@@ -1,0 +1,130 @@
+package net.wg.gui.notification {
+import flash.display.InteractiveObject;
+
+import net.wg.gui.notification.events.NotificationListEvent;
+
+import scaleform.clik.core.UIComponent;
+import scaleform.clik.data.ListData;
+import scaleform.clik.interfaces.IListItemRenderer;
+
+public class ServiceMessageItemRenderer extends ServiceMessage implements IListItemRenderer {
+
+    private static const SINGLE_RENDERER_LABEL:String = "single";
+
+    private static const FIRST_RENDERER_LABEL:String = "first";
+
+    private static const DEFAULT_RENDERER_LABEL:String = "normal";
+
+    private static const LAST_RENDERER_LABEL:String = "last";
+
+    private var _index:uint;
+
+    private var _selectable:Boolean;
+
+    private var _selected:Boolean;
+
+    private var _owner:UIComponent;
+
+    private var _backgroundLabel:String = "";
+
+    public function ServiceMessageItemRenderer() {
+        super();
+    }
+
+    public function get index():uint {
+        return this._index;
+    }
+
+    public function set index(param1:uint):void {
+        this._index = param1;
+    }
+
+    public function get selectable():Boolean {
+        return this._selectable;
+    }
+
+    public function set selectable(param1:Boolean):void {
+        this._selectable = param1;
+    }
+
+    public function setListData(param1:ListData):void {
+        this.index = param1.index;
+    }
+
+    public function setData(param1:Object):void {
+        this.data = param1;
+    }
+
+    public function getData():Object {
+        return this.data;
+    }
+
+    public function get owner():UIComponent {
+        return this._owner;
+    }
+
+    public function set owner(param1:UIComponent):void {
+        if (this._owner) {
+            this._owner.removeEventListener(NotificationListEvent.UPDATE_INDEXES, this.onOwnerUpdateIndexesHandler, false);
+        }
+        this._owner = param1;
+        if (this._owner) {
+            this._owner.addEventListener(NotificationListEvent.UPDATE_INDEXES, this.onOwnerUpdateIndexesHandler, false, 0, true);
+        }
+        this.focusTarget = this._owner;
+    }
+
+    public function get selected():Boolean {
+        return this._selected;
+    }
+
+    public function set selected(param1:Boolean):void {
+        this._selected = param1;
+    }
+
+    override public function toString():String {
+        return "[Service message ListItemRenderer " + this.index + ", " + name + "]";
+    }
+
+    override protected function configUI():void {
+        var _loc2_:InteractiveObject = null;
+        super.configUI();
+        focusTarget = this._owner;
+        _focusable = tabEnabled = tabChildren = false;
+        var _loc1_:int = 0;
+        while (_loc1_ < numChildren) {
+            _loc2_ = getChildAt(_loc1_) as InteractiveObject;
+            if (_loc2_ && _loc2_ != textField && _loc2_ != buttonsGroup) {
+                _loc2_.mouseEnabled = false;
+            }
+            _loc1_++;
+        }
+    }
+
+    override protected function onDispose():void {
+        if (this._owner) {
+            this._owner.removeEventListener(NotificationListEvent.UPDATE_INDEXES, this.onOwnerUpdateIndexesHandler, false);
+        }
+        this.owner = null;
+        super.onDispose();
+    }
+
+    private function onOwnerUpdateIndexesHandler(param1:NotificationListEvent):void {
+        if (!background) {
+            return;
+        }
+        var _loc2_:int = param1.length;
+        var _loc3_:String = DEFAULT_RENDERER_LABEL;
+        if (this.index == 0) {
+            _loc3_ = _loc2_ > 0 ? FIRST_RENDERER_LABEL : SINGLE_RENDERER_LABEL;
+        }
+        else if (this.index + 1 == _loc2_) {
+            _loc3_ = LAST_RENDERER_LABEL;
+        }
+        if (_loc3_ != this._backgroundLabel) {
+            this._backgroundLabel = _loc3_;
+            background.gotoAndStop(this._backgroundLabel);
+        }
+    }
+}
+}

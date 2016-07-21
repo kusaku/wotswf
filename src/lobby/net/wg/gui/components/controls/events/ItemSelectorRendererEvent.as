@@ -1,0 +1,25 @@
+package net.wg.gui.components.controls.events {
+import flash.events.Event;
+
+public class ItemSelectorRendererEvent extends Event {
+
+    public static const RENDERER_CLICK:String = "btnClick";
+
+    public static const RENDERER_OVER:String = "btnOver";
+
+    public var itemData:String = "";
+
+    public function ItemSelectorRendererEvent(param1:String, param2:Boolean = false, param3:Boolean = false, param4:String = null) {
+        this.itemData = param4;
+        super(param1, param2, param3);
+    }
+
+    override public function clone():Event {
+        return new ItemSelectorRendererEvent(type, bubbles, cancelable);
+    }
+
+    override public function toString():String {
+        return formatToString("ItemSelectorRendererEvent", "type", "bubbles", "cancelable", "eventPhase");
+    }
+}
+}

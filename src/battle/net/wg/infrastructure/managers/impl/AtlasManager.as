@@ -1,0 +1,92 @@
+package net.wg.infrastructure.managers.impl {
+import flash.display.Graphics;
+import flash.events.EventDispatcher;
+import flash.geom.Matrix;
+import flash.utils.Dictionary;
+
+import net.wg.data.constants.Errors;
+import net.wg.data.constants.Linkages;
+import net.wg.infrastructure.interfaces.IAtlas;
+import net.wg.infrastructure.interfaces.IAtlasItemVO;
+import net.wg.infrastructure.managers.IAtlasManager;
+
+public class AtlasManager extends EventDispatcher implements IAtlasManager {
+
+    private var _atlasesDict:Dictionary = null;
+
+    private var _isDisposed:Boolean = false;
+
+    private var _lastAtlas:IAtlas = null;
+
+    public function AtlasManager() {
+        super();
+        this._atlasesDict = new Dictionary(true);
+    }
+
+    public function dispose():void {
+        App.utils.asserter.assert(!this._isDisposed, "AtlasManager " + Errors.ALREADY_DISPOSED);
+        this._isDisposed = true;
+        App.utils.data.cleanupDynamicObject(this._atlasesDict);
+        this._atlasesDict = null;
+        if (this._lastAtlas) {
+            this._lastAtlas.dispose();
+            this._lastAtlas = null;
+        }
+    }
+
+    public function registerAtlas(param1:String):void {
+        var _loc2_:IAtlas = this.getAtlas(param1);
+        App.utils.asserter.assertNull(_loc2_, "AtlasManager \'" + param1 + Errors.ALREADY_REGISTERED);
+        var _loc3_:Class = App.utils.classFactory.getClass(Linkages.ATLAS_CLASS_NAME);
+        _loc2_ = new _loc3_();
+        _loc2_.initResources(param1);
+        this._atlasesDict[param1] = _loc2_;
+        this._lastAtlas = _loc2_;
+    }
+
+    public function isAtlasInitialized(param1:String):Boolean {
+        var _loc2_:IAtlas = this.getAtlas(param1);
+        App.utils.asserter.assertNotNull(_loc2_, "AtlasManager atlas \'" + param1 + Errors.CANT_NULL);
+        return _loc2_.isAtlasInitialized;
+    }
+
+    public function drawGraphics(param1:String, param2:String, param3:Graphics, param4:String = "", param5:Boolean = false, param6:Boolean = false, param7:Boolean = false):void {
+        var _loc10_:Number = NaN;
+        var _loc11_:Number = NaN;
+        var _loc12_:Matrix = null;
+        var _loc8_:IAtlas = this.getAtlas(param1);
+        App.utils.asserter.assertNotNull(_loc8_, "AtlasManager atlas \'" + param1 + Errors.CANT_NULL);
+        var _loc9_:IAtlasItemVO = _loc8_.getAtlasItemVOByName(param2);
+        if (!_loc9_ && param4 != "") {
+            _loc9_ = _loc8_.getAtlasItemVOByName(param4);
+        }
+        if (_loc9_) {
+            _loc10_ = 0;
+            _loc11_ = 0;
+            if (param7) {
+                _loc10_ = -(_loc9_.width >> 1);
+                _loc11_ = -(_loc9_.height >> 1);
+            }
+            _loc12_ = new Matrix();
+            _loc12_.translate(-_loc9_.x + _loc10_, -_loc9_.y + _loc11_);
+            param3.clear();
+            param3.beginBitmapFill(_loc8_.atlasBitmapData, _loc12_, param6, param5);
+            param3.drawRect(_loc10_, _loc11_, _loc9_.width, _loc9_.height);
+            param3.endFill();
+        }
+        else {
+            param3.clear();
+            param3.beginFill(16711680, 0.5);
+            param3.drawRect(0, 0, 10, 10);
+            param3.endFill();
+        }
+    }
+
+    private function getAtlas(param1:String):IAtlas {
+        if (this._lastAtlas && this._lastAtlas.atlasName == param1) {
+            return this._lastAtlas;
+        }
+        return this._atlasesDict[param1];
+    }
+}
+}

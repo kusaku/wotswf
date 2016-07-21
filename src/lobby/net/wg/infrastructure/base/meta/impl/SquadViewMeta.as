@@ -1,0 +1,65 @@
+package net.wg.infrastructure.base.meta.impl {
+import net.wg.data.constants.Errors;
+import net.wg.gui.prebattle.squads.simple.SquadViewHeaderVO;
+import net.wg.gui.prebattle.squads.simple.vo.SimpleSquadTeamSectionVO;
+import net.wg.gui.rally.views.room.BaseRallyRoomView;
+import net.wg.infrastructure.exceptions.AbstractException;
+
+public class SquadViewMeta extends BaseRallyRoomView {
+
+    public var leaveSquad:Function;
+
+    private var _simpleSquadTeamSectionVO:SimpleSquadTeamSectionVO;
+
+    private var _squadViewHeaderVO:SquadViewHeaderVO;
+
+    public function SquadViewMeta() {
+        super();
+    }
+
+    override protected function onDispose():void {
+        if (this._simpleSquadTeamSectionVO) {
+            this._simpleSquadTeamSectionVO.dispose();
+            this._simpleSquadTeamSectionVO = null;
+        }
+        if (this._squadViewHeaderVO) {
+            this._squadViewHeaderVO.dispose();
+            this._squadViewHeaderVO = null;
+        }
+        super.onDispose();
+    }
+
+    public function leaveSquadS():void {
+        App.utils.asserter.assertNotNull(this.leaveSquad, "leaveSquad" + Errors.CANT_NULL);
+        this.leaveSquad();
+    }
+
+    public function as_updateBattleType(param1:Object):void {
+        if (this._squadViewHeaderVO) {
+            this._squadViewHeaderVO.dispose();
+        }
+        this._squadViewHeaderVO = new SquadViewHeaderVO(param1);
+        this.updateBattleType(this._squadViewHeaderVO);
+    }
+
+    public function as_setSimpleTeamSectionData(param1:Object):void {
+        if (this._simpleSquadTeamSectionVO) {
+            this._simpleSquadTeamSectionVO.dispose();
+        }
+        this._simpleSquadTeamSectionVO = new SimpleSquadTeamSectionVO(param1);
+        this.setSimpleTeamSectionData(this._simpleSquadTeamSectionVO);
+    }
+
+    protected function updateBattleType(param1:SquadViewHeaderVO):void {
+        var _loc2_:String = "as_updateBattleType" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
+    }
+
+    protected function setSimpleTeamSectionData(param1:SimpleSquadTeamSectionVO):void {
+        var _loc2_:String = "as_setSimpleTeamSectionData" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
+    }
+}
+}
