@@ -67,6 +67,7 @@ public class BaseWaitListSection extends UIComponent {
         if (this.candidates) {
             this.candidates.dataProvider = this.candidatesDP;
             this.candidates.addEventListener(ListEventEx.ITEM_CLICK, this.onListItemClick);
+            this.candidates.addEventListener(ListEventEx.ITEM_RIGHT_CLICK, this.onListItemClick);
         }
         if (this.btnInviteFriend) {
             this.btnInviteFriend.addEventListener(ButtonEvent.CLICK, this.onInviteFriendClickHandler);
@@ -97,6 +98,7 @@ public class BaseWaitListSection extends UIComponent {
         }
         if (this.candidates) {
             this.candidates.removeEventListener(ListEventEx.ITEM_CLICK, this.onListItemClick);
+            this.candidates.removeEventListener(ListEventEx.ITEM_RIGHT_CLICK, this.onListItemClick);
             this.candidates.dispose();
             this.candidates = null;
         }

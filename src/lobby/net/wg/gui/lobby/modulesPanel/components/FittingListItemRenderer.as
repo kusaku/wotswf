@@ -5,7 +5,7 @@ import flash.events.MouseEvent;
 import flash.text.TextField;
 import flash.utils.Dictionary;
 
-import net.wg.data.Colors;
+import net.wg.data.constants.Currencies;
 import net.wg.gui.components.advanced.ModuleTypesUIWithFill;
 import net.wg.gui.components.controls.ActionPrice;
 import net.wg.gui.components.controls.IconText;
@@ -116,7 +116,6 @@ public class FittingListItemRenderer extends TableRenderer {
     }
 
     protected function setup():void {
-        var _loc1_:Boolean = false;
         if (this._deviceData == null) {
             return;
         }
@@ -124,7 +123,7 @@ public class FittingListItemRenderer extends TableRenderer {
         this._commons.updateTextFieldSize(this.titleField, false, true);
         App.utils.asserter.assertFrameExists(this._deviceData.moduleLabel, this.moduleType);
         this.moduleType.gotoAndStop(this._deviceData.moduleLabel);
-        _loc1_ = this._deviceData.showPrice;
+        var _loc1_:Boolean = this._deviceData.showPrice;
         this.priceMC.visible = _loc1_;
         this.actionPrice.visible = _loc1_;
         if (_loc1_) {
@@ -179,7 +178,10 @@ public class FittingListItemRenderer extends TableRenderer {
             this.priceMC.icon = this._deviceData.currency;
             this.priceMC.text = this._deviceData.price;
             if (!this._deviceData.isEnoughCurrency) {
-                this.priceMC.textColor = Colors.ERROR_COLOR;
+                this.priceMC.textColor = Currencies.ERROR_COLOR;
+            }
+            else {
+                this.priceMC.textColor = Currencies.CREDITS_COLOR;
             }
             this.priceMC.validateNow();
         }

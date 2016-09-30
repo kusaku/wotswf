@@ -3,7 +3,6 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 
 import net.wg.data.constants.Errors;
-import net.wg.data.constants.Linkages;
 import net.wg.data.constants.Values;
 import net.wg.gui.components.advanced.events.TutorialHelpBtnEvent;
 import net.wg.gui.components.advanced.vo.TutorialBtnControllerVO;
@@ -18,6 +17,10 @@ public class TutorialHelpBtnController extends EventDispatcher implements ITutor
 
     private static const HELP_BTN_NAME:String = "helpBtn";
 
+    private static const LAYOUT_ABSTRACT_INVOKE:String = "layoutHelpBtn" + Errors.ABSTRACT_INVOKE;
+
+    protected var helpBtnLinkageId:String = "WindowHelpButtonUI";
+
     private var _view:AbstractView = null;
 
     private var _helpBtn:SoundButtonEx = null;
@@ -29,7 +32,7 @@ public class TutorialHelpBtnController extends EventDispatcher implements ITutor
     }
 
     public function createHelpBtn():void {
-        this._helpBtn = App.utils.classFactory.getObject(Linkages.TUTORIAL_HELP_BTN_UI) as SoundButtonEx;
+        this._helpBtn = App.utils.classFactory.getObject(this.helpBtnLinkageId) as SoundButtonEx;
         App.utils.asserter.assertNotNull(this._helpBtn, "_helpBtn" + Errors.CANT_NULL);
         this._view.addChild(this._helpBtn);
         this._view.addEventListener(Event.RESIZE, this.onViewResizeHandler);
@@ -39,7 +42,7 @@ public class TutorialHelpBtnController extends EventDispatcher implements ITutor
         this.layoutHelpBtn();
     }
 
-    public function dispose():void {
+    public final function dispose():void {
         this._view.removeEventListener(Event.RESIZE, this.onViewResizeHandler);
         this._helpBtn.removeEventListener(ButtonEvent.CLICK, this.onHelpBtnClickHandler);
         this._view = null;
@@ -49,9 +52,8 @@ public class TutorialHelpBtnController extends EventDispatcher implements ITutor
     }
 
     public function layoutHelpBtn():void {
-        var _loc1_:String = "layoutHelpBtn" + Errors.ABSTRACT_INVOKE;
-        DebugUtils.LOG_ERROR(_loc1_);
-        throw new AbstractException(_loc1_);
+        DebugUtils.LOG_ERROR(LAYOUT_ABSTRACT_INVOKE);
+        throw new AbstractException(LAYOUT_ABSTRACT_INVOKE);
     }
 
     private function applyData():void {
@@ -69,10 +71,6 @@ public class TutorialHelpBtnController extends EventDispatcher implements ITutor
         App.utils.asserter.assertNotNull(this._view, "view as AbstractView" + Errors.CANT_NULL);
     }
 
-    public function get helpBtn():SoundButtonEx {
-        return this._helpBtn;
-    }
-
     public function get model():TutorialBtnControllerVO {
         return this._model;
     }
@@ -80,6 +78,10 @@ public class TutorialHelpBtnController extends EventDispatcher implements ITutor
     public function set model(param1:TutorialBtnControllerVO):void {
         this._model = param1;
         this.applyData();
+    }
+
+    public function get helpBtn():SoundButtonEx {
+        return this._helpBtn;
     }
 
     public function get selected():Boolean {

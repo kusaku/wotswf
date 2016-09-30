@@ -14,11 +14,13 @@ import org.idmedia.as3commons.lang.Exception;
 
 public class MessageListDAAPI extends BattleMessageListMeta implements IBattleMessageListMeta, IDAAPIModule {
 
+    private static const POOL_COLOR_ERROR:String = "Can\'t find pool for color: ";
+
+    protected var isShowUniqueOnly:Boolean;
+
+    protected var maxMessages:uint = 3;
+
     private var _isDAAPIInited:Boolean = false;
-
-    private var _isShowUniqueOnly:Boolean;
-
-    private var _maxMessages:uint = 3;
 
     private var _yellowMessagesPool:FadedMessagesPool;
 
@@ -71,8 +73,8 @@ public class MessageListDAAPI extends BattleMessageListMeta implements IBattleMe
         var _loc4_:PoolSettingsVO = null;
         var _loc5_:FadedMessagesPool = null;
         setup(param1);
-        this._maxMessages = param1.maxLinesCount;
-        this._isShowUniqueOnly = param1.showUniqueOnly;
+        this.maxMessages = param1.maxLinesCount;
+        this.isShowUniqueOnly = param1.showUniqueOnly;
         var _loc3_:Vector.<PoolSettingsVO> = param1.poolSettings;
         while (true) {
             loop0:
@@ -105,7 +107,7 @@ public class MessageListDAAPI extends BattleMessageListMeta implements IBattleMe
             param1.dispose();
             return;
         }
-        throw new Exception("Can\'t find pool for color: " + _loc2_);
+        throw new Exception(POOL_COLOR_ERROR + _loc2_);
     }
 
     override protected function onMessageClose(param1:IMessage):void {
@@ -170,11 +172,11 @@ public class MessageListDAAPI extends BattleMessageListMeta implements IBattleMe
         this._isDAAPIInited = true;
     }
 
-    private function showMessage(param1:String, param2:String, param3:FadedMessagesPool):void {
-        if (this._isShowUniqueOnly && isNowShowed(param1)) {
+    protected function showMessage(param1:String, param2:String, param3:FadedMessagesPool):void {
+        if (this.isShowUniqueOnly && isNowShowed(param1)) {
             return;
         }
-        if (length >= this._maxMessages) {
+        if (length >= this.maxMessages) {
             closeOldestMessage();
         }
         var _loc4_:FadedTextMessage = param3.createItem();

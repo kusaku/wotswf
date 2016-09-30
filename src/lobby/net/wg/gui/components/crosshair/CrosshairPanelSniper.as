@@ -47,7 +47,7 @@ public class CrosshairPanelSniper extends CrosshairPanelBase {
         super.onPopulate();
         _fadingTargetWalker.setPosAsPercent(100);
         setDefaultTargetState();
-        as_setAmmoStock(0, 0, true, "critical");
+        as_setAmmoStock(0, 0, true, "critical", false);
     }
 
     override protected function onDispose():void {

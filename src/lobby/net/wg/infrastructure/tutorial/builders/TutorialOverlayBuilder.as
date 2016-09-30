@@ -24,13 +24,13 @@ public class TutorialOverlayBuilder extends TutorialBuilder {
 
     public function TutorialOverlayBuilder(param1:IView, param2:Object) {
         super(param1, param2);
-        this._viewTutorialId = this.view.viewTutorialId;
+        this._viewTutorialId = this.view.as_config.viewTutorialId;
         this._model = new TutorialContextOverlayVO(param2);
         this.createAndLayoutOverlay();
     }
 
-    override public function dispose():void {
-        App.stage.removeEventListener(MouseEvent.CLICK, this.onStageClickHandler);
+    override protected function onDispose():void {
+        App.stage.removeEventListener(MouseEvent.MOUSE_UP, this.onStageClickHandler);
         App.utils.scheduler.cancelTask(this.createHelpBtnController);
         App.utils.scheduler.cancelTask(this.layoutOverlay);
         if (this._helpBtnController != null) {
@@ -44,7 +44,7 @@ public class TutorialOverlayBuilder extends TutorialBuilder {
             this._model.dispose();
             this._model = null;
         }
-        super.dispose();
+        super.onDispose();
     }
 
     override protected function onViewResize():void {
@@ -85,10 +85,10 @@ public class TutorialOverlayBuilder extends TutorialBuilder {
         }
         this._tutorialOverlay.visible = !this._tutorialOverlay.visible;
         if (this._tutorialOverlay.visible) {
-            App.stage.addEventListener(MouseEvent.CLICK, this.onStageClickHandler);
+            App.stage.addEventListener(MouseEvent.MOUSE_UP, this.onStageClickHandler);
         }
         else {
-            App.stage.removeEventListener(MouseEvent.CLICK, this.onStageClickHandler);
+            App.stage.removeEventListener(MouseEvent.MOUSE_UP, this.onStageClickHandler);
         }
     }
 

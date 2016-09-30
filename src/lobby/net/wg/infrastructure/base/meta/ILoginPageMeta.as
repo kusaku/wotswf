@@ -57,9 +57,13 @@ public interface ILoginPageMeta extends IEventDispatcher {
 
     function as_showWallpaper(param1:Boolean, param2:String, param3:Boolean, param4:Boolean):void;
 
-    function as_showLoginVideo(param1:String, param2:Boolean):void;
+    function as_showLoginVideo(param1:String, param2:Number, param3:Boolean):void;
 
     function as_setCapsLockState(param1:Boolean):void;
+
+    function as_pausePlayback():void;
+
+    function as_resumePlayback():void;
 
     function as_setKeyboardLang(param1:String):void;
 

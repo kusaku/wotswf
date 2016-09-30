@@ -13,5 +13,11 @@ public class AimSettingsDataVo extends SettingsDataVo {
             "sniper": new AimSettingsSniperDataVo()
         });
     }
+
+    override protected function onDispose():void {
+        this.arcade = null;
+        this.sniper = null;
+        super.onDispose();
+    }
 }
 }

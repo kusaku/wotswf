@@ -5,10 +5,16 @@ public interface IResearchPanelMeta extends IEventDispatcher {
 
     function goToResearchS():void;
 
-    function as_updateCurrentVehicle(param1:String, param2:String, param3:String, param4:Number, param5:Boolean, param6:Boolean):void;
+    function addVehToCompareS():void;
+
+    function as_updateCurrentVehicle(param1:Object):void;
 
     function as_setEarnedXP(param1:Number):void;
 
     function as_setElite(param1:Boolean):void;
+
+    function as_setIGRLabel(param1:Boolean, param2:String):void;
+
+    function as_actionIGRDaysLeft(param1:Boolean, param2:String):void;
 }
 }

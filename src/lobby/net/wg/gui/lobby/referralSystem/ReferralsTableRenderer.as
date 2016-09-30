@@ -1,22 +1,19 @@
 package net.wg.gui.lobby.referralSystem {
-import flash.display.MovieClip;
 import flash.events.MouseEvent;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
+import net.wg.data.constants.Linkages;
 import net.wg.data.constants.Values;
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.components.controls.TableRenderer;
 import net.wg.gui.components.controls.UserNameField;
+import net.wg.gui.messenger.controls.ContactStatusIndicator;
 
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.events.ButtonEvent;
 
 public class ReferralsTableRenderer extends TableRenderer {
-
-    private static const STATUS_ONLINE:String = "online";
-
-    private static const STATUS_OFFLINE:String = "offline";
 
     public var referralNumberTF:TextField = null;
 
@@ -28,11 +25,11 @@ public class ReferralsTableRenderer extends TableRenderer {
 
     public var createSquadBtn:SoundButtonEx = null;
 
-    public var statusIndicator:MovieClip = null;
+    public var statusIndicator:ContactStatusIndicator = null;
 
-    private var referralID:Number = 0;
+    private var _referralID:Number = 0;
 
-    private var model:ReferralsTableRendererVO = null;
+    private var _model:ReferralsTableRendererVO = null;
 
     public function ReferralsTableRenderer() {
         super();
@@ -45,7 +42,7 @@ public class ReferralsTableRenderer extends TableRenderer {
 
     override public function setData(param1:Object):void {
         if (param1) {
-            this.model = new ReferralsTableRendererVO(param1);
+            this._model = new ReferralsTableRendererVO(param1);
             invalidateData();
         }
     }
@@ -54,10 +51,12 @@ public class ReferralsTableRenderer extends TableRenderer {
         super.configUI();
         this.createSquadBtn.mouseEnabledOnDisabled = true;
         this.multiplierTF.autoSize = TextFieldAutoSize.CENTER;
+        this.statusIndicator.setLinkage(Linkages.REF_STATUS_PREFIX);
     }
 
     override protected function onDispose():void {
         this.removeListeners();
+        this._model = null;
         this.referralNumberTF = null;
         this.expTF = null;
         this.multiplierTF = null;
@@ -65,6 +64,7 @@ public class ReferralsTableRenderer extends TableRenderer {
         this.referralName = null;
         this.createSquadBtn.dispose();
         this.createSquadBtn = null;
+        this.statusIndicator.dispose();
         this.statusIndicator = null;
         super.onDispose();
     }
@@ -73,25 +73,25 @@ public class ReferralsTableRenderer extends TableRenderer {
         super.draw();
         mouseEnabled = mouseChildren = true;
         if (isInvalid(InvalidationType.DATA)) {
-            if (this.model) {
-                this.referralNumberTF.htmlText = this.model.referralNo;
-                this.createSquadBtn.tooltip = this.model.btnTooltip;
-                this.hideElements(this.model.isEmpty);
-                if (!this.model.isEmpty) {
-                    this.referralID = this.model.referralVO.accID;
-                    this.referralName.userVO = this.model.referralVO;
-                    this.expTF.htmlText = this.model.exp;
-                    this.multiplierTF.htmlText = this.model.multiplier;
+            if (this._model) {
+                this.referralNumberTF.htmlText = this._model.referralNo;
+                this.createSquadBtn.tooltip = this._model.btnTooltip;
+                this.hideElements(this._model.isEmpty);
+                if (!this._model.isEmpty) {
+                    this._referralID = this._model.referralVO.accID;
+                    this.referralName.userVO = this._model.referralVO;
+                    this.expTF.htmlText = this._model.exp;
+                    this.multiplierTF.htmlText = this._model.multiplier;
                     this.createSquadBtn.label = MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_CREATESQUADBTN_LABEL;
-                    this.createSquadBtn.enabled = this.model.btnEnabled;
-                    if (this.model.btnEnabled) {
+                    this.createSquadBtn.enabled = this._model.btnEnabled;
+                    if (this._model.btnEnabled) {
                         this.createSquadBtn.addEventListener(ButtonEvent.CLICK, this.onCreateSquadBtnClickHandler);
                     }
                     else {
                         this.createSquadBtn.removeEventListener(ButtonEvent.CLICK, this.onCreateSquadBtnClickHandler);
                     }
-                    this.statusIndicator.gotoAndPlay(!!this.model.isOnline ? STATUS_ONLINE : STATUS_OFFLINE);
-                    if (this.model.multiplierTooltip != Values.EMPTY_STR) {
+                    this.statusIndicator.update(this._model.contactDataVO);
+                    if (this._model.multiplierTooltip != Values.EMPTY_STR) {
                         this.multiplierTF.addEventListener(MouseEvent.ROLL_OVER, this.onMultiplierRollOverHandler);
                         this.multiplierTF.addEventListener(MouseEvent.ROLL_OUT, onMultiplierRollOutHandler);
                     }
@@ -130,11 +130,11 @@ public class ReferralsTableRenderer extends TableRenderer {
     }
 
     private function onCreateSquadBtnClickHandler(param1:ButtonEvent):void {
-        dispatchEvent(new ReferralManagementEvent(ReferralManagementEvent.CREATE_SQUAD_BTN_CLICK, this.referralID));
+        dispatchEvent(new ReferralManagementEvent(ReferralManagementEvent.CREATE_SQUAD_BTN_CLICK, this._referralID));
     }
 
     private function onMultiplierRollOverHandler(param1:MouseEvent):void {
-        App.toolTipMgr.showComplex(this.model.multiplierTooltip);
+        App.toolTipMgr.showComplex(this._model.multiplierTooltip);
     }
 }
 }

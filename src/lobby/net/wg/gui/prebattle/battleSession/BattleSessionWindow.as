@@ -89,7 +89,10 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
 
     private var _scheduler:IScheduler = null;
 
+    private var _nationsDP:DataProvider;
+
     public function BattleSessionWindow() {
+        this._nationsDP = new DataProvider();
         super();
         this._isReady = false;
         showWindowBgForm = false;
@@ -224,6 +227,12 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
     }
 
     override protected function onDispose():void {
+        var _loc1_:BSFlagRendererVO = null;
+        for each(_loc1_ in this._nationsDP) {
+            _loc1_.dispose();
+        }
+        this._nationsDP.cleanUp();
+        this._nationsDP = null;
         this._scheduler.cancelTask(this.stopReadyButtonCoolDown);
         this._scheduler = null;
         while (this.numberingContainer.numChildren > 0) {
@@ -234,7 +243,9 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
             this._numberingTFs.splice(0, this._numberingTFs.length);
             this._numberingTFs = null;
         }
+        this.memberList.removeEventListener(ListEventEx.ITEM_DOUBLE_CLICK, this.onMemberListItemDoubleClickHandler);
         this.memberList.removeEventListener(ListEventEx.ITEM_CLICK, this.onMemberListItemClickHandler);
+        this.memberStackList.removeEventListener(ListEventEx.ITEM_DOUBLE_CLICK, this.onMemberListItemDoubleClickHandler);
         this.memberStackList.removeEventListener(ListEventEx.ITEM_CLICK, this.onMemberListItemClickHandler);
         this.upButton.removeEventListener(ButtonEvent.CLICK, this.onUpButtonClickHandler);
         this.upButton.dispose();
@@ -319,15 +330,21 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
     }
 
     public function as_setNationsLimits(param1:Array):void {
+        var _loc2_:Object = null;
+        var _loc3_:BSFlagRendererVO = null;
+        this._nationsDP.cleanUp();
+        for each(_loc2_ in param1) {
+            _loc3_ = new BSFlagRendererVO(_loc2_);
+            this._nationsDP.push(_loc3_);
+        }
+        this.requirementInfo.flagList.dataProvider = this._nationsDP;
         if (param1) {
             this.requirementInfo.flagList.visible = true;
             this.requirementInfo.requiredNationText.visible = false;
-            this.requirementInfo.flagList.dataProvider = new DataProvider(param1);
         }
         else {
             this.requirementInfo.flagList.visible = false;
             this.requirementInfo.requiredNationText.visible = true;
-            this.requirementInfo.flagList.dataProvider = new DataProvider(param1);
             this.requirementInfo.requiredNationText.text = MENU.NATIONS_ALL;
         }
     }
@@ -380,6 +397,27 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
         this.leaveButton.label = PREBATTLE.BUTTONS_BATTLESESSION_LEAVE;
     }
 
+    private function checkAndAssignMember(param1:Object):void {
+        var _loc2_:PlayerPrbInfoVO = new PlayerPrbInfoVO(param1);
+        if (canMoveToAssignedS()) {
+            requestToAssignMemberS(_loc2_.accID);
+        }
+        _loc2_.dispose();
+    }
+
+    private function checkAndUnassignMember(param1:Object):void {
+        var _loc2_:PlayerPrbInfoVO = new PlayerPrbInfoVO(param1);
+        if (canMoveToUnassignedS()) {
+            requestToUnassignMemberS(_loc2_.accID);
+        }
+        _loc2_.dispose();
+    }
+
+    private function updateMoveButtons():void {
+        this.downButton.enabled = canMoveToUnassignedS() && this.memberList.dataProvider.length > 0;
+        this.upButton.enabled = canMoveToAssignedS() && this.memberStackList.dataProvider.length > 0;
+    }
+
     private function onMemberListItemClickHandler(param1:ListEventEx):void {
         var _loc2_:PlayerPrbInfoVO = null;
         if (param1.buttonIdx == MouseEventEx.RIGHT_BUTTON) {
@@ -430,27 +468,6 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
                 this.checkAndUnassignMember(_loc2_.requestItemAt(_loc3_));
             }
         }
-    }
-
-    private function checkAndAssignMember(param1:Object):void {
-        var _loc2_:PlayerPrbInfoVO = new PlayerPrbInfoVO(param1);
-        if (canMoveToAssignedS()) {
-            requestToAssignMemberS(_loc2_.accID);
-        }
-        _loc2_.dispose();
-    }
-
-    private function checkAndUnassignMember(param1:Object):void {
-        var _loc2_:PlayerPrbInfoVO = new PlayerPrbInfoVO(param1);
-        if (canMoveToUnassignedS()) {
-            requestToUnassignMemberS(_loc2_.accID);
-        }
-        _loc2_.dispose();
-    }
-
-    private function updateMoveButtons():void {
-        this.downButton.enabled = canMoveToUnassignedS() && this.memberList.dataProvider.length > 0;
-        this.upButton.enabled = canMoveToAssignedS() && this.memberStackList.dataProvider.length > 0;
     }
 }
 }

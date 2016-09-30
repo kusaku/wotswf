@@ -12,7 +12,7 @@ public class ClanProfilePersonnelViewVO extends DAAPIDataClass {
 
     private static const STATISTICS:String = "statistics";
 
-    public var membersCount:String = "";
+    public var title:String = "";
 
     public var defaultSortField:String = "";
 

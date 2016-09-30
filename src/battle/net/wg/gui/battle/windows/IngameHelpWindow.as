@@ -13,7 +13,7 @@ import scaleform.clik.events.ButtonEvent;
 
 public class IngameHelpWindow extends IngameHelpWindowMeta implements IIngameHelpWindowMeta {
 
-    private var _keysDictionary:Dictionary;
+    private static const CROSSHAIRCONTROLS_TIMELEFT:Number = 7.42;
 
     public var settingsButton:SoundButtonEx = null;
 
@@ -199,6 +199,8 @@ public class IngameHelpWindow extends IngameHelpWindowMeta implements IIngameHel
 
     public var attackTF:TextField = null;
 
+    private var _keysDictionary:Dictionary;
+
     public function IngameHelpWindow() {
         this._keysDictionary = new Dictionary();
         super();
@@ -226,111 +228,6 @@ public class IngameHelpWindow extends IngameHelpWindowMeta implements IIngameHel
         this._keysDictionary[KEYBOARD_KEYS.SHOW_HUD] = this.showHUDTF;
         this._keysDictionary[KEYBOARD_KEYS.SHOW_RADIAL_MENU] = this.showRadialMenuTF;
         this._keysDictionary[KEYBOARD_KEYS.ATTACK] = this.attackTF;
-    }
-
-    public function as_setKeys(param1:Object):void {
-        this.setKeys(param1);
-    }
-
-    private function onSettingsBtnClickHandler(param1:ButtonEvent):void {
-        clickSettingWindowS();
-    }
-
-    private function setKeys(param1:Object):void {
-        var _loc2_:TextField = null;
-        var _loc3_:* = null;
-        var _loc4_:IAssertable = App.utils.asserter;
-        var _loc5_:ICommons = App.utils.commons;
-        for (_loc3_ in param1) {
-            _loc2_ = this._keysDictionary[_loc3_];
-            _loc4_.assert(_loc2_ != null, "No " + _loc3_ + " in clip");
-            _loc2_.text = _loc5_.keyToString(param1[_loc3_]).keyName;
-        }
-    }
-
-    private function setTitleTexts():void {
-        this.battleControlsTitle.text = INGAME_HELP.BATTLECONTROLS_TITLE;
-        this.radialMenuTitle.text = INGAME_HELP.RADIALMENU_TITLE;
-        this.chatControlsTitle.text = INGAME_HELP.CHATCONTROLS_TITLE;
-        this.vehicleTypesTitle.text = INGAME_HELP.VEHICLETYPES_TITLE;
-        this.crosshairControlsTitle.text = INGAME_HELP.CROSSHAIRCONTROLS_TITLE;
-        this.markerColorsTitle.text = INGAME_HELP.MARKERCOLORS_TITLE;
-        this.settingsHelp.text = INGAME_HELP.SETTINGS_HELP;
-        this.returnToGame.text = INGAME_HELP.RETURNTOGAME;
-    }
-
-    private function setDescriptionTexts():void {
-        this.movementForward.text = INGAME_HELP.BATTLECONTROLS_MOVEMENTFORWARD;
-        this.movementBackward.text = INGAME_HELP.BATTLECONTROLS_MOVEMENTBACKWARD;
-        this.movementLeft.text = INGAME_HELP.BATTLECONTROLS_MOVEMENTLEFT;
-        this.movementRight.text = INGAME_HELP.BATTLECONTROLS_MOVEMENTRIGHT;
-        this.cruiseCtrlForward.text = INGAME_HELP.BATTLECONTROLS_CRUISECTRLFORWARD;
-        this.cruiseCtrlBackward.text = INGAME_HELP.BATTLECONTROLS_CRUISECTRLBACKWARD;
-        this.switchAutorotation.text = INGAME_HELP.BATTLECONTROLS_SWITCHAUTOROTATION;
-        this.stopFire.text = INGAME_HELP.BATTLECONTROLS_STOPFIRE;
-        this.voiceChatMute.text = INGAME_HELP.BATTLECONTROLS_VOICECHATMUTE;
-        this.casseteReload.text = INGAME_HELP.BATTLECONTROLS_CASSETERELOAD;
-        this.fire.text = INGAME_HELP.BATTLECONTROLS_FIRE;
-        this.toggleLockTarget.text = INGAME_HELP.BATTLECONTROLS_TOGGLELOCKTARGET;
-        this.toggleLockTargetExt.text = INGAME_HELP.BATTLECONTROLS_TOGGLELOCKTARGET_EXT;
-        this.disableLockTarget.text = INGAME_HELP.BATTLECONTROLS_DISABLELOCKTARGET;
-        this.toggleSniperMode.text = INGAME_HELP.BATTLECONTROLS_TOGGLESNIPERMODE;
-        this.toggleSniperModeExt.text = INGAME_HELP.BATTLECONTROLS_TOGGLESNIPERMODE_EXT;
-        this.togglePlayerPanelModes.text = INGAME_HELP.BATTLECONTROLS_TOGGLEPLAYERPANELMODES;
-        this.showExPlayerInfo.text = INGAME_HELP.BATTLECONTROLS_SHOWEXPLAYERINFO;
-        this.hideInterface.text = INGAME_HELP.BATTLECONTROLS_HIDEINTERFACE;
-        this.showCursor.text = INGAME_HELP.BATTLECONTROLS_SHOWCURSOR;
-        this.showCursorExt.text = INGAME_HELP.BATTLECONTROLS_SHOWCURSOR_EXT;
-        this.makeScreenshort.text = INGAME_HELP.BATTLECONTROLS_MAKESCREENSHORT;
-        this.radialMenuShow.text = INGAME_HELP.RADIALMENU_SHOW;
-        this.radialMenuShowExt.text = INGAME_HELP.RADIALMENU_SHOW_EXT;
-        this.attackEnemy.text = INGAME_HELP.RADIALMENU_ATTACKENEMY;
-        this.attackEnemyExt.text = INGAME_HELP.RADIALMENU_ATTACKENEMY_EXT;
-        this.enterToChatMode.text = INGAME_HELP.CHATCONTROLS_ENTERTOCHATMODE;
-        this.changetf.text = INGAME_HELP.CHATCONTROLS_CHANGE;
-        this.send.text = INGAME_HELP.CHATCONTROLS_SEND;
-        this.exitFromChatMode.text = INGAME_HELP.CHATCONTROLS_EXITFROMCHATMODE;
-        this.at_spg.text = ITEM_TYPES.VEHICLE_TAGS_AT_SPG_NAME;
-        this.spg.text = ITEM_TYPES.VEHICLE_TAGS_SPG_NAME;
-        this.light_tank.text = ITEM_TYPES.VEHICLE_TAGS_LIGHT_TANK_NAME;
-        this.medium_tank.text = ITEM_TYPES.VEHICLE_TAGS_MEDIUM_TANK_NAME;
-        this.heavy_tank.text = ITEM_TYPES.VEHICLE_TAGS_HEAVY_TANK_NAME;
-        this.friend.text = INGAME_HELP.MARKERCOLORS_FRIEND;
-        this.enemy.text = INGAME_HELP.MARKERCOLORS_ENEMY;
-        this.teamKiller.text = INGAME_HELP.MARKERCOLORS_TEAMKILLER;
-        this.squadPlay.text = INGAME_HELP.MARKERCOLORS_SQUADPLAYER;
-        this.targetIcon.text = INGAME_HELP.CROSSHAIRCONTROLS_TARGETICON;
-        this.targetDistance.text = INGAME_HELP.CROSSHAIRCONTROLS_TARGETDISTANCE;
-        this.targetLevel.text = INGAME_HELP.CROSSHAIRCONTROLS_TARGETLEVEL;
-        this.targetName.text = INGAME_HELP.CROSSHAIRCONTROLS_TARGETNAME;
-        this.hpIndicator.text = INGAME_HELP.CROSSHAIRCONTROLS_HPINDICATOR;
-        this.hpValues.text = INGAME_HELP.CROSSHAIRCONTROLS_HPVALUES;
-        this.targetClass.text = INGAME_HELP.CROSSHAIRCONTROLS_TARGETCLASS;
-        this.damageIndicator.text = INGAME_HELP.CROSSHAIRCONTROLS_DAMAGEINDICATOR;
-        this.reloadTimer.text = INGAME_HELP.CROSSHAIRCONTROLS_RELOADTIMER;
-        this.reloadIndicator.text = INGAME_HELP.CROSSHAIRCONTROLS_RELOADINDICATOR;
-        this.ammoNumber.text = INGAME_HELP.CROSSHAIRCONTROLS_AMMONUMBER;
-        this.marker.text = INGAME_HELP.CROSSHAIRCONTROLS_MARKER;
-        this.healthPlayer.text = INGAME_HELP.CROSSHAIRCONTROLS_HEALTHPLAYER;
-        this.dispercion.text = INGAME_HELP.CROSSHAIRCONTROLS_DISPERCION;
-        this.gunMarker.text = INGAME_HELP.CROSSHAIRCONTROLS_GUNMARKER;
-    }
-
-    private function setCrossHairTexts():void {
-        this.example_time_left.text = INGAME_HELP.CROSSHAIRCONTROLS_TIMELEFT;
-        this.example_name.text = INGAME_HELP.CROSSHAIRCONTROLS_EXAMPLE_NAME;
-        this.example_hp.text = INGAME_HELP.CROSSHAIRCONTROLS_EXAMPLE_HP;
-        this.example_hit.text = INGAME_HELP.CROSSHAIRCONTROLS_EXAMPLE_DAMAGE;
-    }
-
-    private function setkeysTexts():void {
-        this.settingsButton.label = INGAME_HELP.SETTINGS_BUTTON;
-        this.printscreenTF.text = CONTROLS.KEYBOARD_KEY_PRINT_SCREEN;
-        this.enterTF.text = CONTROLS.KEYBOARD_KEY_ENTER;
-        this.tabTF.text = CONTROLS.KEYBOARD_KEY_TAB;
-        this.enter2TF.text = CONTROLS.KEYBOARD_KEY_ENTER;
-        this.escapeTF.text = CONTROLS.KEYBOARD_KEY_ESCAPE;
-        this.showCursorTF.text = CONTROLS.KEYBOARD_KEY_CTRL_WO_REFERRAL;
     }
 
     override protected function configUI():void {
@@ -439,6 +336,111 @@ public class IngameHelpWindow extends IngameHelpWindowMeta implements IIngameHel
         this.showRadialMenuTF = null;
         this.attackTF = null;
         super.onDispose();
+    }
+
+    public function as_setKeys(param1:Object):void {
+        this.setKeys(param1);
+    }
+
+    private function setKeys(param1:Object):void {
+        var _loc2_:TextField = null;
+        var _loc3_:* = null;
+        var _loc4_:IAssertable = App.utils.asserter;
+        var _loc5_:ICommons = App.utils.commons;
+        for (_loc3_ in param1) {
+            _loc2_ = this._keysDictionary[_loc3_];
+            _loc4_.assert(_loc2_ != null, "No " + _loc3_ + " in clip");
+            _loc2_.text = _loc5_.keyToString(param1[_loc3_]).keyName;
+        }
+    }
+
+    private function setTitleTexts():void {
+        this.battleControlsTitle.text = INGAME_HELP.BATTLECONTROLS_TITLE;
+        this.radialMenuTitle.text = INGAME_HELP.RADIALMENU_TITLE;
+        this.chatControlsTitle.text = INGAME_HELP.CHATCONTROLS_TITLE;
+        this.vehicleTypesTitle.text = INGAME_HELP.VEHICLETYPES_TITLE;
+        this.crosshairControlsTitle.text = INGAME_HELP.CROSSHAIRCONTROLS_TITLE;
+        this.markerColorsTitle.text = INGAME_HELP.MARKERCOLORS_TITLE;
+        this.settingsHelp.text = INGAME_HELP.SETTINGS_HELP;
+        this.returnToGame.text = INGAME_HELP.RETURNTOGAME;
+    }
+
+    private function setDescriptionTexts():void {
+        this.movementForward.text = INGAME_HELP.BATTLECONTROLS_MOVEMENTFORWARD;
+        this.movementBackward.text = INGAME_HELP.BATTLECONTROLS_MOVEMENTBACKWARD;
+        this.movementLeft.text = INGAME_HELP.BATTLECONTROLS_MOVEMENTLEFT;
+        this.movementRight.text = INGAME_HELP.BATTLECONTROLS_MOVEMENTRIGHT;
+        this.cruiseCtrlForward.text = INGAME_HELP.BATTLECONTROLS_CRUISECTRLFORWARD;
+        this.cruiseCtrlBackward.text = INGAME_HELP.BATTLECONTROLS_CRUISECTRLBACKWARD;
+        this.switchAutorotation.text = INGAME_HELP.BATTLECONTROLS_SWITCHAUTOROTATION;
+        this.stopFire.text = INGAME_HELP.BATTLECONTROLS_STOPFIRE;
+        this.voiceChatMute.text = INGAME_HELP.BATTLECONTROLS_VOICECHATMUTE;
+        this.casseteReload.text = INGAME_HELP.BATTLECONTROLS_CASSETERELOAD;
+        this.fire.text = INGAME_HELP.BATTLECONTROLS_FIRE;
+        this.toggleLockTarget.text = INGAME_HELP.BATTLECONTROLS_TOGGLELOCKTARGET;
+        this.toggleLockTargetExt.text = INGAME_HELP.BATTLECONTROLS_TOGGLELOCKTARGET_EXT;
+        this.disableLockTarget.text = INGAME_HELP.BATTLECONTROLS_DISABLELOCKTARGET;
+        this.toggleSniperMode.text = INGAME_HELP.BATTLECONTROLS_TOGGLESNIPERMODE;
+        this.toggleSniperModeExt.text = INGAME_HELP.BATTLECONTROLS_TOGGLESNIPERMODE_EXT;
+        this.togglePlayerPanelModes.text = INGAME_HELP.BATTLECONTROLS_TOGGLEPLAYERPANELMODES;
+        this.showExPlayerInfo.text = INGAME_HELP.BATTLECONTROLS_SHOWEXPLAYERINFO;
+        this.hideInterface.text = INGAME_HELP.BATTLECONTROLS_HIDEINTERFACE;
+        this.showCursor.text = INGAME_HELP.BATTLECONTROLS_SHOWCURSOR;
+        this.showCursorExt.text = INGAME_HELP.BATTLECONTROLS_SHOWCURSOR_EXT;
+        this.makeScreenshort.text = INGAME_HELP.BATTLECONTROLS_MAKESCREENSHORT;
+        this.radialMenuShow.text = INGAME_HELP.RADIALMENU_SHOW;
+        this.radialMenuShowExt.text = INGAME_HELP.RADIALMENU_SHOW_EXT;
+        this.attackEnemy.text = INGAME_HELP.RADIALMENU_ATTACKENEMY;
+        this.attackEnemyExt.text = INGAME_HELP.RADIALMENU_ATTACKENEMY_EXT;
+        this.enterToChatMode.text = INGAME_HELP.CHATCONTROLS_ENTERTOCHATMODE;
+        this.changetf.text = INGAME_HELP.CHATCONTROLS_CHANGE;
+        this.send.text = INGAME_HELP.CHATCONTROLS_SEND;
+        this.exitFromChatMode.text = INGAME_HELP.CHATCONTROLS_EXITFROMCHATMODE;
+        this.at_spg.text = ITEM_TYPES.VEHICLE_TAGS_AT_SPG_NAME;
+        this.spg.text = ITEM_TYPES.VEHICLE_TAGS_SPG_NAME;
+        this.light_tank.text = ITEM_TYPES.VEHICLE_TAGS_LIGHT_TANK_NAME;
+        this.medium_tank.text = ITEM_TYPES.VEHICLE_TAGS_MEDIUM_TANK_NAME;
+        this.heavy_tank.text = ITEM_TYPES.VEHICLE_TAGS_HEAVY_TANK_NAME;
+        this.friend.text = INGAME_HELP.MARKERCOLORS_FRIEND;
+        this.enemy.text = INGAME_HELP.MARKERCOLORS_ENEMY;
+        this.teamKiller.text = INGAME_HELP.MARKERCOLORS_TEAMKILLER;
+        this.squadPlay.text = INGAME_HELP.MARKERCOLORS_SQUADPLAYER;
+        this.targetIcon.text = INGAME_HELP.CROSSHAIRCONTROLS_TARGETICON;
+        this.targetDistance.text = INGAME_HELP.CROSSHAIRCONTROLS_TARGETDISTANCE;
+        this.targetLevel.text = INGAME_HELP.CROSSHAIRCONTROLS_TARGETLEVEL;
+        this.targetName.text = INGAME_HELP.CROSSHAIRCONTROLS_TARGETNAME;
+        this.hpIndicator.text = INGAME_HELP.CROSSHAIRCONTROLS_HPINDICATOR;
+        this.hpValues.text = INGAME_HELP.CROSSHAIRCONTROLS_HPVALUES;
+        this.targetClass.text = INGAME_HELP.CROSSHAIRCONTROLS_TARGETCLASS;
+        this.damageIndicator.text = INGAME_HELP.CROSSHAIRCONTROLS_DAMAGEINDICATOR;
+        this.reloadTimer.text = INGAME_HELP.CROSSHAIRCONTROLS_RELOADTIMER;
+        this.reloadIndicator.text = INGAME_HELP.CROSSHAIRCONTROLS_RELOADINDICATOR;
+        this.ammoNumber.text = INGAME_HELP.CROSSHAIRCONTROLS_AMMONUMBER;
+        this.marker.text = INGAME_HELP.CROSSHAIRCONTROLS_MARKER;
+        this.healthPlayer.text = INGAME_HELP.CROSSHAIRCONTROLS_HEALTHPLAYER;
+        this.dispercion.text = INGAME_HELP.CROSSHAIRCONTROLS_DISPERCION;
+        this.gunMarker.text = INGAME_HELP.CROSSHAIRCONTROLS_GUNMARKER;
+    }
+
+    private function setCrossHairTexts():void {
+        this.example_time_left.text = App.utils.locale.float(CROSSHAIRCONTROLS_TIMELEFT);
+        this.example_name.text = INGAME_HELP.CROSSHAIRCONTROLS_EXAMPLE_NAME;
+        this.example_hp.text = INGAME_HELP.CROSSHAIRCONTROLS_EXAMPLE_HP;
+        this.example_hit.text = INGAME_HELP.CROSSHAIRCONTROLS_EXAMPLE_DAMAGE;
+    }
+
+    private function setkeysTexts():void {
+        this.settingsButton.label = INGAME_HELP.SETTINGS_BUTTON;
+        this.printscreenTF.text = CONTROLS.KEYBOARD_KEY_PRINT_SCREEN;
+        this.enterTF.text = CONTROLS.KEYBOARD_KEY_ENTER;
+        this.tabTF.text = CONTROLS.KEYBOARD_KEY_TAB;
+        this.enter2TF.text = CONTROLS.KEYBOARD_KEY_ENTER;
+        this.escapeTF.text = CONTROLS.KEYBOARD_KEY_ESCAPE;
+        this.showCursorTF.text = CONTROLS.KEYBOARD_KEY_CTRL_WO_REFERRAL;
+    }
+
+    private function onSettingsBtnClickHandler(param1:ButtonEvent):void {
+        clickSettingWindowS();
     }
 }
 }

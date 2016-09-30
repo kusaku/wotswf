@@ -78,8 +78,7 @@ public class FCFullStats extends FCStatsMeta implements IFCStatsMeta, IBattleCom
     }
 
     public function setArenaInfo(param1:IDAAPIDataClass):void {
-        var _loc2_:DAAPIArenaInfoVO = null;
-        _loc2_ = DAAPIArenaInfoVO(param1);
+        var _loc2_:DAAPIArenaInfoVO = DAAPIArenaInfoVO(param1);
         this.mapIcon.source = _loc2_.mapIcon;
         this.mapTF.text = _loc2_.mapName;
         this.battleTF.text = _loc2_.battleTypeLocaleStr;

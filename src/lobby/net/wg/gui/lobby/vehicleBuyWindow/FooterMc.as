@@ -46,9 +46,9 @@ public class FooterMc extends UIComponentEx {
         super.onDispose();
     }
 
-    public function showWarning():void {
+    public function showWarning(param1:String):void {
         gotoAndStop(WARNING_FRAME_LBL);
-        this.warningMsg.text = DIALOGS.BUYVEHICLEDIALOG_WARNING;
+        this.warningMsg.text = param1;
         _originalHeight = _originalHeight + VehicleBuyWindow.WARNING_HEIGHT;
         setActualSize(width, height + VehicleBuyWindow.WARNING_HEIGHT);
         setActualScale(1, 1);

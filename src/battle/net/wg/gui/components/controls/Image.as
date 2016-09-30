@@ -77,6 +77,7 @@ public class Image extends Sprite implements IImage {
 
     public function set bitmapData(param1:BitmapData):void {
         this._bitmap.bitmapData = param1;
+        this._bitmap.visible = param1 != null;
         dispatchEvent(new Event(Event.CHANGE));
     }
 

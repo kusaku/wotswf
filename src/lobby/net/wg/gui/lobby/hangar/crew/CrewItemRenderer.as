@@ -2,18 +2,20 @@ package net.wg.gui.lobby.hangar.crew {
 import flash.display.DisplayObject;
 import flash.display.MovieClip;
 import flash.display.Sprite;
-import flash.events.Event;
 import flash.events.MouseEvent;
-import flash.events.TimerEvent;
 import flash.geom.Point;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
-import flash.utils.Timer;
 
+import net.wg.data.constants.ComponentState;
+import net.wg.data.constants.Linkages;
+import net.wg.data.constants.SoundManagerStates;
 import net.wg.data.constants.generated.CONTEXT_MENU_HANDLER_TYPE;
 import net.wg.gui.components.controls.TileList;
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.events.CrewEvent;
+import net.wg.gui.lobby.components.SmallSkillsList;
+import net.wg.gui.lobby.components.data.SkillsVO;
 import net.wg.gui.lobby.hangar.CrewDropDownEvent;
 import net.wg.infrastructure.events.TutorialEvent;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
@@ -25,16 +27,17 @@ import scaleform.clik.controls.DropdownMenu;
 import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.DataProvider;
 import scaleform.clik.data.ListData;
-import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.events.ComponentEvent;
-import scaleform.clik.events.InputEvent;
 import scaleform.clik.events.ListEvent;
 import scaleform.clik.interfaces.IDataProvider;
 import scaleform.clik.interfaces.IListItemRenderer;
 import scaleform.clik.utils.Padding;
-import scaleform.gfx.MouseEventEx;
 
 public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer {
+
+    private static const SOUND_TYPE:String = "rendererNormal";
+
+    private static const SOUND_ID:String = "";
 
     private static const MENU_WIDTH:Number = 368;
 
@@ -42,7 +45,9 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
 
     private static const DROPDOWN:String = "RecruitScrollingList";
 
-    private static const ITEM_RENDERER:String = "RecruitItemRenderer";
+    private static const DROPDOWN2:String = "RecruitScrollingList2";
+
+    private static const ITEM_RENDERER:String = "RecruitItemRendererUI";
 
     private static const TANKMEN_ICONS_SMALL:String = "../maps/icons/tankmen/icons/small/";
 
@@ -52,9 +57,17 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
 
     private static const IMAGE_EXTENSION:String = ".png";
 
-    public var soundType:String = "rendererNormal";
+    private static const DOWN_MENU_DIRECTION:String = "down";
 
-    public var soundId:String = "";
+    private static const DEF_ROW_COUNT:int = 5;
+
+    private static const EMPTY_LABEL:String = "empty";
+
+    private static const SELECTED_TAB_INDEX:int = 2;
+
+    private static const SPACE_DELIMITER:String = " ";
+
+    private static const EMPTY_STR:String = "";
 
     public var icon:UILoaderAlt = null;
 
@@ -66,13 +79,11 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
 
     public var roles:TileList = null;
 
-    public var skills:TileList = null;
-
-    public var goups_icons:MovieClip = null;
+    public var skills:SmallSkillsList = null;
 
     public var speed_xp_bg:UIComponent = null;
 
-    public var new_skill_anim:MovieClip = null;
+    public var newSkillAnim:MovieClip = null;
 
     public var levelSpecializationMain:CrewItemLabel = null;
 
@@ -86,11 +97,9 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
 
     public var emptySlotBgAnim:MovieClip = null;
 
-    public var lastSkillLevel:TextField = null;
+    private var _index:uint = 0;
 
-    protected var _index:uint = 0;
-
-    protected var _selectable:Boolean = true;
+    private var _selectable:Boolean = true;
 
     public function CrewItemRenderer() {
         super();
@@ -104,9 +113,8 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
         itemRenderer = ITEM_RENDERER;
         menuPadding = new Padding(4, 3, 3, 4);
         menuMargin = 0;
-        this.new_skill_anim.alpha = 0;
+        this.newSkillAnim.visible = false;
         menuOffset.left = width - 1;
-        this.goups_icons.alpha = 1;
         this.inspectableThumbOffset = {
             "top": 0,
             "bottom": 0
@@ -121,24 +129,24 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
         if (dropdown == null) {
             return;
         }
-        if (dropdown is String && dropdown != "") {
-            _loc2_ = App.utils.classFactory.getClass(dropdown.toString()) as Class;
+        if (dropdown is String && dropdown != EMPTY_STR) {
+            _loc2_ = App.utils.classFactory.getClass(dropdown.toString());
             if (_loc2_ != null) {
-                _loc1_ = App.utils.classFactory.getComponent(dropdown.toString(), CoreList) as CoreList;
+                _loc1_ = App.utils.classFactory.getComponent(dropdown.toString(), CoreList);
             }
         }
         if (_loc1_) {
-            if (itemRenderer is String && itemRenderer != "") {
+            if (itemRenderer is String && itemRenderer != EMPTY_STR) {
                 _loc1_.itemRenderer = App.utils.classFactory.getClass(itemRenderer.toString());
             }
             else if (itemRenderer is Class) {
-                _loc1_.itemRenderer = itemRenderer as Class;
+                _loc1_.itemRenderer = Class(itemRenderer);
             }
-            if (scrollBar is String && scrollBar != "") {
-                _loc1_.scrollBar = App.utils.classFactory.getClass(scrollBar.toString()) as Class;
+            if (scrollBar is String && scrollBar != EMPTY_STR) {
+                _loc1_.scrollBar = App.utils.classFactory.getClass(scrollBar.toString());
             }
             else if (scrollBar is Class) {
-                _loc1_.scrollBar = scrollBar as Class;
+                _loc1_.scrollBar = Class(scrollBar);
             }
             _loc1_.selectedIndex = !!TankmanRoleVO(this.data).tankmanID ? 1 : 0;
             _loc1_.width = menuWidth == -1 ? Number(width + menuOffset.left + menuOffset.right) : Number(menuWidth);
@@ -151,15 +159,14 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
                 "bottom": thumbOffsetBottom
             };
             _loc1_.focusTarget = this;
-            _loc1_.rowCount = menuRowCount < 1 ? 5 : menuRowCount;
+            _loc1_.rowCount = menuRowCount < 1 ? DEF_ROW_COUNT : menuRowCount;
             _loc1_.labelField = _labelField;
             _loc1_.labelFunction = _labelFunction;
             _loc1_.canCleanDataProvider = false;
             _dropdownRef = _loc1_;
-            _dropdownRef.name = "dropDownList";
-            _dropdownRef.addEventListener(ListEvent.ITEM_CLICK, handleMenuItemClick, false, 0, true);
-            _dropdownRef.addEventListener(TutorialEvent.VIEW_READY_FOR_TUTORIAL, dropdownRefReadyForTutorialHandler);
-            _loc3_ = new Point(x + menuOffset.left, menuDirection == "down" ? Number(y + height + menuOffset.top) : Number(y - _dropdownRef.height + menuOffset.bottom));
+            _dropdownRef.addEventListener(ListEvent.ITEM_CLICK, this.onDropDownItemClickHandler, false, 0, true);
+            _dropdownRef.addEventListener(TutorialEvent.VIEW_READY_FOR_TUTORIAL, this.onDropDownViewReadyForTutorialHandler);
+            _loc3_ = new Point(x + menuOffset.left, menuDirection == DOWN_MENU_DIRECTION ? Number(y + height + menuOffset.top) : Number(y - _dropdownRef.height + menuOffset.bottom));
             _loc3_ = parent.localToGlobal(_loc3_);
             App.utils.popupMgr.show(_dropdownRef, _loc3_.x, _loc3_.y);
         }
@@ -171,10 +178,10 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
     override protected function hideDropdown():void {
         App.toolTipMgr.hide();
         if (_dropdownRef) {
-            _dropdownRef.removeEventListener(ListEvent.ITEM_CLICK, handleMenuItemClick, false);
+            _dropdownRef.removeEventListener(ListEvent.ITEM_CLICK, this.onDropDownItemClickHandler, false);
             if (_dropdownRef is IDisposable) {
                 IDisposable(_dropdownRef).dispose();
-                _dropdownRef.removeEventListener(TutorialEvent.VIEW_READY_FOR_TUTORIAL, dropdownRefReadyForTutorialHandler);
+                _dropdownRef.removeEventListener(TutorialEvent.VIEW_READY_FOR_TUTORIAL, this.onDropDownViewReadyForTutorialHandler);
             }
             App.utils.commons.releaseReferences(_dropdownRef);
             _dropdownRef.parent.removeChild(_dropdownRef);
@@ -184,12 +191,14 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
 
     override protected function updateAfterStateChange():void {
         var _loc1_:TankmanRoleVO = null;
+        var _loc2_:TankmanVO = null;
         super.updateAfterStateChange();
         if (this.data) {
             _loc1_ = TankmanRoleVO(this.data);
-            this.tankmenName.label = _loc1_.tankman.rank + " " + _loc1_.tankman.firstName + " " + _loc1_.tankman.lastName;
-            if (_state == "up" || _state == "disabled" || ["out", "toggle", "kb_release"].indexOf(_state) > -1 && !selected) {
-                this.tankmenName.label = _loc1_.tankman.rank + " " + _loc1_.tankman.lastName;
+            _loc2_ = _loc1_.tankman;
+            this.tankmenName.label = _loc2_.rank + SPACE_DELIMITER + _loc2_.firstName + SPACE_DELIMITER + _loc2_.lastName;
+            if (_state == ComponentState.UP || _state == ComponentState.DISABLED || [ComponentState.OUT, ComponentState.TOGGLE, ComponentState.KB_RELEASE].indexOf(_state) > -1 && !selected) {
+                this.tankmenName.label = _loc2_.rank + SPACE_DELIMITER + _loc2_.lastName;
             }
         }
     }
@@ -239,21 +248,9 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
     }
 
     override protected function onDispose():void {
-        removeEventListener(Event.ADDED, addToAutoGroup, false);
-        removeEventListener(Event.REMOVED, addToAutoGroup, false);
-        removeEventListener(MouseEvent.ROLL_OVER, this.handleMouseRollOver, false);
-        removeEventListener(MouseEvent.ROLL_OUT, this.handleMouseRollOut, false);
-        removeEventListener(MouseEvent.MOUSE_DOWN, this.handleMousePress, false);
-        removeEventListener(MouseEvent.CLICK, this.handleMouseRelease, false);
-        removeEventListener(MouseEvent.DOUBLE_CLICK, this.handleMouseRelease, false);
-        removeEventListener(InputEvent.INPUT, handleInput, false);
-        if (_repeatTimer) {
-            _repeatTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, beginRepeat, false);
-            _repeatTimer.removeEventListener(TimerEvent.TIMER, handleRepeat, false);
-        }
         if (_dropdownRef) {
-            _dropdownRef.removeEventListener(ListEvent.ITEM_CLICK, handleMenuItemClick, false);
-            _dropdownRef.removeEventListener(TutorialEvent.VIEW_READY_FOR_TUTORIAL, dropdownRefReadyForTutorialHandler);
+            _dropdownRef.removeEventListener(ListEvent.ITEM_CLICK, this.onDropDownItemClickHandler, false);
+            _dropdownRef.removeEventListener(TutorialEvent.VIEW_READY_FOR_TUTORIAL, this.onDropDownViewReadyForTutorialHandler);
             if (_dropdownRef is IDisposable) {
                 IDisposable(_dropdownRef).dispose();
             }
@@ -275,10 +272,9 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
         this.roles = null;
         this.skills.dispose();
         this.skills = null;
-        this.goups_icons = null;
         this.speed_xp_bg.dispose();
         this.speed_xp_bg = null;
-        this.new_skill_anim = null;
+        this.newSkillAnim = null;
         this.levelSpecializationMain.dispose();
         this.levelSpecializationMain = null;
         this.tankmenName.dispose();
@@ -288,13 +284,16 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
         this.role.dispose();
         this.role = null;
         this.vehicleType = null;
-        this.lastSkillLevel = null;
         this.emptySlotBgAnim = null;
         if (_data && _data is IDisposable) {
             IDisposable(_data).dispose();
             _data = null;
         }
         super.onDispose();
+    }
+
+    override protected function canLog():Boolean {
+        return false;
     }
 
     public function getData():Object {
@@ -305,8 +304,8 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
         dispatchEvent(new CrewEvent(CrewEvent.OPEN_PERSONAL_CASE, this.data, false, param1));
     }
 
-    public function playSound(param1:String):void {
-        App.soundMgr.playControlsSnd(param1, this.soundType, this.soundId);
+    private function playSound(param1:String):void {
+        App.soundMgr.playControlsSnd(param1, SOUND_TYPE, SOUND_ID);
     }
 
     public function setData(param1:Object):void {
@@ -317,38 +316,45 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
         }
         this.visible = true;
         var _loc2_:TankmanRoleVO = TankmanRoleVO(param1);
+        if (dataProvider != null) {
+            dataProvider.cleanUp();
+        }
         this.dataProvider = new DataProvider(_loc2_.recruitList);
         var _loc3_:Number = _height * (_loc2_.recruitList.length < menuRowCount ? _loc2_.recruitList.length : menuRowCount);
         var _loc4_:Number = _height / 2 - _loc3_ / 2 - _height;
         var _loc5_:Number = parent.parent.y - y - _height;
         menuOffset.top = Math.round(_loc4_ >= _loc5_ ? Number(_loc4_) : Number(_loc5_)) - 3;
-        if (_loc2_.tankman.iconFile != this.icon.source && _loc2_.tankman.iconFile) {
+        var _loc6_:TankmanVO = _loc2_.tankman;
+        if (_loc6_.iconFile != this.icon.source && _loc6_.iconFile) {
             this.icon.visible = true;
-            this.icon.source = TANKMEN_ICONS_SMALL + _loc2_.tankman.iconFile;
+            this.icon.source = TANKMEN_ICONS_SMALL + _loc6_.iconFile;
         }
-        if (_loc2_.tankman.rankIconFile != this.iconRank.imageLoader.source && _loc2_.tankman.rankIconFile) {
+        if (_loc6_.rankIconFile != this.iconRank.imageLoader.source && _loc6_.rankIconFile) {
             this.iconRank.imageLoader.visible = true;
-            this.iconRank.imageLoader.source = TANKMEN_RANKS_SMALL + _loc2_.tankman.rankIconFile;
+            this.iconRank.imageLoader.source = TANKMEN_RANKS_SMALL + _loc6_.rankIconFile;
         }
         else {
             this.iconRank.imageLoader.visible = false;
         }
-        if (_loc2_.tankman.roleIconFile != this.iconRole.imageLoader.source && _loc2_.tankman.roleIconFile) {
+        if (_loc6_.roleIconFile != this.iconRole.imageLoader.source && _loc6_.roleIconFile) {
             this.iconRole.imageLoader.visible = true;
-            this.iconRole.imageLoader.source = _loc2_.tankman.roleIconFile;
+            this.iconRole.imageLoader.source = _loc6_.roleIconFile;
         }
-        var _loc6_:TankmanTextCreator = new TankmanTextCreator(_loc2_.tankman, _loc2_);
-        this.role.label = _loc6_.roleHtml;
-        this.levelSpecializationMain.label = _loc6_.levelSpecializationMainHtml;
-        var _loc7_:Array = [];
-        var _loc8_:int = _loc2_.roles.length;
-        var _loc9_:int = 0;
-        while (_loc9_ < _loc8_) {
-            _loc7_.push(new SkillsVO({"icon": TANKMEN_ROLES_SMALL + _loc2_.roles[_loc9_] + IMAGE_EXTENSION}));
-            _loc9_++;
+        var _loc7_:TankmanTextCreator = new TankmanTextCreator(_loc6_, _loc2_);
+        this.role.label = _loc7_.roleHtml;
+        this.levelSpecializationMain.label = _loc7_.levelSpecializationMainHtml;
+        var _loc8_:Array = [];
+        var _loc9_:int = _loc2_.roles.length;
+        var _loc10_:int = 0;
+        while (_loc10_ < _loc9_) {
+            _loc8_.push(new SkillsVO({"icon": TANKMEN_ROLES_SMALL + _loc2_.roles[_loc10_] + IMAGE_EXTENSION}));
+            _loc10_++;
         }
-        this.roles.dataProvider = new DataProvider(_loc7_);
-        this.speed_xp_bg.visible = _loc2_.tankman.isLessMastered;
+        if (this.roles.dataProvider != null) {
+            this.roles.dataProvider.cleanUp();
+        }
+        this.roles.dataProvider = new DataProvider(_loc8_);
+        this.speed_xp_bg.visible = _loc6_.isLessMastered;
         if (isNaN(_loc2_.tankmanID) && App.globalVarsMgr.isKoreaS()) {
             this.emptySlotBgAnim.gotoAndPlay(1);
             this.emptySlotBgAnim.visible = true;
@@ -357,7 +363,8 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
             this.emptySlotBgAnim.gotoAndStop(1);
             this.emptySlotBgAnim.visible = false;
         }
-        this.updateSkills(_loc2_.tankman);
+        this.skills.updateSkills(_loc6_);
+        this.newSkillAnim.visible = _loc6_.canBuySkill;
         selected = false;
         visible = true;
     }
@@ -365,29 +372,7 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
     public function setListData(param1:ListData):void {
         this.index = param1.index;
         selected = param1.selected;
-        label = param1.label || "empty";
-    }
-
-    public function updateSkills(param1:TankmanVO):void {
-        var _loc2_:int = 0;
-        this.skills.dataProvider = new DataProvider(param1.renderSkills);
-        if (param1.renderSkills.length > 0) {
-            this.new_skill_anim.alpha = 0;
-            _loc2_ = !!param1.lastSkillInProgress ? 1 : 0;
-            if (param1.needGroupSkills) {
-                this.goups_icons.visible = true;
-                this.goups_icons.skillsGroupNum.text = "x" + (param1.skills.length - _loc2_);
-            }
-            else {
-                this.goups_icons.visible = false;
-            }
-            this.lastSkillLevel.text = !!_loc2_ ? param1.lastSkillLevel + "%" : "";
-            this.lastSkillLevel.x = this.skills.x + (this.skills.columnWidth + this.skills.paddingRight) * param1.renderSkills.length;
-        }
-        else {
-            this.lastSkillLevel.text = "";
-            this.goups_icons.visible = false;
-        }
+        label = param1.label || EMPTY_LABEL;
     }
 
     override public function get data():Object {
@@ -399,10 +384,10 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
     }
 
     override public function set dataProvider(param1:IDataProvider):void {
-        dropdown = param1.length > 1 ? "RecruitScrollingList" : "RecruitScrollingList2";
-        menuRowCount = param1.length < 5 ? Number(param1.length) : Number(5);
+        dropdown = param1.length > 1 ? DROPDOWN : DROPDOWN2;
+        menuRowCount = param1.length < DEF_ROW_COUNT ? Number(param1.length) : Number(DEF_ROW_COUNT);
         if (param1.length > this.menuRowCount) {
-            super.scrollBar = "ScrollBar";
+            super.scrollBar = Linkages.SCROLL_BAR;
         }
         else {
             super.scrollBar = null;
@@ -432,30 +417,36 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
     }
 
     override protected function handleMouseRelease(param1:MouseEvent):void {
-        var _loc4_:int = 0;
-        var _loc5_:DisplayObject = null;
-        var _loc6_:Number = NaN;
+        var _loc4_:TileList = null;
+        var _loc5_:DataProvider = null;
+        var _loc6_:int = 0;
+        var _loc7_:int = 0;
+        var _loc8_:DisplayObject = null;
+        var _loc9_:Number = NaN;
         var _loc2_:ICommons = App.utils.commons;
         var _loc3_:TankmanRoleVO = TankmanRoleVO(this.data);
         if (_loc2_.isLeftButton(param1)) {
-            if (this.skills.dataProvider) {
-                _loc4_ = 0;
-                while (_loc4_ < this.skills.dataProvider.length) {
-                    if (this.skills.dataProvider[_loc4_].buy) {
-                        _loc5_ = this.skills.getRendererAt(_loc4_) as DisplayObject;
-                        _loc6_ = _loc5_.width;
-                        if (_loc5_.mouseX > 0 && _loc5_.mouseX < _loc6_ && (_loc5_.mouseY > 0 && _loc5_.mouseY < _loc6_)) {
+            _loc4_ = this.skills.skills;
+            _loc5_ = DataProvider(_loc4_.dataProvider);
+            if (_loc5_ != null) {
+                _loc6_ = _loc5_.length;
+                _loc7_ = 0;
+                while (_loc7_ < _loc6_) {
+                    if (_loc5_[_loc7_].buy) {
+                        _loc8_ = DisplayObject(_loc4_.getRendererAt(_loc7_));
+                        _loc9_ = _loc8_.width;
+                        if (_loc8_.mouseX > 0 && _loc8_.mouseX < _loc9_ && (_loc8_.mouseY > 0 && _loc8_.mouseY < _loc9_)) {
                             if (selected) {
                                 close();
                             }
                             if (_loc3_.tankmanID > 0) {
-                                this.openPersonalCase(2);
-                                setState("out");
+                                this.openPersonalCase(SELECTED_TAB_INDEX);
+                                setState(ComponentState.OUT);
                                 return;
                             }
                         }
                     }
-                    _loc4_++;
+                    _loc7_++;
                 }
             }
         }
@@ -471,38 +462,27 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
 
     override protected function handleMouseRollOver(param1:MouseEvent):void {
         super.handleMouseRollOver(param1);
-        this.playSound("over");
+        this.playSound(ComponentState.OVER);
     }
 
     override protected function handleMouseRollOut(param1:MouseEvent):void {
         super.handleMouseRollOut(param1);
-        this.playSound("out");
+        this.playSound(ComponentState.OUT);
     }
 
     override protected function handleMousePress(param1:MouseEvent):void {
-        var _loc5_:ButtonEvent = null;
-        var _loc2_:MouseEventEx = param1 as MouseEventEx;
-        var _loc3_:uint = _loc2_ == null ? uint(0) : uint(_loc2_.mouseIdx);
-        var _loc4_:uint = _loc2_ == null ? uint(0) : uint(_loc2_.buttonIdx);
-        if (_loc4_ == 0) {
-            _mouseDown = _mouseDown | 1 << _loc3_;
-            if (enabled) {
-                setState("down");
-                if (autoRepeat && _repeatTimer == null) {
-                    _autoRepeatEvent = new ButtonEvent(ButtonEvent.CLICK, true, false, _loc3_, _loc4_, false, true);
-                    _repeatTimer = new Timer(repeatDelay, 1);
-                    _repeatTimer.addEventListener(TimerEvent.TIMER_COMPLETE, beginRepeat, false, 0, true);
-                    _repeatTimer.start();
-                }
-                _loc5_ = new ButtonEvent(ButtonEvent.PRESS, true, false, _loc3_, _loc4_, false, false);
-                dispatchEvent(_loc5_);
-                this.playSound("press");
-            }
+        super.handleMousePress(param1);
+        if (App.utils.commons.isLeftButton(param1) && enabled) {
+            this.playSound(SoundManagerStates.SND_PRESS);
         }
     }
 
-    override protected function canLog():Boolean {
-        return false;
+    private function onDropDownItemClickHandler(param1:ListEvent):void {
+        handleMenuItemClick(param1);
+    }
+
+    private function onDropDownViewReadyForTutorialHandler(param1:TutorialEvent):void {
+        dropdownRefReadyForTutorialHandler(param1);
     }
 }
 }

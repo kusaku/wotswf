@@ -30,6 +30,8 @@ public class DirectionButtonRenderer extends UIComponent {
 
     private var _canAttackMode:Boolean = false;
 
+    private var _canAvailableMode:Boolean = true;
+
     public function DirectionButtonRenderer() {
         super();
     }
@@ -83,6 +85,11 @@ public class DirectionButtonRenderer extends UIComponent {
             this.attackDeclaredIcon.visible = false;
             this.clanTF.visible = false;
             this.button.visible = false;
+            if (!this._canAvailableMode) {
+                this.direction.hoverAnimation = null;
+                this.direction.mouseArea.buttonMode = false;
+                return;
+            }
             if (this._model && this._model.canBeAttacked && this._canAttackMode) {
                 this.button.visible = true;
                 this.direction.hoverAnimation = DirectionCmp.ANIMATION_ATTACK;
@@ -121,6 +128,15 @@ public class DirectionButtonRenderer extends UIComponent {
         invalidate(INVALID_COMMANDER_MODE);
     }
 
+    public function get canAvailableMode():Boolean {
+        return this._canAvailableMode;
+    }
+
+    public function set canAvailableMode(param1:Boolean):void {
+        this._canAvailableMode = param1;
+        invalidate(INVALID_COMMANDER_MODE);
+    }
+
     private function clanOverHandler(param1:MouseEvent):void {
         if (this._model && this._model.isAttackDeclared()) {
             App.toolTipMgr.showSpecial(TOOLTIPS_CONSTANTS.CLAN_INFO, null, this._model.attackerClanID);
@@ -145,7 +161,7 @@ public class DirectionButtonRenderer extends UIComponent {
         if (param1 is MouseEvent && !App.utils.commons.isLeftButton(param1 as MouseEvent)) {
             return;
         }
-        if (this._model && this._model.canBeAttacked && this._canAttackMode) {
+        if (this._model && this._model.canBeAttacked && this._canAttackMode && this._canAvailableMode) {
             _loc2_ = new FortIntelClanDescriptionEvent(FortIntelClanDescriptionEvent.ATTACK_DIRECTION, this._model.uid);
             dispatchEvent(_loc2_);
         }

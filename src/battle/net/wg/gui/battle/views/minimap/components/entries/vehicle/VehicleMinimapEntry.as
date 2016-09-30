@@ -98,7 +98,7 @@ public class VehicleMinimapEntry extends BattleUIComponent implements IVehicleMi
 
     private var _isVehicleLabelVisible:Boolean = false;
 
-    private var _isInAoIChanged:Boolean = false;
+    private var _isInAoI:Boolean = false;
 
     public function VehicleMinimapEntry() {
         this._vehicleAnimations = {};
@@ -114,23 +114,36 @@ public class VehicleMinimapEntry extends BattleUIComponent implements IVehicleMi
         this._currentTextField = this.vehicleNameTextFieldClassic;
         TextFieldEx.setNoTranslate(this.vehicleNameTextFieldAlt, true);
         TextFieldEx.setNoTranslate(this.vehicleNameTextFieldClassic, true);
+        MinimapEntryController.instance.registerScalableEntry(this);
     }
 
     public function setVehicleInfo(param1:Number, param2:String, param3:String, param4:String, param5:String):void {
-        this._classTagName = param2;
         this._vehicleID = param1;
-        this._guiLabel = param4;
-        this._vehicleName = param3;
-        invalidate(INVALID_VEHICLE_LABEL | INVALID_CHANGE_VEHICLE_ANIMATION_TYPE);
+        var _loc6_:uint = 0;
+        if (this._classTagName != param2) {
+            this._classTagName = param2;
+            _loc6_ = _loc6_ | INVALID_CHANGE_VEHICLE_ANIMATION_TYPE;
+        }
+        if (this._guiLabel != param4) {
+            this._guiLabel = param4;
+            _loc6_ = _loc6_ | (INVALID_VEHICLE_LABEL | INVALID_CHANGE_VEHICLE_ANIMATION_TYPE);
+        }
+        if (this._vehicleName != param3) {
+            this._vehicleName = param3;
+            _loc6_ = _loc6_ | INVALID_VEHICLE_LABEL;
+        }
         if (param5 != Values.EMPTY_STR) {
             this._actionAnimationType = param5;
-            invalidate(INVALID_VEHICLE_ACTION_ANIMATION);
+            _loc6_ = _loc6_ | INVALID_VEHICLE_ACTION_ANIMATION;
         }
         if (!this._isSetVehicleInfo) {
             App.colorSchemeMgr.addEventListener(ColorSchemeEvent.SCHEMAS_UPDATED, this.onColorSchemasUpdatedHandler);
             this._isSetVehicleInfo = true;
         }
         MinimapEntryController.instance.registerVehicleLabelEntry(this);
+        if (_loc6_ != 0) {
+            invalidate(_loc6_);
+        }
     }
 
     private function updateBearer():void {
@@ -223,7 +236,6 @@ public class VehicleMinimapEntry extends BattleUIComponent implements IVehicleMi
 
     public function setInAoI(param1:Boolean):void {
         this._currentTextField.visible = false;
-        var _loc2_:* = 0;
         if (param1) {
             this._currentTextField = this.vehicleNameTextFieldClassic;
             MinimapEntryController.instance.registerVehicleEntry(this);
@@ -232,10 +244,9 @@ public class VehicleMinimapEntry extends BattleUIComponent implements IVehicleMi
             MinimapEntryController.instance.unregisterVehicleEntry(this);
             this._actionAnimationType = Values.EMPTY_STR;
             this._currentTextField = this.vehicleNameTextFieldAlt;
-            this._isInAoIChanged = true;
         }
-        _loc2_ = _loc2_ | (INVALID_VEHICLE_LABEL | INVALID_CHANGE_VEHICLE_ANIMATION_TYPE);
-        invalidate(_loc2_);
+        this._isInAoI = param1;
+        invalidate(INVALID_VEHICLE_LABEL | INVALID_CHANGE_VEHICLE_ANIMATION_TYPE);
     }
 
     override protected function draw():void {
@@ -278,12 +289,11 @@ public class VehicleMinimapEntry extends BattleUIComponent implements IVehicleMi
                     this._currVehicleAnimation.stop();
                     this._currVehicleAnimation.visible = false;
                 }
-                if (this._isInAoIChanged) {
-                    this._isInAoIChanged = false;
-                    this._atlasItemName = VehicleMinimapEntryConst.LAST_LIT_ICON_NAME + ATLAS_NAME_DELIMITER + this._guiLabel + ATLAS_NAME_DELIMITER + this._deadState + this._aliasColor;
+                if (this._isInAoI) {
+                    this._atlasItemName = this._classTagName + ATLAS_NAME_DELIMITER + this._guiLabel + ATLAS_NAME_DELIMITER + this._deadState + this._aliasColor;
                 }
                 else {
-                    this._atlasItemName = this._classTagName + ATLAS_NAME_DELIMITER + this._guiLabel + ATLAS_NAME_DELIMITER + this._deadState + this._aliasColor;
+                    this._atlasItemName = VehicleMinimapEntryConst.LAST_LIT_ICON_NAME + ATLAS_NAME_DELIMITER + this._guiLabel + ATLAS_NAME_DELIMITER + this._deadState + this._aliasColor;
                 }
                 if (this._deadState == VehicleMinimapEntryConst.DEAD) {
                     if (this._isDeadPermanent) {
@@ -325,6 +335,7 @@ public class VehicleMinimapEntry extends BattleUIComponent implements IVehicleMi
     }
 
     override protected function onDispose():void {
+        MinimapEntryController.instance.unregisterScalableEntry(this);
         this.mcTopAnimation.dispose();
         this.mcTopAnimation = null;
         App.utils.data.cleanupDynamicObject(this._vehicleAnimations);

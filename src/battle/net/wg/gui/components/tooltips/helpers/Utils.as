@@ -62,6 +62,8 @@ public class Utils {
 
     public const STATUS_RENTED:String = "rented";
 
+    public const STATUS_DISMISSED:String = "dismissed";
+
     public const STATUS_CRITICAL:String = "critical";
 
     public const STATUS_WARNING:String = "warning";
@@ -103,8 +105,10 @@ public class Utils {
     }
 
     public function addHeader(param1:String, param2:Number, param3:Number, param4:String):TextField {
-        var _loc5_:TextField = App.textMgr.createTextField();
-        var _loc6_:TextFormat = new TextFormat();
+        var _loc5_:TextField = null;
+        var _loc6_:TextFormat = null;
+        _loc5_ = App.textMgr.createTextField();
+        _loc6_ = new TextFormat();
         _loc6_.leading = -3;
         _loc6_.align = TextFormatAlign.LEFT;
         _loc5_.name = param1;
@@ -124,6 +128,7 @@ public class Utils {
     }
 
     public function createBlock(param1:ToolTipBlockVO, param2:Number):ToolTipBlockResultVO {
+        var _loc6_:Number = NaN;
         var _loc16_:IconText = null;
         var _loc17_:ToolTipBlockRightListItemVO = null;
         var _loc21_:TextField = null;
@@ -132,7 +137,7 @@ public class Utils {
         var _loc3_:Number = 0;
         var _loc4_:uint = 0;
         var _loc5_:String = "$TextFont";
-        var _loc6_:Number = 0;
+        _loc6_ = 0;
         var _loc7_:Vector.<IconText> = new Vector.<IconText>();
         var _loc8_:Array = [];
         if (param1.header) {
@@ -176,8 +181,7 @@ public class Utils {
         param1.contener.addChild(_loc10_);
         var _loc13_:Vector.<ToolTipBlockRightListItemVO> = param1.rightTextList;
         var _loc14_:uint = _loc13_.length;
-        var _loc15_:Number = param1.leftTextLineHight != 0 ? Number(param1.leftTextLineHight) : Number(_loc10_.getLineMetrics(0).height + _loc11_.leading + 0.333);
-        _loc15_ = _loc15_ + param1.rightTextStartYPos;
+        var _loc15_:Number = param1.leftTextLineHight != 0 ? Number(param1.leftTextLineHight) : Number(_loc10_.getLineMetrics(0).height);
         var _loc18_:Boolean = false;
         _loc4_ = 0;
         while (_loc4_ < _loc14_) {
@@ -312,6 +316,9 @@ public class Utils {
                 _loc4_ = 0.3;
                 _loc5_ = 0.11;
                 _loc6_ = 11;
+                break;
+            case this.STATUS_DISMISSED:
+                _loc2_.textColor = 0;
                 break;
             case this.STATUS_INFO:
             default:

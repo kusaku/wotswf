@@ -8,20 +8,20 @@ import net.wg.data.constants.Errors;
 import net.wg.data.constants.QuestsStates;
 import net.wg.data.constants.generated.QUESTS_ALIASES;
 import net.wg.gui.components.advanced.interfaces.INewIndicator;
-import net.wg.gui.components.controls.SoundListItemRenderer;
+import net.wg.gui.components.controls.TableRenderer;
 import net.wg.gui.components.controls.TextFieldShort;
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.lobby.components.ProgressIndicator;
 import net.wg.gui.lobby.questsWindow.components.QuestStatusComponent;
 import net.wg.gui.lobby.questsWindow.components.QuestsCounter;
 import net.wg.gui.lobby.questsWindow.data.QuestRendererVO;
+import net.wg.gui.lobby.questsWindow.events.IQuestRenderer;
 
 import org.idmedia.as3commons.util.StringUtils;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.events.ComponentEvent;
 
-public class QuestRenderer extends SoundListItemRenderer {
+public class QuestRenderer extends TableRenderer implements IQuestRenderer {
 
     private static const DEF_COUNTER_Y:int = 27;
 
@@ -37,13 +37,7 @@ public class QuestRenderer extends SoundListItemRenderer {
 
     public var statusMC:QuestStatusComponent;
 
-    public var lockUpMC:MovieClip;
-
-    public var lockDownMC:MovieClip;
-
     public var actionMC:MovieClip;
-
-    public var background:MovieClip;
 
     public var progressIndicator:ProgressIndicator;
 
@@ -81,7 +75,7 @@ public class QuestRenderer extends SoundListItemRenderer {
         this.statusMC.visible = false;
         this.progressIndicator.visible = false;
         this.actionMC.visible = false;
-        this._questComponents = new <DisplayObject>[this.indicatorIGR, this.counter, this.lockUpMC, this.lockDownMC, this.actionMC, this.progressIndicator, this.taskTF, this.descrTF, this.timerTF, this.background];
+        this._questComponents = new <DisplayObject>[this.indicatorIGR, this.counter, this.actionMC, this.progressIndicator, this.taskTF, this.descrTF, this.timerTF, rendererBg];
         this._blockTitleComponents = new <DisplayObject>[this.blockTitleTF];
     }
 
@@ -115,8 +109,6 @@ public class QuestRenderer extends SoundListItemRenderer {
         this.descrTF = null;
         this.taskTF = null;
         this.actionMC = null;
-        this.lockUpMC = null;
-        this.lockDownMC = null;
         this.newIndicator.dispose();
         this.newIndicator = null;
         this.indicatorIGR.dispose();
@@ -127,6 +119,7 @@ public class QuestRenderer extends SoundListItemRenderer {
         this.statusMC = null;
         this.progressIndicator.dispose();
         this.progressIndicator = null;
+        this._questData = null;
         this.blockTitleTF = null;
         this._questComponents.splice(0, this._questComponents.length);
         this._blockTitleComponents.splice(0, this._blockTitleComponents.length);
@@ -134,21 +127,12 @@ public class QuestRenderer extends SoundListItemRenderer {
         this._blockTitleComponents = null;
         this.bckgrImageLoader.dispose();
         this.bckgrImageLoader = null;
-        this.background = null;
         super.onDispose();
     }
 
     override protected function draw():void {
+        super.draw();
         if (isInvalid(InvalidationType.STATE)) {
-            if (_newFrame) {
-                gotoAndPlay(_newFrame);
-                _newFrame = null;
-            }
-            if (focusIndicator && _newFocusIndicatorFrame) {
-                focusIndicator.gotoAndPlay(_newFocusIndicatorFrame);
-                _newFocusIndicatorFrame = null;
-            }
-            dispatchEvent(new ComponentEvent(ComponentEvent.STATE_CHANGE));
             if (this._questData != null) {
                 this.checkData(this._questData);
             }
@@ -164,8 +148,6 @@ public class QuestRenderer extends SoundListItemRenderer {
             }
             this._wasAnimated = true;
         }
-        this.mouseChildren = true;
-        this.mouseEnabled = true;
         this.newIndicator.mouseChildren = false;
     }
 
@@ -183,12 +165,6 @@ public class QuestRenderer extends SoundListItemRenderer {
         this.newIndicator.addEventListener(MouseEvent.CLICK, this.onControlClickHandler);
         this.newIndicator.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         this.newIndicator.addEventListener(MouseEvent.ROLL_OVER, this.onNewIndicatorRollOverHandler);
-        this.lockUpMC.addEventListener(MouseEvent.CLICK, this.onControlClickHandler);
-        this.lockUpMC.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
-        this.lockUpMC.addEventListener(MouseEvent.ROLL_OVER, this.onLockMcRollOverHandler);
-        this.lockDownMC.addEventListener(MouseEvent.CLICK, this.onControlClickHandler);
-        this.lockDownMC.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
-        this.lockDownMC.addEventListener(MouseEvent.ROLL_OVER, this.onLockMcRollOverHandler);
     }
 
     private function removeListeners():void {
@@ -201,12 +177,6 @@ public class QuestRenderer extends SoundListItemRenderer {
         this.newIndicator.removeEventListener(MouseEvent.CLICK, this.onControlClickHandler);
         this.newIndicator.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         this.newIndicator.removeEventListener(MouseEvent.ROLL_OVER, this.onNewIndicatorRollOverHandler);
-        this.lockUpMC.removeEventListener(MouseEvent.CLICK, this.onControlClickHandler);
-        this.lockUpMC.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
-        this.lockUpMC.removeEventListener(MouseEvent.ROLL_OVER, this.onLockMcRollOverHandler);
-        this.lockDownMC.removeEventListener(MouseEvent.CLICK, this.onControlClickHandler);
-        this.lockDownMC.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
-        this.lockDownMC.removeEventListener(MouseEvent.ROLL_OVER, this.onLockMcRollOverHandler);
     }
 
     private function checkData(param1:QuestRendererVO):void {
@@ -220,9 +190,10 @@ public class QuestRenderer extends SoundListItemRenderer {
             this.setQuestTexts(param1);
             this.checkCounter(param1);
             this.checkProgress(param1);
-            this.checkLock(param1);
             this.checkIGR(param1);
             this.checkAction(param1);
+            this.mouseChildren = true;
+            this.mouseEnabled = true;
         }
         else if (_loc2_ == QUESTS_ALIASES.RENDERER_TYPE_BLOCK_TITLE) {
             if (_loc2_ != this._type) {
@@ -231,6 +202,8 @@ public class QuestRenderer extends SoundListItemRenderer {
                 this._type = _loc2_;
             }
             this.blockTitleTF.htmlText = this._questData.description;
+            this.mouseChildren = false;
+            this.mouseEnabled = false;
         }
         else {
             App.utils.asserter.assert(false, "Quest renderer type \'" + param1.rendererType + "\'" + Errors.WASNT_FOUND);
@@ -251,15 +224,10 @@ public class QuestRenderer extends SoundListItemRenderer {
         this.actionMC.visible = param1.eventType == QuestsStates.ACTION;
     }
 
-    private function checkLock(param1:QuestRendererVO):void {
-        this.lockUpMC.visible = param1.isLocked;
-        this.lockDownMC.visible = param1.isLock;
-    }
-
     private function setQuestTexts(param1:QuestRendererVO):void {
-        this.taskTF.text = param1.taskType;
+        this.taskTF.htmlText = param1.taskType;
         this.descrTF.label = param1.description;
-        this.timerTF.htmlText = param1.timerDescr;
+        this.timerTF.htmlText = param1.timerDescription;
     }
 
     private function checkProgress(param1:QuestRendererVO):void {
@@ -324,17 +292,12 @@ public class QuestRenderer extends SoundListItemRenderer {
 
     override public function set enabled(param1:Boolean):void {
         super.enabled = param1;
-        mouseChildren = true;
     }
 
     private function onNewIndicatorRollOverHandler(param1:MouseEvent):void {
         if (this._questData != null) {
             this.showTooltip(this._questData.eventType == QuestsStates.ACTION ? TOOLTIPS.QUESTS_NEWLABEL_ACTION : TOOLTIPS.QUESTS_NEWLABEL_TASK);
         }
-    }
-
-    private function onLockMcRollOverHandler(param1:MouseEvent):void {
-        this.showTooltip(TOOLTIPS.QUESTS_COMPLEXTASK_LABEL);
     }
 
     private function onIndicatorIgrRollOverHandler(param1:MouseEvent):void {

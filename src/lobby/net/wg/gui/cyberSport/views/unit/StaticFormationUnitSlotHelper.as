@@ -1,21 +1,16 @@
 package net.wg.gui.cyberSport.views.unit {
 import flash.display.InteractiveObject;
 
-import net.wg.gui.cyberSport.views.respawn.UnitSlotButtonProperties;
 import net.wg.gui.lobby.fortifications.data.battleRoom.LegionariesCandidateVO;
 import net.wg.gui.rally.controls.interfaces.IRallySimpleSlotRenderer;
 import net.wg.gui.rally.interfaces.IRallySlotVO;
+import net.wg.gui.utils.VO.UnitSlotProperties;
 
 public class StaticFormationUnitSlotHelper extends UnitSlotHelper {
 
-    private var _removeBtnProps:UnitSlotButtonProperties;
-
     public function StaticFormationUnitSlotHelper() {
         super();
-        this._removeBtnProps = new UnitSlotButtonProperties({
-            "x": 255,
-            "width": 23
-        });
+        removeBtnProps = new UnitSlotProperties(255, 23);
     }
 
     override public function onControlRollOver(param1:InteractiveObject, param2:IRallySimpleSlotRenderer, param3:IRallySlotVO, param4:* = null):void {
@@ -35,10 +30,6 @@ public class StaticFormationUnitSlotHelper extends UnitSlotHelper {
             _loc4_ = _loc3_.isLegionaries;
         }
         StaticFormationSlotRenderer(param1).legionnaireIcon.visible = _loc4_;
-    }
-
-    override protected function get removeBtnProps():UnitSlotButtonProperties {
-        return this._removeBtnProps;
     }
 }
 }

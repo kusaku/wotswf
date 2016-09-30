@@ -16,6 +16,12 @@ import net.wg.gui.components.controls.SoundListItemRenderer;
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.components.controls.VO.ActionPriceVO;
 import net.wg.gui.events.CrewEvent;
+import net.wg.gui.lobby.barracks.data.BarracksTankmanVO;
+import net.wg.gui.lobby.components.SmallSkillsList;
+import net.wg.infrastructure.managers.ITooltipMgr;
+import net.wg.utils.IUtils;
+
+import org.idmedia.as3commons.util.StringUtils;
 
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.events.ListEvent;
@@ -30,11 +36,9 @@ public class BarracksItemRenderer extends SoundListItemRenderer {
 
     private static const PATH_TANKMAN_ICONS_SMALL:String = "../maps/icons/tankmen/ranks/small/";
 
-    private static const SOUND_ID_BTN_DISSMISS:String = "btnDissmiss";
+    private static const SOUND_ID_BTN_DISMISS:String = "btnDissmiss";
 
     private static const SOUND_ID_BTN_UPLOADED:String = "btnUnload";
-
-    private static const PROPERTY_ACTION_PRICE_DATA:String = "actionPriceData";
 
     private static const TO_STRING_TEXT:String = "BarracksItemRenderer: ";
 
@@ -68,7 +72,7 @@ public class BarracksItemRenderer extends SoundListItemRenderer {
 
     public var countField:TextField = null;
 
-    public var btnDissmiss:SoundButtonEx;
+    public var btnDismiss:SoundButtonEx;
 
     public var icon:UILoaderAlt;
 
@@ -92,6 +96,10 @@ public class BarracksItemRenderer extends SoundListItemRenderer {
 
     public var lockMsg:TextField = null;
 
+    public var recoveryPeriodTf:TextField = null;
+
+    public var skills:SmallSkillsList = null;
+
     public var vehicleType:TextField = null;
 
     public var price:IconText = null;
@@ -99,6 +107,10 @@ public class BarracksItemRenderer extends SoundListItemRenderer {
     public var actionPrice:ActionPrice = null;
 
     public var descrField:TextField = null;
+
+    private var _isMouseOver:Boolean = false;
+
+    private var _tankmanData:BarracksTankmanVO = null;
 
     private var _inTank:Boolean = false;
 
@@ -108,49 +120,47 @@ public class BarracksItemRenderer extends SoundListItemRenderer {
 
     private var _buy:Boolean = false;
 
-    private var _isMouseOver:Boolean = false;
+    private var _toolTipMgr:ITooltipMgr = null;
 
-    private var _actionPriceVo:ActionPriceVO = null;
+    private var _utils:IUtils = null;
 
     public function BarracksItemRenderer() {
         super();
+        this.skills.showBuyAnimation = false;
         buttonMode = true;
         soundType = SoundTypes.BARRACKS_TANKMAN_SOUND_TYPE;
-        this.btnDissmiss.soundType = SoundTypes.NORMAL_BTN;
+        this.btnDismiss.soundType = SoundTypes.NORMAL_BTN;
+        this._toolTipMgr = App.toolTipMgr;
+        this._utils = App.utils;
     }
 
     override public function setData(param1:Object):void {
-        if (!param1) {
+        super.setData(param1);
+        if (param1 == null) {
             return;
         }
-        this.btnDissmiss.focusTarget = this;
-        data = param1;
-        this.empty = param1.empty;
-        this.buy = param1.buy;
-        if (param1.iconFile && param1.iconFile != this.icon.source) {
-            this.icon.source = PATH_TANKMAN_ICONS_BARRACKS + param1.iconFile;
+        this.btnDismiss.focusTarget = this;
+        this._tankmanData = BarracksTankmanVO(param1);
+        this.empty = this._tankmanData.empty;
+        this.buy = this._tankmanData.buy;
+        if (this._tankmanData.iconFile && this._tankmanData.iconFile != this.icon.source) {
+            this.icon.source = PATH_TANKMAN_ICONS_BARRACKS + this._tankmanData.iconFile;
         }
-        if (param1.rankIconFile && param1.rankIconFile != this.iconRank.source) {
-            this.iconRank.source = PATH_TANKMAN_ICONS_SMALL + param1.rankIconFile;
+        if (this._tankmanData.rankIconFile && this._tankmanData.rankIconFile != this.iconRank.source) {
+            this.iconRank.source = PATH_TANKMAN_ICONS_SMALL + this._tankmanData.rankIconFile;
         }
-        if (param1.roleIconFile && param1.roleIconFile != this.iconRole.source) {
-            this.iconRole.source = param1.roleIconFile;
+        if (this._tankmanData.roleIconFile && this._tankmanData.roleIconFile != this.iconRole.source) {
+            this.iconRole.source = this._tankmanData.roleIconFile;
         }
-        this.inCurrentTank = param1.inCurrentTank;
+        this.inCurrentTank = this._tankmanData.inCurrentTank;
         if (!this.inCurrentTank) {
-            this.inTank = param1.inTank;
+            this.inTank = this._tankmanData.inTank;
         }
-        this._actionPriceVo = data.hasOwnProperty(PROPERTY_ACTION_PRICE_DATA) && data.actionPriceData ? new ActionPriceVO(data.actionPriceData) : null;
-        this.btnDissmiss.enabled = !(param1.locked || param1.vehicleBroken);
-        this.btnDissmiss.label = MENU.BARRACKS_BTNDISSMISS;
-        this.btnDissmiss.soundId = SOUND_ID_BTN_DISSMISS;
-        if (this.isTankmanInTank()) {
-            this.btnDissmiss.label = MENU.BARRACKS_BTNUNLOAD;
-            this.btnDissmiss.soundId = SOUND_ID_BTN_UPLOADED;
-            this.btnDissmiss.enabled = !param1.locked;
-        }
-        this.btnDissmiss.soundType = SoundTypes.NORMAL_BTN;
-        this.btnDissmiss.validateNow();
+        this.btnDismiss.enabled = this._tankmanData.actionBtnEnabled;
+        this.btnDismiss.label = this._tankmanData.actionBtnLabel;
+        this.btnDismiss.soundId = this._inTank || this._inCurrentTank ? SOUND_ID_BTN_UPLOADED : SOUND_ID_BTN_DISMISS;
+        this.btnDismiss.soundType = SoundTypes.NORMAL_BTN;
+        this.btnDismiss.validateNow();
         invalidate(INVALIDATE_PARAMS);
         validateNow();
     }
@@ -164,15 +174,14 @@ public class BarracksItemRenderer extends SoundListItemRenderer {
         removeEventListener(MouseEvent.CLICK, this.onClickHandler, false);
         removeEventListener(MouseEvent.ROLL_OVER, this.onRollOverHandler);
         removeEventListener(MouseEvent.ROLL_OUT, this.onRollOutHandler);
-        this.btnDissmiss.removeEventListener(ButtonEvent.CLICK, this.onBtnDissmissButtonEventClickHandler);
-        this.btnDissmiss.removeEventListener(MouseEvent.ROLL_OVER, this.onBtnDissmissRollOverHandler, false);
-        this.btnDissmiss.removeEventListener(MouseEvent.ROLL_OUT, this.onButtonDissmissRollOutHandler, false);
-        this.btnDissmiss.removeEventListener(MouseEvent.CLICK, this.onButtonDissmissRollOutHandler, false);
+        this.btnDismiss.removeEventListener(ButtonEvent.CLICK, this.onBtnDismissButtonEventClickHandler);
+        this.btnDismiss.removeEventListener(MouseEvent.ROLL_OVER, this.onBtnDismissRollOverHandler, false);
+        this.btnDismiss.removeEventListener(MouseEvent.ROLL_OUT, this.onBtnDismissRollOutHandler, false);
         super.onBeforeDispose();
     }
 
     override protected function onDispose():void {
-        this.btnDissmiss.focusTarget = null;
+        this.btnDismiss.focusTarget = null;
         if (this.icon) {
             this.icon.dispose();
             this.icon = null;
@@ -185,8 +194,8 @@ public class BarracksItemRenderer extends SoundListItemRenderer {
             this.iconRank.dispose();
             this.iconRank = null;
         }
-        this.btnDissmiss.dispose();
-        this.btnDissmiss = null;
+        this.btnDismiss.dispose();
+        this.btnDismiss = null;
         this.emptyPlacesTF = null;
         _data = null;
         this.countField = null;
@@ -206,28 +215,31 @@ public class BarracksItemRenderer extends SoundListItemRenderer {
             this.actionPrice.dispose();
             this.actionPrice = null;
         }
-        if (this._actionPriceVo) {
-            this._actionPriceVo.dispose();
-            this._actionPriceVo = null;
-        }
         this.descrField = null;
+        this.recoveryPeriodTf = null;
+        if (this.skills != null) {
+            this.skills.dispose();
+            this.skills = null;
+        }
+        this._tankmanData = null;
+        this._toolTipMgr = null;
+        this._utils = null;
         super.onDispose();
     }
 
     override protected function configUI():void {
         super.configUI();
         tabChildren = false;
-        this.btnDissmiss.focusTarget = this;
-        this.btnDissmiss.addEventListener(ButtonEvent.CLICK, this.onBtnDissmissButtonEventClickHandler);
+        this.btnDismiss.focusTarget = this;
+        this.btnDismiss.addEventListener(ButtonEvent.CLICK, this.onBtnDismissButtonEventClickHandler);
         this.icon.mouseEnabled = this.iconRole.mouseEnabled = this.iconRank.mouseEnabled = false;
         this.icon.mouseChildren = this.iconRole.mouseChildren = this.iconRank.mouseChildren = false;
         addEventListener(ButtonEvent.CLICK, this.onButtonEventClickHandler, false, 0, true);
         addEventListener(MouseEvent.CLICK, this.onClickHandler, false);
         addEventListener(MouseEvent.ROLL_OVER, this.onRollOverHandler);
         addEventListener(MouseEvent.ROLL_OUT, this.onRollOutHandler);
-        this.btnDissmiss.addEventListener(MouseEvent.ROLL_OVER, this.onBtnDissmissRollOverHandler, false, 0, true);
-        this.btnDissmiss.addEventListener(MouseEvent.ROLL_OUT, this.onButtonDissmissRollOutHandler, false, 0, true);
-        this.btnDissmiss.addEventListener(MouseEvent.CLICK, this.onButtonDissmissRollOutHandler, false, 0, true);
+        this.btnDismiss.addEventListener(MouseEvent.ROLL_OVER, this.onBtnDismissRollOverHandler, false, 0, true);
+        this.btnDismiss.addEventListener(MouseEvent.ROLL_OUT, this.onBtnDismissRollOutHandler, false, 0, true);
         mouseChildren = true;
         this.clickArea.buttonMode = true;
     }
@@ -248,8 +260,9 @@ public class BarracksItemRenderer extends SoundListItemRenderer {
     override protected function draw():void {
         var _loc1_:String = null;
         var _loc2_:Point = null;
-        var _loc3_:String = null;
+        var _loc3_:ActionPriceVO = null;
         var _loc4_:String = null;
+        var _loc5_:String = null;
         super.draw();
         if (!_baseDisposed) {
             if (isInvalid(INVALIDATE_IN_TANK) && this.selection) {
@@ -266,8 +279,8 @@ public class BarracksItemRenderer extends SoundListItemRenderer {
                 _loc2_ = new Point(mouseX, mouseY);
                 _loc2_ = localToGlobal(_loc2_);
                 if (hitTestPoint(_loc2_.x, _loc2_.y, true) && this._isMouseOver) {
-                    if (this.btnDissmiss.hitTestPoint(_loc2_.x, _loc2_.y, true) && !(this._buy || this.empty)) {
-                        this.onBtnDissmissRollOverHandler(null);
+                    if (this.btnDismiss.hitTestPoint(_loc2_.x, _loc2_.y, true) && !(this._buy || this.empty)) {
+                        this.onBtnDismissRollOverHandler(null);
                     }
                     else {
                         dispatchEvent(new ListEvent(ListEvent.ITEM_ROLL_OVER, true, true, -1, -1, -1, null, data));
@@ -276,49 +289,61 @@ public class BarracksItemRenderer extends SoundListItemRenderer {
                 this.countField.text = Values.EMPTY_STR;
                 if (this._buy) {
                     if (this.price) {
-                        this.price.textColor = !!data.enoughGold ? Number(IconText.BASE_COLOR) : Number(Colors.ERROR_COLOR);
-                        this.price.text = App.utils.locale.gold(data.price);
+                        this.price.textColor = !!this._tankmanData.enoughGold ? Number(IconText.BASE_COLOR) : Number(Colors.ERROR_COLOR);
+                        this.price.text = this._utils.locale.gold(this._tankmanData.price);
                         this.price.visible = true;
                     }
                     if (this.actionPrice) {
-                        if (this._actionPriceVo) {
-                            this._actionPriceVo.forCredits = false;
-                            this.actionPrice.textColorType = !!data.enoughGold ? ActionPrice.TEXT_COLOR_TYPE_ICON : ActionPrice.TEXT_COLOR_TYPE_ERROR;
+                        _loc3_ = this._tankmanData.actionPriceData;
+                        if (_loc3_) {
+                            _loc3_.forCredits = false;
+                            this.actionPrice.textColorType = !!this._tankmanData.enoughGold ? ActionPrice.TEXT_COLOR_TYPE_ICON : ActionPrice.TEXT_COLOR_TYPE_ERROR;
                         }
-                        this.actionPrice.setData(this._actionPriceVo);
+                        this.actionPrice.setData(_loc3_);
                         this.actionPrice.setup(this);
                         if (this.price) {
                             this.price.visible = !this.actionPrice.visible;
                         }
                     }
-                    this.countField.text = PLUS + data.count;
-                    this.descrField.text = App.utils.locale.makeString(MENU.BARRACKS_BTNBUYBERTHDECS);
-                    this.descrField.replaceText(this.descrField.text.indexOf(CHAR_LEFT_BRACES), this.descrField.text.indexOf(CHAR_RIGHT_BRACES) + 1, String(data.count));
+                    this.countField.text = PLUS + this._tankmanData.count;
+                    this.descrField.text = this._utils.locale.makeString(MENU.BARRACKS_BTNBUYBERTHDECS);
+                    this.descrField.replaceText(this.descrField.text.indexOf(CHAR_LEFT_BRACES), this.descrField.text.indexOf(CHAR_RIGHT_BRACES) + 1, String(this._tankmanData.count));
                 }
                 if (this.empty) {
-                    this.emptyPlacesTF.text = App.utils.locale.makeString(MENU.BARRACKS_BARRACKSRENDERER_PLACESCOUNT) + Values.SPACE_STR + data.freePlaces;
+                    this.emptyPlacesTF.text = this._utils.locale.makeString(MENU.BARRACKS_BARRACKSRENDERER_PLACESCOUNT) + Values.SPACE_STR + this._tankmanData.freePlaces;
                 }
                 if (this.role) {
-                    this.role.htmlText = data.role;
+                    this.role.htmlText = this._tankmanData.role;
                 }
                 if (!(this._buy || this.empty)) {
-                    _loc3_ = data.specializationLevel + CHAR_PERCENT;
-                    _loc4_ = App.utils.locale.makeString(MENU.tankmen(data.tankType));
-                    if (!data.isInSelfVehicleClass) {
-                        this.levelSpecializationMain.htmlText = this.formatDebuffHtmlText(_loc3_);
-                        this.role.htmlText = this.role.htmlText + (CHAR_COMMA + this.formatDebuffHtmlText(_loc4_ + Values.SPACE_STR + data.vehicleType));
+                    _loc4_ = this._tankmanData.specializationLevel + CHAR_PERCENT;
+                    _loc5_ = this._utils.locale.makeString(MENU.tankmen(this._tankmanData.tankType));
+                    if (!this._tankmanData.isInSelfVehicleClass) {
+                        this.levelSpecializationMain.htmlText = this.formatDebuffHtmlText(_loc4_);
+                        this.role.htmlText = this.role.htmlText + (CHAR_COMMA + this.formatDebuffHtmlText(_loc5_ + Values.SPACE_STR + this._tankmanData.vehicleType));
                     }
-                    else if (!data.isInSelfVehicleType) {
-                        this.levelSpecializationMain.htmlText = this.formatDebuffHtmlText(_loc3_);
-                        this.role.htmlText = this.role.htmlText + (CHAR_COMMA + _loc4_ + this.formatDebuffHtmlText(data.vehicleType));
+                    else if (!this._tankmanData.isInSelfVehicleType) {
+                        this.levelSpecializationMain.htmlText = this.formatDebuffHtmlText(_loc4_);
+                        this.role.htmlText = this.role.htmlText + (CHAR_COMMA + _loc5_ + this.formatDebuffHtmlText(this._tankmanData.vehicleType));
                     }
                     else {
-                        this.levelSpecializationMain.htmlText = _loc3_;
-                        this.role.htmlText = this.role.htmlText + (CHAR_COMMA + Values.SPACE_STR + _loc4_ + Values.SPACE_STR + data.vehicleType);
+                        this.levelSpecializationMain.htmlText = _loc4_;
+                        this.role.htmlText = this.role.htmlText + (CHAR_COMMA + Values.SPACE_STR + _loc5_ + Values.SPACE_STR + this._tankmanData.vehicleType);
                     }
-                    this.tankmanName.text = data.firstname + Values.SPACE_STR + data.lastname;
-                    this.rank.text = data.rank;
-                    this.lockMsg.text = data.lockMessage;
+                    this.tankmanName.text = this._tankmanData.firstName + Values.SPACE_STR + this._tankmanData.lastName;
+                    this.rank.visible = this._tankmanData.isRankNameVisible && StringUtils.isNotEmpty(this._tankmanData.rank);
+                    if (this.rank.visible) {
+                        this.rank.text = this._tankmanData.rank;
+                    }
+                    this.skills.visible = this._tankmanData.isSkillsVisible;
+                    if (this.skills.visible) {
+                        this.skills.updateSkills(this._tankmanData);
+                    }
+                    this.lockMsg.text = this._tankmanData.lockMessage;
+                    this.recoveryPeriodTf.visible = StringUtils.isNotEmpty(this._tankmanData.recoveryPeriodText);
+                    if (this.recoveryPeriodTf.visible) {
+                        this.recoveryPeriodTf.htmlText = this._tankmanData.recoveryPeriodText;
+                    }
                 }
             }
         }
@@ -327,7 +352,7 @@ public class BarracksItemRenderer extends SoundListItemRenderer {
     private function updateControlsState():void {
         var _loc1_:* = !(this._buy || this._empty);
         this.icon.visible = this.iconRank.visible = this.iconRole.visible = _loc1_;
-        this.btnDissmiss.visible = _loc1_;
+        this.btnDismiss.visible = _loc1_;
         if (this.buy) {
             soundType = SoundTypes.BARRACKS_BUY_SOUND_TYPE;
         }
@@ -337,6 +362,14 @@ public class BarracksItemRenderer extends SoundListItemRenderer {
         else {
             soundType = SoundTypes.BARRACKS_TANKMAN_SOUND_TYPE;
         }
+    }
+
+    private function formatDebuffHtmlText(param1:String):String {
+        return HTML_FONT_START + Colors.ERROR_COLOR + HTML_FONT_END + param1 + HTML_FONT_TAG_CLOSE;
+    }
+
+    private function isDismissBtn(param1:Object):Boolean {
+        return param1 == this.btnDismiss;
     }
 
     override public function get enabled():Boolean {
@@ -372,22 +405,22 @@ public class BarracksItemRenderer extends SoundListItemRenderer {
         invalidate(INVALIDATE_IN_TANK);
     }
 
-    public function get buy():Boolean {
-        return this._buy;
-    }
-
-    public function set buy(param1:Boolean):void {
-        this._buy = param1;
-        this.updateControlsState();
-        setState(ComponentState.UP);
-    }
-
     public function get empty():Boolean {
         return this._empty;
     }
 
     public function set empty(param1:Boolean):void {
         this._empty = param1;
+        this.updateControlsState();
+        setState(ComponentState.UP);
+    }
+
+    public function get buy():Boolean {
+        return this._buy;
+    }
+
+    public function set buy(param1:Boolean):void {
+        this._buy = param1;
         this.updateControlsState();
         setState(ComponentState.UP);
     }
@@ -402,13 +435,9 @@ public class BarracksItemRenderer extends SoundListItemRenderer {
         this._isMouseOver = false;
     }
 
-    private function onBtnDissmissButtonEventClickHandler(param1:ButtonEvent):void {
-        if (this.isTankmanInTank()) {
-            dispatchEvent(new CrewEvent(CrewEvent.UNLOAD_TANKMAN, data));
-        }
-        else {
-            dispatchEvent(new CrewEvent(CrewEvent.DISMISS_TANKMAN, data));
-        }
+    private function onBtnDismissButtonEventClickHandler(param1:ButtonEvent):void {
+        dispatchEvent(new CrewEvent(CrewEvent.ACT_TANKMAN, data));
+        this._toolTipMgr.hide();
     }
 
     private function onButtonEventClickHandler(param1:ButtonEvent):void {
@@ -423,19 +452,16 @@ public class BarracksItemRenderer extends SoundListItemRenderer {
         }
     }
 
-    private function onBtnDissmissRollOverHandler(param1:MouseEvent):void {
+    private function onBtnDismissRollOverHandler(param1:MouseEvent):void {
         setState(ComponentState.OUT);
-        if (this.isTankmanInTank()) {
-            App.toolTipMgr.showComplex(TOOLTIPS.BARRACKS_TANKMEN_UNLOAD);
-        }
-        else {
-            App.toolTipMgr.showComplex(TOOLTIPS.BARRACKS_TANKMEN_DISMISS);
+        if (StringUtils.isNotEmpty(this._tankmanData.actionBtnTooltip)) {
+            this._toolTipMgr.showComplex(this._tankmanData.actionBtnTooltip);
         }
     }
 
-    private function onButtonDissmissRollOutHandler(param1:MouseEvent = null):void {
+    private function onBtnDismissRollOutHandler(param1:MouseEvent = null):void {
         setState(ComponentState.OVER);
-        App.toolTipMgr.hide();
+        this._toolTipMgr.hide();
         dispatchEvent(new ListEvent(ListEvent.ITEM_ROLL_OVER, true, true, -1, -1, -1, null, data));
     }
 
@@ -451,21 +477,9 @@ public class BarracksItemRenderer extends SoundListItemRenderer {
         if (this.isDismissBtn(param1.target)) {
             return;
         }
-        if (App.utils.commons.isRightButton(param1) && (!this._buy && !this._empty)) {
+        if (this._utils.commons.isRightButton(param1) && (!this._buy && !this._empty)) {
             dispatchEvent(new CrewEvent(CrewEvent.OPEN_PERSONAL_CASE, data, false, 0));
         }
-    }
-
-    private function formatDebuffHtmlText(param1:String):String {
-        return HTML_FONT_START + Colors.ERROR_COLOR + HTML_FONT_END + param1 + HTML_FONT_TAG_CLOSE;
-    }
-
-    private function isTankmanInTank():Boolean {
-        return this._inTank || this._inCurrentTank;
-    }
-
-    private function isDismissBtn(param1:Object):Boolean {
-        return param1 == this.btnDissmiss;
     }
 }
 }

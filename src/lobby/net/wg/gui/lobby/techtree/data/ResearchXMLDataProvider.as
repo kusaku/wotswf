@@ -18,7 +18,7 @@ public class ResearchXMLDataProvider extends ResearchVODataProvider {
         var _loc6_:XML = null;
         var _loc7_:NodeData = null;
         var _loc8_:ResearchDisplayInfo = null;
-        clearUp();
+        cleanUp();
         NodeData.setDisplayInfoClass(ResearchDisplayInfo);
         var _loc2_:String = String(param1);
         var _loc3_:XML = new XML(_loc2_);
@@ -57,8 +57,9 @@ public class ResearchXMLDataProvider extends ResearchVODataProvider {
     }
 
     private function getNodeData(param1:XML):NodeData {
+        var _loc2_:NodeData = null;
         var _loc4_:XML = null;
-        var _loc2_:NodeData = new NodeData();
+        _loc2_ = new NodeData();
         var _loc3_:Array = [];
         for each(_loc4_ in param1.child(NodeName.UNLOCK_PROPS).child(NodeName.REQUIRED).children()) {
             _loc3_.push(Number(_loc4_.toString()));

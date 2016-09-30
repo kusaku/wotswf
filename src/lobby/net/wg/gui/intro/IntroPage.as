@@ -22,13 +22,13 @@ public class IntroPage extends IntroPageMeta implements IIntroPageMeta {
 
     public var videoPlayer:SimpleVideoPlayer;
 
-    private var introInfo:IntroInfoVO;
+    private var _introInfo:IntroInfoVO;
 
-    private var playerOriginalWidth:Number;
+    private var _playerOriginalWidth:Number;
 
-    private var playerOriginalHeight:Number;
+    private var _playerOriginalHeight:Number;
 
-    private var stageDimensions:Point;
+    private var _stageDimensions:Point;
 
     public function IntroPage() {
         super();
@@ -41,86 +41,91 @@ public class IntroPage extends IntroPageMeta implements IIntroPageMeta {
         param1.y = param3 - param1.height >> 1;
     }
 
-    override protected function configUI():void {
-        super.configUI();
-        this.videoPlayer.addEventListener(VideoPlayerEvent.PLAYBACK_STOPPED, this.videoPlayerStopHandler, false, 0, true);
-        this.videoPlayer.addEventListener(VideoPlayerStatusEvent.ERROR, this.videoPlayerErrorHandler, false, 0, true);
-        stage.addEventListener(MouseEvent.CLICK, this.clickMainHandler, false, 0, true);
-        this.playerOriginalWidth = this.videoPlayer.width;
-        this.playerOriginalHeight = this.videoPlayer.height;
-    }
-
-    private function clickMainHandler(param1:MouseEvent):void {
-        this.videoPlayer.stopPlayback();
-    }
-
-    override public function updateStage(param1:Number, param2:Number):void {
-        if (!this.stageDimensions) {
-            this.stageDimensions = new Point();
-        }
-        this.stageDimensions.x = param1;
-        this.stageDimensions.y = param2;
-        invalidate(STAGE_RESIZED);
-    }
-
-    private function videoPlayerStopHandler(param1:VideoPlayerEvent):void {
-        stopVideoS();
-    }
-
-    private function videoPlayerErrorHandler(param1:VideoPlayerStatusEvent):void {
-        handleErrorS(param1.errorCode);
-    }
-
     override public function setViewSize(param1:Number, param2:Number):void {
     }
 
-    override public function handleInput(param1:InputEvent):void {
-        var _loc3_:Number = NaN;
-        super.handleInput(param1);
-        var _loc2_:InputDetails = param1.details;
-        if (_loc2_.value != InputValue.KEY_UP) {
-            _loc3_ = _loc2_.code;
-            if (_loc3_ == Keyboard.ESCAPE || _loc3_ == Keyboard.ENTER || _loc3_ == Keyboard.SPACE) {
-                param1.handled = true;
-                this.videoPlayer.stopPlayback();
-            }
+    override public function updateStage(param1:Number, param2:Number):void {
+        if (!this._stageDimensions) {
+            this._stageDimensions = new Point();
         }
+        this._stageDimensions.x = param1;
+        this._stageDimensions.y = param2;
+        invalidate(STAGE_RESIZED);
     }
 
-    public function as_playVideo(param1:Object):void {
-        this.introInfo = new IntroInfoVO(param1);
+    override protected function configUI():void {
+        super.configUI();
+        this.videoPlayer.addEventListener(VideoPlayerEvent.PLAYBACK_STOPPED, this.onVideoPlayerPlaybackStoppedHandler, false, 0, true);
+        this.videoPlayer.addEventListener(VideoPlayerStatusEvent.ERROR, this.onVideoPlayerErrorHandler, false, 0, true);
+        stage.addEventListener(MouseEvent.CLICK, this.onStageClickHandler, false, 0, true);
+        this._playerOriginalWidth = this.videoPlayer.width;
+        this._playerOriginalHeight = this.videoPlayer.height;
+    }
+
+    override protected function playVideo(param1:IntroInfoVO):void {
+        this._introInfo = param1;
         invalidate(INTRO_INFO_CHANGED);
     }
 
     override protected function draw():void {
         super.draw();
         if (isInvalid(INTRO_INFO_CHANGED)) {
-            if (this.introInfo) {
-                this.videoPlayer.volume = this.introInfo.volume;
-                this.videoPlayer.source = this.introInfo.source;
+            if (this._introInfo) {
+                this.videoPlayer.volume = this._introInfo.volume;
+                this.videoPlayer.bufferTime = this._introInfo.bufferTime;
+                this.videoPlayer.source = this._introInfo.source;
             }
         }
         if (isInvalid(STAGE_RESIZED)) {
-            if (this.stageDimensions) {
-                IntroPage.imitateNoBorderScaleMode(this, this.stageDimensions.x, this.stageDimensions.y, this.playerOriginalWidth, this.playerOriginalHeight);
+            if (this._stageDimensions) {
+                IntroPage.imitateNoBorderScaleMode(this, this._stageDimensions.x, this._stageDimensions.y, this._playerOriginalWidth, this._playerOriginalHeight);
             }
         }
     }
 
     override protected function onDispose():void {
         if (this.videoPlayer) {
-            this.videoPlayer.removeEventListener(VideoPlayerStatusEvent.STATUS_CHANGED, this.videoPlayerStopHandler);
-            this.videoPlayer.removeEventListener(VideoPlayerStatusEvent.ERROR, this.videoPlayerErrorHandler);
+            this.videoPlayer.removeEventListener(VideoPlayerEvent.PLAYBACK_STOPPED, this.onVideoPlayerPlaybackStoppedHandler);
+            this.videoPlayer.removeEventListener(VideoPlayerStatusEvent.ERROR, this.onVideoPlayerErrorHandler);
             this.videoPlayer.dispose();
-            if (this.videoPlayer.parent) {
-                this.videoPlayer.parent.removeChild(this.videoPlayer);
-            }
             this.videoPlayer = null;
         }
         if (stage) {
-            stage.removeEventListener(MouseEvent.CLICK, this.clickMainHandler);
+            stage.removeEventListener(MouseEvent.CLICK, this.onStageClickHandler);
         }
+        this._introInfo = null;
+        this._stageDimensions = null;
         super.onDispose();
+    }
+
+    override public function handleInput(param1:InputEvent):void {
+        var _loc2_:InputDetails = null;
+        var _loc3_:Number = NaN;
+        super.handleInput(param1);
+        if (this._introInfo && this._introInfo.canSkip) {
+            _loc2_ = param1.details;
+            if (_loc2_.value != InputValue.KEY_UP) {
+                _loc3_ = _loc2_.code;
+                if (_loc3_ == Keyboard.ESCAPE || _loc3_ == Keyboard.ENTER || _loc3_ == Keyboard.SPACE) {
+                    param1.handled = true;
+                    this.videoPlayer.stopPlayback();
+                }
+            }
+        }
+    }
+
+    private function onStageClickHandler(param1:MouseEvent):void {
+        if (this._introInfo && this._introInfo.canSkip) {
+            this.videoPlayer.stopPlayback();
+        }
+    }
+
+    private function onVideoPlayerPlaybackStoppedHandler(param1:VideoPlayerEvent):void {
+        stopVideoS();
+    }
+
+    private function onVideoPlayerErrorHandler(param1:VideoPlayerStatusEvent):void {
+        handleErrorS(param1.errorCode);
     }
 }
 }

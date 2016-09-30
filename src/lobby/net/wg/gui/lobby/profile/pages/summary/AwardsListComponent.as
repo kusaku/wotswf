@@ -7,6 +7,7 @@ import net.wg.gui.lobby.battleResults.components.MedalsList;
 
 import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.DataProvider;
+import scaleform.clik.interfaces.IDataProvider;
 
 public class AwardsListComponent extends UIComponent {
 
@@ -20,7 +21,7 @@ public class AwardsListComponent extends UIComponent {
 
     public var medalsList:MedalsList;
 
-    private var _dataProvider:DataProvider;
+    private var _isToolTipShowing:Boolean;
 
     private var _label:String = "";
 
@@ -28,37 +29,28 @@ public class AwardsListComponent extends UIComponent {
 
     private var _titleToolTip:String;
 
-    private var _isToolTipShowing:Boolean;
-
     public function AwardsListComponent() {
         super();
     }
 
     override protected function draw():void {
         var _loc1_:Boolean = false;
+        var _loc2_:IDataProvider = null;
         super.draw();
         if (isInvalid(DP_INV)) {
-            this.medalsList.dataProvider = this._dataProvider;
-            _loc1_ = !!this._dataProvider ? this._dataProvider.length <= 0 : true;
+            _loc2_ = this.medalsList.dataProvider;
+            _loc1_ = !!_loc2_ ? _loc2_.length <= 0 : true;
             invalidate(TEXT_INVALID);
         }
         if (isInvalid(TEXT_INVALID)) {
             this.textField.autoSize = TextFieldAutoSize.CENTER;
-            if (_loc1_) {
-                this.textField.text = this._errorText;
-                this.textField.y = ERROR_TEXT_PADDING;
-            }
-            else {
-                this.textField.text = this._label;
-                this.textField.y = 0;
-            }
+            this.textField.text = !!_loc1_ ? this._errorText : this._label;
             this.textField.x = this.medalsList.width - this.textField.width >> 1;
+            this.textField.y = !!_loc1_ ? Number(ERROR_TEXT_PADDING) : Number(0);
         }
     }
 
     override protected function onDispose():void {
-        this._dataProvider.cleanUp();
-        this._dataProvider = null;
         this.medalsList.dispose();
         this.medalsList = null;
         this.disposeHandlers();
@@ -82,7 +74,9 @@ public class AwardsListComponent extends UIComponent {
     }
 
     public function set dataProvider(param1:Array):void {
-        this._dataProvider = new DataProvider(param1);
+        this.medalsList.dataProvider = new DataProvider(param1);
+        this.medalsList.invalidateData();
+        this.medalsList.validateNow();
         invalidate(DP_INV);
     }
 

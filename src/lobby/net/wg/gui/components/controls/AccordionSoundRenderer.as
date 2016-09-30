@@ -4,8 +4,8 @@ import flash.events.MouseEvent;
 
 import net.wg.data.components.AccordionRendererData;
 import net.wg.data.constants.SoundTypes;
+import net.wg.gui.components.interfaces.IAccordionItemRenderer;
 import net.wg.gui.events.AccordionRendererEvent;
-import net.wg.gui.interfaces.IAccordionItemRenderer;
 
 import scaleform.clik.constants.InvalidationType;
 

@@ -5,11 +5,7 @@ public class CrewEvent extends Event {
 
     public static const OPEN_PERSONAL_CASE:String = "openPersonalCase";
 
-    public static const UNLOAD_TANKMAN:String = "unloadTankman";
-
-    public static const DISMISS_TANKMAN:String = "dismissTankman";
-
-    public static const UNLOAD_ALL_TANKMAN:String = "unloadAllTankman";
+    public static const ACT_TANKMAN:String = "actTankman";
 
     public static const SHOW_RECRUIT_WINDOW:String = "showRecruitWindow";
 

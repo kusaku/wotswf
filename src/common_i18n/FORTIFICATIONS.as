@@ -393,6 +393,8 @@ package
       
       public static const ORDERTYPE_BATTLECONSUMABLE:String = "#fortifications:orderType/battleConsumable";
       
+      public static const ORDERTYPE_BATTLECONSUMABLE_NO_LEVEL:String = "#fortifications:orderType/battleConsumable_no_level";
+      
       public static const BUILDINGS_MILITARY_BASE:String = "#fortifications:buildings/MILITARY_BASE";
       
       public static const BUILDINGS_MILITARY_ACADEMY:String = "#fortifications:buildings/MILITARY_ACADEMY";
@@ -969,6 +971,8 @@ package
       
       public static const FORTINTELLIGENCE_CLANDESCRIPTION_NEXTAVAILABLEATTACK:String = "#fortifications:FortIntelligence/clanDescription/nextAvailableAttack";
       
+      public static const FORTINTELLIGENCE_CLANDESCRIPTION_DISABLEATTACK:String = "#fortifications:FortIntelligence/clanDescription/disableAttack";
+      
       public static const FORTINTELLIGENCE_CLANDESCRIPTION_ATTACK:String = "#fortifications:FortIntelligence/clanDescription/attack";
       
       public static const FORTINTELLIGENCE_CLANDESCRIPTION_DIRECTION_TOOLTIP_ATTACK:String = "#fortifications:FortIntelligence/clanDescription/direction/tooltip/attack";
@@ -1116,20 +1120,6 @@ package
       public static const FORTCLANBATTLEROOM_HEADER_BATTLEICON_DEFENCE_TOOLTIP_BODY:String = "#fortifications:FortClanBattleRoom/header/battleIcon/defence/tooltip/body";
       
       public static const FORTCLANBATTLEROOM_HEADER_ORDERSDISABLED:String = "#fortifications:FortClanBattleRoom/header/ordersDisabled";
-      
-      public static const TOOLTIPBUILDINGINFO_DESCRACTION:String = "#fortifications:ToolTipBuildingInfo/descrAction";
-      
-      public static const TOOLTIPBUILDINGINFO_LOWLEVELMESSAGE:String = "#fortifications:ToolTipBuildingInfo/lowLevelMessage";
-      
-      public static const TOOLTIPBUILDINGINFO_DESTROYEDMESSAGE:String = "#fortifications:ToolTipBuildingInfo/destroyedMessage";
-      
-      public static const TOOLTIPBUILDINGINFO_STATUSMSG_VICTORY:String = "#fortifications:ToolTipBuildingInfo/statusMsg/victory";
-      
-      public static const TOOLTIPBUILDINGINFO_STATUSMSG_DEFEAT:String = "#fortifications:ToolTipBuildingInfo/statusMsg/defeat";
-      
-      public static const TOOLTIPBUILDINGINFO_STATUSMSG_WASNOTBATTLE:String = "#fortifications:ToolTipBuildingInfo/statusMsg/wasNotBattle";
-      
-      public static const TOOLTIPBUILDINGINFO_MEP_MAPPREFIX:String = "#fortifications:ToolTipBuildingInfo/mep/mapPrefix";
       
       public static const FORTBATTLEROOM_LISTHEADER_CLANPLAYERS:String = "#fortifications:fortBattleRoom/listHeader/clanPlayers";
       

@@ -1,7 +1,8 @@
 package net.wg.gui.lobby.hangar.tcarousel {
+import flash.display.Sprite;
 import flash.events.MouseEvent;
 
-import net.wg.gui.components.controls.SoundButtonEx;
+import net.wg.gui.interfaces.ISoundButtonEx;
 import net.wg.gui.lobby.hangar.tcarousel.data.FalloutVehicleCarouselVO;
 import net.wg.gui.lobby.hangar.tcarousel.event.SlotEvent;
 
@@ -9,15 +10,21 @@ import scaleform.clik.events.ButtonEvent;
 
 public class FalloutTankCarouselItemRenderer extends TankCarouselItemRenderer {
 
-    public var selectBtn:SoundButtonEx = null;
+    public var selectBtn:ISoundButtonEx = null;
+
+    public var falloutSelect:Sprite = null;
+
+    public var falloutArrowHover:Sprite = null;
+
+    public var falloutArrow:Sprite = null;
 
     private var _falloutData:FalloutVehicleCarouselVO = null;
 
-    private var _falloutSlot:FalloutTankCarouselRendererSlot = null;
-
     public function FalloutTankCarouselItemRenderer() {
         super();
-        this._falloutSlot = FalloutTankCarouselRendererSlot(slot);
+        this.falloutSelect.visible = false;
+        this.falloutArrow.visible = false;
+        this.falloutArrowHover.visible = false;
     }
 
     override protected function configUI():void {
@@ -30,27 +37,44 @@ public class FalloutTankCarouselItemRenderer extends TankCarouselItemRenderer {
     override protected function updateData():void {
         super.updateData();
         if (this._falloutData != null) {
-            this._falloutSlot.updateFalloutData(this._falloutData.falloutSelected, this._falloutData.falloutCanBeSelected);
-            if (this._falloutData.falloutSelected || this._falloutData.falloutCanBeSelected) {
-                this.selectBtn.label = this._falloutData.selectButtonLabel;
-                this.selectBtn.selected = !this._falloutData.falloutSelected;
-                this.selectBtn.enabled = !this._falloutData.falloutButtonDisabled;
-                this.selectBtn.visible = true;
+            if (this._falloutData.buySlot || this._falloutData.buyTank) {
+                this.falloutSelect.visible = false;
+                this.falloutArrow.visible = false;
+                this.falloutArrowHover.visible = false;
+                this.selectBtn.visible = false;
             }
             else {
-                this.selectBtn.visible = false;
+                this.falloutSelect.visible = this._falloutData.falloutSelected;
+                if (!this._falloutData.falloutSelected) {
+                    this.falloutArrow.visible = this.falloutArrowHover.visible = this._falloutData.falloutCanBeSelected;
+                }
+                else {
+                    this.falloutArrow.visible = false;
+                    this.falloutArrowHover.visible = false;
+                }
+                if (this._falloutData.falloutSelected || this._falloutData.falloutCanBeSelected) {
+                    this.selectBtn.label = this._falloutData.selectButtonLabel;
+                    this.selectBtn.selected = !this._falloutData.falloutSelected;
+                    this.selectBtn.enabled = !this._falloutData.falloutButtonDisabled;
+                    this.selectBtn.visible = true;
+                }
+                else {
+                    this.selectBtn.visible = false;
+                }
             }
         }
     }
 
     override protected function onDispose():void {
+        this.falloutSelect = null;
+        this.falloutArrowHover = null;
+        this.falloutArrow = null;
         this.selectBtn.removeEventListener(ButtonEvent.CLICK, this.onSelectBtnClickHandler);
         this.selectBtn.removeEventListener(MouseEvent.ROLL_OVER, this.onSelectBtnRollOverHandler);
         this.selectBtn.removeEventListener(MouseEvent.ROLL_OUT, this.onSelectBtnRollOutHandler);
         this.selectBtn.dispose();
         this.selectBtn = null;
         this._falloutData = null;
-        this._falloutSlot = null;
         super.onDispose();
     }
 

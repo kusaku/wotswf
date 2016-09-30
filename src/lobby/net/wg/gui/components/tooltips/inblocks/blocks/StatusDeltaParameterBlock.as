@@ -1,10 +1,10 @@
 package net.wg.gui.components.tooltips.inblocks.blocks {
-import flash.display.Sprite;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
 import net.wg.data.constants.Errors;
 import net.wg.gui.components.advanced.interfaces.IStatusDeltaIndicatorAnim;
+import net.wg.gui.components.controls.Image;
 import net.wg.gui.components.tooltips.inblocks.data.StatusDeltaParameterBlockVO;
 
 import org.idmedia.as3commons.util.StringUtils;
@@ -19,7 +19,7 @@ public class StatusDeltaParameterBlock extends BaseTooltipBlock {
 
     public var statusBar:IStatusDeltaIndicatorAnim;
 
-    public var decreaseIcon:Sprite = null;
+    public var buffIcon:Image = null;
 
     private var _data:StatusDeltaParameterBlockVO;
 
@@ -51,16 +51,18 @@ public class StatusDeltaParameterBlock extends BaseTooltipBlock {
         this.statusBar = null;
         this.titleTF = null;
         this.valueTF = null;
-        this.decreaseIcon = null;
+        this.buffIcon.dispose();
+        this.buffIcon = null;
         super.onDispose();
     }
 
     override protected function onValidateBlock():Boolean {
         if (!this._isDataApplied) {
             this.applyData();
-            this.decreaseIcon.visible = this._data.showDecreaseArrow;
-            if (this.decreaseIcon.visible) {
-                this.decreaseIcon.x = this.valueTF.x + this.valueTF.width - this.valueTF.textWidth + DECREASE_ARROW_PADDING ^ 0;
+            this.buffIcon.visible = StringUtils.isNotEmpty(this._data.buffIconSrc);
+            if (this.buffIcon.visible) {
+                this.buffIcon.source = this._data.buffIconSrc;
+                this.buffIcon.x = this.valueTF.x + this.valueTF.width - this.valueTF.textWidth + DECREASE_ARROW_PADDING ^ 0;
             }
             return true;
         }

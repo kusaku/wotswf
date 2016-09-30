@@ -49,7 +49,7 @@ public class HeaderButtonContentItem extends UIComponent implements IHeaderButto
 
     private var _boundsWidth:Number = 0;
 
-    private var _screen:String;
+    private var _screen:String = "narrowScreen";
 
     private var _forceInvalidSize:Boolean = false;
 
@@ -58,7 +58,6 @@ public class HeaderButtonContentItem extends UIComponent implements IHeaderButto
     public function HeaderButtonContentItem() {
         this._minScreenPadding = new Padding(0, 16, 0, 16);
         this._additionalScreenPadding = new Padding(0, 10, 0, 10);
-        this._screen = LobbyHeader.NARROW_SCREEN;
         super();
         this._readyToShow = false;
         this._hideDisplayObjList = new Vector.<DisplayObject>(0);

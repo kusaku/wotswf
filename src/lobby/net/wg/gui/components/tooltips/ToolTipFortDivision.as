@@ -52,11 +52,12 @@ public class ToolTipFortDivision extends ToolTipSpecial {
     }
 
     override protected function redraw():void {
+        var _loc1_:Number = NaN;
         var _loc5_:Number = NaN;
         var _loc6_:ToolTipBlockVO = null;
         var _loc7_:Number = NaN;
         var _loc8_:ToolTipBlockResultVO = null;
-        var _loc1_:Number = 320;
+        _loc1_ = 320;
         var _loc2_:Separator = null;
         separators = new Vector.<Separator>();
         var _loc3_:FortDivisionVO = new FortDivisionVO(_data);

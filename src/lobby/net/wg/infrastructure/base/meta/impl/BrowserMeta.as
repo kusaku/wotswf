@@ -1,8 +1,8 @@
 package net.wg.infrastructure.base.meta.impl {
 import net.wg.data.constants.Errors;
-import net.wg.infrastructure.base.AbstractWindowView;
+import net.wg.infrastructure.base.BaseDAAPIComponent;
 
-public class BrowserMeta extends AbstractWindowView {
+public class BrowserMeta extends BaseDAAPIComponent {
 
     public var browserAction:Function;
 
@@ -17,6 +17,8 @@ public class BrowserMeta extends AbstractWindowView {
     public var onBrowserShow:Function;
 
     public var onBrowserHide:Function;
+
+    public var setBrowserSize:Function;
 
     public function BrowserMeta() {
         super();
@@ -55,6 +57,11 @@ public class BrowserMeta extends AbstractWindowView {
     public function onBrowserHideS():void {
         App.utils.asserter.assertNotNull(this.onBrowserHide, "onBrowserHide" + Errors.CANT_NULL);
         this.onBrowserHide();
+    }
+
+    public function setBrowserSizeS(param1:int, param2:int):void {
+        App.utils.asserter.assertNotNull(this.setBrowserSize, "setBrowserSize" + Errors.CANT_NULL);
+        this.setBrowserSize(param1, param2);
     }
 }
 }

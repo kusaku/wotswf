@@ -201,6 +201,8 @@ package
       
       public static const DOWNLOAD_DISCOUNTS:String = "#waiting:download/discounts";
       
+      public static const DOWNLOAD_RECYCLEBIN:String = "#waiting:download/recycleBin";
+      
       public static const UPDATINGSKILLWINDOW:String = "#waiting:updatingSkillWindow";
       
       public static const PREBATTLE_CREATE:String = "#waiting:prebattle/create";

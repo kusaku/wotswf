@@ -3,7 +3,7 @@ import flash.display.MovieClip;
 
 import net.wg.data.constants.Linkages;
 import net.wg.gui.components.controls.BitmapFill;
-import net.wg.gui.interfaces.IAccordionItemRenderer;
+import net.wg.gui.components.interfaces.IAccordionItemRenderer;
 import net.wg.infrastructure.interfaces.IDynamicContent;
 import net.wg.utils.IEventCollector;
 

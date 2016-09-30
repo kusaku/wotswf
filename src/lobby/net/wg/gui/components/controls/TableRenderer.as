@@ -129,7 +129,7 @@ public class TableRenderer extends SoundListItemRenderer implements ITableRender
             this.disableMc.dispose();
             this.disableMc = null;
         }
-        this._statesPassive.slice(0, this._statesPassive.length);
+        this._statesPassive.splice(0, this._statesPassive.length);
         this._statesPassive = null;
         this.rendererBg = null;
         super.onDispose();

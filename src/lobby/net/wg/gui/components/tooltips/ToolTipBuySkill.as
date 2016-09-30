@@ -5,6 +5,7 @@ import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
 import net.wg.data.constants.Linkages;
+import net.wg.data.constants.generated.SKILLS_CONSTANTS;
 import net.wg.gui.components.tooltips.VO.Dimension;
 import net.wg.gui.components.tooltips.VO.ToolTipBuySkillVO;
 import net.wg.gui.lobby.tankman.SkillItemViewMini;
@@ -53,7 +54,8 @@ public class ToolTipBuySkill extends ToolTipBase {
     }
 
     override protected function updateSize():void {
-        var _loc1_:Dimension = this.getContDimension();
+        var _loc1_:Dimension = null;
+        _loc1_ = this.getContDimension();
         background.x = background.y = 0;
         background.width = _loc1_.width + LEFT_MARGIN + RIGHT_MARGIN;
         this.separator.x = background.width - this.separator.width >> 1;
@@ -96,7 +98,7 @@ public class ToolTipBuySkill extends ToolTipBase {
         if (_loc3_ > 0) {
             this.skillLevel = _loc5_.getComponent(Linkages.SKILL_ITEM_VIEW_MINI, MovieClip);
             this.skillLevel.x = LEFT_MARGIN;
-            this.skillLevel.type = SkillItemViewMini.TYPE_CURRENT_NEW_SKILL;
+            this.skillLevel.type = SKILLS_CONSTANTS.TYPE_CURRENT_NEW_SKILL;
             this.skillLevel.text = "<font size=\"12\" color=\"#7B7969\" face=\"$FieldFont\">" + App.utils.locale.makeString(TOOLTIPS.BUYSKILL_PARTLY, {"count": "<font size=\"12\" face=\"$TitleFont\" color=\"#F06532\">" + String(_loc3_) + "%</font>"}) + "</font>";
             addChild(this.skillLevel);
         }
@@ -104,7 +106,7 @@ public class ToolTipBuySkill extends ToolTipBase {
             this.skillCount = _loc5_.getComponent(Linkages.SKILL_ITEM_VIEW_MINI, SkillItemViewMini);
             this.skillCount.x = LEFT_MARGIN;
             this.skillCount.y = _loc4_;
-            this.skillCount.type = _loc2_ > 1 ? SkillItemViewMini.TYPE_NEW_SKILLS : SkillItemViewMini.TYPE_NEW_SKILL;
+            this.skillCount.type = _loc2_ > 1 ? SKILLS_CONSTANTS.TYPE_NEW_SKILLS : SKILLS_CONSTANTS.TYPE_NEW_SKILL;
             this.skillCount.text = "<font size=\"12\" color=\"#7B7969\" face=\"$FieldFont\">" + App.utils.locale.makeString(TOOLTIPS.BUYSKILL_FULLY, {"count": "<font size=\"12\" face=\"$TitleFont\" color=\"#FFAC34\">" + String(_loc2_) + " x 100%</font>"}) + "</font>";
             if (_loc3_ > 0) {
                 this.skillLevel.y = Math.round(this.skillCount.y + LINE_HEIGHT);

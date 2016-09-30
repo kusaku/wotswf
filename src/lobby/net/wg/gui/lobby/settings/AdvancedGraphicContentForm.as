@@ -1,15 +1,15 @@
 package net.wg.gui.lobby.settings {
 import flash.events.Event;
 
+import net.wg.data.constants.Values;
 import net.wg.gui.components.advanced.FieldSet;
 import net.wg.gui.components.controls.CheckBox;
 import net.wg.gui.components.controls.LabelControl;
 import net.wg.gui.lobby.settings.components.RadioButtonBar;
 import net.wg.gui.lobby.settings.components.SettingsStepSlider;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
-
-public class AdvancedGraphicContentForm extends UIComponent {
+public class AdvancedGraphicContentForm extends UIComponentEx {
 
     private static const RADIO_BAR_OFFSET:Number = 12;
 
@@ -120,26 +120,26 @@ public class AdvancedGraphicContentForm extends UIComponent {
     }
 
     private function initTexts():void {
-        this.RENDER_PIPELINELabel.text = "";
-        this.TEXTURE_QUALITYLabel.text = "";
-        this.DECALS_QUALITYLabel.text = "";
-        this.SHADOWS_QUALITYLabel.text = "";
-        this.TERRAIN_QUALITYLabel.text = "";
-        this.WATER_QUALITYLabel.text = "";
-        this.LIGHTING_QUALITYLabel.text = "";
-        this.SPEEDTREE_QUALITYLabel.text = "";
-        this.FLORA_QUALITYLabel.text = "";
-        this.EFFECTS_QUALITYLabel.text = "";
-        this.POST_PROCESSING_QUALITYLabel.text = "";
-        this.MOTION_BLUR_QUALITYLabel.text = "";
-        this.FAR_PLANELabel.text = "";
-        this.OBJECT_LODLabel.text = "";
-        this.SNIPER_MODE_EFFECTS_QUALITYLabel.text = "";
-        this.fpsPerfomancerCheckbox.label = "";
-        this.SNIPER_MODE_GRASS_ENABLEDCheckbox.label = "";
-        this.VEHICLE_DUST_ENABLEDCheckbox.label = "";
-        this.VEHICLE_TRACES_ENABLEDCheckbox.label = "";
-        this.SEMITRANSPARENT_LEAVES_ENABLEDCheckbox.label = "";
+        this.RENDER_PIPELINELabel.text = Values.EMPTY_STR;
+        this.TEXTURE_QUALITYLabel.text = Values.EMPTY_STR;
+        this.DECALS_QUALITYLabel.text = Values.EMPTY_STR;
+        this.SHADOWS_QUALITYLabel.text = Values.EMPTY_STR;
+        this.TERRAIN_QUALITYLabel.text = Values.EMPTY_STR;
+        this.WATER_QUALITYLabel.text = Values.EMPTY_STR;
+        this.LIGHTING_QUALITYLabel.text = Values.EMPTY_STR;
+        this.SPEEDTREE_QUALITYLabel.text = Values.EMPTY_STR;
+        this.FLORA_QUALITYLabel.text = Values.EMPTY_STR;
+        this.EFFECTS_QUALITYLabel.text = Values.EMPTY_STR;
+        this.POST_PROCESSING_QUALITYLabel.text = Values.EMPTY_STR;
+        this.MOTION_BLUR_QUALITYLabel.text = Values.EMPTY_STR;
+        this.FAR_PLANELabel.text = Values.EMPTY_STR;
+        this.OBJECT_LODLabel.text = Values.EMPTY_STR;
+        this.SNIPER_MODE_EFFECTS_QUALITYLabel.text = Values.EMPTY_STR;
+        this.fpsPerfomancerCheckbox.label = Values.EMPTY_STR;
+        this.SNIPER_MODE_GRASS_ENABLEDCheckbox.label = Values.EMPTY_STR;
+        this.VEHICLE_DUST_ENABLEDCheckbox.label = Values.EMPTY_STR;
+        this.VEHICLE_TRACES_ENABLEDCheckbox.label = Values.EMPTY_STR;
+        this.SEMITRANSPARENT_LEAVES_ENABLEDCheckbox.label = Values.EMPTY_STR;
     }
 
     override protected function configUI():void {
@@ -251,6 +251,8 @@ public class AdvancedGraphicContentForm extends UIComponent {
         this.VEHICLE_DUST_ENABLEDCheckbox = null;
         this.VEHICLE_TRACES_ENABLEDCheckbox = null;
         this.SEMITRANSPARENT_LEAVES_ENABLEDCheckbox = null;
+        this.graficsFieldSet.dispose();
+        this.graficsFieldSet = null;
         super.onDispose();
     }
 }

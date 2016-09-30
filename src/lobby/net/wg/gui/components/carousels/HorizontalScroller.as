@@ -24,7 +24,11 @@ public class HorizontalScroller extends ScrollerBase {
 
     private static const INVALID_GO_TO_INDEX:String = "invalidGoToIndex";
 
+    private static const VIEW_PORT_NAME:String = "viewPort";
+
     private var _itemRendererFactory:Class;
+
+    private var _itemRendererLinkage:String;
 
     private var _measuredTypicalItemRendererWidth:Number = NaN;
 
@@ -60,7 +64,11 @@ public class HorizontalScroller extends ScrollerBase {
 
     private var _goToIndex:int = -1;
 
+    private var _rowCount:int = 1;
+
     private var _scrollIfRendererVisible:Boolean = false;
+
+    private var _goToDuration:Number = 0;
 
     public function HorizontalScroller() {
         super();
@@ -97,6 +105,7 @@ public class HorizontalScroller extends ScrollerBase {
         _loc1_.gap = this._gap;
         _loc1_.setSelectedIndex(this._selectedIndex);
         _loc1_.tooltipDecorator = this._tooltipDecorator;
+        _loc1_.name = VIEW_PORT_NAME;
         viewPort = _loc1_;
         this._cursorManager = new HorizontalScrollerCursorManager();
         container.addChildAt(DisplayObject(this._cursorManager), 0);
@@ -108,26 +117,32 @@ public class HorizontalScroller extends ScrollerBase {
         this.unsubFromScrollbar();
         this._scrollbarRef = null;
         this._itemRendererFactory = null;
-        viewPort.dispose();
-        this._cursorManager.dispose();
-        this._cursorManager = null;
+        if (viewPort != null) {
+            viewPort.dispose();
+        }
+        if (this._cursorManager != null) {
+            this._cursorManager.dispose();
+            this._cursorManager = null;
+        }
         if (this._dataProvider != null) {
             this._dataProvider.removeEventListener(Event.CHANGE, this.onDataProviderChangeHandler);
             this._dataProvider = null;
         }
-        this._tooltipDecorator.dispose();
-        this._tooltipDecorator = null;
+        if (this._tooltipDecorator != null) {
+            this._tooltipDecorator.dispose();
+            this._tooltipDecorator = null;
+        }
         super.onDispose();
     }
 
-    override protected function refreshViewPortBounds():void {
+    override protected function updateScrollPosition():void {
         var _loc2_:int = 0;
         var _loc3_:Number = NaN;
         var _loc1_:Boolean = isInvalid(INVALID_GO_TO_INDEX);
         if (_loc1_) {
             if (this._goToIndex >= 0) {
                 _loc2_ = int(width / pageWidth * this._goToOffset) * pageWidth;
-                _loc3_ = this._goToIndex * pageWidth - _loc2_;
+                _loc3_ = (this._goToIndex / this._rowCount ^ 0) * pageWidth - _loc2_;
                 if (_loc3_ > maxHorizontalScrollPosition) {
                     _loc3_ = maxHorizontalScrollPosition;
                 }
@@ -136,12 +151,11 @@ public class HorizontalScroller extends ScrollerBase {
                 }
                 if (this._scrollIfRendererVisible || horizontalScrollPosition > _loc3_ || horizontalScrollPosition + width <= _loc3_) {
                     this.startScroll();
-                    throwToHorizontalPosition(_loc3_, 0);
-                    this.completeScroll();
+                    throwToHorizontalPosition(_loc3_, this._goToDuration);
                 }
             }
         }
-        super.refreshViewPortBounds();
+        super.updateScrollPosition();
         if (_loc1_) {
             viewPort.validateNow();
         }
@@ -278,10 +292,9 @@ public class HorizontalScroller extends ScrollerBase {
         if (isInvalid(InvalidationType.SETTINGS)) {
             this.dataViewPort.rendererWidth = this._rendererWidth;
             this.dataViewPort.itemRendererFactory = this._itemRendererFactory;
+            this.dataViewPort.rowCount = this._rowCount;
+            this.dataViewPort.gap = this._gap;
             this._measuredTypicalItemRendererWidth = this.dataViewPort.rendererWidth;
-            if (this._measuredTypicalItemRendererWidth === this._measuredTypicalItemRendererWidth) {
-                pageWidth = this._measuredTypicalItemRendererWidth + this._gap;
-            }
         }
     }
 
@@ -320,17 +333,16 @@ public class HorizontalScroller extends ScrollerBase {
 
     public function set gap(param1:Number):void {
         this._gap = param1;
+        invalidate(InvalidationType.SETTINGS);
     }
 
     public function get itemRendererClassReference():String {
-        if (this._itemRendererFactory == null) {
-            return null;
-        }
-        return this._itemRendererFactory.toString();
+        return this._itemRendererLinkage;
     }
 
     public function set itemRendererClassReference(param1:String):void {
         if (!StringUtils.isEmpty(param1)) {
+            this._itemRendererLinkage = param1;
             this._itemRendererFactory = App.instance.utils.classFactory.getClass(param1);
             invalidate(InvalidationType.SETTINGS);
         }
@@ -386,6 +398,17 @@ public class HorizontalScroller extends ScrollerBase {
         return this._measuredTypicalItemRendererWidth;
     }
 
+    public function get rowCount():int {
+        return this._rowCount;
+    }
+
+    public function set rowCount(param1:int):void {
+        if (this._rowCount != param1) {
+            this._rowCount = param1;
+            invalidate(InvalidationType.SETTINGS);
+        }
+    }
+
     private function get dataViewPort():HorizontalScrollerViewPort {
         return HorizontalScrollerViewPort(this.viewPort);
     }
@@ -406,6 +429,14 @@ public class HorizontalScroller extends ScrollerBase {
             this.completeScroll();
             dispatchEvent(new ScrollEvent(ScrollEvent.SCROLL_COMPLETE));
         }
+    }
+
+    public function get goToDuration():Number {
+        return this._goToDuration;
+    }
+
+    public function set goToDuration(param1:Number):void {
+        this._goToDuration = param1;
     }
 }
 }

@@ -21,11 +21,13 @@ public class PersonalCaseBlockItem extends UIComponent {
 
     private static const NEW_SKILLS_PADDING:int = 4;
 
-    private static const LEFT_DASH_WIDTH:int = 322;
+    private static const LEFT_DASH_WIDTH:int = 332;
 
     private static const RIGHT_DASH_PADDING:int = 16;
 
-    private static const RIGHT_DASH_WIDTH:int = 141;
+    private static const RIGHT_DASH_WIDTH:int = 131;
+
+    private static const VALUE_MARGIN:int = 3;
 
     public var skills:UILoaderAlt;
 
@@ -146,11 +148,11 @@ public class PersonalCaseBlockItem extends UIComponent {
     }
 
     private function updateLeftValue():void {
-        this.value.x = this.leftDashLine.x + this.leftDashLine.width - this.value.width ^ 0;
+        this.value.x = this.leftDashLine.x + this.leftDashLine.width - this.value.width + VALUE_MARGIN ^ 0;
     }
 
     private function updateRightValue():void {
-        this.valuePrem.x = this.rightDashLine.x + this.rightDashLine.width - this.valuePrem.width ^ 0;
+        this.valuePrem.x = this.rightDashLine.x + this.rightDashLine.width - this.valuePrem.width + VALUE_MARGIN ^ 0;
     }
 
     private function addListenersToIcon():void {

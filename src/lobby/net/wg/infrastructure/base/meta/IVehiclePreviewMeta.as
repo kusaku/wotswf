@@ -11,6 +11,8 @@ public interface IVehiclePreviewMeta extends IEventDispatcher {
 
     function onOpenInfoTabS(param1:int):void;
 
+    function onCompareClickS():void;
+
     function as_setStaticData(param1:Object):void;
 
     function as_updateInfoData(param1:Object):void;

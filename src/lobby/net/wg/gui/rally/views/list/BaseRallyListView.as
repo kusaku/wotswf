@@ -38,13 +38,13 @@ public class BaseRallyListView extends BaseRallyListViewMeta implements IBaseRal
         super.configUI();
         if (this.rallyTable) {
             this.rallyTable.listDP = this.listDataProvider;
-            this.listDataProvider.addEventListener(ManualSearchEvent.DATA_UPDATED, this.handleDataUpdated, false, 0, true);
-            this.listDataProvider.addEventListener(Event.CHANGE, this.listDataProviderChangeHandler);
-            this.rallyTable.addEventListener(SortableTableListEvent.LIST_INDEX_CHANGE, this.onSelectRally);
-            this.rallyTable.addEventListener(SortableTableListEvent.RENDERER_DOUBLE_CLICK, this.onListItemDoubleClick);
-            this.rallyTable.addEventListener(SortableTableListEvent.RENDERER_ROLL_OVER, this.onItemRollOver);
-            this.rallyTable.addEventListener(SortableTableListEvent.RENDERER_ROLL_OUT, onControlRollOut);
-            this.rallyTable.addEventListener(SortableTableListEvent.RENDERER_PRESS, this.onListItemPress);
+            this.listDataProvider.addEventListener(ManualSearchEvent.DATA_UPDATED, this.onDataUpdatedHandler, false, 0, true);
+            this.listDataProvider.addEventListener(Event.CHANGE, this.onDataProviderChangeHandler);
+            this.rallyTable.addEventListener(SortableTableListEvent.LIST_INDEX_CHANGE, this.onListIndexChangeHandler);
+            this.rallyTable.addEventListener(SortableTableListEvent.RENDERER_DOUBLE_CLICK, this.onRendererDoubleClickHandler);
+            this.rallyTable.addEventListener(SortableTableListEvent.RENDERER_ROLL_OVER, this.onRendererRollOverHandler);
+            this.rallyTable.addEventListener(SortableTableListEvent.RENDERER_ROLL_OUT, this.onRendererRollOutHandler);
+            this.rallyTable.addEventListener(SortableTableListEvent.RENDERER_PRESS, this.onRendererPressHandler);
         }
         if (this.noItemsTF != null) {
             this.noItemsTF.visible = true;
@@ -52,33 +52,37 @@ public class BaseRallyListView extends BaseRallyListViewMeta implements IBaseRal
             TextFieldEx.setVerticalAlign(this.noItemsTF, TextFieldEx.VALIGN_CENTER);
         }
         if (this.detailsSection) {
-            this.detailsSection.addEventListener(RallyViewsEvent.JOIN_RALLY_REQUEST, this.onJoinRequest);
-            this.detailsSection.addEventListener(RallyViewsEvent.ASSIGN_SLOT_REQUEST, this.onJoinRequest);
+            this.detailsSection.addEventListener(RallyViewsEvent.JOIN_RALLY_REQUEST, this.onJoinRallyRequestHandler);
+            this.detailsSection.addEventListener(RallyViewsEvent.ASSIGN_SLOT_REQUEST, this.onAssignSlotRequestHandler);
         }
     }
 
     override protected function onDispose():void {
         if (this.rallyTable) {
-            this.listDataProvider.removeEventListener(ManualSearchEvent.DATA_UPDATED, this.handleDataUpdated);
-            this.listDataProvider.removeEventListener(Event.CHANGE, this.listDataProviderChangeHandler);
+            this.listDataProvider.removeEventListener(ManualSearchEvent.DATA_UPDATED, this.onDataUpdatedHandler);
+            this.listDataProvider.removeEventListener(Event.CHANGE, this.onDataProviderChangeHandler);
             this.listDataProvider = null;
-            this.rallyTable.removeEventListener(SortableTableListEvent.LIST_INDEX_CHANGE, this.onSelectRally);
-            this.rallyTable.removeEventListener(SortableTableListEvent.RENDERER_DOUBLE_CLICK, this.onListItemDoubleClick);
-            this.rallyTable.removeEventListener(SortableTableListEvent.RENDERER_ROLL_OVER, this.onItemRollOver);
-            this.rallyTable.removeEventListener(SortableTableListEvent.RENDERER_ROLL_OUT, onControlRollOut);
-            this.rallyTable.removeEventListener(SortableTableListEvent.RENDERER_PRESS, this.onListItemPress);
+            this.rallyTable.removeEventListener(SortableTableListEvent.LIST_INDEX_CHANGE, this.onListIndexChangeHandler);
+            this.rallyTable.removeEventListener(SortableTableListEvent.RENDERER_DOUBLE_CLICK, this.onRendererDoubleClickHandler);
+            this.rallyTable.removeEventListener(SortableTableListEvent.RENDERER_ROLL_OVER, this.onRendererRollOverHandler);
+            this.rallyTable.removeEventListener(SortableTableListEvent.RENDERER_ROLL_OUT, this.onRendererRollOutHandler);
+            this.rallyTable.removeEventListener(SortableTableListEvent.RENDERER_PRESS, this.onRendererPressHandler);
             this.rallyTable.dispose();
             this.rallyTable = null;
         }
         if (this.detailsSection) {
-            this.detailsSection.removeEventListener(RallyViewsEvent.JOIN_RALLY_REQUEST, this.onJoinRequest);
-            this.detailsSection.removeEventListener(RallyViewsEvent.ASSIGN_SLOT_REQUEST, this.onJoinRequest);
+            this.detailsSection.removeEventListener(RallyViewsEvent.JOIN_RALLY_REQUEST, this.onJoinRallyRequestHandler);
+            this.detailsSection.removeEventListener(RallyViewsEvent.ASSIGN_SLOT_REQUEST, this.onAssignSlotRequestHandler);
             this.detailsSection.dispose();
             this.detailsSection = null;
         }
         this.noItemsTF = null;
         App.utils.scheduler.cancelTask(this.requestRallyData);
         super.onDispose();
+    }
+
+    private function onRendererRollOutHandler(param1:SortableTableListEvent):void {
+        onControlRollOut();
     }
 
     public function as_getSearchDP():Object {
@@ -100,9 +104,9 @@ public class BaseRallyListView extends BaseRallyListViewMeta implements IBaseRal
 
     public function as_selectByIndex(param1:int):void {
         if (this.rallyTable.listSelectedIndex != param1) {
-            this.rallyTable.removeEventListener(SortableTableListEvent.LIST_INDEX_CHANGE, this.onSelectRally);
+            this.rallyTable.removeEventListener(SortableTableListEvent.LIST_INDEX_CHANGE, this.onListIndexChangeHandler);
             this.rallyTable.listSelectedIndex = param1;
-            this.rallyTable.addEventListener(SortableTableListEvent.LIST_INDEX_CHANGE, this.onSelectRally);
+            this.rallyTable.addEventListener(SortableTableListEvent.LIST_INDEX_CHANGE, this.onListIndexChangeHandler);
         }
         this.requestRallyData(param1);
     }
@@ -154,39 +158,53 @@ public class BaseRallyListView extends BaseRallyListViewMeta implements IBaseRal
         }
     }
 
-    protected function onSelectRally(param1:SortableTableListEvent):void {
+    private function onListIndexChangeHandler(param1:SortableTableListEvent):void {
         var _loc2_:int = param1.index;
         if (!isNaN(_loc2_)) {
             App.utils.scheduler.scheduleOnNextFrame(this.requestRallyData, _loc2_);
         }
     }
 
-    protected function onListItemDoubleClick(param1:SortableTableListEvent):void {
+    private function onRendererDoubleClickHandler(param1:SortableTableListEvent):void {
         var _loc3_:Object = null;
         var _loc2_:IRallyListItemVO = param1.itemData as IRallyListItemVO;
-        if (param1.buttonIdx == MouseEventEx.LEFT_BUTTON && _loc2_) {
-            _loc3_ = {
-                "alias": getRallyViewAlias(),
-                "itemId": _loc2_.mgrID,
-                "peripheryID": _loc2_.peripheryID,
-                "slotIndex": -1
-            };
-            dispatchEvent(new RallyViewsEvent(RallyViewsEvent.LOAD_VIEW_REQUEST, _loc3_));
+        if (_loc2_) {
+            if (param1.buttonIdx == MouseEventEx.LEFT_BUTTON) {
+                _loc3_ = {
+                    "alias": getRallyViewAlias(),
+                    "itemId": _loc2_.mgrID,
+                    "peripheryID": _loc2_.peripheryID,
+                    "slotIndex": -1
+                };
+                dispatchEvent(new RallyViewsEvent(RallyViewsEvent.LOAD_VIEW_REQUEST, _loc3_));
+            }
         }
     }
 
-    protected function onListItemPress(param1:SortableTableListEvent):void {
+    private function onRendererPressHandler(param1:SortableTableListEvent):void {
         App.toolTipMgr.hide();
     }
 
-    protected function onItemRollOver(param1:SortableTableListEvent):void {
+    private function onRendererRollOverHandler(param1:SortableTableListEvent):void {
+        this.itemRollOverPerformer(param1);
+    }
+
+    protected function itemRollOverPerformer(param1:SortableTableListEvent = null):void {
         var _loc2_:IRallyListItemVO = param1.itemData as IRallyListItemVO;
         if (_loc2_ != null) {
             App.toolTipMgr.showSpecial(this.getRallyTooltipLinkage(), null, this.getRallyTooltipData(_loc2_));
         }
     }
 
-    protected function onJoinRequest(param1:RallyViewsEvent):void {
+    private function onAssignSlotRequestHandler(param1:RallyViewsEvent):void {
+        this.joinRallyRequestPerformer(param1);
+    }
+
+    private function onJoinRallyRequestHandler(param1:RallyViewsEvent):void {
+        this.joinRallyRequestPerformer(param1);
+    }
+
+    protected function joinRallyRequestPerformer(param1:RallyViewsEvent):void {
         var _loc3_:Object = null;
         var _loc2_:IRallyListItemVO = this.rallyTable.getListSelectedItem() as IRallyListItemVO;
         if (_loc2_ && _loc2_.mgrID != 0) {
@@ -200,12 +218,12 @@ public class BaseRallyListView extends BaseRallyListViewMeta implements IBaseRal
         }
     }
 
-    private function handleDataUpdated(param1:ManualSearchEvent):void {
+    private function onDataUpdatedHandler(param1:ManualSearchEvent):void {
         var _loc2_:Number = Math.min(Math.max(0, this.listDataProvider.length - this.rallyTable.totalRenderers), this.rallyTable.scrollPosition);
         IManualSearchDataProvider(this.listDataProvider).requestUpdatedItems(_loc2_, Math.min(this.listDataProvider.length - 1, _loc2_ + this.rallyTable.totalRenderers - 1), this.updateData);
     }
 
-    private function listDataProviderChangeHandler(param1:Event):void {
+    private function onDataProviderChangeHandler(param1:Event):void {
         this.listDataChange();
     }
 }

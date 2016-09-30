@@ -15,6 +15,8 @@ public class HANGAR_ALIASES {
 
     public static const VEHICLE_PARAMETERS:String = "params";
 
+    public static const HEADER:String = "header";
+
     public static const VEH_PARAMS_LNK:String = "VehicleParametersUI";
 
     public static const VEH_PARAMS_RENDERER_BASE_UI:String = "VehParamRendererBaseUI";

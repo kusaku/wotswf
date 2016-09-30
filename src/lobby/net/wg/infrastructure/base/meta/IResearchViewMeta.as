@@ -9,6 +9,8 @@ public interface IResearchViewMeta extends IEventDispatcher {
 
     function request4InfoS(param1:Number, param2:Number):void;
 
+    function request4RestoreS(param1:Number):void;
+
     function showSystemMessageS(param1:String, param2:String):void;
 
     function as_setNodesStates(param1:Number, param2:Array):void;
@@ -20,5 +22,7 @@ public interface IResearchViewMeta extends IEventDispatcher {
     function as_setInventoryItems(param1:Array):void;
 
     function as_useXMLDumping():void;
+
+    function as_setNodeVehCompareData(param1:Array):void;
 }
 }

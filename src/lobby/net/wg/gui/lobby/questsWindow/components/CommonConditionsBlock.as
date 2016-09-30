@@ -41,7 +41,7 @@ public class CommonConditionsBlock extends AbstractResizableContent implements I
 
     override protected function configUI():void {
         super.configUI();
-        this.progressElementsContainer.addEventListener(Event.RESIZE, this.layoutHandler);
+        this.progressElementsContainer.addEventListener(Event.RESIZE, this.onLayoutResizeHandler);
         this.progressElementsContainer.verticalPadding = VERTICAL_PADDING;
         this.progressElementsContainer.bottomPadding = 0;
         this.progressElementsContainer.isNumerated = true;
@@ -54,7 +54,7 @@ public class CommonConditionsBlock extends AbstractResizableContent implements I
     }
 
     override protected function onDispose():void {
-        this.progressElementsContainer.removeEventListener(Event.RESIZE, this.layoutHandler);
+        this.progressElementsContainer.removeEventListener(Event.RESIZE, this.onLayoutResizeHandler);
         this.progressElementsContainer.dispose();
         this.progressElementsContainer = null;
         this.description = null;
@@ -87,6 +87,7 @@ public class CommonConditionsBlock extends AbstractResizableContent implements I
             this.description.htmlText = this.data.description;
             this.description.height = this.description.textHeight + TEXT_PADDING;
             this.counter.text = this.data.counterValue.toString();
+            this.counter.validateNow();
             this.statusMC.visible = this.data.showDone;
             this.progressElementsContainer.isReadyForLayout = false;
             this.progressElementsContainer.setData(this.data.progressElements);
@@ -105,7 +106,7 @@ public class CommonConditionsBlock extends AbstractResizableContent implements I
         isReadyForLayout = true;
     }
 
-    private function layoutHandler(param1:Event):void {
+    private function onLayoutResizeHandler(param1:Event):void {
         if (this.progressElementsContainer.isReadyForLayout) {
             this.layoutBlocks();
             dispatchEvent(new ResizableBlockEvent(ResizableBlockEvent.CONTETNT_WAS_CHANGED));

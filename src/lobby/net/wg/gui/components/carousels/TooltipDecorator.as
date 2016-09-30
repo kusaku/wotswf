@@ -35,10 +35,8 @@ public class TooltipDecorator implements ITooltipMgr, IDisposable {
     }
 
     public function hide():void {
-        if (this._enabled) {
-            this._mgr.hide();
-        }
-        else {
+        this._mgr.hide();
+        if (!this._enabled) {
             this._postponedFunction = null;
             this._postponedArgs = null;
         }

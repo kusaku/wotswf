@@ -20,14 +20,16 @@ import net.wg.gui.rally.controls.interfaces.IRallySimpleSlotRenderer;
 import net.wg.gui.rally.controls.interfaces.ISlotRendererHelper;
 import net.wg.gui.rally.events.RallyViewsEvent;
 import net.wg.gui.rally.interfaces.IRallySlotVO;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.IUserProps;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class RallySimpleSlotRenderer extends UIComponent implements IRallySimpleSlotRenderer {
+public class RallySimpleSlotRenderer extends UIComponentEx implements IRallySimpleSlotRenderer {
 
     private static const UPDATE_SLOT_DATA:String = "updateSlotData";
+
+    private static const DOT_SYMBOL:String = ".";
 
     public static const STATUSES:Array = [IndicationOfStatus.STATUS_NORMAL, IndicationOfStatus.STATUS_CANCELED, IndicationOfStatus.STATUS_READY, IndicationOfStatus.STATUS_IN_BATTLE, IndicationOfStatus.STATUS_LOCKED];
 
@@ -76,11 +78,11 @@ public class RallySimpleSlotRenderer extends UIComponent implements IRallySimple
     override protected function configUI():void {
         super.configUI();
         if (this.orderNo != null) {
-            this.orderNo.text = (this._index + 1).toString() + ".";
+            this.orderNo.text = (this._index + 1).toString() + DOT_SYMBOL;
         }
         if (this.vehicleBtn != null) {
-            this.vehicleBtn.addEventListener(RallyViewsEvent.VEH_BTN_ROLL_OVER, this.onMedallionRollOverHandler, false, int.MAX_VALUE);
-            this.vehicleBtn.addEventListener(RallyViewsEvent.VEH_BTN_ROLL_OUT, this.onMedallionRollOutHandler);
+            this.vehicleBtn.addEventListener(RallyViewsEvent.VEH_BTN_ROLL_OVER, this.onVehBtnRollOverHandler, false, int.MAX_VALUE);
+            this.vehicleBtn.addEventListener(RallyViewsEvent.VEH_BTN_ROLL_OUT, this.onVehBtnRollOutHandler);
         }
         if (this.contextMenuArea != null) {
             this.contextMenuArea.buttonMode = this.contextMenuArea.useHandCursor = true;
@@ -103,8 +105,8 @@ public class RallySimpleSlotRenderer extends UIComponent implements IRallySimple
 
     override protected function onDispose():void {
         if (this.vehicleBtn != null) {
-            this.vehicleBtn.removeEventListener(RallyViewsEvent.VEH_BTN_ROLL_OVER, this.onMedallionRollOverHandler);
-            this.vehicleBtn.removeEventListener(RallyViewsEvent.VEH_BTN_ROLL_OUT, this.onControlRollOutHandler);
+            this.vehicleBtn.removeEventListener(RallyViewsEvent.VEH_BTN_ROLL_OVER, this.onVehBtnRollOverHandler);
+            this.vehicleBtn.removeEventListener(RallyViewsEvent.VEH_BTN_ROLL_OUT, this.onVehBtnRollOutHandler);
             this.vehicleBtn.dispose();
             this.vehicleBtn = null;
         }
@@ -138,6 +140,7 @@ public class RallySimpleSlotRenderer extends UIComponent implements IRallySimple
         this.slotLabel = null;
         this.commander = null;
         this._slotData = null;
+        this._helper.dispose();
         this._helper = null;
         super.onDispose();
     }
@@ -233,14 +236,14 @@ public class RallySimpleSlotRenderer extends UIComponent implements IRallySimple
         return this._userInfoTextLoadingController;
     }
 
-    protected function onContextMenuAreaClickHandler(param1:MouseEvent):void {
+    private function onContextMenuAreaClickHandler(param1:MouseEvent):void {
         if (App.utils.commons.isRightButton(param1)) {
             this.onContextMenuAreaClick(param1);
         }
     }
 
     protected function onContextMenuAreaClick(param1:MouseEvent):void {
-        var _loc2_:ExtendedUserVO = !!this._slotData ? this._slotData.player as ExtendedUserVO : null;
+        var _loc2_:ExtendedUserVO = !!this._slotData ? ExtendedUserVO(this._slotData.player) : null;
         if (_loc2_ && !UserTags.isCurrentPlayer(_loc2_.tags)) {
             App.contextMenuMgr.show(CONTEXT_MENU_HANDLER_TYPE.BASE_USER, this, _loc2_);
         }
@@ -251,14 +254,14 @@ public class RallySimpleSlotRenderer extends UIComponent implements IRallySimple
     }
 
     private function onControlRollOverHandler(param1:MouseEvent):void {
-        this._helper.onControlRollOver(param1.currentTarget as InteractiveObject, this, this._slotData);
+        this._helper.onControlRollOver(InteractiveObject(param1.currentTarget), this, this._slotData);
     }
 
-    private function onMedallionRollOverHandler(param1:RallyViewsEvent):void {
+    private function onVehBtnRollOverHandler(param1:RallyViewsEvent):void {
         this.medallionDispatchEvent(param1);
     }
 
-    private function onMedallionRollOutHandler(param1:Event):void {
+    private function onVehBtnRollOutHandler(param1:Event):void {
         this.hideTooltip();
     }
 

@@ -11,6 +11,7 @@ import net.wg.gui.lobby.hangar.tcarousel.data.TankCarouselFilterSelectedVO;
 import net.wg.gui.lobby.hangar.tcarousel.data.VehicleCarouselVO;
 import net.wg.gui.lobby.hangar.tcarousel.event.TankFiltersEvents;
 import net.wg.gui.lobby.hangar.tcarousel.event.TankItemEvent;
+import net.wg.gui.lobby.hangar.tcarousel.helper.ITankCarouselHelper;
 import net.wg.infrastructure.base.meta.impl.TankCarouselMeta;
 import net.wg.utils.helpLayout.HelpLayoutVO;
 
@@ -22,11 +23,7 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
 
     private static const HELP_ID_SEPARATOR:String = "_";
 
-    private static const RENDERER_WIDTH:Number = 162;
-
     private static const FILTERS_WIDTH:Number = 58;
-
-    private static const GAP:Number = 10;
 
     private static const ELASTICITY:Number = 0.25;
 
@@ -34,11 +31,15 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
 
     private static const THROW_ACCELERATION_RATE:int = 4;
 
-    private static const COUNTER_POS_Y:Number = -46;
-
     private static const OFFSET_FILTERS:int = 20;
 
     private static const OFFSET_ARROW:int = 14;
+
+    private static const THRESHOLD:int = 809;
+
+    private static const GO_TO_OFFSET:Number = 0.5;
+
+    private static const INV_ROW_COUNT:String = "invRowCount";
 
     public var vehicleFilters:TankCarouselFilters = null;
 
@@ -48,6 +49,8 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
 
     public var leftFadeEndItem:MovieClip = null;
 
+    public var filterCounter:TankFilterCounter = null;
+
     private var _dataProvider:FilterDAAPIDataProvider = null;
 
     private var _isDAAPIInited:Boolean = false;
@@ -56,6 +59,12 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
 
     private var _filtersHelpLayoutId:String = null;
 
+    private var _stageHeight:Number = 0;
+
+    private var _rowCount:int = 1;
+
+    private var _helper:ITankCarouselHelper = null;
+
     public function TankCarousel() {
         super();
     }
@@ -63,8 +72,8 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
     override protected function updateLayout(param1:Number, param2:Number = 0):void {
         var _loc3_:Number = param2 + FILTERS_WIDTH + OFFSET_FILTERS + OFFSET_ARROW;
         var _loc4_:Number = param1 - _loc3_ - OFFSET_ARROW;
+        this.background.width = param1;
         super.updateLayout(_loc4_, _loc3_);
-        this.leftFadeEndItem.height = this.rightFadeEndItem.height = scrollList.height;
         this.rightFadeEndItem.x = rightArrow.x - rightArrow.width - this.rightFadeEndItem.width;
     }
 
@@ -82,17 +91,17 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
         scrollList.snapScrollPositionToItemRendererSize = false;
         scrollList.snapToPages = true;
         scrollList.cropContent = true;
-        scrollList.gap = GAP;
-        scrollList.rendererWidth = RENDERER_WIDTH;
         scrollList.maskOffsetLeft = scrollList.maskOffsetRight = MASK_OFFSET;
-        scrollList.goToOffset = 0.5;
+        scrollList.goToOffset = GO_TO_OFFSET;
+        this._helper = new TankCarouselHelper();
+        this.updateScrollListSettings();
         leftArrow.mouseEnabledOnDisabled = rightArrow.mouseEnabledOnDisabled = true;
         addEventListener(TankItemEvent.SELECT_ITEM, this.onSelectItemHandler);
         addEventListener(TankItemEvent.SELECT_BUY_SLOT, this.onSelectBuySlotHandler);
         addEventListener(TankItemEvent.SELECT_BUY_TANK, this.onSelectBuyTankHandler);
-        this.vehicleFilters.setCounterY(COUNTER_POS_Y);
         this.vehicleFilters.addEventListener(RendererEvent.ITEM_CLICK, this.onVehicleFiltersItemClickHandler);
-        this.vehicleFilters.addEventListener(TankFiltersEvents.FILTER_RESET, this.onVehicleFiltrsFilterResetHandler);
+        this.vehicleFilters.addEventListener(Event.RESIZE, this.onVehicleFiltersResizeHandler);
+        this.filterCounter.addEventListener(TankFiltersEvents.FILTER_RESET, this.onVehicleFiltrsFilterResetHandler);
         this.background.mouseEnabled = false;
         this.background.mouseChildren = false;
         mouseEnabled = false;
@@ -100,9 +109,21 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
     }
 
     override protected function draw():void {
+        var _loc1_:Boolean = isInvalid(InvalidationType.SIZE);
+        if (_loc1_) {
+            this._helper = this.getNewHelper();
+        }
+        if (isInvalid(INV_ROW_COUNT)) {
+            scrollList.rowCount = this._rowCount;
+            this.goToSelectedItem();
+            invalidate(InvalidationType.SETTINGS);
+        }
+        if (isInvalid(InvalidationType.SETTINGS)) {
+            this.updateScrollListSettings();
+        }
         super.draw();
-        if (isInvalid(InvalidationType.SIZE)) {
-            this.background.width = width;
+        if (_loc1_) {
+            dispatchEvent(new Event(Event.RESIZE));
         }
     }
 
@@ -110,20 +131,25 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
         removeEventListener(TankItemEvent.SELECT_ITEM, this.onSelectItemHandler);
         removeEventListener(TankItemEvent.SELECT_BUY_SLOT, this.onSelectBuySlotHandler);
         removeEventListener(TankItemEvent.SELECT_BUY_TANK, this.onSelectBuyTankHandler);
-        this.vehicleFilters.removeEventListener(TankFiltersEvents.FILTER_RESET, this.onVehicleFiltrsFilterResetHandler);
+        this.filterCounter.removeEventListener(TankFiltersEvents.FILTER_RESET, this.onVehicleFiltrsFilterResetHandler);
         App.contextMenuMgr.hide();
+        this.vehicleFilters.removeEventListener(Event.RESIZE, this.onVehicleFiltersResizeHandler);
         this.vehicleFilters.removeEventListener(RendererEvent.ITEM_CLICK, this.onVehicleFiltersItemClickHandler);
         this.vehicleFilters.dispose();
         this.vehicleFilters = null;
         this._dataProvider.removeEventListener(Event.CHANGE, this.onDataProviderChangeHandler);
         this._dataProvider = null;
+        this.filterCounter.dispose();
+        this.filterCounter = null;
         this.background = null;
         this.rightFadeEndItem = null;
         this.leftFadeEndItem = null;
+        this._helper = null;
         super.onDispose();
     }
 
     override protected function initCarouselFilter(param1:TankCarouselFilterInitVO):void {
+        this.filterCounter.setCloseButtonTooltip(param1.counterCloseTooltip);
         this.vehicleFilters.initData(param1);
     }
 
@@ -132,7 +158,7 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
     }
 
     public function as_blinkCounter():void {
-        this.vehicleFilters.counterBlink();
+        this.filterCounter.blink();
     }
 
     public function as_dispose():void {
@@ -149,15 +175,22 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
     }
 
     public function as_hideCounter():void {
-        this.vehicleFilters.counterHide();
+        this.filterCounter.hide();
     }
 
     public function as_populate():void {
         this._isDAAPIInited = true;
     }
 
+    public function as_rowCount(param1:int):void {
+        if (this._rowCount != param1) {
+            this._rowCount = param1;
+            invalidate(InvalidationType.SIZE, INV_ROW_COUNT);
+        }
+    }
+
     public function as_showCounter(param1:String, param2:Boolean):void {
-        this.vehicleFilters.counterShow(param1, param2);
+        this.filterCounter.setCount(param1, param2);
     }
 
     public function getBottom():Number {
@@ -185,13 +218,34 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
         var _loc3_:HelpLayoutVO = new HelpLayoutVO();
         _loc3_.x = this.vehicleFilters.x;
         _loc3_.y = this.vehicleFilters.y;
-        _loc3_.width = this.vehicleFilters.paramsFilter.width;
-        _loc3_.height = scrollList.height;
+        _loc3_.width = this.vehicleFilters.width;
+        _loc3_.height = this.vehicleFilters.height;
         _loc3_.extensibilityDirection = Directions.RIGHT;
         _loc3_.message = LOBBY_HELP.HANGAR_VEHFILTERS;
         _loc3_.id = this._filtersHelpLayoutId;
         _loc3_.scope = this;
         _loc1_.push(_loc3_);
+        return _loc1_;
+    }
+
+    public function updateStage(param1:Number, param2:Number):void {
+        width = param1;
+        this._stageHeight = param2;
+        invalidate(InvalidationType.SIZE);
+    }
+
+    protected function getNewHelper():ITankCarouselHelper {
+        var _loc1_:ITankCarouselHelper = this._helper;
+        if (this._rowCount > 1 && this._stageHeight < THRESHOLD) {
+            if (!(_loc1_ is SmallTankCarouselHelper)) {
+                _loc1_ = new SmallTankCarouselHelper();
+                invalidate(InvalidationType.SETTINGS);
+            }
+        }
+        else if (!(_loc1_ is TankCarouselHelper)) {
+            _loc1_ = new TankCarouselHelper();
+            invalidate(InvalidationType.SETTINGS);
+        }
         return _loc1_;
     }
 
@@ -203,12 +257,40 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
         selectedIndex = this._dataProvider.getDAAPIselectedIdx();
     }
 
+    private function updateScrollListSettings():void {
+        scrollList.itemRendererClassReference = this._helper.linkRenderer;
+        gap = this._helper.gap;
+        rendererWidth = this._helper.rendererWidth;
+        pageWidth = this._helper.rendererWidth + this._helper.gap;
+        scrollList.height = (this._helper.gap + this._helper.rendererHeight) * this._rowCount - this._helper.gap;
+        scrollList.y = this._helper.padding.top;
+        this.background.height = -this.background.y + scrollList.height + scrollList.y + this._helper.padding.bottom;
+        this.leftFadeEndItem.height = this.rightFadeEndItem.height = leftArrow.height = rightArrow.height = scrollList.height;
+        this.leftFadeEndItem.y = this.rightFadeEndItem.y = scrollList.y;
+        leftArrow.y = scrollList.y;
+        rightArrow.y = scrollList.y + rightArrow.height;
+        this.vehicleFilters.height = scrollList.height;
+    }
+
+    private function goToSelectedItem():void {
+        if (selectedIndex < 0) {
+            goToItem(0);
+        }
+        else {
+            goToItem(selectedIndex, true);
+        }
+    }
+
     public function get isDAAPIInited():Boolean {
         return this._isDAAPIInited;
     }
 
     public function get disposed():Boolean {
         return false;
+    }
+
+    public function get helper():ITankCarouselHelper {
+        return this._helper;
     }
 
     private function onSelectBuyTankHandler(param1:TankItemEvent):void {
@@ -233,12 +315,74 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
 
     private function onDataProviderChangeHandler(param1:Event):void {
         this.updateSelectedIndex();
-        if (selectedIndex < 0) {
-            goToItem(0);
-        }
-        else {
-            goToItem(selectedIndex, true);
-        }
+        this.goToSelectedItem();
+    }
+
+    private function onVehicleFiltersResizeHandler(param1:Event):void {
+        this.vehicleFilters.y = scrollList.y + (scrollList.height - this.vehicleFilters.height >> 1);
+        updateHotFiltersS();
     }
 }
+}
+
+import net.wg.gui.lobby.hangar.tcarousel.helper.ITankCarouselHelper;
+
+import scaleform.clik.utils.Padding;
+
+class TankCarouselHelper implements ITankCarouselHelper {
+
+    private static const PADDING:Padding = new Padding(10);
+
+    function TankCarouselHelper() {
+        super();
+    }
+
+    public function get linkRenderer():String {
+        return "TankCarouselItemRendererUI";
+    }
+
+    public function get rendererWidth():Number {
+        return 162;
+    }
+
+    public function get rendererHeight():Number {
+        return 102;
+    }
+
+    public function get gap():Number {
+        return 10;
+    }
+
+    public function get padding():Padding {
+        return PADDING;
+    }
+}
+
+class SmallTankCarouselHelper implements ITankCarouselHelper {
+
+    private static const PADDING:Padding = new Padding(20);
+
+    function SmallTankCarouselHelper() {
+        super();
+    }
+
+    public function get linkRenderer():String {
+        return "SmallTankCarouselItemRendererUI";
+    }
+
+    public function get rendererWidth():Number {
+        return 162;
+    }
+
+    public function get rendererHeight():Number {
+        return 37;
+    }
+
+    public function get gap():Number {
+        return 10;
+    }
+
+    public function get padding():Padding {
+        return PADDING;
+    }
 }

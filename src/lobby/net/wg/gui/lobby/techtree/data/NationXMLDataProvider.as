@@ -18,7 +18,7 @@ public class NationXMLDataProvider extends NationVODataProvider {
         var _loc5_:Number = NaN;
         var _loc6_:XML = null;
         var _loc8_:NodeData = null;
-        clearUp();
+        cleanUp();
         var _loc2_:String = String(param1);
         var _loc3_:XML = new XML(_loc2_);
         _loc3_.ignoreWhite = true;
@@ -33,10 +33,14 @@ public class NationXMLDataProvider extends NationVODataProvider {
         }
         _loc5_ = _loc3_.children()[1].text();
         if (_loc5_ > -1) {
-            _scrollIndex = _loc5_;
+            scrollIndex = _loc5_;
         }
         var _loc7_:XML = _loc3_.children()[2];
-        _displaySettings = new NationDisplaySettings(_loc7_.child(NodeName.NODE_RENDERER_NAME).text(), _loc7_.child(NodeName.IS_LEVEL_DISPLAYED).text());
+        displaySettings = new NationDisplaySettings(_loc7_.child(NodeName.NODE_RENDERER_NAME).text(), _loc7_.child(NodeName.IS_LEVEL_DISPLAYED).text());
+    }
+
+    override protected function onDispose():void {
+        super.onDispose();
     }
 
     private function getNodeDisplayInfo(param1:XML):NTDisplayInfo {
@@ -69,8 +73,9 @@ public class NationXMLDataProvider extends NationVODataProvider {
     }
 
     private function getNodeData(param1:XML):NodeData {
+        var _loc2_:NodeData = null;
         var _loc4_:XML = null;
-        var _loc2_:NodeData = new NodeData();
+        _loc2_ = new NodeData();
         var _loc3_:Array = [];
         for each(_loc4_ in param1.child(NodeName.UNLOCK_PROPS).child(NodeName.TOP_IDS).children()) {
             _loc3_.push(Number(_loc4_.toString()));

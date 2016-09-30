@@ -56,5 +56,7 @@ public interface IUtils extends IUtilsManagerMeta, IDisposable {
     function get dateTime():IDateTime;
 
     function get poolManager():IPoolManager;
+
+    function get counterManager():ICounterManager;
 }
 }

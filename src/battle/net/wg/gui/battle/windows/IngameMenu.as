@@ -64,6 +64,8 @@ public class IngameMenu extends IngameMenuMeta implements IIngameMenuMeta {
 
     public var cancelBtn:SoundButtonEx = null;
 
+    private var _isSettingsCounterAdded:Boolean = false;
+
     private var _tooltipType:String = "unavailable";
 
     private var _tooltipFullData:String = "";
@@ -121,6 +123,9 @@ public class IngameMenu extends IngameMenuMeta implements IIngameMenuMeta {
     }
 
     override protected function onDispose():void {
+        if (this._isSettingsCounterAdded) {
+            App.utils.counterManager.removeCounter(this.settingsBtn);
+        }
         this.quitBattleBtn.removeEventListener(ButtonEvent.PRESS, this.onQuitBattleBtnPressHandler);
         this.settingsBtn.removeEventListener(ButtonEvent.PRESS, this.onSettingsBtnPressHandler);
         this.helpBtn.removeEventListener(ButtonEvent.PRESS, this.onHelpBtnPressHandler);
@@ -149,6 +154,7 @@ public class IngameMenu extends IngameMenuMeta implements IIngameMenuMeta {
     override protected function onSetModalFocus(param1:InteractiveObject):void {
         super.onSetModalFocus(param1);
         setFocus(this.cancelBtn);
+        onCounterNeedUpdateS();
     }
 
     override protected function draw():void {
@@ -248,6 +254,11 @@ public class IngameMenu extends IngameMenuMeta implements IIngameMenuMeta {
         this._tooltipType = param2 != Values.EMPTY_STR ? param2 : TYPE_UNAVAILABLE;
         this._serverStats = param1;
         invalidate(INVALIDATE_SERVER_STATS);
+    }
+
+    public function as_setSettingsBtnCounter(param1:String):void {
+        this._isSettingsCounterAdded = true;
+        App.utils.counterManager.setCounter(this.settingsBtn, param1);
     }
 }
 }

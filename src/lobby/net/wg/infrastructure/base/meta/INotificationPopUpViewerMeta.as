@@ -5,7 +5,7 @@ public interface INotificationPopUpViewerMeta extends IEventDispatcher {
 
     function setListClearS():void;
 
-    function onMessageHidedS(param1:Boolean, param2:Boolean):void;
+    function onMessageHiddenS(param1:Boolean, param2:Boolean, param3:int, param4:Number):void;
 
     function onClickActionS(param1:uint, param2:Number, param3:String):void;
 

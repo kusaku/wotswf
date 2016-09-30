@@ -12,6 +12,8 @@ import scaleform.clik.events.ButtonEvent;
 
 public class BaseRallyView extends BaseRallyViewMeta implements IBaseRallyViewMeta {
 
+    public static const DEFAULT_STRING:String = "";
+
     public var titleLbl:TextField;
 
     public var descrLbl:TextField;
@@ -41,14 +43,14 @@ public class BaseRallyView extends BaseRallyViewMeta implements IBaseRallyViewMe
     override protected function configUI():void {
         super.configUI();
         if (this.createBtn) {
-            this.createBtn.addEventListener(ButtonEvent.CLICK, this.onCreateClick);
-            this.createBtn.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-            this.createBtn.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOut);
+            this.createBtn.addEventListener(ButtonEvent.CLICK, this.onCreateButtonClickHandler);
+            this.createBtn.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+            this.createBtn.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         }
         if (this.backBtn) {
             this.backBtn.addEventListener(ButtonEvent.CLICK, this.onBackClickHandler);
-            this.backBtn.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-            this.backBtn.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOut);
+            this.backBtn.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+            this.backBtn.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         }
     }
 
@@ -56,18 +58,21 @@ public class BaseRallyView extends BaseRallyViewMeta implements IBaseRallyViewMe
         App.utils.scheduler.cancelTask(this.coolDownControls);
         if (this.backBtn) {
             this.backBtn.removeEventListener(ButtonEvent.CLICK, this.onBackClickHandler);
-            this.backBtn.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-            this.backBtn.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOut);
+            this.backBtn.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+            this.backBtn.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
             this.backBtn.dispose();
             this.backBtn = null;
         }
         if (this.createBtn) {
-            this.createBtn.removeEventListener(ButtonEvent.CLICK, this.onCreateClick);
-            this.createBtn.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-            this.createBtn.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOut);
+            this.createBtn.removeEventListener(ButtonEvent.CLICK, this.onCreateButtonClickHandler);
+            this.createBtn.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+            this.createBtn.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
             this.createBtn.dispose();
             this.createBtn = null;
         }
+        this.titleLbl = null;
+        this.descrLbl = null;
+        this._coolDownRequests = null;
         App.contextMenuMgr.hide();
         super.onDispose();
     }
@@ -85,7 +90,7 @@ public class BaseRallyView extends BaseRallyViewMeta implements IBaseRallyViewMe
     }
 
     protected function getRallyViewAlias():String {
-        return "";
+        return DEFAULT_STRING;
     }
 
     protected function showComplexTooltip(param1:String, param2:String):void {
@@ -95,25 +100,37 @@ public class BaseRallyView extends BaseRallyViewMeta implements IBaseRallyViewMe
         }
     }
 
-    protected function onControlRollOver(param1:MouseEvent):void {
+    private function onControlRollOverHandler(param1:MouseEvent):void {
+        this.controlRollOverPerformer(param1);
     }
 
-    protected function onCreateClick(param1:ButtonEvent):void {
-        var _loc2_:Object = {
+    protected function controlRollOverPerformer(param1:MouseEvent = null):void {
+    }
+
+    private function onCreateButtonClickHandler(param1:ButtonEvent):void {
+        this.onCreateButtonClick();
+    }
+
+    protected function onCreateButtonClick():void {
+        var _loc1_:Object = {
             "alias": this.getRallyViewAlias(),
             "itemId": Number.NaN,
             "peripheryID": 0,
             "slotIndex": -1
         };
-        dispatchEvent(new RallyViewsEvent(RallyViewsEvent.LOAD_VIEW_REQUEST, _loc2_));
+        dispatchEvent(new RallyViewsEvent(RallyViewsEvent.LOAD_VIEW_REQUEST, _loc1_));
     }
 
-    protected function onBackClickHandler(param1:ButtonEvent):void {
+    private function onBackClickHandler(param1:ButtonEvent):void {
         this.onControlRollOut();
         dispatchEvent(new RallyViewsEvent(RallyViewsEvent.BACK_NAVIGATION_REQUEST));
     }
 
-    protected function onControlRollOut(param1:Event = null):void {
+    private function onControlRollOutHandler(param1:Event):void {
+        this.onControlRollOut();
+    }
+
+    protected function onControlRollOut():void {
         App.toolTipMgr.hide();
     }
 

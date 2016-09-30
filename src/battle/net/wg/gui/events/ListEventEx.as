@@ -6,6 +6,8 @@ public class ListEventEx extends ListEvent {
 
     public static const ITEM_CLICK:String = "itemClick";
 
+    public static const ITEM_RIGHT_CLICK:String = "itemRightClick";
+
     public static const ITEM_PRESS:String = "itemPress";
 
     public static const ITEM_ROLL_OVER:String = "itemRollOver";

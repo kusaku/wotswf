@@ -7,7 +7,7 @@ import net.wg.infrastructure.base.AbstractView;
 
 import scaleform.gfx.MouseCursorEvent;
 
-class BaseCursor extends AbstractView {
+public class BaseCursor extends AbstractView {
 
     private var _attachedSprite:Sprite = null;
 
@@ -15,7 +15,7 @@ class BaseCursor extends AbstractView {
 
     private var _isServiceListenersAdded:Boolean = false;
 
-    function BaseCursor() {
+    public function BaseCursor() {
         super();
     }
 

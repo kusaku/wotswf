@@ -11,6 +11,8 @@ public interface ITechTreeMeta extends IEventDispatcher {
 
     function onCloseTechTreeS():void;
 
+    function request4VehCompareS(param1:Number):void;
+
     function as_setAvailableNations(param1:Array):void;
 
     function as_setSelectedNation(param1:String):void;

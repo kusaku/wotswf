@@ -31,6 +31,6 @@ public interface IBattleStatisticDataControllerMeta extends IEventDispatcher {
 
     function as_setPersonalStatus(param1:uint):void;
 
-    function as_updatePersonalStatus(param1:uint = 0, param2:uint = 0):void;
+    function as_updatePersonalStatus(param1:uint, param2:uint):void;
 }
 }

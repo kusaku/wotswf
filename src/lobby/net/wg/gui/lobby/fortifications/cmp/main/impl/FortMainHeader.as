@@ -4,8 +4,8 @@ import flash.display.InteractiveObject;
 import flash.geom.Rectangle;
 import flash.text.TextField;
 
-import net.wg.gui.components.advanced.ToggleSoundButton;
 import net.wg.gui.components.controls.BitmapFill;
+import net.wg.gui.components.controls.BlackButton;
 import net.wg.gui.components.controls.IconTextButton;
 import net.wg.gui.interfaces.IButtonIconLoader;
 import net.wg.gui.interfaces.ISoundButtonEx;
@@ -60,7 +60,7 @@ public class FortMainHeader extends UIComponentEx implements IMainHeader {
 
     private var _settingBtn:IButtonIconLoader = null;
 
-    private var _transportBtn:ToggleSoundButton = null;
+    private var _transportBtn:BlackButton = null;
 
     private var _clanProfileBtn:ISoundButtonEx = null;
 
@@ -80,6 +80,7 @@ public class FortMainHeader extends UIComponentEx implements IMainHeader {
         mouseEnabled = false;
         this._settingBtn.iconSource = RES_ICONS.MAPS_ICONS_BUTTONS_SETTINGS;
         this._transportBtn.iconSource = RES_ICONS.MAPS_ICONS_BUTTONS_TRANSPORTING;
+        this._transportBtn.toggleEnable = true;
     }
 
     override protected function onDispose():void {
@@ -213,11 +214,11 @@ public class FortMainHeader extends UIComponentEx implements IMainHeader {
         this._calendarBtn = param1;
     }
 
-    public function get transportBtn():ToggleSoundButton {
+    public function get transportBtn():BlackButton {
         return this._transportBtn;
     }
 
-    public function set transportBtn(param1:ToggleSoundButton):void {
+    public function set transportBtn(param1:BlackButton):void {
         this._transportBtn = param1;
     }
 

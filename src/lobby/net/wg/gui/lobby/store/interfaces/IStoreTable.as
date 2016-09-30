@@ -10,5 +10,7 @@ public interface IStoreTable extends IStoreTableMeta, IDAAPIModule, IUIComponent
     function setModuleRendererLinkage(param1:String):void;
 
     function updateHeaderCountTitle(param1:String):void;
+
+    function updateVehicleCompareAvailable(param1:Boolean):void;
 }
 }

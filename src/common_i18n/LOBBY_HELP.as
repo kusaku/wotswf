@@ -42,6 +42,10 @@ package
       public static const HANGAR_VEHRESEARCHPANEL:String = "#lobby_help:hangar/vehResearchPanel";
       
       public static const HANGAR_VEHFILTERS:String = "#lobby_help:hangar/vehFilters";
+      
+      public static const HANGAR_HEADER_QUESTS:String = "#lobby_help:hangar/header/quests";
+      
+      public static const HANGAR_HEADER_VEHICLE:String = "#lobby_help:hangar/header/vehicle";
        
       
       public function LOBBY_HELP()

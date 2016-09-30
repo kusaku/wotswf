@@ -1,13 +1,19 @@
 package net.wg.gui.battle.views.vehicleMarkers {
+import flash.display.Graphics;
 import flash.events.Event;
 import flash.external.ExternalInterface;
 import flash.geom.ColorTransform;
+import flash.geom.Point;
+import flash.geom.Rectangle;
 
+import net.wg.data.constants.AtlasConstants;
 import net.wg.data.constants.Values;
 import net.wg.gui.battle.views.vehicleMarkers.VO.VehicleMarkerSettings;
 import net.wg.gui.battle.views.vehicleMarkers.events.VehicleMarkersManagerEvent;
+import net.wg.gui.utils.RootSWFAtlasManager;
 import net.wg.infrastructure.base.meta.IVehicleMarkersManagerMeta;
 import net.wg.infrastructure.base.meta.impl.VehicleMarkersManagerMeta;
+import net.wg.infrastructure.events.AtlasEvent;
 
 public class VehicleMarkersManager extends VehicleMarkersManagerMeta implements IVehicleMarkersManagerMeta {
 
@@ -27,6 +33,12 @@ public class VehicleMarkersManager extends VehicleMarkersManagerMeta implements 
 
     private var _splashDuration:int = 1000;
 
+    private var _atlasManager:RootSWFAtlasManager;
+
+    private var _markersCallback:Array;
+
+    public var isAtlasInited:Boolean;
+
     public function VehicleMarkersManager() {
         this._markerSettings = {
             "ally": new VehicleMarkerSettings(),
@@ -35,6 +47,10 @@ public class VehicleMarkersManager extends VehicleMarkersManagerMeta implements 
         };
         super();
         sInstance = this;
+        this._atlasManager = RootSWFAtlasManager.instance;
+        this._atlasManager.addEventListener(AtlasEvent.ATLAS_INITIALIZED, this.onAtlasInitialized);
+        this._atlasManager.initAtlas(AtlasConstants.VEHICLE_MARKERS_ATLAS);
+        this._markersCallback = [];
         addEventListener(Event.ENTER_FRAME, this.callExternalInterface);
     }
 
@@ -45,13 +61,43 @@ public class VehicleMarkersManager extends VehicleMarkersManagerMeta implements 
         return sInstance;
     }
 
+    private function onAtlasInitialized(param1:AtlasEvent):void {
+        var _loc2_:IMarkerManagerHandler = null;
+        if (this._atlasManager.isAtlasInitialized(AtlasConstants.VEHICLE_MARKERS_ATLAS)) {
+            this.isAtlasInited = true;
+            this._atlasManager.removeEventListener(AtlasEvent.ATLAS_INITIALIZED, this.onAtlasInitialized);
+            while (this._markersCallback.length > 0) {
+                _loc2_ = this._markersCallback.shift();
+                _loc2_.managerReadyHandler();
+            }
+        }
+    }
+
+    public function addReadyHandler(param1:IMarkerManagerHandler):void {
+        if (this._markersCallback.indexOf(param1) == -1) {
+            this._markersCallback.push(param1);
+        }
+    }
+
+    public function drawGraphics(param1:String, param2:Graphics, param3:Point = null):void {
+        this._atlasManager.drawGraphics(AtlasConstants.VEHICLE_MARKERS_ATLAS, param1, param2, param3);
+    }
+
+    public function drawWithCenterAlign(param1:String, param2:Graphics, param3:Boolean, param4:Boolean, param5:int = 0, param6:int = 0):void {
+        this._atlasManager.drawWithCenterAlign(AtlasConstants.VEHICLE_MARKERS_ATLAS, param1, param2, param3, param4, param5, param6);
+    }
+
+    public function getAtlasItemBounds(param1:String):Rectangle {
+        return this._atlasManager.getAtlasItemBounds(AtlasConstants.VEHICLE_MARKERS_ATLAS, param1);
+    }
+
     override protected function onDispose():void {
         removeEventListener(Event.ENTER_FRAME, this.callExternalInterface);
         this._markerSettings = null;
         this._defaultSchemes = null;
         this._colorBlindSchemes = null;
         this._currentSchemes = null;
-        VMAtlasManager.instance.dispose();
+        RootSWFAtlasManager.instance.dispose();
         super.onDispose();
     }
 

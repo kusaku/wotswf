@@ -1,124 +1,141 @@
 package net.wg.gui.notification {
-import flash.events.Event;
-
-import net.wg.gui.components.controls.ScrollingListPx;
-import net.wg.gui.notification.events.NotificationListEvent;
+import net.wg.gui.components.controls.VerticalListViewPort;
+import net.wg.gui.components.controls.events.VerticalListViewportEvent;
+import net.wg.gui.components.controls.scroller.ScrollerBase;
+import net.wg.gui.components.controls.scroller.data.ScrollConfig;
 import net.wg.gui.notification.vo.NotificationInfoVO;
+import net.wg.gui.notification.vo.NotificationMessagesListVO;
 
+import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.data.DataProvider;
-import scaleform.clik.interfaces.IListItemRenderer;
+import scaleform.clik.interfaces.IDataProvider;
 
-public class NotificationsList extends ScrollingListPx {
+public class NotificationsList extends ScrollerBase {
 
-    public static const PENDING_DATA_INV:String = "pendingDataInv";
+    private var _viewPort:VerticalListViewPort = null;
 
-    public static const RENDERERS_CHANGE_HEIGHT:String = "renderersChangeHeight";
+    private var _data:NotificationMessagesListVO = null;
 
-    private var _pendingDataList:Array;
+    private var _itemRendererClassName:String = null;
 
     public function NotificationsList() {
-        this._pendingDataList = [];
         super();
     }
 
-    override protected function onDispose():void {
-        this._pendingDataList.splice(0, this._pendingDataList.length);
-        this._pendingDataList = null;
-        if (_dataProvider) {
-            _dataProvider.removeEventListener(Event.CHANGE, handleDataChange);
+    override protected function configUI():void {
+        super.configUI();
+        var _loc1_:ScrollConfig = new ScrollConfig();
+        _loc1_.normalizeWheelScrollDelta = false;
+        _loc1_.mouseWheelScrollDuration = 0;
+        this.scrollConfig = _loc1_;
+        cropContent = true;
+        useTimer = true;
+        touchScrollEnabled = false;
+        this._viewPort = new VerticalListViewPort();
+        this._viewPort.addEventListener(VerticalListViewportEvent.RESIZE_TOP, this.onViewPortResizeTopHandler);
+        viewPort = this._viewPort;
+    }
+
+    override protected function roundToNearest(param1:Number, param2:Number):Number {
+        return param1;
+    }
+
+    override protected function draw():void {
+        super.draw();
+        if (isInvalid(InvalidationType.RENDERERS)) {
+            this._viewPort.itemRendererClassName = this._itemRendererClassName;
         }
+        if (isInvalid(InvalidationType.DATA) && this._data != null) {
+            this._viewPort.dataProvider = new DataProvider(this._data.messages);
+            App.utils.scheduler.scheduleOnNextFrame(this.scrollToMaxPosition);
+        }
+    }
+
+    override protected function onDispose():void {
+        App.utils.scheduler.cancelTask(this.scrollToMaxPosition);
+        this._viewPort.removeEventListener(VerticalListViewportEvent.RESIZE_TOP, this.onViewPortResizeTopHandler);
+        this._viewPort.dispose();
+        this._viewPort = null;
+        this._data = null;
         super.onDispose();
     }
 
     public function appendData(param1:NotificationInfoVO):void {
-        this._pendingDataList.push(param1);
-        invalidate(PENDING_DATA_INV);
+        var _loc2_:IDataProvider = this.dataProvider;
+        if (_loc2_ != null) {
+            DataProvider(_loc2_).push(param1);
+            _loc2_.invalidate();
+        }
+    }
+
+    public function invalidateRenderers():void {
+        if (this._viewPort != null) {
+            this._viewPort.invalidateRenderers();
+        }
+    }
+
+    public function scrollTo(param1:Number, param2:Number = 0.0):void {
+        verticalScrollPosition = param1;
+        startScroll();
+        throwToVerticalPosition(param1, param2);
+    }
+
+    public function setData(param1:NotificationMessagesListVO):void {
+        if (this._data != param1) {
+            this._data = param1;
+            invalidateData();
+        }
     }
 
     public function updateData(param1:NotificationInfoVO):void {
-        var _loc5_:int = 0;
-        var _loc2_:uint = _dataProvider.length;
-        var _loc3_:NotificationInfoVO = null;
-        var _loc4_:int = -1;
-        _loc5_ = 0;
-        while (_loc5_ < _loc2_) {
-            _loc3_ = NotificationInfoVO(_dataProvider[_loc5_]);
-            if (param1.isEquals(_loc3_)) {
-                _dataProvider[_loc5_] = param1;
-                _loc4_ = _loc5_;
-            }
-            _loc5_++;
-        }
-        if (_loc4_ > -1) {
-            invalidate();
-        }
-    }
-
-    override protected function draw():void {
-        var _loc1_:Boolean = false;
-        var _loc2_:uint = 0;
         var _loc3_:uint = 0;
-        var _loc4_:IListItemRenderer = null;
-        var _loc5_:int = 0;
-        super.draw();
-        if (isInvalid(PENDING_DATA_INV)) {
-            _loc1_ = scrollPosition == 0 || scrollPosition == maxScroll;
-            if (!dataProvider) {
-                dataProvider = new DataProvider([]);
-            }
-            _loc2_ = 0;
-            while (this._pendingDataList.length > 0) {
-                _dataProvider.removeEventListener(Event.CHANGE, handleDataChange);
-                _loc2_ = DataProvider(_dataProvider).push(this._pendingDataList.shift());
-                createRendererByDataIndex(_loc2_ - 1);
-                _dataProvider.addEventListener(Event.CHANGE, handleDataChange, false, 0, true);
-            }
-            if (_loc1_) {
-                scrollPosition = maxScroll;
-            }
-            container.y = -(scrollStepFactor * _scrollPosition);
-            scrollBar.setScrollProperties(scrollPageSize, 0, maxScroll);
-            scrollBar.position = scrollPosition;
-            scrollBar.trackScrollPageSize = scrollPageSize;
-            scrollBar.visible = maxScroll > 0;
-            dispatchEvent(new NotificationListEvent(NotificationListEvent.UPDATE_INDEXES, _dataProvider.length));
-        }
-        if (isInvalid(RENDERERS_CHANGE_HEIGHT)) {
-            totalHeight = 0;
-            _loc3_ = _renderers.length;
-            _loc5_ = 0;
-            while (_loc5_ < _loc3_) {
-                _loc4_ = _renderers[_loc5_];
-                _loc4_.y = totalHeight;
-                totalHeight = totalHeight + ((_loc4_.height | 0) + padding);
-                _loc5_++;
-            }
-        }
-    }
-
-    override protected function drawRenderers(param1:Number):void {
-        super.drawRenderers(param1);
-        if (totalHeight > maskObject.height) {
-            scrollPosition = maxScroll;
-        }
-        dispatchEvent(new NotificationListEvent(NotificationListEvent.UPDATE_INDEXES, _dataProvider.length));
-    }
-
-    override protected function createRenderer(param1:uint):IListItemRenderer {
-        var _loc2_:IListItemRenderer = super.createRenderer(param1);
+        var _loc4_:int = 0;
+        var _loc2_:IDataProvider = this.dataProvider;
         if (_loc2_ != null) {
-            _loc2_.addEventListener(Event.RESIZE, this.onRendererResizeHandler);
+            _loc3_ = _loc2_.length;
+            _loc4_ = 0;
+            while (_loc4_ < _loc3_) {
+                if (param1.isEquals(_loc2_[_loc4_])) {
+                    _loc2_[_loc4_] = param1;
+                    this._viewPort.updateData(_loc4_);
+                    break;
+                }
+                _loc4_++;
+            }
         }
-        return _loc2_;
     }
 
-    override protected function cleanUpRenderer(param1:IListItemRenderer):void {
-        param1.removeEventListener(Event.RESIZE, this.onRendererResizeHandler);
-        super.cleanUpRenderer(param1);
+    private function scrollToMaxPosition():void {
+        do
+        {
+            this._viewPort.verticalScrollPosition = maxVerticalScrollPosition;
+            this._viewPort.validateNow();
+            refreshMinAndMaxScrollValues();
+        }
+        while (this._viewPort.verticalScrollPosition != maxVerticalScrollPosition);
+
+        this.scrollTo(this._viewPort.verticalScrollPosition);
     }
 
-    private function onRendererResizeHandler(param1:Event):void {
-        invalidate(RENDERERS_CHANGE_HEIGHT);
+    public function get itemRendererClassName():String {
+        return this._itemRendererClassName;
+    }
+
+    public function set itemRendererClassName(param1:String):void {
+        if (this._itemRendererClassName != param1) {
+            this._itemRendererClassName = param1;
+            invalidate(InvalidationType.RENDERERS);
+        }
+    }
+
+    public function get dataProvider():IDataProvider {
+        return this._viewPort != null ? this._viewPort.dataProvider : null;
+    }
+
+    private function onViewPortResizeTopHandler(param1:VerticalListViewportEvent):void {
+        var _loc2_:int = param1.change;
+        this.scrollTo(verticalScrollPosition + _loc2_);
+        this._viewPort.y = this._viewPort.y - _loc2_;
     }
 }
 }

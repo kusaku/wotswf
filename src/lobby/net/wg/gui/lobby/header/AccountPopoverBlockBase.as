@@ -100,9 +100,8 @@ public class AccountPopoverBlockBase extends UIComponentEx implements IAccountCl
     }
 
     protected function applyData():void {
-        var _loc1_:AccountPopoverBlockVO = null;
         var _loc2_:Boolean = false;
-        _loc1_ = AccountPopoverBlockVO(this._data);
+        var _loc1_:AccountPopoverBlockVO = AccountPopoverBlockVO(this._data);
         _loc2_ = _loc1_.isDoActionBtnVisible;
         this.doActionBtn.visible = _loc2_;
         if (_loc2_) {

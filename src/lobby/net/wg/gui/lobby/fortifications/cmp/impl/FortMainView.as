@@ -359,6 +359,17 @@ public class FortMainView extends FortMainViewMeta implements IFortMainView {
         param1.removeEventListener(IconLoaderEvent.ICON_LOADING_FAILED, this.onItemIconLoadingFailedHandler);
     }
 
+    private function loadItemCompleted(param1:DisplayObject):void {
+        if (param1) {
+            this.removeItemLoaderHandlers(param1);
+            this._loadersList.splice(this._loadersList.indexOf(param1), 1);
+            if (this._loadersList.length == 0) {
+                onViewReadyS();
+                this.show();
+            }
+        }
+    }
+
     public function get buildings():IFortLandscapeCmp {
         return this._buildings;
     }
@@ -393,17 +404,6 @@ public class FortMainView extends FortMainViewMeta implements IFortMainView {
 
     private function onItemIconLoadedHandler(param1:IconLoaderEvent):void {
         this.loadItemCompleted(DisplayObject(param1.target));
-    }
-
-    private function loadItemCompleted(param1:DisplayObject):void {
-        if (param1) {
-            this.removeItemLoaderHandlers(param1);
-            this._loadersList.splice(this._loadersList.indexOf(param1), 1);
-            if (this._loadersList.length == 0) {
-                onViewReadyS();
-                this.show();
-            }
-        }
     }
 
     private function onCommanderHelpViewCommanderHelpViewBtnClickHandler(param1:FortInitEvent):void {

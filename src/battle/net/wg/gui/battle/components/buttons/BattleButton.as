@@ -92,7 +92,6 @@ public class BattleButton extends BattleUIComponent implements IBattleButton {
     }
 
     private function onMouseRollOverHandler(param1:MouseEvent):void {
-        param1.stopImmediatePropagation();
         throwLifeCycleException();
         if (param1.buttonDown) {
             if (this._dragOverButtonHandler) {
@@ -120,7 +119,6 @@ public class BattleButton extends BattleUIComponent implements IBattleButton {
     }
 
     private function onMouseRollOutHandler(param1:MouseEvent):void {
-        param1.stopImmediatePropagation();
         throwLifeCycleException();
         if (param1.buttonDown) {
             if (this._dragOutButtonHandler) {
@@ -147,7 +145,6 @@ public class BattleButton extends BattleUIComponent implements IBattleButton {
     }
 
     protected function onMousePressHandler(param1:MouseEvent):void {
-        param1.stopImmediatePropagation();
         throwLifeCycleException();
         if (!this.enabled) {
             return;
@@ -164,8 +161,7 @@ public class BattleButton extends BattleUIComponent implements IBattleButton {
     protected function invokePressActions():void {
     }
 
-    protected function onMouseClickHandler(param1:MouseEvent):void {
-        param1.stopImmediatePropagation();
+    private function onMouseClickHandler(param1:MouseEvent):void {
         throwLifeCycleException();
         this.invokeReleaseActions();
         if (!this.enabled) {
@@ -182,10 +178,9 @@ public class BattleButton extends BattleUIComponent implements IBattleButton {
     protected function invokeReleaseActions():void {
     }
 
-    protected function onReleaseOutsideHandler(param1:MouseEvent):void {
-        param1.stopImmediatePropagation();
+    private function onReleaseOutsideHandler(param1:MouseEvent):void {
         throwLifeCycleException();
-        if (contains(param1.target as DisplayObject)) {
+        if (contains(DisplayObject(param1.target))) {
             return;
         }
         App.stage.removeEventListener(MouseEvent.MOUSE_UP, this.onReleaseOutsideHandler, false);

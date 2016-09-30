@@ -7,11 +7,11 @@ import scaleform.clik.constants.InvalidationType;
 
 public class VehPreviewBackground extends UIComponentEx {
 
-    public var separator:Sprite;
+    public var separator:Sprite = null;
 
-    public var bitmaps:Sprite;
+    public var bitmaps:Sprite = null;
 
-    private var _backHitArea:Sprite;
+    private var _backHitArea:Sprite = null;
 
     public function VehPreviewBackground() {
         super();
@@ -19,17 +19,23 @@ public class VehPreviewBackground extends UIComponentEx {
 
     override protected function configUI():void {
         super.configUI();
-        this._backHitArea = new Sprite();
-        addChild(this._backHitArea);
-        this.separator.hitArea = this._backHitArea;
-        this.separator.mouseChildren = this.separator.mouseEnabled = false;
+        if (this.separator != null) {
+            this._backHitArea = new Sprite();
+            addChild(this._backHitArea);
+            this.separator.hitArea = this._backHitArea;
+            this.separator.mouseChildren = this.separator.mouseEnabled = false;
+        }
     }
 
     override protected function onDispose():void {
-        removeChild(this._backHitArea);
-        this._backHitArea = null;
-        this.separator.hitArea = null;
-        this.separator = null;
+        if (this._backHitArea != null) {
+            removeChild(this._backHitArea);
+            this._backHitArea = null;
+        }
+        if (this.separator != null) {
+            this.separator.hitArea = null;
+            this.separator = null;
+        }
         this.bitmaps = null;
         super.onDispose();
     }
@@ -38,7 +44,9 @@ public class VehPreviewBackground extends UIComponentEx {
         super.draw();
         if (isInvalid(InvalidationType.SIZE)) {
             this.bitmaps.width = width;
-            this.separator.width = width;
+            if (this.separator != null) {
+                this.separator.width = width;
+            }
         }
     }
 }

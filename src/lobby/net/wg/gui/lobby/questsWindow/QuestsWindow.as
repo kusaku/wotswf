@@ -5,10 +5,10 @@ import flash.display.Sprite;
 import net.wg.data.constants.generated.QUESTS_ALIASES;
 import net.wg.gui.components.advanced.ButtonBarEx;
 import net.wg.gui.components.advanced.ViewStack;
+import net.wg.gui.data.TabsVO;
 import net.wg.gui.events.ViewStackEvent;
 import net.wg.gui.lobby.quests.views.QuestsPersonalWelcomeView;
 import net.wg.gui.lobby.questsWindow.components.interfaces.IQuestsWindow;
-import net.wg.gui.lobby.questsWindow.data.TabsVO;
 import net.wg.infrastructure.base.meta.impl.QuestsWindowMeta;
 import net.wg.infrastructure.events.FocusChainChangeEvent;
 import net.wg.infrastructure.events.FocusRequestEvent;
@@ -33,8 +33,6 @@ public class QuestsWindow extends QuestsWindowMeta implements IQuestsWindow {
     public var line:Sprite;
 
     private var _currentViewAlias:String = null;
-
-    private var _tabsDPSource:Array;
 
     private var _focusList:Vector.<InteractiveObject>;
 
@@ -71,15 +69,15 @@ public class QuestsWindow extends QuestsWindowMeta implements IQuestsWindow {
     override protected function onPopulate():void {
         super.onPopulate();
         window.title = QUESTS.QUESTS_TITLE;
-        this.tabs_mc.addEventListener(IndexEvent.INDEX_CHANGE, this.onTabSelectedHandler);
+        this.tabs_mc.addEventListener(IndexEvent.INDEX_CHANGE, this.onTabsIndexChangeHandler);
         this.view_mc.addEventListener(ViewStackEvent.VIEW_CHANGED, this.onViewChangedHandler);
         this.view_mc.addEventListener(FocusRequestEvent.REQUEST_FOCUS, this.onRequestFocusHandler);
-        addEventListener(FocusChainChangeEvent.FOCUS_CHAIN_CHANGE, this.focusChainChangeHandler);
+        addEventListener(FocusChainChangeEvent.FOCUS_CHAIN_CHANGE, this.onFocusChainChangeHandler);
     }
 
     override protected function onDispose():void {
         App.utils.scheduler.cancelTask(this.setFocusView);
-        this.tabs_mc.removeEventListener(IndexEvent.INDEX_CHANGE, this.onTabSelectedHandler);
+        this.tabs_mc.removeEventListener(IndexEvent.INDEX_CHANGE, this.onTabsIndexChangeHandler);
         this.view_mc.removeEventListener(ViewStackEvent.VIEW_CHANGED, this.onViewChangedHandler);
         this.view_mc.removeEventListener(FocusRequestEvent.REQUEST_FOCUS, this.onRequestFocusHandler);
         this.tabs_mc.dispose();
@@ -88,10 +86,9 @@ public class QuestsWindow extends QuestsWindowMeta implements IQuestsWindow {
         this.view_mc = null;
         this.line = null;
         App.toolTipMgr.hide();
-        removeEventListener(FocusChainChangeEvent.FOCUS_CHAIN_CHANGE, this.focusChainChangeHandler);
+        removeEventListener(FocusChainChangeEvent.FOCUS_CHAIN_CHANGE, this.onFocusChainChangeHandler);
         this._focusList.splice(0, this._focusList.length);
         this._focusList = null;
-        this.cleanTabsDPSource();
         super.onDispose();
     }
 
@@ -103,12 +100,10 @@ public class QuestsWindow extends QuestsWindowMeta implements IQuestsWindow {
     }
 
     override protected function init(param1:TabsVO):void {
-        this.cleanTabsDPSource();
-        this._tabsDPSource = App.utils.data.vectorToArray(param1.tabs);
         if (this.tabs_mc.dataProvider != null) {
             this.tabs_mc.dataProvider.cleanUp();
         }
-        this.tabs_mc.dataProvider = new DataProvider(this._tabsDPSource);
+        this.tabs_mc.dataProvider = new DataProvider(param1.tabs);
     }
 
     public function as_loadView(param1:String, param2:String):void {
@@ -131,13 +126,6 @@ public class QuestsWindow extends QuestsWindowMeta implements IQuestsWindow {
             _loc1_ = _loc1_.concat(IFocusChainContainer(this.view_mc.currentView).getFocusChain());
         }
         return _loc1_;
-    }
-
-    private function cleanTabsDPSource():void {
-        if (this._tabsDPSource != null) {
-            this._tabsDPSource.splice(0, this._tabsDPSource.length);
-            this._tabsDPSource = null;
-        }
     }
 
     private function setFocusView(param1:IViewStackContent):void {
@@ -174,7 +162,7 @@ public class QuestsWindow extends QuestsWindowMeta implements IQuestsWindow {
         }
     }
 
-    private function onTabSelectedHandler(param1:IndexEvent):void {
+    private function onTabsIndexChangeHandler(param1:IndexEvent):void {
         var _loc2_:Object = this.tabs_mc.dataProvider.requestItemAt(this.tabs_mc.selectedIndex);
         onTabSelectedS(_loc2_.id);
     }
@@ -194,7 +182,7 @@ public class QuestsWindow extends QuestsWindowMeta implements IQuestsWindow {
         setFocus(param1.focusContainer.getComponentForFocus());
     }
 
-    private function focusChainChangeHandler(param1:FocusChainChangeEvent):void {
+    private function onFocusChainChangeHandler(param1:FocusChainChangeEvent):void {
         this.invalidateFocusChain();
     }
 }

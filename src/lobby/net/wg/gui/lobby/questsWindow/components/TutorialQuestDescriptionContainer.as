@@ -53,11 +53,12 @@ public class TutorialQuestDescriptionContainer extends UIComponentEx {
     }
 
     private function layout():void {
+        var _loc2_:Number = NaN;
         var _loc1_:ICommons = App.utils.commons;
         _loc1_.updateTextFieldSize(this.conditionsTitleTF, false, true);
         _loc1_.updateTextFieldSize(this.descTitleTF, false, true);
         _loc1_.updateTextFieldSize(this.descTextTF, false, true);
-        var _loc2_:Number = this.conditionsTitleTF.y + this.conditionsTitleTF.height;
+        _loc2_ = this.conditionsTitleTF.y + this.conditionsTitleTF.height;
         this.conditionsGroup.y = _loc2_ | 0;
         _loc2_ = _loc2_ + (this.conditionsGroup.height + GAP);
         this.separator.y = _loc2_;

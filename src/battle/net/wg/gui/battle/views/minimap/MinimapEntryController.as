@@ -1,6 +1,10 @@
 package net.wg.gui.battle.views.minimap {
+import flash.display.DisplayObject;
+
 import net.wg.data.constants.Errors;
+import net.wg.gui.battle.views.minimap.components.entries.interfaces.IMinimapEntryWithNonScaleContent;
 import net.wg.gui.battle.views.minimap.components.entries.interfaces.IVehicleMinimapEntry;
+import net.wg.gui.battle.views.minimap.constants.MinimapSizeConst;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 import net.wg.utils.IAssertable;
 
@@ -20,9 +24,17 @@ public class MinimapEntryController implements IDisposable {
 
     private var _isShowVehicleNamesTurnedOn:Boolean = false;
 
+    private var _scalableEntries:Vector.<DisplayObject>;
+
+    private var _scalableEntriesWithNonScaleContent:Vector.<IMinimapEntryWithNonScaleContent>;
+
+    private var _sizeIndex:int = 0;
+
     public function MinimapEntryController(param1:PrivateClass) {
         var _loc2_:IAssertable = null;
         this._asserter = App.utils.asserter;
+        this._scalableEntries = new Vector.<DisplayObject>();
+        this._scalableEntriesWithNonScaleContent = new Vector.<IMinimapEntryWithNonScaleContent>();
         super();
         if (_instance) {
             _loc2_ = App.utils.asserter;
@@ -95,6 +107,46 @@ public class MinimapEntryController implements IDisposable {
         }
     }
 
+    public function registerScalableEntry(param1:DisplayObject, param2:Boolean = false):void {
+        this._scalableEntries.push(param1);
+        var _loc3_:Number = MinimapSizeConst.ENTRY_SCALES[this._sizeIndex];
+        if (_loc3_ != param1.scaleX) {
+            param1.scaleX = param1.scaleY = _loc3_;
+        }
+        if (param2) {
+            this._scalableEntriesWithNonScaleContent.push(IMinimapEntryWithNonScaleContent(param1));
+            IMinimapEntryWithNonScaleContent(param1).setContentNormalizedScale(MinimapSizeConst.ENTRY_INTERNAL_CONTENT_CONTR_SCALES[this._sizeIndex]);
+        }
+    }
+
+    public function unregisterScalableEntry(param1:DisplayObject, param2:Boolean = false):void {
+        var _loc3_:int = this._scalableEntries.indexOf(param1);
+        if (_loc3_ != -1) {
+            this._scalableEntries.splice(_loc3_, 1);
+        }
+        if (param2) {
+            _loc3_ = this._scalableEntriesWithNonScaleContent.indexOf(param1);
+            if (_loc3_ != -1) {
+                this._scalableEntriesWithNonScaleContent.splice(_loc3_, 1);
+            }
+        }
+    }
+
+    public function updateScale(param1:int):void {
+        var _loc3_:DisplayObject = null;
+        var _loc4_:IMinimapEntryWithNonScaleContent = null;
+        this._sizeIndex = param1;
+        var _loc2_:Number = MinimapSizeConst.ENTRY_SCALES[this._sizeIndex];
+        for each(_loc3_ in this._scalableEntries) {
+            if (_loc2_ != _loc3_.scaleX) {
+                _loc3_.scaleX = _loc3_.scaleY = _loc2_;
+            }
+        }
+        for each(_loc4_ in this._scalableEntriesWithNonScaleContent) {
+            _loc4_.setContentNormalizedScale(MinimapSizeConst.ENTRY_INTERNAL_CONTENT_CONTR_SCALES[this._sizeIndex]);
+        }
+    }
+
     private function verifyIsDisposed():void {
         this._asserter.assert(!this._isDisposed, "MinimapEntryController " + Errors.ALREADY_DISPOSED);
     }
@@ -103,6 +155,10 @@ public class MinimapEntryController implements IDisposable {
         this.verifyIsDisposed();
         this._isDisposed = true;
         this._asserter = null;
+        this._scalableEntries.splice(0, this._scalableEntries.length);
+        this._scalableEntries = null;
+        this._scalableEntriesWithNonScaleContent.splice(0, this._scalableEntriesWithNonScaleContent.length);
+        this._scalableEntriesWithNonScaleContent = null;
         this._vehicleEntries.splice(0, this._vehicleEntries.length);
         this._vehicleEntries = null;
         this._vehicleLabelsEntries.splice(0, this._vehicleLabelsEntries.length);

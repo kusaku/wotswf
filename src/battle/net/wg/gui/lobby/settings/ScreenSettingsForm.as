@@ -8,10 +8,9 @@ import net.wg.gui.components.controls.LabelControl;
 import net.wg.gui.components.controls.RangeSlider;
 import net.wg.gui.components.controls.Slider;
 import net.wg.gui.components.controls.UILoaderAlt;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
-
-public class ScreenSettingsForm extends UIComponent {
+public class ScreenSettingsForm extends UIComponentEx {
 
     public var monitorLabel:LabelControl = null;
 

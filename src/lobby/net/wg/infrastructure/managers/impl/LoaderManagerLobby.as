@@ -1,5 +1,6 @@
 package net.wg.infrastructure.managers.impl {
 import net.wg.data.Aliases;
+import net.wg.data.daapi.LoadViewVO;
 
 public class LoaderManagerLobby extends LoaderManagerBase {
 
@@ -9,12 +10,12 @@ public class LoaderManagerLobby extends LoaderManagerBase {
         super();
     }
 
-    override public function as_loadView(param1:Object, param2:String, param3:String, param4:String = null):void {
-        if (param2 == Aliases.LOBBY && !this.firstTimeLoadLobby) {
-            loadLibraries(Vector.<String>(["toolTips.swf", "popovers.swf", "IconLibrary.swf"]));
+    override protected function loadView(param1:LoadViewVO):void {
+        if (param1.alias == Aliases.LOBBY && !this.firstTimeLoadLobby) {
+            loadLibraries(Vector.<String>(["guiControlsLobbyBattleDynamic.swf", "guiControlsLobbyDynamic.swf", "popovers.swf", "IconLibrary.swf"]));
             this.firstTimeLoadLobby = true;
         }
-        super.as_loadView(param1, param2, param3, param4);
+        super.loadView(param1);
     }
 }
 }

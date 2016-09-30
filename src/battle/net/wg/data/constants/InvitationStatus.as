@@ -31,6 +31,10 @@ public class InvitationStatus {
         return (param1 & InvitationStatus.RECEIVED_FROM) > 0;
     }
 
+    public static function isOnlyReceived(param1:uint):Boolean {
+        return (param1 & InvitationStatus.RECEIVED_FROM) > 0 && (param1 & InvitationStatus.RECEIVED_INACTIVE) == 0;
+    }
+
     public static function isReceivedInactive(param1:uint):Boolean {
         return (param1 & InvitationStatus.RECEIVED_INACTIVE) > 0;
     }

@@ -22,9 +22,7 @@ public class SellVehicleVo extends DAAPIDataClass {
 
     public var sellPrice:Array = null;
 
-    public var action:Object = null;
-
-    public var actionVo:ActionPriceVO = null;
+    public var action:ActionPriceVO = null;
 
     public var hasCrew:Boolean = false;
 
@@ -32,29 +30,47 @@ public class SellVehicleVo extends DAAPIDataClass {
 
     public var isRented:Boolean = false;
 
+    public var levelStr:String = "";
+
+    public var description:String = "";
+
+    public var crewLabel:String = "";
+
+    public var priceLabel:String = "";
+
+    public var priceTextValue:String = "";
+
+    public var priceTextColor:int = -1;
+
+    public var currencyIcon:String = "";
+
+    public var crewTooltip:String = "";
+
+    public var crewRecoveryBufferFull:Boolean = false;
+
+    public var barracksDropDownData:Array = null;
+
     public function SellVehicleVo(param1:Object) {
         super(param1);
     }
 
     override protected function onDataWrite(param1:String, param2:Object):Boolean {
-        if (param1 == ACTION_LABEL) {
-            this.action = param2;
-            if (this.action) {
-                this.actionVo = new ActionPriceVO(this.action);
-            }
+        if (param1 == ACTION_LABEL && param2 != null) {
+            this.action = new ActionPriceVO(param2);
             return false;
         }
-        return this.hasOwnProperty(param1);
+        return super.onDataWrite(param1, param2);
     }
 
     override protected function onDispose():void {
-        if (this.actionVo != null) {
-            this.actionVo.dispose();
-            this.actionVo = null;
+        if (this.action != null) {
+            this.action.dispose();
+            this.action = null;
         }
-        this.sellPrice.splice(0, this.sellPrice.length);
+        this.sellPrice.splice(0);
         this.sellPrice = null;
-        this.action = App.utils.data.cleanupDynamicObject(this.action);
+        this.barracksDropDownData.splice(0);
+        this.barracksDropDownData = null;
         super.onDispose();
     }
 }

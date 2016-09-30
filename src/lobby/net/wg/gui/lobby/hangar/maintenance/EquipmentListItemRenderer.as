@@ -5,6 +5,7 @@ import flash.text.TextField;
 
 import net.wg.data.constants.Currencies;
 import net.wg.data.constants.SoundTypes;
+import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 import net.wg.gui.components.advanced.ModuleTypesUIWithFill;
 import net.wg.gui.components.controls.ActionPrice;
 import net.wg.gui.components.controls.IconText;
@@ -104,14 +105,14 @@ public class EquipmentListItemRenderer extends SoundListItemRenderer {
                     _loc1_ = null;
                     if (this.module.actionPriceVo) {
                         _loc1_ = this.module.actionPriceVo;
-                        _loc1_.forCredits = this.module.currency == Currencies.CREDITS;
+                        _loc1_.forCredits = this.module.currency == CURRENCIES_CONSTANTS.CREDITS;
                     }
                     this.actionPrice.setData(_loc1_);
                     this.actionPrice.setup(this);
                     this.actionPrice.validateNow();
                     this.priceMC.visible = !this.actionPrice.visible;
                     this.priceMC.text = App.utils.locale.integer(this.module.price);
-                    this.priceMC.textColor = this.module.price < this.module.userCredits[this.module.currency] ? Number(Currencies.TEXT_COLORS[this.module.currency]) : Number(Currencies.TEXT_COLORS[Currencies.ERROR]);
+                    this.priceMC.textColor = this.module.price < this.module.userCredits[this.module.currency] ? Number(Currencies.TEXT_COLORS[this.module.currency]) : Number(Currencies.TEXT_COLORS[CURRENCIES_CONSTANTS.ERROR]);
                     if (this.module.status == MENU.MODULEFITS_NOT_WITH_INSTALLED_EQUIPMENT) {
                         this.actionPrice.textColorType = ActionPrice.TEXT_COLOR_TYPE_DISABLE;
                     }

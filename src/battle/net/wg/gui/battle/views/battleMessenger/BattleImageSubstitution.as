@@ -18,7 +18,9 @@ public class BattleImageSubstitution implements IDisposable {
     }
 
     public function dispose():void {
-        this.image.dispose();
+        if (this.image.width != 0 && this.image.height != 0) {
+            this.image.dispose();
+        }
         this.image = null;
     }
 }

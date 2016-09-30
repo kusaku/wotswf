@@ -14,6 +14,8 @@ public class TextFieldShort extends ListItemRenderer implements ITextContainer {
 
     private static const REPLACE_SYMBOLS:String = "..";
 
+    public var useDropShadow:Boolean = true;
+
     protected var _toolTip:String = "";
 
     private var _textFormat:TextFormat;
@@ -76,12 +78,12 @@ public class TextFieldShort extends ListItemRenderer implements ITextContainer {
         var _loc4_:Number = NaN;
         var _loc5_:Number = NaN;
         var _loc6_:String = null;
-        var _loc7_:DropShadowFilter = null;
+        var _loc7_:Number = NaN;
         var _loc8_:Number = NaN;
-        var _loc9_:Number = NaN;
+        var _loc9_:String = null;
         var _loc10_:String = null;
-        var _loc11_:String = null;
-        var _loc12_:Number = NaN;
+        var _loc11_:Number = NaN;
+        var _loc12_:DropShadowFilter = null;
         super.draw();
         if (textField && InvalidationType.DATA) {
             textField.wordWrap = true;
@@ -91,23 +93,23 @@ public class TextFieldShort extends ListItemRenderer implements ITextContainer {
             _loc3_ = [];
             _loc4_ = 0;
             if (this._useHtml) {
+                _loc7_ = 0;
                 _loc8_ = 0;
-                _loc9_ = 0;
-                _loc10_ = "";
-                _loc11_ = _label;
+                _loc9_ = "";
+                _loc10_ = _label;
                 while (true) {
-                    _loc4_ = _loc11_.indexOf("<");
+                    _loc4_ = _loc10_.indexOf("<");
                     if (_loc4_ < 0) {
                         break;
                     }
-                    _loc9_ = _loc11_.indexOf(">", _loc4_);
-                    _loc10_ = _loc11_.substr(_loc4_, _loc9_ - _loc4_ + 1);
-                    _loc2_.push(_loc10_);
+                    _loc8_ = _loc10_.indexOf(">", _loc4_);
+                    _loc9_ = _loc10_.substr(_loc4_, _loc8_ - _loc4_ + 1);
+                    _loc2_.push(_loc9_);
                     _loc3_.push(_loc4_);
-                    _loc11_ = _loc11_.substr(_loc8_, _loc4_) + _loc11_.substr(_loc9_ + 1, _loc11_.length);
+                    _loc10_ = _loc10_.substr(_loc7_, _loc4_) + _loc10_.substr(_loc8_ + 1, _loc10_.length);
                 }
-                textField.htmlText = _loc11_;
-                _loc1_ = _loc11_;
+                textField.htmlText = _loc10_;
+                _loc1_ = _loc10_;
             }
             else {
                 textField.text = _label;
@@ -123,18 +125,20 @@ public class TextFieldShort extends ListItemRenderer implements ITextContainer {
                 _loc6_ = textField.text.substring(0, _loc5_ - this._replaceSymbolsLen) + REPLACE_SYMBOLS;
             }
             if (this._useHtml) {
-                _loc12_ = _loc2_.length - 1;
-                while (_loc12_ >= 0) {
-                    _loc4_ = _loc3_[_loc12_];
-                    _loc6_ = _loc6_.substr(0, _loc4_) + _loc2_[_loc12_] + _loc6_.substr(_loc4_);
-                    _loc12_--;
+                _loc11_ = _loc2_.length - 1;
+                while (_loc11_ >= 0) {
+                    _loc4_ = _loc3_[_loc11_];
+                    _loc6_ = _loc6_.substr(0, _loc4_) + _loc2_[_loc11_] + _loc6_.substr(_loc4_);
+                    _loc11_--;
                 }
             }
             this.showText(_loc6_);
             textField.setTextFormat(this._textFormat);
             textField.textColor = this._textColor;
-            _loc7_ = this.getDropShadowFilter(this._shadowColor);
-            textField.filters = [_loc7_];
+            if (this.useDropShadow) {
+                _loc12_ = this.getDropShadowFilter(this._shadowColor);
+                textField.filters = [_loc12_];
+            }
             this._toolTip = _label;
             invalidateSize();
         }

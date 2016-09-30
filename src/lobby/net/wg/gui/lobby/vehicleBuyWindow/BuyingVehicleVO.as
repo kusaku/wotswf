@@ -1,4 +1,5 @@
 package net.wg.gui.lobby.vehicleBuyWindow {
+import net.wg.data.constants.Errors;
 import net.wg.data.daapi.base.DAAPIDataClass;
 import net.wg.gui.components.controls.VO.ActionPriceVO;
 import net.wg.gui.utils.VO.PriceVO;
@@ -16,6 +17,10 @@ public class BuyingVehicleVO extends DAAPIDataClass {
     private static const SLOT_ACTION_PRICE:String = "slotActionPriceData";
 
     private static const SELECTED_ID:String = "selectedId";
+
+    private static const RENT_DATA_ARRAY:String = "rentData array";
+
+    private static const VEHICLE_PRICES_ARRAY:String = "vehiclePrices array";
 
     public var name:String = "";
 
@@ -47,6 +52,8 @@ public class BuyingVehicleVO extends DAAPIDataClass {
 
     public var tankmenLabel:String = "";
 
+    public var crewCheckbox:String = "";
+
     public var studyPriceCredits:Number = NaN;
 
     public var studyPriceGold:Number = NaN;
@@ -54,6 +61,18 @@ public class BuyingVehicleVO extends DAAPIDataClass {
     public var ammoPrice:Number = NaN;
 
     public var slotPrice:int = -1;
+
+    public var title:String = "";
+
+    public var priceLabel:String = "";
+
+    public var submitBtnLabel:String = "";
+
+    public var cancelBtnLabel:String = "";
+
+    public var vehiclePricesActionData:ActionPriceVO = null;
+
+    public var warningMsg:String = "";
 
     private var _studyPriceGoldActionDataVo:ActionPriceVO = null;
 
@@ -75,46 +94,34 @@ public class BuyingVehicleVO extends DAAPIDataClass {
 
     private var _vehiclePrice:PriceVO = null;
 
-    private var _vehiclePricesActionDataVo:ActionPriceVO = null;
-
     public function BuyingVehicleVO(param1:Object) {
         super(param1);
     }
 
     override protected function onDataWrite(param1:String, param2:Object):Boolean {
-        if (param1 == STUDY_PRICE_CREDITS_ACTION) {
-            if (param2) {
-                this._studyPriceCreditsActionDataVo = new ActionPriceVO(param2);
-                this._studyPriceCreditsActionDataVo.forCredits = true;
-            }
+        if (param1 == STUDY_PRICE_CREDITS_ACTION && param2 != null) {
+            this._studyPriceCreditsActionDataVo = new ActionPriceVO(param2);
+            this._studyPriceCreditsActionDataVo.forCredits = true;
             return false;
         }
-        if (param1 == STUDY_PRICE_GOLD_ACTION) {
-            if (param2) {
-                this._studyPriceGoldActionDataVo = new ActionPriceVO(param2);
-                this._studyPriceGoldActionDataVo.forCredits = false;
-            }
+        if (param1 == STUDY_PRICE_GOLD_ACTION && param2 != null) {
+            this._studyPriceGoldActionDataVo = new ActionPriceVO(param2);
+            this._studyPriceGoldActionDataVo.forCredits = false;
             return false;
         }
-        if (param1 == VEHICLE_PRICES_ACTION) {
-            if (param2) {
-                this._vehiclePricesActionDataVo = new ActionPriceVO(param2);
-                this.updateVehicleActionPrice();
-            }
+        if (param1 == VEHICLE_PRICES_ACTION && param2 != null) {
+            this.vehiclePricesActionData = new ActionPriceVO(param2);
+            this.updateVehicleActionPrice();
             return false;
         }
-        if (param1 == AMMO_ACTION_PRICE) {
-            if (param2) {
-                this._ammoActionPriceDataVo = new ActionPriceVO(param2);
-                this._ammoActionPriceDataVo.forCredits = true;
-            }
+        if (param1 == AMMO_ACTION_PRICE && param2 != null) {
+            this._ammoActionPriceDataVo = new ActionPriceVO(param2);
+            this._ammoActionPriceDataVo.forCredits = true;
             return false;
         }
-        if (param1 == SLOT_ACTION_PRICE) {
-            if (param2) {
-                this._slotActionPriceDataVo = new ActionPriceVO(param2);
-                this._slotActionPriceDataVo.forCredits = false;
-            }
+        if (param1 == SLOT_ACTION_PRICE && param2 != null) {
+            this._slotActionPriceDataVo = new ActionPriceVO(param2);
+            this._slotActionPriceDataVo.forCredits = false;
             return false;
         }
         return super.onDataWrite(param1, param2);
@@ -123,32 +130,33 @@ public class BuyingVehicleVO extends DAAPIDataClass {
     override protected function onDispose():void {
         var _loc1_:Object = null;
         var _loc2_:VehicleBuyRentItemVO = null;
-        if (this._ammoActionPriceDataVo) {
+        if (this._ammoActionPriceDataVo != null) {
             this._ammoActionPriceDataVo.dispose();
             this._ammoActionPriceDataVo = null;
         }
-        if (this._studyPriceCreditsActionDataVo) {
+        if (this._studyPriceCreditsActionDataVo != null) {
             this._studyPriceCreditsActionDataVo.dispose();
             this._studyPriceCreditsActionDataVo = null;
         }
-        if (this._slotActionPriceDataVo) {
+        if (this._slotActionPriceDataVo != null) {
             this._slotActionPriceDataVo.dispose();
             this._slotActionPriceDataVo = null;
         }
-        if (this._vehiclePricesActionDataVo) {
-            this._vehiclePricesActionDataVo.dispose();
-            this._vehiclePricesActionDataVo = null;
+        if (this.vehiclePricesActionData != null) {
+            this.vehiclePricesActionData.dispose();
+            this.vehiclePricesActionData = null;
         }
-        if (this._studyPriceGoldActionDataVo) {
+        if (this._studyPriceGoldActionDataVo != null) {
             this._studyPriceGoldActionDataVo.dispose();
             this._studyPriceGoldActionDataVo = null;
         }
-        if (this._vehiclePrice) {
+        if (this._vehiclePrice != null) {
             this._vehiclePrice.dispose();
             this._vehiclePrice = null;
         }
-        this._rentDataDD = App.utils.data.cleanupDynamicObject(this._rentDataDD);
-        if (this._rentDataProviderDD) {
+        App.utils.data.cleanupDynamicObject(this._rentDataDD);
+        this._rentDataDD = null;
+        if (this._rentDataProviderDD != null) {
             for each(_loc1_ in this._rentDataProviderDD) {
                 _loc2_ = VehicleBuyRentItemVO(_loc1_.data);
                 _loc2_.dispose();
@@ -156,7 +164,7 @@ public class BuyingVehicleVO extends DAAPIDataClass {
             this._rentDataProviderDD.splice(0, this._rentDataProviderDD.length);
             this._rentDataProviderDD = null;
         }
-        if (this._vehiclePrices) {
+        if (this._vehiclePrices != null) {
             this._vehiclePrices.splice(0, this._vehiclePrices.length);
             this._vehiclePrices = null;
         }
@@ -164,8 +172,8 @@ public class BuyingVehicleVO extends DAAPIDataClass {
     }
 
     private function updateVehicleActionPrice():void {
-        if (this._vehiclePricesActionDataVo) {
-            this._vehiclePricesActionDataVo.forCredits = !this.vehiclePrice.isGold;
+        if (this.vehiclePricesActionData != null) {
+            this.vehiclePricesActionData.forCredits = !this.vehiclePrice.isGold;
         }
     }
 
@@ -173,7 +181,7 @@ public class BuyingVehicleVO extends DAAPIDataClass {
         var _loc2_:Number = NaN;
         var _loc3_:Number = NaN;
         var _loc4_:VehicleBuyRentItemVO = null;
-        if (param1) {
+        if (param1 != null) {
             _loc2_ = param1.length;
             _loc3_ = 0;
             while (_loc3_ < _loc2_) {
@@ -196,17 +204,18 @@ public class BuyingVehicleVO extends DAAPIDataClass {
     }
 
     public function set vehiclePrices(param1:Array):void {
+        App.utils.asserter.assertNotNull(param1, VEHICLE_PRICES_ARRAY + Errors.CANT_NULL);
         this._vehiclePrices = param1;
         this.vehiclePrice = new PriceVO(this._vehiclePrices);
         this.isPremium = this.vehiclePrice.isGold;
     }
 
     public function get actualActionPriceDataVo():ActionPriceVO {
-        return this._vehiclePricesActionDataVo;
+        return this.vehiclePricesActionData;
     }
 
     public function set actualActionPriceDataVo(param1:ActionPriceVO):void {
-        this._vehiclePricesActionDataVo = param1;
+        this.vehiclePricesActionData = param1;
     }
 
     public function get studyPriceCreditsActionDataVo():ActionPriceVO {
@@ -217,7 +226,9 @@ public class BuyingVehicleVO extends DAAPIDataClass {
         if (this._studyPriceCreditsActionDataVo != null) {
             this._studyPriceCreditsActionDataVo.dispose();
         }
-        this._studyPriceCreditsActionDataVo = new ActionPriceVO(param1);
+        if (param1 != null) {
+            this._studyPriceCreditsActionDataVo = new ActionPriceVO(param1);
+        }
     }
 
     public function get studyPriceGoldActionDataVo():ActionPriceVO {
@@ -228,7 +239,9 @@ public class BuyingVehicleVO extends DAAPIDataClass {
         if (this._studyPriceGoldActionDataVo != null) {
             this._studyPriceGoldActionDataVo.dispose();
         }
-        this._studyPriceGoldActionDataVo = new ActionPriceVO(param1);
+        if (param1 != null) {
+            this._studyPriceGoldActionDataVo = new ActionPriceVO(param1);
+        }
     }
 
     public function get ammoActionPriceDataVo():ActionPriceVO {
@@ -239,7 +252,9 @@ public class BuyingVehicleVO extends DAAPIDataClass {
         if (this._ammoActionPriceDataVo != null) {
             this._ammoActionPriceDataVo.dispose();
         }
-        this._ammoActionPriceDataVo = new ActionPriceVO(param1);
+        if (param1 != null) {
+            this._ammoActionPriceDataVo = new ActionPriceVO(param1);
+        }
     }
 
     public function get slotActionPriceDataVo():ActionPriceVO {
@@ -250,7 +265,9 @@ public class BuyingVehicleVO extends DAAPIDataClass {
         if (this._slotActionPriceDataVo != null) {
             this._slotActionPriceDataVo.dispose();
         }
-        this._slotActionPriceDataVo = new ActionPriceVO(param1);
+        if (param1 != null) {
+            this._slotActionPriceDataVo = new ActionPriceVO(param1);
+        }
     }
 
     public function get rentDataDD():Object {
@@ -267,7 +284,9 @@ public class BuyingVehicleVO extends DAAPIDataClass {
             this._rentDataSelectedId = VehicleBuyRentItemVO.DEF_ITEM_ID;
         }
         this._rentDataProviderDD = [];
-        this.updateRentData(this._rentDataDD.data as Array);
+        var _loc2_:Array = this._rentDataDD.data as Array;
+        App.utils.asserter.assertNotNull(_loc2_, RENT_DATA_ARRAY + Errors.CANT_NULL);
+        this.updateRentData(_loc2_);
     }
 
     public function get vehiclePrice():PriceVO {
@@ -289,10 +308,6 @@ public class BuyingVehicleVO extends DAAPIDataClass {
 
     public function get rentDataProviderDD():Array {
         return this._rentDataProviderDD;
-    }
-
-    public function set rentDataProviderDD(param1:Array):void {
-        this._rentDataProviderDD = param1;
     }
 }
 }

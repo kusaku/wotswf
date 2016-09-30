@@ -1,44 +1,47 @@
 package net.wg.gui.lobby.store.views {
 import net.wg.data.constants.generated.STORE_TYPES;
 import net.wg.gui.lobby.store.views.base.SimpleStoreMenuView;
+import net.wg.gui.lobby.store.views.data.FiltersVO;
+import net.wg.gui.lobby.store.views.data.FitItemsFiltersVO;
 
 import scaleform.clik.data.DataProvider;
 
 public class EquipmentView extends SimpleStoreMenuView {
+
+    private static const OPTIONAL_DEVICE_TAGS_NAME:String = "optionalDevice";
 
     public function EquipmentView() {
         super();
     }
 
     override public function resetTemporaryHandlers():void {
-        resetHandlers(getTagsArray(), myVehicleRadioBtn);
+        super.resetTemporaryHandlers();
+        resetHandlers(getTagsArray(), null);
     }
 
-    override protected function specialKindForTags():String {
-        return "optionalDevice";
-    }
-
-    override public function setViewData(param1:Array):void {
-        super.setViewData(param1);
+    override public function setFiltersData(param1:FiltersVO, param2:Boolean):void {
+        super.setFiltersData(param1, param2);
         if (getUIName() == STORE_TYPES.SHOP) {
             if (!onVehicleChkBx.selected) {
                 onVehicleChkBx.selected = true;
             }
             onVehicleChkBx.visible = vehChBxHeader.visible = false;
         }
-        var _loc2_:String = String(param1.shift());
-        selectFilterSimple(getFitsArray(), _loc2_, true);
-        setCurrentVehicle(param1.shift());
+        var _loc3_:FitItemsFiltersVO = FitItemsFiltersVO(param1);
+        setCurrentVehicle(_loc3_.vehicleCD);
         updateSubFilter(getNation());
-        selectFilter(getTagsArray(), param1, true, false);
+        selectFilter(getTagsArray(), param1.extra, true, false);
         dispatchViewChange();
     }
 
-    override public function getFilter():Array {
-        var _loc1_:Array = [myVehicleRadioBtn.group.data];
-        _loc1_.push(getFilterData().current);
-        _loc1_ = _loc1_.concat(getSelectedFilters(getTagsArray(), false, null));
-        return _loc1_;
+    override protected function configUI():void {
+        super.configUI();
+        fitsTextField.text = MENU.SHOP_MENU_EQUIPMENT_FITS_NAME;
+        vehChBxHeader.text = MENU.SHOP_MENU_OPTIONALDEVICE_EXTRA_NAME;
+    }
+
+    override protected function specialKindForTags():String {
+        return OPTIONAL_DEVICE_TAGS_NAME;
     }
 
     override protected function onVehicleFilterUpdated(param1:DataProvider, param2:Number, param3:int):void {

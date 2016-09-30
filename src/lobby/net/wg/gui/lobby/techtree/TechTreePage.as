@@ -7,9 +7,9 @@ import flash.ui.Keyboard;
 
 import net.wg.data.Aliases;
 import net.wg.data.constants.Linkages;
+import net.wg.data.constants.generated.NODE_STATE_FLAGS;
 import net.wg.gui.components.controls.ScrollBar;
 import net.wg.gui.components.miniclient.TechTreeMiniClientComponent;
-import net.wg.gui.lobby.techtree.constants.NodeState;
 import net.wg.gui.lobby.techtree.controls.NationsButtonBar;
 import net.wg.gui.lobby.techtree.data.NationXMLDataProvider;
 import net.wg.gui.lobby.techtree.data.vo.NodeData;
@@ -26,11 +26,13 @@ import scaleform.gfx.TextFieldEx;
 
 public class TechTreePage extends TechTreeMeta implements ITechTreePage {
 
-    public static const BACKGROUND_ALPHA:Number = 0.9;
+    private static const BACKGROUND_ALPHA:Number = 0.9;
 
     private static const WARNING_VERTICAL_GAP:int = 5;
 
     private static const WARN_VISIBILITY_BORDER:int = 900;
+
+    private static const EMPTY_STR:String = "";
 
     public var titleField:TextField = null;
 
@@ -42,7 +44,7 @@ public class TechTreePage extends TechTreeMeta implements ITechTreePage {
 
     public var treeRightBG:Sprite = null;
 
-    private var titleAppearance:TitleAppearance = null;
+    private var _titleAppearance:TitleAppearance = null;
 
     private var _miniClient:TechTreeMiniClientComponent = null;
 
@@ -65,14 +67,14 @@ public class TechTreePage extends TechTreeMeta implements ITechTreePage {
 
     override protected function onBeforeDispose():void {
         App.gameInputMgr.clearKeyHandler(Keyboard.ESCAPE, KeyboardEvent.KEY_DOWN);
-        this.nationsBar.removeEventListener(IndexEvent.INDEX_CHANGE, this.handleIndexChange);
+        this.nationsBar.removeEventListener(IndexEvent.INDEX_CHANGE, this.onNationsBarIndexChangeHandler);
         super.onBeforeDispose();
     }
 
     override protected function onDispose():void {
         this._miniClient = null;
-        this.titleAppearance.clearUp();
-        this.titleAppearance = null;
+        this._titleAppearance.clearUp();
+        this._titleAppearance = null;
         this.nationsBar.dispose();
         this.nationsBar = null;
         this.nationTree.dispose();
@@ -86,10 +88,10 @@ public class TechTreePage extends TechTreeMeta implements ITechTreePage {
 
     override protected function configUI():void {
         super.configUI();
-        this.titleAppearance = new TitleAppearance(this.titleField);
+        this._titleAppearance = new TitleAppearance(this.titleField);
         this.titleField.mouseEnabled = false;
         TextFieldEx.setVerticalAlign(this.titleField, TextFieldEx.VALIGN_CENTER);
-        this.nationsBar.addEventListener(IndexEvent.INDEX_CHANGE, this.handleIndexChange, false, 0, true);
+        this.nationsBar.addEventListener(IndexEvent.INDEX_CHANGE, this.onNationsBarIndexChangeHandler, false, 0, true);
         this.nationsBar.focused = 1;
         this.nationTree.view = this;
         this.treeRightBG.mouseEnabled = this.treeRightBG.tabEnabled = false;
@@ -119,11 +121,15 @@ public class TechTreePage extends TechTreeMeta implements ITechTreePage {
     }
 
     public function as_setInventoryItems(param1:Array):void {
-        this.nationTree.setNodesStates(NodeState.IN_INVENTORY, param1);
+        this.nationTree.setNodesStates(NODE_STATE_FLAGS.IN_INVENTORY, param1);
     }
 
     public function as_setNext2Unlock(param1:Array):void {
-        this.nationTree.setNodesStates(NodeState.NEXT_2_UNLOCK, param1, NodeData.UNLOCK_PROPS_FIELD);
+        this.nationTree.setNodesStates(NODE_STATE_FLAGS.NEXT_2_UNLOCK, param1, NodeData.UNLOCK_PROPS_FIELD);
+    }
+
+    public function as_setNodeVehCompareData(param1:Array):void {
+        this.nationTree.setItemsField(param1, NodeData.VEH_COMPARE_TREE_NODE_DATA);
     }
 
     public function as_setNodesStates(param1:Number, param2:Array):void {
@@ -157,12 +163,16 @@ public class TechTreePage extends TechTreeMeta implements ITechTreePage {
         this.nationTree.dataProvider = new NationXMLDataProvider();
     }
 
+    public function getScrollBar():ScrollBar {
+        return this.scrollBar;
+    }
+
     protected function updateLayouts():void {
         this.nationsBar.height = _height;
         this.nationTree.setSize(Math.round(_width - this.nationTree.x), Math.round(_height));
         this.treeRightBG.x = _width - this.treeRightBG.width;
         this.treeRightBG.height = _height;
-        this.titleAppearance.updateInTT(_width, App.appHeight);
+        this._titleAppearance.updateInTT(_width, App.appHeight);
         if (this._miniClient) {
             this.updateMiniClientLayouts();
         }
@@ -186,11 +196,11 @@ public class TechTreePage extends TechTreeMeta implements ITechTreePage {
         onCloseTechTreeS();
     }
 
-    private function handleIndexChange(param1:IndexEvent):void {
+    private function onNationsBarIndexChangeHandler(param1:IndexEvent):void {
         var _loc2_:String = this.nationsBar.itemToLabel(param1.data);
         var _loc3_:Object = getNationTreeDataS(_loc2_);
         var _loc4_:String = MENU.nation_tree_title(_loc2_);
-        this.titleField.text = !!_loc4_ ? _loc4_ : "";
+        this.titleField.text = !!_loc4_ ? _loc4_ : EMPTY_STR;
         this.nationTree.storeScrollPosition();
         this.nationTree.invalidateNodesData(_loc2_, _loc3_);
         App.contextMenuMgr.hide();

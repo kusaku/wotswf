@@ -109,13 +109,14 @@ public class VehiclesSortingBlock extends AbstractResizableContent implements IS
             this.data.dispose();
             this.data = null;
         }
+        this._sortingFunction = null;
         super.onDispose();
     }
 
     override protected function draw():void {
         var _loc1_:int = 0;
-        var _loc2_:Array = null;
-        var _loc3_:int = 0;
+        var _loc2_:int = 0;
+        var _loc3_:Array = null;
         var _loc4_:Number = NaN;
         var _loc5_:ProfileSortingButton = null;
         if (isInvalid(InvalidationType.DATA) && this.data) {
@@ -134,14 +135,15 @@ public class VehiclesSortingBlock extends AbstractResizableContent implements IS
             updateSelectedIndex(this.nationFilter, this.data.selectedNation);
             updateSelectedIndex(this.tankFilter, this.data.selectedVehType);
             updateSelectedIndex(this.levelFilter, this.data.selectedLvl);
-            _loc1_ = 0;
-            while (_loc1_ < this.buttonBar.renderersCount) {
-                _loc5_ = this.buttonBar.getButtonAt(_loc1_) as ProfileSortingButton;
+            _loc1_ = this.buttonBar.renderersCount;
+            _loc2_ = 0;
+            while (_loc2_ < _loc1_) {
+                _loc5_ = this.buttonBar.getButtonAt(_loc2_) as ProfileSortingButton;
                 if (_loc5_.id == this.data.selectedBtnID) {
-                    this.buttonBar.selectedIndex = _loc1_;
+                    this.buttonBar.selectedIndex = _loc2_;
                     _loc5_.sortDirection = this.data.sortDirection;
                 }
-                _loc1_++;
+                _loc2_++;
             }
             this._tableID = this.data.tableID;
             if (this.data.showNotInHangarCB) {
@@ -150,10 +152,10 @@ public class VehiclesSortingBlock extends AbstractResizableContent implements IS
             this.sortCheckBox.visible = this.data.hasHeader && (this.data.showInHangarCB || this.data.showNotInHangarCB);
             this.sortCheckBox.selected = this.data.cbSelected;
             this.vehiclesList.y = this.buttonBar.y + this.buttonBar.height;
-            _loc2_ = this._sortingFunction(this.getSortingObject());
-            _loc3_ = _loc2_.length > 0 ? int(_loc2_.length) : 1;
-            this.vehiclesList.height = VEHICLE_RENDERER_HEIGHT * Math.min(MAX_VEHICLE_RENDERERS, _loc3_);
-            this.vehiclesList.dataProvider = setupDataProvider(_loc2_);
+            _loc3_ = this._sortingFunction(this.getSortingObject());
+            _loc1_ = _loc3_.length > 0 ? int(_loc3_.length) : 1;
+            this.vehiclesList.height = VEHICLE_RENDERER_HEIGHT * Math.min(MAX_VEHICLE_RENDERERS, _loc1_);
+            this.vehiclesList.dataProvider = setupDataProvider(_loc3_);
             this.isReadyForLayout = true;
             _loc4_ = Math.round(this.vehiclesList.y + this.vehiclesList.height);
             setSize(this.width, _loc4_ + BOTTOM_PADDING);
@@ -164,40 +166,19 @@ public class VehiclesSortingBlock extends AbstractResizableContent implements IS
     }
 
     private function addListeners():void {
-        this.nationFilter.addEventListener(ListEvent.INDEX_CHANGE, this.updateSortedData);
-        this.tankFilter.addEventListener(ListEvent.INDEX_CHANGE, this.updateSortedData);
-        this.levelFilter.addEventListener(ListEvent.INDEX_CHANGE, this.updateSortedData);
-        this.sortCheckBox.addEventListener(Event.SELECT, this.updateSortedData);
-        this.buttonBar.addEventListener(ButtonEvent.CLICK, this.updateSortedData);
+        this.nationFilter.addEventListener(ListEvent.INDEX_CHANGE, this.onUpdateSortedDataHandler);
+        this.tankFilter.addEventListener(ListEvent.INDEX_CHANGE, this.onUpdateSortedDataHandler);
+        this.levelFilter.addEventListener(ListEvent.INDEX_CHANGE, this.onUpdateSortedDataHandler);
+        this.sortCheckBox.addEventListener(Event.SELECT, this.onUpdateSortedDataHandler);
+        this.buttonBar.addEventListener(ButtonEvent.CLICK, this.onUpdateSortedDataHandler);
     }
 
     private function removeListeners():void {
-        this.nationFilter.removeEventListener(ListEvent.INDEX_CHANGE, this.updateSortedData);
-        this.tankFilter.removeEventListener(ListEvent.INDEX_CHANGE, this.updateSortedData);
-        this.levelFilter.removeEventListener(ListEvent.INDEX_CHANGE, this.updateSortedData);
-        this.sortCheckBox.removeEventListener(Event.SELECT, this.updateSortedData);
-        this.buttonBar.removeEventListener(ButtonEvent.CLICK, this.updateSortedData);
-    }
-
-    override public function set availableWidth(param1:Number):void {
-        super.availableWidth = param1;
-        invalidate(INV_AVAILABLE_WIDTH);
-    }
-
-    override public function set isReadyForLayout(param1:Boolean):void {
-        super.isReadyForLayout = param1;
-        if (param1) {
-            this.addListeners();
-        }
-        else {
-            this.removeListeners();
-        }
-    }
-
-    private function updateSortedData(param1:Event):void {
-        var _loc2_:Object = this.getSortingObject();
-        var _loc3_:Array = this._sortingFunction(_loc2_);
-        this.setSortedData(_loc3_);
+        this.nationFilter.removeEventListener(ListEvent.INDEX_CHANGE, this.onUpdateSortedDataHandler);
+        this.tankFilter.removeEventListener(ListEvent.INDEX_CHANGE, this.onUpdateSortedDataHandler);
+        this.levelFilter.removeEventListener(ListEvent.INDEX_CHANGE, this.onUpdateSortedDataHandler);
+        this.sortCheckBox.removeEventListener(Event.SELECT, this.onUpdateSortedDataHandler);
+        this.buttonBar.removeEventListener(ButtonEvent.CLICK, this.onUpdateSortedDataHandler);
     }
 
     private function getSortingObject():Object {
@@ -224,11 +205,25 @@ public class VehiclesSortingBlock extends AbstractResizableContent implements IS
     private function setSortedData(param1:Array):void {
         var _loc2_:int = param1.length > 0 ? int(param1.length) : 1;
         var _loc3_:Number = VEHICLE_RENDERER_HEIGHT * Math.min(MAX_VEHICLE_RENDERERS, _loc2_);
-        var _loc4_:Number = _loc3_ - this.vehiclesList.height;
         this.vehiclesList.dataProvider = setupDataProvider(param1);
         this.vehiclesList.height = _loc3_;
         this.setSize(this.width, this.vehiclesList.y + this.vehiclesList.height + BOTTOM_PADDING);
         dispatchEvent(new ResizableBlockEvent(ResizableBlockEvent.CONTETNT_WAS_CHANGED, true));
+    }
+
+    override public function set availableWidth(param1:Number):void {
+        super.availableWidth = param1;
+        invalidate(INV_AVAILABLE_WIDTH);
+    }
+
+    override public function set isReadyForLayout(param1:Boolean):void {
+        super.isReadyForLayout = param1;
+        if (param1) {
+            this.addListeners();
+        }
+        else {
+            this.removeListeners();
+        }
     }
 
     public function get sortingFunction():Function {
@@ -237,6 +232,12 @@ public class VehiclesSortingBlock extends AbstractResizableContent implements IS
 
     public function set sortingFunction(param1:Function):void {
         this._sortingFunction = param1;
+    }
+
+    private function onUpdateSortedDataHandler(param1:Event):void {
+        var _loc2_:Object = this.getSortingObject();
+        var _loc3_:Array = this._sortingFunction(_loc2_);
+        this.setSortedData(_loc3_);
     }
 }
 }

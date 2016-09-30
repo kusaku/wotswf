@@ -168,8 +168,9 @@ public class RangeSlider extends Slider {
     }
 
     protected function updateRangeThumbs():void {
+        var _loc2_:Number = NaN;
         var _loc1_:Number = track.width - (this._trackHorizontalPadding << 1) - RENDERER_LINE_SIZE;
-        var _loc2_:Number = _maximum - _minimum;
+        _loc2_ = _maximum - _minimum;
         var _loc3_:Number = this._trackEdge + offsetLeft - (thumb.width >> 1);
         this.leftThumb.x = (this._leftValue - _minimum) / _loc2_ * _loc1_ + _loc3_ + this._trackHorizontalPadding ^ 0;
         this.rightThumb.x = (this._rightValue - _minimum) / _loc2_ * _loc1_ + _loc3_ + this._trackHorizontalPadding ^ 0;

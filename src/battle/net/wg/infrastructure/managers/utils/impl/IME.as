@@ -140,10 +140,12 @@ public class IME implements IIME {
     }
 
     private function removeLangBarHandlers():void {
+        this.langBar.removeEventListener("langBarReady", this.onLangBarReady);
         this.langBar.removeEventListener(Event.ENTER_FRAME, this.onLangBarEnterFrameHandler);
     }
 
     private function removeStatusContainerHandler():void {
+        this.statusWinContainer.removeEventListener("statusWindowReady", this.onStatusContainerReady);
         this.statusWinContainer.removeEventListener(Event.ENTER_FRAME, this.onStatusContainerEnterFrameHandler);
     }
 
@@ -151,6 +153,11 @@ public class IME implements IIME {
         var _loc2_:LoaderInfo = LoaderInfo(param1.currentTarget);
         _loc2_.removeEventListener(Event.COMPLETE, this.langBarLoaded);
         this.langBar = param1.currentTarget.content;
+        this.langBar.addEventListener("langBarReady", this.onLangBarReady);
+    }
+
+    private function onLangBarReady(param1:Event):void {
+        this.langBar.removeEventListener("langBarReady", this.onLangBarReady);
         this.langBar.addEventListener(Event.ENTER_FRAME, this.onLangBarEnterFrameHandler);
     }
 
@@ -158,6 +165,11 @@ public class IME implements IIME {
         var _loc2_:LoaderInfo = LoaderInfo(param1.currentTarget);
         _loc2_.removeEventListener(Event.COMPLETE, this.statusWindowLoaded);
         this.statusWinContainer = param1.currentTarget.content;
+        this.statusWinContainer.addEventListener("statusWindowReady", this.onStatusContainerReady);
+    }
+
+    private function onStatusContainerReady(param1:Event):void {
+        this.statusWinContainer.removeEventListener("statusWindowReady", this.onStatusContainerReady);
         this.statusWinContainer.addEventListener(Event.ENTER_FRAME, this.onStatusContainerEnterFrameHandler);
     }
 

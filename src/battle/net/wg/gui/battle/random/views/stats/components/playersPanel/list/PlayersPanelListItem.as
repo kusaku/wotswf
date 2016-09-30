@@ -64,6 +64,10 @@ public class PlayersPanelListItem extends BattleUIComponent {
 
     public var hit:Sprite = null;
 
+    public var holderItemID:Number = -1;
+
+    public var disableCommunication:BattleAtlasSprite = null;
+
     private var _state:int = 0;
 
     private var _playerNameFullWidth:Number = NaN;
@@ -98,7 +102,7 @@ public class PlayersPanelListItem extends BattleUIComponent {
 
     private var _isRightAligned:Boolean = false;
 
-    public var holderItemID:Number = -1;
+    private var _isIgnoredTmp:Boolean = false;
 
     public function PlayersPanelListItem() {
         super();
@@ -111,6 +115,7 @@ public class PlayersPanelListItem extends BattleUIComponent {
         this.vehicleTF.mouseEnabled = false;
         this.icoIGR.mouseEnabled = false;
         this.vehicleLevel.mouseEnabled = false;
+        this.vehicleLevel.isCetralize = true;
         this.vehicleIcon.mouseEnabled = false;
         this.mute.mouseEnabled = false;
         this.speakAnimation.mouseEnabled = false;
@@ -126,197 +131,13 @@ public class PlayersPanelListItem extends BattleUIComponent {
         addEventListener(MouseEvent.MOUSE_OUT, this.onMouseOutHandler);
     }
 
-    private function onMouseOverHandler(param1:MouseEvent):void {
-        var _loc2_:PlayersPanelItemEvent = new PlayersPanelItemEvent(PlayersPanelItemEvent.ON_ITEM_OVER, this, this.holderItemID, param1);
-        dispatchEvent(_loc2_);
-        this.dynamicSquad.onItemOver();
-    }
-
-    private function onMouseOutHandler(param1:MouseEvent):void {
-        var _loc2_:PlayersPanelItemEvent = new PlayersPanelItemEvent(PlayersPanelItemEvent.ON_ITEM_OUT, this, this.holderItemID, param1);
-        dispatchEvent(_loc2_);
-        this.dynamicSquad.onItemOut();
-    }
-
-    private function onMouseClickHandler(param1:MouseEvent):void {
-        var _loc2_:PlayersPanelItemEvent = new PlayersPanelItemEvent(PlayersPanelItemEvent.ON_ITEM_CLICK, this, this.holderItemID, param1);
-        dispatchEvent(_loc2_);
-    }
-
-    public function setIsRightAligned(param1:Boolean):void {
-        if (this._isRightAligned == param1) {
-            return;
-        }
-        this._isRightAligned = param1;
-        this.dynamicSquad.setIsEnemy(param1);
-        invalidateState();
-    }
-
-    public function setState(param1:int):void {
-        if (this._state == param1) {
-            return;
-        }
-        this._state = param1;
-        invalidateState();
-    }
-
-    public function setPlayerNameProps(param1:IUserProps):void {
-        App.utils.commons.truncateTextFieldText(this.playerNameCutTF, param1.userName);
-        App.utils.commons.formatPlayerName(this.playerNameFullTF, param1);
-    }
-
-    public function getPlayerNameFullWidth():Number {
-        return Math.floor(this.playerNameFullTF.textWidth) + PLAYER_NAME_MARGIN;
-    }
-
-    public function setPlayerNameFullWidth(param1:Number):void {
-        param1 = Math.min(this._maxPlayerNameWidth, param1);
-        if (this._playerNameFullWidth == param1) {
-            return;
-        }
-        this._playerNameFullWidth = param1;
-        invalidate(PlayersPanelInvalidationType.PLAYER_NAME_FULL_WIDTH);
-    }
-
-    public function setVehicleName(param1:String):void {
-        if (this._vehicleName == param1) {
-            return;
-        }
-        this._vehicleName = param1;
-        invalidate(PlayersPanelInvalidationType.VEHILCE_NAME);
-    }
-
-    public function setFrags(param1:int):void {
-        if (this._frags == param1) {
-            return;
-        }
-        this._frags = param1;
-        invalidate(PlayersPanelInvalidationType.FRAGS);
-    }
-
-    public function setIsMute(param1:Boolean):void {
-        if (this._isMute == param1) {
-            return;
-        }
-        this._isMute = param1;
-        invalidate(PlayersPanelInvalidationType.MUTE);
-    }
-
-    public function setIsSpeaking(param1:Boolean):void {
-        if (this._isSpeaking == param1) {
-            return;
-        }
-        this._isSpeaking = param1;
-        invalidate(PlayersPanelInvalidationType.IS_SPEAKING);
-    }
-
-    public function setIsAlive(param1:Boolean):void {
-        if (this._isAlive == param1) {
-            return;
-        }
-        this._isAlive = param1;
-        invalidate(PlayersPanelInvalidationType.ALIVE | PlayersPanelInvalidationType.PLAYER_SCHEME);
-    }
-
-    public function setIsOffline(param1:Boolean):void {
-        if (this._isOffline == param1) {
-            return;
-        }
-        this._isOffline = param1;
-        invalidate(PlayersPanelInvalidationType.PLAYER_SCHEME);
-    }
-
-    public function setIsTeamKiller(param1:Boolean):void {
-        if (this._isTeamKiller == param1) {
-            return;
-        }
-        this._isTeamKiller = param1;
-        invalidate(PlayersPanelInvalidationType.PLAYER_SCHEME);
-    }
-
-    public function setIsCurrentPlayer(param1:Boolean):void {
-        if (this._isCurrentPlayer == param1) {
-            return;
-        }
-        this._isCurrentPlayer = param1;
-        invalidate(PlayersPanelInvalidationType.PLAYER_SCHEME);
-    }
-
-    public function setIsSelected(param1:Boolean):void {
-        if (this._isSelected == param1) {
-            return;
-        }
-        this._isSelected = param1;
-        invalidate(PlayersPanelInvalidationType.SELECTED);
-    }
-
-    public function setIsIGR(param1:Boolean):void {
-        if (this._isIGR == param1) {
-            return;
-        }
-        this._isIGR = param1;
-        invalidate(PlayersPanelInvalidationType.IGR_CHANGED);
-    }
-
-    public function setSquad(param1:Boolean, param2:int):void {
-        this.dynamicSquad.setCurrentSquad(param1, param2);
-        if (this._isSquadPersonal != param1) {
-            this._isSquadPersonal = param1;
-            invalidate(PlayersPanelInvalidationType.PLAYER_SCHEME);
-        }
-    }
-
-    public function setSquadState(param1:int):void {
-        this.dynamicSquad.setState(param1);
-    }
-
-    public function setIsInviteShown(param1:Boolean):void {
-        this.dynamicSquad.setIsInviteShown(param1);
-    }
-
-    public function setIsInteractive(param1:Boolean):void {
-        this.dynamicSquad.setIsInteractive(param1);
-    }
-
-    public function setSquadNoSound(param1:Boolean):void {
-        this.dynamicSquad.setNoSound(param1);
-    }
-
-    public function setVehicleIcon(param1:String):void {
-        if (this._vehicleImage == param1) {
-            return;
-        }
-        this._vehicleImage = param1;
-        this.vehicleIcon.setImageNames(BattleAtlasItem.getVehicleIconName(param1), BattleAtlasItem.VEHICLE_TYPE_UNKNOWN);
-    }
-
-    public function setVehicleLevel(param1:int):void {
-        if (this._vehicleLevel == param1 || param1 == UNKNOWN_VEHICLE_LEVEL) {
-            return;
-        }
-        this._vehicleLevel = param1;
-        this.vehicleLevel.imageName = BattleAtlasItem.getVehicleLevelName(this._vehicleLevel);
-    }
-
-    public function setVehicleLevelVisible(param1:Boolean):void {
-        this.vehicleLevel.visible = param1;
-    }
-
-    public function setVehicleAction(param1:int):void {
-        this.actionMarker.imageName = BattleAtlasItem.getVehicleActionName(VehicleActions.getActionName(param1));
-        this.actionMarker.visible = true;
-    }
-
-    public function updateColorBlind():void {
-        invalidate(PlayersPanelInvalidationType.PLAYER_SCHEME);
-    }
-
     override protected function onDispose():void {
         removeEventListener(MouseEvent.CLICK, this.onMouseClickHandler);
         removeEventListener(MouseEvent.MOUSE_OVER, this.onMouseOverHandler);
         removeEventListener(MouseEvent.MOUSE_OUT, this.onMouseOutHandler);
         this.dynamicSquad.dispose();
         this.speakAnimation.dispose();
+        this.disableCommunication = null;
         this.fragsTF = null;
         this.playerNameFullTF = null;
         this.playerNameCutTF = null;
@@ -340,7 +161,11 @@ public class PlayersPanelListItem extends BattleUIComponent {
         this.icoIGR.visible = false;
         this.icoIGR.imageName = BattleAtlasItem.ICO_IGR;
         this.mute.visible = false;
-        this.mute.imageName = BattleAtlasItem.STATS_MUTE;
+        this.mute.imageName = !!this._isRightAligned ? BattleAtlasItem.RIGHT_STATS_MUTE : BattleAtlasItem.LEFT_STATS_MUTE;
+        if (this.disableCommunication) {
+            this.disableCommunication.visible = false;
+            this.disableCommunication.imageName = BattleAtlasItem.ICON_TOXIC_CHAT_OFF;
+        }
         this.bg.imageName = BattleAtlasItem.PLAYERS_PANEL_BG;
         this.selfBg.visible = false;
         this.selfBg.imageName = BattleAtlasItem.PLAYERS_PANEL_SELF_BG;
@@ -374,6 +199,9 @@ public class PlayersPanelListItem extends BattleUIComponent {
                     this.speakAnimation.speaking = true;
                 }
             }
+            if (this.disableCommunication) {
+                this.disableCommunication.visible = this._isIgnoredTmp;
+            }
         }
         if (isInvalid(PlayersPanelInvalidationType.IS_SPEAKING)) {
             if (!this._isMute) {
@@ -396,6 +224,182 @@ public class PlayersPanelListItem extends BattleUIComponent {
         if (isInvalid(InvalidationType.STATE)) {
             this.applyState();
         }
+    }
+
+    public function getPlayerNameFullWidth():Number {
+        return Math.floor(this.playerNameFullTF.textWidth) + PLAYER_NAME_MARGIN;
+    }
+
+    public function isIgnoredTmp(param1:Boolean):void {
+        if (this._isIgnoredTmp == param1 || this.disableCommunication == null) {
+            return;
+        }
+        this._isIgnoredTmp = param1;
+        invalidate(PlayersPanelInvalidationType.MUTE);
+    }
+
+    public function setFrags(param1:int):void {
+        if (this._frags == param1) {
+            return;
+        }
+        this._frags = param1;
+        invalidate(PlayersPanelInvalidationType.FRAGS);
+    }
+
+    public function setIsAlive(param1:Boolean):void {
+        if (this._isAlive == param1) {
+            return;
+        }
+        this._isAlive = param1;
+        invalidate(PlayersPanelInvalidationType.ALIVE | PlayersPanelInvalidationType.PLAYER_SCHEME);
+    }
+
+    public function setIsCurrentPlayer(param1:Boolean):void {
+        if (this._isCurrentPlayer == param1) {
+            return;
+        }
+        this._isCurrentPlayer = param1;
+        invalidate(PlayersPanelInvalidationType.PLAYER_SCHEME);
+    }
+
+    public function setIsIGR(param1:Boolean):void {
+        if (this._isIGR == param1) {
+            return;
+        }
+        this._isIGR = param1;
+        invalidate(PlayersPanelInvalidationType.IGR_CHANGED);
+    }
+
+    public function setIsInteractive(param1:Boolean):void {
+        this.dynamicSquad.setIsInteractive(param1);
+    }
+
+    public function setIsInviteShown(param1:Boolean):void {
+        this.dynamicSquad.setIsInviteShown(param1);
+    }
+
+    public function setIsMute(param1:Boolean):void {
+        if (this._isMute == param1) {
+            return;
+        }
+        this._isMute = param1;
+        invalidate(PlayersPanelInvalidationType.MUTE);
+    }
+
+    public function setIsOffline(param1:Boolean):void {
+        if (this._isOffline == param1) {
+            return;
+        }
+        this._isOffline = param1;
+        invalidate(PlayersPanelInvalidationType.PLAYER_SCHEME);
+    }
+
+    public function setIsRightAligned(param1:Boolean):void {
+        if (this._isRightAligned == param1) {
+            return;
+        }
+        this._isRightAligned = param1;
+        this.dynamicSquad.setIsEnemy(param1);
+        invalidateState();
+    }
+
+    public function setIsSelected(param1:Boolean):void {
+        if (this._isSelected == param1) {
+            return;
+        }
+        this._isSelected = param1;
+        invalidate(PlayersPanelInvalidationType.SELECTED);
+    }
+
+    public function setIsSpeaking(param1:Boolean):void {
+        if (this._isSpeaking == param1) {
+            return;
+        }
+        this._isSpeaking = param1;
+        invalidate(PlayersPanelInvalidationType.IS_SPEAKING);
+    }
+
+    public function setIsTeamKiller(param1:Boolean):void {
+        if (this._isTeamKiller == param1) {
+            return;
+        }
+        this._isTeamKiller = param1;
+        invalidate(PlayersPanelInvalidationType.PLAYER_SCHEME);
+    }
+
+    public function setPlayerNameFullWidth(param1:Number):void {
+        param1 = Math.min(this._maxPlayerNameWidth, param1);
+        if (this._playerNameFullWidth == param1) {
+            return;
+        }
+        this._playerNameFullWidth = param1;
+        invalidate(PlayersPanelInvalidationType.PLAYER_NAME_FULL_WIDTH);
+    }
+
+    public function setPlayerNameProps(param1:IUserProps):void {
+        App.utils.commons.truncateTextFieldText(this.playerNameCutTF, param1.userName);
+        App.utils.commons.formatPlayerName(this.playerNameFullTF, param1);
+    }
+
+    public function setSquad(param1:Boolean, param2:int):void {
+        this.dynamicSquad.setCurrentSquad(param1, param2);
+        if (this._isSquadPersonal != param1) {
+            this._isSquadPersonal = param1;
+            invalidate(PlayersPanelInvalidationType.PLAYER_SCHEME);
+        }
+    }
+
+    public function setSquadNoSound(param1:Boolean):void {
+        this.dynamicSquad.setNoSound(param1);
+    }
+
+    public function setSquadState(param1:int):void {
+        this.dynamicSquad.setState(param1);
+    }
+
+    public function setState(param1:int):void {
+        if (this._state == param1) {
+            return;
+        }
+        this._state = param1;
+        invalidateState();
+    }
+
+    public function setVehicleAction(param1:int):void {
+        this.actionMarker.imageName = BattleAtlasItem.getVehicleActionName(VehicleActions.getActionName(param1));
+        this.actionMarker.visible = true;
+    }
+
+    public function setVehicleIcon(param1:String):void {
+        if (this._vehicleImage == param1) {
+            return;
+        }
+        this._vehicleImage = param1;
+        this.vehicleIcon.setImageNames(BattleAtlasItem.getVehicleIconName(param1), BattleAtlasItem.VEHICLE_TYPE_UNKNOWN);
+    }
+
+    public function setVehicleLevel(param1:int):void {
+        if (this._vehicleLevel == param1 || param1 == UNKNOWN_VEHICLE_LEVEL) {
+            return;
+        }
+        this._vehicleLevel = param1;
+        this.vehicleLevel.imageName = BattleAtlasItem.getVehicleLevelName(this._vehicleLevel);
+    }
+
+    public function setVehicleLevelVisible(param1:Boolean):void {
+        this.vehicleLevel.visible = param1;
+    }
+
+    public function setVehicleName(param1:String):void {
+        if (this._vehicleName == param1) {
+            return;
+        }
+        this._vehicleName = param1;
+        invalidate(PlayersPanelInvalidationType.VEHILCE_NAME);
+    }
+
+    public function updateColorBlind():void {
+        invalidate(PlayersPanelInvalidationType.PLAYER_SCHEME);
     }
 
     private function updatePositions():void {
@@ -558,6 +562,23 @@ public class PlayersPanelListItem extends BattleUIComponent {
                 this.vehicleTF.textColor = _loc2_.rgb;
             }
         }
+    }
+
+    private function onMouseOverHandler(param1:MouseEvent):void {
+        var _loc2_:PlayersPanelItemEvent = new PlayersPanelItemEvent(PlayersPanelItemEvent.ON_ITEM_OVER, this, this.holderItemID, param1);
+        dispatchEvent(_loc2_);
+        this.dynamicSquad.onItemOver();
+    }
+
+    private function onMouseOutHandler(param1:MouseEvent):void {
+        var _loc2_:PlayersPanelItemEvent = new PlayersPanelItemEvent(PlayersPanelItemEvent.ON_ITEM_OUT, this, this.holderItemID, param1);
+        dispatchEvent(_loc2_);
+        this.dynamicSquad.onItemOut();
+    }
+
+    private function onMouseClickHandler(param1:MouseEvent):void {
+        var _loc2_:PlayersPanelItemEvent = new PlayersPanelItemEvent(PlayersPanelItemEvent.ON_ITEM_CLICK, this, this.holderItemID, param1);
+        dispatchEvent(_loc2_);
     }
 }
 }

@@ -1,73 +1,71 @@
 package net.wg.gui.lobby.questsWindow.data {
+import net.wg.data.constants.Errors;
 import net.wg.data.daapi.base.DAAPIDataClass;
+import net.wg.gui.lobby.quests.data.AwardCarouselItemRendererVO;
+
+import scaleform.clik.data.DataProvider;
 
 public class QuestDataVO extends DAAPIDataClass {
 
-    private var _header:HeaderDataVO = null;
+    private static const AWARDS_DATA_PROVIDER_FIELD:String = "awardsDataProvider";
 
-    private var _award:Array;
+    private static const HEADER_FIELD:String = "header";
 
-    private var _requirements:Object = null;
+    public var awardsDataProvider:DataProvider;
 
-    private var _conditions:Object = null;
+    public var header:HeaderDataVO = null;
+
+    public var award:Array;
+
+    public var requirements:Object = null;
+
+    public var conditions:Object = null;
 
     public function QuestDataVO(param1:Object) {
-        this._award = [];
+        this.awardsDataProvider = new DataProvider();
+        this.award = [];
         super(param1);
     }
 
     override protected function onDataWrite(param1:String, param2:Object):Boolean {
+        var _loc3_:Array = null;
+        var _loc4_:Object = null;
         switch (param1) {
-            case "header":
-                this._header = !!param2 ? new HeaderDataVO(param2) : null;
+            case HEADER_FIELD:
+                this.header = !!param2 ? new HeaderDataVO(param2) : null;
+                return false;
+            case AWARDS_DATA_PROVIDER_FIELD:
+                _loc3_ = param2 as Array;
+                App.utils.asserter.assertNotNull(_loc3_, Errors.CANT_NULL);
+                for each(_loc4_ in _loc3_) {
+                    this.awardsDataProvider.push(new AwardCarouselItemRendererVO(_loc4_));
+                }
                 return false;
             default:
                 return true;
         }
     }
 
-    public function get header():HeaderDataVO {
-        return this._header;
-    }
-
-    public function set header(param1:HeaderDataVO):void {
-        this._header = param1;
-    }
-
     override protected function onDispose():void {
-        if (this._header) {
-            this._header.dispose();
-            this._header = null;
+        var _loc1_:AwardCarouselItemRendererVO = null;
+        if (this.header != null) {
+            this.header.dispose();
+            this.header = null;
         }
-        if (this._award) {
-            this._award.splice(0, this._award.length);
-            this._award = null;
+        if (this.award != null) {
+            this.award.splice(0, this.award.length);
+            this.award = null;
         }
+        for each(_loc1_ in this.awardsDataProvider) {
+            _loc1_.dispose();
+        }
+        this.awardsDataProvider.splice(0, this.awardsDataProvider.length);
+        this.awardsDataProvider = null;
+        App.utils.data.cleanupDynamicObject(this.requirements);
+        this.requirements = null;
+        App.utils.data.cleanupDynamicObject(this.conditions);
+        this.conditions = null;
         super.onDispose();
-    }
-
-    public function get requirements():Object {
-        return this._requirements;
-    }
-
-    public function set requirements(param1:Object):void {
-        this._requirements = param1;
-    }
-
-    public function get conditions():Object {
-        return this._conditions;
-    }
-
-    public function set conditions(param1:Object):void {
-        this._conditions = param1;
-    }
-
-    public function get award():Array {
-        return this._award;
-    }
-
-    public function set award(param1:Array):void {
-        this._award = param1;
     }
 }
 }

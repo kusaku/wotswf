@@ -36,8 +36,9 @@ public class ToolTipSkill extends ToolTipSpecial {
     }
 
     override protected function redraw():void {
+        var _loc1_:ToolTipSkillVO = null;
         var _loc4_:TextFormat = null;
-        var _loc1_:ToolTipSkillVO = new ToolTipSkillVO(_data);
+        _loc1_ = new ToolTipSkillVO(_data);
         contentMargin.bottom = 2;
         blockResults = new Vector.<ToolTipBlockResultVO>();
         this.whiteBg.width = 10;

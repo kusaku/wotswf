@@ -71,7 +71,7 @@ public class CustomizationItemRenderer extends UIComponent {
     }
 
     private function onRollOverHandler(param1:MouseEvent):void {
-        this.toolTipMgr.showSpecial(TOOLTIPS_CONSTANTS.CUSTOMIZATION_ITEM, null, this.data.type, this.data.id, this.data.nationId, !!this.data.isPermanent ? 0 : this.data.value, this.data.isPermanent, !!this.data.isPermanent ? 1 : 0, false, this.data.boundVehicle, this.data.boundToCurrentVehicle);
+        this.toolTipMgr.showSpecial(TOOLTIPS_CONSTANTS.CUSTOMIZATION_ITEM, null, this.data.type, this.data.id, this.data.nationId, this.data.value, this.data.isPermanent, this.data.boundVehicle, this.data.boundToCurrentVehicle);
     }
 
     private function onRollOutHandler(param1:MouseEvent):void {

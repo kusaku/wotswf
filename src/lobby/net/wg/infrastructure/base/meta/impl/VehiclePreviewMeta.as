@@ -16,6 +16,8 @@ public class VehiclePreviewMeta extends AbstractView {
 
     public var onOpenInfoTab:Function;
 
+    public var onCompareClick:Function;
+
     private var _vehPreviewStaticDataVO:VehPreviewStaticDataVO;
 
     private var _vehPreviewInfoPanelVO:VehPreviewInfoPanelVO;
@@ -60,6 +62,11 @@ public class VehiclePreviewMeta extends AbstractView {
     public function onOpenInfoTabS(param1:int):void {
         App.utils.asserter.assertNotNull(this.onOpenInfoTab, "onOpenInfoTab" + Errors.CANT_NULL);
         this.onOpenInfoTab(param1);
+    }
+
+    public function onCompareClickS():void {
+        App.utils.asserter.assertNotNull(this.onCompareClick, "onCompareClick" + Errors.CANT_NULL);
+        this.onCompareClick();
     }
 
     public function as_setStaticData(param1:Object):void {

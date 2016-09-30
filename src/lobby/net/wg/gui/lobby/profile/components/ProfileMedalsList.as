@@ -9,11 +9,5 @@ public class ProfileMedalsList extends MedalsList {
 
     override protected function updateFilters():void {
     }
-
-    override protected function showToolTipByItemData(param1:Object):void {
-    }
-
-    override protected function hideTooltip():void {
-    }
 }
 }

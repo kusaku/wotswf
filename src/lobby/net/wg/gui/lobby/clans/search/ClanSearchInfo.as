@@ -41,8 +41,6 @@ public class ClanSearchInfo extends ClanSearchInfoMeta implements IClanSearchInf
 
     private static const CLAN_NAME_GAP:int = 3;
 
-    private static const CREATION_DATE_GAP:int = 7;
-
     private static const CLAN_BASE_INFO_PLACE:int = 225;
 
     private static const INV_COMPONENTS_VISIBILITY:String = "InvComponentsVisibility";
@@ -55,7 +53,7 @@ public class ClanSearchInfo extends ClanSearchInfoMeta implements IClanSearchInf
 
     public var clanNameTF:TextField = null;
 
-    public var creationDateTF:TextField = null;
+    public var ratingTitleTF:TextField = null;
 
     public var ratingTF:TextField = null;
 
@@ -159,7 +157,7 @@ public class ClanSearchInfo extends ClanSearchInfoMeta implements IClanSearchInf
         this.stat2 = null;
         this.stat3 = null;
         this.clanNameTF = null;
-        this.creationDateTF = null;
+        this.ratingTitleTF = null;
         this.requestSentTF = null;
         this._utils = null;
         this._initData = null;
@@ -203,7 +201,7 @@ public class ClanSearchInfo extends ClanSearchInfoMeta implements IClanSearchInf
 
     override protected function onPopulate():void {
         super.onPopulate();
-        this._infoComponents = new <InteractiveObject>[this.emblem, this.clanNameTF, this.creationDateTF, this.ratingTF, this.ratingDescriptionTF, InteractiveObject(this.clanProfileBtn), this.stat1, this.stat2, this.stat3, this.bg];
+        this._infoComponents = new <InteractiveObject>[this.emblem, this.clanNameTF, this.ratingTitleTF, this.ratingTF, this.ratingDescriptionTF, InteractiveObject(this.clanProfileBtn), this.stat1, this.stat2, this.stat3, this.bg];
     }
 
     override protected function setDummy(param1:DummyVO):void {
@@ -251,12 +249,11 @@ public class ClanSearchInfo extends ClanSearchInfoMeta implements IClanSearchInf
     }
 
     private function updateEmblemLayout():void {
-        this._utils.commons.updateTextFieldSize(this.creationDateTF, false);
-        var _loc1_:* = EMBLEM_PLACE_SIZE + CLAN_NAME_GAP + this.clanNameTF.height + CREATION_DATE_GAP + this.creationDateTF.height >> 0;
+        this._utils.commons.updateTextFieldSize(this.ratingTitleTF, false);
+        var _loc1_:* = EMBLEM_PLACE_SIZE + CLAN_NAME_GAP + this.clanNameTF.height + this.ratingTitleTF.height >> 0;
         var _loc2_:* = CLAN_BASE_INFO_PLACE - _loc1_ >> 1;
         this.emblem.y = _loc2_ + (EMBLEM_PLACE_SIZE - TEMP_EMBLEM_SIZE >> 1);
         this.clanNameTF.y = _loc2_ + EMBLEM_PLACE_SIZE + CLAN_NAME_GAP;
-        this.creationDateTF.y = this.clanNameTF.y + this.clanNameTF.textHeight + CREATION_DATE_GAP;
         this.emblem.x = this.width - TEMP_EMBLEM_SIZE >> 1;
     }
 
@@ -314,7 +311,7 @@ public class ClanSearchInfo extends ClanSearchInfoMeta implements IClanSearchInf
 
     private function updateData():void {
         this._utils.commons.truncateTextFieldText(this.clanNameTF, this._data.clanName, false);
-        this.creationDateTF.htmlText = this._data.creationDate;
+        this.ratingTitleTF.htmlText = this._data.ratingTitle;
         this.ratingTF.htmlText = this._data.rating;
         var _loc1_:uint = this._stats.length;
         this._utils.asserter.assertNotNull(this._data.stats, "_data.stats " + Errors.CANT_NULL);

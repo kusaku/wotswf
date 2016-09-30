@@ -38,13 +38,15 @@ public class PlayersPanelList extends Sprite implements IDisposable {
 
     private var _isCursorVisible:Boolean = false;
 
+    public var inviteReceivedIndicator:InviteReceivedIndicator;
+
     public function PlayersPanelList() {
         super();
         this._state = PLAYERS_PANEL_STATE.FULL;
         this._items = new Vector.<IPlayersPanelListItemHolder>();
         this._panelListItems = new Vector.<PlayersPanelListItem>();
         this._currOrder = new Vector.<Number>();
-        this.inviteIndicator.visible = false;
+        this.inviteReceivedIndicator.visible = false;
     }
 
     public function get state():int {
@@ -56,16 +58,11 @@ public class PlayersPanelList extends Sprite implements IDisposable {
         if (this._state == param1) {
             return;
         }
-        if (this._state == PLAYERS_PANEL_STATE.HIDEN) {
-            this.inviteIndicator.visible = false;
-        }
-        else if (param1 == PLAYERS_PANEL_STATE.HIDEN) {
-            this.inviteIndicator.visible = this._isInviteReceived;
-        }
         for each(_loc2_ in this._items) {
             _loc2_.listItem.setState(param1);
         }
         this._state = param1;
+        this.updateInviteIndicator();
     }
 
     public function setIsInteractive(param1:Boolean):void {
@@ -84,9 +81,10 @@ public class PlayersPanelList extends Sprite implements IDisposable {
         if (this._isCursorVisible == param1) {
             return;
         }
+        this._isCursorVisible = param1;
         this.setMouseListenersEnabled(param1);
         if (this._itemUnderMouse) {
-            if (param1) {
+            if (this._isCursorVisible) {
                 _loc2_ = this._items[this._itemUnderMouse.holderItemID];
                 MinimapEntryController.instance.highlight(_loc2_.vehicleID);
             }
@@ -135,6 +133,7 @@ public class PlayersPanelList extends Sprite implements IDisposable {
         }
         this.updatePlayerNameWidth();
         this.updateInviteIndicator();
+        dispatchEvent(new PlayersPanelListEvent(PlayersPanelListEvent.ITEMS_COUNT_CHANGE, 0));
     }
 
     public function setFrags(param1:Number, param2:int):void {
@@ -232,6 +231,8 @@ public class PlayersPanelList extends Sprite implements IDisposable {
     protected function onDispose():void {
         var _loc3_:PlayersPanelListItem = null;
         this.setMouseListenersEnabled(false);
+        this.inviteReceivedIndicator.dispose();
+        this.inviteReceivedIndicator = null;
         this._itemUnderMouse = null;
         var _loc1_:int = this._items.length;
         var _loc2_:int = 0;
@@ -253,10 +254,6 @@ public class PlayersPanelList extends Sprite implements IDisposable {
     }
 
     protected function get itemLinkage():String {
-        throw new AbstractException(Errors.ABSTRACT_INVOKE);
-    }
-
-    protected function get inviteIndicator():InviteReceivedIndicator {
         throw new AbstractException(Errors.ABSTRACT_INVOKE);
     }
 
@@ -345,9 +342,7 @@ public class PlayersPanelList extends Sprite implements IDisposable {
     }
 
     private function updateInviteIndicator():void {
-        if (this.state == PLAYERS_PANEL_STATE.HIDEN) {
-            this.inviteIndicator.visible = this._isInviteReceived;
-        }
+        this.inviteReceivedIndicator.visible = this.state == PLAYERS_PANEL_STATE.HIDEN && this._isInviteReceived;
     }
 
     private function getHolderByVehicleID(param1:Number):PlayersPanelListItemHolder {

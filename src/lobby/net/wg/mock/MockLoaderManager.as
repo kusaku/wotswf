@@ -14,7 +14,7 @@ public class MockLoaderManager implements ILoaderManager {
     public function addEventListener(param1:String, param2:Function, param3:Boolean = false, param4:int = 0, param5:Boolean = false):void {
     }
 
-    public function as_loadView(param1:Object, param2:String, param3:String, param4:String = null):void {
+    public function as_loadView(param1:Object):void {
     }
 
     public function getStats():String {
@@ -37,7 +37,7 @@ public class MockLoaderManager implements ILoaderManager {
     public function stopLoadingByAliases(param1:Array):void {
     }
 
-    public function viewInitializationErrorS(param1:Object, param2:String, param3:String):void {
+    public function viewInitializationErrorS(param1:String, param2:String):void {
     }
 
     public function viewLoadErrorS(param1:String, param2:String, param3:String):void {

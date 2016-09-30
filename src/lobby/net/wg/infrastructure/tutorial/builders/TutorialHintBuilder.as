@@ -30,7 +30,7 @@ public class TutorialHintBuilder extends TutorialBuilder {
         App.tutorialMgr.addEventListener(TutorialHintEvent.HIDE_HINT, this.onHideHintHandler);
     }
 
-    override public function dispose():void {
+    override protected function onDispose():void {
         App.tutorialMgr.removeEventListener(TutorialHintEvent.HIDE_HINT, this.onHideHintHandler);
         if (this._component != null) {
             this._component.removeEventListener(LifeCycleEvent.ON_DISPOSE, this.onComponentDisposeHandler);
@@ -38,7 +38,7 @@ public class TutorialHintBuilder extends TutorialBuilder {
         }
         this.disposeHint();
         this.disposeModel();
-        super.dispose();
+        super.onDispose();
     }
 
     override protected function onViewResize():void {
@@ -48,8 +48,7 @@ public class TutorialHintBuilder extends TutorialBuilder {
     }
 
     protected function layoutHint():void {
-        var _loc1_:Point = null;
-        _loc1_ = this._component.localToGlobal(new Point(0, 0));
+        var _loc1_:Point = this._component.localToGlobal(new Point(0, 0));
         _loc1_ = viewForHint.globalToLocal(_loc1_);
         this._hint.x = _loc1_.x - HINT_GLOW_OFFSET + this._model.padding.left ^ 0;
         this._hint.y = _loc1_.y - HINT_GLOW_OFFSET + this._model.padding.top ^ 0;

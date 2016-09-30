@@ -17,7 +17,7 @@ public interface ICyberSportIntroMeta extends IEventDispatcher {
 
     function joinClubUnitS():void;
 
-    function as_setSelectedVehicle(param1:Object, param2:Boolean, param3:String):void;
+    function as_setSelectedVehicle(param1:Object):void;
 
     function as_setTexts(param1:Object):void;
 

@@ -79,12 +79,16 @@ public class FortClanBattleRoom extends FortClanBattleRoomMeta implements IFortC
         this.headerDescr.autoSize = TextFieldAutoSize.RIGHT;
         this.timer.addEventListener(ClanBattleTimerEvent.ALERT_TICK, this.onTimerAlertTickHandler);
         this.headerDescr.addEventListener(MouseEvent.ROLL_OVER, this.onHeaderDescrRollOverHandler);
-        this.headerDescr.addEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
+        this.headerDescr.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         this.ordersDisabled.addEventListener(MouseEvent.ROLL_OVER, this.onOrdersDisabledRollOverHandler);
-        this.ordersDisabled.addEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
+        this.ordersDisabled.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         this.connectedDirections.connectionIcon.useOverlay = false;
         this.connectedDirections.leftDirection.alwaysShowLevels = true;
         this.connectedDirections.rightDirection.alwaysShowLevels = true;
+    }
+
+    private function onControlRollOutHandler(param1:MouseEvent):void {
+        onControlRollOut();
     }
 
     override protected function onPopulate():void {
@@ -100,10 +104,10 @@ public class FortClanBattleRoom extends FortClanBattleRoomMeta implements IFortC
         this.timer.removeEventListener(ClanBattleTimerEvent.ALERT_TICK, this.onTimerAlertTickHandler);
         this.timer = null;
         this.headerDescr.removeEventListener(MouseEvent.ROLL_OVER, this.onHeaderDescrRollOverHandler);
-        this.headerDescr.removeEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
+        this.headerDescr.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         this.headerDescr = null;
         this.ordersDisabled.removeEventListener(MouseEvent.ROLL_OVER, this.onOrdersDisabledRollOverHandler);
-        this.ordersDisabled.removeEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
+        this.ordersDisabled.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         this.ordersDisabled = null;
         this.mineClanIcon.dispose();
         this.mineClanIcon = null;

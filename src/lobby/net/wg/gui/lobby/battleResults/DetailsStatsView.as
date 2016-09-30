@@ -46,9 +46,10 @@ public class DetailsStatsView extends UIComponentEx implements IViewStackContent
     }
 
     public function update(param1:Object):void {
+        var _loc3_:Boolean = false;
         this._data = BattleResultsVO(param1);
         var _loc2_:Vector.<VehicleStatsVO> = this._data.common.playerVehicles;
-        var _loc3_:Boolean = _loc2_ != null && _loc2_.length > 1;
+        _loc3_ = _loc2_ != null && _loc2_.length > 1;
         this.vehicleSelection.visible = _loc3_;
         if (_loc3_) {
             this.vehicleSelection.setData(_loc2_, this._data.common.playerVehicleNames, this._data.selectedIdxInGarageDropdown);

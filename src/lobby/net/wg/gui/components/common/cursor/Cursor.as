@@ -107,6 +107,7 @@ public class Cursor extends DroppingCursor implements ICursor, ICursorMeta {
     public function as_hideCursor():void {
         this._visible = false;
         this.updateServiceListeners();
+        setCursor(Cursors.ARROW);
     }
 
     override protected function updateServiceListeners():void {

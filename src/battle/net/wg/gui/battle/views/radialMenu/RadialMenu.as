@@ -50,6 +50,8 @@ public class RadialMenu extends RadialMenuMeta implements IRadialMenuMeta {
 
     private var _state:String = "default";
 
+    private var _offsetAngle:Number = 45;
+
     private var _stageWidth:int = 0;
 
     private var _stageHeight:int = 0;
@@ -71,8 +73,6 @@ public class RadialMenu extends RadialMenuMeta implements IRadialMenuMeta {
     private var _buttons:Vector.<RadialButton> = null;
 
     private var _buttonsCount:int = 6;
-
-    private var _selectedButtonIndex:int = -1;
 
     public function RadialMenu() {
         this._stateMap = new Dictionary();
@@ -121,8 +121,8 @@ public class RadialMenu extends RadialMenuMeta implements IRadialMenuMeta {
     public function as_show(param1:String, param2:Array, param3:Array):void {
         this._isAction = false;
         this._state = param1;
-        this._aspectRatioWidth = param3[0] * POINT_RADIUS;
-        this._aspectRatioHeight = param3[1] * POINT_RADIUS;
+        this._aspectRatioWidth = param3[0];
+        this._aspectRatioHeight = param3[1];
         App.utils.scheduler.cancelTask(this.internalHide);
         App.utils.scheduler.cancelTask(this.hideButton);
         this.updateData();
@@ -138,44 +138,41 @@ public class RadialMenu extends RadialMenuMeta implements IRadialMenuMeta {
     public function updateStage(param1:int, param2:int):void {
         this._stageWidth = param1;
         this._stageHeight = param2;
-        this._scaleKoefX = 1 / App.stage.scaleX;
-        this._scaleKoefY = 1 / App.stage.scaleY;
         invalidate(InvalidationType.SIZE);
     }
 
-    private function selectButton(param1:int):void {
-        if (this._selectedButtonIndex != param1) {
-            this.unSelectButton();
-            this._selectedButtonIndex = param1;
-            this._buttons[this._selectedButtonIndex].state = InteractiveStates.OVER;
+    private function selectButton(param1:RadialButton):void {
+        if (!param1.selected) {
+            param1.state = InteractiveStates.OVER;
+            param1.selected = true;
             onSelectS();
         }
     }
 
-    private function unSelectButton():void {
-        if (this._selectedButtonIndex != -1) {
-            this._buttons[this._selectedButtonIndex].state = InteractiveStates.OUT;
-            this._selectedButtonIndex = -1;
+    private function unSelectButton(param1:RadialButton):void {
+        if (param1.selected) {
+            param1.state = InteractiveStates.OUT;
+            param1.selected = false;
         }
     }
 
-    private function cancelButton():void {
-        if (this._selectedButtonIndex != -1) {
-            this._buttons[this._selectedButtonIndex].state = InteractiveStates.UP;
-            this._selectedButtonIndex = -1;
-        }
+    private function cancelButton(param1:RadialButton):void {
+        param1.state = InteractiveStates.UP;
+        param1.selected = false;
     }
 
     private function internalShow():void {
-        this.cancelButton();
-        var _loc1_:int = 0;
+        this._scaleKoefX = 1 / App.stage.scaleX;
+        this._scaleKoefY = 1 / App.stage.scaleY;
+        visible = true;
+        this.pane.visible = true;
+        this.background.visible = true;
+        var _loc1_:uint = 0;
         while (_loc1_ < this._buttonsCount) {
+            this.cancelButton(this._buttons[_loc1_]);
             this._buttons[_loc1_].visible = true;
             _loc1_++;
         }
-        this.pane.visible = true;
-        this.background.visible = true;
-        visible = true;
         if (App.stage) {
             App.stage.addEventListener(MouseEvent.MOUSE_WHEEL, this.onMouseWheelHandler);
             App.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.onButtonMouseDownHandler);
@@ -205,20 +202,22 @@ public class RadialMenu extends RadialMenuMeta implements IRadialMenuMeta {
     }
 
     private function hideButton(param1:Array):void {
-        param1[0].state = HIDE_STATE;
+        var _loc2_:RadialButton = param1[0];
+        _loc2_.state = HIDE_STATE;
     }
 
     private function updateButtons():void {
+        var _loc2_:RadialButton = null;
         var _loc3_:Number = NaN;
-        var _loc1_:Number = 45;
-        var _loc2_:Number = (CIRCLE_DEGREES - (_loc1_ << 1)) / this._buttons.length;
-        var _loc4_:int = 0;
+        var _loc1_:Number = (CIRCLE_DEGREES - (this._offsetAngle << 1)) / this._buttons.length;
+        var _loc4_:uint = 0;
         while (_loc4_ < this._buttonsCount) {
-            _loc3_ = _loc2_ * _loc4_ + _loc1_;
+            _loc2_ = this._buttons[_loc4_];
+            _loc3_ = _loc1_ * _loc4_ + this._offsetAngle;
             if (_loc4_ > this._buttonsCount >> 1 - 1) {
-                _loc3_ = -CIRCLE_DEGREES + _loc3_ + _loc1_;
+                _loc3_ = -CIRCLE_DEGREES + _loc3_ + this._offsetAngle;
             }
-            this._buttons[_loc4_].angle = _loc3_;
+            _loc2_.angle = _loc3_;
             _loc4_++;
         }
     }
@@ -232,14 +231,14 @@ public class RadialMenu extends RadialMenuMeta implements IRadialMenuMeta {
             _loc3_ = 0;
             while (_loc3_ < this._buttonsCount) {
                 _loc2_ = this._buttons[_loc3_];
-                if (this._selectedButtonIndex == _loc3_) {
+                if (_loc2_.selected) {
                     App.utils.scheduler.scheduleTask(this.hideButton, PAUSE_BEFORE_HIDE, [_loc2_]);
                     this._isAction = true;
                     onActionS(_loc2_.action);
                     _loc1_ = true;
                 }
                 else {
-                    _loc2_.visible = false;
+                    this._buttons[_loc3_].visible = false;
                 }
                 _loc3_++;
             }
@@ -266,54 +265,75 @@ public class RadialMenu extends RadialMenuMeta implements IRadialMenuMeta {
     }
 
     private function onMouseMoveHandler(param1:MouseEvent):void {
-        var _loc2_:int = 0;
-        var _loc3_:int = 0;
-        var _loc4_:Number = NaN;
-        var _loc5_:Number = NaN;
-        var _loc6_:Point = null;
-        var _loc7_:int = 0;
-        if (visible && !this._isAction && param1.delta == 0) {
+        var _loc2_:uint = 0;
+        var _loc3_:Point = null;
+        var _loc4_:int = 0;
+        var _loc5_:int = 0;
+        var _loc6_:Number = NaN;
+        var _loc7_:Number = NaN;
+        var _loc8_:Number = NaN;
+        var _loc9_:Number = NaN;
+        var _loc10_:RadialButton = null;
+        if (visible && !this._isAction) {
             this._wheelPosition = -1;
-            _loc2_ = this.mouseX - this._mouseOffset.x;
-            _loc3_ = this.mouseY - this._mouseOffset.y;
-            _loc4_ = Math.sqrt(_loc2_ * _loc2_ + _loc3_ * _loc3_);
-            if (_loc4_ > INTERNAL_MENU_RADIUS) {
-                _loc5_ = Math.atan2(_loc3_, _loc2_);
-                _loc6_ = new Point(this._aspectRatioWidth * Math.cos(_loc5_), this._aspectRatioHeight * Math.sin(_loc5_));
-                if (_loc4_ > POINT_RADIUS) {
-                    this._mouseOffset.x = this.mouseX - _loc6_.x;
-                    this._mouseOffset.y = this.mouseY - _loc6_.y;
+            _loc2_ = 0;
+            _loc3_ = new Point(this.mouseX, this.mouseY);
+            _loc4_ = _loc3_.x - this._mouseOffset.x;
+            _loc5_ = _loc3_.y - this._mouseOffset.y;
+            _loc6_ = Math.sqrt(_loc4_ * _loc4_ + _loc5_ * _loc5_);
+            if (_loc6_ > INTERNAL_MENU_RADIUS) {
+                _loc7_ = Math.atan2(_loc5_, _loc4_);
+                _loc8_ = POINT_RADIUS * Math.cos(_loc7_) * this._aspectRatioWidth;
+                _loc9_ = POINT_RADIUS * Math.sin(_loc7_) * this._aspectRatioHeight;
+                _loc3_.x = _loc8_;
+                _loc3_.y = _loc9_;
+                if (_loc6_ > POINT_RADIUS) {
+                    this._mouseOffset.x = this.mouseX - _loc8_;
+                    this._mouseOffset.y = this.mouseY - _loc9_;
                 }
-                _loc6_ = this.localToGlobal(_loc6_);
-                _loc7_ = 0;
-                while (_loc7_ < this._buttonsCount) {
-                    if (this._buttons[_loc7_].hitAreaSpr.hitTestPoint(_loc6_.x * this._scaleKoefX, _loc6_.y * this._scaleKoefY, true)) {
-                        this.selectButton(_loc7_);
-                        break;
+                if (_loc6_ > INTERNAL_MENU_RADIUS) {
+                    _loc3_ = this.localToGlobal(_loc3_);
+                    while (_loc2_ < this._buttonsCount) {
+                        _loc10_ = this._buttons[_loc2_];
+                        if (_loc10_.hitAreaSpr.hitTestPoint(_loc3_.x * this._scaleKoefX, _loc3_.y * this._scaleKoefX, true)) {
+                            this.selectButton(_loc10_);
+                        }
+                        else {
+                            this.unSelectButton(_loc10_);
+                        }
+                        _loc2_++;
                     }
-                    _loc7_++;
                 }
             }
             else {
-                this.unSelectButton();
+                while (_loc2_ < this._buttonsCount) {
+                    this.unSelectButton(this._buttons[_loc2_]);
+                    _loc2_++;
+                }
+                return;
             }
         }
     }
 
     private function onMouseWheelHandler(param1:MouseEvent):void {
         var _loc2_:int = 0;
-        var _loc3_:int = 0;
+        var _loc3_:RadialButton = null;
+        var _loc4_:uint = 0;
         if (visible && !this._isAction) {
             _loc2_ = param1.delta;
             if (this._wheelPosition == -1) {
-                _loc3_ = 0;
-                while (_loc3_ < this._buttonsCount) {
-                    if (this._selectedButtonIndex == _loc3_) {
-                        this._wheelPosition = _loc3_;
+                _loc4_ = 0;
+                while (_loc4_ < this._buttonsCount) {
+                    _loc3_ = this._buttons[_loc4_];
+                    if (_loc3_.selected) {
+                        this._wheelPosition = _loc4_;
                         break;
                     }
-                    _loc3_++;
+                    _loc4_++;
                 }
+            }
+            if (this._wheelPosition > -1) {
+                this.unSelectButton(this._buttons[this._wheelPosition]);
             }
             if (_loc2_ < 0) {
                 this._wheelPosition++;
@@ -327,7 +347,7 @@ public class RadialMenu extends RadialMenuMeta implements IRadialMenuMeta {
                     this._wheelPosition = this._buttonsCount - 1;
                 }
             }
-            this.selectButton(this._wheelPosition);
+            this.selectButton(this._buttons[this._wheelPosition]);
         }
     }
 

@@ -20,7 +20,6 @@ import net.wg.infrastructure.events.FocusChainChangeEvent;
 import net.wg.infrastructure.interfaces.IFocusChainContainer;
 
 import scaleform.clik.data.DataProvider;
-import scaleform.clik.events.ButtonEvent;
 
 public class FortClanBattleList extends FortClanBattleListMeta implements IFortClanBattleListMeta, IFocusChainContainer {
 
@@ -101,30 +100,6 @@ public class FortClanBattleList extends FortClanBattleListMeta implements IFortC
 
     private function updateTextPosition():void {
         this.currentBattlesCount.x = Math.round(this.currentBattlesCountTitle.x + this.currentBattlesCountTitle.width);
-    }
-
-    override protected function onCreateClick(param1:ButtonEvent):void {
-        var _loc2_:Object = {
-            "alias": this.getRallyViewAlias(),
-            "itemId": Number.NaN,
-            "peripheryID": 0,
-            "slotIndex": -1
-        };
-        dispatchEvent(new RallyViewsEvent(RallyViewsEvent.LOAD_VIEW_REQUEST, _loc2_));
-    }
-
-    override protected function onJoinRequest(param1:RallyViewsEvent):void {
-        var _loc3_:Object = null;
-        var _loc2_:IRallyListItemVO = rallyTable.getListSelectedItem() as IRallyListItemVO;
-        if (_loc2_ && _loc2_.mgrID != 0) {
-            _loc3_ = {
-                "alias": this.getRallyViewAlias(),
-                "itemId": _loc2_.mgrID,
-                "peripheryID": _loc2_.peripheryID,
-                "slotIndex": (!!param1.data ? param1.data : -1)
-            };
-            dispatchEvent(new RallyViewsEvent(RallyViewsEvent.LOAD_VIEW_REQUEST, _loc3_));
-        }
     }
 
     private function onListDataProviderChangeHandler(param1:Event):void {

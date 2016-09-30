@@ -75,7 +75,8 @@ public class ConfirmExchangeBlock extends UIComponentEx {
         this.needItemsStepper.value = this.convertGold(this._needGoldValue);
         this.goldStepper.value = this._needGoldValue;
         this.rateCmp.setData(param1.exchangeHeaderData);
-        this.rateCmp.setRates(param1.exchangeRate, param1.defaultExchangeRate);
+        this.rateCmp.setRates(param1.defaultExchangeRate, param1.exchangeRate);
+        this.rateCmp.isActionMode = param1.defaultExchangeRate != param1.exchangeRate && param1.exchangeRate != 0;
     }
 
     private function convertGold(param1:Number):int {

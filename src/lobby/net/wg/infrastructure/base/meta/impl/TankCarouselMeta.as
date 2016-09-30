@@ -17,6 +17,8 @@ public class TankCarouselMeta extends ScrollCarousel {
 
     public var resetFilters:Function;
 
+    public var updateHotFilters:Function;
+
     private var _tankCarouselFilterInitVO:TankCarouselFilterInitVO;
 
     private var _tankCarouselFilterSelectedVO:TankCarouselFilterSelectedVO;
@@ -60,6 +62,11 @@ public class TankCarouselMeta extends ScrollCarousel {
     public function resetFiltersS():void {
         App.utils.asserter.assertNotNull(this.resetFilters, "resetFilters" + Errors.CANT_NULL);
         this.resetFilters();
+    }
+
+    public function updateHotFiltersS():void {
+        App.utils.asserter.assertNotNull(this.updateHotFilters, "updateHotFilters" + Errors.CANT_NULL);
+        this.updateHotFilters();
     }
 
     public function as_setCarouselFilter(param1:Object):void {

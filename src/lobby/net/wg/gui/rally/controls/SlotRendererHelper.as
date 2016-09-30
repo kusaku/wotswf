@@ -69,5 +69,12 @@ public class SlotRendererHelper implements ISlotRendererHelper {
     public function set chooseVehicleText(param1:String):void {
         this._chooseVehicleText = param1;
     }
+
+    public final function dispose():void {
+        this.onDispose();
+    }
+
+    protected function onDispose():void {
+    }
 }
 }

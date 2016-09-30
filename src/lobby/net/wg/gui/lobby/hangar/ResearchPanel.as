@@ -1,13 +1,17 @@
 package net.wg.gui.lobby.hangar {
 import flash.display.MovieClip;
-import flash.display.Sprite;
+import flash.events.Event;
+import flash.events.MouseEvent;
 import flash.text.TextField;
 
 import net.wg.data.constants.Directions;
 import net.wg.data.constants.IconsTypes;
+import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.controls.IconText;
-import net.wg.gui.components.controls.SoundButtonEx;
-import net.wg.gui.components.tooltips.helpers.TankTypeIco;
+import net.wg.gui.data.VehCompareEntrypointVO;
+import net.wg.gui.interfaces.IButtonIconLoader;
+import net.wg.gui.interfaces.ISoundButtonEx;
+import net.wg.gui.lobby.hangar.data.ResearchPanelVO;
 import net.wg.infrastructure.base.meta.IResearchPanelMeta;
 import net.wg.infrastructure.base.meta.impl.ResearchPanelMeta;
 import net.wg.utils.helpLayout.HelpLayoutVO;
@@ -18,55 +22,53 @@ import scaleform.clik.events.ButtonEvent;
 
 public class ResearchPanel extends ResearchPanelMeta implements IResearchPanelMeta, IHelpLayoutComponent {
 
-    private static const HELP_LAYOUT_W_CORRECTION:int = -1;
+    private static const HELP_LAYOUT_CORRECTION:int = 1;
 
-    private static const ELITE_VEHICLE_HORIZONTAL_OFFSET:int = -32;
+    private static const GAP:Number = 10;
 
-    private static const REGULAR_VEHICLE_HORIZONTAL_OFFSET:int = -22;
+    private static const VEHICLE_COMPARE_BTN_WIDTH:int = 55;
 
-    private static const ELITE_POSTFIX:String = "_elite";
+    private static const SEPARATOR:String = "_";
 
-    public var tankTypeIco:TankTypeIco = null;
-
-    public var tankName:TextField = null;
-
-    public var tankDescr:TextField = null;
-
-    public var button:SoundButtonEx = null;
+    public var button:ISoundButtonEx = null;
 
     public var xpText:IconText = null;
 
-    public var premIGRBg:Sprite = null;
-
     public var bg:MovieClip = null;
 
-    private var _vehicleName:String = null;
+    public var igrLabel:TextField = null;
 
-    private var _vehicleType:String = null;
+    public var igrActionDaysLeft:TextField = null;
 
-    private var _vDescription:String = null;
+    public var addToCompareBtn:IButtonIconLoader = null;
+
+    private var _data:ResearchPanelVO = null;
 
     private var _earnedXP:Number = 0;
 
     private var _isElite:Boolean = false;
 
-    private var _isPremIGR:Boolean;
-
     private var _helpLayoutId:String = null;
-
-    private var _helpLayoutW:Number = 0;
 
     public function ResearchPanel() {
         super();
+        this.igrLabel.visible = this.igrActionDaysLeft.visible = false;
     }
 
     override protected function configUI():void {
         super.configUI();
+        initSize();
         this.mouseEnabled = false;
         this.bg.mouseEnabled = false;
         this.bg.mouseChildren = false;
-        this.premIGRBg.mouseEnabled = this.premIGRBg.mouseChildren = false;
+        this.igrLabel.addEventListener(MouseEvent.MOUSE_OVER, this.onIgrLabelMouseOverHandler);
+        this.igrLabel.addEventListener(MouseEvent.MOUSE_OUT, this.onIgrLabelMouseOutHandler);
         App.utils.helpLayout.registerComponent(this);
+        this.addToCompareBtn.addEventListener(MouseEvent.CLICK, this.onAddToCompareBtnClickHandler);
+        this.addToCompareBtn.iconSource = RES_ICONS.MAPS_ICONS_BUTTONS_VEHICLECOMPAREBTN;
+        this.addToCompareBtn.mouseEnabledOnDisabled = true;
+        this.addToCompareBtn.focusable = false;
+        this.addToCompareBtn.visible = false;
     }
 
     override protected function onPopulate():void {
@@ -81,30 +83,73 @@ public class ResearchPanel extends ResearchPanelMeta implements IResearchPanelMe
     override protected function onDispose():void {
         this.xpText.dispose();
         this.xpText = null;
+        this.igrLabel.removeEventListener(MouseEvent.MOUSE_OVER, this.onIgrLabelMouseOverHandler);
+        this.igrLabel.removeEventListener(MouseEvent.MOUSE_OUT, this.onIgrLabelMouseOutHandler);
         this.button.removeEventListener(ButtonEvent.CLICK, this.onButtonClickHandler);
         this.button.dispose();
         this.button = null;
+        this.addToCompareBtn.removeEventListener(MouseEvent.CLICK, this.onAddToCompareBtnClickHandler);
+        this.addToCompareBtn.dispose();
+        this.addToCompareBtn = null;
+        this.igrLabel = null;
+        this.igrActionDaysLeft = null;
         this._helpLayoutId = null;
-        this.premIGRBg = null;
-        this.tankTypeIco.dispose();
-        this.tankTypeIco = null;
-        this.tankName = null;
-        this.tankDescr = null;
         this.bg = null;
+        this._data = null;
         super.onDispose();
     }
 
     override protected function draw():void {
+        var _loc1_:VehCompareEntrypointVO = null;
+        var _loc2_:Boolean = false;
+        var _loc3_:Number = NaN;
         super.draw();
-        if (isInvalid(InvalidationType.DATA)) {
-            this.tankTypeIco.type = !!this._isElite ? this._vehicleType + ELITE_POSTFIX : this._vehicleType;
-            this.tankTypeIco.x = !!this._isElite ? Number(ELITE_VEHICLE_HORIZONTAL_OFFSET) : Number(REGULAR_VEHICLE_HORIZONTAL_OFFSET);
-            this.tankName.htmlText = this._vehicleName;
-            this.tankDescr.htmlText = this._vDescription;
+        if (this._data != null && isInvalid(InvalidationType.DATA)) {
             this.xpText.text = App.utils != null ? App.utils.locale.integer(this._earnedXP) : this._earnedXP.toString();
             this.xpText.icon = !!this._isElite ? IconsTypes.ELITE_XP : IconsTypes.XP;
-            this.premIGRBg.visible = this._isPremIGR;
+            _loc1_ = this._data.vehCompareVO;
+            _loc2_ = _loc1_ != null ? Boolean(_loc1_.modeAvailable) : false;
+            this.addToCompareBtn.visible = _loc2_;
+            if (_loc2_) {
+                this.addToCompareBtn.enabled = _loc1_.btnEnabled;
+                this.addToCompareBtn.tooltip = _loc1_.btnTooltip;
+                this.button.x = -this.button.width - VEHICLE_COMPARE_BTN_WIDTH;
+            }
+            else {
+                this.button.x = -this.button.width - GAP;
+            }
+            this.xpText.x = this.button.x - this.xpText.width - GAP;
         }
+        if (isInvalid(InvalidationType.SIZE)) {
+            _loc3_ = GAP;
+            if (this.igrLabel.visible) {
+                this.igrLabel.y = _loc3_;
+                _loc3_ = _loc3_ + (this.igrLabel.textHeight + GAP);
+            }
+            if (this.igrActionDaysLeft.visible) {
+                this.igrActionDaysLeft.y = _loc3_;
+                _loc3_ = _loc3_ + (this.igrActionDaysLeft.textHeight + GAP);
+            }
+            this.addToCompareBtn.y = this.button.y = this.xpText.y = _loc3_;
+            this.bg.height = this.button.y + this.button.height + GAP;
+            height = this.bg.height;
+            dispatchEvent(new Event(Event.RESIZE));
+        }
+    }
+
+    override protected function updateCurrentVehicle(param1:ResearchPanelVO):void {
+        this._data = param1;
+        this._earnedXP = this._data.earnedXP;
+        this._isElite = this._data.isElite;
+        invalidateData();
+    }
+
+    public function as_actionIGRDaysLeft(param1:Boolean, param2:String):void {
+        this.igrActionDaysLeft.visible = param1;
+        if (param1) {
+            this.igrActionDaysLeft.htmlText = param2;
+        }
+        invalidateSize();
     }
 
     public function as_setEarnedXP(param1:Number):void {
@@ -123,28 +168,26 @@ public class ResearchPanel extends ResearchPanelMeta implements IResearchPanelMe
         invalidateData();
     }
 
-    public function as_updateCurrentVehicle(param1:String, param2:String, param3:String, param4:Number, param5:Boolean, param6:Boolean):void {
-        this._vehicleName = param1;
-        this._vehicleType = param2;
-        this._vDescription = param3;
-        this._earnedXP = param4;
-        this._isElite = param5;
-        this._isPremIGR = param6;
-        invalidateData();
+    public function as_setIGRLabel(param1:Boolean, param2:String):void {
+        this.igrLabel.visible = param1;
+        if (param1) {
+            this.igrLabel.htmlText = param2;
+        }
+        invalidateSize();
     }
 
     public function getHelpLayoutWidth():Number {
-        return this.bg.width + this.bg.x - (this.tankTypeIco.x - this.tankTypeIco.width);
+        return this.bg.width + this.bg.x;
     }
 
     public function getLayoutProperties():Vector.<HelpLayoutVO> {
         if (!this._helpLayoutId) {
-            this._helpLayoutId = name + "_" + Math.random();
+            this._helpLayoutId = name + SEPARATOR + Math.random();
         }
         var _loc1_:HelpLayoutVO = new HelpLayoutVO();
-        _loc1_.x = this.bg.x + this.bg.width - this._helpLayoutW;
-        _loc1_.y = 0;
-        _loc1_.width = this._helpLayoutW + HELP_LAYOUT_W_CORRECTION;
+        _loc1_.x = -this.bg.width;
+        _loc1_.y = this.bg.y;
+        _loc1_.width = this.bg.width - HELP_LAYOUT_CORRECTION;
         _loc1_.height = this.bg.height;
         _loc1_.extensibilityDirection = Directions.RIGHT;
         _loc1_.message = LOBBY_HELP.HANGAR_VEHRESEARCHPANEL;
@@ -153,12 +196,22 @@ public class ResearchPanel extends ResearchPanelMeta implements IResearchPanelMe
         return new <HelpLayoutVO>[_loc1_];
     }
 
-    public function showHelpLayoutEx(param1:Number, param2:Number):void {
-        this._helpLayoutW = param2;
-    }
-
     private function onButtonClickHandler(param1:ButtonEvent):void {
         goToResearchS();
+    }
+
+    private function onAddToCompareBtnClickHandler(param1:MouseEvent):void {
+        if (this.addToCompareBtn.enabled) {
+            addVehToCompareS();
+        }
+    }
+
+    private function onIgrLabelMouseOverHandler(param1:MouseEvent):void {
+        App.toolTipMgr.showSpecial(TOOLTIPS_CONSTANTS.IGR_INFO, null);
+    }
+
+    private function onIgrLabelMouseOutHandler(param1:MouseEvent):void {
+        App.toolTipMgr.hide();
     }
 }
 }

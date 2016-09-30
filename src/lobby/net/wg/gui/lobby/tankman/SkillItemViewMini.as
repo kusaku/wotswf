@@ -1,27 +1,16 @@
 package net.wg.gui.lobby.tankman {
 import flash.text.TextField;
 
+import net.wg.data.constants.Values;
+import net.wg.data.constants.generated.SKILLS_CONSTANTS;
 import net.wg.gui.components.controls.UILoaderAlt;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
+public class SkillItemViewMini extends UIComponentEx {
 
-public class SkillItemViewMini extends UIComponent {
+    private static const LEVEL_POSTFIX:String = "%";
 
-    public static const TYPE_SKILL:String = "skill";
-
-    public static const TYPE_NEW_SKILL:String = "new_skill";
-
-    public static const TYPE_SKILLS:String = "skills";
-
-    public static const TYPE_NEW_SKILLS:String = "new_skills";
-
-    public static const TYPE_CURRENT_SKILL:String = "current_skill";
-
-    public static const TYPE_CURRENT_NEW_SKILL:String = "current_new_skill";
-
-    public static const LEVEL_POSTFIX:String = "%";
-
-    public static const COUNT_POSTFIX:String = " x 100%";
+    private static const COUNT_POSTFIX:String = " x 100%";
 
     public var icon:UILoaderAlt;
 
@@ -42,7 +31,15 @@ public class SkillItemViewMini extends UIComponent {
     override protected function onDispose():void {
         this.icon.dispose();
         this.icon = null;
+        this.textField = null;
         super.onDispose();
+    }
+
+    protected function updateType():void {
+        if (this._type == SKILLS_CONSTANTS.TYPE_CURRENT_NEW_SKILL || this._type == SKILLS_CONSTANTS.TYPE_NEW_SKILL || this._type == SKILLS_CONSTANTS.TYPE_NEW_SKILLS) {
+            this.iconSource = null;
+        }
+        gotoAndPlay(this._type);
     }
 
     public function get text():String {
@@ -60,7 +57,7 @@ public class SkillItemViewMini extends UIComponent {
 
     public function set level(param1:Number):void {
         this._level = param1;
-        this.text = !!isNaN(this._level) ? "" : this._level.toString() + LEVEL_POSTFIX;
+        this.text = !!isNaN(this._level) ? Values.EMPTY_STR : this._level.toString() + LEVEL_POSTFIX;
     }
 
     public function get count():int {
@@ -82,13 +79,6 @@ public class SkillItemViewMini extends UIComponent {
         }
         this._type = param1;
         this.updateType();
-    }
-
-    protected function updateType():void {
-        if (this._type == TYPE_CURRENT_NEW_SKILL || this._type == TYPE_NEW_SKILL || this._type == TYPE_NEW_SKILLS) {
-            this.iconSource = null;
-        }
-        gotoAndPlay(this._type);
     }
 
     public function get iconSource():String {

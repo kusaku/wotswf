@@ -30,6 +30,7 @@ public class CoreListEx extends CoreList {
         }
         param1.addEventListener(ButtonEvent.PRESS, this.dispatchItemEvent, false, 0, true);
         param1.addEventListener(ButtonEvent.CLICK, this.handleItemClick, false, 0, true);
+        param1.addEventListener(MouseEvent.CLICK, this.handleItemRightClick, false, 0, true);
         param1.addEventListener(ButtonEvent.DRAG_OVER, this.dispatchItemEvent, false, 0, true);
         param1.addEventListener(ButtonEvent.DRAG_OUT, this.dispatchItemEvent, false, 0, true);
         param1.addEventListener(ButtonEvent.RELEASE_OUTSIDE, this.dispatchItemEvent, false, 0, true);
@@ -45,6 +46,7 @@ public class CoreListEx extends CoreList {
 
     override protected function cleanUpRenderer(param1:IListItemRenderer):void {
         param1.doubleClickEnabled = false;
+        param1.removeEventListener(MouseEvent.CLICK, this.handleItemRightClick, false);
         param1.removeEventListener(ButtonEvent.DRAG_OVER, this.dispatchItemEvent, false);
         param1.removeEventListener(ButtonEvent.DRAG_OUT, this.dispatchItemEvent, false);
         param1.removeEventListener(ButtonEvent.RELEASE_OUTSIDE, this.dispatchItemEvent, false);
@@ -95,36 +97,42 @@ public class CoreListEx extends CoreList {
     }
 
     override protected function dispatchItemEvent(param1:Event):Boolean {
-        var _loc2_:String = null;
+        var _loc3_:String = null;
+        var _loc2_:IListItemRenderer = param1.currentTarget as IListItemRenderer;
+        if (_loc2_.getData() == null) {
+            return false;
+        }
         switch (param1.type) {
             case ButtonEvent.PRESS:
-                _loc2_ = ListEventEx.ITEM_PRESS;
+                _loc3_ = ListEventEx.ITEM_PRESS;
                 break;
             case ButtonEvent.CLICK:
-                _loc2_ = ListEventEx.ITEM_CLICK;
+                _loc3_ = ListEventEx.ITEM_CLICK;
+                break;
+            case MouseEvent.CLICK:
+                _loc3_ = ListEventEx.ITEM_RIGHT_CLICK;
                 break;
             case ButtonEvent.DRAG_OVER:
-                _loc2_ = ListEventEx.ITEM_DRAG_OVER;
+                _loc3_ = ListEventEx.ITEM_DRAG_OVER;
                 break;
             case ButtonEvent.DRAG_OUT:
-                _loc2_ = ListEventEx.ITEM_DRAG_OUT;
+                _loc3_ = ListEventEx.ITEM_DRAG_OUT;
                 break;
             case ButtonEvent.RELEASE_OUTSIDE:
-                _loc2_ = ListEventEx.ITEM_RELEASE_OUTSIDE;
+                _loc3_ = ListEventEx.ITEM_RELEASE_OUTSIDE;
                 break;
             case MouseEvent.ROLL_OVER:
-                _loc2_ = ListEventEx.ITEM_ROLL_OVER;
+                _loc3_ = ListEventEx.ITEM_ROLL_OVER;
                 break;
             case MouseEvent.ROLL_OUT:
-                _loc2_ = ListEventEx.ITEM_ROLL_OUT;
+                _loc3_ = ListEventEx.ITEM_ROLL_OUT;
                 break;
             case MouseEvent.DOUBLE_CLICK:
-                _loc2_ = ListEventEx.ITEM_DOUBLE_CLICK;
+                _loc3_ = ListEventEx.ITEM_DOUBLE_CLICK;
                 break;
             default:
                 return true;
         }
-        var _loc3_:IListItemRenderer = param1.currentTarget as IListItemRenderer;
         var _loc4_:uint = 0;
         if (param1 is ButtonEvent) {
             _loc4_ = (param1 as ButtonEvent).controllerIdx;
@@ -143,25 +151,35 @@ public class CoreListEx extends CoreList {
         if (param1 is ButtonEvent) {
             _loc6_ = (param1 as ButtonEvent).isKeyboard;
         }
-        var _loc7_:ListEventEx = new ListEventEx(_loc2_, false, true, _loc3_.index, 0, _loc3_.index, _loc3_, dataProvider.requestItemAt(_loc3_.index), _loc4_, _loc5_, _loc6_);
-        callLogEvent(_loc7_, _loc3_.index);
+        var _loc7_:ListEventEx = new ListEventEx(_loc3_, false, true, _loc2_.index, 0, _loc2_.index, _loc2_, dataProvider.requestItemAt(_loc2_.index), _loc4_, _loc5_, _loc6_);
+        callLogEvent(_loc7_, _loc2_.index);
         return dispatchEvent(_loc7_);
     }
 
-    override protected function handleItemClick(param1:ButtonEvent):void {
-        var _loc2_:Number = (param1.currentTarget as IListItemRenderer).index;
-        if (isNaN(_loc2_)) {
+    private function dispatchItemClick(param1:Event, param2:uint):void {
+        var _loc3_:Number = (param1.currentTarget as IListItemRenderer).index;
+        if (isNaN(_loc3_)) {
             return;
         }
         if (this.dispatchItemEvent(param1)) {
-            callLogEvent(param1, _loc2_);
+            callLogEvent(param1, _loc3_);
             if (_baseDisposed) {
                 return;
             }
-            if (this.useRightButton && this.useRightButtonForSelect || param1.buttonIdx == 0) {
-                selectedIndex = _loc2_;
+            if (this.useRightButton && this.useRightButtonForSelect || param2 == 0) {
+                selectedIndex = _loc3_;
             }
         }
+    }
+
+    protected function handleItemRightClick(param1:MouseEventEx):void {
+        if (param1.buttonIdx == MouseEventEx.RIGHT_BUTTON) {
+            this.dispatchItemClick(param1, param1.buttonIdx);
+        }
+    }
+
+    override protected function handleItemClick(param1:ButtonEvent):void {
+        this.dispatchItemClick(param1, param1.buttonIdx);
     }
 
     protected function onItemStartDrag(param1:ListEventEx):void {

@@ -11,6 +11,8 @@ public class QuestsDataVO extends DAAPIDataClass {
 
     public var isSortable:Boolean = false;
 
+    public var rendererType:String = "QuestRenderer_UI";
+
     public function QuestsDataVO(param1:Object) {
         super(param1);
     }

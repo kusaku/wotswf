@@ -137,8 +137,6 @@ package
       
       public static const CROSSHAIRCONTROLS_EXAMPLE_NAME:String = "#ingame_help:crosshairControls/example/name";
       
-      public static const CROSSHAIRCONTROLS_TIMELEFT:String = "#ingame_help:crosshairControls/timeLeft";
-      
       public static const MARKERMARKS_TITLE:String = "#ingame_help:markerMarks/title";
       
       public static const MARKERMARKS_FOLLOW:String = "#ingame_help:markerMarks/follow";

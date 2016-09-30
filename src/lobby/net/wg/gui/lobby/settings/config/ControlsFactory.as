@@ -1,4 +1,5 @@
 package net.wg.gui.lobby.settings.config {
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.Values;
 import net.wg.gui.lobby.settings.vo.SettingsControlProp;
 
@@ -24,7 +25,7 @@ public class ControlsFactory {
 
     private static var _instance:ControlsFactory = null;
 
-    private var _currentVal = null;
+    private var _currentVal:Object = null;
 
     private var _optionsVal:Array = null;
 
@@ -40,19 +41,22 @@ public class ControlsFactory {
 
     private var _advancedVal:Boolean = false;
 
-    private var _prevValVal = null;
+    private var _prevValVal:Object = null;
 
     private var _isDataAsSelectedIndexVal:Boolean = false;
 
-    private var _defaultVal = null;
+    private var _defaultVal:Object = null;
 
-    public function ControlsFactory(param1:PrivateClass) {
+    private var _isDisposed:Boolean = false;
+
+    public function ControlsFactory() {
         super();
+        App.utils.asserter.assert(!_instance, "Instantiation failed: Use ControlsFactory.getInstance() instead of new.");
     }
 
     public static function get instance():ControlsFactory {
         if (_instance == null) {
-            _instance = new ControlsFactory(new PrivateClass());
+            _instance = new ControlsFactory();
         }
         return _instance;
     }
@@ -64,8 +68,7 @@ public class ControlsFactory {
 
     public function build():SettingsControlProp {
         App.utils.asserter.assert(this._typeVal != Values.EMPTY_STR, "ControlFactory: type of new control is empty.");
-        var _loc1_:SettingsControlProp = null;
-        _loc1_ = new SettingsControlProp(this._currentVal, this._optionsVal, this._typeVal, this._hasLabelVal, this._hasValueVal, this._isDependOnVal, this._readOnlyVal, this._advancedVal, this._prevValVal, this._isDataAsSelectedIndexVal, this._defaultVal);
+        var _loc1_:SettingsControlProp = new SettingsControlProp(this._currentVal, this._optionsVal, this._typeVal, this._hasLabelVal, this._hasValueVal, this._isDependOnVal, this._readOnlyVal, this._advancedVal, this._prevValVal, this._isDataAsSelectedIndexVal, this._defaultVal);
         this.refresh();
         return _loc1_;
     }
@@ -75,13 +78,8 @@ public class ControlsFactory {
         return this;
     }
 
-    public function current(param1:*):ControlsFactory {
+    public function current(param1:Object):ControlsFactory {
         this._currentVal = param1;
-        return this;
-    }
-
-    public function defaultVal(param1:*):ControlsFactory {
-        this._defaultVal = param1;
         return this;
     }
 
@@ -110,11 +108,6 @@ public class ControlsFactory {
         return this;
     }
 
-    public function prevVal(param1:*):ControlsFactory {
-        this._prevValVal = param1;
-        return this;
-    }
-
     public function readOnly(param1:Boolean):ControlsFactory {
         this._readOnlyVal = param1;
         return this;
@@ -139,12 +132,22 @@ public class ControlsFactory {
         this._isDataAsSelectedIndexVal = false;
         this._defaultVal = null;
     }
-}
-}
 
-class PrivateClass {
-
-    function PrivateClass() {
-        super();
+    private function verifyIsDisposed():void {
+        App.utils.asserter.assert(!this._isDisposed, "ControlsFactory " + Errors.ALREADY_DISPOSED);
     }
+
+    public final function dispose():void {
+        this.verifyIsDisposed();
+        this._isDisposed = true;
+        if (this._optionsVal) {
+            this._optionsVal.splice(0, this._optionsVal.length);
+            this._optionsVal = null;
+        }
+        this._currentVal = null;
+        this._prevValVal = null;
+        this._defaultVal = null;
+        _instance = null;
+    }
+}
 }

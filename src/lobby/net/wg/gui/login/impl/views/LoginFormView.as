@@ -114,7 +114,12 @@ public class LoginFormView extends UIComponentEx implements ILoginFormView {
     }
 
     public function setSelectedServerIndex(param1:int):void {
-        this._server.selectedIndex = param1;
+        if (this._server.dataProvider != null && this._server.dataProvider.length > param1) {
+            this._server.selectedIndex = param1;
+        }
+        else {
+            DebugUtils.LOG_WARNING("Selected server index " + param1 + " not found in provided list!");
+        }
     }
 
     public function setServersDP(param1:IDataProvider):void {

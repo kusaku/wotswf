@@ -1,19 +1,14 @@
 package net.wg.gui.lobby.settings {
 import net.wg.gui.components.controls.BorderShadowScrollPane;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
-
-public class AdvancedGraphicSettingsForm extends UIComponent {
+public class AdvancedGraphicSettingsForm extends UIComponentEx {
 
     private static const PANE_WIDTH:Number = 800;
 
     private static const PANE_HEIGHT:Number = 398;
 
     public var scrollPane:BorderShadowScrollPane;
-
-    public var content:AdvancedGraphicContentForm;
-
-    protected var _data:Object = null;
 
     public function AdvancedGraphicSettingsForm() {
         super();
@@ -22,11 +17,11 @@ public class AdvancedGraphicSettingsForm extends UIComponent {
     override protected function configUI():void {
         super.configUI();
         this.scrollPane.setSize(PANE_WIDTH, PANE_HEIGHT);
-        this.content = this.scrollPane.target as AdvancedGraphicContentForm;
+        var _loc1_:AdvancedGraphicContentForm = this.scrollPane.target as AdvancedGraphicContentForm;
+        App.utils.asserter.assertNotNull(_loc1_, "scrollPane.target must be AdvancedGraphicContentForm");
     }
 
     override protected function onDispose():void {
-        this.content = null;
         this.scrollPane.dispose();
         this.scrollPane = null;
         super.onDispose();

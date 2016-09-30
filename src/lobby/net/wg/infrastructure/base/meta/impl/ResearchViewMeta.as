@@ -10,6 +10,8 @@ public class ResearchViewMeta extends AbstractView {
 
     public var request4Info:Function;
 
+    public var request4Restore:Function;
+
     public var showSystemMessage:Function;
 
     public function ResearchViewMeta() {
@@ -29,6 +31,11 @@ public class ResearchViewMeta extends AbstractView {
     public function request4InfoS(param1:Number, param2:Number):void {
         App.utils.asserter.assertNotNull(this.request4Info, "request4Info" + Errors.CANT_NULL);
         this.request4Info(param1, param2);
+    }
+
+    public function request4RestoreS(param1:Number):void {
+        App.utils.asserter.assertNotNull(this.request4Restore, "request4Restore" + Errors.CANT_NULL);
+        this.request4Restore(param1);
     }
 
     public function showSystemMessageS(param1:String, param2:String):void {

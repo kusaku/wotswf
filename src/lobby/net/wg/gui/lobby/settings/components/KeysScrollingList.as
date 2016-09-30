@@ -22,21 +22,17 @@ public class KeysScrollingList extends ScrollingListPx {
     }
 
     override protected function draw():void {
-        var _loc1_:uint = 0;
-        var _loc2_:uint = 0;
-        var _loc3_:IListItemRenderer = null;
-        var _loc4_:DisplayObject = null;
-        var _loc5_:Graphics = null;
+        var _loc1_:Graphics = null;
         if (isInvalid(InvalidationType.SCROLL_BAR)) {
             createScrollBar();
             invalidate(SCROLL_POSITION_INV);
         }
         if (isInvalid(InvalidationType.SIZE, SCROLL_POSITION_INV)) {
             drawScrollBar();
-            _loc5_ = maskObject.graphics;
-            _loc5_.beginFill(0, 1);
-            _loc5_.drawRect(0, 0, _width, _height);
-            _loc5_.endFill();
+            _loc1_ = maskObject.graphics;
+            _loc1_.beginFill(0, 1);
+            _loc1_.drawRect(0, 0, _width, _height);
+            _loc1_.endFill();
         }
         if (isInvalid(InvalidationType.STATE)) {
             if (_newFrame) {
@@ -78,25 +74,26 @@ public class KeysScrollingList extends ScrollingListPx {
         if (_loc2_ == null) {
             return;
         }
-        container.addChild(_loc2_ as DisplayObject);
+        var _loc3_:DisplayObject = _loc2_ as DisplayObject;
+        App.utils.asserter.assertNotNull(_loc3_, "renderer must be DisplayObject");
+        container.addChild(_loc3_);
         _renderers.push(_loc2_);
-        var _loc3_:Object = _dataProvider[param1];
-        _loc2_.setListData(new ListData(param1, itemToLabel(_loc3_), false));
-        _loc2_.setData(_loc3_);
+        var _loc4_:Object = _dataProvider[param1];
+        _loc2_.setListData(new ListData(param1, itemToLabel(_loc4_), false));
+        _loc2_.setData(_loc4_);
         _loc2_.owner = this;
         _loc2_.validateNow();
-        totalHeight = totalHeight + _loc3_.rendererYOffset;
+        totalHeight = totalHeight + _loc4_.rendererYOffset;
         _loc2_.y = totalHeight;
         totalHeight = totalHeight + Math.round(_loc2_.height);
     }
 
     override protected function createRenderer(param1:uint):IListItemRenderer {
         var _loc2_:IListItemRenderer = super.createRenderer(param1);
-        if (_loc2_ != null) {
+        if (_loc2_) {
             this.setupRenderer(_loc2_);
-            return _loc2_;
         }
-        return null;
+        return _loc2_;
     }
 
     override protected function drawRenderers(param1:Number):void {
@@ -117,14 +114,14 @@ public class KeysScrollingList extends ScrollingListPx {
         param1.focusTarget = this;
         param1.tabEnabled = false;
         param1.doubleClickEnabled = true;
-        param1.addEventListener(ButtonEvent.PRESS, this.dispatchItemEvent, false, 0, true);
-        param1.addEventListener(ButtonEvent.CLICK, handleItemClick, false, 0, true);
-        param1.addEventListener(MouseEvent.DOUBLE_CLICK, this.dispatchItemEvent, false, 0, true);
-        param1.addEventListener(MouseEvent.ROLL_OVER, this.dispatchItemEvent, false, 0, true);
-        param1.addEventListener(MouseEvent.ROLL_OUT, this.dispatchItemEvent, false, 0, true);
-        param1.addEventListener(KeyInputEvents.CHANGE, this.dispatchItemEvent, false, 0, true);
+        param1.addEventListener(ButtonEvent.PRESS, this.onPressHandler, false, 0, true);
+        param1.addEventListener(ButtonEvent.CLICK, this.onClickHandler, false, 0, true);
+        param1.addEventListener(MouseEvent.DOUBLE_CLICK, this.onDoubleClickHandler, false, 0, true);
+        param1.addEventListener(MouseEvent.ROLL_OVER, this.onRollOverHandler, false, 0, true);
+        param1.addEventListener(MouseEvent.ROLL_OUT, this.onRollOutHandler, false, 0, true);
+        param1.addEventListener(KeyInputEvents.CHANGE, this.onChangeHandler, false, 0, true);
         if (_usingExternalRenderers) {
-            param1.addEventListener(MouseEvent.MOUSE_WHEEL, handleMouseWheel, false, 0, true);
+            param1.addEventListener(MouseEvent.MOUSE_WHEEL, this.onMouseWheelHandler, false, 0, true);
         }
     }
 
@@ -132,13 +129,41 @@ public class KeysScrollingList extends ScrollingListPx {
         param1.owner = null;
         param1.focusTarget = null;
         param1.doubleClickEnabled = false;
-        param1.removeEventListener(ButtonEvent.PRESS, this.dispatchItemEvent);
-        param1.removeEventListener(ButtonEvent.CLICK, handleItemClick);
-        param1.removeEventListener(MouseEvent.DOUBLE_CLICK, this.dispatchItemEvent);
-        param1.removeEventListener(MouseEvent.ROLL_OVER, this.dispatchItemEvent);
-        param1.removeEventListener(MouseEvent.ROLL_OUT, this.dispatchItemEvent);
-        param1.removeEventListener(MouseEvent.MOUSE_WHEEL, handleMouseWheel);
-        param1.removeEventListener(KeyInputEvents.CHANGE, this.dispatchItemEvent);
+        param1.removeEventListener(ButtonEvent.PRESS, this.onPressHandler);
+        param1.removeEventListener(ButtonEvent.CLICK, this.onClickHandler);
+        param1.removeEventListener(MouseEvent.DOUBLE_CLICK, this.onDoubleClickHandler);
+        param1.removeEventListener(MouseEvent.ROLL_OVER, this.onRollOverHandler);
+        param1.removeEventListener(MouseEvent.ROLL_OUT, this.onRollOutHandler);
+        param1.removeEventListener(MouseEvent.MOUSE_WHEEL, this.onMouseWheelHandler);
+        param1.removeEventListener(KeyInputEvents.CHANGE, this.onChangeHandler);
+    }
+
+    private function onPressHandler(param1:ButtonEvent):void {
+        this.dispatchItemEvent(param1);
+    }
+
+    private function onClickHandler(param1:ButtonEvent):void {
+        handleItemClick(param1);
+    }
+
+    private function onDoubleClickHandler(param1:MouseEvent):void {
+        this.dispatchItemEvent(param1);
+    }
+
+    private function onRollOverHandler(param1:MouseEvent):void {
+        this.dispatchItemEvent(param1);
+    }
+
+    private function onRollOutHandler(param1:MouseEvent):void {
+        this.dispatchItemEvent(param1);
+    }
+
+    private function onMouseWheelHandler(param1:MouseEvent):void {
+        handleMouseWheel(param1);
+    }
+
+    private function onChangeHandler(param1:KeyInputEvents):void {
+        this.dispatchItemEvent(param1);
     }
 
     override protected function dispatchItemEvent(param1:Event):Boolean {
@@ -166,26 +191,27 @@ public class KeysScrollingList extends ScrollingListPx {
                 return true;
         }
         var _loc3_:IListItemRenderer = param1.currentTarget as IListItemRenderer;
+        App.utils.asserter.assertNotNull(_loc3_, "event.currentTarget must be IListItemRenderer");
         var _loc4_:uint = 0;
         if (param1 is ButtonEvent) {
-            _loc4_ = (param1 as ButtonEvent).controllerIdx;
+            _loc4_ = ButtonEvent(param1).controllerIdx;
         }
         else if (param1 is KeyInputEvents) {
             _loc4_ = KeyInputEvents(param1).keyCode;
         }
         else if (param1 is MouseEventEx) {
-            _loc4_ = (param1 as MouseEventEx).mouseIdx;
+            _loc4_ = MouseEventEx(param1).mouseIdx;
         }
         var _loc5_:uint = 0;
         if (param1 is ButtonEvent) {
-            _loc5_ = (param1 as ButtonEvent).buttonIdx;
+            _loc5_ = ButtonEvent(param1).buttonIdx;
         }
         else if (param1 is MouseEventEx) {
-            _loc5_ = (param1 as MouseEventEx).buttonIdx;
+            _loc5_ = MouseEventEx(param1).buttonIdx;
         }
         var _loc6_:Boolean = false;
         if (param1 is ButtonEvent) {
-            _loc6_ = (param1 as ButtonEvent).isKeyboard;
+            _loc6_ = ButtonEvent(param1).isKeyboard;
         }
         var _loc7_:ListEventEx = new ListEventEx(_loc2_, false, true, _loc3_.index, 0, _loc3_.index, _loc3_, dataProvider[_loc3_.index], _loc4_, _loc5_, _loc6_);
         if (_loc2_ != ListEventEx.ITEM_TEXT_CHANGE) {
@@ -214,6 +240,7 @@ public class KeysScrollingList extends ScrollingListPx {
         var _loc2_:uint = 0;
         while (_loc2_ < _loc1_) {
             _loc3_ = getRendererAt(_loc2_) as KeysItemRenderer;
+            App.utils.asserter.assertNotNull(_loc3_, "getRendererAt(i) must be KeysItemRenderer");
             if (_loc3_.isSelected()) {
                 return true;
             }
@@ -249,11 +276,6 @@ public class KeysScrollingList extends ScrollingListPx {
             _loc3_++;
         }
         return _loc1_;
-    }
-
-    override protected function onDispose():void {
-        _renderers = new Vector.<IListItemRenderer>();
-        super.onDispose();
     }
 
     override public function toString():String {

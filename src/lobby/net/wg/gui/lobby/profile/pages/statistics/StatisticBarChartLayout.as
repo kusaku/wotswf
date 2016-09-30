@@ -10,9 +10,8 @@ public class StatisticBarChartLayout extends LayoutBase {
     }
 
     override public function layout(param1:uint, param2:Object):void {
-        var _loc4_:Point = null;
         var _loc3_:StatisticBarChartItem = StatisticBarChartItem(param2);
-        _loc4_ = _loc3_.getThumbDimensions();
+        var _loc4_:Point = _loc3_.getThumbDimensions();
         _loc3_.x = Math.round(paddingLeft + param1 * (gap + _loc4_.x));
         _loc3_.y = _loc3_.y - _loc4_.y;
     }

@@ -7,6 +7,7 @@ import net.wg.data.constants.Errors;
 import net.wg.data.constants.IconsTypes;
 import net.wg.data.constants.Values;
 import net.wg.data.constants.generated.BOOSTER_CONSTANTS;
+import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 import net.wg.gui.components.controls.ActionPrice;
 import net.wg.gui.components.controls.IconText;
 import net.wg.gui.components.controls.SoundButtonEx;
@@ -150,8 +151,8 @@ public class BoostersTableRenderer extends TableRenderer {
         App.utils.asserter.assertNotNull(this._model.price, "Price" + Errors.CANT_NULL);
         this.actionBtn.y = ACTION_BUTTON_TOP_SHOP;
         var _loc1_:int = this.actionBtn.x + this.actionBtn.width;
-        var _loc2_:int = this._model.price.newPrices[Currencies.CREDITS_INDEX];
-        var _loc3_:int = this._model.price.newPrices[Currencies.GOLD_INDEX];
+        var _loc2_:int = this._model.price.newPrices[CURRENCIES_CONSTANTS.CREDITS_INDEX];
+        var _loc3_:int = this._model.price.newPrices[CURRENCIES_CONSTANTS.GOLD_INDEX];
         var _loc4_:* = this._model.actionPriceData != null;
         var _loc5_:ActionPriceVO = !!_loc4_ ? this._model.actionPriceData : this._model.price;
         if (_loc3_ > 0) {

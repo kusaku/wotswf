@@ -17,17 +17,25 @@ public class ContactsTreeItemRenderer extends ContactItemRenderer {
 
     private static const ITEM_INSIDE_GROUP_PADDING:int = 10;
 
-    private var myData:ITreeItemInfo;
+    private static const MAIN_GROUP_ITEM_LINKAGE:String = "MainGroupItemUI";
 
-    private var dashedArea:EmptyHighlightArea;
+    private static const CONTACT_GROUP_ITEM_LINKAGE:String = "ContactGroupItemUI";
 
-    private var contactItem:ContactItem;
+    private static const EMPTY_HIGHLIGHT_AREA_LINKAGE:String = "EmptyHighlightAreaUI";
 
-    private var mainGroupItem:MainGroupItem;
+    private static const CONTACT_ITEM_LINKAGE:String = "ContactItemUI";
 
-    private var contactGroupItem:ContactGroupItem;
+    private var _myData:ITreeItemInfo;
 
-    private var currentContentItem:UIComponent;
+    private var _dashedArea:EmptyHighlightArea;
+
+    private var _contactItem:ContactItem;
+
+    private var _mainGroupItem:MainGroupItem;
+
+    private var _contactGroupItem:ContactGroupItem;
+
+    private var _currentContentItem:UIComponent;
 
     private var _isNewDataIsEqualOldData:Boolean = true;
 
@@ -37,22 +45,22 @@ public class ContactsTreeItemRenderer extends ContactItemRenderer {
     }
 
     override public function getCurrentContentItem():UIComponent {
-        return this.currentContentItem;
+        return this._currentContentItem;
     }
 
     override public function getData():Object {
-        return this.myData;
+        return this._myData;
     }
 
     override public function setData(param1:Object):void {
         this._isNewDataIsEqualOldData = false;
-        if (param1 && this.myData) {
-            if ((this.myData as ContactsListTreeItemInfo).isEquals(param1 as ContactsListTreeItemInfo)) {
+        if (param1 && this._myData && this._myData.id != null) {
+            if (ContactsListTreeItemInfo(this._myData).isEquals(ContactsListTreeItemInfo(param1))) {
                 this._isNewDataIsEqualOldData = true;
                 return;
             }
         }
-        this.myData = ITreeItemInfo(param1);
+        this._myData = ITreeItemInfo(param1);
         invalidateData();
     }
 
@@ -69,63 +77,63 @@ public class ContactsTreeItemRenderer extends ContactItemRenderer {
         var _loc5_:EmptyRowVO = null;
         var _loc6_:Number = NaN;
         super.draw();
-        var _loc1_:Boolean = isInvalid(InvalidationType.DATA) && !this._isNewDataIsEqualOldData;
+        var _loc1_:Boolean = !this._isNewDataIsEqualOldData && isInvalid(InvalidationType.DATA);
         if (_loc1_) {
-            if (this.myData) {
+            if (this._myData) {
                 visible = true;
                 _loc2_ = true;
-                if (this.myData.isBrunch) {
-                    if (this.myData.parent == null) {
-                        if (this.mainGroupItem == null) {
-                            this.mainGroupItem = App.utils.classFactory.getComponent("MainGroupItemUI", MainGroupItem);
+                if (this._myData.isBrunch) {
+                    if (this._myData.parent == null) {
+                        if (this._mainGroupItem == null) {
+                            this._mainGroupItem = App.utils.classFactory.getComponent(MAIN_GROUP_ITEM_LINKAGE, MainGroupItem);
                         }
-                        _loc3_ = this.mainGroupItem;
+                        _loc3_ = this._mainGroupItem;
                         _loc2_ = false;
                     }
                     else {
-                        if (this.contactGroupItem == null) {
-                            this.contactGroupItem = App.utils.classFactory.getComponent("ContactGroupItemUI", ContactGroupItem);
+                        if (this._contactGroupItem == null) {
+                            this._contactGroupItem = App.utils.classFactory.getComponent(CONTACT_GROUP_ITEM_LINKAGE, ContactGroupItem);
                         }
-                        _loc3_ = this.contactGroupItem;
+                        _loc3_ = this._contactGroupItem;
                     }
                 }
-                else if (this.myData.gui["id"] == null) {
-                    if (this.dashedArea == null) {
-                        this.dashedArea = App.utils.classFactory.getComponent("EmptyHighlightAreaUI", EmptyHighlightArea);
-                        this.dashedArea.setSize(_width, _height);
+                else if (this._myData.id == null) {
+                    if (this._dashedArea == null) {
+                        this._dashedArea = App.utils.classFactory.getComponent(EMPTY_HIGHLIGHT_AREA_LINKAGE, EmptyHighlightArea);
+                        this._dashedArea.setSize(_width, _height);
                     }
-                    _loc5_ = new EmptyRowVO(this.myData.data);
+                    _loc5_ = new EmptyRowVO(this._myData.data);
                     _loc6_ = !!_loc5_.isVisible ? Number(1) : Number(0);
-                    this.dashedArea.dashedAreaAlpha = _loc6_;
-                    this.dashedArea.defaultTextAlpha = _loc6_;
-                    _loc3_ = this.dashedArea;
+                    this._dashedArea.dashedAreaAlpha = _loc6_;
+                    this._dashedArea.defaultTextAlpha = _loc6_;
+                    _loc3_ = this._dashedArea;
                     _loc2_ = _loc5_.isActive;
                 }
                 else {
-                    if (this.contactItem == null) {
-                        this.contactItem = App.utils.classFactory.getComponent("ContactItemUI", ContactItem);
+                    if (this._contactItem == null) {
+                        this._contactItem = App.utils.classFactory.getComponent(CONTACT_ITEM_LINKAGE, ContactItem);
                     }
-                    if (this.myData.parent.parent == null) {
-                        this.contactItem.x = 0;
-                        this.contactItem.width = _width;
+                    if (this._myData.parent.parent == null) {
+                        this._contactItem.x = 0;
+                        this._contactItem.width = _width;
                     }
                     else {
-                        this.contactItem.x = ITEM_INSIDE_GROUP_PADDING;
-                        this.contactItem.width = _width - ITEM_INSIDE_GROUP_PADDING;
+                        this._contactItem.x = ITEM_INSIDE_GROUP_PADDING;
+                        this._contactItem.width = _width - ITEM_INSIDE_GROUP_PADDING;
                     }
-                    _loc3_ = this.contactItem;
+                    _loc3_ = this._contactItem;
                 }
-                if (_loc3_ != this.currentContentItem) {
-                    if (this.currentContentItem) {
-                        removeChild(this.currentContentItem);
+                if (_loc3_ != this._currentContentItem) {
+                    if (this._currentContentItem) {
+                        removeChild(this._currentContentItem);
                     }
                     addChild(_loc3_);
                 }
-                this.currentContentItem = _loc3_;
-                _loc4_ = this.currentContentItem as IUpdatable;
+                this._currentContentItem = _loc3_;
+                _loc4_ = this._currentContentItem as IUpdatable;
                 if (_loc4_) {
-                    _loc4_.update(this.myData.data);
-                    this.currentContentItem.validateNow();
+                    _loc4_.update(this._myData.data);
+                    this._currentContentItem.validateNow();
                 }
                 this.enabled = _loc2_;
                 if (this.isItemOver() && !this._isNewDataIsEqualOldData) {
@@ -138,41 +146,41 @@ public class ContactsTreeItemRenderer extends ContactItemRenderer {
             this._isNewDataIsEqualOldData = true;
         }
         if (_loc1_ || isInvalid(DRAGGING_ITEM_INV)) {
-            alpha = !isNaN(draggedItemId) && this.currentContentItem != null && this.currentContentItem == this.contactItem && ContactItemVO(this.contactItem.data).dbID == draggedItemId ? Number(0.3) : Number(1);
+            alpha = !isNaN(draggedItemId) && this._currentContentItem != null && this._currentContentItem == this._contactItem && ContactItemVO(this._contactItem.data).dbID == draggedItemId ? Number(0.3) : Number(1);
         }
     }
 
     override protected function onDispose():void {
-        if (this.dashedArea) {
-            this.dashedArea.dispose();
-            this.dashedArea = null;
+        if (this._dashedArea) {
+            this._dashedArea.dispose();
+            this._dashedArea = null;
         }
-        if (this.contactItem) {
-            this.contactItem.dispose();
+        if (this._contactItem) {
+            this._contactItem.dispose();
         }
-        if (this.mainGroupItem) {
-            this.mainGroupItem.dispose();
+        if (this._mainGroupItem) {
+            this._mainGroupItem.dispose();
         }
-        if (this.contactGroupItem) {
-            this.contactGroupItem.dispose();
+        if (this._contactGroupItem) {
+            this._contactGroupItem.dispose();
         }
-        this.contactItem = null;
-        this.mainGroupItem = null;
-        this.contactGroupItem = null;
-        this.currentContentItem = null;
+        this._contactItem = null;
+        this._mainGroupItem = null;
+        this._contactGroupItem = null;
+        this._currentContentItem = null;
+        this._myData = null;
         background = null;
         super.onDispose();
-        this.myData = null;
     }
 
     protected function showTooltip():void {
         var _loc1_:ContactItemVO = null;
-        if (this.currentContentItem == this.contactItem && this.contactItem) {
-            _loc1_ = ContactItemVO(this.contactItem.data);
+        if (this._currentContentItem == this._contactItem && this._contactItem) {
+            _loc1_ = ContactItemVO(this._contactItem.data);
             App.toolTipMgr.showSpecial(TOOLTIPS_CONSTANTS.CONTACT, null, _loc1_.dbID, null);
         }
-        else if (this.currentContentItem == this.contactGroupItem) {
-            App.toolTipMgr.show(this.contactGroupItem.label);
+        else if (this._currentContentItem == this._contactGroupItem) {
+            App.toolTipMgr.show(this._contactGroupItem.label);
         }
     }
 
@@ -182,7 +190,7 @@ public class ContactsTreeItemRenderer extends ContactItemRenderer {
 
     private function updateTooltip():void {
         this.hideTooltip();
-        if (this.myData.gui["id"] != null && !this.myData.isBrunch) {
+        if (this._myData.id != null && !this._myData.isBrunch) {
             this.showTooltip();
         }
     }
@@ -201,14 +209,14 @@ public class ContactsTreeItemRenderer extends ContactItemRenderer {
     }
 
     override public function get data():Object {
-        return this.myData;
+        return this._myData;
     }
 
     override public function get getCursorType():String {
-        if (this.currentContentItem == this.contactItem) {
+        if (this._currentContentItem == this._contactItem) {
             return Cursors.DRAG_OPEN;
         }
-        if (this.currentContentItem == this.contactGroupItem) {
+        if (this._currentContentItem == this._contactGroupItem) {
             return Cursors.HAND;
         }
         return Cursors.ARROW;

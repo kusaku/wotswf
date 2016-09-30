@@ -375,6 +375,16 @@ package
       
       public static const TIP179_BECAREFUL_SECURITY_0_INFINITY_ALL_ALL_ALL_ALL:String = "#tips:tip179/beCareful/security/0_infinity/all/all/all/all";
       
+      public static const TIP180_TECHNICALADVICE_INTERFACE_0_INFINITY_ALL_ALL_ALL_ALL:String = "#tips:tip180/technicalAdvice/interface/0_infinity/all/all/all/all";
+      
+      public static const TIP181_TECHNICALADVICE_INTERFACE_0_INFINITY_ALL_ALL_ALL_ALL:String = "#tips:tip181/technicalAdvice/interface/0_infinity/all/all/all/all";
+      
+      public static const TIP182_TECHNICALADVICE_INTERFACE_0_INFINITY_ALL_ALL_ALL_ALL:String = "#tips:tip182/technicalAdvice/interface/0_infinity/all/all/all/all";
+      
+      public static const TIP183_TECHNICALADVICE_INTERFACE_0_INFINITY_ALL_ALL_ALL_ALL:String = "#tips:tip183/technicalAdvice/interface/0_infinity/all/all/all/all";
+      
+      public static const TIP184_TECHNICALADVICE_INTERFACE_0_INFINITY_ALL_ALL_ALL_ALL:String = "#tips:tip184/technicalAdvice/interface/0_infinity/all/all/all/all";
+      
       public static const SANDBOX0:String = "#tips:sandbox0";
       
       public static const SANDBOX1:String = "#tips:sandbox1";

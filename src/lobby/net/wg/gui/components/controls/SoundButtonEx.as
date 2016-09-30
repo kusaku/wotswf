@@ -150,6 +150,9 @@ public class SoundButtonEx extends SoundButton implements ISoundButtonEx {
         if (isInvalid(InvalidationType.STATE)) {
             if (_newFrame) {
                 gotoAndPlay(_newFrame);
+                if (_baseDisposed) {
+                    return;
+                }
                 _newFrame = null;
             }
             if (focusIndicator && _newFocusIndicatorFrame) {

@@ -136,7 +136,7 @@ public class VehicleSellDialog extends VehicleSellDialogMeta implements IVehicle
         this.addEventListener(VehicleSellDialogEvent.UPDATE_RESULT, this.onUpdateResultHandler);
         this.cancelBtn.addEventListener(ButtonEvent.CLICK, this.onCancelBtnClickHandler);
         this.submitBtn.addEventListener(ButtonEvent.CLICK, this.onSubmitBtnClickHandler);
-        this.headerComponent.inBarracsDrop.addEventListener(ListEvent.INDEX_CHANGE, this.onHeaderComponentIndexChangeHandler);
+        this.headerComponent.inBarracksDrop.addEventListener(ListEvent.INDEX_CHANGE, this.onHeaderComponentIndexChangeHandler);
         setFocus(this.submitBtn);
     }
 
@@ -149,7 +149,7 @@ public class VehicleSellDialog extends VehicleSellDialogMeta implements IVehicle
         this.controlQuestion.removeEventListener(ControlQuestionComponent.USER_INPUT_HANDLER, this.onControlQuestionUserInputHandler);
         this.cancelBtn.removeEventListener(ButtonEvent.CLICK, this.onCancelBtnClickHandler);
         this.submitBtn.removeEventListener(ButtonEvent.CLICK, this.onSubmitBtnClickHandler);
-        this.headerComponent.inBarracsDrop.removeEventListener(ListEvent.INDEX_CHANGE, this.onHeaderComponentIndexChangeHandler);
+        this.headerComponent.inBarracksDrop.removeEventListener(ListEvent.INDEX_CHANGE, this.onHeaderComponentIndexChangeHandler);
         for each(_loc1_ in this._tweens) {
             _loc1_.paused = true;
             _loc1_ = null;
@@ -189,7 +189,7 @@ public class VehicleSellDialog extends VehicleSellDialogMeta implements IVehicle
                 if (this._controlQuestionVisible) {
                     this.cleanAndFocusControlQuestion();
                 }
-                checkControlQuestionS(this.headerComponent.inBarracsDrop.selectedIndex == DISMISS_TANKMEN);
+                checkControlQuestionS(this.headerComponent.inBarracksDrop.selectedIndex == DISMISS_TANKMEN);
             }
             if (isInvalid(InvalidationType.DATA)) {
                 this.setGoldText(this.headerComponent.creditsCommon, this._removeDevicesFullCost);
@@ -551,7 +551,7 @@ public class VehicleSellDialog extends VehicleSellDialogMeta implements IVehicle
             }
             _loc8_++;
         }
-        var _loc11_:* = this.headerComponent.inBarracsDrop.selectedIndex == 1;
+        var _loc11_:* = this.headerComponent.inBarracksDrop.selectedIndex == 1;
         setDialogSettingsS(this._setingsDropBtn.selected);
         sellS(this._vehicleVo.intCD, _loc5_, _loc6_, _loc4_, _loc7_, _loc11_);
         onWindowCloseS();

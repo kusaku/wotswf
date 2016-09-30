@@ -4,7 +4,7 @@ import net.wg.gui.components.controls.DropdownMenu;
 import net.wg.gui.components.controls.LabelControl;
 import net.wg.gui.components.controls.Slider;
 import net.wg.gui.lobby.settings.config.SettingsConfigHelper;
-import net.wg.gui.lobby.settings.evnts.SettingsSubVewEvent;
+import net.wg.gui.lobby.settings.events.SettingsSubVewEvent;
 import net.wg.gui.lobby.settings.vo.SettingsControlProp;
 import net.wg.infrastructure.base.UIComponentEx;
 
@@ -85,7 +85,7 @@ public class SettingsArcadeForm extends UIComponentEx {
         var _loc4_:SettingsControlProp = null;
         var _loc5_:Slider = null;
         var _loc6_:DropdownMenu = null;
-        if (this._data != null) {
+        if (this._data) {
             _loc1_ = Values.EMPTY_STR;
             _loc2_ = this._data.keys.length;
             _loc3_ = 0;
@@ -107,7 +107,75 @@ public class SettingsArcadeForm extends UIComponentEx {
             }
             this._data = null;
         }
+        this.netSlider.dispose();
+        this.netSlider = null;
+        this.netLabel.dispose();
+        this.netLabel = null;
+        this.netValue.dispose();
+        this.netValue = null;
+        this.netTypeDropDown.dispose();
+        this.netTypeDropDown = null;
+        this.centralTagSlider.dispose();
+        this.centralTagSlider = null;
+        this.centralTagLabel.dispose();
+        this.centralTagLabel = null;
+        this.centralTagValue.dispose();
+        this.centralTagValue = null;
+        this.centralTagTypeDropDown.dispose();
+        this.centralTagTypeDropDown = null;
+        this.reloaderSlider.dispose();
+        this.reloaderSlider = null;
+        this.reloaderLabel.dispose();
+        this.reloaderLabel = null;
+        this.reloaderValue.dispose();
+        this.reloaderValue = null;
+        this.conditionSlider.dispose();
+        this.conditionSlider = null;
+        this.conditionLabel.dispose();
+        this.conditionLabel = null;
+        this.conditionValue.dispose();
+        this.conditionValue = null;
+        this.mixingSlider.dispose();
+        this.mixingSlider = null;
+        this.mixingLabel.dispose();
+        this.mixingLabel = null;
+        this.mixingValue.dispose();
+        this.mixingValue = null;
+        this.mixingTypeDropDown.dispose();
+        this.mixingTypeDropDown = null;
+        this.gunTagSlider.dispose();
+        this.gunTagSlider = null;
+        this.gunTagLabel.dispose();
+        this.gunTagLabel = null;
+        this.gunTagValue.dispose();
+        this.gunTagValue = null;
+        this.gunTagTypeDropDown.dispose();
+        this.gunTagTypeDropDown = null;
+        this.cassetteSlider.dispose();
+        this.cassetteSlider = null;
+        this.cassetteLabel.dispose();
+        this.cassetteLabel = null;
+        this.cassetteValue.dispose();
+        this.cassetteValue = null;
+        this.reloaderTimerSlider.dispose();
+        this.reloaderTimerSlider = null;
+        this.reloaderTimerLabel.dispose();
+        this.reloaderTimerLabel = null;
+        this.reloaderTimerValue.dispose();
+        this.reloaderTimerValue = null;
         super.onDispose();
+    }
+
+    private function getSelectedIndex(param1:SettingsControlProp):int {
+        var _loc2_:int = param1.options.length;
+        var _loc3_:int = 0;
+        while (_loc3_ < _loc2_) {
+            if (param1.options[_loc3_].index == param1.current) {
+                return _loc3_;
+            }
+            _loc3_++;
+        }
+        return -1;
     }
 
     public function setData(param1:String, param2:Object):void {
@@ -133,16 +201,17 @@ public class SettingsArcadeForm extends UIComponentEx {
             while (_loc8_ < _loc5_) {
                 _loc6_ = _loc3_[_loc8_];
                 _loc7_ = _loc4_[_loc8_] as SettingsControlProp;
+                App.utils.asserter.assertNotNull(_loc7_, " values[i] must be SettingsControlProp");
                 if (this[_loc6_ + _loc7_.type]) {
                     switch (_loc7_.type) {
                         case SettingsConfigHelper.TYPE_SLIDER:
                             _loc9_ = this[_loc6_ + _loc7_.type];
-                            _loc9_.value = _loc7_.current;
+                            _loc9_.value = Number(_loc7_.current);
                             _loc9_.addEventListener(SliderEvent.VALUE_CHANGE, this.onSliderValueChangeHandler);
                             _loc9_.enabled = _loc7_.current != null;
                             if (_loc7_.hasValue && this[_loc6_ + SettingsConfigHelper.TYPE_VALUE]) {
                                 _loc11_ = this[_loc6_ + SettingsConfigHelper.TYPE_VALUE];
-                                _loc11_.text = _loc7_.current != null ? _loc7_.current : "";
+                                _loc11_.text = !!_loc7_.current ? _loc7_.current.toString() : Values.EMPTY_STR;
                             }
                             if (_loc7_.hasLabel && this[_loc6_ + SettingsConfigHelper.TYPE_LABEL]) {
                                 _loc12_ = this[_loc6_ + SettingsConfigHelper.TYPE_LABEL];
@@ -153,7 +222,7 @@ public class SettingsArcadeForm extends UIComponentEx {
                             _loc10_ = this[_loc6_ + _loc7_.type];
                             _loc10_.dataProvider = new DataProvider(_loc7_.options);
                             _loc10_.menuRowCount = _loc7_.options is Array ? Number(_loc7_.options.length) : Number(0);
-                            _loc10_.selectedIndex = _loc7_.current;
+                            _loc10_.selectedIndex = this.getSelectedIndex(_loc7_);
                             _loc10_.enabled = _loc7_.current != null;
                             _loc10_.addEventListener(ListEvent.INDEX_CHANGE, this.onDropDownIndexChangeHandler);
                     }
@@ -192,7 +261,7 @@ public class SettingsArcadeForm extends UIComponentEx {
     private function onDropDownIndexChangeHandler(param1:ListEvent):void {
         var _loc2_:DropdownMenu = DropdownMenu(param1.target);
         var _loc3_:String = SettingsConfigHelper.instance.getControlId(_loc2_.name, SettingsConfigHelper.TYPE_DROPDOWN);
-        dispatchEvent(new SettingsSubVewEvent(SettingsSubVewEvent.ON_CONTROL_CHANGE, this._id, _loc3_, _loc2_.selectedIndex));
+        dispatchEvent(new SettingsSubVewEvent(SettingsSubVewEvent.ON_CONTROL_CHANGE, this._id, _loc3_, _loc2_.dataProvider[_loc2_.selectedIndex].index));
     }
 
     private function onSliderValueChangeHandler(param1:SliderEvent):void {

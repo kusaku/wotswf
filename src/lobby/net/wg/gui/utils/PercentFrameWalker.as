@@ -12,8 +12,6 @@ public class PercentFrameWalker implements IFrameWalker {
 
     private var _callback:Function;
 
-    private var _startTime:Number = 0;
-
     private var _startTimeStamp:Number = 0;
 
     private var _totalTime:Number = 0;
@@ -22,19 +20,38 @@ public class PercentFrameWalker implements IFrameWalker {
 
     private var _targetMC:CrosshairCircle;
 
+    private var _startTime:Number = 0;
+
     public function PercentFrameWalker(param1:CrosshairCircle, param2:int, param3:Boolean) {
         super();
         this._targetMC = param1;
     }
 
-    public function setTarget(param1:MovieClip):void {
+    public final function dispose():void {
+        this.onDispose();
     }
 
     public function play(param1:String):void {
     }
 
+    public function restartFromCurrentFrame(param1:Number):void {
+        var _loc2_:Number = NaN;
+        this.stop();
+        if (param1 > 0) {
+            _loc2_ = this._totalTime - getTimer() + this._startTimeStamp;
+            this._totalTime = this._totalTime - _loc2_ + param1 * 1000;
+            this._intervalID = setInterval(this.run, ANIM_INTERVAL);
+        }
+        else {
+            this.walkEnd();
+        }
+    }
+
     public function setPosAsPercent(param1:Number):void {
         this._targetMC.setPercents(param1);
+    }
+
+    public function setTarget(param1:MovieClip):void {
     }
 
     public function start(param1:Number, param2:Number, param3:String = null, param4:Function = null):void {
@@ -58,23 +75,17 @@ public class PercentFrameWalker implements IFrameWalker {
         }
     }
 
-    public function restartFromCurrentFrame(param1:Number):void {
-        this.stop();
-        if (param1 > 0) {
-            this._startTimeStamp = getTimer();
-            this._startTime = this._totalTime - param1 * 1000;
-            this._intervalID = setInterval(this.run, ANIM_INTERVAL);
-        }
-        else {
-            this.walkEnd();
-        }
-    }
-
     public function stop():void {
         if (this._intervalID != -1) {
             clearInterval(this._intervalID);
             this._intervalID = -1;
         }
+    }
+
+    protected function onDispose():void {
+        this.stop();
+        this._callback = null;
+        this._targetMC = null;
     }
 
     private function run():void {
@@ -93,16 +104,6 @@ public class PercentFrameWalker implements IFrameWalker {
         if (this._callback) {
             this._callback.call();
         }
-    }
-
-    public final function dispose():void {
-        this.onDispose();
-    }
-
-    protected function onDispose():void {
-        this.stop();
-        this._callback = null;
-        this._targetMC = null;
     }
 
     public function get startTime():Number {

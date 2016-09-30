@@ -1,5 +1,6 @@
 package net.wg.gui.messenger.controls {
 import net.wg.gui.components.controls.ScrollingListEx;
+import net.wg.gui.components.controls.listselection.ListSelectionDirection;
 import net.wg.gui.messenger.data.IContactItemRenderer;
 import net.wg.gui.messenger.evnts.ContactsTreeEvent;
 
@@ -41,7 +42,7 @@ public class BaseContactsScrollingList extends ScrollingListEx {
     override protected function changeFocus():void {
         super.changeFocus();
         if (_selectedIndex == -1) {
-            navigateSelection(0, 1);
+            navigateSelection(0, ListSelectionDirection.DOWN);
             updateSelectedIndex();
         }
     }

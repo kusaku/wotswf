@@ -9,11 +9,13 @@ import net.wg.gui.components.advanced.SortingButton;
 import net.wg.gui.components.advanced.SortingButtonVO;
 import net.wg.gui.components.controls.CheckBox;
 import net.wg.gui.components.controls.ScrollingListWithDisRenderers;
+import net.wg.gui.components.controls.events.SortableScrollingListEvent;
 import net.wg.gui.cyberSport.controls.events.VehicleSelectorEvent;
 import net.wg.gui.cyberSport.controls.events.VehicleSelectorItemEvent;
-import net.wg.gui.cyberSport.vo.VehicleSelectorFilterVO;
 import net.wg.gui.cyberSport.vo.VehicleSelectorItemVO;
 import net.wg.gui.events.SortingEvent;
+import net.wg.gui.lobby.components.VehicleSelectorFilter;
+import net.wg.gui.lobby.components.data.VehicleSelectorFilterVO;
 import net.wg.gui.rally.vo.VehicleAlertVO;
 import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.IViewStackContent;
@@ -60,7 +62,7 @@ public class VehicleSelector extends UIComponentEx implements IViewStackContent 
 
     private static const HEADER_SHORT_USER_NAME_MULTI_WIDTH:int = 207;
 
-    private static const HEADER_SHORT_USER_NAME_WIDTH:int = 236;
+    private static const HEADER_SHORT_USER_NAME_WIDTH:int = 237;
 
     private static const HEADER_SHORT_USER_NAME_SORT_ORDER:int = 3;
 
@@ -97,6 +99,7 @@ public class VehicleSelector extends UIComponentEx implements IViewStackContent 
         this.allCheckBox.addEventListener(Event.SELECT, this.onAllCheckBoxSelectHandler);
         this.list.smartScrollBar = true;
         this.list.addEventListener(VehicleSelectorItemEvent.SELECT_VEHICLE, this.onListSelectVehicleHandler);
+        this.list.addEventListener(SortableScrollingListEvent.SORT_APPLIED, this.onListSortAppliedHandler);
         this.header.addEventListener(SortingEvent.SORT_DIRECTION_CHANGED, this.onHeaderSortDirectionChangedHandler, false, 0, true);
     }
 
@@ -114,6 +117,7 @@ public class VehicleSelector extends UIComponentEx implements IViewStackContent 
             setActualSize(_width, _height);
             this.list.height = _height - this.list.y - (!!this._multiSelection ? LIST_MULTI_OFFSET : 0);
             setActualScale(1, 1);
+            dispatchEvent(new Event(Event.RESIZE));
         }
     }
 
@@ -124,12 +128,13 @@ public class VehicleSelector extends UIComponentEx implements IViewStackContent 
         this.filtersView.dispose();
         this.filtersView = null;
         this.list.removeEventListener(VehicleSelectorItemEvent.SELECT_VEHICLE, this.onListSelectVehicleHandler);
+        this.list.removeEventListener(SortableScrollingListEvent.SORT_APPLIED, this.onListSortAppliedHandler);
         this.list.dispose();
         this.list = null;
         this.header.removeEventListener(SortingEvent.SORT_DIRECTION_CHANGED, this.onHeaderSortDirectionChangedHandler, false);
         this.header.dispose();
         this.header = null;
-        this._localSelectionOverrides.slice(0, this._localSelectionOverrides.length);
+        this._localSelectionOverrides.splice(0, this._localSelectionOverrides.length);
         this._localSelectionOverrides = null;
         if (this._selectedItemVO) {
             this._selectedItemVO.dispose();
@@ -368,6 +373,27 @@ public class VehicleSelector extends UIComponentEx implements IViewStackContent 
 
     public function get isUserVehiclesMode():Boolean {
         return this._filtersMode == VehicleSelectorFilter.MODE_USER_VEHICLES;
+    }
+
+    private function onListSortAppliedHandler(param1:SortableScrollingListEvent):void {
+        var _loc3_:Number = NaN;
+        var _loc4_:Number = NaN;
+        var _loc5_:VehicleSelectorItemVO = null;
+        var _loc2_:Number = 0;
+        if (!this._multiSelection) {
+            _loc3_ = 0;
+            _loc4_ = this.list.dataProvider.length;
+            _loc5_ = null;
+            _loc3_ = 0;
+            while (_loc3_ < _loc4_) {
+                _loc5_ = this.list.dataProvider[_loc3_];
+                if (_loc5_.selected) {
+                    _loc2_ = _loc3_;
+                }
+                _loc3_++;
+            }
+        }
+        this.list.selectedIndex = _loc2_;
     }
 
     private function onListSelectVehicleHandler(param1:VehicleSelectorItemEvent):void {

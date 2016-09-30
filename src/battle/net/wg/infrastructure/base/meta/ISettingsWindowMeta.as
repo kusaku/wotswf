@@ -15,11 +15,15 @@ public interface ISettingsWindowMeta extends IEventDispatcher {
 
     function altVoicesPreviewS():void;
 
+    function altBulbPreviewS(param1:int):void;
+
     function isSoundModeValidS():Boolean;
 
     function showWarningDialogS(param1:String, param2:Object, param3:Boolean):void;
 
     function onTabSelectedS(param1:String):void;
+
+    function onCounterTargetVisitedS(param1:String):void;
 
     function as_setData(param1:Object):void;
 
@@ -38,5 +42,7 @@ public interface ISettingsWindowMeta extends IEventDispatcher {
     function as_setGraphicsPreset(param1:Number):void;
 
     function as_isPresetApplied():Boolean;
+
+    function as_setCountersData(param1:Array):void;
 }
 }

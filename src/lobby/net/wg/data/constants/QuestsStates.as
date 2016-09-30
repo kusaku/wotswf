@@ -5,6 +5,8 @@ public class QuestsStates {
 
     public static const NOT_AVAILABLE:String = "notAvailable";
 
+    public static const ANOTHER:String = "another";
+
     public static const NOT_DONE:String = "notDone";
 
     public static const CONDITIONS:String = "conditions";
@@ -16,8 +18,6 @@ public class QuestsStates {
     public static const ACTION:int = 1;
 
     public static const BATTLE_QUEST:int = 2;
-
-    public static const TOKEN_QUEST:int = 3;
 
     public static const CURRENT_STATE:int = 1;
 

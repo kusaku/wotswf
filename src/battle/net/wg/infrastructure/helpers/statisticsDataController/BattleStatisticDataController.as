@@ -172,7 +172,7 @@ public class BattleStatisticDataController extends BattleStatisticDataController
         }
     }
 
-    public function as_updatePersonalStatus(param1:uint = 0, param2:uint = 0):void {
+    public function as_updatePersonalStatus(param1:uint, param2:uint):void {
         var _loc3_:IBattleComponentDataController = null;
         for each(_loc3_ in this._componentControllers) {
             _loc3_.updatePersonalStatus(param1, param2);

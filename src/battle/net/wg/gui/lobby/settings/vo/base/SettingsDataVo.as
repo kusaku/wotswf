@@ -15,20 +15,12 @@ public class SettingsDataVo extends DAAPIDataClass {
         super(param1);
     }
 
-    protected static function createControl(param1:String):ControlsFactory {
-        return ControlsFactory.instance.createControl(param1);
-    }
-
-    protected static function createSliderWithLabelAndValue():ControlsFactory {
-        return createControl(ControlsFactory.TYPE_SLIDER).hasLabel(true).hasValue(true);
-    }
-
     override protected function onDispose():void {
         var _loc4_:int = 0;
         if (this.keys) {
             this.keys.splice(0, this.keys.length);
+            this.keys = null;
         }
-        this.keys = null;
         var _loc1_:int = this.values.length;
         var _loc2_:int = 0;
         var _loc3_:int = 0;
@@ -61,16 +53,22 @@ public class SettingsDataVo extends DAAPIDataClass {
         return hasOwnProperty(param1);
     }
 
-    public function getByKey(param1:String):* {
-        var _loc2_:int = this.keys.indexOf(param1);
-        var _loc3_:Object = this.values[_loc2_];
-        return _loc3_;
+    public function getByKey(param1:String):Object {
+        return this.values[this.keys.indexOf(param1)];
     }
 
     public function setByKey(param1:String, param2:Object):void {
         var _loc3_:int = this.keys.indexOf(param1);
         App.utils.asserter.assert(_loc3_ != -1, this + ":setByKey - cant find \'" + param1 + "\' field.");
         this.values[_loc3_] = param2;
+    }
+
+    public function createControl(param1:String):ControlsFactory {
+        return ControlsFactory.instance.createControl(param1);
+    }
+
+    public function createSliderWithLabelAndValue():ControlsFactory {
+        return this.createControl(ControlsFactory.TYPE_SLIDER).hasLabel(true).hasValue(true);
     }
 }
 }

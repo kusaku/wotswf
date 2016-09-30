@@ -9,7 +9,7 @@ public class NotificationPopUpViewerMeta extends BaseDAAPIComponent {
 
     public var setListClear:Function;
 
-    public var onMessageHided:Function;
+    public var onMessageHidden:Function;
 
     public var onClickAction:Function;
 
@@ -34,9 +34,9 @@ public class NotificationPopUpViewerMeta extends BaseDAAPIComponent {
         this.setListClear();
     }
 
-    public function onMessageHidedS(param1:Boolean, param2:Boolean):void {
-        App.utils.asserter.assertNotNull(this.onMessageHided, "onMessageHided" + Errors.CANT_NULL);
-        this.onMessageHided(param1, param2);
+    public function onMessageHiddenS(param1:Boolean, param2:Boolean, param3:int, param4:Number):void {
+        App.utils.asserter.assertNotNull(this.onMessageHidden, "onMessageHidden" + Errors.CANT_NULL);
+        this.onMessageHidden(param1, param2, param3, param4);
     }
 
     public function onClickActionS(param1:uint, param2:Number, param3:String):void {

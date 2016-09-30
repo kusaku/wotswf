@@ -13,6 +13,8 @@ public interface ITankCarouselMeta extends IEventDispatcher {
 
     function resetFiltersS():void;
 
+    function updateHotFiltersS():void;
+
     function as_getDataProvider():Object;
 
     function as_setCarouselFilter(param1:Object):void;
@@ -20,6 +22,8 @@ public interface ITankCarouselMeta extends IEventDispatcher {
     function as_initCarouselFilter(param1:Object):void;
 
     function as_showCounter(param1:String, param2:Boolean):void;
+
+    function as_rowCount(param1:int):void;
 
     function as_hideCounter():void;
 

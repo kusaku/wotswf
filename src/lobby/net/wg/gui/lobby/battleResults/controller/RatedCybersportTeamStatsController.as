@@ -27,8 +27,7 @@ public class RatedCybersportTeamStatsController extends DefaultTeamStatsControll
     }
 
     override protected function setupCybersport(param1:BattleResultsVO, param2:CsTeamStats, param3:CsTeamStats, param4:SortableHeaderButtonBar, param5:SortableHeaderButtonBar, param6:TeamStatsList, param7:TeamStatsList):void {
-        var _loc8_:Number = NaN;
-        _loc8_ = Math.max(param1.team1.length, param1.team2.length);
+        var _loc8_:Number = Math.max(param1.team1.length, param1.team2.length);
         param2.setData(param1.cyberSport.teams.allies);
         param3.setData(param1.cyberSport.teams.enemies);
         param4.y = param2.y + param2.height;

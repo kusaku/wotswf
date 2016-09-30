@@ -198,7 +198,6 @@ public class Dummy extends UIComponentEx implements IDummy {
     }
 
     private function layoutCenter(param1:int, param2:int):void {
-        var _loc5_:* = 0;
         var _loc3_:int = 0;
         if (this._icon) {
             _loc3_ = this._icon.height;
@@ -207,7 +206,7 @@ public class Dummy extends UIComponentEx implements IDummy {
         if (this._button) {
             _loc4_ = this._button.height + BUTTON_GAP;
         }
-        _loc5_ = param2 - this.text.height - _loc3_ - _loc4_ >> 1;
+        var _loc5_:* = param2 - this.text.height - _loc3_ - _loc4_ >> 1;
         this.text.x = (param1 - this.text.width >> 1) + this._padding.left * _width >> 0;
         this.text.y = _loc5_ + this._padding.top * _height + _loc3_ >> 0;
         if (this._icon) {

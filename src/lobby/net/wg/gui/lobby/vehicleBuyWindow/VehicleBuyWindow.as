@@ -6,14 +6,16 @@ import flash.events.Event;
 import flash.filters.DropShadowFilter;
 
 import net.wg.data.Colors;
-import net.wg.data.constants.Currencies;
 import net.wg.data.constants.IconsTypes;
+import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 import net.wg.gui.components.controls.VO.ActionPriceVO;
 import net.wg.infrastructure.base.meta.IVehicleBuyWindowMeta;
 import net.wg.infrastructure.base.meta.impl.VehicleBuyWindowMeta;
 import net.wg.infrastructure.constants.WindowViewInvalidationType;
 import net.wg.infrastructure.interfaces.IWindow;
 import net.wg.utils.ILocale;
+
+import org.idmedia.as3commons.util.StringUtils;
 
 import scaleform.clik.constants.ConstrainMode;
 import scaleform.clik.constants.InvalidationType;
@@ -36,6 +38,8 @@ public class VehicleBuyWindow extends VehicleBuyWindowMeta implements IVehicleBu
     private static const INV_TOTAL_RESULT:String = "InvTotalResult";
 
     private static const INV_EXPAND:String = "InvExpand";
+
+    private static const EMPTY_STR:String = "";
 
     public var footerMc:FooterMc = null;
 
@@ -101,16 +105,6 @@ public class VehicleBuyWindow extends VehicleBuyWindowMeta implements IVehicleBu
         this.moveFocusToSubmitButton();
     }
 
-    override protected function onPopulate():void {
-        super.onPopulate();
-        if (App.globalVarsMgr.isKoreaS()) {
-            this.footerMc.showWarning();
-            this.backgroundMc.height = this.backgroundMc.height + WARNING_HEIGHT;
-            this.height = _originalHeight + WARNING_HEIGHT;
-            window.updateSize(this.width, this.height, true);
-        }
-    }
-
     override protected function configUI():void {
         super.configUI();
         this._goldColor = this.footerMc.totalGoldPrice.textColor;
@@ -135,13 +129,11 @@ public class VehicleBuyWindow extends VehicleBuyWindowMeta implements IVehicleBu
         var _loc3_:Number = NaN;
         var _loc4_:int = 0;
         var _loc5_:int = 0;
-        var _loc6_:Object = null;
-        var _loc7_:ActionPriceVO = null;
-        var _loc8_:DropShadowFilter = null;
-        var _loc9_:Object = null;
-        var _loc10_:Number = NaN;
-        var _loc11_:Number = NaN;
-        var _loc12_:Boolean = false;
+        var _loc6_:DropShadowFilter = null;
+        var _loc7_:Object = null;
+        var _loc8_:Number = NaN;
+        var _loc9_:Number = NaN;
+        var _loc10_:Boolean = false;
         super.draw();
         if (window && isInvalid(WindowViewInvalidationType.POSITION_INVALID)) {
             _loc2_ = App.appWidth;
@@ -162,41 +154,24 @@ public class VehicleBuyWindow extends VehicleBuyWindowMeta implements IVehicleBu
             }
         }
         var _loc1_:ILocale = App.utils.locale;
-        if (this._initInfo && isInvalid(InvalidationType.DATA)) {
-            _loc6_ = {"vehiclename": this._initInfo.name};
+        if (this._initInfo != null && isInvalid(InvalidationType.DATA)) {
+            _loc6_ = this.headerMc.tankPriceLabel.filters[0];
             this.window.titleUseHtml = true;
-            window.title = _loc1_.makeString(DIALOGS.BUYVEHICLEDIALOG_TITLE, _loc6_);
-            _loc6_["vehiclename"] = this._initInfo.shortName;
-            this.headerMc.tankPriceLabel.htmlText = _loc1_.makeString(DIALOGS.BUYVEHICLEDIALOG_PRICELABEL, _loc6_);
+            window.title = this._initInfo.title;
             this.headerMc.tankName.htmlText = this._initInfo.longName;
             this.headerMc.tankDescr.text = this._initInfo.description;
-            this.headerMc.icon.tankType = this._initInfo.type;
-            this.headerMc.icon.image = this._initInfo.icon;
-            this.headerMc.icon.nation = this._initInfo.nation;
-            this.headerMc.icon.level = this._initInfo.level;
-            this.headerMc.icon.isElite = this._initInfo.isElite;
-            this.headerMc.icon.isPremium = this._initInfo.isPremium;
             this.bodyMc.tankmenLabel.htmlText = this._initInfo.tankmenLabel;
-            this.bodyMc.scoolBtn.updatePrice(this._initInfo.studyPriceCredits, IconsTypes.CREDITS, this._initInfo.studyPriceCreditsActionDataVo);
-            this.bodyMc.academyBtn.updatePrice(this._initInfo.studyPriceGold, IconsTypes.GOLD, this._initInfo.studyPriceGoldActionDataVo);
-            this.bodyMc.freeBtn.updatePrice(0, "");
-            this.bodyMc.freeBtn.data = 0;
-            this.bodyMc.freeBtn.enabled = !this._initInfo.isStudyDisabled;
-            this.bodyMc.scoolBtn.data = this._initInfo.studyPriceCredits;
-            this.bodyMc.scoolBtn.enabled = this._userTotalCredits >= this._initInfo.studyPriceCredits && !this._initInfo.isStudyDisabled;
-            this.bodyMc.academyBtn.data = this._initInfo.studyPriceGold;
-            this.bodyMc.academyBtn.enabled = this._userTotalGold >= this._initInfo.studyPriceGold && !this._initInfo.isStudyDisabled;
-            this.bodyMc.slotPrice.text = _loc1_.integer(this._initInfo.slotPrice);
-            _loc7_ = this._initInfo.slotActionPriceDataVo;
-            this.bodyMc.slotActionPrice.setData(_loc7_);
-            this.bodyMc.slotPrice.visible = !this.bodyMc.slotActionPrice.visible;
-            this.bodyMc.scoolBtn.nation = this.bodyMc.academyBtn.nation = this.bodyMc.freeBtn.nation = this._initInfo.nation;
-            _loc8_ = this.headerMc.tankPriceLabel.filters[0];
-            this.bodyMc.crewCheckbox.textField.filters = this.bodyMc.ammoCheckbox.textField.filters = this.bodyMc.slotCheckbox.textField.filters = [_loc8_];
+            this.footerMc.submitBtn.label = this._initInfo.submitBtnLabel;
+            this.footerMc.cancelBtn.label = this._initInfo.cancelBtnLabel;
+            this.initVehicleIcon();
+            this.initStudyButtons();
+            this.initPriceControls();
+            this.bodyMc.crewCheckbox.label = this._initInfo.crewCheckbox;
+            this.bodyMc.crewCheckbox.textField.filters = this.bodyMc.ammoCheckbox.textField.filters = this.bodyMc.slotCheckbox.textField.filters = [_loc6_];
             this.updateRentItems();
-            _loc9_ = this.headerMc.rentDD.dataProvider[this.headerMc.rentDD.selectedIndex];
-            if (this.headerMc.rentDD.visible && _loc9_) {
-                this.checkRentDDSelectedItem(_loc9_.data);
+            _loc7_ = this.headerMc.rentDD.dataProvider[this.headerMc.rentDD.selectedIndex];
+            if (this.headerMc.rentDD.visible && _loc7_) {
+                this.checkRentDDSelectedItem(_loc7_.data);
             }
             else {
                 this.updateVehiclePrice();
@@ -207,41 +182,41 @@ public class VehicleBuyWindow extends VehicleBuyWindowMeta implements IVehicleBu
         }
         if (isInvalid(INV_TOTAL_RESULT)) {
             this.headerMc.rentIcon.visible = this._selectedRentId != VehicleBuyRentItemVO.DEF_ITEM_ID;
-            _loc10_ = !!this.bodyMc.slotCheckbox.selected ? Number(this._initInfo.slotPrice) : Number(0);
-            _loc11_ = !!this.bodyMc.ammoCheckbox.selected ? Number(this._initInfo.ammoPrice) : Number(0);
+            _loc8_ = !!this.bodyMc.slotCheckbox.selected ? Number(this._initInfo.slotPrice) : Number(0);
+            _loc9_ = !!this.bodyMc.ammoCheckbox.selected ? Number(this._initInfo.ammoPrice) : Number(0);
             if (this._initInfo.vehiclePrice.isGold) {
-                _loc10_ = _loc10_ + this._initInfo.vehiclePrice.price;
+                _loc8_ = _loc8_ + this._initInfo.vehiclePrice.price;
             }
             else {
-                _loc11_ = _loc11_ + this._initInfo.vehiclePrice.price;
+                _loc9_ = _loc9_ + this._initInfo.vehiclePrice.price;
             }
             if (!this.bodyMc.crewCheckbox.selected) {
                 if (this.bodyMc.isGoldPriceSelected) {
-                    _loc10_ = _loc10_ + this.bodyMc.selectedPrice;
+                    _loc8_ = _loc8_ + this.bodyMc.selectedPrice;
                 }
                 else {
-                    _loc11_ = _loc11_ + this.bodyMc.selectedPrice;
+                    _loc9_ = _loc9_ + this.bodyMc.selectedPrice;
                 }
             }
-            this.footerMc.totalGoldPrice.text = _loc1_.gold(_loc10_);
-            _loc11_ = !!isNaN(_loc11_) ? Number(0) : Number(_loc11_);
-            this.footerMc.totalCreditsPrice.text = _loc1_.integer(_loc11_);
-            _loc12_ = true;
-            if (_loc10_ > this._userTotalGold) {
+            this.footerMc.totalGoldPrice.text = _loc1_.gold(_loc8_);
+            _loc9_ = !!isNaN(_loc9_) ? Number(0) : Number(_loc9_);
+            this.footerMc.totalCreditsPrice.text = _loc1_.integer(_loc9_);
+            _loc10_ = true;
+            if (_loc8_ > this._userTotalGold) {
                 this.footerMc.totalGoldPrice.textColor = Colors.ERROR_COLOR;
-                _loc12_ = false;
+                _loc10_ = false;
             }
             else {
                 this.footerMc.totalGoldPrice.textColor = this._goldColor;
             }
-            if (_loc11_ > this._userTotalCredits) {
+            if (_loc9_ > this._userTotalCredits) {
                 this.footerMc.totalCreditsPrice.textColor = Colors.ERROR_COLOR;
-                _loc12_ = false;
+                _loc10_ = false;
             }
             else {
                 this.footerMc.totalCreditsPrice.textColor = this._creditsColor;
             }
-            this.footerMc.submitBtn.enabled = _loc12_ && this._isSubmitBtnEnabled;
+            this.footerMc.submitBtn.enabled = _loc10_ && this._isSubmitBtnEnabled;
         }
     }
 
@@ -272,6 +247,12 @@ public class VehicleBuyWindow extends VehicleBuyWindowMeta implements IVehicleBu
     override protected function setInitData(param1:BuyingVehicleVO):void {
         this.expand(param1.expanded, true);
         this._initInfo = param1;
+        if (StringUtils.isNotEmpty(this._initInfo.warningMsg)) {
+            this.footerMc.showWarning(this._initInfo.warningMsg);
+            this.backgroundMc.height = this.backgroundMc.height + WARNING_HEIGHT;
+            this.height = _originalHeight + WARNING_HEIGHT;
+            window.updateSize(this.width, this.height, true);
+        }
         invalidate(InvalidationType.DATA, INV_TOTAL_RESULT);
     }
 
@@ -309,6 +290,35 @@ public class VehicleBuyWindow extends VehicleBuyWindowMeta implements IVehicleBu
         setFocus(this.footerMc.submitBtn);
     }
 
+    private function initPriceControls():void {
+        this.headerMc.tankPriceLabel.htmlText = this._initInfo.priceLabel;
+        this.bodyMc.slotPrice.text = App.utils.locale.integer(this._initInfo.slotPrice);
+        this.bodyMc.slotActionPrice.setData(this._initInfo.slotActionPriceDataVo);
+        this.bodyMc.slotPrice.visible = !this.bodyMc.slotActionPrice.visible;
+    }
+
+    private function initStudyButtons():void {
+        this.bodyMc.scoolBtn.updatePrice(this._initInfo.studyPriceCredits, IconsTypes.CREDITS, this._initInfo.studyPriceCreditsActionDataVo);
+        this.bodyMc.academyBtn.updatePrice(this._initInfo.studyPriceGold, IconsTypes.GOLD, this._initInfo.studyPriceGoldActionDataVo);
+        this.bodyMc.freeBtn.updatePrice(0, EMPTY_STR);
+        this.bodyMc.freeBtn.data = 0;
+        this.bodyMc.freeBtn.enabled = !this._initInfo.isStudyDisabled;
+        this.bodyMc.scoolBtn.data = this._initInfo.studyPriceCredits;
+        this.bodyMc.scoolBtn.enabled = this._userTotalCredits >= this._initInfo.studyPriceCredits && !this._initInfo.isStudyDisabled;
+        this.bodyMc.academyBtn.data = this._initInfo.studyPriceGold;
+        this.bodyMc.academyBtn.enabled = this._userTotalGold >= this._initInfo.studyPriceGold && !this._initInfo.isStudyDisabled;
+        this.bodyMc.scoolBtn.nation = this.bodyMc.academyBtn.nation = this.bodyMc.freeBtn.nation = this._initInfo.nation;
+    }
+
+    private function initVehicleIcon():void {
+        this.headerMc.icon.tankType = this._initInfo.type;
+        this.headerMc.icon.image = this._initInfo.icon;
+        this.headerMc.icon.nation = this._initInfo.nation;
+        this.headerMc.icon.level = this._initInfo.level;
+        this.headerMc.icon.isElite = this._initInfo.isElite;
+        this.headerMc.icon.isPremium = this._initInfo.isPremium;
+    }
+
     private function checkAmmo():void {
         var _loc1_:ILocale = null;
         if (this._initInfo.isNoAmmo) {
@@ -328,7 +338,7 @@ public class VehicleBuyWindow extends VehicleBuyWindowMeta implements IVehicleBu
         var _loc2_:ActionPriceVO = this._initInfo.actualActionPriceDataVo;
         this.headerMc.tankActionPrice.setData(_loc2_);
         this.headerMc.tankPrice.visible = !this.headerMc.tankActionPrice.visible;
-        this.headerMc.tankPrice.icon = !!this._initInfo.vehiclePrice.isGold ? Currencies.GOLD : Currencies.CREDITS;
+        this.headerMc.tankPrice.icon = !!this._initInfo.vehiclePrice.isGold ? CURRENCIES_CONSTANTS.GOLD : CURRENCIES_CONSTANTS.CREDITS;
         this.headerMc.tankPrice.textColor = !!this._initInfo.vehiclePrice.isGold ? Number(this._goldColor) : Number(this._creditsColor);
         this.headerMc.tankPrice.text = _loc1_.integer(this._initInfo.vehiclePrice.price);
     }

@@ -35,5 +35,21 @@ public class ControlsSettingsDataVo extends SettingsDataVo {
             "backDraftInvert": createControl(ControlsFactory.TYPE_CHECKBOX).build()
         });
     }
+
+    override protected function onDispose():void {
+        if (this.keyboardImportantBinds) {
+            this.keyboardImportantBinds.splice(0, this.keyboardImportantBinds.length);
+            this.keyboardImportantBinds = null;
+        }
+        this.keysLayoutOrder = null;
+        this.keyboard = null;
+        this.mouseHorzInvert = null;
+        this.mouseArcadeSens = null;
+        this.mouseVertInvert = null;
+        this.mouseSniperSens = null;
+        this.mouseStrategicSens = null;
+        this.backDraftInvert = null;
+        super.onDispose();
+    }
 }
 }

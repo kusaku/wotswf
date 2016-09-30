@@ -39,7 +39,7 @@ public class CustomizationSlotsPanelVO extends DAAPIDataClass {
             this._groups[_loc1_].dispose();
             _loc1_++;
         }
-        this._groups.slice(0, _loc2_);
+        this._groups.splice(0, _loc2_);
         this._groups = null;
         super.onDispose();
     }

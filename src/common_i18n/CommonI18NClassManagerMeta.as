@@ -103,6 +103,8 @@ package
       
       public static const VEHICLE_PREVIEW:Class = VEHICLE_PREVIEW;
       
+      public static const VEH_COMPARE:Class = VEH_COMPARE;
+      
       public static const WAITING:Class = WAITING;
        
       

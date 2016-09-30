@@ -278,14 +278,13 @@ public class ExchangeXPWindow extends ExchangeXpWindowMeta implements IExchangeX
     }
 
     public function as_setWalletStatus(param1:Object):void {
-        var _loc5_:Boolean = false;
         var _loc2_:IWalletStatusVO = App.utils.voMgr.walletStatusVO;
         _loc2_.update(param1);
         var _loc3_:* = !this.onHandHaveNotMoney.updateStatus(_loc2_.goldStatus);
         this.resultHaveNotMoney.updateStatus(_loc2_.goldStatus);
         var _loc4_:* = !this.onHandHaveNotFreeXp.updateStatus(_loc2_.freeXpStatus);
         this.resultHaveNotFreeXp.updateStatus(_loc2_.freeXpStatus);
-        _loc5_ = _loc3_ && _loc4_;
+        var _loc5_:Boolean = _loc3_ && _loc4_;
         this.itGoldBefore.visible = _loc3_;
         this.itGoldResult.visible = _loc3_;
         this.itExperienceBefore.visible = _loc4_;

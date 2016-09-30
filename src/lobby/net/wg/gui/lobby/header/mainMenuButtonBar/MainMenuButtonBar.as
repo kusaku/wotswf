@@ -1,6 +1,7 @@
 package net.wg.gui.lobby.header.mainMenuButtonBar {
 import flash.text.TextFieldAutoSize;
 
+import net.wg.data.constants.Values;
 import net.wg.gui.components.controls.MainMenuButton;
 import net.wg.gui.interfaces.ISoundButtonEx;
 import net.wg.gui.lobby.header.vo.HangarMenuTabItemVO;
@@ -34,17 +35,19 @@ public class MainMenuButtonBar extends ButtonBar {
 
     override protected function updateRenderers():void {
         var _loc5_:int = 0;
-        var _loc6_:Button = null;
-        var _loc7_:Boolean = false;
+        var _loc6_:int = 0;
+        var _loc7_:Button = null;
+        var _loc8_:Boolean = false;
         var _loc1_:Number = this.paddingLeft + this.paddingRight;
         var _loc2_:int = -1;
         if (_renderers[0] is Class(_itemRendererClass)) {
-            while (_renderers.length > _dataProvider.length) {
-                _loc5_ = _renderers.length - 1;
-                if (container.contains(_renderers[_loc5_])) {
-                    container.removeChild(_renderers[_loc5_]);
+            _loc5_ = _dataProvider.length;
+            while (_renderers.length > _loc5_) {
+                _loc6_ = _renderers.length - 1;
+                if (container.contains(_renderers[_loc6_])) {
+                    container.removeChild(_renderers[_loc6_]);
                 }
-                _renderers.splice(_loc5_--, 1);
+                _renderers.splice(_loc6_--, 1);
             }
         }
         else {
@@ -56,35 +59,35 @@ public class MainMenuButtonBar extends ButtonBar {
         var _loc3_:uint = _dataProvider.length;
         var _loc4_:uint = 0;
         while (_loc4_ < _loc3_ && _loc2_ == -1) {
-            _loc7_ = false;
+            _loc8_ = false;
             if (_loc4_ < _renderers.length) {
-                _loc6_ = _renderers[_loc4_];
+                _loc7_ = _renderers[_loc4_];
             }
             else {
-                _loc6_ = Button(App.utils.classFactory.getComponent(_itemRenderer, Button));
-                this.setupRenderer(_loc6_, _loc4_);
-                _loc7_ = true;
+                _loc7_ = Button(App.utils.classFactory.getComponent(_itemRenderer, Button));
+                this.setupRenderer(_loc7_, _loc4_);
+                _loc8_ = true;
             }
-            this.populateRendererData(_loc6_, _loc4_);
+            this.populateRendererData(_loc7_, _loc4_);
             if (_autoSize == TextFieldAutoSize.NONE && _buttonWidth > 0) {
-                _loc6_.width = Math.round(_buttonWidth);
+                _loc7_.width = Math.round(_buttonWidth);
             }
             else if (_autoSize != TextFieldAutoSize.NONE) {
-                _loc6_.autoSize = _autoSize;
+                _loc7_.autoSize = _autoSize;
             }
-            _loc6_.validateNow();
+            _loc7_.validateNow();
             if (_loc1_ > MAX_WIDTH) {
-                _loc6_.dispose();
+                _loc7_.dispose();
                 break;
             }
-            if (_loc7_) {
-                _loc6_.x = _loc1_ ^ 0;
-                _loc6_.y = this.paddingTop;
-                _loc6_.group = _group;
-                container.addChild(_loc6_);
-                _renderers.push(_loc6_);
+            if (_loc8_) {
+                _loc7_.x = _loc1_ ^ 0;
+                _loc7_.y = this.paddingTop ^ 0;
+                _loc7_.group = _group;
+                container.addChild(_loc7_);
+                _renderers.push(_loc7_);
             }
-            _loc1_ = _loc1_ + (_loc6_.width + spacing);
+            _loc1_ = _loc1_ + (_loc7_.width + spacing);
             _loc4_++;
         }
         this.updateLayout(_loc1_);
@@ -123,45 +126,58 @@ public class MainMenuButtonBar extends ButtonBar {
         ISoundButtonEx(param1).mouseEnabledOnDisabled = true;
     }
 
+    public function getButtonByValue(param1:String):Button {
+        var _loc2_:FindData = this.findButtonIndex(param1);
+        var _loc3_:int = _loc2_.index >= 0 ? int(_loc2_.index) : _loc2_.subIndex >= 0 ? int(_loc2_.subIndex) : -1;
+        if (_loc3_ >= 0) {
+            return getButtonAt(_loc3_);
+        }
+        return null;
+    }
+
     public function setCurrent(param1:String):void {
-        var _loc3_:HangarMenuTabItemVO = null;
-        var _loc4_:int = 0;
-        var _loc5_:Array = null;
-        var _loc8_:uint = 0;
         this.selectedIndex = -1;
         this.enabled = param1 != PREBATTLE;
-        var _loc2_:int = _dataProvider.length;
-        var _loc6_:Boolean = false;
-        var _loc7_:uint = 0;
-        while (_loc7_ < _loc2_) {
-            _loc3_ = HangarMenuTabItemVO(_dataProvider[_loc7_]);
-            if (param1 == _loc3_.value) {
-                this.selectedIndex = _loc7_;
-                break;
-            }
-            if (_loc3_.subValues != null) {
-                _loc5_ = _loc3_.subValues;
-                _loc4_ = _loc5_.length;
-                _loc8_ = 0;
-                while (_loc8_ < _loc4_) {
-                    if (param1 == _loc5_[_loc8_]) {
-                        this.subItemSelectedIndex = _loc7_;
-                        _loc6_ = true;
-                        break;
-                    }
-                    _loc8_++;
-                }
-                if (_loc6_) {
-                    break;
-                }
-            }
-            _loc7_++;
+        var _loc2_:FindData = this.findButtonIndex(param1);
+        if (_loc2_.index >= 0) {
+            this.selectedIndex = _loc2_.index;
+        }
+        else if (_loc2_.subIndex >= 0) {
+            this.subItemSelectedIndex = _loc2_.subIndex;
         }
     }
 
     public function setDisableNav(param1:Boolean):void {
         this._disableNav = param1;
         this.enabled = !param1;
+    }
+
+    private function findButtonIndex(param1:String):FindData {
+        var _loc3_:HangarMenuTabItemVO = null;
+        var _loc4_:int = 0;
+        var _loc5_:Array = null;
+        var _loc7_:uint = 0;
+        var _loc2_:int = _dataProvider.length;
+        var _loc6_:uint = 0;
+        while (_loc6_ < _loc2_) {
+            _loc3_ = HangarMenuTabItemVO(_dataProvider[_loc6_]);
+            if (param1 == _loc3_.value) {
+                return new FindData(_loc6_);
+            }
+            if (_loc3_.subValues != null) {
+                _loc5_ = _loc3_.subValues;
+                _loc4_ = _loc5_.length;
+                _loc7_ = 0;
+                while (_loc7_ < _loc4_) {
+                    if (param1 == _loc5_[_loc7_]) {
+                        return new FindData(-1, _loc6_);
+                    }
+                    _loc7_++;
+                }
+            }
+            _loc6_++;
+        }
+        return new FindData();
     }
 
     private function updateLayout(param1:Number):void {
@@ -180,23 +196,20 @@ public class MainMenuButtonBar extends ButtonBar {
                 _loc3_ = -param1;
         }
         _loc4_ = _loc4_ + _loc3_;
-        var _loc5_:Number = 0;
-        while (_loc5_ < _renderers.length) {
-            _loc2_ = _renderers[_loc5_];
-            _loc2_.x = _loc4_;
+        var _loc5_:int = _renderers.length;
+        var _loc6_:Number = 0;
+        while (_loc6_ < _loc5_) {
+            _loc2_ = _renderers[_loc6_];
+            _loc2_.x = _loc4_ | 0;
             _loc4_ = _loc4_ + (_loc2_.width + spacing);
-            _loc5_++;
+            _loc6_++;
         }
     }
 
     private function updateSubItem(param1:Number, param2:String):void {
-        var _loc3_:MainMenuButton = null;
         if (param1 >= 0) {
-            _loc3_ = _renderers[this.subItemSelectedIndex] as MainMenuButton;
-            if (_loc3_) {
-                _loc3_.setExternalState(param2);
-            }
-            if (param2 == "") {
+            MainMenuButton(_renderers[this.subItemSelectedIndex]).setExternalState(param2);
+            if (param2 == Values.EMPTY_STR) {
                 this._subItemSelectedIndex = -1;
             }
         }
@@ -204,7 +217,7 @@ public class MainMenuButtonBar extends ButtonBar {
 
     override public function set selectedIndex(param1:int):void {
         super.selectedIndex = param1;
-        this.updateSubItem(this.subItemSelectedIndex, "");
+        this.updateSubItem(this.subItemSelectedIndex, Values.EMPTY_STR);
     }
 
     public function get subItemSelectedIndex():int {
@@ -212,7 +225,7 @@ public class MainMenuButtonBar extends ButtonBar {
     }
 
     public function set subItemSelectedIndex(param1:int):void {
-        this.updateSubItem(this._subItemSelectedIndex, "");
+        this.updateSubItem(this._subItemSelectedIndex, Values.EMPTY_STR);
         this._subItemSelectedIndex = param1;
         this.updateSubItem(this._subItemSelectedIndex, MainMenuButton.SUB_SELECTED);
     }
@@ -223,4 +236,25 @@ public class MainMenuButtonBar extends ButtonBar {
         }
     }
 }
+}
+
+class FindData {
+
+    private var _index:int = -1;
+
+    private var _subIndex:int = -1;
+
+    function FindData(param1:int = -1, param2:int = -1) {
+        super();
+        this._index = param1;
+        this._subIndex = param2;
+    }
+
+    public function get index():int {
+        return this._index;
+    }
+
+    public function get subIndex():int {
+        return this._subIndex;
+    }
 }

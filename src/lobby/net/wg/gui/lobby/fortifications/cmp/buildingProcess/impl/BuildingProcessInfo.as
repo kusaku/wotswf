@@ -83,6 +83,7 @@ public class BuildingProcessInfo extends MovieClip implements IDisposable, IFocu
     }
 
     public function setData(param1:BuildingProcessInfoVO):void {
+        var _loc2_:Boolean = false;
         this.model = param1;
         this.buildingName.htmlText = this.model.buildingName;
         this.statusMsg.htmlText = this.model.statusMsg;
@@ -91,7 +92,7 @@ public class BuildingProcessInfo extends MovieClip implements IDisposable, IFocu
         this.buildingImg.setState(this.model.buildingIcon);
         this.longDescription.htmlText = this.model.longDescr;
         this.applyButton.label = this.model.buttonLabel;
-        var _loc2_:Boolean = this.model.isVisibleBtn;
+        _loc2_ = this.model.isVisibleBtn;
         this.applyButton.visible = _loc2_;
         this.applyButton.enabled = this.model.isEnableBtn;
         this.builtMessage.visible = !_loc2_;

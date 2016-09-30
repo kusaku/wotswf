@@ -4,10 +4,12 @@ import flash.display.Sprite;
 import net.wg.data.constants.AtlasConstants;
 import net.wg.data.constants.InvalidationType;
 import net.wg.gui.battle.components.BattleUIComponent;
+import net.wg.gui.battle.views.minimap.MinimapEntryController;
 import net.wg.gui.battle.views.minimap.components.entries.constants.PersonalMinimapEntryConst;
+import net.wg.gui.battle.views.minimap.components.entries.interfaces.IMinimapEntryWithNonScaleContent;
 import net.wg.infrastructure.managers.IAtlasManager;
 
-public class ViewPointMinimapEntry extends BattleUIComponent {
+public class ViewPointMinimapEntry extends BattleUIComponent implements IMinimapEntryWithNonScaleContent {
 
     private static const YAW_CORRECTION_ANGLE:Number = 180;
 
@@ -38,6 +40,7 @@ public class ViewPointMinimapEntry extends BattleUIComponent {
         this._atlasManager.drawGraphics(AtlasConstants.BATTLE_ATLAS, PersonalMinimapEntryConst.ARROW_ATLAS_ITEM_NAME, this.arrowPlaceholder.graphics, "", true);
         this._atlasManager.drawGraphics(AtlasConstants.BATTLE_ATLAS, PersonalMinimapEntryConst.VIEW_SECTOR_LINE_ATLAS_ITEM_NAME, this.sectorLeft.graphics, "", true);
         this._atlasManager.drawGraphics(AtlasConstants.BATTLE_ATLAS, PersonalMinimapEntryConst.VIEW_SECTOR_LINE_ATLAS_ITEM_NAME, this.sectorRight.graphics, "", true);
+        MinimapEntryController.instance.registerScalableEntry(this, true);
     }
 
     override protected function draw():void {
@@ -68,7 +71,14 @@ public class ViewPointMinimapEntry extends BattleUIComponent {
         this.sectorRight = null;
         this.arrowPlaceholder = null;
         this._atlasManager = null;
+        MinimapEntryController.instance.unregisterScalableEntry(this, true);
         super.onDispose();
+    }
+
+    public function setContentNormalizedScale(param1:Number):void {
+        if (this.sectorLeft.scaleX != param1) {
+            this.sectorLeft.scaleX = this.sectorLeft.scaleY = this.sectorRight.scaleX = this.sectorRight.scaleY = param1;
+        }
     }
 }
 }

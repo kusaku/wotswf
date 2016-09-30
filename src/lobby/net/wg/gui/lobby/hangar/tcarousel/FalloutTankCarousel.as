@@ -4,17 +4,21 @@ import net.wg.gui.lobby.hangar.tcarousel.data.FalloutVehicleCarouselVO;
 import net.wg.gui.lobby.hangar.tcarousel.data.MultiselectionInfoVO;
 import net.wg.gui.lobby.hangar.tcarousel.data.MultiselectionSlotVO;
 import net.wg.gui.lobby.hangar.tcarousel.event.SlotEvent;
+import net.wg.gui.lobby.hangar.tcarousel.helper.ITankCarouselHelper;
 import net.wg.infrastructure.base.meta.IFalloutTankCarouselMeta;
 import net.wg.infrastructure.base.meta.impl.FalloutTankCarouselMeta;
 
-public class FalloutTankCarousel extends FalloutTankCarouselMeta implements IFalloutTankCarouselMeta {
+import scaleform.clik.constants.InvalidationType;
 
-    private static const COUNTER_POS_Y:Number = -41;
+public class FalloutTankCarousel extends FalloutTankCarouselMeta implements IFalloutTankCarouselMeta {
 
     public var multiselectionSlots:MultiselectionSlots = null;
 
     public function FalloutTankCarousel() {
         super();
+    }
+
+    override public function as_rowCount(param1:int):void {
     }
 
     override protected function configUI():void {
@@ -23,7 +27,6 @@ public class FalloutTankCarousel extends FalloutTankCarouselMeta implements IFal
         this.multiselectionSlots.addEventListener(SlotEvent.TYPE_SELECT, this.onMultiselectionSlotsTypeSelectHandler);
         this.multiselectionSlots.addEventListener(SlotEvent.TYPE_SHIFT, this.onMultiselectionSlotsTypeShiftHandler);
         this.multiselectionSlots.addEventListener(SlotEvent.TYPE_DEACTIVATED, this.onMultiselectionSlotsTypeDeactivatedHandler);
-        vehicleFilters.setCounterY(COUNTER_POS_Y);
     }
 
     override protected function onDispose():void {
@@ -34,6 +37,15 @@ public class FalloutTankCarousel extends FalloutTankCarouselMeta implements IFal
         this.multiselectionSlots.dispose();
         this.multiselectionSlots = null;
         super.onDispose();
+    }
+
+    override protected function getNewHelper():ITankCarouselHelper {
+        var _loc1_:ITankCarouselHelper = helper;
+        if (!(_loc1_ is TankCarouselHelper)) {
+            _loc1_ = new TankCarouselHelper();
+            invalidate(InvalidationType.SETTINGS);
+        }
+        return _loc1_;
     }
 
     override protected function getRendererVo():Class {
@@ -72,4 +84,37 @@ public class FalloutTankCarousel extends FalloutTankCarouselMeta implements IFal
         clearSlotS(param1.vehicleId);
     }
 }
+}
+
+import net.wg.gui.lobby.hangar.tcarousel.helper.ITankCarouselHelper;
+
+import scaleform.clik.utils.Padding;
+
+class TankCarouselHelper implements ITankCarouselHelper {
+
+    private static const PADDING:Padding = new Padding(68, 10, 10, 10);
+
+    function TankCarouselHelper() {
+        super();
+    }
+
+    public function get linkRenderer():String {
+        return "FalloutTankCarouselItemRendererUI";
+    }
+
+    public function get rendererWidth():Number {
+        return 173;
+    }
+
+    public function get rendererHeight():Number {
+        return 136;
+    }
+
+    public function get gap():Number {
+        return 4;
+    }
+
+    public function get padding():Padding {
+        return PADDING;
+    }
 }

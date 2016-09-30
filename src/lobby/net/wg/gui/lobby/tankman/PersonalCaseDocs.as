@@ -3,6 +3,7 @@ import flash.display.InteractiveObject;
 import flash.events.Event;
 
 import net.wg.data.constants.Currencies;
+import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 import net.wg.gui.components.carousels.CarouselBase;
 import net.wg.gui.components.carousels.PortraitsCarousel;
 import net.wg.gui.components.controls.ActionPrice;
@@ -125,8 +126,8 @@ public class PersonalCaseDocs extends UIComponentEx implements IViewStackContent
 
     private function updateTextColor():void {
         var _loc1_:Boolean = this.isHasMoney();
-        this.gold.textColor = !!_loc1_ ? Number(Currencies.TEXT_COLORS[Currencies.GOLD]) : Number(Currencies.TEXT_COLORS[Currencies.ERROR]);
-        this.credits.textColor = !!this.model.useOnlyGold ? Number(Currencies.TEXT_COLORS[Currencies.CREDITS]) : !!_loc1_ ? Number(Currencies.TEXT_COLORS[Currencies.CREDITS]) : Number(Currencies.TEXT_COLORS[Currencies.ERROR]);
+        this.gold.textColor = !!_loc1_ ? Number(Currencies.TEXT_COLORS[CURRENCIES_CONSTANTS.GOLD]) : Number(Currencies.TEXT_COLORS[CURRENCIES_CONSTANTS.ERROR]);
+        this.credits.textColor = !!this.model.useOnlyGold ? Number(Currencies.TEXT_COLORS[CURRENCIES_CONSTANTS.CREDITS]) : !!_loc1_ ? Number(Currencies.TEXT_COLORS[CURRENCIES_CONSTANTS.CREDITS]) : Number(Currencies.TEXT_COLORS[CURRENCIES_CONSTANTS.ERROR]);
         this.actionPriceGold.textColorType = !!_loc1_ ? ActionPrice.TEXT_COLOR_TYPE_ICON : ActionPrice.TEXT_COLOR_TYPE_ERROR;
         this.actionPriceCredits.textColorType = !!this.model.useOnlyGold ? ActionPrice.TEXT_COLOR_TYPE_ICON : !!_loc1_ ? ActionPrice.TEXT_COLOR_TYPE_ICON : ActionPrice.TEXT_COLOR_TYPE_ERROR;
     }

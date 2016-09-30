@@ -4,10 +4,11 @@ import flash.text.TextField;
 import net.wg.data.VO.StoreTableVO;
 import net.wg.data.constants.Errors;
 import net.wg.data.constants.generated.FITTING_TYPES;
+import net.wg.gui.lobby.components.InfoMessageComponent;
 import net.wg.gui.lobby.store.interfaces.IStoreTable;
 import net.wg.infrastructure.base.meta.impl.StoreTableMeta;
-import net.wg.infrastructure.exceptions.ArgumentException;
 import net.wg.infrastructure.exceptions.NullPointerException;
+import net.wg.utils.IAssertable;
 
 import scaleform.clik.interfaces.IListItemRenderer;
 
@@ -15,31 +16,34 @@ public class StoreTable extends StoreTableMeta implements IStoreTable {
 
     private static const INVALID_TABLE:String = "invalidTable";
 
+    private static const TABLE_VO_STR:String = "_tableVO";
+
+    private static const LINKAGE_STR:String = "linkage";
+
     public var header:TableHeader = null;
 
     public var list:StoreList = null;
 
     public var headerTitle:TextField = null;
 
+    public var noItemsInfoCmp:InfoMessageComponent = null;
+
     private var _tableVO:StoreTableVO = null;
 
     private var _tableDP:StoreTableDataProvider = null;
-
-    private var _type:String = null;
 
     private var _vehicleRendererLinkage:String = null;
 
     private var _moduleRendererLinkage:String = null;
 
+    private var _asserter:IAssertable;
+
+    private var _isVehicleCompareAvailable:Boolean = false;
+
     public function StoreTable() {
+        this._asserter = App.utils.asserter;
         super();
         this._tableDP = new StoreTableDataProvider();
-    }
-
-    private static function assertNotNull(param1:Object, param2:String):void {
-        if (App.instance) {
-            App.utils.asserter.assert(param1 != null, param2 + Errors.CANT_NULL, NullPointerException);
-        }
     }
 
     override protected function configUI():void {
@@ -49,16 +53,8 @@ public class StoreTable extends StoreTableMeta implements IStoreTable {
 
     override protected function draw():void {
         super.draw();
-        if (isInvalid(INVALID_TABLE) && this._tableVO) {
+        if (isInvalid(INVALID_TABLE) && this._tableVO != null) {
             this.updateTable();
-        }
-    }
-
-    override protected function onPopulate():void {
-        super.onPopulate();
-        this._tableVO = new StoreTableVO();
-        if (this._type) {
-            invalidate(INVALID_TABLE);
         }
     }
 
@@ -69,44 +65,32 @@ public class StoreTable extends StoreTableMeta implements IStoreTable {
         this.list = null;
         this.headerTitle = null;
         this._tableVO = null;
-        this._type = null;
         this._vehicleRendererLinkage = null;
         this._moduleRendererLinkage = null;
+        this._asserter = null;
         this._tableDP.cleanUp();
         this._tableDP = null;
+        this.noItemsInfoCmp.dispose();
+        this.noItemsInfoCmp = null;
         super.onDispose();
+    }
+
+    override protected function setData(param1:StoreTableVO):void {
+        this._tableVO = param1;
+        invalidate(INVALID_TABLE);
     }
 
     public function as_getTableDataProvider():Object {
         return this._tableDP;
     }
 
-    public function as_scrollToFirst(param1:Number, param2:String, param3:String):void {
-    }
-
-    public function as_setCredits(param1:Number):void {
-        StoreTable.assertNotNull(this._tableVO, "_tableVO");
-        this._tableVO.credits = param1;
-    }
-
-    public function as_setGold(param1:Number):void {
-        StoreTable.assertNotNull(this._tableVO, "_tableVO");
-        this._tableVO.gold = param1;
-    }
-
-    public function as_setTableType(param1:String):void {
-        StoreTable.assertNotNull(param1, "TableType");
-        this._type = param1;
-        invalidate(INVALID_TABLE);
-    }
-
     public function setModuleRendererLinkage(param1:String):void {
-        StoreTable.assertNotNull(param1, "linkage");
+        this._asserter.assertNotNull(param1, LINKAGE_STR + Errors.CANT_NULL, NullPointerException);
         this._moduleRendererLinkage = param1;
     }
 
     public function setVehicleRendererLinkage(param1:String):void {
-        StoreTable.assertNotNull(param1, "linkage");
+        this._asserter.assertNotNull(param1, LINKAGE_STR + Errors.CANT_NULL, NullPointerException);
         this._vehicleRendererLinkage = param1;
     }
 
@@ -114,33 +98,44 @@ public class StoreTable extends StoreTableMeta implements IStoreTable {
         this.header.headerInfo.countField.text = param1;
     }
 
+    public function updateVehicleCompareAvailable(param1:Boolean):void {
+        this._isVehicleCompareAvailable = param1;
+        this.header.headerInfo.isCompareNeed(param1);
+    }
+
+    private function assertNotNull(param1:Object, param2:String):void {
+        if (App.instance) {
+            App.utils.asserter.assert(param1 != null, param2 + Errors.CANT_NULL, NullPointerException);
+        }
+    }
+
     private function updateTable():void {
-        StoreTable.assertNotNull(this._type, "_type");
-        StoreTable.assertNotNull(this._moduleRendererLinkage, "moduleRendererLinkage");
-        StoreTable.assertNotNull(this._vehicleRendererLinkage, "vehicleRendererLinkage");
+        var _loc1_:String = this._tableVO.type;
+        this._asserter.assertNotNull(_loc1_, "_type");
+        this._asserter.assertNotNull(this._moduleRendererLinkage, "moduleRendererLinkage" + Errors.CANT_NULL, NullPointerException);
+        this._asserter.assertNotNull(this._vehicleRendererLinkage, "vehicleRendererLinkage" + Errors.CANT_NULL, NullPointerException);
         this.list.scrollToIndex(0);
-        this.setupRendererType(this._type);
-        this.setupDataProvider(this._type);
+        this.setupRendererType(_loc1_);
+        this.setupDataProvider(_loc1_);
+        this.noItemsInfoCmp.visible = this._tableVO.showNoItemsInfo;
+        if (this._tableVO.showNoItemsInfo) {
+            this.noItemsInfoCmp.setData(this._tableVO.noItemsInfo);
+            this.noItemsInfoCmp.x = this.list.x + (this.list.width - this.noItemsInfoCmp.width >> 1) | 0;
+            this.noItemsInfoCmp.y = this.list.y + (this.list.height - this.noItemsInfoCmp.height >> 1) | 0;
+        }
     }
 
     private function setupRendererType(param1:String):void {
-        var rendererName:String = null;
-        var classRef:Class = null;
-        var type:String = param1;
-        rendererName = this._moduleRendererLinkage;
-        if (type == FITTING_TYPES.VEHICLE) {
-            rendererName = this._vehicleRendererLinkage;
+        var _loc2_:String = this._moduleRendererLinkage;
+        if (param1 == FITTING_TYPES.VEHICLE) {
+            _loc2_ = this._vehicleRendererLinkage;
         }
-        this.detectRendererHeight(rendererName);
-        try {
-            classRef = App.utils.classFactory.getClass(rendererName);
-            if (this.list.itemRenderer != classRef) {
-                this.list.itemRendererName = rendererName;
-            }
-            return;
-        }
-        catch (error:ReferenceError) {
-            throw new ArgumentException(Errors.BAD_LINKAGE + rendererName, error.errorID);
+        this.header.headerInfo.isCompareNeed(this._isVehicleCompareAvailable && param1 == FITTING_TYPES.VEHICLE);
+        this.detectRendererHeight(_loc2_);
+        var _loc3_:Class = App.utils.classFactory.getClass(_loc2_);
+        this._asserter.assertNotNull(_loc3_, Errors.BAD_LINKAGE + _loc2_);
+        if (this.list.itemRenderer != _loc3_) {
+            this.list.itemRendererName = _loc2_;
         }
     }
 

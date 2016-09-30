@@ -199,24 +199,6 @@ package
       
       public static const INSCRIPTION_USA_INSCRIPTION_08:String = "#vehicle_customization_cn:inscription/usa/inscription_08";
       
-      public static const INSCRIPTION_USA_INSCRIPTION_09:String = "#vehicle_customization_cn:inscription/usa/inscription_09";
-      
-      public static const INSCRIPTION_USA_INSCRIPTION_10:String = "#vehicle_customization_cn:inscription/usa/inscription_10";
-      
-      public static const INSCRIPTION_USA_INSCRIPTION_11:String = "#vehicle_customization_cn:inscription/usa/inscription_11";
-      
-      public static const INSCRIPTION_USA_INSCRIPTION_12:String = "#vehicle_customization_cn:inscription/usa/inscription_12";
-      
-      public static const INSCRIPTION_USA_INSCRIPTION_13:String = "#vehicle_customization_cn:inscription/usa/inscription_13";
-      
-      public static const INSCRIPTION_USA_INSCRIPTION_14:String = "#vehicle_customization_cn:inscription/usa/inscription_14";
-      
-      public static const INSCRIPTION_USA_INSCRIPTION_15:String = "#vehicle_customization_cn:inscription/usa/inscription_15";
-      
-      public static const INSCRIPTION_USA_INSCRIPTION_16:String = "#vehicle_customization_cn:inscription/usa/inscription_16";
-      
-      public static const INSCRIPTION_USA_INSCRIPTION_17:String = "#vehicle_customization_cn:inscription/usa/inscription_17";
-      
       public static const INSCRIPTION_CHINA_INSCRIPTION_01:String = "#vehicle_customization_cn:inscription/china/inscription_01";
       
       public static const INSCRIPTION_CHINA_INSCRIPTION_02:String = "#vehicle_customization_cn:inscription/china/inscription_02";

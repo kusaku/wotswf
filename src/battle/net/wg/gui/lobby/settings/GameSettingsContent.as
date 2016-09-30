@@ -9,6 +9,7 @@ import net.wg.gui.components.controls.DropdownMenu;
 import net.wg.gui.components.controls.InfoIcon;
 import net.wg.gui.components.controls.LabelControl;
 import net.wg.gui.components.controls.Slider;
+import net.wg.gui.lobby.settings.components.RadioButtonBar;
 import net.wg.infrastructure.base.UIComponentEx;
 
 public class GameSettingsContent extends UIComponentEx {
@@ -99,9 +100,11 @@ public class GameSettingsContent extends UIComponentEx {
 
     public var fieldSetMinimap:FieldSet = null;
 
-    public var showBattleEfficiencyRibbonsCheckbox:CheckBox = null;
-
     public var simplifiedTTCCheckbox:CheckBox = null;
+
+    public var carouselTypeFieldSet:FieldSet = null;
+
+    public var carouselTypeButtonBar:RadioButtonBar = null;
 
     public function GameSettingsContent() {
         super();
@@ -122,6 +125,8 @@ public class GameSettingsContent extends UIComponentEx {
         this.showTimeMessageCheckbox.label = SETTINGS.CHAT_SHOWTIMEMESSAGE;
         this.invitesFromFriendsOnlyCheckbox.label = SETTINGS.CHAT_INVITESFROMFRIENDSONLY;
         this.receiveClanInvitesNotificationsCheckbox.label = SETTINGS.CHAT_RECEIVECLANINVITESNOTIFICATIONS;
+        this.receiveClanInvitesNotificationsCheckbox.toolTip = TOOLTIPS.RECEIVECLANINVITESNOTIFICATIONS;
+        this.receiveClanInvitesNotificationsCheckbox.infoIcoType = InfoIcon.TYPE_INFO;
         this.receiveInvitesInBattleCheckbox.label = SETTINGS.CHAT_RECEIVEINVITESINBATTLE;
         this.receiveInvitesInBattleCheckbox.toolTip = TOOLTIPS.RECEIVEINVITESINBATTLE;
         this.receiveInvitesInBattleCheckbox.infoIcoType = InfoIcon.TYPE_INFO;
@@ -167,12 +172,10 @@ public class GameSettingsContent extends UIComponentEx {
         this.showVehModelsOnMapLabel.text = SETTINGS.GAME_SHOWVEHMODELSONMAP;
         this.showVehModelsOnMapLabel.toolTip = TOOLTIPS.SHOWVEHMODELSONMAP;
         this.showVehModelsOnMapLabel.infoIcoType = InfoIcon.TYPE_INFO;
-        this.showBattleEfficiencyRibbonsCheckbox.label = SETTINGS.GAME_SHOWBATTLEEFFICIENCYRIBBONS;
-        this.showBattleEfficiencyRibbonsCheckbox.toolTip = TOOLTIPS.SHOWBATTLEEFFICIENCYRIBBONS;
-        this.showBattleEfficiencyRibbonsCheckbox.infoIcoType = InfoIcon.TYPE_INFO;
         this.simplifiedTTCCheckbox.label = SETTINGS.GAME_SHOWSIMPLIFIEDVEHPARAMS;
         this.simplifiedTTCCheckbox.toolTip = TOOLTIPS.SHOWSIMPLIFIEDVEHPARAMS;
         this.simplifiedTTCCheckbox.infoIcoType = InfoIcon.TYPE_INFO;
+        this.carouselTypeFieldSet.label = SETTINGS.GAME_CAROUSELTYPE;
         super.configUI();
     }
 
@@ -261,10 +264,12 @@ public class GameSettingsContent extends UIComponentEx {
         this.minimapMaxViewRangeCheckbox = null;
         this.minimapDrawRangeCheckbox.dispose();
         this.minimapDrawRangeCheckbox = null;
-        this.showBattleEfficiencyRibbonsCheckbox.dispose();
-        this.showBattleEfficiencyRibbonsCheckbox = null;
         this.simplifiedTTCCheckbox.dispose();
         this.simplifiedTTCCheckbox = null;
+        this.carouselTypeFieldSet.dispose();
+        this.carouselTypeFieldSet = null;
+        this.carouselTypeButtonBar.dispose();
+        this.carouselTypeButtonBar = null;
         super.onDispose();
     }
 

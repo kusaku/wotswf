@@ -19,8 +19,7 @@ public class QuestsCurrentTab extends QuestsCurrentTabMeta implements IQuestsTab
 
     override protected function setQuestsData(param1:QuestsDataVO):void {
         super.setQuestsData(param1);
-        var _loc2_:Array = questsArray;
-        this._questContent.setQuestsData(_loc2_, param1.totalTasks);
+        this._questContent.setQuestsListData(questsArray, param1.rendererType);
         if (!param1.isSortable) {
             this._questContent.sortElementsUnVisible();
         }
@@ -43,6 +42,18 @@ public class QuestsCurrentTab extends QuestsCurrentTabMeta implements IQuestsTab
     override protected function onPopulate():void {
         super.onPopulate();
         this.questContent.sortingFunction = getSortedTableDataS;
+    }
+
+    public function as_showNoData():void {
+        this._questContent.setNoData();
+    }
+
+    public function as_showNoSelect():void {
+        this._questContent.setNotSelected();
+    }
+
+    public function as_showWaiting(param1:Boolean):void {
+        this._questContent.showWaiting = param1;
     }
 
     public function as_updateQuestInfo(param1:Object):void {

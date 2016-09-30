@@ -5,6 +5,8 @@ public class UserTags {
 
     public static const IGNORED:String = "ignored";
 
+    public static const IGNORED_TMP:String = "tmp_ignored";
+
     public static const MUTED:String = "muted";
 
     public static const CURRENT:String = "himself";
@@ -34,7 +36,11 @@ public class UserTags {
     }
 
     public static function isIgnored(param1:Array):Boolean {
-        return param1.indexOf(IGNORED) != -1;
+        return param1.indexOf(IGNORED) != -1 || param1.indexOf(IGNORED_TMP) != -1;
+    }
+
+    public static function isIgnoredTmp(param1:Array):Boolean {
+        return param1.indexOf(IGNORED_TMP) != -1;
     }
 
     public static function isMuted(param1:Array):Boolean {

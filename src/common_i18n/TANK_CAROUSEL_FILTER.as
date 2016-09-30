@@ -3,77 +3,97 @@ package
    public class TANK_CAROUSEL_FILTER
    {
       
-      public static const FILTER_POPOVER_TITLE:String = "#tank_carousel_filter:filter/popover/title";
+      public static const POPOVER_TITLE:String = "#tank_carousel_filter:popover/title";
       
-      public static const FILTER_POPOVER_LABEL_NATION:String = "#tank_carousel_filter:filter/popover/label/nation";
+      public static const POPOVER_LABEL_NATIONS:String = "#tank_carousel_filter:popover/label/nations";
       
-      public static const FILTER_POPOVER_LABEL_VEHICLE:String = "#tank_carousel_filter:filter/popover/label/vehicle";
+      public static const POPOVER_LABEL_VEHICLETYPES:String = "#tank_carousel_filter:popover/label/vehicleTypes";
       
-      public static const FILTER_POPOVER_LABEL_VEHICLELEVEL:String = "#tank_carousel_filter:filter/popover/label/vehicleLevel";
+      public static const POPOVER_LABEL_LEVELS:String = "#tank_carousel_filter:popover/label/levels";
       
-      public static const FILTER_POPOVER_LABEL_VEHICLEELITETYPE:String = "#tank_carousel_filter:filter/popover/label/vehicleEliteType";
+      public static const POPOVER_LABEL_SPECIALS:String = "#tank_carousel_filter:popover/label/specials";
       
-      public static const FILTER_POPOVER_LABEL_DEFAULTBTN:String = "#tank_carousel_filter:filter/popover/label/defaultBtn";
+      public static const POPOVER_LABEL_HIDDEN:String = "#tank_carousel_filter:popover/label/hidden";
       
-      public static const FILTER_POPOVER_LABEL_VEHICLELEASE:String = "#tank_carousel_filter:filter/popover/label/vehicleLease";
+      public static const POPOVER_LABEL_DEFAULTBUTTON:String = "#tank_carousel_filter:popover/label/defaultButton";
       
-      public static const FILTER_POPOVER_CHECKBOX_PREMIUM:String = "#tank_carousel_filter:filter/popover/checkBox/Premium";
+      public static const POPOVER_CHECKBOX_PREMIUM:String = "#tank_carousel_filter:popover/checkbox/premium";
       
-      public static const FILTER_POPOVER_CHECKBOX_ELITE:String = "#tank_carousel_filter:filter/popover/checkBox/Elite";
+      public static const POPOVER_CHECKBOX_ELITE:String = "#tank_carousel_filter:popover/checkbox/elite";
       
-      public static const FILTER_POPOVER_TOOLTIP_NATION_BODY:String = "#tank_carousel_filter:filter/popover/tooltip/nation/body";
+      public static const POPOVER_CHECKBOX_FAVORITE:String = "#tank_carousel_filter:popover/checkbox/favorite";
       
-      public static const FILTER_POPOVER_TOOLTIP_VEHICLETYPE_BODY:String = "#tank_carousel_filter:filter/popover/tooltip/vehicleType/body";
+      public static const POPOVER_CHECKBOX_HIDERENTED:String = "#tank_carousel_filter:popover/checkbox/hideRented";
       
-      public static const FILTER_POPOVER_TOOLTIP_DEFAULTBTN_HEADER:String = "#tank_carousel_filter:filter/popover/tooltip/defaultBtn/header";
+      public static const POPOVER_CHECKBOX_HIDEEVENT:String = "#tank_carousel_filter:popover/checkbox/hideEvent";
       
-      public static const FILTER_POPOVER_TOOLTIP_DEFAULTBTN_BODY:String = "#tank_carousel_filter:filter/popover/tooltip/defaultBtn/body";
+      public static const TOOLTIP_DEFAULTBUTTON_HEADER:String = "#tank_carousel_filter:tooltip/defaultButton/header";
       
-      public static const FILTER_POPOVER_TOOLTIP_PREMIUM_HEADER:String = "#tank_carousel_filter:filter/popover/tooltip/premium/header";
+      public static const TOOLTIP_DEFAULTBUTTON_BODY:String = "#tank_carousel_filter:tooltip/defaultButton/body";
       
-      public static const FILTER_POPOVER_TOOLTIP_PREMIUM_BODY:String = "#tank_carousel_filter:filter/popover/tooltip/premium/body";
+      public static const TOOLTIP_PARAMS_HEADER:String = "#tank_carousel_filter:tooltip/params/header";
       
-      public static const FILTER_POPOVER_TOOLTIP_ELITE_HEADER:String = "#tank_carousel_filter:filter/popover/tooltip/elite/header";
+      public static const TOOLTIP_PARAMS_BODY:String = "#tank_carousel_filter:tooltip/params/body";
       
-      public static const FILTER_POPOVER_TOOLTIP_ELITE_BODY:String = "#tank_carousel_filter:filter/popover/tooltip/elite/body";
+      public static const TOOLTIP_NATIONS_BODY:String = "#tank_carousel_filter:tooltip/nations/body";
       
-      public static const FILTER_PARAMSFILTER_HEADER:String = "#tank_carousel_filter:filter/paramsFilter/header";
+      public static const TOOLTIP_VEHICLETYPES_BODY:String = "#tank_carousel_filter:tooltip/vehicleTypes/body";
       
-      public static const FILTER_PARAMSFILTER_BODY:String = "#tank_carousel_filter:filter/paramsFilter/body";
+      public static const TOOLTIP_PREMIUM_HEADER:String = "#tank_carousel_filter:tooltip/premium/header";
       
-      public static const FILTER_BONUSFILTER_HEADER:String = "#tank_carousel_filter:filter/bonusFilter/header";
+      public static const TOOLTIP_PREMIUM_BODY:String = "#tank_carousel_filter:tooltip/premium/body";
       
-      public static const FILTER_BONUSFILTER_BODY:String = "#tank_carousel_filter:filter/bonusFilter/body";
+      public static const TOOLTIP_ELITE_HEADER:String = "#tank_carousel_filter:tooltip/elite/header";
       
-      public static const FILTER_FAVORITEFILTER_HEADER:String = "#tank_carousel_filter:filter/favoriteFilter/header";
+      public static const TOOLTIP_ELITE_BODY:String = "#tank_carousel_filter:tooltip/elite/body";
       
-      public static const FILTER_FAVORITEFILTER_BODY:String = "#tank_carousel_filter:filter/favoriteFilter/body";
+      public static const TOOLTIP_FAVORITE_HEADER:String = "#tank_carousel_filter:tooltip/favorite/header";
       
-      public static const FILTER_GAMEMODEFILTER_HEADER:String = "#tank_carousel_filter:filter/gameModeFilter/header";
+      public static const TOOLTIP_FAVORITE_BODY:String = "#tank_carousel_filter:tooltip/favorite/body";
       
-      public static const FILTER_GAMEMODEFILTER_BODY:String = "#tank_carousel_filter:filter/gameModeFilter/body";
+      public static const TOOLTIP_BONUS_HEADER:String = "#tank_carousel_filter:tooltip/bonus/header";
       
-      public static const FILTER_TOOLTIP_HEADER_TITLE:String = "#tank_carousel_filter:filter/tooltip/header/title";
+      public static const TOOLTIP_BONUS_BODY:String = "#tank_carousel_filter:tooltip/bonus/body";
       
-      public static const FILTER_TOOLTIP_HEADER_DESCRIPTION:String = "#tank_carousel_filter:filter/tooltip/header/description";
+      public static const TOOLTIP_HIDERENTED_HEADER:String = "#tank_carousel_filter:tooltip/hideRented/header";
       
-      public static const FILTER_TOOLTIP_BODY_NATION:String = "#tank_carousel_filter:filter/tooltip/body/nation";
+      public static const TOOLTIP_HIDERENTED_BODY:String = "#tank_carousel_filter:tooltip/hideRented/body";
       
-      public static const FILTER_TOOLTIP_BODY_TYPE:String = "#tank_carousel_filter:filter/tooltip/body/type";
+      public static const TOOLTIP_HIDEEVENT_HEADER:String = "#tank_carousel_filter:tooltip/hideEvent/header";
       
-      public static const FILTER_TOOLTIP_BODY_LEVEL:String = "#tank_carousel_filter:filter/tooltip/body/level";
+      public static const TOOLTIP_HIDEEVENT_BODY:String = "#tank_carousel_filter:tooltip/hideEvent/body";
       
-      public static const FILTER_TOOLTIP_BODY_ONLY:String = "#tank_carousel_filter:filter/tooltip/body/only";
+      public static const TOOLTIP_IGR_HEADER:String = "#tank_carousel_filter:tooltip/igr/header";
       
-      public static const FILTER_TOOLTIP_BODY_ONLY_PREMIUM:String = "#tank_carousel_filter:filter/tooltip/body/only/premium";
+      public static const TOOLTIP_IGR_BODY:String = "#tank_carousel_filter:tooltip/igr/body";
       
-      public static const FILTER_TOOLTIP_BODY_ONLY_ELITE:String = "#tank_carousel_filter:filter/tooltip/body/only/elite";
+      public static const TOOLTIP_GAMEMODE_HEADER:String = "#tank_carousel_filter:tooltip/gameMode/header";
       
-      public static const FILTER_TOOLTIP_BODY_ONLY_BASIC:String = "#tank_carousel_filter:filter/tooltip/body/only/basic";
+      public static const TOOLTIP_GAMEMODE_BODY:String = "#tank_carousel_filter:tooltip/gameMode/body";
       
-      public static const FILTER_TOOLTIP_RENTAL:String = "#tank_carousel_filter:filter/tooltip/rental";
+      public static const INFOTIP_HEADER_TITLE:String = "#tank_carousel_filter:infotip/header/title";
       
-      public static const FILTER_TOOLTIP_COUNTER:String = "#tank_carousel_filter:filter/tooltip/counter";
+      public static const INFOTIP_HEADER_DESCRIPTION:String = "#tank_carousel_filter:infotip/header/description";
+      
+      public static const INFOTIP_NATIONS:String = "#tank_carousel_filter:infotip/nations";
+      
+      public static const INFOTIP_VEHICLETYPES:String = "#tank_carousel_filter:infotip/vehicleTypes";
+      
+      public static const INFOTIP_LEVELS:String = "#tank_carousel_filter:infotip/levels";
+      
+      public static const INFOTIP_ONLY:String = "#tank_carousel_filter:infotip/only";
+      
+      public static const INFOTIP_ONLY_PREMIUM:String = "#tank_carousel_filter:infotip/only/premium";
+      
+      public static const INFOTIP_ONLY_ELITE:String = "#tank_carousel_filter:infotip/only/elite";
+      
+      public static const INFOTIP_ONLY_FAVORITE:String = "#tank_carousel_filter:infotip/only/favorite";
+      
+      public static const INFOTIP_RENT:String = "#tank_carousel_filter:infotip/rent";
+      
+      public static const INFOTIP_EVENT:String = "#tank_carousel_filter:infotip/event";
+      
+      public static const INFOTIP_COUNTER:String = "#tank_carousel_filter:infotip/counter";
        
       
       public function TANK_CAROUSEL_FILTER()

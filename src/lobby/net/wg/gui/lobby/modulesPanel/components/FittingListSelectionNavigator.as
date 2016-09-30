@@ -1,5 +1,5 @@
 package net.wg.gui.lobby.modulesPanel.components {
-import net.wg.gui.components.controls.AbstractListSelectionNavigator;
+import net.wg.gui.components.controls.listselection.AbstractListSelectionNavigator;
 import net.wg.gui.lobby.modulesPanel.data.DeviceVO;
 
 public class FittingListSelectionNavigator extends AbstractListSelectionNavigator {

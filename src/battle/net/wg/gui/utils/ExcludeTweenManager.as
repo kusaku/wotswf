@@ -7,46 +7,44 @@ import scaleform.clik.motion.Tween;
 
 public class ExcludeTweenManager implements IDisposable {
 
-    private var currentTweens:Dictionary;
+    private var _currentTweens:Dictionary;
 
     public function ExcludeTweenManager() {
         super();
-        this.currentTweens = new Dictionary();
+        this._currentTweens = new Dictionary();
     }
 
     public function registerAndLaunch(param1:Number, param2:Object, param3:Object, param4:Object):Tween {
         var _loc5_:Tween = null;
-        if (this.currentTweens[param2]) {
-            _loc5_ = Tween(this.currentTweens[param2]);
+        if (this._currentTweens[param2]) {
+            _loc5_ = Tween(this._currentTweens[param2]);
             this.unregister(_loc5_);
         }
         _loc5_ = new Tween(param1, param2, param3, param4);
-        this.currentTweens[param2] = _loc5_;
+        this._currentTweens[param2] = _loc5_;
         return _loc5_;
     }
 
     public function unregister(param1:Tween):void {
-        if (this.currentTweens && this.currentTweens[param1.target]) {
+        if (this._currentTweens && this._currentTweens[param1.target]) {
+            delete this._currentTweens[param1.target];
             param1.paused = true;
             param1.dispose();
-            delete this.currentTweens[param1.target];
         }
     }
 
     public function unregisterAll():void {
-        var _loc1_:* = null;
-        var _loc2_:Tween = null;
-        for (_loc1_ in this.currentTweens) {
-            _loc2_ = Tween(this.currentTweens[_loc1_]);
-            _loc2_.paused = true;
-            _loc2_.dispose();
-            delete this.currentTweens[_loc1_];
+        var _loc1_:Tween = null;
+        for each(_loc1_ in this._currentTweens) {
+            _loc1_.paused = true;
+            _loc1_.dispose();
         }
+        App.utils.data.cleanupDynamicObject(this._currentTweens);
     }
 
-    public function dispose():void {
+    public final function dispose():void {
         this.unregisterAll();
-        this.currentTweens = null;
+        this._currentTweens = null;
     }
 }
 }

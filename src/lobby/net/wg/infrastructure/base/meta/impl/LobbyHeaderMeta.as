@@ -17,6 +17,8 @@ public class LobbyHeaderMeta extends BaseDAAPIComponent {
 
     public var showPremiumDialog:Function;
 
+    public var onPremShopClick:Function;
+
     public var onPayment:Function;
 
     public var showSquad:Function;
@@ -66,6 +68,11 @@ public class LobbyHeaderMeta extends BaseDAAPIComponent {
     public function showPremiumDialogS():void {
         App.utils.asserter.assertNotNull(this.showPremiumDialog, "showPremiumDialog" + Errors.CANT_NULL);
         this.showPremiumDialog();
+    }
+
+    public function onPremShopClickS():void {
+        App.utils.asserter.assertNotNull(this.onPremShopClick, "onPremShopClick" + Errors.CANT_NULL);
+        this.onPremShopClick();
     }
 
     public function onPaymentS():void {

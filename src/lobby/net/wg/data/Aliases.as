@@ -109,6 +109,8 @@ public class Aliases {
 
     public static const FITTING_SELECT_POPOVER:String = "fittingSelectPopover";
 
+    public static const BROWSER:String = "browser";
+
     public static const LIB_CONTROLS:String = "controls";
 
     public static const LIB_ADVANCED:String = "advanced";
@@ -132,6 +134,8 @@ public class Aliases {
     public static const NOTIFICATION_LIST_BUTTON:String = "notificationListButton";
 
     public static const CONTACTS_LIST_BUTTON:String = "contactsListButton";
+
+    public static const VEHICLE_COMPARE_CART_BUTTON:String = "vehicleCompareCartButton";
 
     public static const TICKER:String = "ticker";
 

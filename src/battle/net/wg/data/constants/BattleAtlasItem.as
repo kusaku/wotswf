@@ -13,7 +13,9 @@ public class BattleAtlasItem {
 
     public static const SQUAD_NO_SOUND:String = "squad_noSound";
 
-    public static const STATS_MUTE:String = "stats_mute";
+    public static const LEFT_STATS_MUTE:String = "left_stats_mute";
+
+    public static const RIGHT_STATS_MUTE:String = "right_stats_mute";
 
     public static const PLAYERS_PANEL_SELF_BG:String = "playersPanel_selfBg";
 
@@ -75,9 +77,11 @@ public class BattleAtlasItem {
 
     public static const POSTMORTEM_TIPS_BG:String = "postmortemTips_bg";
 
-    public static const CRUISE:String = "Cruise_";
+    public static const POSTMORTEM_PANEL_BG:String = "postmortemPanel_bg";
 
-    public static const PNG_EXT:String = "";
+    public static const POSTMORTEM_TIPS_BG_LARGE:String = "postmortemPanel_bg_large";
+
+    public static const CRUISE:String = "Cruise_";
 
     private static const VEHICLE_LEVEL_KEY:String = "level";
 
@@ -88,6 +92,66 @@ public class BattleAtlasItem {
     private static const VEHICLE_ACTION_PREFIX:String = "vehicleActionMarker_";
 
     private static const FULL_STATS_VEHICLE_TYPE_PREFIX:String = "fullStatsVehicleType_";
+
+    public static const BUTTON_TOXIC_CHAT_OFF_DISABLEL:String = "button_toxic_chat_off_disablel";
+
+    public static const BUTTON_TOXIC_CHAT_OFF_HOVER:String = "button_toxic_chat_off_hover";
+
+    public static const BUTTON_TOXIC_CHAT_OFF_NORMAL:String = "button_toxic_chat_off_normal";
+
+    public static const BUTTON_TOXIC_CHAT_ON_HOVER:String = "button_toxic_chat_on_hover";
+
+    public static const BUTTON_TOXIC_CHAT_ON_NORMAL:String = "button_toxic_chat_on_normal";
+
+    public static const BUTTON_TOXIC_CHAT_ON_DISABLEL:String = "button_toxic_chat_on_disablel";
+
+    public static const ICON_TOXIC_CHAT_OFF:String = "icon_toxic_chat_off";
+
+    public static const RIBBONS_ARMOR:String = "ribbonsArmor";
+
+    public static const RIBBONS_ASSIST_SPOT:String = "ribbonsAssistSpot";
+
+    public static const RIBBONS_ASSIST_TRACK:String = "ribbonsAssistTrack";
+
+    public static const RIBBONS_BG_GREEN_SMALL:String = "ribbonsBgGreenSmall";
+
+    public static const RIBBONS_BG_GREEN_MEDIUM:String = "ribbonsBgGreenMedium";
+
+    public static const RIBBONS_BG_GREEN_LARGE:String = "ribbonsBgGreenLarge";
+
+    public static const RIBBONS_BG_GREY_SMALL:String = "ribbonsBgGreySmall";
+
+    public static const RIBBONS_BG_GREY_MEDIUM:String = "ribbonsBgGreyMedium";
+
+    public static const RIBBONS_BG_GREY_LARGE:String = "ribbonsBgGreyLarge";
+
+    public static const RIBBONS_BURN:String = "ribbonsBurn";
+
+    public static const RIBBONS_CAPTURE:String = "ribbonsCapture";
+
+    public static const RIBBONS_CRITS:String = "ribbonsCrits";
+
+    public static const RIBBONS_DAMAGE:String = "ribbonsDamage";
+
+    public static const RIBBONS_DEFENCE:String = "ribbonsDefence";
+
+    public static const RIBBONS_KILL:String = "ribbonsKill";
+
+    public static const RIBBONS_RAM:String = "ribbonsRam";
+
+    public static const RIBBONS_SPOTTED:String = "ribbonsSpotted";
+
+    public static const WHITE_ICON_AT_SPG_16X16:String = "whiteIconAt-SPG16x16";
+
+    public static const WHITE_ICON_HEAVYTANK_16X16:String = "whiteIconHeavyTank16x16";
+
+    public static const WHITE_ICON_LIGHTTANK_16X16:String = "whiteIconLightTank16x16";
+
+    public static const WHITE_ICON_MEDIUM_TANK_16X16:String = "whiteIconMediumTank16x16";
+
+    public static const WHITE_ICON_SPG_16X16:String = "whiteIconSPG16x16";
+
+    private static const DASH:String = "_";
 
     public function BattleAtlasItem() {
         super();
@@ -110,7 +174,7 @@ public class BattleAtlasItem {
     }
 
     public static function getFullStatsVehicleTypeName(param1:String, param2:String):String {
-        return FULL_STATS_VEHICLE_TYPE_PREFIX + param1 + "_" + param2;
+        return FULL_STATS_VEHICLE_TYPE_PREFIX + param1 + DASH + param2;
     }
 }
 }

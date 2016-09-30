@@ -14,6 +14,7 @@ public class EqualGapsHorizontalLayout extends GroupLayout {
 
     override public function invokeLayout():Object {
         var _loc1_:DisplayObject = null;
+        var _loc6_:uint = 0;
         var _loc2_:int = _target.numChildren;
         var _loc3_:int = 0;
         var _loc4_:uint = 0;
@@ -26,7 +27,7 @@ public class EqualGapsHorizontalLayout extends GroupLayout {
             _loc4_ = _loc4_ + Math.round(_loc1_.width);
             _loc5_++;
         }
-        var _loc6_:uint = Math.round((this._availableSize - _loc4_) / (_loc2_ + 1));
+        _loc6_ = Math.round((this._availableSize - _loc4_) / (_loc2_ + 1));
         var _loc7_:int = _loc6_;
         _loc5_ = 0;
         while (_loc5_ < _loc2_) {

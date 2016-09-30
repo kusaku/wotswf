@@ -1,28 +1,39 @@
 package net.wg.data.VO {
-public class StoreTableVO {
+import net.wg.data.daapi.base.DAAPIDataClass;
+import net.wg.gui.lobby.components.data.InfoMessageVO;
 
-    private var _gold:Number = 0;
+public class StoreTableVO extends DAAPIDataClass {
 
-    private var _credits:Number = 0;
+    private static const NO_ITEMS_INFO_FIELD_NAME:String = "noItemsInfo";
 
-    public function StoreTableVO() {
-        super();
+    public var gold:Number = 0.0;
+
+    public var credits:Number = 0.0;
+
+    public var type:String = "";
+
+    public var showNoItemsInfo:Boolean = false;
+
+    public var noItemsInfo:InfoMessageVO = null;
+
+    public function StoreTableVO(param1:Object) {
+        super(param1);
     }
 
-    public function get gold():Number {
-        return this._gold;
+    override protected function onDataWrite(param1:String, param2:Object):Boolean {
+        if (param1 == NO_ITEMS_INFO_FIELD_NAME && param2 != null) {
+            this.noItemsInfo = new InfoMessageVO(param2);
+            return false;
+        }
+        return super.onDataWrite(param1, param2);
     }
 
-    public function set gold(param1:Number):void {
-        this._gold = param1;
-    }
-
-    public function get credits():Number {
-        return this._credits;
-    }
-
-    public function set credits(param1:Number):void {
-        this._credits = param1;
+    override protected function onDispose():void {
+        if (this.noItemsInfo != null) {
+            this.noItemsInfo.dispose();
+            this.noItemsInfo = null;
+        }
+        super.onDispose();
     }
 }
 }

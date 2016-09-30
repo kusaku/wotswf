@@ -285,10 +285,9 @@ public class CompanyListView extends CompanyListMeta implements ICompanyListMeta
     }
 
     private function onShowDropDownHandler(param1:CompanyDropDownEvent):void {
-        var _loc4_:Number = NaN;
         var _loc2_:CompanyDropList = CompanyDropList(param1.dropDownref);
         var _loc3_:Point = globalToLocal(new Point(_loc2_.x, _loc2_.y));
-        _loc4_ = 0;
+        var _loc4_:Number = 0;
         if (_loc3_.y + _loc2_.height > y + height) {
             _loc4_ = _loc3_.y + _loc2_.height - y - height;
         }

@@ -15,7 +15,7 @@ public class CONTEXT_MENU_HANDLER_TYPE {
 
     public static const BASE_CLAN:String = "baseClan";
 
-    public static const APPEAL_USER:String = "appealUser";
+    public static const BATTLE_RESULTS_USER:String = "battleResultsUser";
 
     public static const PREBATTLE_USER:String = "prebattleUser";
 
@@ -30,6 +30,12 @@ public class CONTEXT_MENU_HANDLER_TYPE {
     public static const PLAYER_CONTACTS:String = "playerContacts";
 
     public static const CLUB_STAFF:String = "clubStaff";
+
+    public static const STORE_VEHICLE:String = "storeVehicle";
+
+    public static const PROFILE_VEHICLE:String = "profileVehicle";
+
+    public static const VEH_COMPARE:String = "vehCompare";
 
     public function CONTEXT_MENU_HANDLER_TYPE() {
         super();

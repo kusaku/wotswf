@@ -11,6 +11,8 @@ package
       
       public static const HEADER_BACKBTN_DESCRLABEL_HANGAR:String = "#vehicle_preview:header/backBtn/descrLabel/hangar";
       
+      public static const HEADER_BACKBTN_DESCRLABEL_VEHICLECOMPARE:String = "#vehicle_preview:header/backBtn/descrLabel/vehicleCompare";
+      
       public static const HEADER_TITLE:String = "#vehicle_preview:header/title";
       
       public static const HEADER_CLOSEBTN_LABEL:String = "#vehicle_preview:header/closeBtn/label";
@@ -27,6 +29,8 @@ package
       
       public static const BUYINGPANEL_BUYBTN_LABEL_BUY:String = "#vehicle_preview:buyingPanel/buyBtn/label/buy";
       
+      public static const BUYINGPANEL_BUYBTN_LABEL_RESTORE:String = "#vehicle_preview:buyingPanel/buyBtn/label/restore";
+      
       public static const BUYINGPANEL_BUYBTN_LABEL_RESEARCH:String = "#vehicle_preview:buyingPanel/buyBtn/label/research";
       
       public static const INFOPANEL_TAB_CREWINFO_NAME:String = "#vehicle_preview:infoPanel/tab/crewInfo/name";
@@ -34,8 +38,6 @@ package
       public static const INFOPANEL_TAB_FACTSHEET_NAME:String = "#vehicle_preview:infoPanel/tab/factSheet/name";
       
       public static const INFOPANEL_TAB_CREWINFO_LISTDESC_TEXT:String = "#vehicle_preview:infoPanel/tab/crewInfo/listDesc/text";
-      
-      public static const VEHICLEPANEL_INFO:String = "#vehicle_preview:vehiclePanel/info";
        
       
       public function VEHICLE_PREVIEW()

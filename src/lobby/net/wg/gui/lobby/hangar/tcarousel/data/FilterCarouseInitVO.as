@@ -7,57 +7,53 @@ import scaleform.clik.data.DataProvider;
 
 public class FilterCarouseInitVO extends DAAPIDataClass {
 
-    private static const NATIONS_TYPES:String = "nationsType";
+    private static const NATIONS_TYPES:String = "nations";
 
-    private static const VEHICLE_TYPES:String = "vehicleType";
+    private static const VEHICLE_TYPES:String = "vehicleTypes";
 
-    private static const SPECIAL_TYPES_LEFT:String = "specialTypeLeft";
+    private static const LEVELS_TYPES:String = "levels";
 
-    private static const SPECIAL_TYPES_RIGHT:String = "specialTypeRight";
+    private static const SPECIALS:String = "specials";
 
-    private static const LEVELS_TYPES:String = "levelsType";
-
-    private static const RENT_CHECK_BOX:String = "rentCheckBox";
+    private static const HIDDEN:String = "hidden";
 
     public var titleLabel:String = "";
 
-    public var nationLabel:String = "";
+    public var nationsLabel:String = "";
 
-    public var vehicleTypeLabel:String = "";
+    public var vehicleTypesLabel:String = "";
 
-    public var vehicleLevelLabel:String = "";
+    public var levelsLabel:String = "";
 
-    public var vehicleEliteTypeLabel:String = "";
+    public var specialsLabel:String = "";
 
-    public var btnDefaultLabel:String = "";
+    public var hiddenLabel:String = "";
 
-    public var nationTypeId:int = -1;
+    public var defaultButtonLabel:String = "";
 
-    public var vehicleTypeId:int = -1;
+    public var hiddenSectionVisible:Boolean = false;
 
-    public var specialTypesLeftId:int = -1;
+    public var nationsSectionId:int = -1;
 
-    public var specialTypesRightId:int = -1;
+    public var vehicleTypesSectionId:int = -1;
 
-    public var levelTypesId:int = -1;
+    public var levelsSectionId:int = -1;
 
-    public var rentVehicleId:int = -1;
+    public var specialSectionId:int = -1;
 
-    public var hasRentedVehicles:Boolean = false;
+    public var hiddenSectionId:int = -1;
 
-    public var btnDefaultTooltip:String = "";
+    public var defaultButtonTooltip:String = "";
 
-    private var _nationsTypes:DataProvider = null;
+    private var _nations:DataProvider = null;
 
     private var _vehicleTypes:DataProvider = null;
 
-    private var _levelsTypes:DataProvider = null;
+    private var _levels:DataProvider = null;
 
-    private var _specialTypesLeft:DataProvider = null;
+    private var _specials:DataProvider = null;
 
-    private var _specialTypesRight:DataProvider = null;
-
-    private var _rentCheckBoxVO:CheckBoxRendererVO = null;
+    private var _hidden:DataProvider = null;
 
     public function FilterCarouseInitVO(param1:Object) {
         super(param1);
@@ -69,9 +65,9 @@ public class FilterCarouseInitVO extends DAAPIDataClass {
         var _loc6_:Object = null;
         var _loc3_:Object = null;
         if (param1 == NATIONS_TYPES) {
-            this._nationsTypes = new DataProvider();
+            this._nations = new DataProvider();
             for each(_loc4_ in param2) {
-                this._nationsTypes.push(new SimpleRendererVO(_loc4_));
+                this._nations.push(new SimpleRendererVO(_loc4_));
             }
             return false;
         }
@@ -83,28 +79,24 @@ public class FilterCarouseInitVO extends DAAPIDataClass {
             return false;
         }
         if (param1 == LEVELS_TYPES) {
-            this._levelsTypes = new DataProvider();
+            this._levels = new DataProvider();
             for each(_loc6_ in param2) {
-                this._levelsTypes.push(new SimpleRendererVO(_loc6_));
+                this._levels.push(new SimpleRendererVO(_loc6_));
             }
             return false;
         }
-        if (param1 == SPECIAL_TYPES_LEFT) {
-            this._specialTypesLeft = new DataProvider();
+        if (param1 == SPECIALS) {
+            this._specials = new DataProvider();
             for each(_loc3_ in param2) {
-                this._specialTypesLeft.push(new CheckBoxRendererVO(_loc3_));
+                this._specials.push(new CheckBoxRendererVO(_loc3_));
             }
             return false;
         }
-        if (param1 == SPECIAL_TYPES_RIGHT) {
-            this._specialTypesRight = new DataProvider();
+        if (param1 == HIDDEN) {
+            this._hidden = new DataProvider();
             for each(_loc3_ in param2) {
-                this._specialTypesRight.push(new CheckBoxRendererVO(_loc3_));
+                this._hidden.push(new CheckBoxRendererVO(_loc3_));
             }
-            return false;
-        }
-        if (param1 == RENT_CHECK_BOX) {
-            this._rentCheckBoxVO = new CheckBoxRendererVO(param2);
             return false;
         }
         return super.onDataWrite(param1, param2);
@@ -112,35 +104,31 @@ public class FilterCarouseInitVO extends DAAPIDataClass {
 
     override protected function onDispose():void {
         var _loc1_:IDisposable = null;
-        for each(_loc1_ in this._nationsTypes) {
+        for each(_loc1_ in this._nations) {
             _loc1_.dispose();
         }
         for each(_loc1_ in this._vehicleTypes) {
             _loc1_.dispose();
         }
-        for each(_loc1_ in this._levelsTypes) {
+        for each(_loc1_ in this._levels) {
             _loc1_.dispose();
         }
-        for each(_loc1_ in this._specialTypesLeft) {
+        for each(_loc1_ in this._specials) {
             _loc1_.dispose();
         }
-        for each(_loc1_ in this._specialTypesRight) {
+        for each(_loc1_ in this._hidden) {
             _loc1_.dispose();
         }
-        this._nationsTypes.cleanUp();
-        this._nationsTypes = null;
+        this._nations.cleanUp();
+        this._nations = null;
         this._vehicleTypes.cleanUp();
         this._vehicleTypes = null;
-        this._specialTypesLeft.cleanUp();
-        this._specialTypesLeft = null;
-        this._specialTypesRight.cleanUp();
-        this._specialTypesRight = null;
-        this._levelsTypes.cleanUp();
-        this._levelsTypes = null;
-        if (this._rentCheckBoxVO != null) {
-            this._rentCheckBoxVO.dispose();
-            this._rentCheckBoxVO = null;
-        }
+        this._specials.cleanUp();
+        this._specials = null;
+        this._levels.cleanUp();
+        this._levels = null;
+        this._hidden.cleanUp();
+        this._hidden = null;
         super.onDispose();
     }
 
@@ -148,24 +136,20 @@ public class FilterCarouseInitVO extends DAAPIDataClass {
         return this._vehicleTypes;
     }
 
-    public function get specialTypesLeft():DataProvider {
-        return this._specialTypesLeft;
+    public function get specials():DataProvider {
+        return this._specials;
     }
 
-    public function get specialTypesRight():DataProvider {
-        return this._specialTypesRight;
+    public function get hidden():DataProvider {
+        return this._hidden;
     }
 
-    public function get levelsTypes():DataProvider {
-        return this._levelsTypes;
+    public function get levels():DataProvider {
+        return this._levels;
     }
 
-    public function get nationTypes():DataProvider {
-        return this._nationsTypes;
-    }
-
-    public function get rentCheckBoxVO():CheckBoxRendererVO {
-        return this._rentCheckBoxVO;
+    public function get nations():DataProvider {
+        return this._nations;
     }
 }
 }

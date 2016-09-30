@@ -13,7 +13,7 @@ public class StatusDeltaParameterBlockVO extends DAAPIDataClass {
 
     public var statusBarData:StatusDeltaIndicatorVO = null;
 
-    public var showDecreaseArrow:Boolean = false;
+    public var buffIconSrc:String = "";
 
     public function StatusDeltaParameterBlockVO(param1:Object) {
         super(param1);

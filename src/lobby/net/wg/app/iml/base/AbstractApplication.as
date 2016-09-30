@@ -516,10 +516,6 @@ public class AbstractApplication extends ApplicationMeta implements IApplication
         return null;
     }
 
-    public function get altBrowserBgClass():Class {
-        return null;
-    }
-
     public function get systemMessages():DisplayObjectContainer {
         throw new AbstractException("AbstractApplication.systemMessages" + Errors.ABSTRACT_INVOKE);
     }

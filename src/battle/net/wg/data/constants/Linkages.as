@@ -31,6 +31,10 @@ public class Linkages {
 
     public static const SHOP_VEHICLE_ITEM_RENDERER:String = "ShopVehicleListItemRendererUI";
 
+    public static const SHOP_ACCORDION_VEHICLE_VIEW:String = "shopVehicleViewUI";
+
+    public static const INVENTORY_ACCORDION_VEHICLE_VIEW:String = "inventoryVehicleViewUI";
+
     public static const INVENTORY_MODULE_ITEM_RENDERER:String = "InventoryModuleListItemRendererUI";
 
     public static const INVENTORY_VEHICLE_ITEM_RENDERER:String = "InventoryVehicleListItemRendererUI";
@@ -83,6 +87,10 @@ public class Linkages {
 
     public static const BEST_TANKS_MAPS_ITEM_UI:String = "BestTanksMapsItemUI";
 
+    public static const INFO_ICON_UI:String = "InfoIconUI";
+
+    public static const SMALL_SKILL_GROUP_ICON:String = "SmallSkillGroupIconsUI";
+
     public static const PERSONAL_CASE_STATS:String = "crewTankmanStats";
 
     public static const PERSONAL_CASE_RETRAINING:String = "CrewTankmanRetraining";
@@ -110,6 +118,10 @@ public class Linkages {
     public static const WAITING_COMPONENT:String = "WaitingComponent_UI";
 
     public static const ACHIEVEMENT_COMMON:String = "AchievementCommon_UI";
+
+    public static const ACHIEVEMENT_STRIPE:String = "SpecialAchievement_UI";
+
+    public static const FLAG_RENDERER:String = "FlagRendererUI";
 
     public static const DETAILED_STATISTICS_UNIT:String = "DetailedStatisticsUnit_UI";
 
@@ -305,7 +317,9 @@ public class Linkages {
 
     public static const TUTORIAL_CONTEXT_HINT_UI:String = "TutorialContextHintUI";
 
-    public static const TUTORIAL_HELP_BTN_UI:String = "HelpButtonUI";
+    public static const TUTORIAL_WINDOW_HELP_BTN_UI:String = "WindowHelpButtonUI";
+
+    public static const TUTORIAL_VIEW_HELP_BTN_UI:String = "ViewHelpButtonUI";
 
     public static const TUTORIAL_HINT_UI:String = "TutorialHintUI";
 
@@ -331,7 +345,7 @@ public class Linkages {
 
     public static const TUTORIAL_QUEST_CONDITION_RENDERER:String = "TutorialQuestConditionRendererUI";
 
-    public static const CREW_DEFAULT_RENDERER_LINKAGE:String = "CrewItemRenderer";
+    public static const CREW_DEFAULT_RENDERER_LINKAGE:String = "CrewItemRendererUI";
 
     public static const CREW_SMALL_RENDERER_LINKAGE:String = "CrewItemRendererSmallUI";
 
@@ -415,7 +429,7 @@ public class Linkages {
 
     public static const LOCK_CHASSIS:String = "LockChassis";
 
-    public static const POSTMORTEN_TIPS:String = "PostmortemTipsUI";
+    public static const POSTMORTEN_PANEL:String = "PostmortemPanelUI";
 
     public static const POSTMORTEN_GAS_INFO:String = "PostmortemGasInfoUI";
 
@@ -438,6 +452,12 @@ public class Linkages {
     public static const CAPTURE_BAR_LINKAGE:String = "TeamCaptureBarUI";
 
     public static const REF_SYS_AWARDS_BLOCK_UI:String = "RefSysAwardsBlockUI";
+
+    public static const REF_STATUS_PREFIX:String = "ReferralStatus_";
+
+    public static const VEH_CMP_WINDOW_BG_UI:String = "WindowBgUI";
+
+    public static const VEH_CMP_BUBBLE_UI:String = "VehCompareBubbleUI";
 
     public static const DIP_ENGINE_DAMAGED:String = "DipEngineDamagedUI";
 
@@ -486,6 +506,50 @@ public class Linkages {
     public static const VEHICLE_CLASS_ITEM_RENDERER:String = "VehicleClassItemRendererUI";
 
     public static const VEHICLE_MINIMAP_BEARER_ANIMATION:String = "VehicleMinimapBearerAnimation";
+
+    public static const COUNTER_UI:String = "CounterUI";
+
+    public static const SERVICE_MESSAGE_IR_UI:String = "ServiceMessageIR_UI";
+
+    public static const FEEDBACK_DAMAGE_LOG:String = "feedbackDamageLog";
+
+    public static const FEEDBACK_BATTLE_EVENTS:String = "feedbackBattleEvents";
+
+    public static const FEEDBACK_DAMAGE_INDICATOR:String = "feedbackDamageIndicator";
+
+    public static const RIBBONS_ANIMATION_SET:String = "AnimationSetUI";
+
+    public static const RIBBON_ICONS:String = "RibbonIconsUI";
+
+    public static const RIBBON_TEXT:String = "RibbonTextsUI";
+
+    public static const RIBBON_SETTINGS_ITEM:String = "RibbonTypeItemUI";
+
+    public static const NATION_TREE_NODE_SKINNED:String = "NationTreeNodeSkinned";
+
+    public static const RESEARCH_ITEM_NODE:String = "ResearchItemNode";
+
+    public static const FAKE_ITEM_NODE:String = "FakeItemNode";
+
+    public static const RESEARCH_ITEMS_ARROW:String = "ResearchItemsArrowUI";
+
+    public static const VEHICLE_COMPARE_ANIM:String = "VehicleCompareAnimUI";
+
+    public static const HBC_SETTINGS_UI:String = "HBC_Settings_UI";
+
+    public static const HBC_ACCOUNT_UI:String = "HBC_Account_UI";
+
+    public static const HBC_ACCOUNT_UPPER_UI:String = "HBC_AccountUpper_UI";
+
+    public static const HBC_PREM_UI:String = "HBC_Prem_UI";
+
+    public static const HBC_PREM_SHOP_UI:String = "HBC_PremShop_UI";
+
+    public static const HBC_SQUAD_UI:String = "HBC_Squad_UI";
+
+    public static const HBC_BATTLE_SELECTOR_UI:String = "HBC_BattleSelector_UI";
+
+    public static const HBC_FINANCE_UI:String = "HBC_Finance_UI";
 
     public function Linkages() {
         super();

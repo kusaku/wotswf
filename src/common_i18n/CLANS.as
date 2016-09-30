@@ -221,7 +221,7 @@ package
       
       public static const CLAN_HEADER_CHATCHANNELBTN_TOOLTIP_BODY:String = CLAN_HEADER_CHATCHANNELBTN_TOOLTIP + "/body";
       
-      public static const PERSONNELVIEW_MEMBERSCOUNT:String = "#clans:personnelView/membersCount";
+      public static const PERSONNELVIEW_TITLE:String = "#clans:personnelView/title";
       
       public static const PERSONNELVIEW_TABLE_PLAYER:String = "#clans:personnelView/table/player";
       
@@ -1063,7 +1063,7 @@ package
       
       public static const SEARCH_PROMOTEXT_BODY:String = "#clans:search/promoText/body";
       
-      public static const SEARCH_INFO_CREATIONDATE:String = "#clans:search/info/creationDate";
+      public static const SEARCH_INFO_RATINGTITLE:String = "#clans:search/info/ratingTitle";
       
       public static const SEARCH_INFO_RATINGDESCRIPTION:String = "#clans:search/info/ratingDescription";
       

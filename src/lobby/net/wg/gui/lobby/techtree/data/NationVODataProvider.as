@@ -7,34 +7,30 @@ import net.wg.utils.ILocale;
 
 public class NationVODataProvider extends AbstractDataProvider implements INationTreeDataProvider {
 
-    protected var _scrollIndex:Number = -1;
+    private static const PROPERTY_SCROLL_INDEX:String = "scrollIndex";
 
-    protected var _displaySettings:NationDisplaySettings;
+    private static const PROPERTY_DISPLAY_SETTINGS:String = "displaySettings";
+
+    protected var scrollIndex:Number = -1;
+
+    protected var displaySettings:NationDisplaySettings;
 
     public function NationVODataProvider() {
-        this._displaySettings = new NationDisplaySettings();
+        this.displaySettings = new NationDisplaySettings();
         super();
-    }
-
-    public function get scrollIndex():Number {
-        return this._scrollIndex;
-    }
-
-    public function get displaySettings():NationDisplaySettings {
-        return this._displaySettings;
     }
 
     override public function parse(param1:Object):void {
         var _loc5_:NodeData = null;
-        clearUp();
+        cleanUp();
         NodeData.setDisplayInfoClass(NTDisplayInfo);
         var _loc2_:Array = param1.nodes;
         var _loc3_:ILocale = App.utils.locale;
-        if (param1.hasOwnProperty("scrollIndex")) {
-            this._scrollIndex = param1.scrollIndex;
+        if (param1.hasOwnProperty(PROPERTY_SCROLL_INDEX)) {
+            this.scrollIndex = param1.scrollIndex;
         }
-        if (param1.hasOwnProperty("displaySettings")) {
-            this._displaySettings.fromObject(param1.displaySettings, _loc3_);
+        if (param1.hasOwnProperty(PROPERTY_DISPLAY_SETTINGS)) {
+            this.displaySettings.fromObject(param1.displaySettings, _loc3_);
         }
         var _loc4_:Number = _loc2_.length;
         var _loc6_:Number = 0;
@@ -45,6 +41,42 @@ public class NationVODataProvider extends AbstractDataProvider implements INatio
             nodeData.push(_loc5_);
             _loc6_++;
         }
+    }
+
+    override public function setItemField(param1:String, param2:Number, param3:Object):Boolean {
+        var _loc4_:Boolean = super.setItemField(param1, param2, param3);
+        if (!_loc4_) {
+            switch (param1) {
+                case NodeData.VEH_COMPARE_TREE_NODE_DATA:
+                    _loc4_ = this.setVehCompareTreeNode(param2, param3);
+            }
+        }
+        return _loc4_;
+    }
+
+    override protected function onDispose():void {
+        if (this.displaySettings != null) {
+            this.displaySettings.dispose();
+            this.displaySettings = null;
+        }
+        super.onDispose();
+    }
+
+    private function setVehCompareTreeNode(param1:Number, param2:Object):Boolean {
+        var _loc3_:Boolean = false;
+        if (param1 < nodeData.length && nodeData[param1] != null) {
+            nodeData[param1].setVehCompareTreeNode(param2);
+            _loc3_ = true;
+        }
+        return _loc3_;
+    }
+
+    public function getScrollIndex():Number {
+        return this.scrollIndex;
+    }
+
+    public function getDisplaySettings():NationDisplaySettings {
+        return this.displaySettings;
     }
 }
 }

@@ -26,7 +26,11 @@ public class TutorialBuilder implements ITutorialBuilder {
         App.tutorialMgr.addEventListener(TutorialHintEvent.SETUP_HINT, this.onSetupHintHandler);
     }
 
-    public function dispose():void {
+    public final function dispose():void {
+        this.onDispose();
+    }
+
+    protected function onDispose():void {
         this._viewForHint.removeEventListener(Event.RESIZE, this.onViewResizeHandler);
         this._viewForHint.removeEventListener(LifeCycleEvent.ON_DISPOSE, this.onViewDisposeHandler);
         App.tutorialMgr.removeEventListener(TutorialHintEvent.SETUP_HINT, this.onSetupHintHandler);

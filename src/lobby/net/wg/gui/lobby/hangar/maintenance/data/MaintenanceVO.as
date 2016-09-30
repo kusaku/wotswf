@@ -1,4 +1,5 @@
 package net.wg.gui.lobby.hangar.maintenance.data {
+import net.wg.data.constants.Errors;
 import net.wg.data.daapi.base.DAAPIDataClass;
 
 public class MaintenanceVO extends DAAPIDataClass {
@@ -49,12 +50,13 @@ public class MaintenanceVO extends DAAPIDataClass {
         if (param1 == SHELLS_FIELD) {
             this.shells = [];
             _loc3_ = param2 as Array;
+            App.utils.asserter.assertNotNull(_loc3_, SHELLS_FIELD + Errors.CANT_NULL);
             _loc6_ = 0;
             _loc7_ = 0;
             for each(_loc4_ in _loc3_) {
                 _loc5_ = new MaintenanceShellVO(_loc4_);
                 this.shells.push(_loc5_);
-                _loc7_ = _loc7_ + _loc5_.count;
+                _loc7_ = _loc7_ + _loc5_.userCount;
                 if (!_loc6_) {
                     _loc6_ = _loc5_.maxAmmo;
                 }

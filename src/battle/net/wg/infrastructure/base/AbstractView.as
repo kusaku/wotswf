@@ -8,6 +8,7 @@ import flash.utils.getQualifiedClassName;
 import net.wg.data.constants.Errors;
 import net.wg.data.constants.Linkages;
 import net.wg.data.constants.Values;
+import net.wg.data.daapi.LoadViewVO;
 import net.wg.infrastructure.base.meta.IAbstractViewMeta;
 import net.wg.infrastructure.base.meta.impl.AbstractViewMeta;
 import net.wg.infrastructure.events.TutorialEvent;
@@ -19,6 +20,8 @@ import net.wg.infrastructure.interfaces.IManagedContent;
 import net.wg.infrastructure.interfaces.IView;
 import net.wg.utils.IUtils;
 
+import org.idmedia.as3commons.util.StringUtils;
+
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.FocusHandlerEvent;
@@ -26,13 +29,13 @@ import scaleform.clik.events.InputEvent;
 
 public class AbstractView extends AbstractViewMeta implements IView, IAbstractViewMeta {
 
-    private static var INVALID_MODAL_FOCUS:String = "invalidModalFocus";
+    private static const SET_MODAL_FOCUS_MESSAGE:String = "Last focused element is not on display list! Use setfocus before removing element ";
 
-    private var _alias:String = null;
+    private static const SET_FOCUS_ASSERT_MESSAGE:String = "focus must be set to object in display list only.";
 
-    private var _name:String = null;
+    private static const INVALID_MODAL_FOCUS:String = "invalidModalFocus";
 
-    private var _config:Object = null;
+    private var _config:LoadViewVO = null;
 
     private var _waitingFocusToInitialization:Boolean = false;
 
@@ -40,14 +43,12 @@ public class AbstractView extends AbstractViewMeta implements IView, IAbstractVi
 
     private var _loader:Loader = null;
 
-    private var _viewTutorialId:String = null;
-
     private var _lastFocusedElement:InteractiveObject = null;
 
     public function AbstractView() {
         visible = false;
         super();
-        addEventListener(FocusHandlerEvent.FOCUS_IN, this.handleFocusIn);
+        addEventListener(FocusHandlerEvent.FOCUS_IN, this.onFocusInHandler);
     }
 
     override protected function configUI():void {
@@ -84,24 +85,26 @@ public class AbstractView extends AbstractViewMeta implements IView, IAbstractVi
 
     override protected function onBeforeDispose():void {
         this.setLastFocusedElement(null);
-        removeEventListener(FocusHandlerEvent.FOCUS_IN, this.handleFocusIn);
+        removeEventListener(FocusHandlerEvent.FOCUS_IN, this.onFocusInHandler);
         var _loc1_:IUtils = App.utils;
         App.toolTipMgr.hide();
         App.contextMenuMgr.hide();
         _loc1_.scheduler.cancelTask(this.setFocus);
         _loc1_.scheduler.cancelTask(this.nextFrameAfterPopulateHandler);
         removeEventListener(InputEvent.INPUT, handleInput);
-        removeEventListener(TutorialEvent.VIEW_READY_FOR_TUTORIAL, this.viewReadyForTutorialHandler);
+        removeEventListener(TutorialEvent.VIEW_READY_FOR_TUTORIAL, this.onViewReadyForTutorialHandler);
         App.tutorialMgr.removeEventListener(TutorialHintEvent.SHOW_HINT, this.onShowHintHandler);
         super.onBeforeDispose();
     }
 
     override protected function onDispose():void {
-        if (!this.as_config.cached) {
-            this.assertNotNull(this.loader, "loader` in " + getQualifiedClassName(this) + "(" + this.as_alias + "alias)");
+        if (!this._config.cached) {
+            this.assertNotNull(this.loader, "loader` in " + getQualifiedClassName(this) + "(" + this._config.alias + "alias)");
             this._loader.unloadAndStop();
             this._loader = null;
         }
+        this._config.dispose();
+        this._config = null;
         super.onDispose();
         App.utils.commons.releaseReferences(this);
     }
@@ -154,9 +157,9 @@ public class AbstractView extends AbstractViewMeta implements IView, IAbstractVi
     }
 
     protected function onSetModalFocus(param1:InteractiveObject):void {
-        var _loc2_:* = null;
+        var _loc2_:String = null;
         if (this._lastFocusedElement != null && (param1 == this._lastFocusedElement || param1 == null)) {
-            _loc2_ = "Last focused element is not on display list! Use setfocus before removing element " + this._lastFocusedElement + "!";
+            _loc2_ = SET_MODAL_FOCUS_MESSAGE + this._lastFocusedElement;
             App.utils.asserter.assertNotNull(this._lastFocusedElement.parent, _loc2_, InfrastructureException);
             this.setFocus(this._lastFocusedElement);
         }
@@ -174,7 +177,7 @@ public class AbstractView extends AbstractViewMeta implements IView, IAbstractVi
 
     protected final function setFocus(param1:InteractiveObject):void {
         this.assertNotNull(param1, "element");
-        this.assert(param1.stage != null, "focus must be set to object in display list only.");
+        this.assert(param1.stage != null, SET_FOCUS_ASSERT_MESSAGE);
         App.utils.scheduler.cancelTask(this.setFocus);
         this._waitingFocusToInitialization = false;
         if (this.hasFocus) {
@@ -247,11 +250,11 @@ public class AbstractView extends AbstractViewMeta implements IView, IAbstractVi
 
     private function setLastFocusedElement(param1:InteractiveObject):void {
         if (this._lastFocusedElement != null) {
-            this._lastFocusedElement.removeEventListener(FocusHandlerEvent.FOCUS_OUT, this.onFocusOutFromLastFocusedElementHandler);
+            this._lastFocusedElement.removeEventListener(FocusHandlerEvent.FOCUS_OUT, this.onLastFocusedElementFocusOutHandler);
         }
         this._lastFocusedElement = param1;
         if (this._lastFocusedElement != null) {
-            this._lastFocusedElement.addEventListener(FocusHandlerEvent.FOCUS_OUT, this.onFocusOutFromLastFocusedElementHandler);
+            this._lastFocusedElement.addEventListener(FocusHandlerEvent.FOCUS_OUT, this.onLastFocusedElementFocusOutHandler);
         }
     }
 
@@ -265,18 +268,6 @@ public class AbstractView extends AbstractViewMeta implements IView, IAbstractVi
 
     public function set loader(param1:Loader):void {
         this._loader = param1;
-    }
-
-    public function get viewTutorialId():String {
-        return this._viewTutorialId;
-    }
-
-    public function set viewTutorialId(param1:String):void {
-        this._viewTutorialId = param1;
-        if (this._viewTutorialId != null) {
-            addEventListener(TutorialEvent.VIEW_READY_FOR_TUTORIAL, this.viewReadyForTutorialHandler);
-            App.tutorialMgr.addEventListener(TutorialHintEvent.SHOW_HINT, this.onShowHintHandler);
-        }
     }
 
     public function get isModal():Boolean {
@@ -295,28 +286,16 @@ public class AbstractView extends AbstractViewMeta implements IView, IAbstractVi
         return this;
     }
 
-    public function get as_alias():String {
-        return this._alias;
-    }
-
-    public function set as_alias(param1:String):void {
-        this._alias = param1;
-    }
-
-    public function get as_name():String {
-        return this._name;
-    }
-
-    public function set as_name(param1:String):void {
-        this._name = param1;
-    }
-
-    public function get as_config():Object {
+    public function get as_config():LoadViewVO {
         return this._config;
     }
 
-    public function set as_config(param1:Object):void {
+    public function set as_config(param1:LoadViewVO):void {
         this._config = param1;
+        if (StringUtils.isNotEmpty(param1.viewTutorialId)) {
+            addEventListener(TutorialEvent.VIEW_READY_FOR_TUTORIAL, this.onViewReadyForTutorialHandler);
+            App.tutorialMgr.addEventListener(TutorialHintEvent.SHOW_HINT, this.onShowHintHandler);
+        }
     }
 
     protected function get lastFocusedElement():InteractiveObject {
@@ -325,17 +304,17 @@ public class AbstractView extends AbstractViewMeta implements IView, IAbstractVi
 
     private function onShowHintHandler(param1:TutorialHintEvent):void {
         var _loc2_:String = null;
-        if (param1.viewTutorialId == this._viewTutorialId) {
+        if (param1.viewTutorialId == this._config.viewTutorialId) {
             _loc2_ = !!param1.isCustomCmp ? Linkages.CUSTOM_HINT_BUILDER_LNK : Linkages.DEFAULT_HINT_BUILDER_LNK;
             App.tutorialMgr.setupHintBuilder(this, _loc2_, param1.data, param1.component);
         }
     }
 
-    private function handleFocusIn(param1:FocusHandlerEvent):void {
-        onFocusInS(this._alias);
+    private function onFocusInHandler(param1:FocusHandlerEvent):void {
+        onFocusInS(this._config.alias);
     }
 
-    private function onFocusOutFromLastFocusedElementHandler(param1:FocusHandlerEvent):void {
+    private function onLastFocusedElementFocusOutHandler(param1:FocusHandlerEvent):void {
         var _loc5_:* = null;
         var _loc2_:InteractiveObject = this.getManualFocus();
         var _loc3_:* = false;
@@ -350,9 +329,9 @@ public class AbstractView extends AbstractViewMeta implements IView, IAbstractVi
         this.setLastFocusedElement(_loc2_);
     }
 
-    private function viewReadyForTutorialHandler(param1:TutorialEvent):void {
+    private function onViewReadyForTutorialHandler(param1:TutorialEvent):void {
         param1.stopImmediatePropagation();
-        App.tutorialMgr.onComponentCheckComplete(this._alias, param1);
+        App.tutorialMgr.onComponentCheckComplete(this._config.alias, param1);
     }
 }
 }

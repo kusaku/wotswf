@@ -12,7 +12,7 @@ import net.wg.gui.battle.views.destroyTimers.FalloutDestroyTimersPanel;
 import net.wg.gui.battle.views.falloutConsumablesPanel.FalloutConsumablesPanel;
 import net.wg.gui.battle.views.falloutRespawnView.FalloutRespawnView;
 import net.wg.gui.battle.views.flagNotification.FlagNotification;
-import net.wg.gui.battle.views.postMortemTips.PostmortemGasInfo;
+import net.wg.gui.battle.views.postmortemPanel.PostmortemGasInfo;
 import net.wg.gui.battle.views.radialMenu.RadialMenu;
 import net.wg.gui.battle.views.repairPointTimer.RepairPointTimer;
 import net.wg.gui.battle.views.sixthSense.SixthSense;
@@ -170,7 +170,7 @@ public class BaseFalloutPage extends FalloutBattlePageMeta implements IFalloutBa
     private function changeBattleMessengerPosition():void {
         this.battleMessenger.x = damagePanel.x;
         if (damagePanel.visible) {
-            this.battleMessenger.y = damagePanel.y - this.battleMessenger.height + MESSANGER_Y_OFFSET;
+            this.battleMessenger.y = damagePanel.y - this.battleMessenger.height + MESSENGER_Y_OFFSET;
         }
         else {
             this.battleMessenger.y = _originalHeight - MESSENGER_RESPAWN_Y_OFFSET;

@@ -3,8 +3,8 @@ import net.wg.gui.lobby.techtree.data.vo.NationDisplaySettings;
 
 public interface INationTreeDataProvider extends INodesDataProvider {
 
-    function get scrollIndex():Number;
+    function getScrollIndex():Number;
 
-    function get displaySettings():NationDisplaySettings;
+    function getDisplaySettings():NationDisplaySettings;
 }
 }

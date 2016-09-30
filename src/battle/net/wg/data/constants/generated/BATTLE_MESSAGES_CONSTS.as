@@ -25,6 +25,10 @@ public class BATTLE_MESSAGES_CONSTS {
 
     public static const SELF_MESSAGE_RENDERER:String = "PlayerSelfMessageLeftRenderer";
 
+    public static const ADD_IN_BLACKLIST:Number = 0;
+
+    public static const REMOVE_FROM_BLACKLIST:Number = 1;
+
     public function BATTLE_MESSAGES_CONSTS() {
         super();
     }

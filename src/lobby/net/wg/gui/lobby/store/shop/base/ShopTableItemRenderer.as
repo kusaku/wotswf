@@ -1,8 +1,7 @@
 package net.wg.gui.lobby.store.shop.base {
 import net.wg.data.VO.StoreTableData;
-import net.wg.data.constants.Currencies;
-import net.wg.data.constants.IconsTypes;
 import net.wg.data.constants.SoundManagerStatesLobby;
+import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 import net.wg.data.constants.generated.FITTING_TYPES;
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.controls.ActionPrice;
@@ -22,7 +21,6 @@ public class ShopTableItemRenderer extends StoreListItemRenderer {
     public function ShopTableItemRenderer() {
         super();
         soundId = SoundManagerStatesLobby.RENDERER_SHOP;
-        configUI();
     }
 
     override public function setData(param1:Object):void {
@@ -43,11 +41,11 @@ public class ShopTableItemRenderer extends StoreListItemRenderer {
     override protected function updateTexts(param1:StoreTableData, param2:Number, param3:Number):void {
         var _loc4_:int = param2;
         var _loc5_:Number = param1.tableVO.gold;
-        if (param1.currency == Currencies.CREDITS) {
+        if (param1.currency == CURRENCIES_CONSTANTS.CREDITS) {
             _loc4_ = param3;
             _loc5_ = param1.tableVO.credits;
         }
-        if (0 == _loc4_ && param1.requestType != FITTING_TYPES.VEHICLE) {
+        if (_loc4_ == 0 && param1.requestType != FITTING_TYPES.VEHICLE) {
             param1.disabled = true;
         }
         var _loc6_:Boolean = false;
@@ -81,18 +79,26 @@ public class ShopTableItemRenderer extends StoreListItemRenderer {
         this._isUseGoldAndCredits = _loc4_ || _loc5_;
     }
 
-    override protected function onLeftButtonClick():void {
-        var _loc1_:StoreTableData = StoreTableData(data);
-        if (_loc1_.disabled) {
-            return;
-        }
-        var _loc2_:Boolean = _loc1_.itemTypeName == FITTING_TYPES.SHELL && _loc1_.goldShellsForCredits;
-        var _loc3_:Boolean = _loc1_.itemTypeName == FITTING_TYPES.EQUIPMENT && _loc1_.goldEqsForCredits;
-        var _loc4_:* = _loc1_.tableVO.gold >= _loc1_.gold;
-        var _loc5_:* = _loc1_.tableVO.credits >= _loc1_.credits;
-        var _loc6_:Boolean = _loc2_ || _loc3_ ? _loc4_ || _loc5_ : _loc4_ && _loc5_;
-        if (_loc6_) {
-            this.buyItem();
+    override protected function onLeftButtonClick(param1:Object):void {
+        var _loc2_:StoreTableData = null;
+        var _loc3_:Boolean = false;
+        var _loc4_:Boolean = false;
+        var _loc5_:* = false;
+        var _loc6_:* = false;
+        var _loc7_:Boolean = false;
+        if (enabled) {
+            _loc2_ = StoreTableData(data);
+            if (_loc2_.disabled) {
+                return;
+            }
+            _loc3_ = _loc2_.itemTypeName == FITTING_TYPES.SHELL && _loc2_.goldShellsForCredits;
+            _loc4_ = _loc2_.itemTypeName == FITTING_TYPES.EQUIPMENT && _loc2_.goldEqsForCredits;
+            _loc5_ = _loc2_.tableVO.gold >= _loc2_.gold;
+            _loc6_ = _loc2_.tableVO.credits >= _loc2_.credits;
+            _loc7_ = _loc3_ || _loc4_ ? _loc5_ || _loc6_ : _loc5_ && _loc6_;
+            if (_loc7_) {
+                this.buyItem();
+            }
         }
     }
 
@@ -124,10 +130,7 @@ public class ShopTableItemRenderer extends StoreListItemRenderer {
 
     private function updateCredits(param1:Number, param2:StoreTableData, param3:Number, param4:Boolean):void {
         var _loc5_:ILocale = null;
-        var _loc6_:Number = NaN;
-        var _loc7_:Number = NaN;
-        var _loc8_:String = null;
-        var _loc9_:ActionPriceVO = null;
+        var _loc6_:ActionPriceVO = null;
         if (App.instance) {
             _loc5_ = App.utils.locale;
             if (param4) {
@@ -136,29 +139,23 @@ public class ShopTableItemRenderer extends StoreListItemRenderer {
             else {
                 credits.gotoAndStop(param2.currency);
             }
-            _loc6_ = 0;
-            _loc7_ = 0;
-            if (param2.currency == Currencies.GOLD) {
+            if (param2.currency == CURRENCIES_CONSTANTS.GOLD) {
                 credits.price.text = _loc5_.gold(param1);
-                _loc8_ = IconsTypes.GOLD;
-                _loc6_ = param1;
             }
             else {
                 credits.price.text = _loc5_.integer(param3);
-                _loc8_ = IconsTypes.CREDITS;
-                _loc6_ = param3;
             }
-            _loc9_ = param2.actionPriceDataVo;
-            if (_loc9_) {
-                _loc9_.forCredits = param2.currency == Currencies.CREDITS;
+            _loc6_ = param2.actionPriceDataVo;
+            if (_loc6_) {
+                _loc6_.forCredits = param2.currency == CURRENCIES_CONSTANTS.CREDITS;
             }
-            actionPrice.setData(_loc9_);
+            actionPrice.setData(_loc6_);
             credits.visible = !actionPrice.visible;
         }
     }
 
     private function buyItem():void {
-        dispatchEvent(new StoreEvent(StoreEvent.BUY, StoreTableData(data)));
+        dispatchEvent(new StoreEvent(StoreEvent.BUY, StoreTableData(data).id));
     }
 
     protected function get isUseGoldAndCredits():Boolean {

@@ -53,6 +53,9 @@ public class NameAndXpField extends NodeComponent {
             _loc3_ = STATES_MAP[state][_loc2_];
             if (currentFrameLabel != _loc3_ && _labelHash[_loc3_]) {
                 gotoAndStop(_loc3_);
+                if (_baseDisposed) {
+                    return;
+                }
             }
             this.setNameField(_owner.getItemName());
             this.setXpField(_loc1_);

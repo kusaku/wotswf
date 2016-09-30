@@ -112,7 +112,6 @@ public class ContactsListPopover extends ContactsListPopoverMeta implements ICon
     }
 
     override protected function configUI():void {
-        var _loc1_:uint = 0;
         super.configUI();
         this.lipsDown.mouseChildren = this.lipsDown.mouseEnabled = false;
         this.addContactButton.iconSource = RES_ICONS.MAPS_ICONS_MESSENGER_ICONADDCONTACT;
@@ -135,7 +134,7 @@ public class ContactsListPopover extends ContactsListPopoverMeta implements ICon
         this.treeComponent.addEventListener(ContactsTreeEvent.MODE_CHANGED, this.onTreeComponentModeChangedHandler);
         this.treeComponent.addEventListener(FocusRequestEvent.REQUEST_FOCUS, this.onTreeComponentRequestFocusHandler);
         this._dragController = new ContactsListDtagController(new <InteractiveObject>[this.treeComponent.list], ContactsListDragDropDelegate, Linkages.CONTACTS_TREE_ITEM_RENDERER);
-        _loc1_ = this.height - ContactsShared.CONTROLS_PADDING - this.addContactButton.height - ContactsShared.BOTTOM_CTRLS_PADDING;
+        var _loc1_:uint = this.height - ContactsShared.CONTROLS_PADDING - this.addContactButton.height - ContactsShared.BOTTOM_CTRLS_PADDING;
         this.addContactButton.y = this.addGroupButton.y = this.settingsButton.y = _loc1_;
         this.lipsDown.y = _loc1_ - ContactsShared.CONTROLS_PADDING + (this.lipsDown.height >> 1);
         this.viewStack.setAvailableSize(width, this.height - ContactsShared.BOTTOM_CTRLS_PADDING);

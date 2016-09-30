@@ -89,30 +89,36 @@ public class VehPreviewInfoPanel extends UIComponentEx implements IVehPreviewInf
     }
 
     override protected function draw():void {
-        var _loc1_:IVehPreviewInfoPanelTab = null;
-        var _loc2_:int = 0;
+        var _loc1_:VehPreviewInfoTabDataItemVO = null;
+        var _loc2_:IVehPreviewInfoPanelTab = null;
         var _loc3_:int = 0;
         var _loc4_:int = 0;
+        var _loc5_:int = 0;
         super.draw();
         if (this._tabViewStack.currentView != null) {
             if (isInvalid(INV_CURRENT_VIEW)) {
                 IViewStackContent(this._tabViewStack.currentView).update(this.getSelectedTabData());
+                _loc1_ = VehPreviewInfoTabDataItemVO(this.getSelectedTabData());
+                this.flag.visible = _loc1_.showNationFlag;
+                if (this.flag.visible) {
+                    this.flag.gotoAndStop(this._data.nation);
+                }
                 invalidateSize();
             }
             if (isInvalid(InvalidationType.SIZE)) {
-                _loc1_ = IVehPreviewInfoPanelTab(this._tabViewStack.currentView);
-                _loc2_ = this.height;
-                _loc3_ = this.scrollPane.y + _loc1_.height + _loc1_.bottomMargin;
-                if (_loc3_ > _loc2_) {
-                    _loc3_ = _loc2_;
+                _loc2_ = IVehPreviewInfoPanelTab(this._tabViewStack.currentView);
+                _loc3_ = this.height;
+                _loc4_ = this.scrollPane.y + _loc2_.height + _loc2_.bottomMargin;
+                if (_loc4_ > _loc3_) {
+                    _loc4_ = _loc3_;
                 }
-                else if (_loc3_ < MIN_BACKGROUND_HEIGHT) {
-                    _loc3_ = MIN_BACKGROUND_HEIGHT;
+                else if (_loc4_ < MIN_BACKGROUND_HEIGHT) {
+                    _loc4_ = MIN_BACKGROUND_HEIGHT;
                 }
-                _loc4_ = _loc3_ - this.scrollPane.y - _loc1_.bottomMargin;
-                this.scrollPane.height = _loc4_;
-                this.scrollBar.height = _loc4_;
-                this.background.height = _loc3_;
+                _loc5_ = _loc4_ - this.scrollPane.y - _loc2_.bottomMargin;
+                this.scrollPane.height = _loc5_;
+                this.scrollBar.height = _loc5_;
+                this.background.height = _loc4_;
                 this.setScrollPaneOffset();
             }
         }
@@ -150,11 +156,6 @@ public class VehPreviewInfoPanel extends UIComponentEx implements IVehPreviewInf
     }
 
     private function onTabViewStackViewChangedHandler(param1:ViewStackEvent):void {
-        var _loc2_:VehPreviewInfoTabDataItemVO = VehPreviewInfoTabDataItemVO(this.getSelectedTabData());
-        this.flag.visible = _loc2_.showNationFlag;
-        if (this.flag.visible) {
-            this.flag.gotoAndStop(this._data.nation);
-        }
         dispatchEvent(new VehPreviewInfoPanelEvent(VehPreviewInfoPanelEvent.INFO_TAB_CHANGED, this.tabButtonBar.selectedIndex, true));
         invalidate(INV_CURRENT_VIEW);
     }

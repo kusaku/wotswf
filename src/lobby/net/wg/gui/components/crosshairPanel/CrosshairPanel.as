@@ -157,7 +157,7 @@ public class CrosshairPanel extends CrosshairPanelMeta implements ICrosshairPane
         y = param2;
     }
 
-    public function as_setAmmoStock(param1:Number, param2:Number, param3:Boolean, param4:String, param5:Boolean = false):void {
+    public function as_setAmmoStock(param1:Number, param2:Number, param3:Boolean, param4:String, param5:Boolean):void {
         this._ammoQuantity = param1;
         this._ammoQuantityInClip = param2;
         this._isAmmoLow = param3;

@@ -37,10 +37,8 @@ public class ColumnData implements IDisposable {
     }
 
     public function newSortingButtonInfo():SortingButtonVO {
-        var _loc1_:int = 0;
-        var _loc2_:SortingButtonVO = null;
-        _loc1_ = 30;
-        _loc2_ = new SortingButtonVO({});
+        var _loc1_:int = 30;
+        var _loc2_:SortingButtonVO = new SortingButtonVO({});
         _loc2_.id = this._columnId;
         _loc2_.iconSource = this._iconSource;
         _loc2_.ascendingIconSource = RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_ASCENDINGSORTARROW;

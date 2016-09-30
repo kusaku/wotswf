@@ -3,14 +3,11 @@ import net.wg.data.constants.ColorSchemeNames;
 import net.wg.gui.components.advanced.ClanEmblem;
 import net.wg.gui.components.advanced.interfaces.INewIndicator;
 import net.wg.gui.components.controls.UserNameField;
-import net.wg.gui.lobby.header.LobbyHeader;
 import net.wg.gui.lobby.header.vo.HBC_AccountDataVo;
 
+import org.idmedia.as3commons.util.StringUtils;
+
 public class HBC_Account extends HeaderButtonContentItem {
-
-    private static const MAX_WIDTH_NARROW:int = 120;
-
-    private static const MAX_WIDTH_WIDE:int = 60;
 
     private static const CLAN_EMBLEM_MARGIN:int = 5;
 
@@ -21,6 +18,8 @@ public class HBC_Account extends HeaderButtonContentItem {
     private static const ADD_SCREEN_PADDING_LEFT:int = 0;
 
     private static const ADD_SCREEN_PADDING_RIGHT:int = 6;
+
+    private static const MIN_WIDTH:Number = 100;
 
     private static const CLAN_EMBLEM_MAX_SCREEN_ALPHA:Number = 1;
 
@@ -52,13 +51,6 @@ public class HBC_Account extends HeaderButtonContentItem {
         this.newIndicator.visible = false;
     }
 
-    override public function parentButtonClicked():void {
-        if (!this._newWasHidden) {
-            this._newWasHidden = true;
-            this.newIndicator.hide();
-        }
-    }
-
     override public function onPopoverClose():void {
         this.arrow.state = HBC_ArrowDown.STATE_NORMAL;
     }
@@ -67,42 +59,56 @@ public class HBC_Account extends HeaderButtonContentItem {
         this.arrow.state = HBC_ArrowDown.STATE_UP;
     }
 
+    override public function parentButtonClicked():void {
+        if (!this._newWasHidden) {
+            this._newWasHidden = true;
+            this.newIndicator.hide();
+        }
+    }
+
     override protected function updateSize():void {
         bounds.width = this.arrow.x + this.arrow.width;
+        if (bounds.width < MIN_WIDTH) {
+            bounds.width = MIN_WIDTH;
+        }
         super.updateSize();
     }
 
     override protected function updateData():void {
         var _loc1_:Number = NaN;
+        var _loc2_:Number = NaN;
+        var _loc3_:Number = NaN;
+        var _loc4_:Number = NaN;
         if (data) {
+            this.clanEmblem.visible = StringUtils.isNotEmpty(this._accountVo.clanEmblemId);
             this.userName.textColor = !!this._accountVo.isTeamKiller ? Number(App.colorSchemeMgr.getScheme(ColorSchemeNames.TEAMKILLER).rgb) : Number(UserNameField.DEF_USER_NAME_COLOR);
-            if (this._accountVo.clanEmblemId) {
+            _loc1_ = 0;
+            if (this.clanEmblem.visible) {
                 this.clanEmblem.setImage(this._accountVo.clanEmblemId);
-                if (screen == LobbyHeader.MAX_SCREEN) {
-                    this.userName.x = this.clanEmblem.x + this.clanEmblem.width + CLAN_EMBLEM_MARGIN;
-                    this.clanEmblem.alpha = CLAN_EMBLEM_MAX_SCREEN_ALPHA;
-                }
-                else {
-                    this.userName.x = this.clanEmblem.width >> 2;
-                    this.clanEmblem.alpha = CLAN_EMBLEM_NOT_MAX_SCREEN_ALPHA;
-                }
+                _loc1_ = this.clanEmblem.width >> 1;
             }
-            else {
-                this.userName.x = this.clanEmblem.x + CLAN_EMBLEM_OFFSET;
-            }
-            this.clanEmblem.visible = Boolean(this._accountVo.clanEmblemId);
-            if (this._accountVo.userVO) {
-                _loc1_ = 0;
-                if (availableWidth > 0) {
-                    _loc1_ = availableWidth - (this.userName.x + ARROW_MARGIN + this.arrow.width);
-                }
-                else {
-                    _loc1_ = screen == LobbyHeader.NARROW_SCREEN ? Number(MAX_WIDTH_NARROW) : Number(MAX_WIDTH_NARROW + wideScreenPrc * MAX_WIDTH_WIDE);
-                }
-                this.userName.width = _loc1_;
+            _loc2_ = availableWidth - _loc1_ - ARROW_MARGIN - this.arrow.width;
+            if (this._accountVo.userVO != null) {
+                this.userName.width = _loc2_;
                 this.userName.userVO = this._accountVo.userVO;
                 this.userName.validateNow();
             }
+            if (this.clanEmblem.visible) {
+                if (this.clanEmblem.width + this.userName.textWidth + CLAN_EMBLEM_MARGIN < _loc2_) {
+                    _loc1_ = this.clanEmblem.width + CLAN_EMBLEM_MARGIN;
+                    this.clanEmblem.alpha = CLAN_EMBLEM_MAX_SCREEN_ALPHA;
+                }
+                else {
+                    this.clanEmblem.alpha = CLAN_EMBLEM_NOT_MAX_SCREEN_ALPHA;
+                }
+            }
+            _loc3_ = CLAN_EMBLEM_OFFSET;
+            _loc4_ = _loc1_ + this.userName.textWidth + ARROW_MARGIN + this.arrow.width;
+            if (_loc4_ < MIN_WIDTH) {
+                _loc3_ = (availableWidth > MIN_WIDTH ? MIN_WIDTH : availableWidth) - _loc4_ >> 1;
+            }
+            this.clanEmblem.x = _loc3_;
+            this.userName.x = _loc3_ + _loc1_;
             this.arrow.x = this.userName.x + this.userName.textWidth + ARROW_MARGIN ^ 0;
             if (this._accountVo.hasNew && !this._newWasAnimated) {
                 this._newWasAnimated = true;

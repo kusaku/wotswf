@@ -9,7 +9,7 @@ public class PersonalMinimapEntryConst {
 
     public static const CAMERA_ATLAS_ITEM_NAME:String = "Camera";
 
-    public static const ARCADE_DIRECTION_LINE_ATLAS_ITEM_NAME:String = "СameraWithDirection";
+    public static const ARCADE_DIRECTION_LINE_ATLAS_ITEM_NAME:String = "CameraWithDirection";
 
     public static const VIEW_SECTOR_LINE_ATLAS_ITEM_NAME:String = "ShotSectorLine";
 

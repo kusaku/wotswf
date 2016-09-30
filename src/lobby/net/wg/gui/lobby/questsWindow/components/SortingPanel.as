@@ -28,7 +28,7 @@ public class SortingPanel extends UIComponent {
         this.sortTF.mouseEnabled = false;
         this.sortTF.text = QUESTS.QUESTS_CURRENTTAB_HEADER_SORT;
         this.doneCB.label = QUESTS.QUESTS_CURRENTTAB_HEADER_CHECKBOX_TEXT;
-        this.sortingDD.dataProvider = new DataProvider([{"label": QUESTS.QUESTS_CURRENTTAB_HEADER_DROPDOWN_ALL}, {"label": QUESTS.QUESTS_CURRENTTAB_HEADER_DROPDOWN_ACTION}, {"label": QUESTS.QUESTS_CURRENTTAB_HEADER_DROPDOWN_QUESTS}]);
+        this.sortingDD.dataProvider = new DataProvider([{"label": QUESTS.QUESTS_CURRENTTAB_HEADER_DROPDOWN_ALL}, {"label": QUESTS.QUESTS_CURRENTTAB_HEADER_DROPDOWN_QUESTS}, {"label": QUESTS.QUESTS_CURRENTTAB_HEADER_DROPDOWN_ACTION}]);
         this.sortingDD.selectedIndex = 0;
     }
 

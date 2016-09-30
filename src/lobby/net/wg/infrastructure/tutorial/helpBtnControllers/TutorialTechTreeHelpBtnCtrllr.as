@@ -3,12 +3,14 @@ import flash.display.DisplayObject;
 import flash.geom.Point;
 
 import net.wg.data.constants.Errors;
+import net.wg.data.constants.Linkages;
 import net.wg.gui.lobby.techtree.TechTreePage;
 
 public class TutorialTechTreeHelpBtnCtrllr extends TutorialHelpBtnController {
 
     public function TutorialTechTreeHelpBtnCtrllr() {
         super();
+        helpBtnLinkageId = Linkages.TUTORIAL_VIEW_HELP_BTN_UI;
     }
 
     override public function layoutHelpBtn():void {

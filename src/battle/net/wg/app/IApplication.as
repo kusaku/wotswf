@@ -83,7 +83,5 @@ public interface IApplication extends IApplicationMeta {
     function get tweenMgr():ITweenManager;
 
     function get browserBgClass():Class;
-
-    function get altBrowserBgClass():Class;
 }
 }

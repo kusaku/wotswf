@@ -157,10 +157,6 @@ public class App {
         return instance.browserBgClass;
     }
 
-    public static function get altBrowserBgClass():Class {
-        return instance.altBrowserBgClass;
-    }
-
     public static function get systemMessages():DisplayObjectContainer {
         return instance.systemMessages;
     }

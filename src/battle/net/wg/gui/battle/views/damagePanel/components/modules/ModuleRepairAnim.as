@@ -99,6 +99,11 @@ public class ModuleRepairAnim extends DamagePanelItemFrameStates {
         this._playbackSpeed = param1;
     }
 
+    public function resetModuleRepairing():void {
+        this._isRepairing = false;
+        this._timer.stop();
+    }
+
     private function onLastFrameOfAnim():void {
         this._isRepairing = false;
         invalidate(IS_REPAIRING_INVALID_MASK);
@@ -134,7 +139,6 @@ public class ModuleRepairAnim extends DamagePanelItemFrameStates {
     }
 
     private function onTimerCompleteHandler(param1:TimerEvent):void {
-        this._isRepairing = false;
         invalidate(IS_REPAIRING_INVALID_MASK);
     }
 }

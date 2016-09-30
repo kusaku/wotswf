@@ -1,16 +1,24 @@
 package net.wg.gui.lobby.techtree.data.vo {
 import net.wg.data.constants.Errors;
 import net.wg.gui.components.controls.VO.ActionPriceVO;
+import net.wg.gui.data.VehCompareEntrypointVO;
 import net.wg.gui.lobby.techtree.constants.NamedLabels;
 import net.wg.gui.lobby.techtree.interfaces.IValueObject;
 import net.wg.infrastructure.exceptions.AbstractException;
+import net.wg.utils.IAssertable;
 import net.wg.utils.ILocale;
 
 public class NodeData implements IValueObject {
 
-    private static var displayInfoClass:Class = null;
+    private static var _displayInfoClass:Class = null;
 
     public static const UNLOCK_PROPS_FIELD:String = "unlockProps";
+
+    public static const VEH_COMPARE_ROOT_DATA:String = "vehCompareRootData";
+
+    public static const VEH_COMPARE_TREE_NODE_DATA:String = "vehCompareTreeNodeData";
+
+    private static const EMPTY_STR:String = "";
 
     private static const EXTRA_INFO_FIELD:String = "extraInfo";
 
@@ -23,6 +31,8 @@ public class NodeData implements IValueObject {
     private static const SHOW_VEHICLE_BTN_LABEL:String = "showVehicleBtnLabel";
 
     private static const SHOW_VEHICLE_BTN_ENABLED:String = "showVehicleBtnEnabled";
+
+    private static const FROM_ARRAY:String = "NodeData.fromArray";
 
     public var id:Number = 0;
 
@@ -40,9 +50,9 @@ public class NodeData implements IValueObject {
 
     public var extraInfo:String = null;
 
-    public var status:String = null;
+    public var status:String = "";
 
-    public var statusLevel:String = null;
+    public var statusLevel:String = "";
 
     public var isPremiumIGR:Boolean = false;
 
@@ -52,47 +62,41 @@ public class NodeData implements IValueObject {
 
     public var showVehicleBtnEnabled:Boolean = false;
 
-    private var _unlockProps:UnlockProps = null;
+    public var shopPrice:ShopPrice = null;
 
-    private var _shopPrice:ShopPrice = null;
+    public var displayInfo:IValueObject = null;
 
-    private var _displayInfo:IValueObject = null;
-
-    private var _earnedXP:Number = 0;
+    public var dataIsReady:Boolean = false;
 
     private var _actionPriceDataVo:ActionPriceVO = null;
 
     private var _earnedXPLabel:String = "";
 
+    private var _vehCompareVO:VehCompareEntrypointVO = null;
+
+    private var _vehCompareTreeNodeVO:VehCompareEntrypointTreeNodeVO = null;
+
+    private var _asserter:IAssertable;
+
+    private var _earnedXP:Number = 0;
+
+    private var _unlockProps:UnlockProps = null;
+
     public function NodeData() {
+        this._asserter = App.utils.asserter;
         super();
     }
 
     public static function setDisplayInfoClass(param1:Class):void {
-        displayInfoClass = param1;
+        _displayInfoClass = param1;
     }
 
-    public function dispose():void {
-        if (this._actionPriceDataVo != null) {
-            this._actionPriceDataVo.dispose();
-            this._actionPriceDataVo = null;
-        }
-        if (this._shopPrice != null) {
-            this._shopPrice.dispose();
-            this._shopPrice = null;
-        }
-        if (this._unlockProps != null) {
-            this._unlockProps.dispose();
-            this._unlockProps = null;
-        }
-        if (this._displayInfo != null) {
-            this._displayInfo.dispose();
-            this._displayInfo = null;
-        }
+    public final function dispose():void {
+        this.onDispose();
     }
 
     public function fromArray(param1:Array, param2:ILocale):void {
-        throw new AbstractException("NodeData.fromArray" + Errors.ABSTRACT_INVOKE);
+        throw new AbstractException(FROM_ARRAY + Errors.ABSTRACT_INVOKE);
     }
 
     public function fromObject(param1:Object, param2:ILocale):void {
@@ -116,11 +120,13 @@ public class NodeData implements IValueObject {
             this.earnedXP = param1.earnedXP;
         }
         if (param1.actionPriceData) {
+            this.clearActionPriceDataVo();
             this._actionPriceDataVo = new ActionPriceVO(param1.actionPriceData);
         }
         if (!isNaN(param1.state)) {
             this.state = param1.state;
         }
+        this.clearUnlockProps();
         this._unlockProps = new UnlockProps();
         if (param1.unlockProps != null) {
             this._unlockProps.fromArray(param1.unlockProps, param2);
@@ -137,14 +143,24 @@ public class NodeData implements IValueObject {
         if (param1.hasOwnProperty(SHOW_VEHICLE_BTN_ENABLED)) {
             this.showVehicleBtnEnabled = param1[SHOW_VEHICLE_BTN_ENABLED];
         }
+        if (param1.hasOwnProperty(VEH_COMPARE_ROOT_DATA)) {
+            this.clearVehCompareVO();
+            this._vehCompareVO = new VehCompareEntrypointVO(param1[VEH_COMPARE_ROOT_DATA]);
+        }
+        if (param1.hasOwnProperty(VEH_COMPARE_TREE_NODE_DATA)) {
+            this.clearVehCompareTreeNodeVO();
+            this._vehCompareTreeNodeVO = new VehCompareEntrypointTreeNodeVO(param1[VEH_COMPARE_TREE_NODE_DATA]);
+        }
         if (param1.hasOwnProperty(IS_PREMIUM_IGR_FIELD)) {
             this.isPremiumIGR = param1[IS_PREMIUM_IGR_FIELD];
         }
         if (param1.hasOwnProperty(STATUS_LEVEL_FIELD)) {
-            this.statusLevel = param1[STATUS_LEVEL_FIELD] as String;
+            this.statusLevel = param1[STATUS_LEVEL_FIELD];
+            App.utils.asserter.assertNotNull(this.statusLevel, STATUS_LEVEL_FIELD + Errors.CANT_NULL);
         }
         if (param1.hasOwnProperty(STATUS_FIELD)) {
-            this.status = param1[STATUS_FIELD] as String;
+            this.status = param1[STATUS_FIELD];
+            App.utils.asserter.assertNotNull(this.status, STATUS_FIELD + Errors.CANT_NULL);
         }
         if (param1.smallIconPath != null) {
             this.smallIconPath = param1.smallIconPath;
@@ -155,32 +171,35 @@ public class NodeData implements IValueObject {
         if (param1.longName != null) {
             this.longName = param1.longName;
         }
-        this._shopPrice = new ShopPrice();
+        this.clearShopPrice();
+        this.shopPrice = new ShopPrice();
         if (param1.shopPrice != null) {
-            this._shopPrice.fromArray(param1.shopPrice, param2);
+            this.shopPrice.fromArray(param1.shopPrice, param2);
         }
-        if (displayInfoClass != null) {
-            this._displayInfo = new displayInfoClass();
+        if (_displayInfoClass != null) {
+            this.clearDisplayInfo();
+            this.displayInfo = new _displayInfoClass();
         }
-        if (param1.displayInfo != null && this._displayInfo != null) {
-            this._displayInfo.fromObject(param1.displayInfo, param2);
+        if (param1.displayInfo != null && this.displayInfo != null) {
+            this.displayInfo.fromObject(param1.displayInfo, param2);
         }
+        this.dataIsReady = true;
     }
 
     public function getActionData(param1:String):ActionPriceVO {
         var _loc2_:ActionPriceVO = null;
         switch (param1) {
             case NamedLabels.XP_COST:
-                _loc2_ = this._unlockProps.actionPriceDataVo;
+                _loc2_ = this._unlockProps != null ? this._unlockProps.actionPriceDataVo : null;
                 break;
             case NamedLabels.EARNED_XP:
                 _loc2_ = this._actionPriceDataVo;
                 break;
             case NamedLabels.CREDITS_PRICE:
-                _loc2_ = this._shopPrice.actionPriceDataVo;
+                _loc2_ = this.shopPrice != null ? this.shopPrice.actionPriceDataVo : null;
                 break;
             case NamedLabels.GOLD_PRICE:
-                _loc2_ = this._shopPrice.actionPriceDataVo;
+                _loc2_ = this.shopPrice != null ? this.shopPrice.actionPriceDataVo : null;
                 break;
             default:
                 _loc2_ = null;
@@ -192,19 +211,22 @@ public class NodeData implements IValueObject {
         var _loc2_:String = null;
         switch (param1) {
             case NamedLabels.XP_COST:
-                _loc2_ = this._unlockProps.xpCostLabel;
+                _loc2_ = this._unlockProps != null ? this._unlockProps.xpCostLabel : EMPTY_STR;
                 break;
             case NamedLabels.EARNED_XP:
                 _loc2_ = this._earnedXPLabel;
                 break;
             case NamedLabels.CREDITS_PRICE:
-                _loc2_ = this._shopPrice.creditsLabel;
+                _loc2_ = this.shopPrice != null ? this.shopPrice.creditsLabel : EMPTY_STR;
                 break;
             case NamedLabels.GOLD_PRICE:
-                _loc2_ = this._shopPrice.goldLabel;
+                _loc2_ = this.shopPrice != null ? this.shopPrice.goldLabel : EMPTY_STR;
+                break;
+            case NamedLabels.RESTORE:
+                _loc2_ = App.utils.locale.makeString(MENU.RESEARCH_LABELS_BUTTON_RESTORE);
                 break;
             default:
-                _loc2_ = "";
+                _loc2_ = EMPTY_STR;
         }
         return _loc2_;
     }
@@ -219,10 +241,10 @@ public class NodeData implements IValueObject {
                 _loc2_ = this._earnedXP;
                 break;
             case NamedLabels.CREDITS_PRICE:
-                _loc2_ = this._shopPrice.credits;
+                _loc2_ = this.shopPrice.credits;
                 break;
             case NamedLabels.GOLD_PRICE:
-                _loc2_ = this._shopPrice.gold;
+                _loc2_ = this.shopPrice.gold;
                 break;
             default:
                 _loc2_ = 0;
@@ -230,8 +252,79 @@ public class NodeData implements IValueObject {
         return _loc2_;
     }
 
+    public function setVehCompareData(param1:Object):void {
+        this.clearVehCompareVO();
+        this._vehCompareVO = new VehCompareEntrypointVO(param1);
+    }
+
+    public function setVehCompareTreeNode(param1:Object):void {
+        this.clearVehCompareTreeNodeVO();
+        this._vehCompareTreeNodeVO = new VehCompareEntrypointTreeNodeVO(param1);
+    }
+
     public function toString():String {
-        return "[\nNodeData:\n id = " + this.id + ",\n nameString = " + this.nameString + ",\n primaryClassName = " + this.primaryClassName + ",\n level = " + this.level + ",\n earnedXP = " + this.earnedXP + ",\n state = " + this.state + ",\n unlockProps = " + this._unlockProps + ",\n iconPath = " + this.iconPath + ",\n longName = " + this.longName + ",\n extraInfo = " + this.extraInfo + ",\n shopPrice = " + this._shopPrice + ",\n displayInfo = " + this._displayInfo + ",\n actionPriceDataVo = " + this._actionPriceDataVo + "," + ",\n status = " + this.status + ",\n statusLevel = " + this.statusLevel + "\n]";
+        return "[\nNodeData:\n id = " + this.id + ",\n nameString = " + this.nameString + ",\n primaryClassName = " + this.primaryClassName + ",\n level = " + this.level + ",\n earnedXP = " + this.earnedXP + ",\n state = " + this.state + ",\n unlockProps = " + this._unlockProps + ",\n iconPath = " + this.iconPath + ",\n longName = " + this.longName + ",\n extraInfo = " + this.extraInfo + ",\n shopPrice = " + this.shopPrice + ",\n displayInfo = " + this.displayInfo + ",\n actionPriceDataVo = " + this._actionPriceDataVo + "," + ",\n status = " + this.status + ",\n statusLevel = " + this.statusLevel + "\n]";
+    }
+
+    protected function onDispose():void {
+        this.dataIsReady = false;
+        this.clearActionPriceDataVo();
+        this.clearShopPrice();
+        this.clearUnlockProps();
+        this.clearDisplayInfo();
+        this.clearVehCompareVO();
+        this.clearVehCompareTreeNodeVO();
+        this._asserter = null;
+    }
+
+    private function clearActionPriceDataVo():void {
+        if (this._actionPriceDataVo != null) {
+            this._actionPriceDataVo.dispose();
+            this._actionPriceDataVo = null;
+        }
+    }
+
+    private function clearUnlockProps():void {
+        if (this._unlockProps != null) {
+            this._unlockProps.dispose();
+            this._unlockProps = null;
+        }
+    }
+
+    private function clearVehCompareVO():void {
+        if (this._vehCompareVO != null) {
+            this._vehCompareVO.dispose();
+            this._vehCompareVO = null;
+        }
+    }
+
+    private function clearVehCompareTreeNodeVO():void {
+        if (this._vehCompareTreeNodeVO != null) {
+            this._vehCompareTreeNodeVO.dispose();
+            this._vehCompareTreeNodeVO = null;
+        }
+    }
+
+    private function clearShopPrice():void {
+        if (this.shopPrice != null) {
+            this.shopPrice.dispose();
+            this.shopPrice = null;
+        }
+    }
+
+    private function clearDisplayInfo():void {
+        if (this.displayInfo != null) {
+            this.displayInfo.dispose();
+            this.displayInfo = null;
+        }
+    }
+
+    public function get unlockProps():UnlockProps {
+        return this._unlockProps;
+    }
+
+    public function set unlockProps(param1:UnlockProps):void {
+        this._unlockProps = param1;
     }
 
     public function get earnedXP():Number {
@@ -247,32 +340,20 @@ public class NodeData implements IValueObject {
             this._earnedXPLabel = App.utils.locale.integer(this._earnedXP);
         }
         else {
-            this._earnedXPLabel = "";
+            this._earnedXPLabel = EMPTY_STR;
         }
     }
 
-    public function get unlockProps():UnlockProps {
-        return this._unlockProps;
+    public function get vehCompareVO():VehCompareEntrypointVO {
+        return this._vehCompareVO;
     }
 
-    public function set unlockProps(param1:UnlockProps):void {
-        this._unlockProps = param1;
+    public function get isCompareModeAvailable():Boolean {
+        return this._vehCompareTreeNodeVO && this._vehCompareTreeNodeVO.modeAvailable;
     }
 
-    public function get shopPrice():ShopPrice {
-        return this._shopPrice;
-    }
-
-    public function set shopPrice(param1:ShopPrice):void {
-        this._shopPrice = param1;
-    }
-
-    public function get displayInfo():IValueObject {
-        return this._displayInfo;
-    }
-
-    public function set displayInfo(param1:IValueObject):void {
-        this._displayInfo = param1;
+    public function get isCompareBasketFull():Boolean {
+        return this._vehCompareTreeNodeVO && this._vehCompareTreeNodeVO.cmpBasketFull;
     }
 }
 }

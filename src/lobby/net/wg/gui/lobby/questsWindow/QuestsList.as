@@ -3,6 +3,7 @@ import flash.text.TextField;
 
 import net.wg.data.constants.QuestsStates;
 import net.wg.gui.components.controls.ScrollingListEx;
+import net.wg.gui.lobby.questsWindow.data.QuestRendererVO;
 
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.interfaces.IDataProvider;
@@ -81,6 +82,13 @@ public class QuestsList extends ScrollingListEx {
         this.allQuestsDoneTF = null;
         this.clickCheckboxTF = null;
         super.onDispose();
+    }
+
+    override public function set selectedIndex(param1:int):void {
+        var _loc2_:QuestRendererVO = QuestRendererVO(_dataProvider[param1]);
+        if (_loc2_ == null || !_loc2_.isTitle) {
+            super.selectedIndex = param1;
+        }
     }
 
     override public function set dataProvider(param1:IDataProvider):void {

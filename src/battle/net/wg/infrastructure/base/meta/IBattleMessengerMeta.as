@@ -9,13 +9,23 @@ public interface IBattleMessengerMeta extends IEventDispatcher {
 
     function focusLostS():void;
 
-    function as_showGreenMessage(param1:String):void;
+    function getToxicStatusS(param1:Number):Object;
 
-    function as_showRedMessage(param1:String):void;
+    function onToxicButtonClickedS(param1:Number, param2:Number):void;
 
-    function as_showBlackMessage(param1:String):void;
+    function onToxicPanelClosedS(param1:Number):void;
 
-    function as_showSelfMessage(param1:String):void;
+    function as_enableToxicPanel():void;
+
+    function as_updateMessages(param1:Number, param2:String):void;
+
+    function as_showGreenMessage(param1:String, param2:Number):void;
+
+    function as_showRedMessage(param1:String, param2:Number):void;
+
+    function as_showBlackMessage(param1:String, param2:Number):void;
+
+    function as_showSelfMessage(param1:String, param2:Number):void;
 
     function as_setupList(param1:Object):void;
 
@@ -38,5 +48,9 @@ public interface IBattleMessengerMeta extends IEventDispatcher {
     function as_toggleCtrlPressFlag(param1:Boolean):void;
 
     function as_enterPressed(param1:int):void;
+
+    function as_updateToxicPanel(param1:Number, param2:Object):void;
+
+    function as_restoreMessages(param1:Number):void;
 }
 }

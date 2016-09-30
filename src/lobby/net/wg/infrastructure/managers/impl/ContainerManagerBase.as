@@ -7,6 +7,7 @@ import flash.utils.Dictionary;
 import net.wg.data.constants.ContainerTypes;
 import net.wg.data.constants.Errors;
 import net.wg.data.constants.generated.EVENT_LOG_CONSTANTS;
+import net.wg.data.daapi.LoadViewVO;
 import net.wg.infrastructure.base.meta.IContainerManagerMeta;
 import net.wg.infrastructure.base.meta.impl.ContainerManagerMeta;
 import net.wg.infrastructure.events.LoaderEvent;
@@ -40,7 +41,7 @@ public class ContainerManagerBase extends ContainerManagerMeta implements IConta
     }
 
     private static function getViewName(param1:IManagedContent):String {
-        return param1.sourceView.as_name;
+        return param1.sourceView.as_config.name;
     }
 
     override protected function onDispose():void {
@@ -69,12 +70,11 @@ public class ContainerManagerBase extends ContainerManagerMeta implements IConta
                 this._loader = null;
             }
             this._containersMap = null;
-            return;
         }
         catch (error:Error) {
             DebugUtils.LOG_ERROR("ContainerManager.onDispose", error.getStackTrace());
-            return;
         }
+        super.onDispose();
     }
 
     public function as_bringToFront(param1:String, param2:String):void {
@@ -126,31 +126,33 @@ public class ContainerManagerBase extends ContainerManagerMeta implements IConta
     }
 
     public function as_hide(param1:String):Boolean {
-        var _loc4_:String = null;
-        var _loc5_:Vector.<AliasVO> = null;
-        var _loc6_:Boolean = false;
-        var _loc7_:int = 0;
+        var _loc4_:IView = null;
+        var _loc5_:String = null;
+        var _loc6_:Vector.<AliasVO> = null;
+        var _loc7_:Boolean = false;
         var _loc8_:int = 0;
+        var _loc9_:int = 0;
         var _loc2_:Boolean = false;
         var _loc3_:ViewInfo = this.nameToView[param1];
         if (_loc3_) {
-            _loc4_ = _loc3_.view.as_config.type;
-            _loc5_ = this._containersForLoadingViews[_loc4_];
-            if (_loc5_) {
-                _loc7_ = _loc5_.length;
-                _loc8_ = 0;
-                while (_loc8_ < _loc7_) {
-                    if (_loc5_[_loc8_].name == param1) {
-                        _loc5_.splice(_loc8_, 1);
+            _loc4_ = _loc3_.view;
+            _loc5_ = _loc4_.as_config.configVO.type;
+            _loc6_ = this._containersForLoadingViews[_loc5_];
+            if (_loc6_) {
+                _loc8_ = _loc6_.length;
+                _loc9_ = 0;
+                while (_loc9_ < _loc8_) {
+                    if (_loc6_[_loc9_].name == param1) {
+                        _loc6_.splice(_loc9_, 1);
                         break;
                     }
-                    _loc8_++;
+                    _loc9_++;
                 }
             }
             delete this.nameToView[param1];
-            _loc6_ = _loc3_.removeView();
-            if (_loc6_) {
-                this.callLogEvent(_loc3_.view, EVENT_LOG_CONSTANTS.EVENT_TYPE_VIEW_UNLOADED, ContainerTypes.CONTAINER_TYPES.indexOf(_loc3_.view.as_config.type));
+            _loc7_ = _loc3_.removeView();
+            if (_loc7_) {
+                this.callLogEvent(_loc4_, EVENT_LOG_CONSTANTS.EVENT_TYPE_VIEW_UNLOADED, ContainerTypes.CONTAINER_TYPES.indexOf(_loc5_));
             }
             _loc3_.dispose();
             _loc3_ = null;
@@ -199,21 +201,25 @@ public class ContainerManagerBase extends ContainerManagerMeta implements IConta
         _loc5_.addEventListener(FocusEvent.FOCUS_OUT, this.onContainerFocusOutHandler);
     }
 
-    public function as_show(param1:String, param2:int = 0, param3:int = 0):Boolean {
+    public function as_show(param1:String, param2:int, param3:int):Boolean {
+        var _loc6_:IView = null;
+        var _loc7_:LoadViewVO = null;
         var _loc4_:Boolean = false;
         var _loc5_:ViewInfo = this.nameToView[param1];
         if (_loc5_ && _loc5_.view) {
-            _loc5_.view.x = param2;
-            _loc5_.view.y = param3;
+            _loc6_ = _loc5_.view;
+            _loc6_.x = param2;
+            _loc6_.y = param3;
             _loc5_.addView();
-            this.callLogEvent(_loc5_.view, EVENT_LOG_CONSTANTS.EVENT_TYPE_VIEW_LOADED, ContainerTypes.CONTAINER_TYPES.indexOf(_loc5_.view.as_config.type));
+            _loc7_ = _loc6_.as_config;
+            this.callLogEvent(_loc6_, EVENT_LOG_CONSTANTS.EVENT_TYPE_VIEW_LOADED, ContainerTypes.CONTAINER_TYPES.indexOf(_loc7_.configVO.type));
             this.updateFocus();
             _loc4_ = true;
-            if (_loc5_.view.as_config.type == ContainerTypes.CURSOR) {
-                dispatchEvent(new LoaderEvent(LoaderEvent.CURSOR_LOADED, _loc5_.view.as_config, param1, _loc5_.view));
+            if (_loc7_.configVO.type == ContainerTypes.CURSOR) {
+                dispatchEvent(new LoaderEvent(LoaderEvent.CURSOR_LOADED, _loc7_.configVO, param1, _loc6_));
             }
-            if (_loc5_.view.as_config.type == ContainerTypes.WAITING) {
-                dispatchEvent(new LoaderEvent(LoaderEvent.WAITING_LOADED, _loc5_.view.as_config, param1, _loc5_.view));
+            if (_loc7_.configVO.type == ContainerTypes.WAITING) {
+                dispatchEvent(new LoaderEvent(LoaderEvent.WAITING_LOADED, _loc7_.configVO, param1, _loc6_));
             }
             return _loc4_;
         }
@@ -349,25 +355,27 @@ public class ContainerManagerBase extends ContainerManagerMeta implements IConta
     }
 
     private function onViewLoadedHandler(param1:LoaderEvent):void {
+        var viewImpl:IView = null;
+        var asConfig:LoadViewVO = null;
         var viewType:String = null;
         var alias:String = null;
         var container:IManagedContainer = null;
-        var vi:ViewInfo = null;
         var n:int = 0;
         var isDeleted:Boolean = false;
         var i:int = 0;
         var event:LoaderEvent = param1;
         try {
-            viewType = event.view.as_config.type;
-            alias = event.view.as_alias;
+            viewImpl = event.view;
+            asConfig = viewImpl.as_config;
+            viewType = asConfig.configVO.type;
+            alias = asConfig.alias;
             container = this.getContainer(viewType);
-            assertNotNull(container, "container is null for type " + event.view.as_config.type + " of " + alias + " view.");
-            vi = new ViewInfo(container, IView(event.view));
-            this.nameToView[event.name] = vi;
+            assertNotNull(container, "container is null for type " + viewType + " of " + alias + " view.");
+            this.nameToView[asConfig.name] = new ViewInfo(container, viewImpl);
             n = this._containersForLoadingViews[viewType].length;
             i = 0;
             while (i < n) {
-                if (this._containersForLoadingViews[viewType][i].name == event.name) {
+                if (this._containersForLoadingViews[viewType][i].name == asConfig.name) {
                     this._containersForLoadingViews[viewType].splice(i, 1);
                     isDeleted = true;
                     break;

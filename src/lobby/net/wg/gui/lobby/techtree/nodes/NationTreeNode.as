@@ -5,10 +5,12 @@ import flash.display.InteractiveObject;
 import flash.display.Sprite;
 import flash.events.MouseEvent;
 
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.generated.CONTEXT_MENU_HANDLER_TYPE;
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.lobby.techtree.TechTreeEvent;
+import net.wg.gui.lobby.techtree.constants.ActionName;
 import net.wg.gui.lobby.techtree.constants.NavIndicator;
 import net.wg.gui.lobby.techtree.constants.NodeEntityType;
 import net.wg.gui.lobby.techtree.constants.TTSoundID;
@@ -19,6 +21,10 @@ import net.wg.gui.lobby.techtree.math.MatrixPosition;
 import net.wg.infrastructure.interfaces.entity.IDraggable;
 
 public class NationTreeNode extends Renderer {
+
+    private static const EMPTY_STR:String = "";
+
+    private static const INDICATOR:String = "indicator ";
 
     public var nameAndXp:NameAndXpField;
 
@@ -37,7 +43,7 @@ public class NationTreeNode extends Renderer {
     }
 
     override public function getIconPath():String {
-        return !!dataInited ? valueObject.smallIconPath : "";
+        return !!dataInited ? valueObject.smallIconPath : EMPTY_STR;
     }
 
     override public function hitTestPoint(param1:Number, param2:Number, param3:Boolean = false):Boolean {
@@ -46,7 +52,8 @@ public class NationTreeNode extends Renderer {
     }
 
     override public function populateUI():void {
-        var _loc1_:String = this.getIconPath();
+        var _loc1_:String = null;
+        _loc1_ = this.getIconPath();
         this.vIconLoader.alpha = stateProps.icoAlpha;
         if (_loc1_ != this.vIconLoader.source) {
             this.vIconLoader.source = _loc1_;
@@ -56,8 +63,14 @@ public class NationTreeNode extends Renderer {
         this.nameAndXp.setIsInAction(actionPrice && isInAction());
         this.nameAndXp.setOwner(this, doValidateNow);
         if (button != null) {
+            if (isRestoreAvailable()) {
+                button.action = ActionName.RESTORE;
+            }
+            else if (isRentAvailable() && isEnoughMoney()) {
+                button.action = ActionName.RENT;
+            }
             button.label = getNamedLabel(stateProps.label);
-            button.enabled = isActionEnabled();
+            button.enabled = isActionEnabled() && isEnoughMoney() || isEnoughXp();
             if (button.setAnimation(stateProps.id, stateProps.animation)) {
                 button.visible = stateProps.visible;
             }
@@ -88,7 +101,7 @@ public class NationTreeNode extends Renderer {
     }
 
     override protected function onDispose():void {
-        removeEventListener(MouseEvent.MOUSE_MOVE, this.handleMouseMove, false);
+        removeEventListener(MouseEvent.MOUSE_MOVE, this.onMouseMoveHandler);
         this.typeAndLevel.dispose();
         this.typeAndLevel = null;
         this.nameAndXp.dispose();
@@ -124,7 +137,7 @@ public class NationTreeNode extends Renderer {
         var _loc1_:IDraggable = null;
         var _loc2_:InteractiveObject = null;
         if (container is IDraggable) {
-            removeEventListener(MouseEvent.MOUSE_MOVE, this.handleMouseMove, false);
+            removeEventListener(MouseEvent.MOUSE_MOVE, this.onMouseMoveHandler);
             _loc1_ = IDraggable(container);
             _loc2_ = _loc1_.getHitArea();
             this._isMouseMoved = false;
@@ -137,6 +150,7 @@ public class NationTreeNode extends Renderer {
         this.navContainer.mouseEnabled = this.navContainer.mouseChildren = false;
         if (!this._isNavContainerAdded && NavIndicator.isDraw(entityType)) {
             _loc1_ = App.utils.classFactory.getObject(NavIndicator.getSource(entityType)) as BitmapData;
+            App.utils.asserter.assertNotNull(_loc1_, INDICATOR + Errors.CANT_NULL);
             if (_loc1_ != null) {
                 this.navContainer.addChild(new Bitmap(_loc1_));
                 this._isNavContainerAdded = true;
@@ -175,14 +189,14 @@ public class NationTreeNode extends Renderer {
 
     private function startDragNode(param1:MouseEvent):void {
         if (container is IDraggable && App.utils.commons.isLeftButton(param1)) {
-            addEventListener(MouseEvent.MOUSE_MOVE, this.handleMouseMove, false, 0, true);
+            addEventListener(MouseEvent.MOUSE_MOVE, this.onMouseMoveHandler, false, 0, true);
         }
     }
 
-    private function handleMouseMove(param1:MouseEvent):void {
+    private function onMouseMoveHandler(param1:MouseEvent):void {
         var _loc2_:IDraggable = null;
         var _loc3_:InteractiveObject = null;
-        if (container as IDraggable && App.utils.commons.isLeftButton(param1)) {
+        if (container is IDraggable && App.utils.commons.isLeftButton(param1)) {
             _loc2_ = IDraggable(container);
             _loc3_ = _loc2_.getHitArea();
             if (!this._isMouseMoved) {

@@ -10,6 +10,8 @@ import net.wg.gui.battle.views.stats.constants.DynamicSquadState;
 
 public class PlayersPanelListItemHolder implements IPlayersPanelListItemHolder {
 
+    public var accDBID:Number = NaN;
+
     private var _listItem:PlayersPanelListItem = null;
 
     private var _vehicleData:DAAPIVehicleInfoVO = null;
@@ -24,77 +26,9 @@ public class PlayersPanelListItemHolder implements IPlayersPanelListItemHolder {
 
     private var _isDisposed:Boolean = false;
 
-    public var accDBID:Number = NaN;
-
     public function PlayersPanelListItemHolder(param1:PlayersPanelListItem) {
         super();
         this._listItem = param1;
-    }
-
-    public function get listItem():PlayersPanelListItem {
-        return this._listItem;
-    }
-
-    public function get playerStatus():uint {
-        return this._vehicleData.playerStatus;
-    }
-
-    public function setVehicleData(param1:DAAPIVehicleInfoVO):void {
-        this._vehicleData = param1.clone();
-        this.accDBID = this._vehicleData.accountDBID;
-        this.applyVehicleData();
-    }
-
-    public function setFrags(param1:int):void {
-        if (this._frags == param1) {
-            return;
-        }
-        this._frags = param1;
-        this.applyFragsData();
-    }
-
-    public function get vehicleID():Number {
-        return !!this._vehicleData ? Number(this._vehicleData.vehicleID) : Number(NaN);
-    }
-
-    public function get accountDBID():Number {
-        return !!this._vehicleData ? Number(this._vehicleData.accountDBID) : Number(NaN);
-    }
-
-    public function setUserTags(param1:Array):void {
-        if (!this._vehicleData || this._vehicleData.userTags == param1) {
-            return;
-        }
-        this._vehicleData.userTags = param1;
-        this.applyUserTags();
-        this.updateUserProps();
-        this.updateDynamicSquadState();
-    }
-
-    public function setPlayerStatus(param1:int):void {
-        if (!this._vehicleData || this._vehicleData.playerStatus == param1) {
-            return;
-        }
-        this._vehicleData.playerStatus = param1;
-        this.applyPlayerStatus();
-        this.updateDynamicSquadState();
-    }
-
-    public function setInvitationStatus(param1:uint):void {
-        if (!this._vehicleData || this._vehicleData.invitationStatus == param1) {
-            return;
-        }
-        this._vehicleData.invitationStatus = param1;
-        this.updateInviteStatus();
-        this.updateDynamicSquadState();
-    }
-
-    public function setVehicleStatus(param1:int):void {
-        if (!this._vehicleData || this._vehicleData.vehicleStatus == param1) {
-            return;
-        }
-        this._vehicleData.vehicleStatus = param1;
-        this.applyVehicleStatus();
     }
 
     public final function dispose():void {
@@ -115,12 +49,54 @@ public class PlayersPanelListItemHolder implements IPlayersPanelListItemHolder {
         }
     }
 
-    public function get isInviteReceived():Boolean {
-        return this._isInviteReceived;
+    public function setFrags(param1:int):void {
+        if (this._frags == param1) {
+            return;
+        }
+        this._frags = param1;
+        this.applyFragsData();
     }
 
-    public function get isCurrentPlayer():Boolean {
-        return this._isCurrPlayer;
+    public function setInvitationStatus(param1:uint):void {
+        if (!this._vehicleData || this._vehicleData.invitationStatus == param1) {
+            return;
+        }
+        this._vehicleData.invitationStatus = param1;
+        this.updateInviteStatus();
+        this.updateDynamicSquadState();
+    }
+
+    public function setPlayerStatus(param1:int):void {
+        if (!this._vehicleData || this._vehicleData.playerStatus == param1) {
+            return;
+        }
+        this._vehicleData.playerStatus = param1;
+        this.applyPlayerStatus();
+        this.updateDynamicSquadState();
+    }
+
+    public function setUserTags(param1:Array):void {
+        if (!this._vehicleData || this._vehicleData.userTags == param1) {
+            return;
+        }
+        this._vehicleData.userTags = param1;
+        this.applyUserTags();
+        this.updateUserProps();
+        this.updateDynamicSquadState();
+    }
+
+    public function setVehicleData(param1:DAAPIVehicleInfoVO):void {
+        this._vehicleData = param1.clone();
+        this.accDBID = this._vehicleData.accountDBID;
+        this.applyVehicleData();
+    }
+
+    public function setVehicleStatus(param1:int):void {
+        if (!this._vehicleData || this._vehicleData.vehicleStatus == param1) {
+            return;
+        }
+        this._vehicleData.vehicleStatus = param1;
+        this.applyVehicleStatus();
     }
 
     private function applyVehicleData():void {
@@ -149,6 +125,7 @@ public class PlayersPanelListItemHolder implements IPlayersPanelListItemHolder {
             return;
         }
         this._listItem.setIsMute(UserTags.isMuted(_loc1_));
+        this._listItem.isIgnoredTmp(UserTags.isIgnored(_loc1_));
         this._isCurrPlayer = UserTags.isCurrentPlayer(_loc1_);
         this._listItem.setIsCurrentPlayer(this._isCurrPlayer);
     }
@@ -195,7 +172,31 @@ public class PlayersPanelListItemHolder implements IPlayersPanelListItemHolder {
     }
 
     private function updateInviteStatus():void {
-        this._isInviteReceived = InvitationStatus.isReceived(this._vehicleData.invitationStatus);
+        this._isInviteReceived = InvitationStatus.isOnlyReceived(this._vehicleData.invitationStatus);
+    }
+
+    public function get listItem():PlayersPanelListItem {
+        return this._listItem;
+    }
+
+    public function get playerStatus():uint {
+        return this._vehicleData.playerStatus;
+    }
+
+    public function get vehicleID():Number {
+        return !!this._vehicleData ? Number(this._vehicleData.vehicleID) : Number(NaN);
+    }
+
+    public function get accountDBID():Number {
+        return !!this._vehicleData ? Number(this._vehicleData.accountDBID) : Number(NaN);
+    }
+
+    public function get isInviteReceived():Boolean {
+        return this._isInviteReceived;
+    }
+
+    public function get isCurrentPlayer():Boolean {
+        return this._isCurrPlayer;
     }
 }
 }

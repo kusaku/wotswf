@@ -1,34 +1,32 @@
 package net.wg.gui.lobby.vehiclePreview.controls {
 import flash.display.MovieClip;
-import flash.display.Sprite;
+import flash.events.Event;
+import flash.events.MouseEvent;
 import flash.text.TextField;
 
-import net.wg.gui.components.tooltips.helpers.TankTypeIco;
+import net.wg.gui.data.VehCompareEntrypointVO;
+import net.wg.gui.interfaces.IButtonIconLoader;
 import net.wg.gui.interfaces.IUpdatableComponent;
 import net.wg.gui.lobby.vehiclePreview.data.VehPreviewVehicleInfoPanelVO;
+import net.wg.gui.lobby.vehiclePreview.events.VehPreviewEvent;
 import net.wg.infrastructure.base.UIComponentEx;
+import net.wg.infrastructure.interfaces.IInfoIcon;
 
 public class VehPreviewVehicleInfoPanel extends UIComponentEx implements IUpdatableComponent {
 
-    private static const ELITE_VEHICLE_HORIZONTAL_OFFSET:int = 86;
-
-    private static const REGULAR_VEHICLE_HORIZONTAL_OFFSET:int = 96;
-
-    private static const ELITE_POSTFIX:String = "_elite";
-
     private static const BOTTOM_MARGIN:int = 9;
-
-    public var tankTypeIco:TankTypeIco = null;
-
-    public var tankName:TextField = null;
-
-    public var tankDescr:TextField = null;
 
     public var infoTf:TextField = null;
 
-    public var premiumIGRBg:Sprite = null;
-
     public var bg:MovieClip = null;
+
+    public var infoIcon:IInfoIcon = null;
+
+    public var addToCompareBtn:IButtonIconLoader = null;
+
+    public var compareInfoTf:TextField = null;
+
+    private var _compareBtnEnabled:Boolean = false;
 
     public function VehPreviewVehicleInfoPanel() {
         super();
@@ -39,32 +37,52 @@ public class VehPreviewVehicleInfoPanel extends UIComponentEx implements IUpdata
         this.mouseEnabled = false;
         this.bg.mouseEnabled = false;
         this.bg.mouseChildren = false;
-        this.premiumIGRBg.mouseEnabled = this.premiumIGRBg.mouseChildren = false;
+        this.addToCompareBtn.addEventListener(MouseEvent.CLICK, this.onCompareBtnClickHandler);
+        this.addToCompareBtn.iconSource = RES_ICONS.MAPS_ICONS_BUTTONS_VEHICLECOMPAREBTN;
+        this.addToCompareBtn.mouseEnabledOnDisabled = true;
+        this.addToCompareBtn.focusable = false;
     }
 
     override protected function onDispose():void {
-        this.premiumIGRBg = null;
-        this.tankTypeIco.dispose();
-        this.tankTypeIco = null;
-        this.tankName = null;
-        this.tankDescr = null;
         this.infoTf = null;
         this.bg = null;
+        this.infoIcon.dispose();
+        this.infoIcon = null;
+        this.addToCompareBtn.removeEventListener(MouseEvent.CLICK, this.onCompareBtnClickHandler);
+        this.addToCompareBtn.dispose();
+        this.addToCompareBtn = null;
+        this.compareInfoTf = null;
         super.onDispose();
     }
 
     public function update(param1:Object):void {
         var _loc2_:VehPreviewVehicleInfoPanelVO = VehPreviewVehicleInfoPanelVO(param1);
-        var _loc3_:Boolean = _loc2_.isElite;
-        this.tankTypeIco.type = !!_loc3_ ? _loc2_.type + ELITE_POSTFIX : _loc2_.type;
-        this.tankTypeIco.x = !!_loc3_ ? Number(ELITE_VEHICLE_HORIZONTAL_OFFSET) : Number(REGULAR_VEHICLE_HORIZONTAL_OFFSET);
-        this.tankName.htmlText = _loc2_.name;
-        this.tankDescr.htmlText = _loc2_.vDescription;
-        this.infoTf.htmlText = _loc2_.info;
-        this.premiumIGRBg.visible = _loc2_.isPremiumIGR;
-        App.utils.commons.updateTextFieldSize(this.infoTf, false, true);
-        this.bg.height = this.infoTf.y + this.infoTf.height + BOTTOM_MARGIN;
+        var _loc3_:VehCompareEntrypointVO = _loc2_.vehCompareVO;
+        var _loc4_:Boolean = _loc3_.modeAvailable;
+        this.infoTf.visible = !_loc4_;
+        this.infoIcon.visible = _loc4_;
+        this.compareInfoTf.visible = _loc4_;
+        this.addToCompareBtn.visible = _loc4_;
+        if (_loc4_) {
+            this.compareInfoTf.htmlText = _loc3_.label;
+            this._compareBtnEnabled = _loc3_.btnEnabled;
+            this.addToCompareBtn.enabled = _loc3_.btnEnabled;
+            this.addToCompareBtn.tooltip = _loc3_.btnTooltip;
+            this.infoIcon.tooltip = _loc2_.infoTooltip;
+            this.bg.height = this.infoIcon.y << 1;
+        }
+        else {
+            this.infoTf.htmlText = _loc2_.info;
+            App.utils.commons.updateTextFieldSize(this.infoTf, false, true);
+            this.bg.height = this.infoTf.y + this.infoTf.height + BOTTOM_MARGIN;
+        }
         height = actualHeight;
+    }
+
+    private function onCompareBtnClickHandler(param1:Event):void {
+        if (this._compareBtnEnabled) {
+            dispatchEvent(new VehPreviewEvent(VehPreviewEvent.COMPARE_CLICK, true));
+        }
     }
 }
 }

@@ -76,6 +76,7 @@ public class VehiclePreview extends VehiclePreviewMeta implements IVehiclePrevie
         addEventListener(VehPreviewEvent.CLOSE_CLICK, this.onCloseClickHandler);
         addEventListener(VehPreviewEvent.BACK_CLICK, this.onBackClickHandler);
         addEventListener(VehPreviewInfoPanelEvent.INFO_TAB_CHANGED, this.onInfoTabChangedHandler);
+        addEventListener(VehPreviewEvent.COMPARE_CLICK, this.onCompareClickHandler);
         App.gameInputMgr.setKeyHandler(Keyboard.ESCAPE, KeyboardEvent.KEY_DOWN, this.onEscapeKeyUpHandler, true);
     }
 
@@ -86,6 +87,7 @@ public class VehiclePreview extends VehiclePreviewMeta implements IVehiclePrevie
         removeEventListener(VehPreviewEvent.CLOSE_CLICK, this.onCloseClickHandler);
         removeEventListener(VehPreviewEvent.BACK_CLICK, this.onBackClickHandler);
         removeEventListener(VehPreviewInfoPanelEvent.INFO_TAB_CHANGED, this.onInfoTabChangedHandler);
+        removeEventListener(VehPreviewEvent.COMPARE_CLICK, this.onCompareClickHandler);
         this.vehParams = null;
         this.header.dispose();
         this.header = null;
@@ -153,6 +155,10 @@ public class VehiclePreview extends VehiclePreviewMeta implements IVehiclePrevie
 
     private function onBackClickHandler(param1:VehPreviewEvent):void {
         onBackClickS();
+    }
+
+    private function onCompareClickHandler(param1:VehPreviewEvent):void {
+        onCompareClickS();
     }
 }
 }

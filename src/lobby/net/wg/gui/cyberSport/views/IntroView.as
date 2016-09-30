@@ -19,7 +19,7 @@ import net.wg.gui.cyberSport.views.events.CSShowHelpEvent;
 import net.wg.gui.cyberSport.vo.CSIntroViewStaticTeamVO;
 import net.wg.gui.cyberSport.vo.CSIntroViewTextsVO;
 import net.wg.gui.rally.events.RallyViewsEvent;
-import net.wg.gui.rally.vo.VehicleVO;
+import net.wg.gui.rally.vo.IntroVehicleVO;
 import net.wg.infrastructure.base.meta.IBaseRallyViewMeta;
 import net.wg.infrastructure.base.meta.ICyberSportIntroMeta;
 import net.wg.infrastructure.base.meta.impl.CyberSportIntroMeta;
@@ -84,7 +84,7 @@ public class IntroView extends CyberSportIntroMeta implements ICyberSportIntroMe
 
     public var regulationsInfoLbl:TextField = null;
 
-    private var _selectedVehicleData:VehicleVO = null;
+    private var _selectedVehicleData:IntroVehicleVO = null;
 
     private var _selectedVehicleIsReady:Boolean = false;
 
@@ -146,28 +146,32 @@ public class IntroView extends CyberSportIntroMeta implements ICyberSportIntroMe
         titleLbl.x = width - titleLbl.width >> 1;
         titleLbl.autoSize = TextFieldAutoSize.CENTER;
         this.helpLabel.text = MENU.INGAME_MENU_BUTTONS_HELP;
-        this.autoMatchBtn.addEventListener(ButtonEvent.CLICK, this.onAutoSearchClick);
-        this.autoMatchBtn.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.autoMatchBtn.addEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
-        this.selectedVehicleBtn.addEventListener(ButtonEvent.CLICK, this.csVehicleBtnOnClick);
-        this.selectedVehicleBtn.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.selectedVehicleBtn.addEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
-        this.warningIcon.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.warningIcon.addEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
+        this.autoMatchBtn.addEventListener(ButtonEvent.CLICK, this.onAutoSearchClickHandler);
+        this.autoMatchBtn.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.autoMatchBtn.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
+        this.selectedVehicleBtn.addEventListener(ButtonEvent.CLICK, this.onSelectedVehicleButtonClickHandler);
+        this.selectedVehicleBtn.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.selectedVehicleBtn.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
+        this.warningIcon.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.warningIcon.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         this.ladderBtnIcon.addEventListener(ButtonEvent.CLICK, this.onLadderBtnClickHandler);
-        this.ladderBtnIcon.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.ladderBtnIcon.addEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
-        this.regulationsInfoLbl.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.regulationsInfoLbl.addEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
-        this.helpLink.addEventListener(ButtonEvent.CLICK, this.onHelpLinkClick);
+        this.ladderBtnIcon.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.ladderBtnIcon.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
+        this.regulationsInfoLbl.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.regulationsInfoLbl.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
+        this.helpLink.addEventListener(ButtonEvent.CLICK, this.onHelpLinkClickHandler);
         this.teamAdditionalBtn.addEventListener(ButtonEvent.CLICK, this.onTeamAdditionalBtnClickHandler);
         this.cancelBtn.addEventListener(ButtonEvent.CLICK, this.onCancelBtnClickHandler);
-        this.teamDescriptionTF.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.teamDescriptionTF.addEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
+        this.teamDescriptionTF.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.teamDescriptionTF.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         createBtn.mouseEnabledOnDisabled = true;
         this._originalCreateBtnWidth = createBtn.width;
         this._originalCreateBtnX = createBtn.x;
         this._originalCreateBtnAutoSize = createBtn.autoSize;
+    }
+
+    private function onControlRollOutHandler(param1:MouseEvent):void {
+        onControlRollOut();
     }
 
     override protected function draw():void {
@@ -254,24 +258,24 @@ public class IntroView extends CyberSportIntroMeta implements ICyberSportIntroMe
 
     override protected function onDispose():void {
         this.cloudsAnimation.stop();
-        this.autoMatchBtn.removeEventListener(ButtonEvent.CLICK, this.onAutoSearchClick);
-        this.autoMatchBtn.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.autoMatchBtn.removeEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
-        this.selectedVehicleBtn.removeEventListener(ButtonEvent.CLICK, this.csVehicleBtnOnClick);
-        this.selectedVehicleBtn.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.selectedVehicleBtn.removeEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
-        this.warningIcon.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.warningIcon.removeEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
+        this.autoMatchBtn.removeEventListener(ButtonEvent.CLICK, this.onAutoSearchClickHandler);
+        this.autoMatchBtn.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.autoMatchBtn.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
+        this.selectedVehicleBtn.removeEventListener(ButtonEvent.CLICK, this.onSelectedVehicleButtonClickHandler);
+        this.selectedVehicleBtn.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.selectedVehicleBtn.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
+        this.warningIcon.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.warningIcon.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         this.ladderBtnIcon.removeEventListener(ButtonEvent.CLICK, this.onLadderBtnClickHandler);
-        this.ladderBtnIcon.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.ladderBtnIcon.removeEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
+        this.ladderBtnIcon.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.ladderBtnIcon.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         this.teamAdditionalBtn.removeEventListener(ButtonEvent.CLICK, this.onTeamAdditionalBtnClickHandler);
         this.cancelBtn.removeEventListener(ButtonEvent.CLICK, this.onCancelBtnClickHandler);
-        this.helpLink.removeEventListener(ButtonEvent.CLICK, this.onHelpLinkClick);
-        this.regulationsInfoLbl.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.regulationsInfoLbl.removeEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
-        this.teamDescriptionTF.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.teamDescriptionTF.removeEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
+        this.helpLink.removeEventListener(ButtonEvent.CLICK, this.onHelpLinkClickHandler);
+        this.regulationsInfoLbl.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.regulationsInfoLbl.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
+        this.teamDescriptionTF.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.teamDescriptionTF.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         this.autoMatchBtn.dispose();
         this.autoMatchBtn = null;
         this.selectedVehicleBtn.dispose();
@@ -314,21 +318,21 @@ public class IntroView extends CyberSportIntroMeta implements ICyberSportIntroMe
         }
     }
 
-    public function as_setSelectedVehicle(param1:Object, param2:Boolean, param3:String):void {
-        this._selectedVehicleData = new VehicleVO(param1);
-        this._warnTooltip = param3;
-        var _loc4_:Array = [];
-        if (this._selectedVehicleIsReady != param2) {
-            this._selectedVehicleIsReady = param2;
-            _loc4_.push(INVALIDATION_SELECTED_VEHICLE_READY);
+    override protected function setSelectedVehicle(param1:IntroVehicleVO):void {
+        this._selectedVehicleData = param1;
+        this._warnTooltip = param1.warnTooltip;
+        var _loc2_:Array = [];
+        if (this._selectedVehicleIsReady != param1.isReadyVehicle) {
+            this._selectedVehicleIsReady = param1.isReadyVehicle;
+            _loc2_.push(INVALIDATION_SELECTED_VEHICLE_READY);
         }
         this.selectedVehicleBtn.setVehicle(this._selectedVehicleData);
         if (!this.selectedVehicleBtn.enabled) {
             this.selectedVehicleBtn.enabled = true;
-            _loc4_.push(INVALIDATION_SELECTED_VEHICLE_BUTTON_ENABLE);
+            _loc2_.push(INVALIDATION_SELECTED_VEHICLE_BUTTON_ENABLE);
         }
-        if (_loc4_.length > 0) {
-            invalidate.apply(null, _loc4_);
+        if (_loc2_.length > 0) {
+            invalidate.apply(null, _loc2_);
         }
     }
 
@@ -358,7 +362,7 @@ public class IntroView extends CyberSportIntroMeta implements ICyberSportIntroMe
         App.toolTipMgr.showComplex(_loc1_);
     }
 
-    override protected function onCreateClick(param1:ButtonEvent):void {
+    override protected function onCreateButtonClick():void {
         if (this._model.isNeedAddPlayers) {
             showStaticTeamStaffS();
         }
@@ -370,7 +374,14 @@ public class IntroView extends CyberSportIntroMeta implements ICyberSportIntroMe
         }
     }
 
-    override protected function onControlRollOver(param1:MouseEvent):void {
+    private function onControlRollOverHandler(param1:MouseEvent):void {
+        this.controlRollOverPerformer(param1);
+    }
+
+    override protected function controlRollOverPerformer(param1:MouseEvent = null):void {
+        if (param1 == null) {
+            return;
+        }
         var _loc2_:String = Values.EMPTY_STR;
         var _loc3_:String = Values.EMPTY_STR;
         switch (param1.currentTarget) {
@@ -421,14 +432,14 @@ public class IntroView extends CyberSportIntroMeta implements ICyberSportIntroMe
         dispatchEvent(new RallyViewsEvent(RallyViewsEvent.LOAD_VIEW_REQUEST, _loc2_));
     }
 
-    private function onAutoSearchClick(param1:ButtonEvent):void {
+    private function onAutoSearchClickHandler(param1:ButtonEvent):void {
         dispatchEvent(new CSComponentEvent(CSComponentEvent.SHOW_AUTO_SEARCH_VIEW, {
             "state": CYBER_SPORT_ALIASES.INTRO_VIEW_UI,
             "cmpDescr": [this._selectedVehicleData.intCD]
         }));
     }
 
-    private function csVehicleBtnOnClick(param1:ButtonEvent):void {
+    private function onSelectedVehicleButtonClickHandler(param1:ButtonEvent):void {
         showSelectorPopupS();
     }
 
@@ -449,7 +460,7 @@ public class IntroView extends CyberSportIntroMeta implements ICyberSportIntroMe
         cancelWaitingTeamRequestS();
     }
 
-    private function onHelpLinkClick(param1:ButtonEvent):void {
+    private function onHelpLinkClickHandler(param1:ButtonEvent):void {
         dispatchEvent(new CSShowHelpEvent(CYBER_SPORT_HELP_IDS.CYBERSPORT_INTRO_HELP));
     }
 }

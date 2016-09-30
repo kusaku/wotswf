@@ -23,9 +23,6 @@ import net.wg.infrastructure.constants.WindowViewInvalidationType;
 import net.wg.infrastructure.events.FocusRequestEvent;
 import net.wg.infrastructure.interfaces.entity.IFocusContainer;
 
-import org.idmedia.as3commons.util.StringUtils;
-
-import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.IndexEvent;
 import scaleform.clik.events.ListEvent;
@@ -36,11 +33,7 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
 
     private static const INVALIDATE_QUEST_INFO:String = "invQuestInfo";
 
-    private static const INVALIDATE_QUEST_ID:String = "invQuestID";
-
     private static const INVALIDATE_SORTING_FUNC:String = "invSortFunc";
-
-    private static const INVALIDATE_NO_DATA_LABEL:String = "invNoDataLabel";
 
     private static const AVAILABLE_HEIGHT:int = 583;
 
@@ -50,9 +43,9 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
 
     private static const AWARDS_PADDING:int = 1;
 
-    private static const WAITING_TOP_PADDING:int = 10;
+    private static const AWARDS_CAROUSEL_PADDING:int = 2;
 
-    private static const SHOW_ANIMATION_TIME:int = 150;
+    private static const WAITING_TOP_PADDING:int = 10;
 
     private static const HIDE_ANIMATION_TIME:int = 600;
 
@@ -70,6 +63,8 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
 
     public var listHidingBG:MovieClip;
 
+    public var blackListBackground:MovieClip;
+
     public var questBG:MovieClip;
 
     public var questInfo:QuestBlock = null;
@@ -80,13 +75,9 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
 
     public var awards:QuestAwardsBlock;
 
-    private var _currentQuest:String = "";
+    public var carouselAwardsBlock:QuestCarouselAwardsBlock = null;
 
-    private var _questForUpdate:String = "";
-
-    private var _lastUpdatedQuest:String = "";
-
-    private var _totalTasks:Number = 0;
+    public var separator:MovieClip = null;
 
     private var _waiting:Waiting = null;
 
@@ -94,15 +85,9 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
 
     private var _questData:QuestDataVO = null;
 
-    private var _allTasks:Vector.<String> = null;
-
     private var _daapi:IQuestsCurrentTabDAAPI;
 
     private var _sortingFunction:Function = null;
-
-    private var _hideSortPanel:Boolean = false;
-
-    private var _noDataLabel:String = "";
 
     private var _showWaiting:Boolean = false;
 
@@ -112,33 +97,31 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
 
     private var _headerResized:Boolean = false;
 
-    private var _isInRoaming:Boolean = false;
-
-    private var _questInFade:Boolean = false;
-
     private var _tweens:Vector.<Tween>;
+
+    private var _currentQuestID:String = "";
 
     public function QuestContent() {
         this._tweens = new Vector.<Tween>();
         super();
-        this._allTasks = new Vector.<String>();
-        this.noQuestsMC.visible = false;
     }
 
     override protected function configUI():void {
         super.configUI();
         this.questInfo = QuestBlock(this.scrollPane.target);
         this.notSelected.text = QUESTS.QUESTS_TABS_NOSELECTED_TEXT;
-        this.listHidingBG.mouseEnabled = false;
-        this.listHidingBG.mouseChildren = false;
-        this.scrollPane.visible = false;
-        this.awards.visible = false;
-        this.header.visible = false;
-        this.alertMsg.visible = false;
-        this._isInRoaming = App.globalVarsMgr.isInRoamingS();
         this.questsList.smartScrollBar = true;
         this.sortingPanel.validateNow();
         this.scrollPane.scrollBarMargin = SCROLLBAR_MARGIN;
+        this.listHidingBG.mouseChildren = false;
+        this.listHidingBG.mouseEnabled = false;
+        this.noQuestsMC.visible = false;
+        this.scrollPane.visible = true;
+        this.alertMsg.visible = false;
+        this.awards.visible = false;
+        this.carouselAwardsBlock.visible = false;
+        this.header.visible = false;
+        this.separator.visible = false;
         this.addListeners();
     }
 
@@ -146,10 +129,6 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
         var _loc1_:Tween = null;
         this.removeListeners();
         App.utils.scheduler.cancelTask(invalidate);
-        if (this._allTasks) {
-            this._allTasks.splice(0, this._allTasks.length);
-            this._allTasks = null;
-        }
         this.tryClearQuestData();
         if (this._waiting) {
             this._waiting.dispose();
@@ -169,6 +148,8 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
         this.header = null;
         this.awards.dispose();
         this.awards = null;
+        this.carouselAwardsBlock.dispose();
+        this.carouselAwardsBlock = null;
         this.sortingPanel.dispose();
         this.sortingPanel = null;
         this.alertMsg.dispose();
@@ -188,41 +169,28 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
         this._sortingFunction = null;
         this._componentForFocus = null;
         this._daapi = null;
+        this.blackListBackground = null;
+        this.separator = null;
         super.onDispose();
     }
 
     override protected function draw():void {
         super.draw();
-        if (isInvalid(InvalidationType.DATA)) {
-            this.invalidateCommonData();
-        }
         if (isInvalid(INVALIDATE_SORTING_FUNC) && this._sortingFunction != null) {
             this.questInfo.conditionsView.blocksContainer.sortingFunction = this._sortingFunction;
             this.questInfo.requirementsView.blocksContainer.sortingFunction = this._sortingFunction;
         }
-        if (isInvalid(INVALIDATE_NO_DATA_LABEL)) {
-            this.noQuestsMC.noResult.text = this._noDataLabel;
-        }
         if (isInvalid(WindowViewInvalidationType.WAITING_INVALID)) {
             this.invalidateWaiting();
         }
-        if (isInvalid(INVALIDATE_QUEST_ID)) {
-            if (this._questInFade) {
-                if (this._lastUpdatedQuest == this._questForUpdate) {
-                    this.getQuestData();
-                }
-                else {
-                    this._lastUpdatedQuest = this._questForUpdate;
-                    App.utils.scheduler.scheduleOnNextFrame(invalidate, INVALIDATE_QUEST_ID);
-                }
-            }
-        }
         if (isInvalid(INVALIDATE_QUEST_INFO)) {
             if (this._questData) {
+                this.notSelected.visible = false;
                 this.scrollPane.scrollPosition = 0;
                 this.questInfo.setData(this._questData);
                 this.header.setData(this._questData.header);
                 this.awards.setData(this._questData.award);
+                this.carouselAwardsBlock.setDataProvider(this._questData.awardsDataProvider);
             }
         }
     }
@@ -232,32 +200,57 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
     }
 
     public function hideSortPanel(param1:Boolean):void {
-        this._hideSortPanel = param1;
+        this.sortingPanel.visible = !param1;
+    }
+
+    public function setNoData():void {
+        this.showQuestInfo(false);
+        this.notSelected.visible = false;
+        this.blackListBackground.visible = false;
+        this.questBG.visible = false;
+        this.questsList.visible = false;
+        this.scrollBar.visible = false;
+        this.noQuestsMC.visible = true;
     }
 
     public function setNoDataLabel(param1:String):void {
-        this._noDataLabel = param1;
-        invalidate(INVALIDATE_NO_DATA_LABEL);
+        this.noQuestsMC.noResult.text = param1;
     }
 
-    public function setQuestsData(param1:Array, param2:Number):void {
-        var _loc3_:QuestRendererVO = null;
+    public function setNotSelected():void {
+        this.showQuestInfo(false);
+        this.notSelected.visible = true;
+    }
+
+    public function setQuestsListData(param1:Array, param2:String):void {
         if (this.questsList.dataProvider != null) {
             this.questsList.dataProvider.cleanUp();
         }
+        this.questsList.itemRenderer = App.utils.classFactory.getClass(param2);
         this.questsList.dataProvider = new DataProvider(param1);
-        this._totalTasks = param2;
-        this._allTasks.splice(0, this._allTasks.length);
-        for each(_loc3_ in param1) {
-            this._allTasks.push(_loc3_.questID);
-        }
-        invalidateData();
+        var _loc3_:Boolean = Boolean(param1.length > 0);
+        this.questsList.visible = _loc3_;
+        this.blackListBackground.visible = _loc3_;
+        this.questBG.visible = true;
+        this.scrollBar.visible = true;
+        this.noQuestsMC.visible = false;
     }
 
     public function setSelectedQuest(param1:String):void {
-        this.sortingPanel.doneCB.selected = false;
-        this._currentQuest = param1;
-        invalidateData();
+        this._currentQuestID = param1;
+        var _loc2_:IDataProvider = this.questsList.dataProvider;
+        var _loc3_:Number = _loc2_.length;
+        var _loc4_:QuestRendererVO = null;
+        var _loc5_:int = 0;
+        while (_loc5_ < _loc3_) {
+            _loc4_ = _loc2_[_loc5_];
+            if (_loc4_.isTitle == false && _loc4_.questID == param1) {
+                this.questsList.selectedIndex = _loc5_;
+                return;
+            }
+            _loc5_++;
+        }
+        this.questsList.selectedIndex = -1;
     }
 
     public function sortElementsUnVisible():void {
@@ -267,29 +260,8 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
     }
 
     public function updateQuestInfo(param1:Object):void {
-        var _loc7_:QuestRenderer = null;
-        var _loc2_:Object = param1;
         this.tryClearQuestData();
-        this._questData = !!_loc2_ ? new QuestDataVO(_loc2_) : null;
-        this._lastUpdatedQuest = this._questForUpdate;
-        var _loc3_:IDataProvider = this.questsList.dataProvider;
-        var _loc4_:Number = _loc3_.length;
-        var _loc5_:QuestRendererVO = null;
-        var _loc6_:int = 0;
-        while (_loc6_ < _loc4_) {
-            _loc5_ = _loc3_[_loc6_];
-            if (_loc5_.questID == this._questForUpdate) {
-                _loc5_.isNew = false;
-                if (this.questsList.selectedIndex == _loc6_) {
-                    _loc7_ = QuestRenderer(this.questsList.getRendererAt(_loc6_, this.questsList.scrollPosition));
-                    if (_loc7_ != null) {
-                        _loc7_.hideNew();
-                    }
-                    break;
-                }
-            }
-            _loc6_++;
-        }
+        this._questData = param1 != null ? new QuestDataVO(param1) : null;
         invalidate(INVALIDATE_QUEST_INFO);
     }
 
@@ -309,13 +281,11 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
         this.questsList.addEventListener(ListEvent.INDEX_CHANGE, this.onQuestListIndexChangeHandler);
         this.sortingPanel.doneCB.addEventListener(Event.SELECT, this.onDoneCheckBoxSelectHandler);
         this.sortingPanel.sortingDD.addEventListener(ListEvent.INDEX_CHANGE, this.onSortingDDIndexChangeHandler);
-        this.questInfo.addEventListener(QuestEvent.SELECT_QUEST, this.onSelectQuestHandler);
-        this.awards.addEventListener(QuestEvent.SELECT_QUEST, this.onSelectQuestHandler);
+        addEventListener(QuestEvent.SELECT_QUEST, this.onSelectQuestHandler);
     }
 
     private function removeListeners():void {
         this.header.contentTabs.removeEventListener(IndexEvent.INDEX_CHANGE, this.onHeaderContentTabsIndexChangeHandler);
-        this.awards.removeEventListener(QuestEvent.SELECT_QUEST, this.onSelectQuestHandler);
         this.awards.removeEventListener(Event.RESIZE, this.onControlResizeHandler);
         this.header.removeEventListener(Event.RESIZE, this.onControlResizeHandler);
         this.questInfo.removeEventListener(Event.RESIZE, this.onControlResizeHandler);
@@ -323,11 +293,11 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
         this.questsList.removeEventListener(ListEvent.INDEX_CHANGE, this.onQuestListIndexChangeHandler);
         this.sortingPanel.doneCB.removeEventListener(Event.SELECT, this.onDoneCheckBoxSelectHandler);
         this.sortingPanel.sortingDD.removeEventListener(ListEvent.INDEX_CHANGE, this.onSortingDDIndexChangeHandler);
-        this.questInfo.removeEventListener(QuestEvent.SELECT_QUEST, this.onSelectQuestHandler);
+        removeEventListener(QuestEvent.SELECT_QUEST, this.onSelectQuestHandler);
     }
 
     private function invalidateWaiting():void {
-        if (!this._waiting) {
+        if (this._waiting == null) {
             this._waiting = new Waiting();
             addChild(this._waiting);
             this._waiting.x = this.notSelected.x + (this.notSelected.width - WAITING_SIZE >> 1);
@@ -339,43 +309,15 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
             this._waiting.validateNow();
             this._waiting.backgroundAlpha = 0;
         }
-        if (this._waiting) {
-            if (this._showWaiting) {
-                this._waiting.show();
-                this.playFadeAnimation(0, SHOW_ANIMATION_TIME, this.tweenFadeOutCallback);
-            }
-            else {
-                this._waiting.hide();
-                this.playFadeAnimation(1, HIDE_ANIMATION_TIME, null);
-            }
-        }
-    }
-
-    private function invalidateCommonData():void {
-        this.questInfo.setAvailableQuests(this._allTasks);
-        var _loc1_:* = this._totalTasks > 0;
-        this.sortingPanel.visible = !this._hideSortPanel && _loc1_ && !this._isInRoaming;
-        this.questsList.visible = _loc1_;
-        this.scrollBar.visible = !!_loc1_ ? Boolean(this.scrollBar.visible) : false;
-        this.listHidingBG.visible = _loc1_;
-        this.questBG.visible = _loc1_;
-        this.notSelected.visible = _loc1_;
-        this.noQuestsMC.visible = !_loc1_;
-        this.alertMsg.visible = _loc1_ && this._isInRoaming;
-        if (_loc1_) {
-            this.checkSelectedQuest();
+        else if (this._showWaiting) {
+            this._waiting.show();
+            this.showQuestInfo(false);
+            this.notSelected.visible = false;
         }
         else {
-            this.scrollPane.visible = false;
-            this.header.visible = false;
-            this.awards.visible = false;
+            this._waiting.hide();
+            this.playFadeAnimation(1, HIDE_ANIMATION_TIME, null);
         }
-    }
-
-    private function updateQuest(param1:String):void {
-        this.showWaiting = true;
-        this._questForUpdate = param1;
-        invalidate(INVALIDATE_QUEST_ID);
     }
 
     private function playFadeAnimation(param1:Number, param2:Number, param3:Function):void {
@@ -402,67 +344,28 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
             "paused": false,
             "ease": Strong.easeInOut,
             "onComplete": param3
+        }), new Tween(param2, this.carouselAwardsBlock, {"alpha": param1}, {
+            "paused": false,
+            "ease": Strong.easeInOut,
+            "onComplete": param3
         })]);
         for each(_loc5_ in this._tweens) {
             _loc5_.fastTransform = false;
         }
     }
 
-    private function tweenFadeOutCallback():void {
-        this._questInFade = true;
-        invalidate(INVALIDATE_QUEST_ID);
-    }
-
     private function showQuestInfo(param1:Boolean):void {
         this.scrollPane.visible = param1;
         this.header.visible = param1;
-    }
-
-    private function checkSelectedQuest():void {
-        var _loc5_:int = 0;
-        var _loc1_:IDataProvider = this.questsList.dataProvider;
-        var _loc2_:Number = _loc1_.length;
-        var _loc3_:QuestRendererVO = null;
-        var _loc4_:Boolean = false;
-        if (StringUtils.isNotEmpty(this._currentQuest)) {
-            _loc5_ = 0;
-            while (_loc5_ < _loc2_) {
-                _loc3_ = _loc1_[_loc5_];
-                if (_loc3_.questID == this._currentQuest) {
-                    if (this.questsList.selectedIndex == _loc5_) {
-                        this.questsList.scrollToIndex(_loc5_);
-                    }
-                    else {
-                        this.questsList.selectedIndex = _loc5_;
-                    }
-                    this.updateQuest(this._currentQuest);
-                    _loc4_ = true;
-                    this.showQuestInfo(false);
-                    this.notSelected.visible = false;
-                    break;
-                }
-                _loc5_++;
-            }
+        if (this._questData != null) {
+            this.awards.visible = this._questData.award != null && this._questData.award.length > 0 && param1;
+            this.carouselAwardsBlock.visible = this._questData.awardsDataProvider.length > 0 && param1;
+            this.separator.visible = this.awards.visible || this.carouselAwardsBlock.visible;
         }
-        if (!_loc4_) {
-            this.questsList.selectedIndex = -1;
-        }
-    }
-
-    private function setNotSelected():void {
-        this.showQuestInfo(false);
-        this.notSelected.visible = true;
-        this.awards.visible = false;
-        this._currentQuest = Values.EMPTY_STR;
     }
 
     private function assertDaapiNotNull():void {
         App.utils.asserter.assertNotNull(this._daapi, "daapi module" + Errors.CANT_NULL);
-    }
-
-    private function getQuestData():void {
-        this.assertDaapiNotNull();
-        this._daapi.getQuestInfoS(this._questForUpdate);
     }
 
     public function set daapi(param1:IQuestsCurrentTabDAAPI):void {
@@ -486,22 +389,21 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
     }
 
     private function onQuestListIndexChangeHandler(param1:ListEvent):void {
-        var _loc2_:QuestRendererVO = null;
-        if (param1.index >= 0) {
-            _loc2_ = QuestRendererVO(param1.itemData);
-            this._currentQuest = _loc2_.questID;
-            this.updateQuest(this._currentQuest);
-        }
-        else {
-            this.setNotSelected();
-        }
         this._componentForFocus = InteractiveObject(param1.target);
         dispatchEvent(new FocusRequestEvent(FocusRequestEvent.REQUEST_FOCUS, this));
     }
 
     private function onQuestListItemClickHandler(param1:ListEvent):void {
-        if (param1.index == this.questsList.selectedIndex) {
-            this.questsList.selectedIndex = -1;
+        this.assertDaapiNotNull();
+        var _loc2_:QuestRendererVO = QuestRendererVO(param1.itemData);
+        if (_loc2_ != null) {
+            if (_loc2_.isTitle) {
+                this._daapi.collapseS(_loc2_.groupID);
+            }
+            else if (_loc2_.questID != this._currentQuestID) {
+                this._currentQuestID = _loc2_.questID;
+                this._daapi.getQuestInfoS(_loc2_.questID);
+            }
         }
     }
 
@@ -516,27 +418,8 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
         this._daapi.sortS(param1.index, this.sortingPanel.doneCB.selected);
     }
 
-    private function onSelectQuestHandler(param1:QuestEvent):void {
-        var _loc2_:IDataProvider = this.questsList.dataProvider;
-        var _loc3_:int = _loc2_.length;
-        var _loc4_:QuestRendererVO = null;
-        var _loc5_:int = 0;
-        while (_loc5_ < _loc3_) {
-            _loc4_ = _loc2_[_loc5_];
-            if (_loc4_.questID == param1.questID) {
-                if (this.questsList.selectedIndex == _loc5_) {
-                    this.questsList.scrollToIndex(_loc5_);
-                }
-                else {
-                    this.questsList.selectedIndex = _loc5_;
-                }
-                break;
-            }
-            _loc5_++;
-        }
-    }
-
     private function onControlResizeHandler(param1:Event):void {
+        var _loc2_:Number = NaN;
         if (this._questData) {
             if (param1.target == this.awards) {
                 this._awardsResized = true;
@@ -549,31 +432,35 @@ public class QuestContent extends UIComponentEx implements IFocusContainer {
             }
             if (this._awardsResized && this._headerResized && this._questInfoResized) {
                 this._awardsResized = this._headerResized = this._questInfoResized = false;
-                this.awards.visible = Boolean(this._questData.award && this._questData.award.length);
                 this.awards.y = AVAILABLE_HEIGHT - this.awards.height - AWARDS_PADDING | 0;
                 this.scrollPane.y = this.header.height | 0;
-                this.scrollPane.height = AVAILABLE_HEIGHT - this.header.height - this.awards.height - AWARDS_PADDING | 0;
+                if (!this.noQuestsMC.visible) {
+                    this.showQuestInfo(true);
+                }
+                this.showWaiting = false;
+                _loc2_ = 0;
+                if (this.awards.visible) {
+                    _loc2_ = this.awards.height + AWARDS_PADDING;
+                }
+                if (this.carouselAwardsBlock.visible) {
+                    _loc2_ = this.carouselAwardsBlock.height + AWARDS_CAROUSEL_PADDING;
+                }
+                this.scrollPane.height = AVAILABLE_HEIGHT - this.header.height - _loc2_ | 0;
                 this.scrollPane.validateNow();
-                if (this._lastUpdatedQuest != this._questForUpdate) {
-                    invalidate(INVALIDATE_QUEST_ID);
-                }
-                else {
-                    if (this.questsList.selectedIndex > -1) {
-                        this.showQuestInfo(true);
-                        this.notSelected.visible = false;
-                    }
-                    else {
-                        this.setNotSelected();
-                    }
-                    this._questInFade = false;
-                    this.showWaiting = false;
-                }
             }
         }
     }
 
     private function onHeaderContentTabsIndexChangeHandler(param1:IndexEvent):void {
         this.questInfo.changeView(this.header.contentTabs.selectedItem.data);
+    }
+
+    private function onSelectQuestHandler(param1:QuestEvent):void {
+        this.assertDaapiNotNull();
+        if (param1.questID != this._currentQuestID) {
+            this.setSelectedQuest(param1.questID);
+            this._daapi.getQuestInfoS(param1.questID);
+        }
     }
 }
 }

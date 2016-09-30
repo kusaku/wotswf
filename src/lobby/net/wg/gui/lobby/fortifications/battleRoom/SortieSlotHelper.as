@@ -8,7 +8,6 @@ import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.advanced.IndicationOfStatus;
 import net.wg.gui.components.controls.ButtonIconTextTransparent;
 import net.wg.gui.cyberSport.controls.CSVehicleButton;
-import net.wg.gui.cyberSport.views.respawn.UnitSlotButtonProperties;
 import net.wg.gui.lobby.fortifications.cmp.battleRoom.SortieSimpleSlot;
 import net.wg.gui.lobby.fortifications.cmp.battleRoom.SortieSlot;
 import net.wg.gui.rally.constants.PlayerStatus;
@@ -19,28 +18,22 @@ import net.wg.gui.rally.controls.RallySlotRenderer;
 import net.wg.gui.rally.controls.interfaces.IRallySimpleSlotRenderer;
 import net.wg.gui.rally.interfaces.IRallySlotVO;
 import net.wg.gui.rally.vo.RallySlotVO;
+import net.wg.gui.utils.VO.UnitSlotProperties;
 import net.wg.infrastructure.managers.ITooltipFormatter;
 
 public class SortieSlotHelper extends BaseRallySlotHelper {
 
-    private var _removeBtnProps:UnitSlotButtonProperties;
+    private var _removeBtnProps:UnitSlotProperties;
 
-    private var _lockBtnProps:UnitSlotButtonProperties;
+    private var _lockBtnProps:UnitSlotProperties;
 
     public function SortieSlotHelper() {
         super();
-        this._removeBtnProps = new UnitSlotButtonProperties({
-            "x": 237,
-            "width": 21,
-            "height": 17
-        });
-        this._lockBtnProps = new UnitSlotButtonProperties({
-            "x": 273,
-            "width": 147
-        });
+        this._removeBtnProps = new UnitSlotProperties(237, 21);
+        this._lockBtnProps = new UnitSlotProperties(273, 147);
     }
 
-    private static function updateSlotRemoveBtn(param1:SortieSlot, param2:Boolean, param3:String, param4:UnitSlotButtonProperties, param5:String):void {
+    private static function updateSlotRemoveBtn(param1:SortieSlot, param2:Boolean, param3:String, param4:UnitSlotProperties, param5:String = ""):void {
         if (param1 != null && param1.removeBtn != null) {
             param1.removeBtn.visible = param2;
             param1.removeBtn.icon = param3;
@@ -89,7 +82,7 @@ public class SortieSlotHelper extends BaseRallySlotHelper {
                 App.toolTipMgr.showComplex(TOOLTIPS.MEDALION_NOVEHICLE);
                 break;
             case CSVehicleButton.SELECTED_VEHICLE:
-                if (param3 && param3.type == "alert") {
+                if (param3 && param3.type == CSVehicleButton.ALERT_DATA_TYPE) {
                     _loc4_ = App.toolTipMgr.getNewFormatter();
                     _loc4_.addHeader(param3.state);
                     _loc4_.addBody(TOOLTIPS.FORTIFICATION_SORTIE_SLOT_VEHICLE_NOTREADY_TEMPORALLY_BODY, true);
@@ -213,78 +206,82 @@ public class SortieSlotHelper extends BaseRallySlotHelper {
     }
 
     override public function updateComponents(param1:IRallySimpleSlotRenderer, param2:IRallySlotVO):void {
-        var _loc5_:SortieSimpleSlot = null;
-        var _loc6_:RallyLockableSlotRenderer = null;
-        var _loc7_:RallySimpleSlotRenderer = null;
-        var _loc8_:SortieSlot = null;
+        var _loc4_:SortieSimpleSlot = null;
+        var _loc5_:RallyLockableSlotRenderer = null;
+        var _loc6_:RallySimpleSlotRenderer = null;
+        var _loc7_:SortieSlot = null;
+        var _loc8_:RallySlotVO = null;
         var _loc9_:Boolean = false;
         if (!param2) {
             return;
         }
-        var _loc3_:RallySlotVO = RallySlotVO(param2);
-        if (_loc3_.player) {
-            _loc3_.player.clanAbbrev = null;
-        }
         super.updateComponents(param1, param2);
-        var _loc4_:Boolean = false;
+        var _loc3_:Boolean = false;
         if (param1 is SortieSimpleSlot) {
-            _loc4_ = true;
-            _loc5_ = SortieSimpleSlot(param1);
-            _loc5_.lockBackground.visible = false;
+            _loc3_ = true;
+            _loc4_ = SortieSimpleSlot(param1);
+            _loc4_.lockBackground.visible = false;
         }
         if (param1 is RallyLockableSlotRenderer) {
-            _loc4_ = true;
-            _loc6_ = RallyLockableSlotRenderer(param1);
-            _loc6_.lockBackground.visible = false;
+            _loc3_ = true;
+            _loc5_ = RallyLockableSlotRenderer(param1);
+            _loc5_.lockBackground.visible = false;
         }
         if (param1 is RallySimpleSlotRenderer) {
-            _loc4_ = true;
-            _loc7_ = RallySimpleSlotRenderer(param1);
-            _loc7_.commander.visible = param1.index == 0;
+            _loc3_ = true;
+            _loc6_ = RallySimpleSlotRenderer(param1);
+            _loc6_.commander.visible = param1.index == 0;
         }
         if (param1 is SortieSlot) {
-            _loc4_ = true;
-            _loc8_ = SortieSlot(param1);
-            _loc8_.setStatus(_loc3_.playerStatus);
-            if (!_loc3_.isClosed) {
-                if (_loc3_.isCommanderState) {
-                    if (_loc3_.player) {
-                        updateSlotRemoveBtn(_loc8_, _loc8_.index > 0, ButtonIconTextTransparent.ICON_CROSS, this._removeBtnProps, "");
+            _loc3_ = true;
+            _loc7_ = SortieSlot(param1);
+            _loc8_ = RallySlotVO(param2);
+            _loc7_.setStatus(_loc8_.playerStatus);
+            if (!_loc8_.isClosed) {
+                if (_loc8_.isCommanderState) {
+                    if (_loc8_.player) {
+                        updateSlotRemoveBtn(_loc7_, _loc7_.index > 0, ButtonIconTextTransparent.ICON_CROSS, this._removeBtnProps);
                     }
                     else {
-                        _loc8_.removeBtn.visible = false;
+                        _loc7_.removeBtn.visible = false;
                     }
                 }
                 else {
-                    _loc9_ = _loc3_.player && UserTags.isCurrentPlayer(_loc3_.player.tags);
-                    _loc8_.removeBtn.visible = _loc9_;
+                    _loc9_ = _loc8_.player && UserTags.isCurrentPlayer(_loc8_.player.tags);
+                    _loc7_.removeBtn.visible = _loc9_;
                     if (_loc9_) {
-                        updateSlotRemoveBtn(_loc8_, _loc9_, ButtonIconTextTransparent.ICON_CROSS, this._removeBtnProps, "");
+                        updateSlotRemoveBtn(_loc7_, _loc9_, ButtonIconTextTransparent.ICON_CROSS, this._removeBtnProps);
                     }
                 }
-                _loc8_.statusIndicator.visible = true;
+                _loc7_.statusIndicator.visible = true;
             }
             else {
-                updateSlotRemoveBtn(_loc8_, _loc3_.isCommanderState, ButtonIconTextTransparent.ICON_NO_ICON, this._lockBtnProps, CYBERSPORT.WINDOW_UNIT_UNLOCKSLOT);
-                _loc8_.statusIndicator.visible = false;
+                updateSlotRemoveBtn(_loc7_, _loc8_.isCommanderState, ButtonIconTextTransparent.ICON_NO_ICON, this._lockBtnProps, CYBERSPORT.WINDOW_UNIT_UNLOCKSLOT);
+                _loc7_.statusIndicator.visible = false;
             }
-            if (_loc3_.player) {
-                _loc8_.setSpeakers(_loc3_.player.isPlayerSpeaking, true);
-                _loc8_.selfBg.visible = UserTags.isCurrentPlayer(_loc3_.player.tags);
+            if (_loc8_.player) {
+                _loc7_.setSpeakers(_loc8_.player.isPlayerSpeaking, true);
+                _loc7_.selfBg.visible = UserTags.isCurrentPlayer(_loc8_.player.tags);
             }
             else {
-                _loc8_.selfBg.visible = false;
-                _loc8_.setSpeakers(false, true);
+                _loc7_.selfBg.visible = false;
+                _loc7_.setSpeakers(false, true);
             }
-            _loc8_.updateVoiceWave();
+            _loc7_.updateVoiceWave();
         }
-        if (!_loc4_) {
+        if (!_loc3_) {
             App.utils.asserter.assert(false, "Wrong slot type passed \'" + getQualifiedClassName(param1));
         }
     }
 
     override protected function isShowSlotRestrictions(param1:RallySimpleSlotRenderer, param2:IRallySlotVO):Boolean {
         return false;
+    }
+
+    override protected function onDispose():void {
+        this._removeBtnProps = null;
+        this._lockBtnProps = null;
+        super.onDispose();
     }
 }
 }

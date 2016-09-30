@@ -16,11 +16,15 @@ public class SettingsWindowMeta extends AbstractWindowView {
 
     public var altVoicesPreview:Function;
 
+    public var altBulbPreview:Function;
+
     public var isSoundModeValid:Function;
 
     public var showWarningDialog:Function;
 
     public var onTabSelected:Function;
+
+    public var onCounterTargetVisited:Function;
 
     public function SettingsWindowMeta() {
         super();
@@ -56,6 +60,11 @@ public class SettingsWindowMeta extends AbstractWindowView {
         this.altVoicesPreview();
     }
 
+    public function altBulbPreviewS(param1:int):void {
+        App.utils.asserter.assertNotNull(this.altBulbPreview, "altBulbPreview" + Errors.CANT_NULL);
+        this.altBulbPreview(param1);
+    }
+
     public function isSoundModeValidS():Boolean {
         App.utils.asserter.assertNotNull(this.isSoundModeValid, "isSoundModeValid" + Errors.CANT_NULL);
         return this.isSoundModeValid();
@@ -69,6 +78,11 @@ public class SettingsWindowMeta extends AbstractWindowView {
     public function onTabSelectedS(param1:String):void {
         App.utils.asserter.assertNotNull(this.onTabSelected, "onTabSelected" + Errors.CANT_NULL);
         this.onTabSelected(param1);
+    }
+
+    public function onCounterTargetVisitedS(param1:String):void {
+        App.utils.asserter.assertNotNull(this.onCounterTargetVisited, "onCounterTargetVisited" + Errors.CANT_NULL);
+        this.onCounterTargetVisited(param1);
     }
 }
 }

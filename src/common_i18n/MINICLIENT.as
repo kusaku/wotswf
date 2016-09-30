@@ -41,6 +41,10 @@ package
       
       public static const BUY_VEHICLE_MESSAGE:String = "#miniclient:buy_vehicle/message";
       
+      public static const RESTORE_VEHICLE_TITLE:String = "#miniclient:restore_vehicle/title";
+      
+      public static const RESTORE_VEHICLE_MESSAGE:String = "#miniclient:restore_vehicle/message";
+      
       public static const INVITATION_NOTE_SQUAD:String = "#miniclient:invitation/note/SQUAD";
       
       public static const INVITATION_NOTE_EVENT:String = "#miniclient:invitation/note/EVENT";

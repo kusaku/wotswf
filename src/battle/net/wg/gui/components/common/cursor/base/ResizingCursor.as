@@ -7,11 +7,11 @@ import net.wg.data.constants.Errors;
 import net.wg.infrastructure.events.LifeCycleEvent;
 import net.wg.infrastructure.interfaces.IView;
 
-class ResizingCursor extends BaseCursor {
+public class ResizingCursor extends BaseCursor {
 
     private var _isOnResizing:Boolean = false;
 
-    function ResizingCursor() {
+    public function ResizingCursor() {
         super();
     }
 

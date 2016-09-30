@@ -47,6 +47,6 @@ public interface IConsumablesPanelMeta extends IEventDispatcher {
 
     function as_switchToPosmortem():void;
 
-    function as_updateEntityState(param1:String, param2:String):void;
+    function as_updateEntityState(param1:String, param2:String):int;
 }
 }

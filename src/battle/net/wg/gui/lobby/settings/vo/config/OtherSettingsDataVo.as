@@ -37,5 +37,18 @@ public class OtherSettingsDataVo extends SettingsDataVo {
             "vibroGUI": createSliderWithLabelAndValue().isDependOn(SettingsConfigHelper.VIBRO_IS_CONNECTED).build()
         });
     }
+
+    override protected function onDispose():void {
+        this.vibroIsConnected = null;
+        this.vibroGain = null;
+        this.vibroEngine = null;
+        this.vibroAcceleration = null;
+        this.vibroShots = null;
+        this.vibroHits = null;
+        this.vibroCollisions = null;
+        this.vibroDamage = null;
+        this.vibroGUI = null;
+        super.onDispose();
+    }
 }
 }

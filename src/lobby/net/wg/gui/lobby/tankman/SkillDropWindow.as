@@ -3,6 +3,7 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.text.TextField;
 
+import net.wg.data.constants.generated.SKILLS_CONSTANTS;
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.components.controls.TankmanTrainingSmallButton;
 import net.wg.infrastructure.base.meta.ISkillDropMeta;
@@ -23,8 +24,6 @@ public class SkillDropWindow extends SkillDropMeta implements ISkillDropMeta {
 
     private static const MAX_SKILL:int = 100;
 
-    protected var savingModeGroup:ButtonGroup;
-
     public var beforeBlock:TankmanSkillsInfoBlock;
 
     public var afterBlock:TankmanSkillsInfoBlock;
@@ -43,6 +42,8 @@ public class SkillDropWindow extends SkillDropMeta implements ISkillDropMeta {
 
     public var model:SkillDropModel;
 
+    private var _savingModeGroup:ButtonGroup;
+
     private var _gold:Number = NaN;
 
     private var _credits:Number = NaN;
@@ -59,14 +60,14 @@ public class SkillDropWindow extends SkillDropMeta implements ISkillDropMeta {
     override protected function configUI():void {
         super.configUI();
         var _loc1_:String = SAVE_MODE_GROUP;
-        this.savingModeGroup = new ButtonGroup(_loc1_, this);
+        this._savingModeGroup = new ButtonGroup(_loc1_, this);
         this.goldButton.groupName = _loc1_;
         this.creditsButton.groupName = _loc1_;
         this.freeButton.groupName = _loc1_;
-        this.savingModeGroup.addButton(this.goldButton);
-        this.savingModeGroup.addButton(this.creditsButton);
-        this.savingModeGroup.addButton(this.freeButton);
-        this.savingModeGroup.addEventListener(Event.CHANGE, this.onSavingModeGroupChangeHandler);
+        this._savingModeGroup.addButton(this.goldButton);
+        this._savingModeGroup.addButton(this.creditsButton);
+        this._savingModeGroup.addButton(this.freeButton);
+        this._savingModeGroup.addEventListener(Event.CHANGE, this.onSavingModeGroupChangeHandler);
         this.goldButton.allowDeselect = this.creditsButton.allowDeselect = this.freeButton.allowDeselect = false;
         this.goldButton.doubleClickEnabled = this.creditsButton.doubleClickEnabled = this.freeButton.doubleClickEnabled = true;
         this.goldButton.retraining = this.creditsButton.retraining = this.freeButton.retraining = false;
@@ -76,22 +77,6 @@ public class SkillDropWindow extends SkillDropMeta implements ISkillDropMeta {
         this.freeButton.addEventListener(MouseEvent.DOUBLE_CLICK, this.onDropButtonDoubleClickHandler);
         this.buttonDrop.addEventListener(ButtonEvent.CLICK, this.onButtonDropClickHandler);
         this.buttonCancel.addEventListener(ButtonEvent.CLICK, this.onButtonCancelClickHandler);
-    }
-
-    private function onSavingModeGroupChangeHandler(param1:Event):void {
-        this.recalculateData();
-    }
-
-    private function onDropButtonDoubleClickHandler(param1:MouseEvent):void {
-        this.onButtonDropClickHandler(null);
-    }
-
-    private function onButtonCancelClickHandler(param1:ButtonEvent):void {
-        onWindowCloseS();
-    }
-
-    private function onButtonDropClickHandler(param1:ButtonEvent):void {
-        dropSkillsS(this.getSelectedDropCostInfo().id);
     }
 
     override protected function onDispose():void {
@@ -115,10 +100,10 @@ public class SkillDropWindow extends SkillDropMeta implements ISkillDropMeta {
         this.freeButton.dispose();
         this.freeButton = null;
         this.freeDropTf = null;
-        if (this.savingModeGroup) {
-            this.savingModeGroup.removeEventListener(Event.CHANGE, this.onSavingModeGroupChangeHandler);
-            this.savingModeGroup.dispose();
-            this.savingModeGroup = null;
+        if (this._savingModeGroup) {
+            this._savingModeGroup.removeEventListener(Event.CHANGE, this.onSavingModeGroupChangeHandler);
+            this._savingModeGroup.dispose();
+            this._savingModeGroup = null;
         }
         if (this.model) {
             this.model.dispose();
@@ -168,6 +153,23 @@ public class SkillDropWindow extends SkillDropMeta implements ISkillDropMeta {
         }
     }
 
+    public function as_setCredits(param1:Number):void {
+        this._credits = param1;
+        invalidate(INVALID_MONEY);
+    }
+
+    public function as_setData(param1:Object):void {
+        this.model = SkillDropModel.parseFromObject(param1);
+        this._gold = this.model.gold;
+        this._credits = this.model.credits;
+        invalidate(INVALID_DATA);
+    }
+
+    public function as_setGold(param1:Number):void {
+        this._gold = param1;
+        invalidate(INVALID_MONEY);
+    }
+
     private function updateSavingModes():void {
         this.goldButton.setDataForDropSkills(this.model.dropSkillGold.gold, this._gold >= this.model.dropSkillGold.gold, this.model.dropSkillGold.actionPriceDataVo);
         this.creditsButton.setDataForDropSkills(this.model.dropSkillCredits.credits, this._credits > this.model.dropSkillCredits.credits, this.model.dropSkillCredits.actionPriceDataVo);
@@ -186,7 +188,7 @@ public class SkillDropWindow extends SkillDropMeta implements ISkillDropMeta {
             default:
                 _loc1_ = this.freeButton;
         }
-        this.savingModeGroup.selectedButton = _loc1_;
+        this._savingModeGroup.selectedButton = _loc1_;
         if (_loc1_.enabled) {
             _loc1_.selected = true;
         }
@@ -194,7 +196,7 @@ public class SkillDropWindow extends SkillDropMeta implements ISkillDropMeta {
 
     private function getSelectedDropCostInfo():DropSkillsCost {
         var _loc1_:DropSkillsCost = null;
-        switch (this.savingModeGroup.selectedButton) {
+        switch (this._savingModeGroup.selectedButton) {
             case this.goldButton:
                 _loc1_ = this.model.dropSkillGold;
                 break;
@@ -214,28 +216,27 @@ public class SkillDropWindow extends SkillDropMeta implements ISkillDropMeta {
         var _loc4_:int = _loc3_ >= MAX_SKILL ? int(_loc2_[1]) : -1;
         var _loc5_:Number = _loc2_[2];
         this.beforeBlock.setSkills(this.model.skillsCount, this.model.preLastSkill, this.model.lastSkill, this.model.lastSkillLevel, this.model.hasNewSkill, this.model.newSkillsCount, this.model.lastNewSkillLevel);
-        var _loc6_:String = _loc4_ > 1 ? SkillItemViewMini.TYPE_NEW_SKILL : null;
-        var _loc7_:String = SkillItemViewMini.TYPE_NEW_SKILL;
+        var _loc6_:String = _loc4_ > 1 ? SKILLS_CONSTANTS.TYPE_NEW_SKILL : null;
+        var _loc7_:String = SKILLS_CONSTANTS.TYPE_NEW_SKILL;
         var _loc8_:* = this.model.skillsCount > _loc4_;
         this.afterBlock.setSkills(_loc4_, _loc6_, _loc7_, _loc5_, _loc8_);
         this.afterBlock.setRoleLevel(this.model.roleLevel, _loc3_);
     }
 
-    public function as_setData(param1:Object):void {
-        this.model = SkillDropModel.parseFromObject(param1);
-        this._gold = this.model.gold;
-        this._credits = this.model.credits;
-        invalidate(INVALID_DATA);
+    private function onSavingModeGroupChangeHandler(param1:Event):void {
+        this.recalculateData();
     }
 
-    public function as_setGold(param1:Number):void {
-        this._gold = param1;
-        invalidate(INVALID_MONEY);
+    private function onDropButtonDoubleClickHandler(param1:MouseEvent):void {
+        this.onButtonDropClickHandler(null);
     }
 
-    public function as_setCredits(param1:Number):void {
-        this._credits = param1;
-        invalidate(INVALID_MONEY);
+    private function onButtonCancelClickHandler(param1:ButtonEvent):void {
+        onWindowCloseS();
+    }
+
+    private function onButtonDropClickHandler(param1:ButtonEvent):void {
+        dropSkillsS(this.getSelectedDropCostInfo().id);
     }
 }
 }

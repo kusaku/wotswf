@@ -3,8 +3,6 @@ public class PlayersPanelListRight extends PlayersPanelList {
 
     private static const LINKAGE:String = "PlayersPanelListItemRightUI";
 
-    public var inviteReceivedIndicator:InviteReceivedIndicator;
-
     public function PlayersPanelListRight() {
         super();
     }
@@ -13,18 +11,12 @@ public class PlayersPanelListRight extends PlayersPanelList {
         return LINKAGE;
     }
 
-    override protected function get inviteIndicator():InviteReceivedIndicator {
-        return this.inviteReceivedIndicator;
-    }
-
     override protected function get isRightAligned():Boolean {
         return true;
     }
 
-    override protected function onDispose():void {
-        this.inviteReceivedIndicator.dispose();
-        this.inviteReceivedIndicator = null;
-        super.onDispose();
+    override public function toString():String {
+        return "[WG PlayersPanelListRight]";
     }
 }
 }

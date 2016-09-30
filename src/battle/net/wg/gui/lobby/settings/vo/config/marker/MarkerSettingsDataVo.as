@@ -16,5 +16,12 @@ public class MarkerSettingsDataVo extends SettingsDataVo {
             "dead": new MarkerDeadSettingsDataVo()
         });
     }
+
+    override protected function onDispose():void {
+        this.enemy = null;
+        this.ally = null;
+        this.dead = null;
+        super.onDispose();
+    }
 }
 }

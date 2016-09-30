@@ -1,8 +1,6 @@
 package net.wg.gui.lobby.store {
 import flash.events.Event;
 
-import net.wg.data.VO.StoreTableData;
-
 public class StoreEvent extends Event {
 
     public static const BUY:String = "storeBuy";
@@ -11,15 +9,21 @@ public class StoreEvent extends Event {
 
     public static const INFO:String = "storeInfo";
 
-    private var _data:StoreTableData = null;
+    public static const ADD_TO_COMPARE:String = "addToCompare";
 
-    public function StoreEvent(param1:String, param2:StoreTableData) {
+    private var _itemCD:String = null;
+
+    public function StoreEvent(param1:String, param2:String) {
         super(param1, true, true);
-        this._data = param2;
+        this._itemCD = param2;
     }
 
-    public function get data():StoreTableData {
-        return this._data;
+    override public function clone():Event {
+        return new StoreEvent(type, this.itemCD);
+    }
+
+    public function get itemCD():String {
+        return this._itemCD;
     }
 }
 }

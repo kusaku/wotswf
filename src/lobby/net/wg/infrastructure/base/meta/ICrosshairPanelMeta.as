@@ -21,7 +21,7 @@ public interface ICrosshairPanelMeta extends IEventDispatcher {
 
     function as_setHealth(param1:Number):void;
 
-    function as_setAmmoStock(param1:Number, param2:Number, param3:Boolean, param4:String, param5:Boolean = false):void;
+    function as_setAmmoStock(param1:Number, param2:Number, param3:Boolean, param4:String, param5:Boolean):void;
 
     function as_setClipParams(param1:Number, param2:Number):void;
 

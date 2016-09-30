@@ -100,10 +100,8 @@ public class GraphicSettingsDataVo extends SettingsDataVo {
 
     public var colorFilterImages:Vector.<String> = null;
 
-    public var hash:Object;
-
     public function GraphicSettingsDataVo() {
-        super(this.hash = {
+        super({
             "monitor": createControl(ControlsFactory.TYPE_DROPDOWN).build(),
             "aspectRatio": createControl(ControlsFactory.TYPE_DROPDOWN).build(),
             "smoothing": createControl(ControlsFactory.TYPE_DROPDOWN).build(),
@@ -152,6 +150,57 @@ public class GraphicSettingsDataVo extends SettingsDataVo {
             "qualityOrder": new Vector.<String>(),
             "presets": null
         });
+    }
+
+    override protected function onDispose():void {
+        this.monitor = null;
+        this.aspectRatio = null;
+        this.smoothing = null;
+        this.customAA = null;
+        this.multisampling = null;
+        this.gamma = null;
+        this.sizes = null;
+        this.windowSize = null;
+        this.resolution = null;
+        this.refreshRate = null;
+        this.interfaceScale = null;
+        this.dynamicRenderer = null;
+        this.fov = null;
+        this.dynamicFov = null;
+        this.HAVOK_ENABLED = null;
+        this.colorFilterIntensity = null;
+        this.colorFilterImages = null;
+        this.fullScreen = null;
+        this.vertSync = null;
+        this.tripleBuffered = null;
+        this.isColorBlind = null;
+        this.graphicsQuality = null;
+        this.graphicsQualityHDSD = null;
+        this.RENDER_PIPELINE = null;
+        this.TEXTURE_QUALITY = null;
+        this.DECALS_QUALITY = null;
+        this.SHADOWS_QUALITY = null;
+        this.TERRAIN_QUALITY = null;
+        this.WATER_QUALITY = null;
+        this.LIGHTING_QUALITY = null;
+        this.SPEEDTREE_QUALITY = null;
+        this.FLORA_QUALITY = null;
+        this.EFFECTS_QUALITY = null;
+        this.POST_PROCESSING_QUALITY = null;
+        this.MOTION_BLUR_QUALITY = null;
+        this.FAR_PLANE = null;
+        this.OBJECT_LOD = null;
+        this.SNIPER_MODE_EFFECTS_QUALITY = null;
+        this.COLOR_GRADING_TECHNIQUE = null;
+        this.fpsPerfomancer = null;
+        this.SNIPER_MODE_GRASS_ENABLED = null;
+        this.VEHICLE_DUST_ENABLED = null;
+        this.VEHICLE_TRACES_ENABLED = null;
+        this.DRR_AUTOSCALER_ENABLED = null;
+        this.SEMITRANSPARENT_LEAVES_ENABLED = null;
+        this.qualityOrder = null;
+        this.presets = null;
+        super.onDispose();
     }
 }
 }

@@ -15,7 +15,11 @@ public class TechTreeEvent extends Event {
 
     public static const CLICK_2_BUY:String = "buy";
 
+    public static const RESTORE_VEHICLE:String = "restoreVehicle";
+
     public static const GO_TO_VEHICLE_VIEW:String = "goToVehicleView";
+
+    public static const CLICK_VEHICLE_COMPARE:String = "clickVehicleCompare";
 
     public var primary:int = -1;
 

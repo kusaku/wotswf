@@ -19,7 +19,7 @@ public class CrosshairPanelStrategic extends CrosshairPanelBase {
     override protected function onPopulate():void {
         super.onPopulate();
         this.setDefaultDistanceState();
-        as_setAmmoStock(0, 0, true, "critical");
+        as_setAmmoStock(0, 0, true, "critical", false);
     }
 
     override protected function onDispose():void {

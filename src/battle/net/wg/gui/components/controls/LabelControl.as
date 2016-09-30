@@ -4,6 +4,7 @@ import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
 
 import net.wg.data.constants.ComponentState;
+import net.wg.data.constants.Linkages;
 
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.controls.Label;
@@ -127,7 +128,7 @@ public class LabelControl extends Label {
         if (!this.owner && parent) {
             this.owner = parent as UIComponent;
         }
-        this._infoIco = InfoIcon(App.utils.classFactory.getComponent("InfoIconUI", InfoIcon));
+        this._infoIco = InfoIcon(App.utils.classFactory.getComponent(Linkages.INFO_ICON_UI, InfoIcon));
         this.owner.addChild(this._infoIco);
     }
 

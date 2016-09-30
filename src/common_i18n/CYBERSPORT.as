@@ -735,6 +735,10 @@ package
       
       public static const LADDERREGULATIONS_TOOLTIP_DATE:String = "#cyberSport:ladderRegulations/tooltip/date";
       
+      public static const SQUADWINDOW_WAITINGFORBATTLE:String = "#cyberSport:squadWindow/waitingForBattle";
+      
+      public static const CLUBS_LEAGUE_LABEL:String = "#cyberSport:clubs/league/label";
+      
       public static const WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_ENUM:Array = [WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_UNRESOLVED,WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_6,WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_7,WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_6_7];
        
       

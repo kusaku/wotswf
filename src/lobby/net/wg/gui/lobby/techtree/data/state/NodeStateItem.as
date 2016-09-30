@@ -1,22 +1,35 @@
 package net.wg.gui.lobby.techtree.data.state {
-public class NodeStateItem {
+import net.wg.infrastructure.interfaces.entity.IDisposable;
 
-    private var state:uint;
+public class NodeStateItem implements IDisposable {
 
-    private var props:StateProperties;
+    private var _state:uint;
+
+    private var _props:StateProperties;
 
     public function NodeStateItem(param1:uint, param2:StateProperties) {
         super();
-        this.state = param1;
-        this.props = param2;
+        this._state = param1;
+        this._props = param2;
     }
 
-    public function getState():uint {
-        return this.state;
+    public final function dispose():void {
+        this.onDispose();
     }
 
     public function getProps():StateProperties {
-        return this.props;
+        return this._props;
+    }
+
+    public function getState():uint {
+        return this._state;
+    }
+
+    protected function onDispose():void {
+        if (this._props != null) {
+            this._props.dispose();
+            this._props = null;
+        }
     }
 }
 }

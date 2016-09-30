@@ -1,8 +1,6 @@
 package net.wg.data.constants.generated {
 public class BATTLE_RESULT_TYPES {
 
-    public static const TOOLTIP_HEAD_BLOCK_LINKAGE:String = "TooltipFinalStatsHeadBlockUI";
-
     public static const TOOLTIP_TEXT_BLOCK_LINKAGE:String = "TooltipTextBlockUI";
 
     public static const TOOLTIP_BUILDUP_BLOCK_LINKAGE:String = "TooltipBuildUpBlockUI";

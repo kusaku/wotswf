@@ -19,6 +19,10 @@ public class ActionName {
 
     public static const BUY_AND_EQUIP:String = "buyAndEquip";
 
+    public static const RESTORE:String = "restore";
+
+    public static const RENT:String = "rent";
+
     public function ActionName() {
         super();
     }

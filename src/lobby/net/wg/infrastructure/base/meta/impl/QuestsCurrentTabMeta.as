@@ -10,6 +10,8 @@ public class QuestsCurrentTabMeta extends QuestsBaseTab {
 
     public var getQuestInfo:Function;
 
+    public var collapse:Function;
+
     public function QuestsCurrentTabMeta() {
         super();
     }
@@ -27,6 +29,11 @@ public class QuestsCurrentTabMeta extends QuestsBaseTab {
     public function getQuestInfoS(param1:String):void {
         App.utils.asserter.assertNotNull(this.getQuestInfo, "getQuestInfo" + Errors.CANT_NULL);
         this.getQuestInfo(param1);
+    }
+
+    public function collapseS(param1:String):void {
+        App.utils.asserter.assertNotNull(this.collapse, "collapse" + Errors.CANT_NULL);
+        this.collapse(param1);
     }
 }
 }

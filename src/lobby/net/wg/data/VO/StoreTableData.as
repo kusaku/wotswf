@@ -2,8 +2,11 @@ package net.wg.data.VO {
 import net.wg.data.constants.Errors;
 import net.wg.data.daapi.base.DAAPIDataClass;
 import net.wg.gui.components.controls.VO.ActionPriceVO;
+import net.wg.gui.data.VehCompareEntrypointVO;
 
 public class StoreTableData extends DAAPIDataClass {
+
+    private static const VEH_COMPARE_DATA_FIELD_NAME:String = "vehCompareData";
 
     private var _extraModuleInfo:String = "";
 
@@ -14,6 +17,8 @@ public class StoreTableData extends DAAPIDataClass {
     private var _name:String = "";
 
     private var _desc:String = "";
+
+    private var _restoreInfo:String = "";
 
     private var _inventoryId:Number = 0;
 
@@ -71,8 +76,51 @@ public class StoreTableData extends DAAPIDataClass {
 
     private var _warnMessage:String = "";
 
+    private var _vehCompareVO:VehCompareEntrypointVO = null;
+
     public function StoreTableData(param1:Object) {
         super(param1);
+    }
+
+    override protected function onDispose():void {
+        this._actionPriceData = null;
+        this._tableVO = null;
+        this.clearActionPriceDataVO();
+        this.clearAlternativePriceDataVO();
+        this.clearVehCompareVO();
+        this._price.splice(0, this._price.length);
+        this._price = null;
+        super.onDispose();
+    }
+
+    override protected function onDataWrite(param1:String, param2:Object):Boolean {
+        if (param1 == VEH_COMPARE_DATA_FIELD_NAME) {
+            this.clearVehCompareVO();
+            this.vehCompareVO = new VehCompareEntrypointVO(param2);
+            return false;
+        }
+        return super.onDataWrite(param1, param2);
+    }
+
+    private function clearVehCompareVO():void {
+        if (this._vehCompareVO != null) {
+            this._vehCompareVO.dispose();
+            this._vehCompareVO = null;
+        }
+    }
+
+    private function clearActionPriceDataVO():void {
+        if (this._actionPriceDataVo != null) {
+            this._actionPriceDataVo.dispose();
+            this._actionPriceDataVo = null;
+        }
+    }
+
+    private function clearAlternativePriceDataVO():void {
+        if (this._alternativePriceDataVo != null) {
+            this._alternativePriceDataVo.dispose();
+            this._alternativePriceDataVo = null;
+        }
     }
 
     public function get goldEqsForCredits():Boolean {
@@ -170,7 +218,9 @@ public class StoreTableData extends DAAPIDataClass {
     public function set actionPriceData(param1:Object):void {
         this._actionPriceData = param1;
         if (param1) {
+            this.clearActionPriceDataVO();
             this.actionPriceDataVo = new ActionPriceVO(param1);
+            this.clearAlternativePriceDataVO();
             this.alternativePriceDataVo = new ActionPriceVO(param1);
         }
     }
@@ -344,6 +394,22 @@ public class StoreTableData extends DAAPIDataClass {
 
     public function set warnMessage(param1:String):void {
         this._warnMessage = param1;
+    }
+
+    public function get vehCompareVO():VehCompareEntrypointVO {
+        return this._vehCompareVO;
+    }
+
+    public function set vehCompareVO(param1:VehCompareEntrypointVO):void {
+        this._vehCompareVO = param1;
+    }
+
+    public function get restoreInfo():String {
+        return this._restoreInfo;
+    }
+
+    public function set restoreInfo(param1:String):void {
+        this._restoreInfo = param1;
     }
 }
 }

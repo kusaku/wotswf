@@ -3,13 +3,13 @@ import net.wg.data.daapi.base.DAAPIDataClass;
 
 public class CommonStatsVO extends DAAPIDataClass {
 
-    private static var TIME_STATS:String = "timeStats";
+    private static const TIME_STATS:String = "timeStats";
 
-    private static var VICTORY_SCORE:String = "victoryScore";
+    private static const VICTORY_SCORE:String = "victoryScore";
 
-    private static var PLAYER_VEHICLES:String = "playerVehicles";
+    private static const PLAYER_VEHICLES:String = "playerVehicles";
 
-    private static var OVERTIME:String = "overtime";
+    private static const OVERTIME:String = "overtime";
 
     public var arenaCreateTimeStr:String = "";
 
@@ -67,23 +67,29 @@ public class CommonStatsVO extends DAAPIDataClass {
 
     public var overtime:OvertimeVO;
 
+    public var clientArenaIdx:Number;
+
     public function CommonStatsVO(param1:Object) {
         super(param1);
     }
 
     override protected function onDataWrite(param1:String, param2:Object):Boolean {
+        var _loc3_:Array = null;
         switch (param1) {
             case TIME_STATS:
-                App.utils.asserter.assert(param2 is Array, "Field \'timeStats\' is expected to be array");
-                this.fillTimeStatValues(param2 as Array);
+                _loc3_ = param2 as Array;
+                App.utils.asserter.assertNotNull(_loc3_, "Field \'timeStats\' is expected to be array");
+                this.fillTimeStatValues(_loc3_);
                 return false;
             case VICTORY_SCORE:
-                App.utils.asserter.assert(param2 is Array, "Field \'victoryScore\' is expected to be array");
-                this.fillVictoryScore(param2 as Array);
+                _loc3_ = param2 as Array;
+                App.utils.asserter.assertNotNull(_loc3_, "Field \'victoryScore\' is expected to be array");
+                this.fillVictoryScore(_loc3_);
                 return false;
             case PLAYER_VEHICLES:
-                App.utils.asserter.assert(param2 is Array, "Field \'playerVehicles\' is expected to be array");
-                this.fillPlayerVehicles(param2 as Array);
+                _loc3_ = param2 as Array;
+                App.utils.asserter.assertNotNull(_loc3_, "Field \'playerVehicles\' is expected to be array");
+                this.fillPlayerVehicles(_loc3_);
                 return false;
             case OVERTIME:
                 this.overtime = new OvertimeVO(param2);
@@ -96,7 +102,10 @@ public class CommonStatsVO extends DAAPIDataClass {
     override protected function onDispose():void {
         var _loc3_:int = 0;
         var _loc4_:int = 0;
-        this.clans = App.utils.data.cleanupDynamicObject(this.clans);
+        App.utils.data.cleanupDynamicObject(this.clans);
+        this.clans = null;
+        this.overtime.dispose();
+        this.overtime = null;
         var _loc1_:int = this.playerVehicles.length;
         var _loc2_:int = 0;
         while (_loc2_ < _loc1_) {

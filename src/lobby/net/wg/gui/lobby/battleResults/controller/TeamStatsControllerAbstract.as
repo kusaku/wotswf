@@ -87,10 +87,9 @@ public class TeamStatsControllerAbstract implements IDisposable {
     }
 
     protected function setupList(param1:Vector.<TeamMemberItemVO>, param2:CommonStatsVO, param3:TeamStatsList):void {
-        param3.bonusType = param2.bonusType;
-        param3.wasInBattle = param2.wasInBattle;
         var _loc4_:Array = App.utils.data.vectorToArray(param1);
         param3.dataProvider = new DataProvider(_loc4_);
+        param3.setCommonStatsVO(param2);
         _loc4_.splice(0, _loc4_.length);
     }
 

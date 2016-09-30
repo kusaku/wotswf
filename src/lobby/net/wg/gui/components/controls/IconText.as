@@ -188,6 +188,9 @@ public class IconText extends UIComponentEx implements ITextContainer {
                     this.iconClip.x = _loc3_ * this.iconClip.scaleX ^ 0;
                     if (isInvalid(INV_ICON)) {
                         this.iconClip.gotoAndStop(this._icon);
+                        if (_baseDisposed) {
+                            return;
+                        }
                         this.iconClip.visible = IconTextHelper.getInstance().isIconClipVisible(this._icon);
                     }
                     if (this._iconPosition == IconTextPosition.LEFT) {

@@ -3,14 +3,11 @@ import flash.events.IEventDispatcher;
 
 import net.wg.gui.lobby.techtree.data.vo.NodeData;
 import net.wg.gui.lobby.techtree.data.vo.UnlockProps;
+import net.wg.infrastructure.interfaces.entity.IDisposable;
 
-public interface INodesDataProvider extends IEventDispatcher {
+public interface INodesDataProvider extends IEventDispatcher, IDisposable {
 
-    function get nation():String;
-
-    function get length():Number;
-
-    function clearUp():void;
+    function cleanUp():void;
 
     function invalidate(param1:String, param2:Object):void;
 
@@ -31,5 +28,9 @@ public interface INodesDataProvider extends IEventDispatcher {
     function setUnlockProps(param1:Number, param2:UnlockProps):Boolean;
 
     function setItemField(param1:String, param2:Number, param3:Object):Boolean;
+
+    function get nation():String;
+
+    function get length():Number;
 }
 }

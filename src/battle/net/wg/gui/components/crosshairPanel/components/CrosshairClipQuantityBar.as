@@ -70,7 +70,7 @@ public class CrosshairClipQuantityBar extends SimpleContainer {
         var _loc1_:Number = this._initQuantityBarTotalFrames;
         if (this._initClipCapacity != this._currentQuantityInClip) {
             if (this._initMode == MODE_QUEUE) {
-                _loc1_ = (this._currentQuantityInClip / this._initBurst ^ 0) + 1;
+                _loc1_ = Math.ceil(this._currentQuantityInClip / this._initBurst) + 1;
             }
             else if (this._initMode == MODE_AMMO) {
                 _loc1_ = this._currentQuantityInClip + 1;

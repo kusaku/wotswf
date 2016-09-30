@@ -1183,6 +1183,18 @@ package
       
       public static const EMBLEM_GROUP7_CLAN_CONTENT_16:String = "#vehicle_customization:emblem/group7/clan_content_16";
       
+      public static const EMBLEM_GROUP7_CLAN_CONTENT_17:String = "#vehicle_customization:emblem/group7/clan_content_17";
+      
+      public static const EMBLEM_GROUP7_CLAN_CONTENT_18:String = "#vehicle_customization:emblem/group7/clan_content_18";
+      
+      public static const EMBLEM_GROUP7_CLAN_CONTENT_19:String = "#vehicle_customization:emblem/group7/clan_content_19";
+      
+      public static const EMBLEM_GROUP7_CLAN_CONTENT_20:String = "#vehicle_customization:emblem/group7/clan_content_20";
+      
+      public static const EMBLEM_GROUP7_CLAN_CONTENT_21:String = "#vehicle_customization:emblem/group7/clan_content_21";
+      
+      public static const EMBLEM_GROUP7_CLAN_CONTENT_22:String = "#vehicle_customization:emblem/group7/clan_content_22";
+      
       public static const EMBLEM_GROUP8_SPECIAL_01:String = "#vehicle_customization:emblem/group8/special_01";
       
       public static const EMBLEM_GROUP9_SPECIAL_11:String = "#vehicle_customization:emblem/group9/special_11";
@@ -1207,6 +1219,20 @@ package
       
       public static const EMBLEM_GROUP22_SPECIAL_81:String = "#vehicle_customization:emblem/group22/special_81";
       
+      public static const EMBLEM_GROUP23_SPECIAL_90:String = "#vehicle_customization:emblem/group23/special_90";
+      
+      public static const EMBLEM_GROUP23_SPECIAL_91:String = "#vehicle_customization:emblem/group23/special_91";
+      
+      public static const EMBLEM_GROUP23_SPECIAL_92:String = "#vehicle_customization:emblem/group23/special_92";
+      
+      public static const EMBLEM_GROUP24_SPECIAL_93:String = "#vehicle_customization:emblem/group24/special_93";
+      
+      public static const EMBLEM_GROUP24_SPECIAL_94:String = "#vehicle_customization:emblem/group24/special_94";
+      
+      public static const EMBLEM_GROUP24_SPECIAL_95:String = "#vehicle_customization:emblem/group24/special_95";
+      
+      public static const EMBLEM_GROUP24_SPECIAL_96:String = "#vehicle_customization:emblem/group24/special_96";
+      
       public static const EMBLEM_M41_ASIA:String = "#vehicle_customization:emblem/M41_asia";
       
       public static const EMBLEM_GROUP9_ASIA_11:String = "#vehicle_customization:emblem/group9/asia_11";
@@ -1228,6 +1254,8 @@ package
       public static const INSCRIPTION_OTHER:String = "#vehicle_customization:inscription/other";
       
       public static const INSCRIPTION_IGR:String = "#vehicle_customization:inscription/IGR";
+      
+      public static const INSCRIPTION_MARKIEVENT:String = "#vehicle_customization:inscription/markIevent";
       
       public static const INSCRIPTION_CLAN_CONTENT:String = "#vehicle_customization:inscription/clan_content";
       
@@ -1947,6 +1975,24 @@ package
       
       public static const INSCRIPTION_USA_JUNE:String = "#vehicle_customization:inscription/usa/june";
       
+      public static const INSCRIPTION_USA_INSCRIPTION_09:String = "#vehicle_customization:inscription/usa/inscription_09";
+      
+      public static const INSCRIPTION_USA_INSCRIPTION_10:String = "#vehicle_customization:inscription/usa/inscription_10";
+      
+      public static const INSCRIPTION_USA_INSCRIPTION_11:String = "#vehicle_customization:inscription/usa/inscription_11";
+      
+      public static const INSCRIPTION_USA_INSCRIPTION_12:String = "#vehicle_customization:inscription/usa/inscription_12";
+      
+      public static const INSCRIPTION_USA_INSCRIPTION_13:String = "#vehicle_customization:inscription/usa/inscription_13";
+      
+      public static const INSCRIPTION_USA_INSCRIPTION_14:String = "#vehicle_customization:inscription/usa/inscription_14";
+      
+      public static const INSCRIPTION_USA_INSCRIPTION_15:String = "#vehicle_customization:inscription/usa/inscription_15";
+      
+      public static const INSCRIPTION_USA_INSCRIPTION_16:String = "#vehicle_customization:inscription/usa/inscription_16";
+      
+      public static const INSCRIPTION_USA_INSCRIPTION_17:String = "#vehicle_customization:inscription/usa/inscription_17";
+      
       public static const INSCRIPTION_USSR_DEFENDER:String = "#vehicle_customization:inscription/ussr/defender";
       
       public static const INSCRIPTION_USSR_RUTHLESS:String = "#vehicle_customization:inscription/ussr/ruthless";
@@ -2108,6 +2154,14 @@ package
       public static const INSCRIPTION_IGR_UNITY:String = "#vehicle_customization:inscription/IGR/unity";
       
       public static const INSCRIPTION_IGR_TANKS:String = "#vehicle_customization:inscription/IGR/tanks";
+      
+      public static const INSCRIPTION_SPECIAL_MARK:String = "#vehicle_customization:inscription/special/mark";
+      
+      public static const INSCRIPTION_SPECIAL_NOW_IS_THE_TIME:String = "#vehicle_customization:inscription/special/now_is_the_time";
+      
+      public static const INSCRIPTION_SPECIAL_IRON_DUKE:String = "#vehicle_customization:inscription/special/iron_duke";
+      
+      public static const INSCRIPTION_SPECIAL_THE_FIRST_TANK:String = "#vehicle_customization:inscription/special/the_first_tank";
       
       public static const INSCRIPTION_ASIA:String = "#vehicle_customization:inscription/ASIA";
       

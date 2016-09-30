@@ -97,12 +97,14 @@ public class ToolTipRefSysDescription extends ToolTipSpecial {
     }
 
     override protected function updatePositions():void {
+        var _loc4_:ICommons = null;
         var _loc7_:DisplayObject = null;
         var _loc8_:Separator = null;
+        var _loc9_:int = 0;
         var _loc1_:IToolTipRefSysAwardsBlock = null;
         var _loc2_:Vector.<TextField> = new <TextField>[this._titleTF, this._actionTF, this._conditionsTF, this._awardsTitleTF, this._bottomTF];
         var _loc3_:int = contentWidth - contentMargin.horizontal;
-        var _loc4_:ICommons = App.utils.commons;
+        _loc4_ = App.utils.commons;
         var _loc5_:int = this._model.blocksVOs.length;
         var _loc6_:int = 0;
         while (_loc6_ < _loc5_) {
@@ -131,7 +133,7 @@ public class ToolTipRefSysDescription extends ToolTipSpecial {
         separators.push(_loc8_);
         this._whiteBg.y = _loc8_.y + _loc8_.height ^ 0;
         this._awardsTitleTF.y = _loc8_.y + _loc8_.height + AWARDS_TITLE_TF_PADDING ^ 0;
-        var _loc9_:int = this._awardsTitleTF.y + TEXT_BLOCK_PADDING;
+        _loc9_ = this._awardsTitleTF.y + TEXT_BLOCK_PADDING;
         _loc6_ = 0;
         while (_loc6_ < _loc5_) {
             _loc1_ = this._textBlocks[_loc6_];

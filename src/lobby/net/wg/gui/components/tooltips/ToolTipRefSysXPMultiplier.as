@@ -85,6 +85,7 @@ public class ToolTipRefSysXPMultiplier extends ToolTipSpecial {
 
     override protected function updatePositions():void {
         var _loc1_:Separator = null;
+        _loc1_ = null;
         var _loc2_:IToolTipRefSysXPMultiplierBlock = null;
         this.descriptionTF.x = this.conditionsTF.x = this.bottomTF.x = this.titleTF.x = contentMargin.left + bgShadowMargin.left;
         this.titleTF.y = topPosition;

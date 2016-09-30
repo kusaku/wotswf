@@ -1,19 +1,22 @@
 package net.wg.gui.battle.views.battleTimer {
 import flash.display.MovieClip;
+import flash.text.TextField;
 
 import net.wg.data.constants.InvalidationType;
 import net.wg.infrastructure.base.meta.IBattleTimerMeta;
 import net.wg.infrastructure.base.meta.impl.BattleTimerMeta;
 
+import scaleform.gfx.TextFieldEx;
+
 public class BattleAnimationTimer extends BattleTimerMeta implements IBattleTimerMeta {
 
-    public var displayNormal:TimerDisplay = null;
+    public var minutesTF:TextField = null;
 
-    public var displayCritical:TimerDisplay = null;
+    public var secondsTF:TextField = null;
 
     public var background:MovieClip = null;
 
-    private var _currDisplay:TimerDisplay = null;
+    public var shadow:MovieClip = null;
 
     private var _isCritical:Boolean = false;
 
@@ -23,23 +26,15 @@ public class BattleAnimationTimer extends BattleTimerMeta implements IBattleTime
 
     public function BattleAnimationTimer() {
         super();
-    }
-
-    override protected function initialize():void {
-        this.displayNormal.visible = false;
-        this.displayCritical.visible = false;
+        TextFieldEx.setNoTranslate(this.minutesTF, true);
+        TextFieldEx.setNoTranslate(this.secondsTF, true);
     }
 
     override protected function draw():void {
-        if (isInvalid(InvalidationType.STATE)) {
-            if (this._currDisplay) {
-                this._currDisplay.visible = false;
-            }
-            this._currDisplay = !!this._isCritical ? this.displayCritical : this.displayNormal;
-            this._currDisplay.visible = true;
-        }
+        super.draw();
         if (isInvalid(InvalidationType.DATA)) {
-            this._currDisplay.setTime(this._minutes, this._seconds);
+            this.minutesTF.text = this._minutes;
+            this.secondsTF.text = this._seconds;
         }
     }
 
@@ -51,6 +46,7 @@ public class BattleAnimationTimer extends BattleTimerMeta implements IBattleTime
 
     public function as_setColor(param1:Boolean):void {
         if (this._isCritical != param1) {
+            this.shadow.visible = !param1;
             if (param1) {
                 this.background.play();
             }
@@ -58,8 +54,6 @@ public class BattleAnimationTimer extends BattleTimerMeta implements IBattleTime
                 this.background.gotoAndStop(1);
             }
             this._isCritical = param1;
-            isInvalid(InvalidationType.STATE);
-            invalidate(InvalidationType.DATA);
         }
     }
 
@@ -70,12 +64,10 @@ public class BattleAnimationTimer extends BattleTimerMeta implements IBattleTime
     }
 
     override protected function onDispose():void {
-        this.displayNormal.dispose();
-        this.displayCritical.dispose();
-        this.displayNormal = null;
-        this.displayCritical = null;
         this.background = null;
-        this._currDisplay = null;
+        this.minutesTF = null;
+        this.secondsTF = null;
+        this.shadow = null;
         super.onDispose();
     }
 }

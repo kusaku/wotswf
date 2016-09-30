@@ -5,11 +5,11 @@ import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
 import net.wg.gui.lobby.questsWindow.components.ResizableContainer;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class QuestAwardsBlock extends UIComponent {
+public class QuestAwardsBlock extends UIComponentEx {
 
     private static const INVALIDATE_MASK_WIDTH:String = "invMaskWidth";
 
@@ -26,6 +26,8 @@ public class QuestAwardsBlock extends UIComponent {
     private static const PIXEL_PADDING:int = 1;
 
     private static const CONTAINER_AVAILABLE_WIDTH:int = 350;
+
+    private static const MORE_THAN_FIVE_ROWS:String = "The number of rows in awards is more than five. Content will be cut. Please check the correctness of the quest.";
 
     public var awardTF:TextField = null;
 
@@ -51,11 +53,11 @@ public class QuestAwardsBlock extends UIComponent {
 
     private var _maskWidth:Number = NaN;
 
+    private var _haveAdditional:Boolean = false;
+
     private var _contentAlign:String = "left";
 
     private var _showFlagBottom:Boolean = true;
-
-    private var _haveAdditional:Boolean = false;
 
     private var _autoHeight:Boolean = true;
 
@@ -94,6 +96,7 @@ public class QuestAwardsBlock extends UIComponent {
         this._haveAdditional = this.addAwardTF != null && this.addContainer != null;
         this.container.verticalPadding = VERTICAL_PADDING;
         this.container.availableWidth = CONTAINER_AVAILABLE_WIDTH;
+        this.container.mouseEnabled = false;
         this.awardTF.text = QUESTS.QUESTS_TABS_AWARD_TEXT;
         this.awardTF.mouseEnabled = false;
         if (this._haveAdditional) {
@@ -125,9 +128,9 @@ public class QuestAwardsBlock extends UIComponent {
             }
         }
         if (isInvalid(INVALIDATE_ALIGN)) {
-            this.container.x = Math.round(this.awardTF.x + this.awardTF.textWidth + TEXT_PADDING);
+            this.container.x = this.awardTF.x + this.awardTF.textWidth + TEXT_PADDING ^ 0;
             if (this._haveAdditional) {
-                this.addContainer.x = Math.round(this.addAwardTF.x + this.addAwardTF.textWidth + TEXT_PADDING);
+                this.addContainer.x = this.addAwardTF.x + this.addAwardTF.textWidth + TEXT_PADDING ^ 0;
             }
         }
         if (isInvalid(INVALIDATE_MASK_WIDTH)) {
@@ -173,7 +176,7 @@ public class QuestAwardsBlock extends UIComponent {
                 }
                 _loc3_ = _loc3_ + Math.round(_loc4_ + BOTTOM_PADDING);
                 if (_loc3_ > this.flagBody.height && this.hasFixedHeight) {
-                    DebugUtils.LOG_WARNING("The number of rows in awards is more than five. Content will be cut. Please check the correctness of the quest.");
+                    DebugUtils.LOG_WARNING(MORE_THAN_FIVE_ROWS);
                     this.container.availableHeight = Math.round(this.flagBody.height - this.container.y);
                     this.container.validateNow();
                     if (this._addData && this._haveAdditional && this._addData.length > 0) {
@@ -224,11 +227,6 @@ public class QuestAwardsBlock extends UIComponent {
         this._contentAlign = param1;
     }
 
-    public function set autoHeight(param1:Boolean):void {
-        this._autoHeight = param1;
-        invalidateData();
-    }
-
     public function get showFlagBottom():Boolean {
         return this._showFlagBottom;
     }
@@ -239,6 +237,15 @@ public class QuestAwardsBlock extends UIComponent {
         }
         this._showFlagBottom = param1;
         invalidate(InvalidationType.SETTINGS);
+    }
+
+    public function get autoHeight():Boolean {
+        return this._autoHeight;
+    }
+
+    public function set autoHeight(param1:Boolean):void {
+        this._autoHeight = param1;
+        invalidateData();
     }
 }
 }

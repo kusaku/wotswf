@@ -71,6 +71,10 @@ public class QUESTS_ALIASES {
 
     public static const BEGINNER_DETAILS_PY_ALIASES:Array = [TUTORIAL_HANGAR_QUEST_DETAILS_PY_ALIAS, TUTORIAL_HANGAR_MOTIVE_QUEST_DETAILS_PY_ALIAS];
 
+    public static const QUEST_RENDERER_ALIAS:String = "QuestRenderer_UI";
+
+    public static const QUEST_RENDERER_BZ_ALIAS:String = "QuestBattleTaskRenderer_UI";
+
     public function QUESTS_ALIASES() {
         super();
     }

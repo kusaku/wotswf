@@ -36,7 +36,7 @@ public class GameInputManager extends GameInputManagerMeta implements IGameInput
         super.onDispose();
     }
 
-    public function as_addKeyHandler(param1:Number, param2:String, param3:Boolean, param4:String = null):void {
+    public function as_addKeyHandler(param1:Number, param2:String, param3:Boolean, param4:String):void {
         this.setKeyHandler(param1, param2, this.pyInputHandler, param3, param4);
     }
 

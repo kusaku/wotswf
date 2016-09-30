@@ -9,7 +9,7 @@ public interface IContainerManagerMeta extends IEventDispatcher {
 
     function as_getView(param1:String):Boolean;
 
-    function as_show(param1:String, param2:int = 0, param3:int = 0):Boolean;
+    function as_show(param1:String, param2:int, param3:int):Boolean;
 
     function as_hide(param1:String):Boolean;
 

@@ -30,10 +30,6 @@ public class NationButton extends SoundButton {
         super.onBeforeDispose();
     }
 
-    protected function defineSoundProps():void {
-        soundType = SoundTypes.TAB;
-    }
-
     override protected function preInitialize():void {
         super.preInitialize();
         this.defineSoundProps();
@@ -41,12 +37,15 @@ public class NationButton extends SoundButton {
 
     override protected function configUI():void {
         super.configUI();
-        addEventListener(MouseEvent.ROLL_OVER, this.showTooltip, false, 0, true);
-        addEventListener(MouseEvent.ROLL_OUT, hideTooltip, false, 0, true);
-        addEventListener(MouseEvent.CLICK, hideTooltip, false, 0, true);
+        addEventListener(MouseEvent.ROLL_OVER, this.showTooltip);
+        addEventListener(MouseEvent.ROLL_OUT, hideTooltip);
+        addEventListener(MouseEvent.CLICK, hideTooltip);
     }
 
     override protected function draw():void {
+        if (_baseDisposed) {
+            return;
+        }
         super.draw();
         if (_label != null && isInvalid(InvalidationType.DATA)) {
             if (this.ico != null) {
@@ -56,6 +55,10 @@ public class NationButton extends SoundButton {
                 this.icoAdd.gotoAndStop(_label);
             }
         }
+    }
+
+    protected function defineSoundProps():void {
+        soundType = SoundTypes.TAB;
     }
 
     override protected function handleMouseRelease(param1:MouseEvent):void {

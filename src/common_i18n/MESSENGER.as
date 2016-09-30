@@ -55,6 +55,14 @@ package
       
       public static const LISTVIEW_TITLE:String = "#messenger:listView/title";
       
+      public static const LISTVIEW_EMPTYLIST_TEMPLATE:String = "#messenger:listView/emptyList/template";
+      
+      public static const LISTVIEW_EMPTYLIST_INFO:String = "#messenger:listView/emptyList/info";
+      
+      public static const LISTVIEW_EMPTYLIST_INVITE:String = "#messenger:listView/emptyList/invite";
+      
+      public static const LISTVIEW_EMPTYLIST_OFFER:String = "#messenger:listView/emptyList/offer";
+      
       public static const STATUS_ONLINE:String = "#messenger:status/online";
       
       public static const STATUS_OFFLINE:String = "#messenger:status/offline";
@@ -108,6 +116,8 @@ package
       public static const BATTLE_TOOLTIPS_SEND:String = "#messenger:battle/toolTips/send";
       
       public static const BATTLE_TOOLTIPS_CANCEL:String = "#messenger:battle/toolTips/cancel";
+      
+      public static const BATTLE_TOOLTIPS_MUTEPLAYER:String = "#messenger:battle/toolTips/mutePlayer";
       
       public static const BATTLE_RECEIVERS_TEAM:String = "#messenger:battle/receivers/team";
       
@@ -491,6 +501,8 @@ package
       
       public static const CLIENT_INFORMATION_ADDTOIGNORED_MESSAGE:String = "#messenger:client/information/addToIgnored/message";
       
+      public static const CLIENT_INFORMATION_ADDTOTMPIGNORED_MESSAGE:String = "#messenger:client/information/addToTmpIgnored/message";
+      
       public static const CLIENT_INFORMATION_SETMUTED_MESSAGE:String = "#messenger:client/information/setMuted/message";
       
       public static const CLIENT_INFORMATION_UNSETMUTED_MESSAGE:String = "#messenger:client/information/unsetMuted/message";
@@ -498,6 +510,8 @@ package
       public static const CLIENT_INFORMATION_REMOVEFROMFRIENDS_MESSAGE:String = "#messenger:client/information/removeFromFriends/message";
       
       public static const CLIENT_INFORMATION_REMOVEFROMIGNORED_MESSAGE:String = "#messenger:client/information/removeFromIgnored/message";
+      
+      public static const CLIENT_INFORMATION_REMOVEFROMTMPIGNORED_MESSAGE:String = "#messenger:client/information/removeFromTmpIgnored/message";
       
       public static const CLIENT_INFORMATION_EMPTYSEARCHRESULT_MESSAGE:String = "#messenger:client/information/emptySearchResult/message";
       
@@ -867,6 +881,8 @@ package
       
       public static const SERVICECHANNELMESSAGES_SYSMSG_TITLES_PURCHASE:String = "#messenger:serviceChannelMessages/sysMsg/titles/purchase";
       
+      public static const SERVICECHANNELMESSAGES_SYSMSG_TITLES_RESTORE:String = "#messenger:serviceChannelMessages/sysMsg/titles/restore";
+      
       public static const SERVICECHANNELMESSAGES_SYSMSG_TITLES_DISMANTLING:String = "#messenger:serviceChannelMessages/sysMsg/titles/dismantling";
       
       public static const SERVICECHANNELMESSAGES_SYSMSG_TITLES_SELLING:String = "#messenger:serviceChannelMessages/sysMsg/titles/selling";
@@ -1026,6 +1042,8 @@ package
       public static const SERVICECHANNELMESSAGES_FORT_DEFENCE_PLANNED:String = "#messenger:serviceChannelMessages/fort/DEFENCE_PLANNED";
       
       public static const SERVICECHANNELMESSAGES_FORT_BATTLE_DELETED:String = "#messenger:serviceChannelMessages/fort/BATTLE_DELETED";
+      
+      public static const SERVICECHANNELMESSAGES_FORT_BATTLE_DELETED_LEVEL:String = "#messenger:serviceChannelMessages/fort/BATTLE_DELETED_LEVEL";
       
       public static const SERVICECHANNELMESSAGES_FORT_SPECIAL_ORDER_EXPIRED_EVACUATION:String = "#messenger:serviceChannelMessages/fort/SPECIAL_ORDER_EXPIRED_EVACUATION";
       
@@ -1441,6 +1459,10 @@ package
       
       public static const CHAT_POSTBATTLESHARING_LABEL:String = "#messenger:chat/postBattleSharing/label";
       
+      public static const CHAT_TOXICMESSAGES_BLOCKEDMESSAGE:String = "#messenger:chat/toxicMessages/blockedMessage";
+      
+      public static const BATTLE_TOOLTIPS_TOXICMESSAGE:String = "#messenger:battle/toolTips/toxicMessage";
+      
       public static const CLIENT_ERROR_LIMIT_ENUM:Array = [CLIENT_ERROR_LIMIT_MAX_ROSTER_ITEMS,CLIENT_ERROR_LIMIT_MAX_GROUP,CLIENT_ERROR_LIMIT_MAX_BLOCK_ITEMS,CLIENT_ERROR_LIMIT_GROUP_INVALID_LENGTH,CLIENT_ERROR_LIMIT_NOTE_INVALID_LENGTH,CLIENT_ERROR_LIMIT_CHANNEL_INVALID_LENGTH,CLIENT_ERROR_LIMIT_PWD_INVALID_LENGTH];
       
       public static const SERVER_ERROR_USER_ROOM_CREATION_ENUM:Array = [SERVER_ERROR_USER_ROOM_CREATION_NAME_EXISTS,SERVER_ERROR_USER_ROOM_CREATION_LIMIT_COUNT,SERVER_ERROR_USER_ROOM_CREATION_LIMIT_PASS,SERVER_ERROR_USER_ROOM_CREATION_LIMIT_NAME,SERVER_ERROR_USER_ROOM_CREATION_WRONG_SYMBOL,SERVER_ERROR_USER_ROOM_CREATION_WRONG_WORD];
@@ -1448,6 +1470,8 @@ package
       public static const CLIENT_ERROR_CHANNEL_ENUM:Array = [CLIENT_ERROR_CHANNEL_NAME_EMPTY,CLIENT_ERROR_CHANNEL_NAME_INVALID,CLIENT_ERROR_CHANNEL_PASSWORD_EMPTY,CLIENT_ERROR_CHANNEL_PASSWORD_INVALID,CLIENT_ERROR_CHANNEL_RETYPE_EMPTY,CLIENT_ERROR_CHANNEL_RETYPE_INVALID,CLIENT_ERROR_CHANNEL_PASSWORDS_NOT_EQUALS,CLIENT_ERROR_CHANNEL_LIMIT_REACHED,CLIENT_ERROR_CHANNEL_NAME_ALREADY_EXISTS];
       
       public static const CLIENT_ERROR_SHARED_ENUM:Array = [CLIENT_ERROR_SHARED_GENERIC,CLIENT_ERROR_SHARED_LOCKED,CLIENT_ERROR_SHARED_NOT_CONNECTED,CLIENT_ERROR_SHARED_WRONG_ARGS,CLIENT_ERROR_SHARED_NOT_SUPPORTED,CLIENT_ERROR_SHARED_DBID_INVALID,CLIENT_ERROR_SHARED_NAME_EMPTY,CLIENT_ERROR_SHARED_NAME_INVALID,CLIENT_ERROR_SHARED_WAITING_BEFORE_START];
+      
+      public static const LISTVIEW_EMPTYLIST_ENUM:Array = [LISTVIEW_EMPTYLIST_TEMPLATE,LISTVIEW_EMPTYLIST_INFO,LISTVIEW_EMPTYLIST_INVITE,LISTVIEW_EMPTYLIST_OFFER];
       
       public static const CLIENT_ERROR_CONTACT_ENUM:Array = [CLIENT_ERROR_CONTACT_CONTACT_ITEM_NOT_FOUND,CLIENT_ERROR_CONTACT_ROSTER_ITEM_EXISTS,CLIENT_ERROR_CONTACT_ROSTER_ITEM_NOT_FOUND,CLIENT_ERROR_CONTACT_FRIENDSHIP_APPROVED,CLIENT_ERROR_CONTACT_FRIENDSHIP_CANCELED,CLIENT_ERROR_CONTACT_FRIENDSHIP_RQ_PROCESS,CLIENT_ERROR_CONTACT_BLOCK_ITEM_EXISTS,CLIENT_ERROR_CONTACT_BLOCK_ITEM_NOT_FOUND,CLIENT_ERROR_CONTACT_MUTED_ITEM_NOT_FOUND,CLIENT_ERROR_CONTACT_GROUP_EMPTY,CLIENT_ERROR_CONTACT_GROUP_EXISTS,CLIENT_ERROR_CONTACT_GROUP_NOT_FOUND,CLIENT_ERROR_CONTACT_GROUP_INVALID_NAME,CLIENT_ERROR_CONTACT_NOTE_EMPTY,CLIENT_ERROR_CONTACT_NOTE_NOT_FOUND];
       
@@ -1506,6 +1530,17 @@ package
          if(CLIENT_ERROR_SHARED_ENUM.indexOf(_loc2_) == -1)
          {
             DebugUtils.LOG_WARNING("[client_error_shared]:locale key \"" + _loc2_ + "\" was not found");
+            return null;
+         }
+         return _loc2_;
+      }
+      
+      public static function listview_emptylist(param1:String) : String
+      {
+         var _loc2_:String = "#messenger:listView/emptyList/" + param1;
+         if(LISTVIEW_EMPTYLIST_ENUM.indexOf(_loc2_) == -1)
+         {
+            DebugUtils.LOG_WARNING("[listview_emptylist]:locale key \"" + _loc2_ + "\" was not found");
             return null;
          }
          return _loc2_;

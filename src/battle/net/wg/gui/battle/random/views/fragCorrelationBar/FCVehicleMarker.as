@@ -25,8 +25,6 @@ public class FCVehicleMarker extends MovieClip implements IDisposable {
 
     private var _vehicleMarkerAnimFinishedHandler:IVehicleMarkerAnimFinishedHandler = null;
 
-    private var _vehicleIDs:Vector.<Number> = null;
-
     private var _isDisposed:Boolean = false;
 
     private const LAST_ANIM_FRAME:int = 12;
@@ -89,7 +87,7 @@ public class FCVehicleMarker extends MovieClip implements IDisposable {
         this._vehicleStatus = this._vehicleStatus ^ VehicleStatus.IS_ALIVE;
         this.normalMarker.visible = false;
         stop();
-        this._vehicleMarkerAnimFinishedHandler.sort(this._vehicleIDs);
+        this._vehicleMarkerAnimFinishedHandler.sort();
     }
 
     private function redraw():void {
@@ -97,8 +95,7 @@ public class FCVehicleMarker extends MovieClip implements IDisposable {
         this._atlasManager.drawGraphics(AtlasConstants.BATTLE_ATLAS, this._color + this._vehicleType + this.DESTROYED_IMAGE_POSTFIX, this.destroyedMarker.graphics);
     }
 
-    public function updateVehicleStatus(param1:uint, param2:Vector.<Number>):void {
-        this._vehicleIDs = param2;
+    public function updateVehicleStatus(param1:uint):void {
         this._vehicleStatus = param1;
         if (!(this._vehicleStatus & VehicleStatus.IS_ALIVE) > 0) {
             this.playDestroyAnim();
@@ -117,7 +114,6 @@ public class FCVehicleMarker extends MovieClip implements IDisposable {
         this.destroyedMarker = null;
         this._atlasManager = null;
         this._vehicleMarkerAnimFinishedHandler = null;
-        this._vehicleIDs = null;
     }
 }
 }

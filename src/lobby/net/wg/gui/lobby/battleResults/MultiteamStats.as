@@ -146,9 +146,10 @@ public class MultiteamStats extends UIComponentEx implements IViewStackContent {
     }
 
     private function onIndexChangeHandler(param1:ListEvent):void {
+        var _loc3_:* = false;
         var _loc4_:TeamMemberItemVO = null;
         var _loc2_:int = this.teamList.selectedIndex;
-        var _loc3_:* = _loc2_ != -1;
+        _loc3_ = _loc2_ != -1;
         this.teamStats.visible = _loc3_;
         this.unselectedItemBg.visible = !_loc3_;
         this.unselectedItemMessage.visible = !_loc3_;

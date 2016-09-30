@@ -59,6 +59,9 @@ public class CrosshairCircle extends Shape implements IDisposable {
     }
 
     public function setPercents(param1:Number):void {
+        if (param1 > 100 || param1 < 0) {
+            throw new Error("Invalid value for percent " + param1.toString() + ". Value must be <= 100 && > 0");
+        }
         if (this.curPercents != param1) {
             this.curPercents = param1;
             graphics.clear();

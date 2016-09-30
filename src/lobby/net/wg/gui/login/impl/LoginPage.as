@@ -17,7 +17,6 @@ import net.wg.gui.components.common.BaseLogoView;
 import net.wg.gui.components.common.serverStats.ServerVO;
 import net.wg.gui.components.common.video.PlayerStatus;
 import net.wg.gui.components.common.video.SimpleVideoPlayer;
-import net.wg.gui.components.common.video.VideoPlayerEvent;
 import net.wg.gui.components.common.video.VideoPlayerStatusEvent;
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.events.UILoaderEvent;
@@ -312,10 +311,18 @@ public class LoginPage extends LoginPageMeta implements ILoginPageMeta {
         return this._serversDataProvider;
     }
 
+    public function as_pausePlayback():void {
+        this.videoPlayer.pausePlayback();
+    }
+
     public function as_resetPassword():void {
         this._simpleFormDataVo.pwd = "";
         this._simpleFormDataVo.invalidType = SimpleForm.INV_PASSWORD;
         this.invalidateForm();
+    }
+
+    public function as_resumePlayback():void {
+        this.videoPlayer.resumePlayback();
     }
 
     public function as_setCapsLockState(param1:Boolean):void {
@@ -362,12 +369,12 @@ public class LoginPage extends LoginPageMeta implements ILoginPageMeta {
         this.version.text = param1;
     }
 
-    public function as_showLoginVideo(param1:String, param2:Boolean):void {
-        if (!this.videoPlayer.hasEventListener(VideoPlayerEvent.PLAYBACK_STOPPED)) {
-            this.videoPlayer.addEventListener(VideoPlayerEvent.PLAYBACK_STOPPED, this.onVideoPlayerPlaybackStoppedHandler);
+    public function as_showLoginVideo(param1:String, param2:Number, param3:Boolean):void {
+        if (!this.videoPlayer.hasEventListener(VideoPlayerStatusEvent.ERROR)) {
             this.videoPlayer.addEventListener(VideoPlayerStatusEvent.ERROR, this.onVideoPlayerErrorHandler);
             this.videoPlayer.addEventListener(VideoPlayerStatusEvent.STATUS_CHANGED, this.onVideoPlayerStatusChangedHandler);
         }
+        this.videoPlayer.bufferTime = param2;
         if (this.videoPlayer.source != param1) {
             this.videoPlayer.source = param1;
             this._isVideoLoaded = false;
@@ -381,7 +388,7 @@ public class LoginPage extends LoginPageMeta implements ILoginPageMeta {
         this.videoPlayer.visible = true;
         this.vignette.visible = true;
         this.bgModeButton.selected = false;
-        this.soundButton.selected = param2;
+        this.soundButton.selected = param3;
         this.destroySparks();
         this.updateButtonsTooltips();
     }
@@ -434,7 +441,6 @@ public class LoginPage extends LoginPageMeta implements ILoginPageMeta {
     }
 
     private function removeVideoPlayerEvents():void {
-        this.videoPlayer.removeEventListener(VideoPlayerEvent.PLAYBACK_STOPPED, this.onVideoPlayerPlaybackStoppedHandler);
         this.videoPlayer.removeEventListener(VideoPlayerStatusEvent.ERROR, this.onVideoPlayerErrorHandler);
         this.videoPlayer.removeEventListener(VideoPlayerStatusEvent.STATUS_CHANGED, this.onVideoPlayerStatusChangedHandler);
     }
@@ -543,11 +549,11 @@ public class LoginPage extends LoginPageMeta implements ILoginPageMeta {
     private function enableInputs(param1:Boolean):void {
         this._isInputEnabled = param1;
         if (this._isInputEnabled) {
-            addEventListener(InputEvent.INPUT, this.handleInput);
+            addEventListener(InputEvent.INPUT, this.onInputHandler);
             this.initFocus();
         }
         else {
-            removeEventListener(InputEvent.INPUT, this.handleInput);
+            removeEventListener(InputEvent.INPUT, this.onInputHandler);
         }
     }
 
@@ -645,9 +651,8 @@ public class LoginPage extends LoginPageMeta implements ILoginPageMeta {
         }
     }
 
-    override public function handleInput(param1:InputEvent):void {
+    private function onInputHandler(param1:InputEvent):void {
         var _loc2_:Function = null;
-        super.handleInput(param1);
         if (param1.handled || App.waiting && App.waiting.isOnStage) {
             return;
         }
@@ -661,7 +666,7 @@ public class LoginPage extends LoginPageMeta implements ILoginPageMeta {
     }
 
     private function onEnterFrameHandler(param1:Event):void {
-        var _loc2_:Number = !isNaN(this.videoPlayer.currentTime) ? Number(this.videoPlayer.currentTime) : Number(0);
+        var _loc2_:Number = !!isNaN(this.videoPlayer.currentTime) ? Number(0) : Number(this.videoPlayer.currentTime);
         var _loc3_:Number = !!this.videoPlayer.metaData ? Number(this.videoPlayer.metaData.duration) : Number(0);
         if (_loc3_ > 0 && _loc2_ >= _loc3_ - VIDEO_END_OFFSET) {
             this.videoPlayer.seek(0);
@@ -696,10 +701,6 @@ public class LoginPage extends LoginPageMeta implements ILoginPageMeta {
 
     private function onVideoPlayerErrorHandler(param1:VideoPlayerStatusEvent):void {
         App.utils.asserter.assert(false, param1.errorCode + ": " + param1.toString());
-    }
-
-    private function onVideoPlayerPlaybackStoppedHandler(param1:VideoPlayerEvent):void {
-        this.videoPlayer.runPlayback();
     }
 
     private function onCopyrightToLegalHandler(param1:CopyrightEvent):void {

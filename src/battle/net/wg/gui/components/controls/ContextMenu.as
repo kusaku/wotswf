@@ -9,50 +9,50 @@ import net.wg.data.VO.SeparateItem;
 import net.wg.data.constants.ContextMenuConstants;
 import net.wg.data.constants.Linkages;
 import net.wg.gui.utils.ExcludeTweenManager;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.IContextItem;
 import net.wg.infrastructure.interfaces.IContextMenu;
 import net.wg.utils.IClassFactory;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.motion.Tween;
 import scaleform.clik.utils.Padding;
 
-public class ContextMenu extends UIComponent implements IContextMenu {
+public class ContextMenu extends UIComponentEx implements IContextMenu {
 
     private static const TWEEN_DURATION:Number = 200;
 
-    public var bgMc:MovieClip;
+    private static const HIT_AREA_MARGIN:Padding = new Padding(3, 3, 3, 3);
 
-    public var groupItemSelected:ContextMenuItem;
+    private static const BG_SHADOW_BORDER:Padding = new Padding(8, 37, 16, 35);
+
+    private static const FIRST_ELEM_TOP_PADDING:Number = 9;
+
+    private static const LAST_ELEM_BOTTOM_PADDING:Number = 9;
+
+    private static const ITEM_SHOW_ALPHA:int = 1;
+
+    private static const ITEM_HIDE_ALPHA:int = 0;
+
+    public var bgMc:MovieClip;
 
     public var hit:MovieClip = null;
 
-    private var MARGIN:Number = 0;
+    private var _groupItemSelected:ContextMenuItem;
 
-    private var _data:Vector.<IContextItem> = null;
+    private var _margin:Number = 0;
 
-    private var _bgShadowBorder:Padding;
+    private var _startX:Number;
 
-    private var _hitAreMargin:Padding;
+    private var _startY:Number;
 
-    private var startX:Number;
+    private var _showHideSubTween:Tween;
 
-    private var startY:Number;
-
-    private var showHideSubTween:Tween;
-
-    private var expandTween:Tween;
-
-    private var items:Array;
+    private var _items:Array;
 
     private var _memberItemData:Object;
 
-    private var tweenManager:ExcludeTweenManager;
-
-    private const FIRST_ELEM_TOP_PADDING:Number = 9;
-
-    private const LAST_ELEM_BOTTOM_PADDING:Number = 9;
+    private var _tweenManager:ExcludeTweenManager;
 
     private var _padding:Padding;
 
@@ -62,14 +62,20 @@ public class ContextMenu extends UIComponent implements IContextMenu {
 
     private var _onReleaseOutsideCallback:Function;
 
+    private var _data:Vector.<IContextItem> = null;
+
+    private var _contextMenuItems:Vector.<ContextMenuItem>;
+
+    private var _separators:Vector.<ContextMenuItemSeparate>;
+
     public function ContextMenu() {
-        this._bgShadowBorder = new Padding(8, 37, 16, 35);
-        this._hitAreMargin = new Padding(3, 3, 3, 3);
         this._memberItemData = {};
-        this.tweenManager = new ExcludeTweenManager();
+        this._tweenManager = new ExcludeTweenManager();
         this._padding = new Padding();
         super();
         this.padding = new Padding(0, 0, 0, 0);
+        this._contextMenuItems = new Vector.<ContextMenuItem>();
+        this._separators = new Vector.<ContextMenuItemSeparate>();
     }
 
     override public function toString():String {
@@ -78,30 +84,45 @@ public class ContextMenu extends UIComponent implements IContextMenu {
 
     override protected function configUI():void {
         super.configUI();
-        App.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
-        if (this.hit) {
-            hitArea = this.hit;
-        }
-        if (this.bgMc) {
-            this.bgMc.mouseEnabled = false;
-            this.bgMc.mouseChildren = false;
-            this.bgMc.tabEnabled = false;
-            this.bgMc.tabChildren = false;
-        }
+        App.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.onAppMouseDownHandler);
+        hitArea = this.hit;
+        this.bgMc.mouseEnabled = false;
+        this.bgMc.mouseChildren = false;
+        this.bgMc.tabEnabled = false;
+        this.bgMc.tabChildren = false;
     }
 
     override protected function onDispose():void {
-        if (App.instance.stage.hasEventListener(MouseEvent.MOUSE_DOWN)) {
-            App.instance.stage.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
-        }
-        this.tweenManager.unregisterAll();
+        App.stage.removeEventListener(MouseEvent.MOUSE_DOWN, this.onAppMouseDownHandler);
+        this._tweenManager.unregisterAll();
+        this._tweenManager.dispose();
+        this._showHideSubTween = null;
+        this._tweenManager = null;
         this._onItemSelectCallback = null;
         this._onReleaseOutsideCallback = null;
+        this._clickPoint = null;
+        this._padding = null;
+        this._memberItemData = null;
+        this.bgMc = null;
+        this.hit = null;
+        if (this._data) {
+            this._data.splice(0, this._data.length);
+            this._data = null;
+        }
         this.clearItems();
+        this._contextMenuItems = null;
+        this._separators = null;
+        if (this._items) {
+            this._items.splice(0, this._items.length);
+            this._items = null;
+        }
+        this._groupItemSelected = null;
         super.onDispose();
     }
 
     public function build(param1:Vector.<IContextItem>, param2:Point):void {
+        var _loc3_:Number = NaN;
+        var _loc4_:Number = NaN;
         var _loc5_:Vector.<IContextItem> = null;
         var _loc6_:uint = 0;
         var _loc7_:uint = 0;
@@ -110,106 +131,90 @@ public class ContextMenu extends UIComponent implements IContextMenu {
         var _loc10_:Number = NaN;
         var _loc11_:Number = NaN;
         var _loc12_:uint = 0;
-        var _loc13_:uint = 0;
+        var _loc13_:int = 0;
         var _loc14_:IClassFactory = null;
         var _loc15_:Number = NaN;
         var _loc16_:ContextMenuItem = null;
         var _loc17_:ContextMenuItem = null;
-        var _loc18_:UIComponent = null;
-        var _loc19_:ContextMenuItemSeparate = null;
-        var _loc20_:IContextItem = null;
-        var _loc21_:Number = NaN;
+        var _loc18_:ContextMenuItemSeparate = null;
+        var _loc19_:IContextItem = null;
         this._clickPoint = param2;
-        var _loc3_:Number = param2.x;
-        var _loc4_:Number = param2.y;
+        _loc3_ = param2.x;
+        _loc4_ = param2.y;
         this.clearItems();
         this._data = param1;
         if (this._data) {
             _loc5_ = this._data;
-            _loc8_ = this.MARGIN + this._bgShadowBorder.left;
-            _loc9_ = this.MARGIN + this._bgShadowBorder.top + this.FIRST_ELEM_TOP_PADDING;
+            _loc8_ = this._margin + BG_SHADOW_BORDER.left;
+            _loc9_ = this._margin + BG_SHADOW_BORDER.top + FIRST_ELEM_TOP_PADDING;
             _loc10_ = _loc8_;
             _loc11_ = _loc9_;
             _loc12_ = 0;
-            _loc13_ = 0;
-            this.items = [];
+            this._items = [];
+            _loc13_ = this._padding.top + this._padding.bottom;
             _loc14_ = App.utils.classFactory;
             _loc15_ = _loc5_.length;
             _loc16_ = null;
-            _loc17_ = null;
             _loc6_ = 0;
             while (_loc6_ < _loc15_) {
-                _loc19_ = null;
-                _loc20_ = _loc5_[_loc6_];
-                if (_loc20_.id == ContextMenuConstants.SEPARATE) {
-                    _loc19_ = _loc14_.getComponent(Linkages.CONTEXT_MENU_SEPARATE, ContextMenuItemSeparate);
-                    _loc19_.index = _loc6_;
-                    _loc19_.id = _loc20_.id;
-                    _loc19_.x = _loc10_;
-                    _loc19_.y = _loc11_;
-                    _loc11_ = _loc11_ + (_loc19_.height + this.padding.bottom + this.padding.top);
-                    this.items.push(_loc19_);
+                _loc18_ = null;
+                _loc19_ = _loc5_[_loc6_];
+                if (_loc19_.id == ContextMenuConstants.SEPARATE) {
+                    _loc18_ = _loc14_.getComponent(Linkages.CONTEXT_MENU_SEPARATE, ContextMenuItemSeparate);
+                    _loc18_.index = _loc6_;
+                    _loc18_.id = _loc19_.id;
+                    _loc18_.x = _loc10_;
+                    _loc18_.y = _loc11_;
+                    _loc11_ = _loc11_ + (_loc18_.height + _loc13_);
+                    this._items.push(_loc18_);
+                    this._separators.push(_loc18_);
                 }
                 else {
-                    _loc16_ = _loc14_.getComponent(Linkages.CONTEXT_MENU_ITEM, ContextMenuItem, _loc20_.initData);
+                    _loc16_ = _loc14_.getComponent(Linkages.CONTEXT_MENU_ITEM, ContextMenuItem, _loc19_.initData);
                     _loc16_.index = _loc6_;
                     _loc16_.items = !!_loc5_[_loc6_].submenu ? _loc5_[_loc6_].submenu.slice(0, _loc5_[_loc6_].submenu.length) : new Vector.<IContextItem>();
-                    _loc16_.addEventListener(ButtonEvent.CLICK, this.onItemClick);
-                    _loc16_.id = _loc20_.id;
-                    _loc16_.label = _loc20_.label;
+                    _loc16_.addEventListener(ButtonEvent.CLICK, this.onItemClickHandler);
+                    _loc16_.id = _loc19_.id;
+                    _loc16_.label = _loc19_.label;
                     _loc16_.invalidWidth();
                     _loc12_ = Math.max(_loc12_, _loc16_.width);
                     _loc16_.x = _loc10_;
                     _loc16_.y = _loc11_;
-                    _loc11_ = _loc11_ + (_loc16_.height + this.padding.bottom + this.padding.top);
+                    _loc11_ = _loc11_ + (_loc16_.height + _loc13_);
                     if (_loc16_.items.length > 0) {
                         _loc12_ = Math.max(_loc12_, this.createSubItems(_loc16_));
                     }
-                    this.items.push(_loc16_);
+                    this._contextMenuItems.push(_loc16_);
+                    this._items.push(_loc16_);
                 }
-                this.addChild(_loc19_ != null ? _loc19_ : _loc16_);
+                addChild(_loc18_ != null ? _loc18_ : _loc16_);
                 _loc6_++;
             }
-            _loc15_ = this.items.length;
-            _loc6_ = 0;
-            while (_loc6_ < _loc15_) {
-                _loc18_ = this.items[_loc6_];
-                _loc18_.width = _loc12_;
-                _loc16_ = _loc18_ as ContextMenuItem;
-                if (_loc16_) {
-                    _loc21_ = _loc16_.subItems.length;
-                    _loc7_ = 0;
-                    while (_loc7_ < _loc21_) {
-                        _loc17_ = _loc16_.subItems[_loc7_];
-                        _loc17_.width = _loc12_;
-                        _loc7_++;
-                    }
-                }
-                _loc6_++;
+            for each(_loc17_ in this._contextMenuItems) {
+                _loc17_.width = _loc12_;
             }
-            _loc13_ = _loc11_ - this.MARGIN - this.padding.bottom - this.padding.top - this._bgShadowBorder.top - this.FIRST_ELEM_TOP_PADDING;
-            this.bgMc.width = _loc12_ + this.MARGIN * 2 + this._bgShadowBorder.left + this._bgShadowBorder.right ^ 0;
-            this.bgMc.height = _loc13_ + this.MARGIN * 2 + this._bgShadowBorder.top + this._bgShadowBorder.bottom + this.FIRST_ELEM_TOP_PADDING + this.LAST_ELEM_BOTTOM_PADDING ^ 0;
-            this.hit.x = _loc8_ - this._hitAreMargin.left;
-            this.hit.y = _loc9_ - this.FIRST_ELEM_TOP_PADDING - this._hitAreMargin.top;
-            this.hit.width = this.bgMc.width - (this._bgShadowBorder.horizontal + this.MARGIN * 2) + this._hitAreMargin.horizontal;
+            this.bgMc.width = _loc12_ + this._margin * 2 + BG_SHADOW_BORDER.left + BG_SHADOW_BORDER.right ^ 0;
+            this.bgMc.height = _loc11_ - this._padding.bottom - this._padding.top + this._margin + BG_SHADOW_BORDER.bottom + LAST_ELEM_BOTTOM_PADDING ^ 0;
+            this.hit.x = _loc8_ - HIT_AREA_MARGIN.left;
+            this.hit.y = _loc9_ - FIRST_ELEM_TOP_PADDING - HIT_AREA_MARGIN.top;
+            this.hit.width = this.bgMc.width - (BG_SHADOW_BORDER.horizontal + this._margin * 2) + HIT_AREA_MARGIN.horizontal;
             this.updateHitHeight(this.bgMc.height);
-            this.x = _loc3_ - this._bgShadowBorder.left;
-            this.y = _loc4_ - this._bgShadowBorder.top;
-            if (this.y + this.bgMc.height > App.instance.appHeight) {
-                this.y = this.y - this.hit.height + this._hitAreMargin.vertical ^ 0;
+            x = _loc3_ - BG_SHADOW_BORDER.left;
+            y = _loc4_ - BG_SHADOW_BORDER.top;
+            if (y + this.bgMc.height > App.instance.appHeight) {
+                y = y - this.hit.height + HIT_AREA_MARGIN.vertical ^ 0;
             }
-            if (this.y < 0) {
-                this.y = this._bgShadowBorder.top;
+            if (y < 0) {
+                y = BG_SHADOW_BORDER.top;
             }
-            if (this.x + this.bgMc.width > App.instance.appWidth) {
-                this.x = this.x - this.hit.width + this._hitAreMargin.horizontal ^ 0;
+            if (x + this.bgMc.width > App.instance.appWidth) {
+                x = x - this.hit.width + HIT_AREA_MARGIN.horizontal ^ 0;
             }
-            if (this.x < 0) {
-                this.x = this._bgShadowBorder.left;
+            if (x < 0) {
+                x = BG_SHADOW_BORDER.left;
             }
-            this.startX = this.x;
-            this.startY = this.y;
+            this._startX = x;
+            this._startY = y;
         }
     }
 
@@ -218,166 +223,178 @@ public class ContextMenu extends UIComponent implements IContextMenu {
     }
 
     protected function clearItems():void {
-        var _loc1_:uint = 0;
-        var _loc2_:uint = 0;
-        if (this.items) {
-            _loc1_ = 0;
-            while (_loc1_ < this.items.length) {
-                if (this.items[_loc1_].subItems) {
-                    _loc2_ = 0;
-                    while (_loc2_ < this.items[_loc1_].subItems.length) {
-                        if (this.items[_loc1_].subItems[_loc2_].hasEventListener(ButtonEvent.CLICK)) {
-                            this.items[_loc1_].subItems[_loc2_].removeEventListener(ButtonEvent.CLICK, this.onItemClick);
-                        }
-                        this.removeChild(this.items[_loc1_].subItems[_loc2_]);
-                        _loc2_++;
-                    }
-                }
-                if (this.items[_loc1_].hasEventListener(ButtonEvent.CLICK)) {
-                    this.items[_loc1_].removeEventListener(ButtonEvent.CLICK, this.onItemClick);
-                }
-                this.removeChild(this.items[_loc1_]);
-                _loc1_++;
-            }
-            this.items.splice();
-            this.items = null;
+        var _loc2_:ContextMenuItem = null;
+        var _loc4_:ContextMenuItemSeparate = null;
+        var _loc1_:int = this._contextMenuItems.length;
+        var _loc3_:int = 0;
+        while (_loc3_ < _loc1_) {
+            _loc2_ = this._contextMenuItems[_loc3_];
+            _loc2_.removeEventListener(ButtonEvent.CLICK, this.onItemClickHandler);
+            removeChild(_loc2_);
+            _loc2_.dispose();
+            _loc3_++;
         }
+        this._contextMenuItems.splice(0, _loc1_);
+        _loc1_ = this._separators.length;
+        _loc3_ = 0;
+        while (_loc3_ < _loc1_) {
+            _loc4_ = this._separators[_loc3_];
+            removeChild(_loc4_);
+            _loc4_.dispose();
+            _loc3_++;
+        }
+        this._separators.splice(0, _loc1_);
     }
 
     private function updateHitHeight(param1:int):void {
-        this.hit.height = param1 - (this._bgShadowBorder.vertical + this.MARGIN * 2) + this._hitAreMargin.vertical;
+        this.hit.height = param1 - (BG_SHADOW_BORDER.vertical + this._margin * 2) + HIT_AREA_MARGIN.vertical;
     }
 
     private function createSubItems(param1:ContextMenuItem):Number {
-        var _loc8_:IContextItem = null;
-        var _loc9_:ContextMenuItem = null;
+        var _loc7_:IContextItem = null;
+        var _loc8_:ContextMenuItem = null;
         var _loc2_:Number = param1.x;
-        var _loc3_:Number = param1.y + param1.height + this.padding.top + this.padding.bottom - this.FIRST_ELEM_TOP_PADDING;
+        var _loc3_:Number = param1.y + param1.height + this._padding.top + this._padding.bottom;
         var _loc4_:Number = param1.items.length;
         var _loc5_:IClassFactory = App.utils.classFactory;
         var _loc6_:Number = 0;
-        var _loc7_:uint = 0;
-        while (_loc7_ < _loc4_) {
-            if (!(param1.items[_loc7_] is SeparateItem)) {
-                _loc8_ = param1.items[_loc7_];
-                _loc9_ = _loc5_.getComponent(Linkages.CONTEXT_MENU_ITEM, ContextMenuItem, _loc8_.initData);
-                _loc9_.index = _loc7_;
-                _loc9_.type = _loc9_.CONTEXT_MENU_ITEM_SUB;
-                _loc9_.id = _loc8_.id;
-                _loc9_.label = _loc8_.label;
-                _loc9_.invalidWidth();
-                _loc6_ = Math.max(_loc6_, _loc9_.width);
-                _loc9_.addEventListener(ButtonEvent.CLICK, this.onItemClick);
-                _loc9_.x = _loc2_;
-                _loc9_.y = _loc3_;
-                _loc3_ = _loc3_ + (_loc9_.height + this.padding.top + this.padding.bottom);
-                _loc9_.visible = false;
-                _loc9_.alpha = 0;
-                param1.subItems.push(_loc9_);
-                this.addChild(_loc9_);
+        var _loc9_:uint = 0;
+        while (_loc9_ < _loc4_) {
+            if (!(param1.items[_loc9_] is SeparateItem)) {
+                _loc7_ = param1.items[_loc9_];
+                _loc8_ = _loc5_.getComponent(Linkages.CONTEXT_MENU_ITEM, ContextMenuItem, _loc7_.initData);
+                _loc8_.index = _loc9_;
+                _loc8_.type = _loc8_.CONTEXT_MENU_ITEM_SUB;
+                _loc8_.id = _loc7_.id;
+                _loc8_.label = _loc7_.label;
+                _loc8_.invalidWidth();
+                _loc6_ = Math.max(_loc6_, _loc8_.width);
+                _loc8_.addEventListener(ButtonEvent.CLICK, this.onItemClickHandler);
+                _loc8_.x = _loc2_;
+                _loc8_.y = _loc3_;
+                _loc3_ = _loc3_ + (_loc8_.height + this._padding.top + this._padding.bottom);
+                _loc8_.visible = false;
+                _loc8_.alpha = 0;
+                param1.subItems.push(_loc8_);
+                this._contextMenuItems.push(_loc8_);
+                addChild(_loc8_);
             }
-            _loc7_++;
+            _loc9_++;
         }
         return _loc6_;
     }
 
     private function beginAnimExpand(param1:ContextMenuItem):void {
-        this.tweenManager.unregisterAll();
-        if (this.groupItemSelected && this.groupItemSelected == param1) {
-            if (this.groupItemSelected.isOpened) {
-                this.hideSub(this.groupItemSelected);
+        this._tweenManager.unregisterAll();
+        if (this._groupItemSelected && this._groupItemSelected == param1) {
+            if (this._groupItemSelected.isOpened) {
+                this.hideSub(this._groupItemSelected);
             }
             else {
-                this.showSub(this.groupItemSelected);
+                this.showSub(this._groupItemSelected);
             }
         }
         else {
-            if (this.groupItemSelected && this.groupItemSelected.isOpened) {
-                this.hideSub(this.groupItemSelected);
+            if (this._groupItemSelected && this._groupItemSelected.isOpened) {
+                this.hideSub(this._groupItemSelected);
             }
-            this.groupItemSelected = param1;
-            this.showSub(this.groupItemSelected);
+            this._groupItemSelected = param1;
+            this.showSub(this._groupItemSelected);
         }
-        this.expand(this.groupItemSelected);
+        this.expand(this._groupItemSelected);
+    }
+
+    private function calculateItemsHeight(param1:Array):int {
+        var _loc2_:int = this._padding.top + this._padding.bottom;
+        var _loc3_:int = 0;
+        var _loc4_:int = param1.length;
+        var _loc5_:int = 0;
+        while (_loc5_ < _loc4_) {
+            _loc3_ = _loc3_ + param1[_loc5_].height;
+            _loc5_++;
+        }
+        _loc3_ = _loc3_ + _loc4_ * _loc2_;
+        return _loc3_;
+    }
+
+    private function calcSumPaddings():int {
+        return FIRST_ELEM_TOP_PADDING + LAST_ELEM_BOTTOM_PADDING - this._padding.bottom - this._padding.top + this._margin * 2 + BG_SHADOW_BORDER.top + BG_SHADOW_BORDER.bottom;
     }
 
     private function expand(param1:ContextMenuItem):void {
-        var _loc2_:uint = param1.index;
-        var _loc3_:uint = 0;
+        var _loc3_:int = 0;
         var _loc4_:uint = 0;
-        var _loc5_:Function = Strong.easeInOut;
-        var _loc6_:Number = this.MARGIN + this._bgShadowBorder.top;
+        var _loc5_:int = 0;
+        var _loc6_:Array = null;
+        var _loc2_:Function = Strong.easeInOut;
+        var _loc7_:int = this.calculateItemsHeight(this._items);
+        var _loc8_:uint = 0;
         if (param1.isOpened) {
-            _loc3_ = 0;
-            while (_loc3_ < param1.subItems.length) {
-                _loc4_ = _loc4_ + (param1.subItems[_loc3_].height + this.padding.top + this.padding.bottom);
-                _loc3_++;
+            _loc8_ = this.calculateItemsHeight(param1.subItems);
+        }
+        _loc7_ = _loc7_ + _loc8_;
+        _loc7_ = _loc7_ + this.calcSumPaddings();
+        var _loc9_:int = this._startY + _loc7_ + this._margin;
+        if (_loc9_ > App.appHeight) {
+            _loc5_ = App.appHeight - _loc9_;
+        }
+        this._tweenManager.registerAndLaunch(TWEEN_DURATION, this.bgMc, {"height": _loc7_}, {
+            "paused": false,
+            "onComplete": this.onHideTweenComplete,
+            "ease": _loc2_
+        });
+        this._tweenManager.registerAndLaunch(TWEEN_DURATION, this, {"y": this._startY + _loc5_ ^ 0}, {
+            "paused": false,
+            "onComplete": this.onHideTweenComplete,
+            "ease": _loc2_
+        });
+        var _loc10_:uint = param1.index + 1;
+        var _loc11_:int = this._padding.top + this._padding.bottom;
+        var _loc12_:int = this._margin + BG_SHADOW_BORDER.top + FIRST_ELEM_TOP_PADDING;
+        _loc3_ = this._items.length;
+        _loc4_ = 0;
+        while (_loc4_ < _loc3_) {
+            if (_loc4_ == _loc10_) {
+                _loc12_ = _loc12_ + _loc8_;
             }
-        }
-        var _loc7_:Number = 0;
-        var _loc8_:Number = _loc4_;
-        _loc3_ = 0;
-        while (_loc3_ < this.items.length) {
-            _loc8_ = _loc8_ + (this.items[_loc3_].height + this.padding.top + this.padding.bottom);
-            _loc3_++;
-        }
-        if (this.startY + _loc8_ + this.MARGIN + this._bgShadowBorder.top + this._bgShadowBorder.bottom > App.appHeight) {
-            _loc7_ = App.appHeight - (this.startY + _loc8_ + this.MARGIN + this._bgShadowBorder.top + this._bgShadowBorder.bottom);
-        }
-        _loc3_ = 0;
-        while (_loc3_ < this.items.length) {
-            this.tweenManager.registerAndLaunch(TWEEN_DURATION, this.items[_loc3_], {"y": _loc6_}, {
+            this._tweenManager.registerAndLaunch(TWEEN_DURATION, this._items[_loc4_], {"y": _loc12_}, {
                 "paused": false,
                 "onComplete": this.onHideTweenComplete,
-                "ease": _loc5_
+                "ease": _loc2_
             });
-            if (_loc3_ == _loc2_) {
-                _loc6_ = _loc6_ + _loc4_;
-            }
-            _loc6_ = _loc6_ + (this.items[_loc3_].height + this.padding.top + this.padding.bottom);
-            _loc3_++;
+            _loc12_ = _loc12_ + (this._items[_loc4_].height + _loc11_);
+            _loc4_++;
         }
-        var _loc9_:Number = _loc6_ + this.MARGIN + this._bgShadowBorder.bottom - this.padding.bottom - this.padding.top ^ 0;
-        this.tweenManager.registerAndLaunch(TWEEN_DURATION, this.bgMc, {"height": _loc9_}, {
-            "paused": false,
-            "onComplete": this.onHideTweenComplete,
-            "ease": _loc5_
-        });
-        this.tweenManager.registerAndLaunch(TWEEN_DURATION, this, {"y": this.startY + _loc7_}, {
-            "paused": false,
-            "onComplete": this.onHideTweenComplete,
-            "ease": _loc5_
-        });
     }
 
     private function showSub(param1:ContextMenuItem):void {
         var _loc3_:ContextMenuItem = null;
         param1.isOpened = true;
-        var _loc2_:uint = 0;
-        while (_loc2_ < param1.subItems.length) {
-            _loc3_ = ContextMenuItem(param1.subItems[_loc2_]);
+        var _loc2_:int = param1.subItems.length;
+        var _loc4_:uint = 0;
+        while (_loc4_ < _loc2_) {
+            _loc3_ = ContextMenuItem(param1.subItems[_loc4_]);
             _loc3_.visible = true;
-            this.showHideSubTween = this.tweenManager.registerAndLaunch(TWEEN_DURATION, _loc3_, {"alpha": 1}, {
+            this._showHideSubTween = this._tweenManager.registerAndLaunch(TWEEN_DURATION, _loc3_, {"alpha": ITEM_SHOW_ALPHA}, {
                 "paused": false,
                 "onComplete": this.fSubAnimComplete,
                 "ease": Strong.easeIn
             });
-            _loc2_++;
+            _loc4_++;
         }
     }
 
     private function hideSub(param1:ContextMenuItem):void {
-        var _loc3_:ContextMenuItem = null;
         param1.isOpened = false;
-        var _loc2_:uint = 0;
-        while (_loc2_ < param1.subItems.length) {
-            _loc3_ = ContextMenuItem(param1.subItems[_loc2_]);
-            this.showHideSubTween = this.tweenManager.registerAndLaunch(TWEEN_DURATION, _loc3_, {"alpha": 0}, {
+        var _loc2_:int = param1.subItems.length;
+        var _loc3_:uint = 0;
+        while (_loc3_ < _loc2_) {
+            this._showHideSubTween = this._tweenManager.registerAndLaunch(TWEEN_DURATION, ContextMenuItem(param1.subItems[_loc3_]), {"alpha": ITEM_HIDE_ALPHA}, {
                 "paused": false,
                 "onComplete": this.fSubAnimComplete,
                 "ease": Strong.easeOut
             });
-            _loc2_++;
+            _loc3_++;
         }
     }
 
@@ -385,15 +402,15 @@ public class ContextMenu extends UIComponent implements IContextMenu {
         if (param1.target == this.bgMc) {
             this.updateHitHeight(this.bgMc.height);
         }
-        this.tweenManager.unregister(param1);
+        this._tweenManager.unregister(param1);
     }
 
     private function fSubAnimComplete(param1:Tween):void {
         var _loc2_:ContextMenuItem = ContextMenuItem(param1.target);
-        if (_loc2_.alpha == 0) {
+        if (_loc2_.alpha == ITEM_HIDE_ALPHA) {
             _loc2_.visible = false;
         }
-        this.tweenManager.unregister(param1);
+        this._tweenManager.unregister(param1);
     }
 
     public function get padding():Padding {
@@ -416,7 +433,7 @@ public class ContextMenu extends UIComponent implements IContextMenu {
         this._onReleaseOutsideCallback = param1;
     }
 
-    private function mouseDownHandler(param1:MouseEvent):void {
+    private function onAppMouseDownHandler(param1:MouseEvent):void {
         if (!this.hit.hitTestPoint(App.stage.mouseX, App.stage.mouseY)) {
             if (this._onReleaseOutsideCallback != null) {
                 this._onReleaseOutsideCallback();
@@ -424,7 +441,7 @@ public class ContextMenu extends UIComponent implements IContextMenu {
         }
     }
 
-    private function onItemClick(param1:ButtonEvent):void {
+    private function onItemClickHandler(param1:ButtonEvent):void {
         var _loc2_:ContextMenuItem = ContextMenuItem(param1.target);
         this.beginAnimExpand(_loc2_);
         if (_loc2_.type != _loc2_.CONTEXT_MENU_ITEM_GROUP) {

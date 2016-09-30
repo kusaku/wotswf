@@ -3,6 +3,7 @@ import flash.display.Sprite;
 
 import net.wg.data.constants.AtlasConstants;
 import net.wg.gui.battle.components.BattleUIComponent;
+import net.wg.gui.battle.views.minimap.MinimapEntryController;
 import net.wg.gui.battle.views.minimap.components.entries.constants.PersonalMinimapEntryConst;
 import net.wg.infrastructure.managers.IAtlasManager;
 
@@ -23,9 +24,11 @@ public class VideoCameraMinimapEntry extends BattleUIComponent {
         super.configUI();
         this._atlasManager.drawGraphics(AtlasConstants.BATTLE_ATLAS, PersonalMinimapEntryConst.GREEN_DIRECTION_ATLAS_ITEM_NAME, this.directionPlaceholder.graphics, "", true);
         this._atlasManager.drawGraphics(AtlasConstants.BATTLE_ATLAS, PersonalMinimapEntryConst.CAMERA_ATLAS_ITEM_NAME, this.cameraPlaceholder.graphics, "", true);
+        MinimapEntryController.instance.registerScalableEntry(this);
     }
 
     override protected function onDispose():void {
+        MinimapEntryController.instance.unregisterScalableEntry(this);
         this.directionPlaceholder = null;
         this.cameraPlaceholder = null;
         this._atlasManager = null;

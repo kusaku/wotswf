@@ -15,6 +15,7 @@ import flash.geom.Rectangle;
 import flash.geom.Transform;
 import flash.media.SoundTransform;
 
+import net.wg.data.daapi.LoadViewVO;
 import net.wg.infrastructure.interfaces.ICursor;
 import net.wg.infrastructure.interfaces.IManagedContainer;
 import net.wg.infrastructure.interfaces.IManagedContent;
@@ -68,7 +69,7 @@ public class MockCursor implements ICursor {
     public function detachFromCursor():void {
     }
 
-    public function dispose():void {
+    public final function dispose():void {
     }
 
     public function getAttachedSprite():Sprite {
@@ -400,25 +401,11 @@ public class MockCursor implements ICursor {
     public function set accessibilityProperties(param1:AccessibilityProperties):void {
     }
 
-    public function get as_alias():String {
-        return "";
-    }
-
-    public function set as_alias(param1:String):void {
-    }
-
-    public function get as_name():String {
-        return "";
-    }
-
-    public function set as_name(param1:String):void {
-    }
-
-    public function get as_config():Object {
+    public function get as_config():LoadViewVO {
         return null;
     }
 
-    public function set as_config(param1:Object):void {
+    public function set as_config(param1:LoadViewVO):void {
     }
 
     public function get loader():Loader {

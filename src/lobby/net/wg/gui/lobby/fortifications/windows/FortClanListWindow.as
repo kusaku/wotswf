@@ -17,9 +17,13 @@ public class FortClanListWindow extends FortClanListWindowMeta implements IFortC
 
     private static const IS_SELF:String = "himself";
 
+    private static const DELAY_ON_SCROLL:int = 100;
+
     public var table:SortableTable;
 
     private var _data:FortClanListWindowVO = null;
+
+    private var _isNeedScroll:Boolean = true;
 
     public function FortClanListWindow() {
         super();
@@ -35,11 +39,15 @@ public class FortClanListWindow extends FortClanListWindowMeta implements IFortC
             this.table.headerDP = new DataProvider(App.utils.data.vectorToArray(this._data.tableHeader));
             this.table.sortByField(TOTAL_MINING, SortingInfo.DESCENDING_SORT);
             this.table.listDP = this._data.members;
-            this.table.scrollListToItemByUniqKey(IS_SELF, true);
+            if (this._isNeedScroll) {
+                this._isNeedScroll = false;
+                App.utils.scheduler.scheduleTask(this.table.scrollListToItemByUniqKey, DELAY_ON_SCROLL, IS_SELF, true);
+            }
         }
     }
 
     override protected function onDispose():void {
+        App.utils.scheduler.cancelTask(this.table.scrollListToItemByUniqKey);
         this.table.removeEventListener(SortableTableListEvent.RENDERER_CLICK, this.onTableRendererClickHandler);
         this.table.dispose();
         this.table = null;

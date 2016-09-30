@@ -6,7 +6,6 @@ import flash.display.Stage;
 import flash.events.Event;
 import flash.text.TextField;
 
-import net.wg.data.constants.LobbyMetrics;
 import net.wg.data.constants.generated.FITTING_TYPES;
 import net.wg.gui.components.controls.ScrollingListEx;
 import net.wg.gui.components.popOvers.PopOver;
@@ -19,7 +18,6 @@ import net.wg.gui.lobby.modulesPanel.data.FittingSelectPopoverVO;
 import net.wg.infrastructure.base.meta.IFittingSelectPopoverMeta;
 import net.wg.infrastructure.base.meta.impl.FittingSelectPopoverMeta;
 import net.wg.infrastructure.interfaces.IWrapper;
-import net.wg.utils.IAssertable;
 
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.data.DataProvider;
@@ -27,7 +25,7 @@ import scaleform.clik.events.ListEvent;
 
 public class FittingSelectPopover extends FittingSelectPopoverMeta implements IFittingSelectPopoverMeta {
 
-    private static const BOTTOM_MARGIN:int = 15;
+    private static const BOTTOM_PADDING:int = 15;
 
     private static const LIST_BOTTOM_MARGIN:int = 2;
 
@@ -38,8 +36,6 @@ public class FittingSelectPopover extends FittingSelectPopoverMeta implements IF
     public var bottomSeparator:MovieClip;
 
     public var topSeparator:MovieClip;
-
-    private var _minAvailableListHeight:int = 0;
 
     private var _data:FittingSelectPopoverVO;
 
@@ -66,12 +62,9 @@ public class FittingSelectPopover extends FittingSelectPopoverMeta implements IF
         this._data = param1;
         this.textTf.htmlText = param1.title;
         width = this.topSeparator.width = this.bottomSeparator.width = this._data.width;
-        var _loc2_:IAssertable = App.utils.asserter;
-        _loc2_.assert(param1.minAvailableHeight > 0, "minAvailableHeight must be greater then zero! received: " + param1.minAvailableHeight);
-        this._minAvailableListHeight = param1.minAvailableHeight - this.itemsList.y - BOTTOM_MARGIN;
-        var _loc3_:String = param1.rendererName;
-        _loc2_.assert(FITTING_TYPES.FITTING_RENDERERS.indexOf(_loc3_) >= 0, "Unknown renderer name: " + _loc3_);
-        this.itemsList.itemRendererName = _loc3_;
+        var _loc2_:String = param1.rendererName;
+        App.utils.asserter.assert(FITTING_TYPES.FITTING_RENDERERS.indexOf(_loc2_) >= 0, "Unknown renderer name: " + _loc2_);
+        this.itemsList.itemRendererName = _loc2_;
         if (this.itemsList.dataProvider != null) {
             this.itemsList.dataProvider.cleanUp();
         }
@@ -123,15 +116,13 @@ public class FittingSelectPopover extends FittingSelectPopoverMeta implements IF
 
     private function updateSize():void {
         var _loc2_:int = 0;
-        var _loc3_:int = 0;
         if (this._data != null && this._data.availableDevices != null) {
-            _loc2_ = App.appHeight - LobbyMetrics.MIN_STAGE_HEIGHT;
-            _loc3_ = this._minAvailableListHeight + _loc2_;
-            this.itemsList.rowCount = Math.min(_loc3_ / this.itemsList.rowHeight, this._data.availableDevices.length);
+            _loc2_ = popoverLayout.positionKeyPoint.y - FITTING_TYPES.HANGAR_POPOVER_TOP_MARGIN - popoverLayout.contentPadding.titleTop - this.itemsList.y - BOTTOM_PADDING - popoverLayout.positionKeyPointPadding.bottom.y;
+            this.itemsList.rowCount = Math.min(_loc2_ / this.itemsList.rowHeight, this._data.availableDevices.length);
         }
         this.itemsList.width = width;
         var _loc1_:int = this.itemsList.y + this.itemsList.height;
-        height = _loc1_ + BOTTOM_MARGIN;
+        height = _loc1_ + BOTTOM_PADDING;
         this.bottomSeparator.y = _loc1_ + (this.bottomSeparator.height >> 1) + LIST_BOTTOM_MARGIN;
     }
 

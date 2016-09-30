@@ -18,9 +18,11 @@ public class CommonsBattle extends CommonsBase {
     override public function formatPlayerName(param1:TextField, param2:IUserProps):Boolean {
         var _loc11_:Boolean = false;
         var _loc13_:Rectangle = null;
-        var _loc14_:Rectangle = null;
-        var _loc15_:Number = NaN;
-        var _loc16_:int = 0;
+        var _loc14_:Number = NaN;
+        var _loc15_:Rectangle = null;
+        var _loc16_:Number = NaN;
+        var _loc17_:int = 0;
+        var _loc18_:String = null;
         var _loc3_:Array = param2.tags;
         var _loc4_:String = param2.userName;
         var _loc5_:String = !!param2.clanAbbrev ? CLAN_TAG_OPEN + param2.clanAbbrev + CLAN_TAG_CLOSE : Values.EMPTY_STR;
@@ -39,23 +41,25 @@ public class CommonsBattle extends CommonsBase {
             _loc10_ = _loc4_ + CUT_SYMBOLS_STR + _loc5_ + _loc6_ + _loc7_ + _loc8_;
             param1.htmlText = _loc10_;
             _loc13_ = param1.getCharBoundaries(_loc4_.length - 1);
-            _loc14_ = param1.getCharBoundaries(_loc10_.length - 1);
-            _loc15_ = _loc14_.x + _loc14_.width - (_loc13_.x + _loc13_.width);
-            if (_loc15_ >= param1.width && param2.clanAbbrev) {
-                _loc5_ = CLAN_TAG_OPEN + CUT_SYMBOLS_STR + CLAN_TAG_CLOSE;
-                _loc10_ = _loc4_ + CUT_SYMBOLS_STR + _loc5_ + _loc6_ + _loc7_ + _loc8_;
-                _loc14_ = param1.getCharBoundaries(_loc10_.length - 1);
-                _loc15_ = _loc14_.x + _loc14_.width - (_loc13_.x + _loc13_.width);
+            _loc14_ = param1.length - 1;
+            _loc15_ = param1.getCharBoundaries(_loc14_);
+            _loc16_ = _loc15_.x + _loc15_.width - (_loc13_.x + _loc13_.width);
+            if (_loc16_ >= param1.width && param2.clanAbbrev) {
+                _loc18_ = CLAN_TAG_OPEN + CUT_SYMBOLS_STR + CLAN_TAG_CLOSE;
+                _loc14_ = _loc14_ - (_loc5_.length - _loc18_.length);
+                _loc5_ = _loc18_;
+                _loc15_ = param1.getCharBoundaries(_loc14_);
+                _loc16_ = _loc15_.x + _loc15_.width - (_loc13_.x + _loc13_.width);
             }
-            _loc16_ = _loc4_.length;
-            while (_loc16_ > 0) {
-                _loc14_ = param1.getCharBoundaries(_loc16_ - 1);
-                if (_loc14_.x + _loc14_.width + _loc15_ <= _loc12_) {
+            _loc17_ = _loc4_.length;
+            while (_loc17_ > 0) {
+                _loc15_ = param1.getCharBoundaries(_loc17_ - 1);
+                if (_loc15_.x + _loc15_.width + _loc16_ <= _loc12_) {
                     break;
                 }
-                _loc16_--;
+                _loc17_--;
             }
-            param1.htmlText = _loc4_.substr(0, _loc16_) + CUT_SYMBOLS_STR + _loc5_ + _loc6_ + _loc7_ + _loc8_;
+            param1.htmlText = _loc4_.substr(0, _loc17_) + CUT_SYMBOLS_STR + _loc5_ + _loc6_ + _loc7_ + _loc8_;
         }
         param1.textColor = _loc9_;
         return _loc11_;

@@ -2,42 +2,32 @@ package net.wg.gui.lobby.hangar.tcarousel {
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.geom.Point;
-import flash.text.TextField;
 
 import net.wg.data.constants.SoundManagerStatesLobby;
 import net.wg.data.constants.SoundTypes;
 import net.wg.data.constants.generated.CONTEXT_MENU_HANDLER_TYPE;
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
-import net.wg.gui.components.controls.ActionPrice;
-import net.wg.gui.components.controls.IconText;
+import net.wg.gui.components.controls.BitmapFill;
+import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.components.controls.scroller.IScrollerItemRenderer;
+import net.wg.gui.components.controls.scroller.ListRendererEvent;
 import net.wg.gui.lobby.hangar.tcarousel.data.VehicleCarouselVO;
 import net.wg.gui.lobby.hangar.tcarousel.event.TankItemEvent;
-import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.managers.ITooltipMgr;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.gfx.MouseEventEx;
 
-public class TankCarouselItemRenderer extends UIComponentEx implements IScrollerItemRenderer {
+public class TankCarouselItemRenderer extends SoundButtonEx implements IScrollerItemRenderer {
 
-    public var price:IconText = null;
+    private static const LOCK_BG_ALIAS:String = "bgDisPattern";
 
-    public var infoText:TextField = null;
+    private static const LOCK_BG_REPEAT:String = "all";
 
-    public var additionalText:TextField = null;
+    public var content:BaseTankIcon = null;
 
-    public var clanLock:ClanLockUI = null;
-
-    public var actionPrice:ActionPrice = null;
-
-    public var slot:TankCarouselRendererSlot = null;
+    public var bmpLockBg:BitmapFill = null;
 
     private var _index:uint = 0;
-
-    private var _owner:UIComponent = null;
-
-    private var _selected:Boolean = false;
 
     private var _dataVO:VehicleCarouselVO = null;
 
@@ -49,33 +39,24 @@ public class TankCarouselItemRenderer extends UIComponentEx implements IScroller
 
     override protected function configUI():void {
         super.configUI();
-        this.slot.soundType = SoundTypes.CAROUSEL_BTN;
-        this.slot.soundId = SoundManagerStatesLobby.CAROUSEL_CELL_BTN;
-        this.actionPrice.mouseChildren = false;
-        this.actionPrice.mouseEnabled = false;
-        this.infoText.mouseEnabled = false;
-        this.clanLock.mouseChildren = false;
-        this.clanLock.mouseEnabled = false;
-        this.price.mouseChildren = false;
-        this.price.mouseEnabled = false;
-        this.additionalText.mouseEnabled = false;
+        this.bmpLockBg.widthFill = this.content.width;
+        this.bmpLockBg.heightFill = this.content.height;
+        this.bmpLockBg.repeat = LOCK_BG_REPEAT;
+        this.bmpLockBg.source = LOCK_BG_ALIAS;
+        this.content.cacheAsBitmap = true;
+        soundType = SoundTypes.CAROUSEL_BTN;
+        soundId = SoundManagerStatesLobby.CAROUSEL_CELL_BTN;
         this.addListeners();
     }
 
     override protected function onDispose():void {
         this.removeListeners();
-        this.actionPrice.dispose();
-        this.actionPrice = null;
-        this.clanLock.dispose();
-        this.clanLock = null;
-        this.slot.dispose();
-        this.slot = null;
-        this.price.dispose();
-        this.price = null;
-        this.infoText = null;
-        this.additionalText = null;
+        this.content.dispose();
+        this.content = null;
+        this.bmpLockBg.dispose();
+        this.bmpLockBg = null;
         this._dataVO = null;
-        this._owner = null;
+        _owner = null;
         this._toolTipMgr = null;
         super.onDispose();
     }
@@ -85,56 +66,40 @@ public class TankCarouselItemRenderer extends UIComponentEx implements IScroller
     }
 
     protected function updateData():void {
-        if (this._dataVO != null) {
-            this.slot.enabled = true;
-            if (this._dataVO.showInfoText) {
-                this.infoText.htmlText = this._dataVO.infoText;
-                this.infoText.visible = true;
-            }
-            else {
-                this.infoText.visible = false;
-            }
-            if (this._dataVO.buySlot || this._dataVO.buyTank) {
-                this.slot.setIcon(this._dataVO.icon);
-            }
-            else {
-                this.slot.updateData(this._dataVO);
-            }
-            if (this._dataVO.buySlot) {
-                if (this._dataVO.hasSale) {
-                    this.actionPrice.setData(this._dataVO.getActionPriceVO());
-                }
-                else {
-                    this.price.text = this._dataVO.slotPrice.toString();
-                }
-                this.price.visible = !this._dataVO.hasSale;
-                this.actionPrice.visible = this._dataVO.hasSale;
-            }
-            else {
-                this.actionPrice.visible = false;
-                this.price.visible = false;
-            }
-            if (this._dataVO.buyTank) {
-                this.additionalText.text = this._dataVO.additionalText;
-                this.additionalText.visible = true;
-            }
-            else {
-                this.additionalText.visible = false;
-            }
-            this.clanLock.timer = this._dataVO.clanLock;
-        }
+        this.bmpLockBg.visible = this._dataVO != null && this._dataVO.lockBackground;
+        this.content.setData(this._dataVO);
     }
 
     private function addListeners():void {
-        this.slot.addEventListener(MouseEvent.ROLL_OVER, this.onSlotMouseRollOverHandler);
-        this.slot.addEventListener(MouseEvent.ROLL_OUT, this.onSlotMouseRollOutHandler);
-        this.slot.addEventListener(MouseEvent.CLICK, this.onSlotMouseClickHandler);
+        addEventListener(MouseEvent.ROLL_OVER, this.onSlotMouseRollOverHandler);
+        addEventListener(MouseEvent.ROLL_OUT, this.onSlotMouseRollOutHandler);
+        addEventListener(MouseEvent.CLICK, this.onSlotMouseClickHandler);
     }
 
     private function removeListeners():void {
-        this.slot.removeEventListener(MouseEvent.ROLL_OVER, this.onSlotMouseRollOverHandler);
-        this.slot.removeEventListener(MouseEvent.ROLL_OUT, this.onSlotMouseRollOutHandler);
-        this.slot.removeEventListener(MouseEvent.CLICK, this.onSlotMouseClickHandler);
+        removeEventListener(MouseEvent.ROLL_OVER, this.onSlotMouseRollOverHandler);
+        removeEventListener(MouseEvent.ROLL_OUT, this.onSlotMouseRollOutHandler);
+        removeEventListener(MouseEvent.CLICK, this.onSlotMouseClickHandler);
+    }
+
+    override public function get data():Object {
+        return this._dataVO;
+    }
+
+    override public function set data(param1:Object):void {
+        if (this._dataVO != null) {
+            this._dataVO.removeEventListener(Event.CHANGE, this.onDataVOChangeHandler);
+            this._dataVO = null;
+        }
+        if (param1 != null) {
+            this._dataVO = VehicleCarouselVO(param1);
+            this._dataVO.addEventListener(Event.CHANGE, this.onDataVOChangeHandler);
+            enabled = true;
+        }
+        else {
+            enabled = false;
+        }
+        this.updateData();
     }
 
     public function get index():uint {
@@ -145,59 +110,19 @@ public class TankCarouselItemRenderer extends UIComponentEx implements IScroller
         this._index = param1;
     }
 
-    public function get data():Object {
-        return null;
-    }
-
-    public function set data(param1:Object):void {
-        if (this._dataVO != null) {
-            this._dataVO.removeEventListener(Event.CHANGE, this.onDataVOChangeHandler);
-            this._dataVO = null;
-        }
-        if (param1 != null) {
-            this._dataVO = VehicleCarouselVO(param1);
-            this._dataVO.addEventListener(Event.CHANGE, this.onDataVOChangeHandler);
-            this.updateData();
-        }
-        else {
-            this.additionalText.visible = false;
-            this.actionPrice.visible = false;
-            this.price.visible = false;
-            this.infoText.visible = false;
-            this.clanLock.visible = false;
-            this.slot.enabled = false;
-            this.slot.hideAllContent();
-        }
-    }
-
-    public function get owner():UIComponent {
-        return this._owner;
-    }
-
-    public function set owner(param1:UIComponent):void {
-        this._owner = param1;
-    }
-
-    public function get selected():Boolean {
-        return this._selected;
-    }
-
-    public function set selected(param1:Boolean):void {
-        if (this._selected != param1) {
-            this._selected = param1;
-            this.slot.selected = param1;
-        }
-    }
-
     public function set tooltipDecorator(param1:ITooltipMgr):void {
         this._toolTipMgr = param1;
+    }
+
+    protected function get dataVO():VehicleCarouselVO {
+        return this._dataVO;
     }
 
     private function onSlotMouseClickHandler(param1:Event):void {
         var _loc4_:String = null;
         var _loc2_:MouseEventEx = param1 as MouseEventEx;
         var _loc3_:uint = _loc2_ == null ? uint(0) : uint(_loc2_.buttonIdx);
-        if (!this.selected && _loc3_ == MouseEventEx.LEFT_BUTTON) {
+        if (!selected && _loc3_ == MouseEventEx.LEFT_BUTTON) {
             if (this._dataVO.buySlot) {
                 _loc4_ = TankItemEvent.SELECT_BUY_SLOT;
             }
@@ -206,9 +131,9 @@ public class TankCarouselItemRenderer extends UIComponentEx implements IScroller
             }
             else {
                 _loc4_ = TankItemEvent.SELECT_ITEM;
-                dispatchEvent(new Event(Event.SELECT));
+                dispatchEvent(new ListRendererEvent(ListRendererEvent.SELECT));
             }
-            dispatchEvent(new TankItemEvent(_loc4_, this._dataVO.id));
+            dispatchEvent(new TankItemEvent(_loc4_, this._index));
         }
         else if (_loc3_ == MouseEventEx.RIGHT_BUTTON && !this._dataVO.buySlot && !this._dataVO.buyTank) {
             App.contextMenuMgr.show(CONTEXT_MENU_HANDLER_TYPE.VEHICLE, this, {"inventoryId": this._dataVO.id});

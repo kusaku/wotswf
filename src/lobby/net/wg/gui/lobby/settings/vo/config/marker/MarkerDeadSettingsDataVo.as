@@ -51,5 +51,23 @@ public class MarkerDeadSettingsDataVo extends SettingsDataVo {
             "markerAltVehicleName": createControl(ControlsFactory.TYPE_CHECKBOX).build()
         });
     }
+
+    override protected function onDispose():void {
+        this.markerBaseIcon = null;
+        this.markerBaseDamage = null;
+        this.markerAltIcon = null;
+        this.markerAltDamage = null;
+        this.markerBaseVehicleName = null;
+        this.markerAltPlayerName = null;
+        this.markerBaseHpIndicator = null;
+        this.markerBaseHp = null;
+        this.markerBasePlayerName = null;
+        this.markerAltLevel = null;
+        this.markerAltHpIndicator = null;
+        this.markerAltHp = null;
+        this.markerBaseLevel = null;
+        this.markerAltVehicleName = null;
+        super.onDispose();
+    }
 }
 }

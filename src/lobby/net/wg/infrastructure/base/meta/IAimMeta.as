@@ -9,7 +9,7 @@ public interface IAimMeta extends IEventDispatcher {
 
     function as_setupReloadingCounter(param1:Boolean):void;
 
-    function as_setReloading(param1:Number, param2:Number, param3:Boolean, param4:Number, param5:Number = 0):void;
+    function as_setReloading(param1:Number, param2:Number, param3:Boolean, param4:Number, param5:Number):void;
 
     function as_setReloadingAsPercent(param1:Number, param2:Boolean):void;
 
@@ -19,7 +19,7 @@ public interface IAimMeta extends IEventDispatcher {
 
     function as_setHealth(param1:Number):void;
 
-    function as_setAmmoStock(param1:Number, param2:Number, param3:Boolean, param4:String, param5:Boolean = false):void;
+    function as_setAmmoStock(param1:Number, param2:Number, param3:Boolean, param4:String, param5:Boolean):void;
 
     function as_setClipParams(param1:Number, param2:Number):void;
 

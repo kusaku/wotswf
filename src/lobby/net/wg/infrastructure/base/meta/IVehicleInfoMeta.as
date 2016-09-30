@@ -7,6 +7,10 @@ public interface IVehicleInfoMeta extends IEventDispatcher {
 
     function onCancelClickS():void;
 
+    function addToCompareS():void;
+
     function as_setVehicleInfo(param1:Object):void;
+
+    function as_setCompareButtonData(param1:Object):void;
 }
 }

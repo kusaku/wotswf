@@ -46,7 +46,9 @@ import net.wg.gui.battle.components.CoolDownTimer;
 import net.wg.gui.battle.components.DestroyTimersPanel;
 import net.wg.gui.battle.components.FrameAnimationTimer;
 import net.wg.gui.battle.components.buttons.BattleButton;
+import net.wg.gui.battle.components.buttons.BattleStateButton;
 import net.wg.gui.battle.components.buttons.BattleToolTipButton;
+import net.wg.gui.battle.components.buttons.btnConfig.BattleStateBtnSettings;
 import net.wg.gui.battle.components.buttons.interfaces.IBattleButton;
 import net.wg.gui.battle.components.buttons.interfaces.IBattleToolTipButton;
 import net.wg.gui.battle.components.buttons.interfaces.IClickButtonHandler;
@@ -59,6 +61,12 @@ import net.wg.gui.battle.components.buttons.interfaces.IRollOverButtonHandler;
 import net.wg.gui.battle.components.buttons.interfaces.IStateChangedButtonHandler;
 import net.wg.gui.battle.components.buttons.interfaces.ITooltipTarget;
 import net.wg.gui.battle.components.constants.InteractiveStates;
+import net.wg.gui.battle.components.damageIndicator.AnimationContainer;
+import net.wg.gui.battle.components.damageIndicator.DamageIndicator;
+import net.wg.gui.battle.components.damageIndicator.DamageIndicatorItem;
+import net.wg.gui.battle.components.damageIndicator.ExtendedStateContainer;
+import net.wg.gui.battle.components.damageIndicator.ItemWithRotation;
+import net.wg.gui.battle.components.damageIndicator.StandardStateContainer;
 import net.wg.gui.battle.components.falloutScorePanel.BarGlowAnimation;
 import net.wg.gui.battle.components.falloutScorePanel.FalloutBaseScorePanel;
 import net.wg.gui.battle.components.falloutScorePanel.FalloutClassicScorePanel;
@@ -99,6 +107,7 @@ import net.wg.gui.battle.random.views.stats.components.fullStats.tableItem.Stats
 import net.wg.gui.battle.random.views.stats.components.playersPanel.PlayersPanel;
 import net.wg.gui.battle.random.views.stats.components.playersPanel.VO.PlayersPanelContextMenuSentData;
 import net.wg.gui.battle.random.views.stats.components.playersPanel.constants.PlayersPanelInvalidationType;
+import net.wg.gui.battle.random.views.stats.components.playersPanel.events.PlayersPanelEvent;
 import net.wg.gui.battle.random.views.stats.components.playersPanel.events.PlayersPanelItemEvent;
 import net.wg.gui.battle.random.views.stats.components.playersPanel.events.PlayersPanelListEvent;
 import net.wg.gui.battle.random.views.stats.components.playersPanel.events.PlayersPanelSwitchEvent;
@@ -139,6 +148,14 @@ import net.wg.gui.battle.tutorial.views.tutorial.utils.tween.TutorialTweener;
 import net.wg.gui.battle.tutorial.views.tutorial.utils.tween.TweenFlowFactory;
 import net.wg.gui.battle.views.BaseBattlePage;
 import net.wg.gui.battle.views.BaseFalloutPage;
+import net.wg.gui.battle.views.battleDamagePanel.BattleDamageLogPanel;
+import net.wg.gui.battle.views.battleDamagePanel.components.DamageLogDetailsController;
+import net.wg.gui.battle.views.battleDamagePanel.components.DamageLogDetailsImages;
+import net.wg.gui.battle.views.battleDamagePanel.components.DamageLogDetailsText;
+import net.wg.gui.battle.views.battleDamagePanel.components.DefaultSummaryImages;
+import net.wg.gui.battle.views.battleDamagePanel.components.SummaryAnimation;
+import net.wg.gui.battle.views.battleDamagePanel.constants.BattleDamageLogConstants;
+import net.wg.gui.battle.views.battleDamagePanel.models.MessageRenderModel;
 import net.wg.gui.battle.views.battleEndWarning.BattleEndWarningPanel;
 import net.wg.gui.battle.views.battleEndWarning.containers.Timer;
 import net.wg.gui.battle.views.battleMessenger.BattleImageSubstitution;
@@ -148,10 +165,12 @@ import net.wg.gui.battle.views.battleMessenger.BattleMessengerPool;
 import net.wg.gui.battle.views.battleMessenger.BattleSmileyMap;
 import net.wg.gui.battle.views.battleMessenger.VO.BattleMessengerReceiverVO;
 import net.wg.gui.battle.views.battleMessenger.VO.BattleMessengerSettingsVO;
+import net.wg.gui.battle.views.battleMessenger.VO.BattleMessengerToxicVO;
+import net.wg.gui.battle.views.battleMessenger.VO.ButtonToxicStatusVO;
+import net.wg.gui.battle.views.battleMessenger.actionPanel.BattleMessengerActionContainer;
 import net.wg.gui.battle.views.battleMessenger.interfaces.IBattleMessenger;
 import net.wg.gui.battle.views.battleTimer.BattleAnimationTimer;
 import net.wg.gui.battle.views.battleTimer.BattleTimer;
-import net.wg.gui.battle.views.battleTimer.TimerDisplay;
 import net.wg.gui.battle.views.consumablesPanel.BattleEquipmentButton;
 import net.wg.gui.battle.views.consumablesPanel.BattleOptionalDeviceButton;
 import net.wg.gui.battle.views.consumablesPanel.BattleOrderButton;
@@ -167,7 +186,6 @@ import net.wg.gui.battle.views.consumablesPanel.interfaces.IBattleShellButton;
 import net.wg.gui.battle.views.consumablesPanel.interfaces.IConsumablesButton;
 import net.wg.gui.battle.views.consumablesPanel.interfaces.IConsumablesPanel;
 import net.wg.gui.battle.views.consumablesPanel.interfaces.IEntityStateButton;
-import net.wg.gui.battle.views.damageIndicator.DamageIndicator;
 import net.wg.gui.battle.views.damageInfoPanel.DamageInfoPanel;
 import net.wg.gui.battle.views.damageInfoPanel.components.DamageItem;
 import net.wg.gui.battle.views.damageInfoPanel.components.Fire;
@@ -251,6 +269,7 @@ import net.wg.gui.battle.views.minimap.components.entries.fallout.repair.EnemyRe
 import net.wg.gui.battle.views.minimap.components.entries.fortconsumables.ArtilleryMinimapEntry;
 import net.wg.gui.battle.views.minimap.components.entries.fortconsumables.BomberMinimapEntry;
 import net.wg.gui.battle.views.minimap.components.entries.interfaces.IHighlightableMinimapEntry;
+import net.wg.gui.battle.views.minimap.components.entries.interfaces.IMinimapEntryWithNonScaleContent;
 import net.wg.gui.battle.views.minimap.components.entries.interfaces.IVehicleMinimapEntry;
 import net.wg.gui.battle.views.minimap.components.entries.personal.AnimationMinimapEntry;
 import net.wg.gui.battle.views.minimap.components.entries.personal.ArcadeCameraMinimapEntry;
@@ -272,8 +291,9 @@ import net.wg.gui.battle.views.minimap.constants.MinimapColorConst;
 import net.wg.gui.battle.views.minimap.constants.MinimapSizeConst;
 import net.wg.gui.battle.views.minimap.containers.MinimapEntriesContainer;
 import net.wg.gui.battle.views.minimap.events.MinimapEvent;
-import net.wg.gui.battle.views.postMortemTips.PostmortemGasInfo;
-import net.wg.gui.battle.views.postMortemTips.PostmortemTips;
+import net.wg.gui.battle.views.postmortemPanel.PostmortemGasInfo;
+import net.wg.gui.battle.views.postmortemPanel.PostmortemPanel;
+import net.wg.gui.battle.views.postmortemPanel.VehiclePanel;
 import net.wg.gui.battle.views.prebattleTimer.PrebattleTimer;
 import net.wg.gui.battle.views.radialMenu.RadialButton;
 import net.wg.gui.battle.views.radialMenu.RadialMenu;
@@ -283,12 +303,17 @@ import net.wg.gui.battle.views.radialMenu.components.Icons;
 import net.wg.gui.battle.views.radialMenu.components.SectorHoveredWrapper;
 import net.wg.gui.battle.views.radialMenu.components.SectorWrapper;
 import net.wg.gui.battle.views.repairPointTimer.RepairPointTimer;
-import net.wg.gui.battle.views.ribbonsPanel.RibbonTitleAnimation;
-import net.wg.gui.battle.views.ribbonsPanel.RibbonsAnimation;
+import net.wg.gui.battle.views.ribbonsPanel.AnimationSet;
+import net.wg.gui.battle.views.ribbonsPanel.RibbonCtrl;
+import net.wg.gui.battle.views.ribbonsPanel.RibbonIcons;
+import net.wg.gui.battle.views.ribbonsPanel.RibbonTexts;
 import net.wg.gui.battle.views.ribbonsPanel.RibbonsPanel;
-import net.wg.gui.battle.views.ribbonsPanel.VO.RibbonVO;
-import net.wg.gui.battle.views.ribbonsPanel.containers.Ribbon;
-import net.wg.gui.battle.views.ribbonsPanel.containers.Title;
+import net.wg.gui.battle.views.ribbonsPanel.data.BackgroundAtlasNames;
+import net.wg.gui.battle.views.ribbonsPanel.data.RibbonAnimationStates;
+import net.wg.gui.battle.views.ribbonsPanel.data.RibbonQueue;
+import net.wg.gui.battle.views.ribbonsPanel.data.RibbonQueueItem;
+import net.wg.gui.battle.views.ribbonsPanel.data.RibbonSettings;
+import net.wg.gui.battle.views.ribbonsPanel.data.RibbonTextSettings;
 import net.wg.gui.battle.views.sixthSense.SixthSense;
 import net.wg.gui.battle.views.staticMarkers.flag.FlagIcon;
 import net.wg.gui.battle.views.staticMarkers.flag.FlagMarker;
@@ -322,9 +347,9 @@ import net.wg.gui.battle.views.vehicleMarkers.FortConsumablesMarker;
 import net.wg.gui.battle.views.vehicleMarkers.HPFieldContainer;
 import net.wg.gui.battle.views.vehicleMarkers.HealthBarAnimatedLabel;
 import net.wg.gui.battle.views.vehicleMarkers.HealthBarAnimatedPart;
+import net.wg.gui.battle.views.vehicleMarkers.IMarkerManagerHandler;
 import net.wg.gui.battle.views.vehicleMarkers.StaticObjectMarker;
 import net.wg.gui.battle.views.vehicleMarkers.VMAtlasItemName;
-import net.wg.gui.battle.views.vehicleMarkers.VMAtlasManager;
 import net.wg.gui.battle.views.vehicleMarkers.VO.HPDisplayMode;
 import net.wg.gui.battle.views.vehicleMarkers.VO.VehicleMarkerFlags;
 import net.wg.gui.battle.views.vehicleMarkers.VO.VehicleMarkerSettings;
@@ -337,6 +362,11 @@ import net.wg.gui.battle.views.vehicleMarkers.VehicleMarkersLinkages;
 import net.wg.gui.battle.views.vehicleMarkers.VehicleMarkersManager;
 import net.wg.gui.battle.views.vehicleMarkers.events.TimelineEvent;
 import net.wg.gui.battle.views.vehicleMarkers.events.VehicleMarkersManagerEvent;
+import net.wg.gui.battle.views.vehicleMessages.VehicleMessage;
+import net.wg.gui.battle.views.vehicleMessages.VehicleMessages;
+import net.wg.gui.battle.views.vehicleMessages.VehicleMessagesPool;
+import net.wg.gui.battle.views.vehicleMessages.VehicleMessagesVoQueue;
+import net.wg.gui.battle.views.vehicleMessages.vo.VehicleMessageVO;
 import net.wg.gui.battle.windows.DeserterDialog;
 import net.wg.gui.battle.windows.IngameHelpWindow;
 import net.wg.gui.battle.windows.IngameMenu;
@@ -344,6 +374,7 @@ import net.wg.gui.battle.windows.ReplenishAmmoDialog;
 import net.wg.infrastructure.base.BaseBattleDAAPIComponent;
 import net.wg.infrastructure.base.meta.IBaseBattleDAAPIComponentMeta;
 import net.wg.infrastructure.base.meta.IBattleDAAPIComponentMeta;
+import net.wg.infrastructure.base.meta.IBattleDamageLogPanelMeta;
 import net.wg.infrastructure.base.meta.IBattleEndWarningPanelMeta;
 import net.wg.infrastructure.base.meta.IBattleMessageListMeta;
 import net.wg.infrastructure.base.meta.IBattleMessengerMeta;
@@ -371,6 +402,7 @@ import net.wg.infrastructure.base.meta.IIngameHelpWindowMeta;
 import net.wg.infrastructure.base.meta.IIngameMenuMeta;
 import net.wg.infrastructure.base.meta.IMinimapMeta;
 import net.wg.infrastructure.base.meta.IPlayersPanelMeta;
+import net.wg.infrastructure.base.meta.IPostmortemPanelMeta;
 import net.wg.infrastructure.base.meta.IPrebattleTimerMeta;
 import net.wg.infrastructure.base.meta.IRadialMenuMeta;
 import net.wg.infrastructure.base.meta.IRepairPointTimerMeta;
@@ -421,7 +453,7 @@ public class ClassManagerMeta {
 
     public static const NET_WG_DATA_CONSTANTS_BATTLESTATISTICSMODELSTATUS:Class = BattleStatisticsModelStatus;
 
-    public static const NET_WG_DATA_CONSTANTS_INTERACTIVESTATES:Class = InteractiveStates;
+    public static const NET_WG_DATA_CONSTANTS_INTERACTIVESTATES:Class = net.wg.data.constants.InteractiveStates;
 
     public static const NET_WG_DATA_CONSTANTS_INVALIDATIONTYPE:Class = InvalidationType;
 
@@ -481,7 +513,11 @@ public class ClassManagerMeta {
 
     public static const NET_WG_GUI_BATTLE_COMPONENTS_BUTTONS_BATTLEBUTTON:Class = BattleButton;
 
+    public static const NET_WG_GUI_BATTLE_COMPONENTS_BUTTONS_BATTLESTATEBUTTON:Class = BattleStateButton;
+
     public static const NET_WG_GUI_BATTLE_COMPONENTS_BUTTONS_BATTLETOOLTIPBUTTON:Class = BattleToolTipButton;
+
+    public static const NET_WG_GUI_BATTLE_COMPONENTS_BUTTONS_BTNCONFIG_BATTLESTATEBTNSETTINGS:Class = BattleStateBtnSettings;
 
     public static const NET_WG_GUI_BATTLE_COMPONENTS_BUTTONS_INTERFACES_IBATTLEBUTTON:Class = IBattleButton;
 
@@ -508,6 +544,18 @@ public class ClassManagerMeta {
     public static const NET_WG_GUI_BATTLE_COMPONENTS_CONSTANTS_INTERACTIVESTATES:Class = InteractiveStates;
 
     public static const NET_WG_GUI_BATTLE_COMPONENTS_CONSTANTS_INVALIDATIONTYPE:Class = net.wg.gui.battle.components.constants.InvalidationType;
+
+    public static const NET_WG_GUI_BATTLE_COMPONENTS_DAMAGEINDICATOR_ANIMATIONCONTAINER:Class = AnimationContainer;
+
+    public static const NET_WG_GUI_BATTLE_COMPONENTS_DAMAGEINDICATOR_DAMAGEINDICATOR:Class = DamageIndicator;
+
+    public static const NET_WG_GUI_BATTLE_COMPONENTS_DAMAGEINDICATOR_DAMAGEINDICATORITEM:Class = DamageIndicatorItem;
+
+    public static const NET_WG_GUI_BATTLE_COMPONENTS_DAMAGEINDICATOR_EXTENDEDSTATECONTAINER:Class = ExtendedStateContainer;
+
+    public static const NET_WG_GUI_BATTLE_COMPONENTS_DAMAGEINDICATOR_ITEMWITHROTATION:Class = ItemWithRotation;
+
+    public static const NET_WG_GUI_BATTLE_COMPONENTS_DAMAGEINDICATOR_STANDARDSTATECONTAINER:Class = StandardStateContainer;
 
     public static const NET_WG_GUI_BATTLE_COMPONENTS_FALLOUTSCOREPANEL_BARGLOWANIMATION:Class = BarGlowAnimation;
 
@@ -589,6 +637,8 @@ public class ClassManagerMeta {
 
     public static const NET_WG_GUI_BATTLE_RANDOM_VIEWS_STATS_COMPONENTS_PLAYERSPANEL_CONSTANTS_PLAYERSPANELINVALIDATIONTYPE:Class = PlayersPanelInvalidationType;
 
+    public static const NET_WG_GUI_BATTLE_RANDOM_VIEWS_STATS_COMPONENTS_PLAYERSPANEL_EVENTS_PLAYERSPANELEVENT:Class = PlayersPanelEvent;
+
     public static const NET_WG_GUI_BATTLE_RANDOM_VIEWS_STATS_COMPONENTS_PLAYERSPANEL_EVENTS_PLAYERSPANELITEMEVENT:Class = PlayersPanelItemEvent;
 
     public static const NET_WG_GUI_BATTLE_RANDOM_VIEWS_STATS_COMPONENTS_PLAYERSPANEL_EVENTS_PLAYERSPANELLISTEVENT:Class = PlayersPanelListEvent;
@@ -669,6 +719,22 @@ public class ClassManagerMeta {
 
     public static const NET_WG_GUI_BATTLE_VIEWS_BASEFALLOUTPAGE:Class = BaseFalloutPage;
 
+    public static const NET_WG_GUI_BATTLE_VIEWS_BATTLEDAMAGEPANEL_BATTLEDAMAGELOGPANEL:Class = BattleDamageLogPanel;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_BATTLEDAMAGEPANEL_COMPONENTS_DAMAGELOGDETAILSCONTROLLER:Class = DamageLogDetailsController;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_BATTLEDAMAGEPANEL_COMPONENTS_DAMAGELOGDETAILSIMAGES:Class = DamageLogDetailsImages;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_BATTLEDAMAGEPANEL_COMPONENTS_DAMAGELOGDETAILSTEXT:Class = DamageLogDetailsText;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_BATTLEDAMAGEPANEL_COMPONENTS_DEFAULTSUMMARYIMAGES:Class = DefaultSummaryImages;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_BATTLEDAMAGEPANEL_COMPONENTS_SUMMARYANIMATION:Class = SummaryAnimation;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_BATTLEDAMAGEPANEL_CONSTANTS_BATTLEDAMAGELOGCONSTANTS:Class = BattleDamageLogConstants;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_BATTLEDAMAGEPANEL_MODELS_MESSAGERENDERMODEL:Class = MessageRenderModel;
+
     public static const NET_WG_GUI_BATTLE_VIEWS_BATTLEENDWARNING_BATTLEENDWARNINGPANEL:Class = BattleEndWarningPanel;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_BATTLEENDWARNING_CONTAINERS_TIMER:Class = Timer;
@@ -687,13 +753,17 @@ public class ClassManagerMeta {
 
     public static const NET_WG_GUI_BATTLE_VIEWS_BATTLEMESSENGER_VO_BATTLEMESSENGERSETTINGSVO:Class = BattleMessengerSettingsVO;
 
+    public static const NET_WG_GUI_BATTLE_VIEWS_BATTLEMESSENGER_VO_BATTLEMESSENGERTOXICVO:Class = BattleMessengerToxicVO;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_BATTLEMESSENGER_VO_BUTTONTOXICSTATUSVO:Class = ButtonToxicStatusVO;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_BATTLEMESSENGER_ACTIONPANEL_BATTLEMESSENGERACTIONCONTAINER:Class = BattleMessengerActionContainer;
+
     public static const NET_WG_GUI_BATTLE_VIEWS_BATTLEMESSENGER_INTERFACES_IBATTLEMESSENGER:Class = IBattleMessenger;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_BATTLETIMER_BATTLEANIMATIONTIMER:Class = BattleAnimationTimer;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_BATTLETIMER_BATTLETIMER:Class = BattleTimer;
-
-    public static const NET_WG_GUI_BATTLE_VIEWS_BATTLETIMER_TIMERDISPLAY:Class = TimerDisplay;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_CONSUMABLESPANEL_BATTLEEQUIPMENTBUTTON:Class = BattleEquipmentButton;
 
@@ -724,8 +794,6 @@ public class ClassManagerMeta {
     public static const NET_WG_GUI_BATTLE_VIEWS_CONSUMABLESPANEL_INTERFACES_ICONSUMABLESPANEL:Class = IConsumablesPanel;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_CONSUMABLESPANEL_INTERFACES_IENTITYSTATEBUTTON:Class = IEntityStateButton;
-
-    public static const NET_WG_GUI_BATTLE_VIEWS_DAMAGEINDICATOR_DAMAGEINDICATOR:Class = DamageIndicator;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_DAMAGEINFOPANEL_DAMAGEINFOPANEL:Class = DamageInfoPanel;
 
@@ -893,6 +961,8 @@ public class ClassManagerMeta {
 
     public static const NET_WG_GUI_BATTLE_VIEWS_MINIMAP_COMPONENTS_ENTRIES_INTERFACES_IHIGHLIGHTABLEMINIMAPENTRY:Class = IHighlightableMinimapEntry;
 
+    public static const NET_WG_GUI_BATTLE_VIEWS_MINIMAP_COMPONENTS_ENTRIES_INTERFACES_IMINIMAPENTRYWITHNONSCALECONTENT:Class = IMinimapEntryWithNonScaleContent;
+
     public static const NET_WG_GUI_BATTLE_VIEWS_MINIMAP_COMPONENTS_ENTRIES_INTERFACES_IVEHICLEMINIMAPENTRY:Class = IVehicleMinimapEntry;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_MINIMAP_COMPONENTS_ENTRIES_PERSONAL_ANIMATIONMINIMAPENTRY:Class = AnimationMinimapEntry;
@@ -935,9 +1005,11 @@ public class ClassManagerMeta {
 
     public static const NET_WG_GUI_BATTLE_VIEWS_MINIMAP_EVENTS_MINIMAPEVENT:Class = MinimapEvent;
 
-    public static const NET_WG_GUI_BATTLE_VIEWS_POSTMORTEMTIPS_POSTMORTEMGASINFO:Class = PostmortemGasInfo;
+    public static const NET_WG_GUI_BATTLE_VIEWS_POSTMORTEMPANEL_POSTMORTEMGASINFO:Class = PostmortemGasInfo;
 
-    public static const NET_WG_GUI_BATTLE_VIEWS_POSTMORTEMTIPS_POSTMORTEMTIPS:Class = PostmortemTips;
+    public static const NET_WG_GUI_BATTLE_VIEWS_POSTMORTEMPANEL_POSTMORTEMPANEL:Class = PostmortemPanel;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_POSTMORTEMPANEL_VEHICLEPANEL:Class = VehiclePanel;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_PREBATTLETIMER_PREBATTLETIMER:Class = PrebattleTimer;
 
@@ -957,19 +1029,27 @@ public class ClassManagerMeta {
 
     public static const NET_WG_GUI_BATTLE_VIEWS_REPAIRPOINTTIMER_REPAIRPOINTTIMER:Class = RepairPointTimer;
 
-    public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_RIBBONTITLEANIMATION:Class = RibbonTitleAnimation;
+    public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_ANIMATIONSET:Class = AnimationSet;
 
-    public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_RIBBONSANIMATION:Class = RibbonsAnimation;
+    public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_RIBBONCTRL:Class = RibbonCtrl;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_RIBBONICONS:Class = RibbonIcons;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_RIBBONTEXTS:Class = RibbonTexts;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_RIBBONSPANEL:Class = RibbonsPanel;
 
-    public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_VO_RIBBONVO:Class = RibbonVO;
+    public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_DATA_BACKGROUNDATLASNAMES:Class = BackgroundAtlasNames;
 
-    public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_CONTAINERS_ICONS:Class = net.wg.gui.battle.views.ribbonsPanel.containers.Icons;
+    public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_DATA_RIBBONANIMATIONSTATES:Class = RibbonAnimationStates;
 
-    public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_CONTAINERS_RIBBON:Class = Ribbon;
+    public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_DATA_RIBBONQUEUE:Class = RibbonQueue;
 
-    public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_CONTAINERS_TITLE:Class = Title;
+    public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_DATA_RIBBONQUEUEITEM:Class = RibbonQueueItem;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_DATA_RIBBONSETTINGS:Class = RibbonSettings;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_DATA_RIBBONTEXTSETTINGS:Class = RibbonTextSettings;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_SIXTHSENSE_SIXTHSENSE:Class = SixthSense;
 
@@ -1039,11 +1119,11 @@ public class ClassManagerMeta {
 
     public static const NET_WG_GUI_BATTLE_VIEWS_VEHICLEMARKERS_HEALTHBARANIMATEDPART:Class = HealthBarAnimatedPart;
 
+    public static const NET_WG_GUI_BATTLE_VIEWS_VEHICLEMARKERS_IMARKERMANAGERHANDLER:Class = IMarkerManagerHandler;
+
     public static const NET_WG_GUI_BATTLE_VIEWS_VEHICLEMARKERS_STATICOBJECTMARKER:Class = StaticObjectMarker;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_VEHICLEMARKERS_VMATLASITEMNAME:Class = VMAtlasItemName;
-
-    public static const NET_WG_GUI_BATTLE_VIEWS_VEHICLEMARKERS_VMATLASMANAGER:Class = VMAtlasManager;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_VEHICLEMARKERS_VO_HPDISPLAYMODE:Class = HPDisplayMode;
 
@@ -1069,6 +1149,16 @@ public class ClassManagerMeta {
 
     public static const NET_WG_GUI_BATTLE_VIEWS_VEHICLEMARKERS_EVENTS_VEHICLEMARKERSMANAGEREVENT:Class = VehicleMarkersManagerEvent;
 
+    public static const NET_WG_GUI_BATTLE_VIEWS_VEHICLEMESSAGES_VEHICLEMESSAGE:Class = VehicleMessage;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_VEHICLEMESSAGES_VEHICLEMESSAGES:Class = VehicleMessages;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_VEHICLEMESSAGES_VEHICLEMESSAGESPOOL:Class = VehicleMessagesPool;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_VEHICLEMESSAGES_VEHICLEMESSAGESVOQUEUE:Class = VehicleMessagesVoQueue;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_VEHICLEMESSAGES_VO_VEHICLEMESSAGEVO:Class = VehicleMessageVO;
+
     public static const NET_WG_GUI_BATTLE_WINDOWS_DESERTERDIALOG:Class = DeserterDialog;
 
     public static const NET_WG_GUI_BATTLE_WINDOWS_INGAMEHELPWINDOW:Class = IngameHelpWindow;
@@ -1082,6 +1172,8 @@ public class ClassManagerMeta {
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IBASEBATTLEDAAPICOMPONENTMETA:Class = IBaseBattleDAAPIComponentMeta;
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IBATTLEDAAPICOMPONENTMETA:Class = IBattleDAAPIComponentMeta;
+
+    public static const NET_WG_INFRASTRUCTURE_BASE_META_IBATTLEDAMAGELOGPANELMETA:Class = IBattleDamageLogPanelMeta;
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IBATTLEENDWARNINGPANELMETA:Class = IBattleEndWarningPanelMeta;
 
@@ -1137,6 +1229,8 @@ public class ClassManagerMeta {
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IPLAYERSPANELMETA:Class = IPlayersPanelMeta;
 
+    public static const NET_WG_INFRASTRUCTURE_BASE_META_IPOSTMORTEMPANELMETA:Class = IPostmortemPanelMeta;
+
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IPREBATTLETIMERMETA:Class = IPrebattleTimerMeta;
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IRADIALMENUMETA:Class = IRadialMenuMeta;
@@ -1156,6 +1250,8 @@ public class ClassManagerMeta {
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_BASEBATTLEDAAPICOMPONENTMETA:Class = BaseBattleDAAPIComponentMeta;
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_BATTLEDAAPICOMPONENTMETA:Class = BattleDAAPIComponentMeta;
+
+    public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_BATTLEDAMAGELOGPANELMETA:Class = BattleDamageLogPanelMeta;
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_BATTLEENDWARNINGPANELMETA:Class = BattleEndWarningPanelMeta;
 
@@ -1210,6 +1306,8 @@ public class ClassManagerMeta {
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_MINIMAPMETA:Class = MinimapMeta;
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_PLAYERSPANELMETA:Class = PlayersPanelMeta;
+
+    public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_POSTMORTEMPANELMETA:Class = PostmortemPanelMeta;
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_PREBATTLETIMERMETA:Class = PrebattleTimerMeta;
 

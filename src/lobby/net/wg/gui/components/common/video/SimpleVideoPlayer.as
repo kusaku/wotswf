@@ -6,11 +6,9 @@ import flash.media.Video;
 import flash.net.NetConnection;
 import flash.net.NetStream;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class SimpleVideoPlayer extends UIComponent {
-
-    private static const BUFFER_TIME:uint = 8;
+public class SimpleVideoPlayer extends UIComponentEx {
 
     private static const VIDEO_SOURCE_INVALID:String = "loadVideo";
 
@@ -24,11 +22,17 @@ public class SimpleVideoPlayer extends UIComponent {
 
     private static const SUBTITLE_TRACK_PROP_NAME:String = "subtitleTrack";
 
+    private static const INV_BUFFER_TIME:String = "invBufferTime";
+
     public var video:Video;
 
-    private var nsStream:NetStream;
+    private var _nsStream:NetStream;
 
-    private var ncConnection:NetConnection;
+    private var _ncConnection:NetConnection;
+
+    private var _subtitleTotalTracks:int = -1;
+
+    private var _audioTotalTracks:int = -1;
 
     private var _source:String = "";
 
@@ -42,11 +46,9 @@ public class SimpleVideoPlayer extends UIComponent {
 
     private var _subtitleTrack:int = 0;
 
-    private var _subtitleTotalTracks:int = -1;
-
-    private var _audioTotalTracks:int = -1;
-
     private var _audioTrack:int = 0;
+
+    private var _bufferTime:Number = 0.1;
 
     public function SimpleVideoPlayer() {
         this._status = PlayerStatus.STOP;
@@ -55,17 +57,17 @@ public class SimpleVideoPlayer extends UIComponent {
 
     override protected function configUI():void {
         super.configUI();
-        this.ncConnection = new NetConnection();
-        this.ncConnection.addEventListener(NetStatusEvent.NET_STATUS, this.netStatusHandler, false, 0, true);
-        this.ncConnection.connect(null);
-        this.nsStream = new NetStream(this.ncConnection);
-        this.nsStream.addEventListener(NetStatusEvent.NET_STATUS, this.netStatusHandler, false, 0, true);
-        this.nsStream.client = {
+        this._ncConnection = new NetConnection();
+        this._ncConnection.addEventListener(NetStatusEvent.NET_STATUS, this.onNetStatusHandler, false, 0, true);
+        this._ncConnection.connect(null);
+        this._nsStream = new NetStream(this._ncConnection);
+        this._nsStream.addEventListener(NetStatusEvent.NET_STATUS, this.onNetStatusHandler, false, 0, true);
+        this._nsStream.client = {
             "onMetaData": this.onMetaDataHandler,
             "onSubtitle": this.onSubtitleHandler
         };
-        this.nsStream.bufferTime = BUFFER_TIME;
-        this.video.attachNetStream(this.nsStream);
+        this._nsStream.bufferTime = this._bufferTime;
+        this.video.attachNetStream(this._nsStream);
     }
 
     override protected function draw():void {
@@ -74,43 +76,46 @@ public class SimpleVideoPlayer extends UIComponent {
             this.applyVideoLoading();
         }
         if (isInvalid(SOUND_LEVEL_INVALID)) {
-            if (this.nsStream) {
-                this.nsStream.soundTransform = new SoundTransform(this._volume);
+            if (this._nsStream) {
+                this._nsStream.soundTransform = new SoundTransform(this._volume);
             }
         }
         if (isInvalid(SELECTED_SUBTITLE_TRACK_INVALID)) {
-            if (this.nsStream.hasOwnProperty(SUBTITLE_TRACK_PROP_NAME)) {
+            if (this._nsStream.hasOwnProperty(SUBTITLE_TRACK_PROP_NAME)) {
                 if (this._subtitleTotalTracks >= this._subtitleTrack) {
-                    this.nsStream[SUBTITLE_TRACK_PROP_NAME] = this._subtitleTrack;
+                    this._nsStream[SUBTITLE_TRACK_PROP_NAME] = this._subtitleTrack;
                 }
                 else {
-                    this.nsStream[SUBTITLE_TRACK_PROP_NAME] = 0;
+                    this._nsStream[SUBTITLE_TRACK_PROP_NAME] = 0;
                 }
             }
         }
         if (isInvalid(SELECTED_AUDIO_TRACK_INVALID)) {
-            if (this.nsStream.hasOwnProperty(AUDIO_TRACK_PROP_NAME)) {
+            if (this._nsStream.hasOwnProperty(AUDIO_TRACK_PROP_NAME)) {
                 if (this._audioTotalTracks > this._audioTrack) {
-                    this.nsStream[AUDIO_TRACK_PROP_NAME] = this._audioTrack;
+                    this._nsStream[AUDIO_TRACK_PROP_NAME] = this._audioTrack;
                 }
                 else {
-                    this.nsStream[AUDIO_TRACK_PROP_NAME] = 0;
+                    this._nsStream[AUDIO_TRACK_PROP_NAME] = 0;
                 }
             }
+        }
+        if (isInvalid(INV_BUFFER_TIME)) {
+            this._nsStream.bufferTime = this._bufferTime;
         }
     }
 
     override protected function onDispose():void {
         App.utils.scheduler.cancelTask(invalidate);
-        if (this.ncConnection) {
-            this.ncConnection.removeEventListener(NetStatusEvent.NET_STATUS, this.netStatusHandler);
-            this.ncConnection.close();
-            this.ncConnection = null;
+        if (this._ncConnection) {
+            this._ncConnection.removeEventListener(NetStatusEvent.NET_STATUS, this.onNetStatusHandler);
+            this._ncConnection.close();
+            this._ncConnection = null;
         }
-        if (this.nsStream) {
-            this.nsStream.removeEventListener(NetStatusEvent.NET_STATUS, this.netStatusHandler);
-            this.nsStream.close();
-            this.nsStream = null;
+        if (this._nsStream) {
+            this._nsStream.removeEventListener(NetStatusEvent.NET_STATUS, this.onNetStatusHandler);
+            this._nsStream.close();
+            this._nsStream = null;
         }
         if (this.video) {
             this.video.clear();
@@ -119,6 +124,7 @@ public class SimpleVideoPlayer extends UIComponent {
             }
             this.video = null;
         }
+        this._metaData = null;
         super.onDispose();
     }
 
@@ -140,11 +146,11 @@ public class SimpleVideoPlayer extends UIComponent {
 
     public function seek(param1:Number):void {
         dispatchEvent(new Event(VideoPlayerEvent.SEEK_START));
-        this.nsStream.seek(param1);
+        this._nsStream.seek(param1);
     }
 
     public function stopPlayback():void {
-        this.nsStream.close();
+        this._nsStream.close();
     }
 
     public function togglePlayback():void {
@@ -164,21 +170,21 @@ public class SimpleVideoPlayer extends UIComponent {
     }
 
     private function applyVideoLoading():void {
-        if (this._source != null || this._source != "") {
+        if (this._source != null && this._source != "") {
             this.setStatus(PlayerStatus.LOADING);
             this.setSubtitle("");
-            this.nsStream.play(this._source);
+            this._nsStream.play(this._source);
             invalidate(SOUND_LEVEL_INVALID);
         }
     }
 
     private function onMetaDataHandler(param1:Object):void {
         this._metaData = param1;
-        if (this.nsStream.hasOwnProperty(SUBTITLE_TRACK_PROP_NAME)) {
+        if (this._nsStream.hasOwnProperty(SUBTITLE_TRACK_PROP_NAME)) {
             this._subtitleTotalTracks = param1.subtitleTracksCount;
             invalidate(SELECTED_SUBTITLE_TRACK_INVALID);
         }
-        if (this.nsStream.hasOwnProperty(AUDIO_TRACK_PROP_NAME)) {
+        if (this._nsStream.hasOwnProperty(AUDIO_TRACK_PROP_NAME)) {
             this._audioTotalTracks = param1.audioTracksCount;
             invalidate(SELECTED_AUDIO_TRACK_INVALID);
         }
@@ -202,17 +208,48 @@ public class SimpleVideoPlayer extends UIComponent {
     }
 
     private function setPause():void {
-        this.nsStream.pause();
+        this._nsStream.pause();
         this.setStatus(PlayerStatus.PAUSE);
     }
 
     private function setPlay():void {
-        this.nsStream.resume();
+        this._nsStream.resume();
         this.setStatus(PlayerStatus.PLAYING);
+    }
+
+    public function get source():String {
+        return this._source;
+    }
+
+    public function set source(param1:String):void {
+        if (this._source != param1) {
+            this._source = param1;
+            invalidate(VIDEO_SOURCE_INVALID);
+        }
     }
 
     public function get status():uint {
         return this._status;
+    }
+
+    public function get volume():Number {
+        return this._volume;
+    }
+
+    public function set volume(param1:Number):void {
+        if (this._volume != param1) {
+            this._volume = param1;
+            invalidate(SOUND_LEVEL_INVALID);
+            dispatchEvent(new Event(VideoPlayerEvent.VOLUME_CHANGED));
+        }
+    }
+
+    public function get metaData():Object {
+        return this._metaData;
+    }
+
+    public function get currentSubtitle():String {
+        return this._currentSubtitle;
     }
 
     public function get subtitleTrack():Number {
@@ -233,45 +270,23 @@ public class SimpleVideoPlayer extends UIComponent {
         invalidate(SELECTED_AUDIO_TRACK_INVALID);
     }
 
-    public function get source():String {
-        return this._source;
+    public function get bufferTime():Number {
+        return this._bufferTime;
     }
 
-    public function set source(param1:String):void {
-        if (this._source != param1) {
-            this._source = param1;
-            invalidate(VIDEO_SOURCE_INVALID);
-        }
-    }
-
-    public function get volume():Number {
-        return this._volume;
-    }
-
-    public function set volume(param1:Number):void {
-        if (this._volume != param1) {
-            this._volume = param1;
-            invalidate(SOUND_LEVEL_INVALID);
-            dispatchEvent(new Event(VideoPlayerEvent.VOLUME_CHANGED));
-        }
-    }
-
-    public function get metaData():Object {
-        return this._metaData;
+    public function set bufferTime(param1:Number):void {
+        this._bufferTime = param1;
+        invalidate(INV_BUFFER_TIME);
     }
 
     public function get currentTime():Number {
-        if (this.nsStream) {
-            return this.nsStream.time;
+        if (this._nsStream) {
+            return this._nsStream.time;
         }
         return NaN;
     }
 
-    public function get currentSubtitle():String {
-        return this._currentSubtitle;
-    }
-
-    protected function netStatusHandler(param1:NetStatusEvent):void {
+    private function onNetStatusHandler(param1:NetStatusEvent):void {
         var _loc4_:VideoPlayerStatusEvent = null;
         var _loc2_:Object = param1.info;
         var _loc3_:String = _loc2_.code;

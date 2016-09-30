@@ -4,8 +4,8 @@ import flash.events.MouseEvent;
 
 import net.wg.data.VO.SellDialogElement;
 import net.wg.data.constants.BaseTooltips;
-import net.wg.data.constants.Currencies;
 import net.wg.data.constants.Values;
+import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 import net.wg.data.constants.generated.FITTING_TYPES;
 import net.wg.data.managers.impl.TooltipProps;
 import net.wg.gui.components.controls.ActionPrice;
@@ -172,8 +172,8 @@ public class SaleItemBlockRenderer extends ListItemRenderer implements ISaleItem
             if (this.ddm.selectedIndex == 1) {
                 if (!this.isRemovable) {
                     this.money.textColor = GOLD_COLOR;
-                    this.money.text = this.getSign(-this._removePrice, Currencies.GOLD);
-                    this.money.icon = Currencies.GOLD;
+                    this.money.text = this.getSign(-this._removePrice, CURRENCIES_CONSTANTS.GOLD);
+                    this.money.icon = CURRENCIES_CONSTANTS.GOLD;
                     this.alertIcon.visible = true;
                     if (this._removePrice != 0) {
                         if (this._actionPriceRemoveVo) {
@@ -190,16 +190,16 @@ public class SaleItemBlockRenderer extends ListItemRenderer implements ISaleItem
                 else {
                     this.money.text = DEFAULT_MONEY_TEXT;
                     this.money.textColor = CREDITS_COLOR;
-                    this.money.icon = Currencies.CREDITS;
+                    this.money.icon = CURRENCIES_CONSTANTS.CREDITS;
                     this.alertIcon.visible = false;
                     this.actionPrice.visible = false;
                 }
             }
             else {
                 this.alertIcon.visible = false;
-                this.money.text = this.getSign(this._moneyValue, Currencies.CREDITS);
+                this.money.text = this.getSign(this._moneyValue, CURRENCIES_CONSTANTS.CREDITS);
                 this.money.textColor = CREDITS_COLOR;
-                this.money.icon = Currencies.CREDITS;
+                this.money.icon = CURRENCIES_CONSTANTS.CREDITS;
                 if (this._actionPriceDataVo) {
                     this._actionPriceDataVo.useSign = true;
                     this._actionPriceDataVo.forCredits = true;
@@ -231,7 +231,7 @@ public class SaleItemBlockRenderer extends ListItemRenderer implements ISaleItem
     }
 
     private function getSign(param1:Number, param2:String):String {
-        if (param2 == Currencies.CREDITS) {
+        if (param2 == CURRENCIES_CONSTANTS.CREDITS) {
             return (param1 > 0 ? PLUS_STR : EMPTY_STR) + App.utils.locale.integer(param1);
         }
         return (param1 > 0 ? PLUS_STR : EMPTY_STR) + App.utils.locale.gold(param1);
@@ -287,9 +287,9 @@ public class SaleItemBlockRenderer extends ListItemRenderer implements ISaleItem
         if (param1.index == 1) {
             this._toInventory = true;
             if (!this.isRemovable) {
-                this.money.text = this.getSign(-this._removePrice, Currencies.GOLD);
+                this.money.text = this.getSign(-this._removePrice, CURRENCIES_CONSTANTS.GOLD);
                 this.money.textColor = GOLD_COLOR;
-                this.money.icon = Currencies.GOLD;
+                this.money.icon = CURRENCIES_CONSTANTS.GOLD;
                 this.alertIcon.visible = true;
                 if (this._removePrice != 0) {
                     if (this._actionPriceRemoveVo) {
@@ -306,7 +306,7 @@ public class SaleItemBlockRenderer extends ListItemRenderer implements ISaleItem
             else {
                 this.money.text = DEFAULT_MONEY_TEXT;
                 this.money.textColor = CREDITS_COLOR;
-                this.money.icon = Currencies.CREDITS;
+                this.money.icon = CURRENCIES_CONSTANTS.CREDITS;
                 this.alertIcon.visible = false;
                 this.actionPrice.visible = false;
             }
@@ -314,8 +314,8 @@ public class SaleItemBlockRenderer extends ListItemRenderer implements ISaleItem
         else {
             this.alertIcon.visible = false;
             this._toInventory = false;
-            this.money.text = this.getSign(this.moneyValue, Currencies.CREDITS);
-            this.money.icon = Currencies.CREDITS;
+            this.money.text = this.getSign(this.moneyValue, CURRENCIES_CONSTANTS.CREDITS);
+            this.money.icon = CURRENCIES_CONSTANTS.CREDITS;
             this.money.textColor = CREDITS_COLOR;
             if (this._actionPriceDataVo) {
                 this._actionPriceDataVo.useSign = true;

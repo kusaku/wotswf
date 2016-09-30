@@ -1,48 +1,37 @@
 package net.wg.gui.lobby.settings {
-import flash.display.MovieClip;
-
 import net.wg.data.constants.Errors;
 import net.wg.data.constants.MarkerState;
 import net.wg.data.constants.Values;
-import net.wg.gui.components.advanced.ButtonBarEx;
-import net.wg.gui.components.common.VehicleMarkerAlly;
-import net.wg.gui.components.common.VehicleMarkerEnemy;
 import net.wg.gui.components.common.markers.VehicleMarker;
 import net.wg.gui.components.common.markers.data.VehicleMarkerVO;
 import net.wg.gui.lobby.settings.config.SettingsConfigHelper;
-import net.wg.gui.lobby.settings.evnts.SettingViewEvent;
-import net.wg.gui.lobby.settings.evnts.SettingsSubVewEvent;
+import net.wg.gui.lobby.settings.events.SettingViewEvent;
+import net.wg.gui.lobby.settings.events.SettingsSubVewEvent;
 import net.wg.gui.lobby.settings.vo.SettingsControlProp;
 import net.wg.gui.lobby.settings.vo.base.SettingsDataVo;
 
 import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.IndexEvent;
 
-public class MarkerSettings extends SettingsBaseView {
+public class MarkerSettings extends MarkerSettingsBase {
 
-    public var tabs:ButtonBarEx = null;
+    private static const HEAVY_TANK_STR:String = "heavyTank";
 
-    public var bg:MovieClip = null;
+    private static const T32_STR:String = "T32";
 
-    public var enemyForm:SettingsMarkersForm = null;
+    private static const E75_STR:String = "E-75";
 
-    public var allyForm:SettingsMarkersForm = null;
+    private static const TIGER_STR:String = "PzKpfw VI Tiger";
 
-    public var deadForm:SettingsMarkersForm = null;
+    private static const KILLER_STR:String = "Killer";
 
-    public var markerEnemy:VehicleMarkerEnemy = null;
+    private static const ALLY_STR:String = "ally";
 
-    public var markerEnemyAlt:VehicleMarkerEnemy = null;
+    private static const ENEMY_STR:String = "enemy";
 
-    public var markerAlly:VehicleMarkerAlly = null;
+    private static const FORM_STR:String = "Form";
 
-    public var markerAllyAlt:VehicleMarkerAlly = null;
-
-    public var markerDead:VehicleMarkerAlly = null;
-
-    public var markerDeadAlt:VehicleMarkerAlly = null;
-
-    private const FORM:String = "Form";
+    private static const ALT_STR:String = "Alt";
 
     private var __currentTab:uint = 0;
 
@@ -63,69 +52,69 @@ public class MarkerSettings extends SettingsBaseView {
     override protected function configUI():void {
         super.configUI();
         this._markerAllyData = new VehicleMarkerVO({
-            "vClass": "heavyTank",
+            "vClass": HEAVY_TANK_STR,
             "vIconSource": RES_ICONS.MAPS_ICONS_LIBRARY_USA_A12_T32,
-            "vType": "T32",
+            "vType": T32_STR,
             "vLevel": 8,
-            "pFullName": "Killer",
+            "pFullName": KILLER_STR,
             "curHealth": 1075,
             "maxHealth": 1400,
-            "entityName": "ally",
+            "entityName": ALLY_STR,
             "speaking": false,
             "hunt": false,
-            "entityType": "ally"
+            "entityType": ALLY_STR
         });
         this._markerEnemyData = new VehicleMarkerVO({
-            "vClass": "heavyTank",
+            "vClass": HEAVY_TANK_STR,
             "vIconSource": RES_ICONS.MAPS_ICONS_LIBRARY_GERMANY_PZVI,
-            "vType": "PzKpfw VI Tiger",
+            "vType": TIGER_STR,
             "vLevel": 7,
-            "pFullName": "Killer",
+            "pFullName": KILLER_STR,
             "curHealth": 985,
             "maxHealth": 1350,
-            "entityName": "enemy",
+            "entityName": ENEMY_STR,
             "speaking": false,
             "hunt": false,
-            "entityType": "enemy"
+            "entityType": ENEMY_STR
         });
         this._markerDeadData = new VehicleMarkerVO({
-            "vClass": "heavyTank",
+            "vClass": HEAVY_TANK_STR,
             "vIconSource": RES_ICONS.MAPS_ICONS_LIBRARY_GERMANY_E_75,
-            "vType": "E-75",
+            "vType": E75_STR,
             "vLevel": 9,
-            "pFullName": "Killer",
+            "pFullName": KILLER_STR,
             "curHealth": 0,
             "maxHealth": 1920,
-            "entityName": "ally",
+            "entityName": ALLY_STR,
             "speaking": false,
             "hunt": false,
-            "entityType": "ally"
+            "entityType": ALLY_STR
         });
         this.initMarkers();
     }
 
     private function initMarkers():void {
-        this.markerAlly.init(this._markerAllyData);
-        this.markerAllyAlt.init(this._markerAllyData);
-        this.markerEnemy.init(this._markerEnemyData);
-        this.markerEnemyAlt.init(this._markerEnemyData);
-        this.markerDead.init(this._markerDeadData);
-        this.markerDeadAlt.init(this._markerDeadData);
-        this.markerAlly.setMarkerState(MarkerState.STATE_NORMAL);
-        this.markerAllyAlt.setMarkerState(MarkerState.STATE_NORMAL);
-        this.markerEnemy.setMarkerState(MarkerState.STATE_NORMAL);
-        this.markerEnemyAlt.setMarkerState(MarkerState.STATE_NORMAL);
-        this.markerDead.setMarkerState(MarkerState.STATE_IMMEDIATE_DEAD);
-        this.markerDeadAlt.setMarkerState(MarkerState.STATE_IMMEDIATE_DEAD);
-        this.markerAllyAlt.exInfo = true;
-        this.markerEnemyAlt.exInfo = true;
-        this.markerDeadAlt.exInfo = true;
+        markerAlly.init(this._markerAllyData);
+        markerAllyAlt.init(this._markerAllyData);
+        markerEnemy.init(this._markerEnemyData);
+        markerEnemyAlt.init(this._markerEnemyData);
+        markerDead.init(this._markerDeadData);
+        markerDeadAlt.init(this._markerDeadData);
+        markerAlly.setMarkerState(MarkerState.STATE_NORMAL);
+        markerAllyAlt.setMarkerState(MarkerState.STATE_NORMAL);
+        markerEnemy.setMarkerState(MarkerState.STATE_NORMAL);
+        markerEnemyAlt.setMarkerState(MarkerState.STATE_NORMAL);
+        markerDead.setMarkerState(MarkerState.STATE_IMMEDIATE_DEAD);
+        markerDeadAlt.setMarkerState(MarkerState.STATE_IMMEDIATE_DEAD);
+        markerAllyAlt.exInfo = true;
+        markerEnemyAlt.exInfo = true;
+        markerDeadAlt.exInfo = true;
     }
 
     override protected function setData(param1:SettingsDataVo):void {
         var _loc14_:int = 0;
         super.setData(param1);
-        var _loc2_:String = "Form";
+        var _loc2_:String = FORM_STR;
         App.utils.data.cleanupDynamicObject(this._dynamicMarkersData);
         this._dynamicMarkersData = {};
         this._setDataInProgress = true;
@@ -143,10 +132,11 @@ public class MarkerSettings extends SettingsBaseView {
         while (_loc13_ < _loc6_) {
             _loc8_ = _loc4_[_loc13_];
             _loc10_ = _loc5_[_loc13_] as SettingsDataVo;
+            App.utils.asserter.assertNotNull(_loc10_, "values[i] must be SettingsDataVo");
             if (this[_loc8_ + _loc2_]) {
                 _loc3_ = SettingsMarkersForm(this[_loc8_ + _loc2_]);
                 _loc3_.setData(_loc8_, _loc10_);
-                _loc3_.addEventListener(SettingsSubVewEvent.ON_CONTROL_CHANGE, this.onControlChangeHandler);
+                _loc3_.addEventListener(SettingsSubVewEvent.ON_CONTROL_CHANGE, this.onFormOnControlChangeHandler);
             }
             _loc11_ = _loc10_.keys;
             _loc12_ = _loc10_.values;
@@ -164,12 +154,12 @@ public class MarkerSettings extends SettingsBaseView {
             _loc13_++;
         }
         this._setDataInProgress = false;
-        this.tabs.dataProvider = new DataProvider(SettingsConfigHelper.instance.markerTabsDataProvider);
-        this.tabs.addEventListener(IndexEvent.INDEX_CHANGE, this.onTabIndexChangeHandler);
-        this.tabs.selectedIndex = this.__currentTab;
+        tabs.dataProvider = new DataProvider(SettingsConfigHelper.instance.markerTabsDataProvider);
+        tabs.addEventListener(IndexEvent.INDEX_CHANGE, this.onTabIndexChangeHandler);
+        tabs.selectedIndex = this.__currentTab;
     }
 
-    private function onControlChangeHandler(param1:SettingsSubVewEvent):void {
+    private function onFormOnControlChangeHandler(param1:SettingsSubVewEvent):void {
         if (this._setDataInProgress) {
             return;
         }
@@ -180,7 +170,7 @@ public class MarkerSettings extends SettingsBaseView {
         if (this._dynamicMarkersData != null) {
             this._dynamicMarkersData[_loc2_][param1.controlId] = param1.controlValue;
         }
-        dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_CONTROL_CHANGED, _viewId, _loc2_, _loc4_));
+        dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_CONTROL_CHANGED, viewId, _loc2_, _loc4_));
         this.updateShowContent();
     }
 
@@ -188,45 +178,24 @@ public class MarkerSettings extends SettingsBaseView {
         this.updateShowContent();
     }
 
+    override protected function onBeforeDispose():void {
+        tabs.removeEventListener(IndexEvent.INDEX_CHANGE, this.onTabIndexChangeHandler);
+        enemyForm.removeEventListener(SettingsSubVewEvent.ON_CONTROL_CHANGE, this.onFormOnControlChangeHandler);
+        allyForm.removeEventListener(SettingsSubVewEvent.ON_CONTROL_CHANGE, this.onFormOnControlChangeHandler);
+        deadForm.removeEventListener(SettingsSubVewEvent.ON_CONTROL_CHANGE, this.onFormOnControlChangeHandler);
+        super.onBeforeDispose();
+    }
+
     override protected function onDispose():void {
-        this.removeListeners();
-        this.disposeMarkers();
-        this.enemyForm.dispose();
-        this.allyForm.dispose();
-        this.deadForm.dispose();
         this._dynamicMarkersData = App.utils.data.cleanupDynamicObject(this._dynamicMarkersData);
+        this._dynamicMarkersData = null;
         this._markerAllyData.dispose();
         this._markerAllyData = null;
         this._markerEnemyData.dispose();
         this._markerEnemyData = null;
         this._markerDeadData.dispose();
         this._markerDeadData = null;
-        this.tabs.dispose();
-        this.tabs = null;
-        this.bg = null;
         super.onDispose();
-    }
-
-    private function removeListeners():void {
-        this.tabs.removeEventListener(IndexEvent.INDEX_CHANGE, this.onTabIndexChangeHandler);
-        this.enemyForm.removeEventListener(SettingsSubVewEvent.ON_CONTROL_CHANGE, this.onControlChangeHandler);
-        this.allyForm.removeEventListener(SettingsSubVewEvent.ON_CONTROL_CHANGE, this.onControlChangeHandler);
-        this.deadForm.removeEventListener(SettingsSubVewEvent.ON_CONTROL_CHANGE, this.onControlChangeHandler);
-    }
-
-    private function disposeMarkers():void {
-        this.markerEnemy.dispose();
-        this.markerEnemy = null;
-        this.markerEnemyAlt.dispose();
-        this.markerEnemyAlt = null;
-        this.markerAlly.dispose();
-        this.markerAlly = null;
-        this.markerAllyAlt.dispose();
-        this.markerAllyAlt = null;
-        this.markerDead.dispose();
-        this.markerDead = null;
-        this.markerDeadAlt.dispose();
-        this.markerDeadAlt = null;
     }
 
     override public function toString():String {
@@ -267,15 +236,15 @@ public class MarkerSettings extends SettingsBaseView {
                 _loc8_.markerSettings = this._dynamicMarkersData[_loc5_];
                 _loc8_.settingsUpdate(_loc6_);
             }
-            if (this[_loc4_ + "Alt"]) {
-                _loc9_ = VehicleMarker(this[_loc4_ + "Alt"]);
+            if (this[_loc4_ + ALT_STR]) {
+                _loc9_ = VehicleMarker(this[_loc4_ + ALT_STR]);
                 _loc9_.visible = _loc10_;
                 _loc9_.markerSettings = this._dynamicMarkersData[_loc5_];
                 _loc9_.settingsUpdate(_loc6_);
             }
             _loc11_++;
         }
-        this.bg.gotoAndStop(SettingsConfigHelper.instance.markerTabsDataProvider[this.__currentTab].id);
+        bg.gotoAndStop(SettingsConfigHelper.instance.markerTabsDataProvider[this.__currentTab].id);
     }
 }
 }

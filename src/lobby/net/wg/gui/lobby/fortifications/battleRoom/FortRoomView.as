@@ -70,7 +70,7 @@ public class FortRoomView extends FortRoomMeta implements IFortRoomMeta {
 
     override protected function coolDownControls(param1:Boolean, param2:int):void {
         if (param2 == CHANGE_UNIT_STATE) {
-            (chatSection as IChatSectionWithDescription).enableEditCommitButton(param1);
+            IChatSectionWithDescription(chatSection).enableEditCommitButton(param1);
         }
         else if (param2 == SET_PLAYER_STATE) {
             teamSection.enableFightButton(param1);
@@ -85,35 +85,39 @@ public class FortRoomView extends FortRoomMeta implements IFortRoomMeta {
         descrLbl.text = FORTIFICATIONS.SORTIE_ROOM_DESCRIPTION;
         backBtn.label = FORTIFICATIONS.SORTIE_ROOM_LEAVEBTN;
         this.changeDivisionBtn.label = FORTIFICATIONS.SORTIE_ROOM_CHANGEDIVISION;
-        this.changeDivisionBtn.addEventListener(ButtonEvent.CLICK, this.changeDivisionHandler);
-        this.changeDivisionBtn.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.changeDivisionBtn.addEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
-        this.legionariesCount.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.legionariesCount.addEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
-        this.filterInfo.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.filterInfo.addEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
-        this.divisionInfoText.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.divisionInfoText.addEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
+        this.changeDivisionBtn.addEventListener(ButtonEvent.CLICK, this.onChangeDivisionClickHandler);
+        this.changeDivisionBtn.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.changeDivisionBtn.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
+        this.legionariesCount.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.legionariesCount.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
+        this.filterInfo.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.filterInfo.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
+        this.divisionInfoText.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.divisionInfoText.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
     }
 
     override protected function onDispose():void {
-        this.changeDivisionBtn.removeEventListener(ButtonEvent.CLICK, this.changeDivisionHandler);
-        this.changeDivisionBtn.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.changeDivisionBtn.removeEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
+        this.changeDivisionBtn.removeEventListener(ButtonEvent.CLICK, this.onChangeDivisionClickHandler);
+        this.changeDivisionBtn.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.changeDivisionBtn.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         this.changeDivisionBtn.dispose();
         this.changeDivisionBtn = null;
-        this.filterInfo.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.filterInfo.removeEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
+        this.filterInfo.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.filterInfo.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         this.filterInfo.dispose();
         this.filterInfo = null;
-        this.legionariesCount.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.legionariesCount.removeEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
+        this.legionariesCount.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.legionariesCount.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         this.legionariesCount = null;
-        this.divisionInfoText.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this.divisionInfoText.removeEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
+        this.divisionInfoText.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
+        this.divisionInfoText.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         this.divisionInfoText = null;
         this.tooltipMessage = null;
         super.onDispose();
+    }
+
+    private function onControlRollOutHandler(param1:MouseEvent):void {
+        onControlRollOut();
     }
 
     override protected function registerOrdersPanel():void {
@@ -139,6 +143,9 @@ public class FortRoomView extends FortRoomMeta implements IFortRoomMeta {
             _loc2_ = new Point(_loc1_.lblTeamMembers.x, _loc1_.lblTeamMembers.y);
             _loc3_ = globalToLocal(_loc1_.localToGlobal(_loc2_));
             this.legionariesCount.x = _loc3_.x + _loc1_.lblTeamMembers.textWidth + LEGIONARIES_TEXT_GAP;
+            if (_loc1_.actionButtonData != null) {
+                tabChildren = focusable = !_loc1_.actionButtonData.isReady;
+            }
         }
     }
 
@@ -181,13 +188,16 @@ public class FortRoomView extends FortRoomMeta implements IFortRoomMeta {
         super.onChooseVehicleRequest(param1);
     }
 
-    override protected function onBackClickHandler(param1:ButtonEvent):void {
-        super.onBackClickHandler(param1);
+    private function onControlRollOverHandler(param1:MouseEvent):void {
+        this.controlRollOverPerformer(param1);
     }
 
-    override protected function onControlRollOver(param1:MouseEvent):void {
+    override protected function controlRollOverPerformer(param1:MouseEvent = null):void {
         var _loc2_:ITooltipFormatter = null;
-        super.onControlRollOver(param1);
+        super.controlRollOverPerformer(param1);
+        if (param1 == null) {
+            return;
+        }
         switch (param1.target) {
             case backBtn:
                 App.toolTipMgr.showComplex(TOOLTIPS.FORTIFICATION_SORTIE_BATTLEROOM_LEAVEBTN);
@@ -207,7 +217,7 @@ public class FortRoomView extends FortRoomMeta implements IFortRoomMeta {
         }
     }
 
-    private function changeDivisionHandler(param1:ButtonEvent):void {
+    private function onChangeDivisionClickHandler(param1:ButtonEvent):void {
         showChangeDivisionWindowS();
     }
 }

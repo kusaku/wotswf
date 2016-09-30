@@ -143,6 +143,8 @@ public class UILoaderAlt extends MovieClip implements IDisposable {
         this._previousContentUnloaded = false;
         var _loc2_:URLRequest = new URLRequest(param1);
         var _loc3_:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain);
+        this._loader.scaleX = 1;
+        this._loader.scaleY = 1;
         this._loader.load(_loc2_, _loc3_);
     }
 

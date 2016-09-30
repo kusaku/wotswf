@@ -2,16 +2,14 @@ package net.wg.gui.lobby.browser {
 import flash.display.MovieClip;
 import flash.events.MouseEvent;
 
+import net.wg.data.constants.generated.BROWSER_CONSTANTS;
 import net.wg.gui.components.controls.SoundButtonEx;
+import net.wg.gui.lobby.browser.events.BrowserActionBtnEvent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class BrowserActionBtn extends UIComponent {
-
-    public static const ACTION_LOADING:String = "loading";
-
-    public static const ACTION_RELOAD:String = "reload";
+public class BrowserActionBtn extends UIComponentEx {
 
     public var btn:SoundButtonEx;
 
@@ -28,9 +26,9 @@ public class BrowserActionBtn extends UIComponent {
     }
 
     override protected function onDispose():void {
-        this.btn.removeEventListener(ButtonEvent.CLICK, this.onBtnClick);
-        this.btn.removeEventListener(MouseEvent.ROLL_OVER, this.onBtnRollOver);
-        this.btn.removeEventListener(MouseEvent.ROLL_OUT, this.onBtnRollOut);
+        this.btn.removeEventListener(ButtonEvent.CLICK, this.onBtnClickHandler);
+        this.btn.removeEventListener(MouseEvent.ROLL_OVER, this.onBtnRollOverHandler);
+        this.btn.removeEventListener(MouseEvent.ROLL_OUT, this.onBtnRollOutHandler);
         this.btn.dispose();
         this.btn = null;
         this.icon = null;
@@ -44,12 +42,11 @@ public class BrowserActionBtn extends UIComponent {
         this.icon.mouseChildren = false;
         this.stopIcon.mouseEnabled = false;
         this.stopIcon.mouseChildren = false;
-        this.action = "reload";
+        this._action = BROWSER_CONSTANTS.ACTION_RELOAD;
         this.showStopIcon(false);
-        this.btn.label = "";
-        this.btn.addEventListener(ButtonEvent.CLICK, this.onBtnClick);
-        this.btn.addEventListener(MouseEvent.ROLL_OVER, this.onBtnRollOver);
-        this.btn.addEventListener(MouseEvent.ROLL_OUT, this.onBtnRollOut);
+        this.btn.addEventListener(ButtonEvent.CLICK, this.onBtnClickHandler);
+        this.btn.addEventListener(MouseEvent.ROLL_OVER, this.onBtnRollOverHandler);
+        this.btn.addEventListener(MouseEvent.ROLL_OUT, this.onBtnRollOutHandler);
     }
 
     private function showStopIcon(param1:Boolean):void {
@@ -63,10 +60,10 @@ public class BrowserActionBtn extends UIComponent {
 
     public function set action(param1:String):void {
         this._action = param1;
-        gotoAndStop(this.action);
+        gotoAndStop(this._action);
         this.icon.mouseEnabled = false;
         this.icon.mouseChildren = false;
-        if (this.action == ACTION_RELOAD) {
+        if (this._action == BROWSER_CONSTANTS.ACTION_RELOAD) {
             this.showStopIcon(false);
         }
         else if (this._isMouseOver) {
@@ -78,16 +75,16 @@ public class BrowserActionBtn extends UIComponent {
         return this._isMouseOver;
     }
 
-    private function onBtnClick(param1:ButtonEvent):void {
-        dispatchEvent(new BrowserEvent(this.action == ACTION_LOADING ? BrowserEvent.ACTION_LOADING : BrowserEvent.ACTION_RELOAD));
+    private function onBtnClickHandler(param1:ButtonEvent):void {
+        dispatchEvent(new BrowserActionBtnEvent(BrowserActionBtnEvent.ON_ACTION));
     }
 
-    private function onBtnRollOver(param1:MouseEvent):void {
-        this.showStopIcon(this.action == ACTION_LOADING);
+    private function onBtnRollOverHandler(param1:MouseEvent):void {
+        this.showStopIcon(this._action == BROWSER_CONSTANTS.ACTION_LOADING);
         this._isMouseOver = true;
     }
 
-    private function onBtnRollOut(param1:MouseEvent):void {
+    private function onBtnRollOutHandler(param1:MouseEvent):void {
         this.showStopIcon(false);
         this._isMouseOver = false;
     }

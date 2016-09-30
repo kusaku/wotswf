@@ -13,6 +13,8 @@ public interface ILobbyHeaderMeta extends IEventDispatcher {
 
     function showPremiumDialogS():void;
 
+    function onPremShopClickS():void;
+
     function onPaymentS():void;
 
     function showSquadS():void;
@@ -39,6 +41,8 @@ public interface ILobbyHeaderMeta extends IEventDispatcher {
 
     function as_setPremiumParams(param1:String, param2:String, param3:Boolean, param4:String, param5:String):void;
 
+    function as_setPremShopData(param1:String, param2:String, param3:String, param4:String):void;
+
     function as_updateBattleType(param1:String, param2:String, param3:Boolean, param4:String, param5:String, param6:String):void;
 
     function as_setServer(param1:String, param2:String, param3:String):void;
@@ -59,6 +63,14 @@ public interface ILobbyHeaderMeta extends IEventDispatcher {
 
     function as_setFightBtnTooltip(param1:String):void;
 
+    function as_updateOnlineCounter(param1:String, param2:String, param3:String, param4:Boolean):void;
+
+    function as_initOnlineCounter(param1:Boolean):void;
+
     function as_setHangarMenuData(param1:Object):void;
+
+    function as_setButtonCounter(param1:String, param2:String):void;
+
+    function as_removeButtonCounter(param1:String):void;
 }
 }

@@ -199,7 +199,7 @@ public class GraphicSettingsBase extends SettingsBaseView {
 
     public var DRR_AUTOSCALER_ENABLEDCheckbox:CheckBox = null;
 
-    protected var _isFullScreen:Boolean = false;
+    protected var isFullScreen:Boolean = false;
 
     public function GraphicSettingsBase() {
         super();
@@ -216,7 +216,7 @@ public class GraphicSettingsBase extends SettingsBaseView {
     override protected function getControlId(param1:DisplayObject):String {
         var _loc2_:String = super.getControlId(param1);
         if (_loc2_ == SettingsConfigHelper.SIZE) {
-            return !!this._isFullScreen ? SettingsConfigHelper.RESOLUTION : SettingsConfigHelper.WINDOW_SIZE;
+            return !!this.isFullScreen ? SettingsConfigHelper.RESOLUTION : SettingsConfigHelper.WINDOW_SIZE;
         }
         return _loc2_;
     }
@@ -299,6 +299,8 @@ public class GraphicSettingsBase extends SettingsBaseView {
         this.VEHICLE_DUST_ENABLEDCheckbox = null;
         this.VEHICLE_TRACES_ENABLEDCheckbox = null;
         this.SEMITRANSPARENT_LEAVES_ENABLEDCheckbox = null;
+        this.HAVOK_ENABLEDLabel = null;
+        this.HAVOK_ENABLEDDropDown = null;
         this.tabs.dispose();
         this.tabs = null;
         this.screenForm.dispose();
@@ -430,6 +432,7 @@ public class GraphicSettingsBase extends SettingsBaseView {
         this.HAVOK_ENABLEDDropDown = this.screenForm.HAVOK_ENABLEDDropDown;
         this.HAVOK_ENABLEDLabel = this.screenForm.HAVOK_ENABLEDLabel;
         var _loc1_:AdvancedGraphicContentForm = this.advancedForm.scrollPane.target as AdvancedGraphicContentForm;
+        App.utils.asserter.assertNotNull(_loc1_, "advancedForm.scrollPane.target must be AdvancedGraphicContentForm");
         this.RENDER_PIPELINELabel = _loc1_.RENDER_PIPELINELabel;
         this.RENDER_PIPELINEButtonBar = _loc1_.RENDER_PIPELINEButtonBar;
         this.TEXTURE_QUALITYLabel = _loc1_.TEXTURE_QUALITYLabel;

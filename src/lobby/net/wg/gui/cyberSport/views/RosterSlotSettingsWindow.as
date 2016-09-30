@@ -12,13 +12,13 @@ import net.wg.gui.cyberSport.controls.CSVehicleButton;
 import net.wg.gui.cyberSport.controls.VehicleSelector;
 import net.wg.gui.cyberSport.controls.data.CSVehicleButtonSelectionVO;
 import net.wg.gui.cyberSport.controls.events.VehicleSelectorEvent;
-import net.wg.gui.cyberSport.controls.events.VehicleSelectorFilterEvent;
 import net.wg.gui.cyberSport.data.RosterSlotSettingsWindowStaticVO;
 import net.wg.gui.cyberSport.views.events.RosterSettingsEvent;
 import net.wg.gui.cyberSport.vo.RosterLimitsVO;
-import net.wg.gui.cyberSport.vo.VehicleSelectorFilterVO;
 import net.wg.gui.cyberSport.vo.VehicleSelectorItemVO;
 import net.wg.gui.events.ViewStackEvent;
+import net.wg.gui.lobby.components.data.VehicleSelectorFilterVO;
+import net.wg.gui.lobby.components.events.VehicleSelectorFilterEvent;
 import net.wg.gui.rally.vo.SettingRosterVO;
 import net.wg.gui.rally.vo.VehicleVO;
 import net.wg.infrastructure.base.meta.IRosterSlotSettingsWindowMeta;
@@ -89,7 +89,7 @@ public class RosterSlotSettingsWindow extends RosterSlotSettingsWindowMeta imple
 
     override protected function draw():void {
         super.draw();
-        if (isInvalid(TAB_SELECTION_INVALIDATION_TYPE) && this._selectTabIndex >= 0) {
+        if (this._selectTabIndex >= 0 && isInvalid(TAB_SELECTION_INVALIDATION_TYPE)) {
             this.buttonBar.selectedIndex = this._selectTabIndex;
         }
     }
@@ -140,7 +140,7 @@ public class RosterSlotSettingsWindow extends RosterSlotSettingsWindowMeta imple
         this.selectedResultBtn.clickableAreaEnable = false;
         this.selectedResultBtn.enabled = false;
         this.submitBtn.addEventListener(ButtonEvent.CLICK, this.onSubmitBtnClickHandler);
-        this.cancelBtn.addEventListener(ButtonEvent.CLICK, this.cancelBtnClickHandler);
+        this.cancelBtn.addEventListener(ButtonEvent.CLICK, this.onCancelBtnClickHandler);
         this.refreshBtn.addEventListener(ButtonEvent.CLICK, this.onRefreshBtnClickHandler);
         this.viewStack.addEventListener(ViewStackEvent.NEED_UPDATE, this.onViewStackNeedUpdateHandler);
         this.viewStack.targetGroup = this.buttonBar.name;
@@ -155,7 +155,7 @@ public class RosterSlotSettingsWindow extends RosterSlotSettingsWindowMeta imple
         this.submitBtn.removeEventListener(ButtonEvent.CLICK, this.onSubmitBtnClickHandler);
         this.submitBtn.dispose();
         this.submitBtn = null;
-        this.cancelBtn.removeEventListener(ButtonEvent.CLICK, this.cancelBtnClickHandler);
+        this.cancelBtn.removeEventListener(ButtonEvent.CLICK, this.onCancelBtnClickHandler);
         this.cancelBtn.dispose();
         this.cancelBtn = null;
         this.refreshBtn.removeEventListener(ButtonEvent.CLICK, this.onRefreshBtnClickHandler);
@@ -177,7 +177,7 @@ public class RosterSlotSettingsWindow extends RosterSlotSettingsWindowMeta imple
         }
         if (this._vehicleSelector != null) {
             this._vehicleSelector.removeEventListener(VehicleSelectorEvent.SELECTION_CHANGED, this.onVehicleSelectorSelectionChangedHandler);
-            this._vehicleSelector.removeEventListener(VehicleSelectorFilterEvent.CHANGE, this.onVehicleSelectorFiltersChangedHandler);
+            this._vehicleSelector.removeEventListener(VehicleSelectorFilterEvent.CHANGE, this.onVehicleSelectorChangeHandler);
             this._vehicleSelector = null;
         }
         this.tryClearRangeModel();
@@ -349,14 +349,14 @@ public class RosterSlotSettingsWindow extends RosterSlotSettingsWindowMeta imple
             this._vehicleSelector.validateNow();
             requestVehicleFiltersS();
             this._vehicleSelector.addEventListener(VehicleSelectorEvent.SELECTION_CHANGED, this.onVehicleSelectorSelectionChangedHandler);
-            this._vehicleSelector.addEventListener(VehicleSelectorFilterEvent.CHANGE, this.onVehicleSelectorFiltersChangedHandler);
+            this._vehicleSelector.addEventListener(VehicleSelectorFilterEvent.CHANGE, this.onVehicleSelectorChangeHandler);
             if (this._listData != null) {
                 this._vehicleSelector.setListItems(this._listData);
             }
         }
     }
 
-    private function onVehicleSelectorFiltersChangedHandler(param1:VehicleSelectorFilterEvent):void {
+    private function onVehicleSelectorChangeHandler(param1:VehicleSelectorFilterEvent):void {
         onFiltersUpdateS(param1.nation, param1.vehicleType, param1.isMain, param1.level, param1.compatibleOnly);
     }
 
@@ -383,6 +383,7 @@ public class RosterSlotSettingsWindow extends RosterSlotSettingsWindowMeta imple
             }
             this.setVehicleSelectionResult(VehicleVO(param1.selectedObjects[0]));
             if (param1.forceSelect) {
+                setFocus(this);
                 this.submitResult();
             }
         }
@@ -392,7 +393,7 @@ public class RosterSlotSettingsWindow extends RosterSlotSettingsWindowMeta imple
         this.submitResult();
     }
 
-    private function cancelBtnClickHandler(param1:ButtonEvent):void {
+    private function onCancelBtnClickHandler(param1:ButtonEvent):void {
         cancelButtonHandlerS();
     }
 }

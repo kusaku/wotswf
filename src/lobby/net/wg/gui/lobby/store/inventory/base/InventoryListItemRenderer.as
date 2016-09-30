@@ -1,9 +1,8 @@
 package net.wg.gui.lobby.store.inventory.base {
 import net.wg.data.VO.StoreTableData;
-import net.wg.data.constants.Currencies;
-import net.wg.data.constants.IconsTypes;
 import net.wg.data.constants.SoundManagerStatesLobby;
 import net.wg.data.constants.SoundTypes;
+import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.controls.VO.ActionPriceVO;
 import net.wg.gui.lobby.store.STORE_STATUS_COLOR;
@@ -28,35 +27,29 @@ public class InventoryListItemRenderer extends StoreListItemRenderer {
         invalidateData();
     }
 
-    override protected function onLeftButtonClick():void {
-        this.sellItem();
+    override protected function onLeftButtonClick(param1:Object):void {
+        if (enabled) {
+            this.sellItem();
+        }
     }
 
     override protected function updateTexts(param1:StoreTableData, param2:Number, param3:Number):void {
         var _loc4_:ILocale = null;
-        var _loc5_:String = null;
-        var _loc6_:Number = NaN;
-        var _loc7_:ActionPriceVO = null;
+        var _loc5_:ActionPriceVO = null;
         if (App.instance) {
             _loc4_ = App.utils.locale;
             credits.gotoAndStop(param1.currency);
-            _loc5_ = "";
-            _loc6_ = 0;
-            if (param1.currency == Currencies.GOLD) {
+            if (param1.currency == CURRENCIES_CONSTANTS.GOLD) {
                 credits.price.text = _loc4_.gold(param2);
-                _loc6_ = param2;
-                _loc5_ = IconsTypes.GOLD;
             }
             else {
                 credits.price.text = _loc4_.integer(param3);
-                _loc5_ = IconsTypes.CREDITS;
-                _loc6_ = param3;
             }
-            _loc7_ = param1.actionPriceDataVo;
-            if (_loc7_) {
-                _loc7_.forCredits = param1.currency == Currencies.CREDITS;
+            _loc5_ = param1.actionPriceDataVo;
+            if (_loc5_) {
+                _loc5_.forCredits = param1.currency == CURRENCIES_CONSTANTS.CREDITS;
             }
-            actionPrice.setData(_loc7_);
+            actionPrice.setData(_loc5_);
             credits.visible = !actionPrice.visible;
             if (errorField) {
                 errorField.text = param1.statusMessage;
@@ -79,7 +72,7 @@ public class InventoryListItemRenderer extends StoreListItemRenderer {
     }
 
     public function sellItem():void {
-        dispatchEvent(new StoreEvent(StoreEvent.SELL, StoreTableData(data)));
+        dispatchEvent(new StoreEvent(StoreEvent.SELL, StoreTableData(data).id));
     }
 }
 }

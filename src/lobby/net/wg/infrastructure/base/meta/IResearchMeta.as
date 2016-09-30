@@ -15,6 +15,8 @@ public interface IResearchMeta extends IEventDispatcher {
 
     function goToVehicleViewS(param1:Number):void;
 
+    function compareVehicleS(param1:Number):void;
+
     function as_drawResearchItems(param1:String, param2:Number):void;
 
     function as_setFreeXP(param1:Number):void;
@@ -22,5 +24,7 @@ public interface IResearchMeta extends IEventDispatcher {
     function as_setInstalledItems(param1:Array):void;
 
     function as_setWalletStatus(param1:Object):void;
+
+    function as_setRootNodeVehCompareData(param1:Object):void;
 }
 }

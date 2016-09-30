@@ -57,5 +57,8 @@ public class MockEventLogManager implements IEventLogManager {
     public function willTrigger(param1:String):Boolean {
         return false;
     }
+
+    public function as_setSystemEnabled(param1:Boolean):void {
+    }
 }
 }

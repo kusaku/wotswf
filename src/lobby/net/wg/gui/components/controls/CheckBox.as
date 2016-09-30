@@ -17,6 +17,8 @@ import scaleform.clik.events.ResizeEvent;
 
 public class CheckBox extends scaleform.clik.controls.CheckBox implements ISoundable, ITextContainer {
 
+    private static const VISIBILITY_INV:String = "visibilityInv";
+
     private static const TEXT_FORMAT_INV:String = "textFormatInv";
 
     private static const INVALIDATION_MULTILINE:String = "invalidationMultiline";
@@ -34,6 +36,14 @@ public class CheckBox extends scaleform.clik.controls.CheckBox implements ISound
     private static const HIT_MARGIN_HEIGHT:Number = 4;
 
     private static const INV_MOUSE_ENABLED:String = "invMouseEnabled";
+
+    private static const EMPTY_STR:String = "";
+
+    private static const LINKAGE_INFO_ICON_UI:String = "InfoIconUI";
+
+    private static const TEXT_ALIGN_EXCEPTION:String = "setter CheckBox::textAlign";
+
+    private static const HEIGHT_PADDING:int = 5;
 
     public var soundId:String = "";
 
@@ -80,7 +90,7 @@ public class CheckBox extends scaleform.clik.controls.CheckBox implements ISound
             this.removeInfoIco();
         }
         if (constraints != null) {
-            constraints.removeEventListener(ResizeEvent.RESIZE, this.handleResizeByConstraints);
+            constraints.removeEventListener(ResizeEvent.RESIZE, this.onConstraintsResizeHandler);
         }
         super.onBeforeDispose();
     }
@@ -127,9 +137,10 @@ public class CheckBox extends scaleform.clik.controls.CheckBox implements ISound
             }
         }
         if (isInvalid(INFO_INV)) {
-            if (this._infoIcoType != "" && this._tooltip != "") {
+            if (this._infoIcoType != EMPTY_STR && this._tooltip != EMPTY_STR) {
                 if (!this._infoIco) {
                     this.createInfoIco();
+                    isInvalid(VISIBILITY_INV);
                 }
                 this._infoIco.tooltip = this._tooltip;
                 this._infoIco.icoType = this._infoIcoType;
@@ -138,6 +149,9 @@ public class CheckBox extends scaleform.clik.controls.CheckBox implements ISound
             else {
                 this.removeInfoIco();
             }
+        }
+        if (isInvalid(VISIBILITY_INV) && this._infoIco) {
+            this._infoIco.visible = this.visible;
         }
         if (textField != null) {
             if (isInvalid(INVALIDATION_LABEL_VISIBILITY) || isInvalid(InvalidationType.STATE)) {
@@ -163,6 +177,11 @@ public class CheckBox extends scaleform.clik.controls.CheckBox implements ISound
                 this.updateTextFieldSize();
             }
         }
+    }
+
+    override public function set visible(param1:Boolean):void {
+        super.visible = param1;
+        invalidate(VISIBILITY_INV);
     }
 
     override protected function updateAfterStateChange():void {
@@ -218,7 +237,7 @@ public class CheckBox extends scaleform.clik.controls.CheckBox implements ISound
     }
 
     private function updateTextFieldSize():void {
-        textField.height = textField.textHeight + 5;
+        textField.height = textField.textHeight + HEIGHT_PADDING;
         if (this.hit) {
             this.hit.width = textField.textWidth > 0 ? Number(textField.x + textField.textWidth + HIT_MARGIN_WIDTH) : Number(0);
             if (textField.textHeight != 0) {
@@ -232,16 +251,16 @@ public class CheckBox extends scaleform.clik.controls.CheckBox implements ISound
 
     private function repositionInfoIcon():void {
         if (this._infoIco) {
-            this._infoIco.x = this.x + textField.x + textField.textWidth + InfoIcon.CHECK_BOX_MARGIN;
+            this._infoIco.x = this.x + textField.x + textField.textWidth + InfoIcon.CHECK_BOX_MARGIN ^ 0;
             this._infoIco.y = this.y + (textField.y + textField.height >> 1);
         }
     }
 
     private function createInfoIco():void {
         if (!owner && parent) {
-            owner = parent as UIComponent;
+            owner = UIComponent(parent);
         }
-        this._infoIco = InfoIcon(App.utils.classFactory.getComponent("InfoIconUI", InfoIcon));
+        this._infoIco = InfoIcon(App.utils.classFactory.getComponent(LINKAGE_INFO_ICON_UI, InfoIcon));
         owner.addChild(this._infoIco);
     }
 
@@ -267,6 +286,9 @@ public class CheckBox extends scaleform.clik.controls.CheckBox implements ISound
 
     override public function set enabled(param1:Boolean):void {
         super.enabled = param1;
+        if (!param1 && _focusIndicator) {
+            _focusIndicator.visible = false;
+        }
         buttonMode = enabled;
         mouseEnabled = false;
         invalidate(INV_MOUSE_ENABLED);
@@ -277,7 +299,7 @@ public class CheckBox extends scaleform.clik.controls.CheckBox implements ISound
     }
 
     public function set textAlign(param1:String):void {
-        throw new AbstractException("setter CheckBox::textAlign" + Errors.ABSTRACT_INVOKE);
+        throw new AbstractException(TEXT_ALIGN_EXCEPTION + Errors.ABSTRACT_INVOKE);
     }
 
     public function get textFont():String {
@@ -372,7 +394,7 @@ public class CheckBox extends scaleform.clik.controls.CheckBox implements ISound
         this._multiline = param1;
         invalidate(INVALIDATION_MULTILINE);
         if (constraints != null) {
-            constraints.addEventListener(ResizeEvent.RESIZE, this.handleResizeByConstraints);
+            constraints.addEventListener(ResizeEvent.RESIZE, this.onConstraintsResizeHandler);
         }
     }
 
@@ -415,7 +437,7 @@ public class CheckBox extends scaleform.clik.controls.CheckBox implements ISound
         this.hideTooltip();
     }
 
-    private function handleResizeByConstraints(param1:ResizeEvent):void {
+    private function onConstraintsResizeHandler(param1:ResizeEvent):void {
         invalidate(INVALIDATION_TEXT_FIELD_SIZE);
     }
 
@@ -433,7 +455,7 @@ public class CheckBox extends scaleform.clik.controls.CheckBox implements ISound
 
     private function resetText():void {
         if (textField && textField.text && textField.text.length > 0) {
-            textField.text = "";
+            textField.text = EMPTY_STR;
             invalidate(INVALIDATION_TEXT_FIELD_SIZE);
         }
     }

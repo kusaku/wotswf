@@ -2,6 +2,8 @@ package net.wg.infrastructure.interfaces {
 import flash.display.DisplayObject;
 import flash.display.Loader;
 
+import net.wg.data.daapi.LoadViewVO;
+
 public interface IView extends IDAAPIModule, IManagedContent, IUIComponentEx {
 
     function getSubContainer():IManagedContainer;
@@ -18,24 +20,12 @@ public interface IView extends IDAAPIModule, IManagedContent, IUIComponentEx {
 
     function updateStage(param1:Number, param2:Number):void;
 
-    function get as_alias():String;
+    function get as_config():LoadViewVO;
 
-    function set as_alias(param1:String):void;
-
-    function get as_name():String;
-
-    function set as_name(param1:String):void;
-
-    function get as_config():Object;
-
-    function set as_config(param1:Object):void;
+    function set as_config(param1:LoadViewVO):void;
 
     function get loader():Loader;
 
     function set loader(param1:Loader):void;
-
-    function get viewTutorialId():String;
-
-    function set viewTutorialId(param1:String):void;
 }
 }

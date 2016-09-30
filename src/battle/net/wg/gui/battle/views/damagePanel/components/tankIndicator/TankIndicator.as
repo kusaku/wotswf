@@ -23,7 +23,7 @@ public class TankIndicator extends BattleUIComponent {
 
     private var _indicators:Object;
 
-    private var _isVehicleWithTurret:Boolean = false;
+    public var isVehicleWithTurret:Boolean = false;
 
     public function TankIndicator() {
         super();
@@ -77,7 +77,7 @@ public class TankIndicator extends BattleUIComponent {
     }
 
     public function setModuleState(param1:String, param2:String):void {
-        if (this._isVehicleWithTurret) {
+        if (this.isVehicleWithTurret) {
             if (VehicleModules.checkIsInTurret(param1)) {
                 this._turretTank.setModuleState(param1, param2);
             }
@@ -109,8 +109,7 @@ public class TankIndicator extends BattleUIComponent {
             this._turretTank = null;
         }
         var _loc3_:TankIndicatorItem = this._indicators[param1];
-        this._isVehicleWithTurret = param1 == VehicleTypes.TANK;
-        if (this._isVehicleWithTurret) {
+        if (this.isVehicleWithTurret) {
             if (_loc3_.hull == null) {
                 _loc3_.hull = App.utils.classFactory.getComponent(_loc3_.hullLinkage, TankRotator);
             }

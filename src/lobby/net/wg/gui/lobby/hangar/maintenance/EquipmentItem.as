@@ -9,6 +9,7 @@ import net.wg.data.constants.Linkages;
 import net.wg.data.constants.SoundTypes;
 import net.wg.data.constants.Values;
 import net.wg.data.constants.generated.CONTEXT_MENU_HANDLER_TYPE;
+import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.advanced.ModuleTypesUIWithFill;
 import net.wg.gui.components.controls.ActionPrice;
@@ -241,8 +242,8 @@ public class EquipmentItem extends SoundButtonEx {
             _loc3_ = App.utils.events;
             this.toBuyDropdown.visible = _loc1_.goldEqsForCredits;
             _loc3_.removeEvent(this.toBuyDropdown, ListEvent.INDEX_CHANGE, this.onModuleCurrencyChangedHandler);
-            this.toBuyDropdown.dataProvider = new DataProvider([_loc2_.htmlTextWithIcon(_loc2_.integer(_loc1_.prices[0]), Currencies.CREDITS), _loc2_.htmlTextWithIcon(_loc2_.gold(_loc1_.prices[1]), Currencies.GOLD)]);
-            this.toBuyDropdown.selectedIndex = _loc1_.currency == Currencies.CREDITS ? 0 : 1;
+            this.toBuyDropdown.dataProvider = new DataProvider([_loc2_.htmlTextWithIcon(_loc2_.integer(_loc1_.prices[0]), CURRENCIES_CONSTANTS.CREDITS), _loc2_.htmlTextWithIcon(_loc2_.gold(_loc1_.prices[1]), CURRENCIES_CONSTANTS.GOLD)]);
+            this.toBuyDropdown.selectedIndex = _loc1_.currency == CURRENCIES_CONSTANTS.CREDITS ? 0 : 1;
             _loc3_.addEvent(this.toBuyDropdown, ListEvent.INDEX_CHANGE, this.onModuleCurrencyChangedHandler);
         }
         else {
@@ -274,17 +275,17 @@ public class EquipmentItem extends SoundButtonEx {
             _loc3_ = _loc1_.prices[this.toBuyDropdown.selectedIndex];
         }
         else {
-            _loc3_ = _loc1_.prices[_loc1_.currency == Currencies.CREDITS ? 0 : 1];
+            _loc3_ = _loc1_.prices[_loc1_.currency == CURRENCIES_CONSTANTS.CREDITS ? 0 : 1];
         }
         var _loc4_:ILocale = App.utils.locale;
         var _loc5_:Number = _loc3_ * _loc2_;
         this.toBuy.textColor = Currencies.TEXT_COLORS[_loc1_.currency];
-        this.price.textColor = Currencies.TEXT_COLORS[_loc5_ > _loc1_.userCredits[_loc1_.currency] ? Currencies.ERROR : _loc1_.currency];
-        this.price.text = _loc1_.currency == Currencies.CREDITS ? _loc4_.integer(_loc5_) : _loc4_.gold(_loc5_);
+        this.price.textColor = Currencies.TEXT_COLORS[_loc5_ > _loc1_.userCredits[_loc1_.currency] ? CURRENCIES_CONSTANTS.ERROR : _loc1_.currency];
+        this.price.text = _loc1_.currency == CURRENCIES_CONSTANTS.CREDITS ? _loc4_.integer(_loc5_) : _loc4_.gold(_loc5_);
         var _loc6_:ActionPriceVO = null;
         if (_loc1_.actionPriceVo) {
             _loc6_ = _loc1_.actionPriceVo;
-            _loc6_.forCredits = _loc1_.currency == Currencies.CREDITS;
+            _loc6_.forCredits = _loc1_.currency == CURRENCIES_CONSTANTS.CREDITS;
         }
         this.actionPrice.setData(_loc6_);
         this.price.visible = !this.actionPrice.visible;
@@ -334,9 +335,9 @@ public class EquipmentItem extends SoundButtonEx {
     }
 
     private function onModuleCurrencyChangedHandler(param1:ListEvent):void {
-        this.price.icon = this.toBuyDropdown.selectedIndex == 0 ? Currencies.CREDITS : Currencies.GOLD;
+        this.price.icon = this.toBuyDropdown.selectedIndex == 0 ? CURRENCIES_CONSTANTS.CREDITS : CURRENCIES_CONSTANTS.GOLD;
         this.actionPrice.ico = this.toBuyDropdown.selectedIndex == 0 ? IconsTypes.CREDITS : IconsTypes.GOLD;
-        this.selectedItem.currency = this.toBuyDropdown.selectedIndex == 0 ? Currencies.CREDITS : Currencies.GOLD;
+        this.selectedItem.currency = this.toBuyDropdown.selectedIndex == 0 ? CURRENCIES_CONSTANTS.CREDITS : CURRENCIES_CONSTANTS.GOLD;
         invalidate(INV_UPDATE);
         dispatchEvent(new EquipmentEvent(EquipmentEvent.TOTAL_PRICE_CHANGED, -1, -1, this.selectedItem.currency));
     }

@@ -5,6 +5,7 @@ import flash.events.MouseEvent;
 import net.wg.data.Aliases;
 import net.wg.data.VO.UserVO;
 import net.wg.data.constants.BaseTooltips;
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.IconsTypes;
 import net.wg.data.constants.Linkages;
 import net.wg.data.managers.impl.TooltipProps;
@@ -19,6 +20,7 @@ import net.wg.gui.lobby.header.vo.HBC_AccountDataVo;
 import net.wg.gui.lobby.header.vo.HBC_BattleTypeVo;
 import net.wg.gui.lobby.header.vo.HBC_FinanceVo;
 import net.wg.gui.lobby.header.vo.HBC_PremDataVo;
+import net.wg.gui.lobby.header.vo.HBC_PremShopVO;
 import net.wg.gui.lobby.header.vo.HBC_SettingsVo;
 import net.wg.gui.lobby.header.vo.HBC_SquadDataVo;
 import net.wg.gui.lobby.header.vo.HangarMenuTabItemVO;
@@ -26,11 +28,15 @@ import net.wg.gui.lobby.header.vo.HangarMenuVO;
 import net.wg.gui.lobby.header.vo.HeaderButtonVo;
 import net.wg.infrastructure.base.meta.ILobbyHeaderMeta;
 import net.wg.infrastructure.base.meta.impl.LobbyHeaderMeta;
+import net.wg.utils.ICounterManager;
+import net.wg.utils.IScheduler;
+import net.wg.utils.IUtils;
 
 import org.idmedia.as3commons.util.StringUtils;
 
 import scaleform.clik.constants.ConstrainMode;
 import scaleform.clik.constants.InvalidationType;
+import scaleform.clik.controls.Button;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.utils.Constraints;
 
@@ -52,6 +58,8 @@ public class LobbyHeader extends LobbyHeaderMeta implements ILobbyHeaderMeta {
 
     private static const BUBBLE_TOOLTIP_Y:int = 7;
 
+    private static const EMPTY_ACTION:String = "";
+
     public var centerBg:Sprite = null;
 
     public var resizeBg:Sprite = null;
@@ -64,6 +72,8 @@ public class LobbyHeader extends LobbyHeaderMeta implements ILobbyHeaderMeta {
 
     public var headerButtonBar:HeaderButtonBar;
 
+    public var onlineCounter:OnlineCounter;
+
     private var _headerButtonsHelper:HeaderButtonsHelper;
 
     private var _bubbleTooltip:ToolTipComplex;
@@ -74,8 +84,17 @@ public class LobbyHeader extends LobbyHeaderMeta implements ILobbyHeaderMeta {
 
     private var _fightBtnTooltipStr:String = "";
 
+    private var _utils:IUtils = null;
+
+    private var _counterManager:ICounterManager = null;
+
+    private var _scheduler:IScheduler = null;
+
     public function LobbyHeader() {
         super();
+        this._utils = App.utils;
+        this._counterManager = this._utils.counterManager;
+        this._scheduler = this._utils.scheduler;
         this._headerButtonsHelper = new HeaderButtonsHelper(this.headerButtonBar);
     }
 
@@ -120,7 +139,13 @@ public class LobbyHeader extends LobbyHeaderMeta implements ILobbyHeaderMeta {
 
     override protected function onDispose():void {
         this.disposeBubbleToolTip();
-        App.utils.scheduler.cancelTask(this.stopReadyCoolDown);
+        this._scheduler.cancelTask(this.stopReadyCoolDown);
+        var _loc1_:int = this.mainMenuButtonBar.dataProvider.length;
+        var _loc2_:int = 0;
+        while (_loc2_ < _loc1_) {
+            this._counterManager.removeCounter(this.mainMenuButtonBar.getButtonAt(_loc2_));
+            _loc2_++;
+        }
         this.mainMenuButtonBar.dispose();
         this.mainMenuButtonBar = null;
         this.headerButtonBar.dispose();
@@ -129,13 +154,21 @@ public class LobbyHeader extends LobbyHeaderMeta implements ILobbyHeaderMeta {
         this.fightBtn = null;
         this._headerButtonsHelper.dispose();
         this._headerButtonsHelper = null;
+        this.onlineCounter.dispose();
+        this.onlineCounter = null;
         this.mainMenuGradient = null;
         this.resizeBg = null;
         this.centerBg = null;
+        this._counterManager = null;
+        this._scheduler = null;
+        this._utils = null;
         super.onDispose();
     }
 
     override protected function setHangarMenuData(param1:HangarMenuVO):void {
+        if (this.mainMenuButtonBar.dataProvider != null) {
+            this.mainMenuButtonBar.dataProvider.cleanUp();
+        }
         this.mainMenuButtonBar.dataProvider = param1.tabDataProvider;
     }
 
@@ -201,6 +234,26 @@ public class LobbyHeader extends LobbyHeaderMeta implements ILobbyHeaderMeta {
         }
     }
 
+    public function as_initOnlineCounter(param1:Boolean):void {
+        this.onlineCounter.initVisible(param1);
+    }
+
+    public function as_removeButtonCounter(param1:String):void {
+        var _loc2_:Button = this.mainMenuButtonBar.getButtonByValue(param1);
+        this.assertMainMenuButtonWasntFound(_loc2_, param1);
+        this._counterManager.removeCounter(_loc2_);
+    }
+
+    public function as_setButtonCounter(param1:String, param2:String):void {
+        var _loc3_:Button = this.mainMenuButtonBar.getButtonByValue(param1);
+        if (_loc3_ == null) {
+            this.mainMenuButtonBar.validateNow();
+            _loc3_ = this.mainMenuButtonBar.getButtonByValue(param1);
+        }
+        this.assertMainMenuButtonWasntFound(_loc3_, param1);
+        this._counterManager.setCounter(_loc3_, param2);
+    }
+
     public function as_setClanEmblem(param1:String):void {
         var _loc2_:Object = this._headerButtonsHelper.getContentDataById(HeaderButtonsHelper.ITEM_ID_ACCOUNT);
         if (_loc2_ != null) {
@@ -211,9 +264,9 @@ public class LobbyHeader extends LobbyHeaderMeta implements ILobbyHeaderMeta {
 
     public function as_setCoolDownForReady(param1:uint):void {
         this._isInCoolDown = true;
-        App.utils.scheduler.cancelTask(this.stopReadyCoolDown);
+        this._scheduler.cancelTask(this.stopReadyCoolDown);
         this.fightBtn.enabled = false;
-        App.utils.scheduler.scheduleTask(this.stopReadyCoolDown, param1 * 1000);
+        this._scheduler.scheduleTask(this.stopReadyCoolDown, param1 * 1000);
     }
 
     public function as_setFightBtnTooltip(param1:String):void {
@@ -257,6 +310,17 @@ public class LobbyHeader extends LobbyHeaderMeta implements ILobbyHeaderMeta {
         }
     }
 
+    public function as_setPremShopData(param1:String, param2:String, param3:String, param4:String):void {
+        var _loc5_:HBC_PremShopVO = HBC_PremShopVO(this._headerButtonsHelper.getContentDataById(HeaderButtonsHelper.ITEM_ID_PREMSHOP));
+        if (_loc5_) {
+            _loc5_.iconSrc = param1;
+            _loc5_.premShopText = param2;
+            _loc5_.tooltip = param3;
+            _loc5_.tooltipType = param4;
+            this._headerButtonsHelper.invalidateDataById(HeaderButtonsHelper.ITEM_ID_PREMSHOP);
+        }
+    }
+
     public function as_setPremiumParams(param1:String, param2:String, param3:Boolean, param4:String, param5:String):void {
         var _loc6_:HBC_PremDataVo = HBC_PremDataVo(this._headerButtonsHelper.getContentDataById(HeaderButtonsHelper.ITEM_ID_PREM));
         if (_loc6_) {
@@ -285,7 +349,7 @@ public class LobbyHeader extends LobbyHeaderMeta implements ILobbyHeaderMeta {
     }
 
     public function as_setWalletStatus(param1:Object):void {
-        App.utils.voMgr.walletStatusVO.update(param1);
+        this._utils.voMgr.walletStatusVO.update(param1);
         this._headerButtonsHelper.invalidateDataById(HeaderButtonsHelper.ITEM_ID_GOLD);
         this._headerButtonsHelper.invalidateDataById(HeaderButtonsHelper.ITEM_ID_FREEXP);
     }
@@ -293,10 +357,10 @@ public class LobbyHeader extends LobbyHeaderMeta implements ILobbyHeaderMeta {
     public function as_showBubbleTooltip(param1:String, param2:int):void {
         this.disposeBubbleToolTip();
         var _loc3_:TooltipProps = new TooltipProps(BaseTooltips.TYPE_INFO, BUBBLE_TOOLTIP_X, BUBBLE_TOOLTIP_Y);
-        this._bubbleTooltip = App.utils.classFactory.getComponent(Linkages.TOOL_TIP_COMPLEX, ToolTipComplex);
+        this._bubbleTooltip = this._utils.classFactory.getComponent(Linkages.TOOL_TIP_COMPLEX, ToolTipComplex);
         addChild(this._bubbleTooltip);
         this._bubbleTooltip.build(param1, _loc3_);
-        App.utils.scheduler.scheduleTask(this.hideBubbleTooltip, param2);
+        this._scheduler.scheduleTask(this.hideBubbleTooltip, param2);
     }
 
     public function as_updateBattleType(param1:String, param2:String, param3:Boolean, param4:String, param5:String, param6:String):void {
@@ -310,6 +374,10 @@ public class LobbyHeader extends LobbyHeaderMeta implements ILobbyHeaderMeta {
             this._headerButtonsHelper.invalidateDataById(HeaderButtonsHelper.ITEM_ID_BATTLE_SELECTOR);
             this.as_doDisableHeaderButton(HeaderButtonsHelper.ITEM_ID_BATTLE_SELECTOR, param3);
         }
+    }
+
+    public function as_updateOnlineCounter(param1:String, param2:String, param3:String, param4:Boolean):void {
+        this.onlineCounter.updateCount(param1, param2, param3, param4);
     }
 
     public function as_updatePingStatus(param1:int, param2:Boolean):void {
@@ -331,23 +399,28 @@ public class LobbyHeader extends LobbyHeaderMeta implements ILobbyHeaderMeta {
         this._headerButtonsHelper.invalidateDataById(HeaderButtonsHelper.ITEM_ID_SQUAD);
     }
 
+    private function assertMainMenuButtonWasntFound(param1:Button, param2:String):void {
+        this._utils.asserter.assertNotNull(param1, "Main menu button alias:" + param2 + Errors.WASNT_FOUND);
+    }
+
     private function updateSize():void {
         this.headerButtonBar.updateCenterItem(this.fightBtn.getRectangle());
         var _loc1_:String = WIDE_SCREEN;
         var _loc2_:Number = 0;
         var _loc3_:Number = 0;
-        if (App.appWidth <= NARROW_SCREEN_SIZE) {
+        var _loc4_:Number = App.appWidth;
+        if (_loc4_ <= NARROW_SCREEN_SIZE) {
             _loc1_ = NARROW_SCREEN;
         }
-        else if (App.appWidth >= WIDE_SCREEN_SIZE) {
+        else if (_loc4_ >= WIDE_SCREEN_SIZE) {
             _loc1_ = MAX_SCREEN;
             _loc2_ = 1;
-            _loc3_ = Math.min((App.appWidth - WIDE_SCREEN_SIZE) / (MAX_SCREEN_SIZE - WIDE_SCREEN_SIZE), 1);
+            _loc3_ = Math.min((_loc4_ - WIDE_SCREEN_SIZE) / (MAX_SCREEN_SIZE - WIDE_SCREEN_SIZE), 1);
         }
         else {
-            _loc2_ = Math.min((App.appWidth - NARROW_SCREEN_SIZE) / (WIDE_SCREEN_SIZE - NARROW_SCREEN_SIZE), 1);
+            _loc2_ = Math.min((_loc4_ - NARROW_SCREEN_SIZE) / (WIDE_SCREEN_SIZE - NARROW_SCREEN_SIZE), 1);
         }
-        this.headerButtonBar.updateScreen(_loc1_, App.appWidth, _loc2_, _loc3_);
+        this.headerButtonBar.updateScreen(_loc1_, _loc4_, _loc2_, _loc3_);
     }
 
     private function stopReadyCoolDown():void {
@@ -357,8 +430,8 @@ public class LobbyHeader extends LobbyHeaderMeta implements ILobbyHeaderMeta {
 
     private function disposeBubbleToolTip():void {
         if (this._bubbleTooltip) {
-            App.utils.scheduler.cancelTask(this.hideBubbleTooltip);
-            App.utils.tweenAnimator.removeAnims(this._bubbleTooltip);
+            this._scheduler.cancelTask(this.hideBubbleTooltip);
+            this._utils.tweenAnimator.removeAnims(this._bubbleTooltip);
             removeChild(this._bubbleTooltip);
             this._bubbleTooltip.dispose();
             this._bubbleTooltip = null;
@@ -367,7 +440,7 @@ public class LobbyHeader extends LobbyHeaderMeta implements ILobbyHeaderMeta {
 
     private function hideBubbleTooltip():void {
         if (this._bubbleTooltip) {
-            App.utils.tweenAnimator.addFadeOutAnim(this._bubbleTooltip, null);
+            this._utils.tweenAnimator.addFadeOutAnim(this._bubbleTooltip, null);
         }
     }
 
@@ -394,6 +467,9 @@ public class LobbyHeader extends LobbyHeaderMeta implements ILobbyHeaderMeta {
             case HeaderButtonsHelper.ITEM_ID_PREM:
                 showPremiumDialogS();
                 break;
+            case HeaderButtonsHelper.ITEM_ID_PREMSHOP:
+                onPremShopClickS();
+                break;
             case HeaderButtonsHelper.ITEM_ID_SQUAD:
                 _loc4_ = HBC_SquadDataVo(this._headerButtonsHelper.getContentDataById(HeaderButtonsHelper.ITEM_ID_SQUAD));
                 if (_loc4_.isEvent) {
@@ -418,7 +494,7 @@ public class LobbyHeader extends LobbyHeaderMeta implements ILobbyHeaderMeta {
     }
 
     private function onFightBtnClickHandler(param1:ButtonEvent):void {
-        fightClickS(0, "");
+        fightClickS(0, EMPTY_ACTION);
     }
 
     private function onFightBtnMouseOutHandler(param1:MouseEvent):void {

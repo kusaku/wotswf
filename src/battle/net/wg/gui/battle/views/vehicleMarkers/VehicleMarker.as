@@ -3,7 +3,6 @@ import flash.display.DisplayObject;
 import flash.display.MovieClip;
 import flash.events.Event;
 import flash.geom.Point;
-import flash.geom.Rectangle;
 import flash.text.TextField;
 
 import net.wg.data.constants.Values;
@@ -13,10 +12,11 @@ import net.wg.gui.battle.views.vehicleMarkers.VO.HPDisplayMode;
 import net.wg.gui.battle.views.vehicleMarkers.VO.VehicleMarkerFlags;
 import net.wg.gui.battle.views.vehicleMarkers.VO.VehicleMarkerVO;
 import net.wg.gui.battle.views.vehicleMarkers.events.VehicleMarkersManagerEvent;
+import net.wg.gui.utils.RootSWFAtlasManager;
 
 import scaleform.gfx.TextFieldEx;
 
-public class VehicleMarker extends BattleUIComponent {
+public class VehicleMarker extends BattleUIComponent implements IMarkerManagerHandler {
 
     private static const SHADOW_POSITIONS:Array = [null, new Point(-94, -122), new Point(-94, -122), new Point(-94, -122), new Point(-94, -122), new Point(-94, -122), new Point(-94, -122), new Point(-94, -122)];
 
@@ -96,6 +96,8 @@ public class VehicleMarker extends BattleUIComponent {
 
     private static const VEHICLE_DESTROY_COLOR:Number = 6710886;
 
+    public static const INVALIDATE_MANAGER_READY:uint = 1 << 17;
+
     public var vehicleIcon:MovieClip = null;
 
     public var hpFieldContainer:HPFieldContainer = null;
@@ -142,7 +144,7 @@ public class VehicleMarker extends BattleUIComponent {
 
     private var _vmManager:VehicleMarkersManager = null;
 
-    private var _atlasManager:VMAtlasManager = null;
+    private var _atlasManager:RootSWFAtlasManager = null;
 
     private var _maxHealthMult:Number = NaN;
 
@@ -150,12 +152,24 @@ public class VehicleMarker extends BattleUIComponent {
 
     private var _isFlagShown:Boolean = false;
 
+    private var _isManagerReady:Boolean = false;
+
     public function VehicleMarker() {
         super();
         this._vmManager = VehicleMarkersManager.getInstance();
-        this._atlasManager = VMAtlasManager.instance;
+        this._isManagerReady = this._vmManager.isAtlasInited;
+        if (!this._isManagerReady) {
+            this._vmManager.addReadyHandler(this);
+        }
         TextFieldEx.setNoTranslate(this.vehicleNameField, true);
         TextFieldEx.setNoTranslate(this.playerNameField, true);
+    }
+
+    public function managerReadyHandler():void {
+        this._isManagerReady = true;
+        if (!this._isPopulated) {
+            invalidate(INVALIDATE_MANAGER_READY);
+        }
     }
 
     override protected function configUI():void {
@@ -169,7 +183,7 @@ public class VehicleMarker extends BattleUIComponent {
     override protected function draw():void {
         var _loc1_:String = null;
         super.draw();
-        if (isInvalid(InvalidationType.DATA) && this._model != null && !this._isPopulated) {
+        if (this._isManagerReady && isInvalid(InvalidationType.DATA) && this._model != null && !this._isPopulated) {
             this._markerColor = this._vmManager.getAliasColor(this._colorSchemeName);
             this.applyColor();
             if (this.getHealthPercents() >= 0) {
@@ -178,7 +192,7 @@ public class VehicleMarker extends BattleUIComponent {
             }
             this.setupVehicleIcon();
             _loc1_ = VMAtlasItemName.getLevelIconName(this._model.vLevel);
-            this._atlasManager.drawWithCenterAlign(_loc1_, this.levelIcon.graphics, true, false);
+            this._vmManager.drawWithCenterAlign(_loc1_, this.levelIcon.graphics, true, false);
             this.setupSquadIcon();
             if (this._model.vClass) {
                 this.setVehicleType();
@@ -361,7 +375,7 @@ public class VehicleMarker extends BattleUIComponent {
             _loc8_ = _loc8_ + SHADOW_TYPE_HBAR_OFFSET;
         }
         var _loc9_:Point = SHADOW_POSITIONS[_loc8_];
-        this._atlasManager.drawGraphics(VMAtlasItemName.getShadowName(_loc8_), this.bgShadow.graphics, _loc9_);
+        this._vmManager.drawGraphics(VMAtlasItemName.getShadowName(_loc8_), this.bgShadow.graphics, _loc9_);
         this.bgShadow.visible = _loc5_ || _loc6_ || _loc2_ || _loc1_ || _loc3_ || _loc4_;
         this.layoutParts(new <Boolean>[this._model.squadIndex != 0, this._isFlagShown, _loc1_, _loc2_, _loc4_, _loc3_, _loc5_ || _loc6_]);
     }
@@ -500,9 +514,7 @@ public class VehicleMarker extends BattleUIComponent {
         else {
             _loc1_ = VMAtlasItemName.getVehicleTypeIconName(this._markerColor, this._model.vClass, this._model.hunt);
         }
-        var _loc2_:Rectangle = this._atlasManager.getAtlasItemBounds(_loc1_);
-        var _loc3_:int = !!_loc2_ ? -_loc2_.width >> 1 : 0;
-        this._atlasManager.drawGraphics(_loc1_, this.marker.vehicleTypeIcon.graphics, new Point(_loc3_, V_TYPE_ICON_Y));
+        this._vmManager.drawWithCenterAlign(_loc1_, this.marker.vehicleTypeIcon.graphics, true, false, 0, V_TYPE_ICON_Y);
     }
 
     private function updateIconColor():void {
@@ -539,7 +551,6 @@ public class VehicleMarker extends BattleUIComponent {
             this._markerSettingsOverride = null;
         }
         this._vmManager = null;
-        this._atlasManager = null;
         super.onDispose();
     }
 
@@ -549,7 +560,7 @@ public class VehicleMarker extends BattleUIComponent {
         if (this._model.squadIndex) {
             _loc1_ = this._vmManager.getAliasColor(this._colorSchemeName);
             _loc2_ = VMAtlasItemName.getSquadIconName(_loc1_, this._model.squadIndex);
-            this._atlasManager.drawWithCenterAlign(_loc2_, this.squadIcon.graphics, true, false);
+            this._vmManager.drawWithCenterAlign(_loc2_, this.squadIcon.graphics, true, false);
         }
     }
 
@@ -561,9 +572,7 @@ public class VehicleMarker extends BattleUIComponent {
     private function setupVehicleIcon():void {
         var _loc1_:Array = this._model.vIconSource.split("/");
         var _loc2_:String = _loc1_[_loc1_.length - 1].replace(".png", "");
-        var _loc3_:Rectangle = this._atlasManager.getAtlasItemBounds(_loc2_);
-        var _loc4_:int = !!_loc3_ ? -_loc3_.width >> 1 : 0;
-        this._atlasManager.drawGraphics(_loc2_, this.vehicleIcon.graphics, new Point(_loc4_, 0));
+        this._vmManager.drawWithCenterAlign(_loc2_, this.vehicleIcon.graphics, true, false);
         this.updateIconColor();
     }
 

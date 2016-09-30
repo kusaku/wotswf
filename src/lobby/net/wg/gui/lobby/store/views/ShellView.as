@@ -1,12 +1,19 @@
 package net.wg.gui.lobby.store.views {
+import flash.text.TextField;
+
+import net.wg.data.constants.generated.STORE_CONSTANTS;
 import net.wg.gui.components.controls.CheckBox;
 import net.wg.gui.components.controls.RadioButton;
 import net.wg.gui.lobby.store.views.base.FitsSelectableStoreMenuView;
 import net.wg.gui.lobby.store.views.base.ViewUIElementVO;
+import net.wg.gui.lobby.store.views.data.ExtFitItemsFiltersVO;
+import net.wg.gui.lobby.store.views.data.FiltersVO;
 
 import scaleform.clik.data.DataProvider;
 
 public class ShellView extends FitsSelectableStoreMenuView {
+
+    private static const KINDS_TAG_NAME:String = "kinds";
 
     public var armorPiercingChkBox:CheckBox = null;
 
@@ -22,43 +29,69 @@ public class ShellView extends FitsSelectableStoreMenuView {
 
     public var otherGunsRadioBtn:RadioButton = null;
 
+    public var kindsTextField:TextField = null;
+
     public function ShellView() {
         super();
     }
 
-    override public function resetTemporaryHandlers():void {
-        resetHandlers(getTagsArray(), null);
-    }
-
-    override public function getFilter():Array {
-        var _loc1_:Array = getSelectedFilters(getTagsArray(), true, null);
-        _loc1_.push(myVehicleRadioBtn.group.data);
-        _loc1_.push(getFilterData().current);
+    override public function getFiltersData():FiltersVO {
+        var _loc1_:ExtFitItemsFiltersVO = new ExtFitItemsFiltersVO(filtersDataHash);
+        _loc1_.fitsType = String(myVehicleRadioBtn.group.data);
+        _loc1_.vehicleCD = getFilterData().current;
+        _loc1_.itemTypes = getSelectedFilters(getTagsArray());
         return _loc1_;
     }
 
-    override public function setViewData(param1:Array):void {
-        super.setViewData(param1);
-        var _loc2_:Number = Number(param1.shift());
-        var _loc3_:Array = param1.splice(0, _loc2_);
-        var _loc4_:String = String(param1.shift());
-        selectFilterSimple(getFitsArray(), _loc4_, true);
-        setCurrentVehicle(param1.shift());
+    override public function resetTemporaryHandlers():void {
+        super.resetTemporaryHandlers();
+        resetHandlers(getTagsArray(), null);
+    }
+
+    override public function setFiltersData(param1:FiltersVO, param2:Boolean):void {
+        super.setFiltersData(param1, param2);
+        var _loc3_:ExtFitItemsFiltersVO = ExtFitItemsFiltersVO(param1);
+        setCurrentVehicle(_loc3_.vehicleCD);
         updateSubFilter(getNation());
-        selectFilter(getTagsArray(), _loc3_, true, false);
+        selectFilter(getTagsArray(), _loc3_.itemTypes, true, false);
         dispatchViewChange();
     }
 
-    override protected function onTagsArrayRequest():Array {
-        return [new ViewUIElementVO("ARMOR_PIERCING", this.armorPiercingChkBox), new ViewUIElementVO("ARMOR_PIERCING_CR", this.armorPiercingCRChkBox), new ViewUIElementVO("HOLLOW_CHARGE", this.hollowChargeChkBox), new ViewUIElementVO("HIGH_EXPLOSIVE", this.highExplosiveChkBox)];
+    override protected function configUI():void {
+        super.configUI();
+        this.kindsTextField.text = MENU.SHOP_MENU_SHELL_KINDS_NAME;
+        fitsTextField.text = MENU.SHOP_MENU_SHELL_FITS_NAME;
     }
 
-    override protected function onFitsArrayRequest():Array {
-        return [new ViewUIElementVO("myVehicleGun", myVehicleRadioBtn), new ViewUIElementVO("myInventoryGuns", this.myInventoryGunsRadioBtn), new ViewUIElementVO("myVehiclesInventoryGuns", this.myVehiclesInventoryGunsRadioBtn), new ViewUIElementVO("otherGuns", this.otherGunsRadioBtn)];
+    override protected function onDispose():void {
+        this.armorPiercingChkBox.dispose();
+        this.armorPiercingChkBox = null;
+        this.armorPiercingCRChkBox.dispose();
+        this.armorPiercingCRChkBox = null;
+        this.hollowChargeChkBox.dispose();
+        this.hollowChargeChkBox = null;
+        this.highExplosiveChkBox.dispose();
+        this.highExplosiveChkBox = null;
+        this.myVehiclesInventoryGunsRadioBtn.dispose();
+        this.myVehiclesInventoryGunsRadioBtn = null;
+        this.myInventoryGunsRadioBtn.dispose();
+        this.myInventoryGunsRadioBtn = null;
+        this.otherGunsRadioBtn.dispose();
+        this.otherGunsRadioBtn = null;
+        this.kindsTextField = null;
+        super.onDispose();
+    }
+
+    override protected function onTagsArrayRequest():Vector.<ViewUIElementVO> {
+        return new <ViewUIElementVO>[new ViewUIElementVO(STORE_CONSTANTS.ARMOR_PIERCING_SHELL, this.armorPiercingChkBox), new ViewUIElementVO(STORE_CONSTANTS.ARMOR_PIERCING_CR_SHELL, this.armorPiercingCRChkBox), new ViewUIElementVO(STORE_CONSTANTS.HOLLOW_CHARGE_SHELL, this.hollowChargeChkBox), new ViewUIElementVO(STORE_CONSTANTS.HIGH_EXPLOSIVE_SHELL, this.highExplosiveChkBox)];
+    }
+
+    override protected function onFitsArrayRequest():Vector.<ViewUIElementVO> {
+        return new <ViewUIElementVO>[new ViewUIElementVO(STORE_CONSTANTS.CURRENT_VEHICLE_SHELL_FIT, myVehicleRadioBtn), new ViewUIElementVO(STORE_CONSTANTS.INVENTORY_VEHICLE_SHELL_FIT, this.myInventoryGunsRadioBtn), new ViewUIElementVO(STORE_CONSTANTS.MY_VEHICLES_SHELL_FIT, this.myVehiclesInventoryGunsRadioBtn), new ViewUIElementVO(STORE_CONSTANTS.OTHER_VEHICLES_SHELL_FIT, this.otherGunsRadioBtn)];
     }
 
     override protected function getTagsName():String {
-        return "kinds";
+        return KINDS_TAG_NAME;
     }
 
     override protected function onVehicleFilterUpdated(param1:DataProvider, param2:Number, param3:int):void {

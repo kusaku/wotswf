@@ -1,9 +1,13 @@
 package net.wg.gui.lobby.store.views.base {
+import flash.text.TextField;
+
 import net.wg.data.VO.ShopSubFilterData;
 import net.wg.data.VO.ShopVehicleFilterElementData;
 import net.wg.data.constants.Linkages;
 import net.wg.gui.components.controls.DropdownMenu;
 import net.wg.gui.components.controls.RadioButton;
+import net.wg.gui.lobby.store.views.data.FiltersVO;
+import net.wg.gui.lobby.store.views.data.FitItemsFiltersVO;
 
 import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.ListEvent;
@@ -16,7 +20,9 @@ public class FitsSelectableStoreMenuView extends BaseStoreMenuView {
 
     public var fitsSelectDropDn:DropdownMenu = null;
 
-    private var _currentVehicle:Object = null;
+    public var fitsTextField:TextField = null;
+
+    private var _currentVehicle:Number = 0;
 
     private var _programUpdating:Boolean = false;
 
@@ -24,14 +30,14 @@ public class FitsSelectableStoreMenuView extends BaseStoreMenuView {
         super();
     }
 
-    override protected function onDispose():void {
-        resetTemporaryHandlers();
-        this.fitsSelectDropDn.removeEventListener(ListEvent.INDEX_CHANGE, this.fitsSelectDropDnChangeHandler);
-        super.onDispose();
+    override public function resetTemporaryHandlers():void {
+        resetHandlers(null, this.myVehicleRadioBtn);
     }
 
-    override public function setViewData(param1:Array):void {
-        this.fitsSelectDropDn.addEventListener(ListEvent.INDEX_CHANGE, this.fitsSelectDropDnChangeHandler);
+    override public function setFiltersData(param1:FiltersVO, param2:Boolean):void {
+        super.setFiltersData(param1, param2);
+        this.fitsSelectDropDn.addEventListener(ListEvent.INDEX_CHANGE, this.onFitsSelectDropDnIndexChangeHandler);
+        selectFilterSimple(getFitsArray(), FitItemsFiltersVO(param1).fitsType, true);
     }
 
     override public final function setSubFilterData(param1:int, param2:ShopSubFilterData):void {
@@ -45,28 +51,45 @@ public class FitsSelectableStoreMenuView extends BaseStoreMenuView {
     }
 
     override public function updateSubFilter(param1:int):void {
-        var _loc5_:ShopVehicleFilterElementData = null;
+        var _loc8_:ShopVehicleFilterElementData = null;
         var _loc2_:Number = 0;
         var _loc3_:DataProvider = new DataProvider();
-        var _loc4_:Number = 0;
-        while (_loc4_ < getFilterData().dataProvider.length) {
-            if (param1 == -1 || getFilterData().dataProvider[_loc4_].nation == param1) {
-                _loc5_ = ShopVehicleFilterElementData(getFilterData().dataProvider[_loc4_]);
-                if (this.getCurrentVehicle() == _loc5_.id) {
+        var _loc4_:DataProvider = getFilterData().dataProvider;
+        var _loc5_:int = _loc4_.length;
+        var _loc6_:Object = this.getCurrentVehicle();
+        var _loc7_:Number = 0;
+        while (_loc7_ < _loc5_) {
+            if (param1 == -1 || _loc4_[_loc7_].nation == param1) {
+                _loc8_ = ShopVehicleFilterElementData(_loc4_[_loc7_]);
+                if (_loc6_ == _loc8_.id) {
                     _loc2_ = _loc3_.length;
                 }
                 _loc3_.push({
-                    "label": _loc5_.name,
-                    "data": _loc5_.id
+                    "label": _loc8_.name,
+                    "data": _loc8_.id
                 });
             }
-            _loc4_++;
+            _loc7_++;
         }
         this.fitsSelectDropDn.enabled = false;
+        if (this.fitsSelectDropDn.dataProvider != null) {
+            this.fitsSelectDropDn.dataProvider.cleanUp();
+        }
         this.fitsSelectDropDn.dataProvider = _loc3_;
         this.fitsSelectDropDn.menuRowCount = Math.min(_loc3_.length, MIN_ITEMS_FOR_SCROLL);
-        this.fitsSelectDropDn.scrollBar = _loc3_.length > MIN_ITEMS_FOR_SCROLL ? Linkages.SCROLL_BAR : "";
+        this.fitsSelectDropDn.scrollBar = _loc3_.length > MIN_ITEMS_FOR_SCROLL ? Linkages.SCROLL_BAR : null;
         this.onVehicleFilterUpdated(_loc3_, _loc2_, param1);
+    }
+
+    override protected function onDispose():void {
+        this.resetTemporaryHandlers();
+        this.fitsSelectDropDn.removeEventListener(ListEvent.INDEX_CHANGE, this.onFitsSelectDropDnIndexChangeHandler);
+        this.myVehicleRadioBtn.dispose();
+        this.myVehicleRadioBtn = null;
+        this.fitsSelectDropDn.dispose();
+        this.fitsSelectDropDn = null;
+        this.fitsTextField = null;
+        super.onDispose();
     }
 
     protected function onVehicleFilterUpdated(param1:DataProvider, param2:Number, param3:int):void {
@@ -82,15 +105,15 @@ public class FitsSelectableStoreMenuView extends BaseStoreMenuView {
         }
     }
 
-    protected function getCurrentVehicle():Object {
+    protected function getCurrentVehicle():Number {
         return this._currentVehicle;
     }
 
-    protected function setCurrentVehicle(param1:Object):void {
+    protected function setCurrentVehicle(param1:Number):void {
         this._currentVehicle = param1;
     }
 
-    private function fitsSelectDropDnChangeHandler(param1:ListEvent):void {
+    private function onFitsSelectDropDnIndexChangeHandler(param1:ListEvent):void {
         if (this.fitsSelectDropDn.enabled && getFilterData().current != param1.itemData && !this._programUpdating) {
             getFilterData().current = param1.itemData.data;
             if (this.myVehicleRadioBtn.selected) {

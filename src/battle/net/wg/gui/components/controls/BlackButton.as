@@ -140,6 +140,7 @@ public class BlackButton extends SoundButtonEx {
     }
 
     private function updatePositions():void {
+        var _loc5_:Boolean = false;
         textField.autoSize = TextFieldAutoSize.LEFT;
         var _loc1_:Number = 1 / this.scaleX;
         var _loc2_:Number = 1 / this.scaleY;
@@ -155,7 +156,7 @@ public class BlackButton extends SoundButtonEx {
         this.toggleGlow.height = hitMc.height + FILTERS_GLOW_OFSET;
         var _loc3_:* = hitMc.width >> 1;
         var _loc4_:int = 0;
-        var _loc5_:Boolean = textField.text != null && StringUtils.isNotEmpty(textField.text);
+        _loc5_ = textField.text != null && StringUtils.isNotEmpty(textField.text);
         var _loc6_:Boolean = this.image.visible;
         if (_loc5_) {
             _loc4_ = _loc3_ - (textField.width >> 1);

@@ -1,24 +1,22 @@
 package net.wg.data.constants {
-public class Currencies {
+import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 
-    public static const GOLD:String = "gold";
-
-    public static const CREDITS:String = "credits";
-
-    public static const DISABLED:String = "disabled";
-
-    public static const ERROR:String = "error";
+public class Currencies extends CURRENCIES_CONSTANTS {
 
     public static const TEXT_COLORS:Object = {
         "credits": CREDITS_COLOR,
         "gold": GOLD_COLOR,
-        "disabled": 5197640,
-        "error": 16711680
+        "disabled": DISABLED_COLOR,
+        "error": ERROR_COLOR
     };
 
     public static const GOLD_COLOR:Number = 16761699;
 
     public static const CREDITS_COLOR:Number = 13556185;
+
+    public static const DISABLED_COLOR:Number = 5197640;
+
+    public static const ERROR_COLOR:Number = 16711680;
 
     public static const CREDITS_INDEX:Number = 0;
 

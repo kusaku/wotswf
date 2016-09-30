@@ -2,12 +2,27 @@ package net.wg.gui.lobby.settings.components {
 import flash.display.Sprite;
 
 import net.wg.data.constants.KeyProps;
+import net.wg.data.constants.Values;
 import net.wg.gui.lobby.settings.components.evnts.KeyInputEvents;
 
 import scaleform.clik.controls.ListItemRenderer;
 import scaleform.clik.interfaces.IDataProvider;
 
 public class KeysItemRenderer extends ListItemRenderer {
+
+    private static const INVALID_DATA:String = "invalid_data";
+
+    private static const INVALID_TEXT:String = "invalid_text";
+
+    private static const HEADER_STR:String = "header_";
+
+    private static const OVER_STR:String = "over";
+
+    private static const UP_STR:String = "up";
+
+    private static const DISABLED_STR:String = "disabled";
+
+    private static const KEY_STR:String = "key";
 
     public var keyInput:KeyInput;
 
@@ -17,27 +32,24 @@ public class KeysItemRenderer extends ListItemRenderer {
 
     private var _header:Boolean;
 
-    private const INVALID_DATA:String = "invalid_data";
-
-    private const INVALID_TEXT:String = "invalid_text";
-
     public function KeysItemRenderer() {
         super();
     }
 
     override public function setData(param1:Object):void {
         super.setData(param1);
-        invalidate(this.INVALID_DATA);
+        invalidate(INVALID_DATA);
     }
 
     override protected function onDispose():void {
-        if (data) {
-            data = null;
-        }
+        data = null;
         if (this.keyInput && this.keyInput.hasEventListener(KeyInputEvents.CHANGE)) {
-            this.keyInput.removeEventListener(KeyInputEvents.CHANGE, this.onKeyChange);
+            this.keyInput.removeEventListener(KeyInputEvents.CHANGE, this.onKeyChangeHandler);
             this.keyInput.dispose();
         }
+        this.keyInput = null;
+        this.bg = null;
+        this.underline = null;
         super.onDispose();
     }
 
@@ -58,10 +70,10 @@ public class KeysItemRenderer extends ListItemRenderer {
         super.enabled = param1;
         mouseChildren = true;
         if (super.enabled) {
-            _loc2_ = _focusIndicator == null && (_displayFocus || _focused) ? "over" : "up";
+            _loc2_ = _focusIndicator == null && (_displayFocus || _focused) ? OVER_STR : UP_STR;
         }
         else {
-            _loc2_ = "disabled";
+            _loc2_ = DISABLED_STR;
         }
         setState(_loc2_);
     }
@@ -75,7 +87,7 @@ public class KeysItemRenderer extends ListItemRenderer {
             return;
         }
         _label = param1;
-        invalidate(this.INVALID_TEXT);
+        invalidate(INVALID_TEXT);
     }
 
     public function get header():Boolean {
@@ -87,7 +99,7 @@ public class KeysItemRenderer extends ListItemRenderer {
             return;
         }
         this._header = param1;
-        setState("up");
+        setState(UP_STR);
     }
 
     override protected function configUI():void {
@@ -95,7 +107,7 @@ public class KeysItemRenderer extends ListItemRenderer {
         super.configUI();
         mouseChildren = true;
         if (this.keyInput) {
-            this.keyInput.addEventListener(KeyInputEvents.CHANGE, this.onKeyChange);
+            this.keyInput.addEventListener(KeyInputEvents.CHANGE, this.onKeyChangeHandler);
             this.keyInput.mouseEnabled = true;
             this.keyInput.mouseChildren = true;
             this.keyInput.buttonMode = true;
@@ -104,7 +116,7 @@ public class KeysItemRenderer extends ListItemRenderer {
 
     override protected function draw():void {
         if (data) {
-            if (isInvalid(this.INVALID_DATA)) {
+            if (isInvalid(INVALID_DATA)) {
                 this.header = data.header;
                 this.keyInput.visible = !data.header;
                 this.underline.visible = data.showUnderline;
@@ -115,7 +127,7 @@ public class KeysItemRenderer extends ListItemRenderer {
                     this.keyInput.key = data.key;
                 }
             }
-            if (isInvalid(this.INVALID_TEXT)) {
+            if (isInvalid(INVALID_TEXT)) {
                 this.setText();
             }
         }
@@ -130,7 +142,7 @@ public class KeysItemRenderer extends ListItemRenderer {
 
     override protected function getStatePrefixes():Vector.<String> {
         if (this._header) {
-            return Vector.<String>(["header_", ""]);
+            return Vector.<String>([HEADER_STR, Values.EMPTY_STR]);
         }
         return !!_selected ? statesSelected : statesDefault;
     }
@@ -140,7 +152,7 @@ public class KeysItemRenderer extends ListItemRenderer {
             return null;
         }
         var _loc2_:IDataProvider = KeysScrollingList(owner).dataProvider;
-        var _loc3_:uint = _loc2_.length;
+        var _loc3_:int = _loc2_.length;
         var _loc4_:uint = 0;
         while (_loc4_ < _loc3_) {
             if (!_loc2_[_loc4_].header && _loc4_ != this.index) {
@@ -172,12 +184,12 @@ public class KeysItemRenderer extends ListItemRenderer {
         }
     }
 
-    private function onKeyChange(param1:KeyInputEvents):void {
+    private function onKeyChangeHandler(param1:KeyInputEvents):void {
         var _loc2_:Object = this.keyCodeWasUsed(param1.keyCode);
         if (_loc2_) {
             _loc2_.key = KeyProps.KEY_NONE;
         }
-        if (data && data.hasOwnProperty("key")) {
+        if (data && data.hasOwnProperty(KEY_STR)) {
             data.key = param1.keyCode;
         }
         dispatchEvent(new KeyInputEvents(KeyInputEvents.CHANGE, param1.keyCode));

@@ -38,8 +38,9 @@ public class TooltipEnvironment extends ToolTipSpecial {
     }
 
     override protected function redraw():void {
+        var _loc1_:TooltipEnvironmentVO = null;
         var _loc2_:Number = NaN;
-        var _loc1_:TooltipEnvironmentVO = new TooltipEnvironmentVO(_data);
+        _loc1_ = new TooltipEnvironmentVO(_data);
         _loc2_ = contentMargin.left + bgShadowMargin.left;
         this.titleTF.text = _loc1_.title;
         this.textTF.text = _loc1_.text;

@@ -35,6 +35,8 @@ public class TOOLTIPS_CONSTANTS {
 
     public static const TECHTREE_MODULE:String = "techtreeModule";
 
+    public static const VEH_COMPARE_TECHTREE_MODULE:String = "vehCompareTechtreeModule";
+
     public static const TECH_MAIN_SHELL:String = "techMainShell";
 
     public static const HANGAR_MODULE:String = "hangarModule";
@@ -43,9 +45,13 @@ public class TOOLTIPS_CONSTANTS {
 
     public static const SHOP_VEHICLE:String = "shopVehicle";
 
+    public static const AWARD_VEHICLE:String = "awardVehicle";
+
     public static const SHOP_SHELL:String = "shopShell";
 
     public static const HANGAR_SHELL:String = "hangarShell";
+
+    public static const AWARD_SHELL:String = "awardShell";
 
     public static const REF_SYS_AWARDS:String = "refSysAwards";
 
@@ -54,6 +60,8 @@ public class TOOLTIPS_CONSTANTS {
     public static const REF_SYS_XP_MULTIPLIER:String = "refSysXPMultiplier";
 
     public static const SHOP_MODULE:String = "shopModule";
+
+    public static const AWARD_MODULE:String = "awardModule";
 
     public static const TANKMAN_SKILL:String = "tankmanSkill";
 
@@ -83,13 +91,13 @@ public class TOOLTIPS_CONSTANTS {
 
     public static const CLAN_COMMON_INFO:String = "clanCommonInfo";
 
-    public static const FORT_BUILDING_INFO:String = "fortBuildingInfo";
-
     public static const FORT_WRONG_TIME:String = "fortWrongTime";
 
     public static const FORT_DIVISION:String = "fortDivision";
 
     public static const FORT_CONSUMABLE_ORDER:String = "fortConsumableOrder";
+
+    public static const BATTLE_CONSUMABLE:String = "battleConsumable";
 
     public static const IGR_INFO:String = "igrInfo";
 
@@ -183,6 +191,8 @@ public class TOOLTIPS_CONSTANTS {
 
     public static const VEHICLE_PREVIEW_PARAMETERS:String = "vehiclePreviewParameters";
 
+    public static const BASE_VEHICLE_PARAMETERS:String = "baseVehicleParameters";
+
     public static const VEHICLE_PREVIEW_CREW_MEMBER:String = "vehiclePreviewCrewMember";
 
     public static const BLOCKS_DEFAULT_UI:String = "ToolTipInblocksDefaultUI";
@@ -228,8 +238,6 @@ public class TOOLTIPS_CONSTANTS {
     public static const COMPLEX_UI:String = "ToolTipComplexUI";
 
     public static const CLAN_INFO_UI:String = "ToolTipClanInfoUI";
-
-    public static const FORT_BUILDING_INFO_UI:String = "ToolTipFortBuildingInfoUI";
 
     public static const REF_SYS_AWARDS_UI:String = "ToolTipRefSysAwardsUI";
 

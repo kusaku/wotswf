@@ -1,6 +1,7 @@
 package net.wg.infrastructure.events {
 import flash.events.Event;
 
+import net.wg.data.daapi.ViewSettingsVO;
 import net.wg.infrastructure.interfaces.IView;
 
 public class LoaderEvent extends Event {
@@ -19,11 +20,11 @@ public class LoaderEvent extends Event {
 
     public var view:IView;
 
-    public var config:Object;
+    public var config:ViewSettingsVO;
 
     public var name:String;
 
-    public function LoaderEvent(param1:String, param2:Object, param3:String = null, param4:IView = null) {
+    public function LoaderEvent(param1:String, param2:ViewSettingsVO, param3:String = null, param4:IView = null) {
         super(param1, true, true);
         this.config = param2;
         this.name = param3;

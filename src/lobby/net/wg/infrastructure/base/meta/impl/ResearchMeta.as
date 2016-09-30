@@ -15,6 +15,8 @@ public class ResearchMeta extends ResearchViewMeta {
 
     public var goToVehicleView:Function;
 
+    public var compareVehicle:Function;
+
     public function ResearchMeta() {
         super();
     }
@@ -47,6 +49,11 @@ public class ResearchMeta extends ResearchViewMeta {
     public function goToVehicleViewS(param1:Number):void {
         App.utils.asserter.assertNotNull(this.goToVehicleView, "goToVehicleView" + Errors.CANT_NULL);
         this.goToVehicleView(param1);
+    }
+
+    public function compareVehicleS(param1:Number):void {
+        App.utils.asserter.assertNotNull(this.compareVehicle, "compareVehicle" + Errors.CANT_NULL);
+        this.compareVehicle(param1);
     }
 }
 }

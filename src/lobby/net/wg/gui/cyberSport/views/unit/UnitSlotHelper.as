@@ -6,13 +6,13 @@ import net.wg.data.constants.UserTags;
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.controls.ButtonIconTextTransparent;
 import net.wg.gui.cyberSport.controls.CSVehicleButton;
-import net.wg.gui.cyberSport.views.respawn.UnitSlotButtonProperties;
 import net.wg.gui.rally.controls.BaseRallySlotHelper;
 import net.wg.gui.rally.controls.RallySimpleSlotRenderer;
 import net.wg.gui.rally.controls.interfaces.IRallySimpleSlotRenderer;
 import net.wg.gui.rally.controls.interfaces.IRallySlotWithRating;
 import net.wg.gui.rally.interfaces.IRallySlotVO;
 import net.wg.gui.rally.vo.RallySlotVO;
+import net.wg.gui.utils.VO.UnitSlotProperties;
 import net.wg.infrastructure.managers.ITooltipFormatter;
 
 public class UnitSlotHelper extends BaseRallySlotHelper {
@@ -21,23 +21,25 @@ public class UnitSlotHelper extends BaseRallySlotHelper {
 
     private static const SLOT_LABEL_GAP:Number = 10;
 
-    private var _removeBtnProps:UnitSlotButtonProperties;
+    private static const DEFAULT_NUMBER_TEXT:String = "0";
 
-    private var _lockBtnProps:UnitSlotButtonProperties;
+    private static const DEFAULT_STRING_TEXT:String = "";
+
+    private static const UNLOCK_SLOT_KEY:String = "unlockSlot";
+
+    private static const LOCK_SLOT_KEY:String = "lockSlot";
+
+    protected var removeBtnProps:UnitSlotProperties;
+
+    protected var lockBtnProps:UnitSlotProperties;
 
     public function UnitSlotHelper() {
         super();
-        this._removeBtnProps = new UnitSlotButtonProperties({
-            "x": 237,
-            "width": 23
-        });
-        this._lockBtnProps = new UnitSlotButtonProperties({
-            "x": 273,
-            "width": 147
-        });
+        this.removeBtnProps = new UnitSlotProperties(237, 23);
+        this.lockBtnProps = new UnitSlotProperties(273, 147);
     }
 
-    private static function updateSlotRemoveBtn(param1:SlotRenderer, param2:Boolean, param3:String, param4:UnitSlotButtonProperties, param5:String):void {
+    private static function updateSlotRemoveBtn(param1:SlotRenderer, param2:Boolean, param3:String, param4:UnitSlotProperties, param5:String):void {
         if (param1 != null && param1.removeBtn != null) {
             param1.removeBtn.visible = param2;
             param1.removeBtn.icon = param3;
@@ -84,7 +86,7 @@ public class UnitSlotHelper extends BaseRallySlotHelper {
                 App.toolTipMgr.showComplex(TOOLTIPS.MEDALION_NOVEHICLE);
                 break;
             case CSVehicleButton.SELECTED_VEHICLE:
-                if (param3 && param3.type == "alert") {
+                if (param3 && param3.type == CSVehicleButton.ALERT_DATA_TYPE) {
                     _loc4_ = App.toolTipMgr.getNewFormatter();
                     _loc4_.addHeader(param3.state);
                     _loc4_.addBody(TOOLTIPS.CYBERSPORT_UNIT_SLOT_VEHICLE_NOTREADY_TEMPORALLY_BODY, true);
@@ -120,7 +122,7 @@ public class UnitSlotHelper extends BaseRallySlotHelper {
         if (param1 is SimpleSlotRenderer) {
             _loc2_ = SimpleSlotRenderer(param1);
             if (_loc2_.ratingTF != null) {
-                _loc2_.ratingTF.text = "";
+                _loc2_.ratingTF.text = DEFAULT_STRING_TEXT;
                 _loc2_.ratingTF.visible = false;
             }
             _loc2_.lockBackground.visible = false;
@@ -129,13 +131,13 @@ public class UnitSlotHelper extends BaseRallySlotHelper {
             _loc3_ = SlotRenderer(param1);
             _loc3_.setStatus(0);
             if (_loc3_.ratingTF != null) {
-                _loc3_.ratingTF.text = "";
+                _loc3_.ratingTF.text = DEFAULT_STRING_TEXT;
                 _loc3_.ratingTF.visible = false;
             }
             _loc3_.levelLbl.mouseEnabled = false;
             _loc3_.removeBtn.visible = false;
             _loc3_.levelLbl.visible = true;
-            _loc3_.levelLbl.text = "0";
+            _loc3_.levelLbl.text = DEFAULT_NUMBER_TEXT;
             _loc3_.levelLbl.alpha = DESELECTED_VEHICLE_LEVEL_ALPHA;
             _loc3_.lockBackground.visible = false;
         }
@@ -170,7 +172,7 @@ public class UnitSlotHelper extends BaseRallySlotHelper {
         if (param2 is SlotRenderer) {
             _loc7_ = SlotRenderer(param2);
             if (param1 == _loc7_.removeBtn && _loc7_.removeBtn.icon == ButtonIconTextTransparent.ICON_LOCK) {
-                _loc8_ = App.toolTipMgr.getNewFormatter().addHeader(MENU.contextmenu(!!param3.isClosed ? "unlockSlot" : "lockSlot"), true).addBody("", true).make();
+                _loc8_ = App.toolTipMgr.getNewFormatter().addHeader(MENU.contextmenu(!!param3.isClosed ? UNLOCK_SLOT_KEY : LOCK_SLOT_KEY), true).addBody(DEFAULT_STRING_TEXT, true).make();
                 if (_loc8_.length > 0) {
                     App.toolTipMgr.showComplex(_loc8_);
                 }
@@ -193,7 +195,7 @@ public class UnitSlotHelper extends BaseRallySlotHelper {
                     if (!param2.isClosed) {
                         if (param2.isCommanderState) {
                             if (param2.player) {
-                                updateSlotRemoveBtn(_loc3_, _loc3_.index > 0, ButtonIconTextTransparent.ICON_CROSS, this.removeBtnProps, "");
+                                updateSlotRemoveBtn(_loc3_, _loc3_.index > 0, ButtonIconTextTransparent.ICON_CROSS, this.removeBtnProps, DEFAULT_STRING_TEXT);
                             }
                         }
                         else {
@@ -203,7 +205,7 @@ public class UnitSlotHelper extends BaseRallySlotHelper {
                             }
                             _loc3_.removeBtn.visible = _loc4_;
                             if (_loc4_) {
-                                updateSlotRemoveBtn(_loc3_, _loc4_, ButtonIconTextTransparent.ICON_CROSS, this.removeBtnProps, "");
+                                updateSlotRemoveBtn(_loc3_, _loc4_, ButtonIconTextTransparent.ICON_CROSS, this.removeBtnProps, DEFAULT_STRING_TEXT);
                             }
                         }
                     }
@@ -245,7 +247,7 @@ public class UnitSlotHelper extends BaseRallySlotHelper {
                 else if (_loc5_ != null) {
                     if (param1 is IRallySlotWithRating) {
                         _loc6_ = IRallySlotWithRating(param1);
-                        _loc6_.setRatingLabelHtmlText("");
+                        _loc6_.setRatingLabelHtmlText(DEFAULT_STRING_TEXT);
                     }
                     _loc5_.visible = false;
                 }
@@ -256,12 +258,10 @@ public class UnitSlotHelper extends BaseRallySlotHelper {
         }
     }
 
-    protected function get removeBtnProps():UnitSlotButtonProperties {
-        return this._removeBtnProps;
-    }
-
-    protected function get lockBtnProps():UnitSlotButtonProperties {
-        return this._lockBtnProps;
+    override protected function onDispose():void {
+        this.removeBtnProps = null;
+        this.lockBtnProps = null;
+        super.onDispose();
     }
 }
 }

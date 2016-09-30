@@ -5,8 +5,10 @@ import flash.events.TimerEvent;
 import flash.geom.Point;
 import flash.utils.Timer;
 
+import net.wg.data.constants.AtlasConstants;
 import net.wg.gui.battle.components.BattleUIComponent;
 import net.wg.gui.battle.views.vehicleMarkers.events.TimelineEvent;
+import net.wg.gui.utils.RootSWFAtlasManager;
 
 public class HealthBarAnimatedPart extends BattleUIComponent {
 
@@ -84,7 +86,7 @@ public class HealthBarAnimatedPart extends BattleUIComponent {
         var _loc2_:String = this._partType == VehicleMarkersConstants.HB_ANIMATED_PART_SPLASH ? VMAtlasItemName.getDamageBarName(param1) : VMAtlasItemName.getHitAnimationName(param1);
         var _loc3_:Point = this._partType == VehicleMarkersConstants.HB_ANIMATED_PART_SPLASH ? DMG_BAR_XY : EXPLOSION_XY;
         var _loc4_:Point = new Point(_loc3_.x, _loc3_.y);
-        VMAtlasManager.instance.drawGraphics(_loc2_, this.animateMc.graphics, _loc4_);
+        RootSWFAtlasManager.instance.drawGraphics(AtlasConstants.VEHICLE_MARKERS_ATLAS, _loc2_, this.animateMc.graphics, _loc4_);
     }
 
     protected function setState():void {

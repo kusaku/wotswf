@@ -35,6 +35,8 @@ public class LobbyMenu extends LobbyMenuMeta implements ILobbyMenuMeta {
 
     public var reportBugPanel:ReportBugPanel;
 
+    public var background:MovieClip;
+
     public var logoffBtn:SoundButtonEx;
 
     public var settingsBtn:SoundButtonEx;
@@ -46,6 +48,8 @@ public class LobbyMenu extends LobbyMenuMeta implements ILobbyMenuMeta {
     public var versionTF:TextField;
 
     public var versionButton:SoundButtonEx;
+
+    private var _isSettingsCounterAdded:Boolean = false;
 
     private var _commons:ICommons;
 
@@ -101,6 +105,9 @@ public class LobbyMenu extends LobbyMenuMeta implements ILobbyMenuMeta {
     }
 
     override protected function onDispose():void {
+        if (this._isSettingsCounterAdded) {
+            App.utils.counterManager.removeCounter(this.settingsBtn);
+        }
         this.logoffBtn.removeEventListener(ButtonEvent.CLICK, this.onLogoffBtnClickHandler);
         this.settingsBtn.removeEventListener(ButtonEvent.CLICK, this.onSettingsBtnClickHandler);
         this.quitBtn.removeEventListener(ButtonEvent.CLICK, this.onQuitBtnClickHandler);
@@ -118,6 +125,7 @@ public class LobbyMenu extends LobbyMenuMeta implements ILobbyMenuMeta {
         this.versionButton = null;
         this.versionTF = null;
         this.header = null;
+        this.background = null;
         this.serverStats = null;
         this.reportBugPanel = null;
         this._commons = null;
@@ -154,6 +162,16 @@ public class LobbyMenu extends LobbyMenuMeta implements ILobbyMenuMeta {
 
     private function onCancelBtnClickHandler(param1:ButtonEvent = null):void {
         cancelClickS();
+    }
+
+    public function as_setSettingsBtnCounter(param1:String):void {
+        this._isSettingsCounterAdded = true;
+        App.utils.counterManager.setCounter(this.settingsBtn, param1);
+    }
+
+    override protected function onSetModalFocus(param1:InteractiveObject):void {
+        super.onSetModalFocus(param1);
+        onCounterNeedUpdateS();
     }
 }
 }

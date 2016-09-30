@@ -7,14 +7,12 @@ public interface IRibbonsPanelMeta extends IEventDispatcher {
 
     function onChangeS():void;
 
-    function onIncCountS():void;
+    function onHideS(param1:String):void;
 
-    function onHideS():void;
+    function as_setup(param1:Array, param2:Boolean, param3:Boolean, param4:Boolean, param5:Boolean):void;
 
-    function as_setup(param1:Boolean, param2:Boolean):void;
+    function as_addBattleEfficiencyEvent(param1:String, param2:String, param3:String, param4:String, param5:String):void;
 
-    function as_addBattleEfficiencyEvent(param1:String, param2:String, param3:int):void;
-
-    function as_setOffsetX(param1:int):void;
+    function as_setSettings(param1:Boolean, param2:Boolean, param3:Boolean, param4:Boolean):void;
 }
 }

@@ -88,11 +88,12 @@ public class ClanProfileMainWindow extends ClanProfileMainWindowMeta implements 
 
     override protected function onPopulate():void {
         var _loc1_:* = 0;
+        var _loc2_:* = 0;
         super.onPopulate();
         this.waitingCmp.x = this.viewStack.x ^ 0;
         this.waitingCmp.y = this.viewStack.y ^ 0;
         _loc1_ = this.windowBG.width - BG_WINDOW_SPACE ^ 0;
-        var _loc2_:* = this.windowBG.height - BG_WINDOW_SPACE ^ 0;
+        _loc2_ = this.windowBG.height - BG_WINDOW_SPACE ^ 0;
         this.waitingCmp.setSize(_loc1_, _loc2_);
         this.waitingCmp.visible = false;
         this.waitingCmp.setAnimationStatus(true);

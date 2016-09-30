@@ -121,7 +121,7 @@ public class SendInvitesWindow extends SendInvitesWindowMeta implements ISendInv
         this._pendingUpdatingContacts = {};
         super();
         isCentered = false;
-        this._invalidUserTags = new <String>[UserTags.IGNORED, UserTags.CURRENT];
+        this._invalidUserTags = new <String>[UserTags.IGNORED, UserTags.IGNORED_TMP, UserTags.CURRENT];
         this._createdContactItems = new Vector.<IDisposable>(0);
     }
 

@@ -148,7 +148,7 @@ public class CrosshairPanelBase extends AimMeta implements IAimMeta {
         y = param2;
     }
 
-    public function as_setAmmoStock(param1:Number, param2:Number, param3:Boolean, param4:String, param5:Boolean = false):void {
+    public function as_setAmmoStock(param1:Number, param2:Number, param3:Boolean, param4:String, param5:Boolean):void {
         var _loc6_:MovieClip = this.ammoCountMC;
         _loc6_.gotoAndStop(!!param3 ? "ammo_low" : "ammo_normal");
         _loc6_.count.text = param1.toString();
@@ -188,7 +188,7 @@ public class CrosshairPanelBase extends AimMeta implements IAimMeta {
         this._universalBarWalker.setPosAsPercent(param1 * 100);
     }
 
-    public function as_setReloading(param1:Number, param2:Number, param3:Boolean, param4:Number, param5:Number = 0):void {
+    public function as_setReloading(param1:Number, param2:Number, param3:Boolean, param4:Number, param5:Number):void {
         this.onSetReloading(param1, param2, param3, param4, param5);
     }
 
@@ -316,7 +316,7 @@ public class CrosshairPanelBase extends AimMeta implements IAimMeta {
     public function setReloaderType(param1:Number, param2:Number):void {
         this.reloadingBarMC.alpha = param1;
         this.onSetTargetToWalker(this._reloadingBarWalker, this.reloadingBarMC);
-        this.as_setReloading(this._reloadingSettings[0], this._reloadingSettings[1], this._reloadingSettings[2], 0);
+        this.as_setReloading(this._reloadingSettings[0], this._reloadingSettings[1], this._reloadingSettings[2], 0, 0);
     }
 
     public function setReloadingTime(param1:Number, param2:Number, param3:Boolean):void {

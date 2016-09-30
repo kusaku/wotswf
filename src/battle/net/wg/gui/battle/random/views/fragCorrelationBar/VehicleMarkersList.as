@@ -60,7 +60,10 @@ public class VehicleMarkersList implements IVehicleMarkerAnimFinishedHandler, ID
         for each(_loc5_ in _loc3_) {
             this.addVehicle(_loc5_);
         }
-        this.sort(this.getCorrectVehicleIds(param2));
+        if (param2) {
+            this._vehicleIDs = this.getCorrectVehicleIds(param2);
+            this.sort();
+        }
     }
 
     public function addVehiclesInfo(param1:Vector.<DAAPIVehicleInfoVO>, param2:Vector.<Number>):void {
@@ -71,7 +74,8 @@ public class VehicleMarkersList implements IVehicleMarkerAnimFinishedHandler, ID
             }
         }
         if (param2) {
-            this.sort(this.getCorrectVehicleIds(param2));
+            this._vehicleIDs = this.getCorrectVehicleIds(param2);
+            this.sort();
         }
     }
 
@@ -96,7 +100,7 @@ public class VehicleMarkersList implements IVehicleMarkerAnimFinishedHandler, ID
     public function showVehicleMarkers():void {
         var _loc1_:FCVehicleMarker = null;
         this._isVehicleCounterShown = true;
-        this.sort(this._vehicleIDs);
+        this.sort();
         for each(_loc1_ in this._vehicleMarkers) {
             _loc1_.visible = true;
         }
@@ -119,7 +123,8 @@ public class VehicleMarkersList implements IVehicleMarkerAnimFinishedHandler, ID
             }
         }
         if (param2) {
-            this.sort(this.getCorrectVehicleIds(param2));
+            this._vehicleIDs = this.getCorrectVehicleIds(param2);
+            this.sort();
         }
     }
 
@@ -127,8 +132,9 @@ public class VehicleMarkersList implements IVehicleMarkerAnimFinishedHandler, ID
         var _loc4_:FCVehicleMarker = null;
         if (this._observerIDs.indexOf(param1) == -1) {
             _loc4_ = this.getVehicleMarkerByID(param1);
-            if (_loc4_) {
-                _loc4_.updateVehicleStatus(param2, this.getCorrectVehicleIds(param3));
+            if (_loc4_ && param3) {
+                this._vehicleIDs = this.getCorrectVehicleIds(param3);
+                _loc4_.updateVehicleStatus(param2);
             }
         }
     }
@@ -143,16 +149,17 @@ public class VehicleMarkersList implements IVehicleMarkerAnimFinishedHandler, ID
         return null;
     }
 
-    public function sort(param1:Vector.<Number>):void {
-        var _loc2_:int = 0;
-        var _loc3_:FCVehicleMarker = null;
-        if (param1 != null) {
-            this._vehicleIDs = param1;
+    public function sort():void {
+        var _loc1_:int = 0;
+        var _loc2_:FCVehicleMarker = null;
+        if (this._vehicleIDs != null) {
             this._vehicleMarkers.sort(this.compare);
-            _loc2_ = this._markerStartPosition;
-            for each(_loc3_ in this._vehicleMarkers) {
-                _loc3_.x = _loc2_;
-                _loc2_ = _loc2_ + this._markerShift;
+            _loc1_ = this._markerStartPosition;
+            for each(_loc2_ in this._vehicleMarkers) {
+                if (_loc2_.x != _loc1_) {
+                    _loc2_.x = _loc1_;
+                }
+                _loc1_ = _loc1_ + this._markerShift;
             }
         }
     }

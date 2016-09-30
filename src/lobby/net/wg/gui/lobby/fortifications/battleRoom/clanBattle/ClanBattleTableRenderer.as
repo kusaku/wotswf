@@ -30,8 +30,6 @@ public class ClanBattleTableRenderer extends TableRenderer implements IManualSea
 
     private var model:ClanBattleRenderListVO = null;
 
-    private var isCommonTTShowed:Boolean = false;
-
     private var isBattleTypeTTShowed:Boolean = false;
 
     public function ClanBattleTableRenderer() {
@@ -98,7 +96,6 @@ public class ClanBattleTableRenderer extends TableRenderer implements IManualSea
         removeEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
         App.toolTipMgr.hide();
         this.isBattleTypeTTShowed = false;
-        this.isCommonTTShowed = false;
     }
 
     override protected function handleMouseRollOver(param1:MouseEvent):void {
@@ -122,19 +119,13 @@ public class ClanBattleTableRenderer extends TableRenderer implements IManualSea
         _loc2_ = localToGlobal(_loc2_);
         if (this.battleType.hitTestPoint(_loc2_.x, _loc2_.y)) {
             if (!this.isBattleTypeTTShowed) {
-                App.toolTipMgr.hide();
                 App.toolTipMgr.show(this.onRollOverLoaderHandler());
                 this.isBattleTypeTTShowed = true;
-                this.isCommonTTShowed = false;
             }
             return;
         }
-        if (!this.isCommonTTShowed) {
-            App.toolTipMgr.hide();
-            App.toolTipMgr.show(TOOLTIPS.FORTIFICATION_FORTCLANBATTLELIST_GENERALRENDER);
-            this.isCommonTTShowed = true;
-            this.isBattleTypeTTShowed = false;
-        }
+        App.toolTipMgr.hide();
+        this.isBattleTypeTTShowed = false;
     }
 }
 }

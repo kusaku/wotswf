@@ -1,4 +1,5 @@
 package net.wg.gui.lobby.fortifications.data {
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.Values;
 import net.wg.data.daapi.base.DAAPIDataClass;
 
@@ -52,37 +53,6 @@ public class DirectionVO extends DAAPIDataClass {
         super(param1);
     }
 
-    public function isAttackDeclared():Boolean {
-        return this.attackerClanID != Values.DEFAULT_INT;
-    }
-
-    public function get canBeAttacked():Boolean {
-        return this.isOpened && this.isAvailable && !this.isBusy;
-    }
-
-    public function get canAttackFrom():Boolean {
-        return this.isOpened && this.isAvailable && !this.isBusy;
-    }
-
-    public function get hasBuildings():Boolean {
-        return this.buildings && this.buildings.length > 0;
-    }
-
-    public function getBuildingUnderAttack():String {
-        var _loc1_:BuildingVO = null;
-        if (this.baseBuilding && this.baseBuilding.underAttack) {
-            return this.baseBuilding.uid;
-        }
-        if (this.hasBuildings) {
-            for each(_loc1_ in this.buildings) {
-                if (_loc1_ && _loc1_.underAttack) {
-                    return _loc1_.uid;
-                }
-            }
-        }
-        return null;
-    }
-
     override protected function onDataWrite(param1:String, param2:Object):Boolean {
         var _loc3_:Array = null;
         var _loc4_:Object = null;
@@ -90,6 +60,7 @@ public class DirectionVO extends DAAPIDataClass {
         if (param1 == FIELD_BUILDINGS) {
             this.buildings = [];
             _loc3_ = param2 as Array;
+            App.utils.asserter.assertNotNull(_loc3_, FIELD_BUILDINGS + Errors.CANT_NULL);
             for each(_loc4_ in _loc3_) {
                 _loc5_ = !!_loc4_ ? new BuildingVO(_loc4_) : null;
                 this.buildings.push(_loc5_);
@@ -112,6 +83,25 @@ public class DirectionVO extends DAAPIDataClass {
         super.onDispose();
     }
 
+    public function getBuildingUnderAttack():String {
+        var _loc1_:BuildingVO = null;
+        if (this.baseBuilding && this.baseBuilding.underAttack) {
+            return this.baseBuilding.uid;
+        }
+        if (this.hasBuildings) {
+            for each(_loc1_ in this.buildings) {
+                if (_loc1_ && _loc1_.underAttack) {
+                    return _loc1_.uid;
+                }
+            }
+        }
+        return null;
+    }
+
+    public function isAttackDeclared():Boolean {
+        return !isNaN(this.attackerClanID) && this.attackerClanID != Values.DEFAULT_INT;
+    }
+
     private function disposeBuildings():void {
         var _loc1_:BuildingVO = null;
         if (this.buildings) {
@@ -123,6 +113,18 @@ public class DirectionVO extends DAAPIDataClass {
             this.buildings.splice(0);
             this.buildings = null;
         }
+    }
+
+    public function get canBeAttacked():Boolean {
+        return this.isOpened && this.isAvailable && !this.isBusy;
+    }
+
+    public function get canAttackFrom():Boolean {
+        return this.isOpened && this.isAvailable && !this.isBusy;
+    }
+
+    public function get hasBuildings():Boolean {
+        return this.buildings && this.buildings.length > 0;
     }
 }
 }

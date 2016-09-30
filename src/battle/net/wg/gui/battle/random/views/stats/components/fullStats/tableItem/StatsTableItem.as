@@ -174,7 +174,7 @@ public class StatsTableItem extends StatsTableItemBase {
         if (isInvalid(RandomFullStatsValidationType.MUTE)) {
             this._muteIcon.visible = this._isMute;
             if (this._isMute) {
-                this._muteIcon.imageName = BattleAtlasItem.STATS_MUTE;
+                this._muteIcon.imageName = BattleAtlasItem.LEFT_STATS_MUTE;
             }
             if (this._isSpeaking) {
                 if (this._isMute) {

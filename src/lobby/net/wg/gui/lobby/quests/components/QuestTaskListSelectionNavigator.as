@@ -1,5 +1,5 @@
 package net.wg.gui.lobby.quests.components {
-import net.wg.gui.components.controls.AbstractListSelectionNavigator;
+import net.wg.gui.components.controls.listselection.AbstractListSelectionNavigator;
 import net.wg.gui.lobby.quests.data.questsTileChains.QuestTaskListRendererVO;
 
 public class QuestTaskListSelectionNavigator extends AbstractListSelectionNavigator {

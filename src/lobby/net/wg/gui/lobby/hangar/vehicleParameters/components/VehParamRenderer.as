@@ -23,7 +23,7 @@ public class VehParamRenderer extends VehParamRendererBase {
 
     private static const ROTATION_90:int = 90;
 
-    private static const DECREASE_ARROW_PADDING:int = -17;
+    private static const BUFF_ICON_PADDING:int = -17;
 
     public var icon:Image = null;
 
@@ -31,7 +31,7 @@ public class VehParamRenderer extends VehParamRendererBase {
 
     public var arrow:Sprite = null;
 
-    public var decreaseIcon:Sprite = null;
+    public var buffIcon:Image = null;
 
     private var _tooltip:String = null;
 
@@ -53,7 +53,6 @@ public class VehParamRenderer extends VehParamRendererBase {
 
     override protected function configUI():void {
         super.configUI();
-        hitMC.height = height;
         this._simpleHitX = this.arrow.x - (this.arrow.width >> 1);
         this._simpleHitW = width - this._simpleHitX;
         mouseEnabledOnDisabled = true;
@@ -69,9 +68,10 @@ public class VehParamRenderer extends VehParamRendererBase {
         this.icon = null;
         this.indicator.dispose();
         this.indicator = null;
+        this.buffIcon.dispose();
+        this.buffIcon = null;
         this.arrow = null;
         this._tooltipMgr = null;
-        this.decreaseIcon = null;
         super.onDispose();
     }
 
@@ -85,9 +85,10 @@ public class VehParamRenderer extends VehParamRendererBase {
                 titleTF.x = SIMPLE_TITLE_TF_X;
                 valueTF.x = SIMPLE_VALUE_TF_X;
                 this.arrow.rotation = !!model.isOpen ? Number(ROTATION_90) : Number(ROTATION_0);
-                this.decreaseIcon.visible = model.showDecreaseArrow;
-                if (this.decreaseIcon.visible) {
-                    this.decreaseIcon.x = valueTF.x + valueTF.width - valueTF.textWidth + DECREASE_ARROW_PADDING ^ 0;
+                this.buffIcon.visible = StringUtils.isNotEmpty(model.buffIconSrc);
+                if (this.buffIcon.visible) {
+                    this.buffIcon.source = model.buffIconSrc;
+                    this.buffIcon.x = valueTF.x + valueTF.width - valueTF.textWidth + BUFF_ICON_PADDING;
                 }
                 titleTF.visible = true;
                 valueTF.visible = true;
@@ -96,7 +97,7 @@ public class VehParamRenderer extends VehParamRendererBase {
             else if (model.state == HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SIMPLE_BOTTOM) {
                 this.indicator.setData(model.indicatorVO);
                 this.indicator.visible = true;
-                this.decreaseIcon.visible = false;
+                this.buffIcon.visible = false;
             }
             else if (model.state == HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED) {
                 titleTF.x = ADVANCED_TITLE_TF_X;
@@ -108,15 +109,14 @@ public class VehParamRenderer extends VehParamRendererBase {
                 mouseChildren = true;
                 titleTF.visible = true;
                 valueTF.visible = true;
-                this.decreaseIcon.visible = false;
+                this.buffIcon.visible = false;
             }
-            if (model.state == HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED) {
-                hitMC.x = valueTF.width - valueTF.textWidth;
-                hitMC.width = width - hitMC.x;
-            }
-            else {
+            if (model.state != HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED) {
                 hitMC.x = this._simpleHitX;
                 hitMC.width = this._simpleHitW;
+            }
+            else {
+                layoutHitArea();
             }
         }
     }
@@ -127,7 +127,7 @@ public class VehParamRenderer extends VehParamRendererBase {
         this.indicator.visible = false;
         this.arrow.visible = false;
         this.icon.visible = false;
-        this.decreaseIcon.visible = false;
+        this.buffIcon.visible = false;
     }
 
     private function onMouseRollOverHandler(param1:MouseEvent):void {

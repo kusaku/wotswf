@@ -1,7 +1,9 @@
 package net.wg.gui.lobby.techtree.data.state {
 import flash.display.MovieClip;
 
-public class AnimationProperties {
+import net.wg.infrastructure.interfaces.entity.IDisposable;
+
+public class AnimationProperties implements IDisposable {
 
     public var duration:Number;
 
@@ -16,10 +18,14 @@ public class AnimationProperties {
         this.to = param3;
     }
 
-    public function setTo(param1:MovieClip):void {
-        var _loc2_:* = null;
-        for (_loc2_ in this.to) {
-            param1[_loc2_] = this.to[_loc2_];
+    public function dispose():void {
+        if (this.from != null) {
+            App.utils.data.cleanupDynamicObject(this.from);
+            this.from = null;
+        }
+        if (this.to != null) {
+            App.utils.data.cleanupDynamicObject(this.to);
+            this.to = null;
         }
     }
 
@@ -27,6 +33,13 @@ public class AnimationProperties {
         var _loc2_:* = null;
         for (_loc2_ in this.from) {
             param1[_loc2_] = this.from[_loc2_];
+        }
+    }
+
+    public function setTo(param1:MovieClip):void {
+        var _loc2_:* = null;
+        for (_loc2_ in this.to) {
+            param1[_loc2_] = this.to[_loc2_];
         }
     }
 }

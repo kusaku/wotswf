@@ -66,7 +66,6 @@ public class ToolTipTankmen extends ToolTipSpecial {
 
     override protected function redraw():void {
         var _loc2_:ToolTipBlockResultVO = null;
-        var _loc5_:ILocale = null;
         var _loc6_:String = null;
         var _loc7_:TextFormat = null;
         var _loc8_:ToolTipBlockVO = null;
@@ -94,7 +93,7 @@ public class ToolTipTankmen extends ToolTipSpecial {
         _loc1_.y = topPosition;
         separators.push(_loc1_);
         topPosition = topPosition + Utils.instance.MARGIN_AFTER_SEPARATE;
-        _loc5_ = App.utils.locale;
+        var _loc5_:ILocale = App.utils.locale;
         if (this.dataVO.vehicleContour != "") {
             topPosition = topPosition - Utils.instance.MARGIN_AFTER_SEPARATE;
             this.whiteBg.x = bgShadowMargin.left + 1;
@@ -196,7 +195,7 @@ public class ToolTipTankmen extends ToolTipSpecial {
             _loc12_ = _loc5_.makeString(TOOLTIPS.HANGAR_CREW_NEW_SKILL_AVAILABLE_TEXT);
             _loc13_ = Utils.instance.getStatusColor(Utils.instance.STATUS_ADDITIONAL);
             this.tooltipStatusNewSkill.updateWidth(content.width - contentMargin.right - bgShadowMargin.right);
-            this.tooltipStatusNewSkill.setData(_loc11_, _loc12_, _loc13_, Status.ICO_NEWSKILL);
+            this.tooltipStatusNewSkill.setData(_loc11_, _loc12_, _loc13_, Status.ICO_NEW_SKILL);
             this.tooltipStatusNewSkill.x = contentMargin.left + bgShadowMargin.left;
             this.tooltipStatusNewSkill.y = topPosition;
             topPosition = topPosition + (this.tooltipStatusNewSkill.actualHeight + Utils.instance.MARGIN_AFTER_BLOCK);

@@ -23,9 +23,9 @@ public class BattleMessengerPool implements IDisposable {
 
     private var _battleSmileyMap:BattleSmileyMap = null;
 
-    public function BattleMessengerPool(param1:int, param2:int, param3:int, param4:Number, param5:Number, param6:int, param7:String, param8:BattleSmileyMap) {
-        var _loc9_:BattleMessage = null;
-        var _loc10_:int = 0;
+    public function BattleMessengerPool(param1:int, param2:int, param3:int, param4:Number, param5:Number, param6:int, param7:String, param8:BattleSmileyMap, param9:Function = null) {
+        var _loc10_:BattleMessage = null;
+        var _loc11_:int = 0;
         super();
         this._lifeTime = param2;
         this._alphaSpeed = param3;
@@ -41,25 +41,25 @@ public class BattleMessengerPool implements IDisposable {
         else {
             this._items = new Vector.<BattleMessage>(param1, true);
             this._numAvailableItems = param1;
-            _loc10_ = 0;
-            while (_loc10_ < param1) {
-                _loc9_ = new BattleMessage(this._lifeTime, this._alphaSpeed, this._lastMessageAlpha, this._recoveredLatestMessagesAlpha, this._recoveredMessagesLifeTime, this.deleteItem);
-                _loc9_.setRenderer(this._renderer);
-                this._battleSmileyMap.mapText(_loc9_.messageField);
-                this._items[_loc10_] = _loc9_;
-                _loc10_++;
+            _loc11_ = 0;
+            while (_loc11_ < param1) {
+                _loc10_ = new BattleMessage(this._lifeTime, this._alphaSpeed, this._lastMessageAlpha, this._recoveredLatestMessagesAlpha, this._recoveredMessagesLifeTime, this.deleteItem, param9);
+                _loc10_.setRenderer(this._renderer);
+                this._battleSmileyMap.mapText(_loc10_.messageField);
+                this._items[_loc11_] = _loc10_;
+                _loc11_++;
             }
         }
     }
 
-    public function createItem():BattleMessage {
-        var _loc1_:BattleMessage = null;
+    public function createItem(param1:Function):BattleMessage {
+        var _loc2_:BattleMessage = null;
         if (this._isUnlimitedMessageStack) {
-            _loc1_ = new BattleMessage(this._lifeTime, this._alphaSpeed, this._lastMessageAlpha, this._recoveredLatestMessagesAlpha, this._recoveredMessagesLifeTime, this.deleteItem);
-            _loc1_.setRenderer(this._renderer);
-            this._battleSmileyMap.mapText(_loc1_.messageField);
-            this._items.push(_loc1_);
-            return _loc1_;
+            _loc2_ = new BattleMessage(this._lifeTime, this._alphaSpeed, this._lastMessageAlpha, this._recoveredLatestMessagesAlpha, this._recoveredMessagesLifeTime, this.deleteItem, param1);
+            _loc2_.setRenderer(this._renderer);
+            this._battleSmileyMap.mapText(_loc2_.messageField);
+            this._items.push(_loc2_);
+            return _loc2_;
         }
         if (this._numAvailableItems > 0) {
             return this._items[--this._numAvailableItems];

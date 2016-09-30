@@ -135,7 +135,7 @@ public class SortableTableList extends SortableScrollingList {
     public function resetSelectedItem():void {
         this._oldSelectedItem = null;
         this._lastSelectedUniqueValue = null;
-        selectedIndex = -1;
+        this.selectedIndex = -1;
     }
 
     public function scrollToItemByUniqKey(param1:String, param2:Object):void {
@@ -229,6 +229,10 @@ public class SortableTableList extends SortableScrollingList {
         _dataProvider.addEventListener(Event.CHANGE, handleDataChange, false, 0, true);
         _dataProvider.addEventListener(ListDataProviderEvent.UPDATE_ITEM, this.onDataProviderUpdateItemHandler);
         invalidateData();
+    }
+
+    override public function set selectedIndex(param1:int):void {
+        super.selectedIndex = !!this._isSelectable ? int(param1) : -1;
     }
 
     public function get selectedItem():Object {

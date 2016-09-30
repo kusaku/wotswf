@@ -93,6 +93,8 @@ package
       
       public static const QUESTS_TITLE_MANEUVERSQUESTS:String = "#quests:quests/title/maneuversQuests";
       
+      public static const QUESTS_TITLE_CURRENTLYAVAILABLE:String = "#quests:quests/title/currentlyAvailable";
+      
       public static const QUESTS_TITLE_UNGOUPEDQUESTS:String = "#quests:quests/title/ungoupedQuests";
       
       public static const QUESTS_TITLE_LADDERQUESTS:String = "#quests:quests/title/ladderQuests";
@@ -121,19 +123,13 @@ package
       
       public static const QUESTSCONTROL_TITLE:String = "#quests:questsControl/title";
       
-      public static const QUESTSCONTROL_ADDITIONALTITLE_NEEDRECEIVEDAWARD:String = "#quests:questsControl/additionalTitle/needReceivedAward";
-      
-      public static const QUESTSCONTROL_ADDITIONALTITLE_FREESLOTSANDFREEQUESTS:String = "#quests:questsControl/additionalTitle/freeSlotsAndFreeQuests";
-      
-      public static const QUESTSCONTROL_ADDITIONALTITLE_FIRSTRUN:String = "#quests:questsControl/additionalTitle/firstRun";
-      
-      public static const QUESTSCONTROL_ADDITIONALTITLE_EMPTY:String = "#quests:questsControl/additionalTitle/empty";
-      
       public static const QUESTS_STATUS_DONE:String = "#quests:quests/status/done";
       
       public static const QUESTS_STATUS_NOTAVAILABLE:String = "#quests:quests/status/notAvailable";
       
       public static const QUESTS_STATUS_NOTDONE:String = "#quests:quests/status/notDone";
+      
+      public static const QUESTS_STATUS_ALLDONE:String = "#quests:quests/status/allDone";
       
       public static const QUESTS_TABLE_NOVEHICLES:String = "#quests:quests/table/noVehicles";
       
@@ -774,6 +770,8 @@ package
       public static const DETAILS_CONDITIONS_CUMULATIVE_SOLOHITSASSISTED:String = "#quests:details/conditions/cumulative/soloHitsAssisted";
       
       public static const DETAILS_CONDITIONS_CUMULATIVE_ORIGINALXP:String = "#quests:details/conditions/cumulative/originalXP";
+      
+      public static const DETAILS_CONDITIONS_CUMULATIVE_ORIGINALCREDITS:String = "#quests:details/conditions/cumulative/originalCredits";
       
       public static const DETAILS_CONDITIONS_CUMULATIVE_DAMAGEASSISTEDTRACK:String = "#quests:details/conditions/cumulative/damageAssistedTrack";
       
@@ -1517,8 +1515,6 @@ package
       
       public static const BEGINNERQUESTS_DETAILS_NOAWARD:String = "#quests:beginnerQuests/details/noAward";
       
-      public static const QUESTSCONTROL_ADDITIONALTITLE_ENUM:Array = [QUESTSCONTROL_ADDITIONALTITLE_NEEDRECEIVEDAWARD,QUESTSCONTROL_ADDITIONALTITLE_FREESLOTSANDFREEQUESTS,QUESTSCONTROL_ADDITIONALTITLE_FIRSTRUN,QUESTSCONTROL_ADDITIONALTITLE_EMPTY];
-      
       public static const QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_ENUM:Array = [QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK1,QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK2,QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK3];
       
       public static const QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_ENUM:Array = [QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK1,QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK2,QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK3];
@@ -1527,13 +1523,6 @@ package
       public function QUESTS()
       {
          super();
-      }
-      
-      public static function questscontrol_additionaltitle(param1:String) : String
-      {
-         var _loc2_:String = "#quests:questsControl/additionalTitle/" + param1;
-         App.utils.asserter.assert(QUESTSCONTROL_ADDITIONALTITLE_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
       }
       
       public static function questspersonalwelcomeview_textblock_body(param1:String) : String

@@ -16,10 +16,6 @@ public interface IDirectionCmp extends IUIComponentEx {
 
     function set solidMode(param1:Boolean):void;
 
-    function get useDirectionBuildingTooltips():Boolean;
-
-    function set useDirectionBuildingTooltips(param1:Boolean):void;
-
     function get layout():String;
 
     function set layout(param1:String):void;

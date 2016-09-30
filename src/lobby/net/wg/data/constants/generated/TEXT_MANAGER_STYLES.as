@@ -59,6 +59,10 @@ public class TEXT_MANAGER_STYLES {
 
     public static const VEHICLE_STATUS_CRITICAL_TEXT:String = "vehicleStatusCriticalText";
 
+    public static const VEHICLE_NAME:String = "vehicleName";
+
+    public static const PREMIUM_VEHICLE_NAME:String = "premiumVehicleName";
+
     public function TEXT_MANAGER_STYLES() {
         super();
     }

@@ -11,7 +11,7 @@ public class SettingsControlProp implements IDisposable {
 
     public static const DEFAULT_LBL:String = "default";
 
-    public var defaultValue = null;
+    public var defaultValue:Object = null;
 
     public var options:Array = null;
 
@@ -29,15 +29,15 @@ public class SettingsControlProp implements IDisposable {
 
     public var extraData:Object = null;
 
-    public var prevVal = null;
+    public var prevVal:Object = null;
 
-    public var changedVal = null;
+    public var changedVal:Object = null;
 
     public var isDataAsSelectedIndex:Boolean = false;
 
-    private var _current = null;
+    private var _current:Object = null;
 
-    public function SettingsControlProp(param1:* = null, param2:Array = null, param3:String = null, param4:Boolean = false, param5:Boolean = false, param6:String = null, param7:Boolean = false, param8:Boolean = false, param9:* = null, param10:Boolean = false, param11:* = null, param12:Object = null) {
+    public function SettingsControlProp(param1:Object = null, param2:Array = null, param3:String = null, param4:Boolean = false, param5:Boolean = false, param6:String = null, param7:Boolean = false, param8:Boolean = false, param9:Object = null, param10:Boolean = false, param11:Object = null, param12:Object = null) {
         super();
         this.current = param1;
         this.options = !!param2 ? param2 : [];
@@ -58,24 +58,26 @@ public class SettingsControlProp implements IDisposable {
         return new SettingsControlProp(this.current, this.options, this.type, this.hasLabel, this.hasValue, this.isDependOn, this.readOnly, this.advanced, this.prevVal, this.isDataAsSelectedIndex, this.defaultValue, this.extraData);
     }
 
-    public function dispose():void {
+    public final function dispose():void {
         if (this.options != null) {
             this.options.splice(0, this.options.length);
             this.options = null;
         }
         if (this.extraData != null) {
             this.extraData = App.utils.data.cleanupDynamicObject(this.extraData);
+            this.extraData = null;
         }
+        this.defaultValue = null;
+        this.prevVal = null;
+        this.changedVal = null;
+        this._current = null;
     }
 
-    public function traceValues():void {
-    }
-
-    public function get current():* {
+    public function get current():Object {
         return this._current;
     }
 
-    public function set current(param1:*):void {
+    public function set current(param1:Object):void {
         this.changedVal = param1;
         if (this._current === param1) {
             return;

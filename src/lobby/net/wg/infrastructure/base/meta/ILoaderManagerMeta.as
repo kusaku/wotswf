@@ -9,8 +9,8 @@ public interface ILoaderManagerMeta extends IEventDispatcher {
 
     function viewLoadErrorS(param1:String, param2:String, param3:String):void;
 
-    function viewInitializationErrorS(param1:Object, param2:String, param3:String):void;
+    function viewInitializationErrorS(param1:String, param2:String):void;
 
-    function as_loadView(param1:Object, param2:String, param3:String, param4:String = null):void;
+    function as_loadView(param1:Object):void;
 }
 }

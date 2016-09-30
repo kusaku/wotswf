@@ -43,6 +43,8 @@ public class ModuleAssets implements IDamagePanelClickableItem {
 
     private var _isDestroyed:Boolean = false;
 
+    public var destroyAvailability:Boolean = true;
+
     public function ModuleAssets(param1:String, param2:String, param3:String, param4:Boolean, param5:int) {
         super();
         this._name = param1;
@@ -74,7 +76,7 @@ public class ModuleAssets implements IDamagePanelClickableItem {
         this.state = BATTLE_ITEM_STATES.NORMAL;
     }
 
-    public function dispose():void {
+    public final function dispose():void {
         this._modulesHit.dispose();
         this._modulesHit = null;
         this._critical.bitmapData.dispose();
@@ -99,6 +101,20 @@ public class ModuleAssets implements IDamagePanelClickableItem {
         this._repairAnim.setPlaybackSpeed(param1);
     }
 
+    public function resetModule():void {
+        this.destroyAvailability = true;
+        this._state = BATTLE_ITEM_STATES.NORMAL;
+        this._critical.visible = false;
+        this._destroyed.visible = false;
+        this._warningAnim.visible = false;
+        this._modulesHit.visible = false;
+        this._repairAnim.resetModuleRepairing();
+    }
+
+    public function resetModuleRepairing():void {
+        this._repairAnim.resetModuleRepairing();
+    }
+
     public function showDestroyed():void {
         this._isDestroyed = true;
         this.state = BATTLE_ITEM_STATES.DESTROYED;
@@ -113,20 +129,23 @@ public class ModuleAssets implements IDamagePanelClickableItem {
         var _loc3_:Boolean = false;
         var _loc4_:Boolean = false;
         var _loc5_:String = null;
-        if (this.state != param1 || this._isDestroyed) {
+        if (this.destroyAvailability && (this._state != param1 || this._isDestroyed)) {
             _loc2_ = this._state;
             this._state = param1;
-            this._critical.visible = this.state == BATTLE_ITEM_STATES.CRITICAL || this._state == BATTLE_ITEM_STATES.REPAIRED;
-            this._destroyed.visible = this.state == BATTLE_ITEM_STATES.DESTROYED;
+            this._critical.visible = this._state == BATTLE_ITEM_STATES.CRITICAL || this._state == BATTLE_ITEM_STATES.REPAIRED;
+            this._destroyed.visible = this._state == BATTLE_ITEM_STATES.DESTROYED;
             _loc3_ = this._state == BATTLE_ITEM_STATES.CRITICAL || this._state == BATTLE_ITEM_STATES.DESTROYED;
             this._warningAnim.visible = _loc3_;
             if (_loc3_) {
                 this._warningAnim.gotoAndPlay(1);
             }
-            _loc4_ = (this.state == BATTLE_ITEM_STATES.NORMAL || this.state == BATTLE_ITEM_STATES.REPAIRED) && _loc2_ != BATTLE_ITEM_STATES.NORMAL || this._isDestroyed;
+            _loc4_ = (this._state == BATTLE_ITEM_STATES.NORMAL || this._state == BATTLE_ITEM_STATES.REPAIRED) && _loc2_ != BATTLE_ITEM_STATES.NORMAL || this._isDestroyed;
             if (_loc4_) {
                 _loc5_ = this.state;
-                if (this.state == BATTLE_ITEM_STATES.NORMAL) {
+                if (this._state == BATTLE_ITEM_STATES.NORMAL) {
+                    _loc5_ = BATTLE_ITEM_STATES.REPAIRED_FULL;
+                }
+                else if (this._state == BATTLE_ITEM_STATES.CRITICAL && this._isDestroyed) {
                     _loc5_ = BATTLE_ITEM_STATES.REPAIRED_FULL;
                 }
                 this._repairAnim.state = _loc5_;
@@ -140,6 +159,14 @@ public class ModuleAssets implements IDamagePanelClickableItem {
 
     public function get mouseEventHitElement():DamagePanelItemClickArea {
         return this._modulesHit;
+    }
+
+    public function hideAsset():void {
+        this._critical.visible = false;
+        this._destroyed.visible = false;
+        this._repairAnim.visible = false;
+        this._warningAnim.visible = false;
+        this._modulesHit.visible = false;
     }
 }
 }

@@ -31,6 +31,8 @@ public class BATTLE_VIEW_ALIASES {
 
     public static const CONSUMABLES_PANEL:String = "consumablesPanel";
 
+    public static const DAMAGE_INDICATOR:String = "damageIndicator";
+
     public static const DESTROY_TIMERS_PANEL:String = "destroyTimersPanel";
 
     public static const FALLOUT_DESTROY_TIMERS_PANEL:String = "falloutDestroyTimersPanel";
@@ -66,6 +68,10 @@ public class BATTLE_VIEW_ALIASES {
     public static const BATTLE_END_WARNING_PANEL:String = "battleEndWarningPanel";
 
     public static const CROSSHAIR_PANEL:String = "crosshairPanel";
+
+    public static const POSTMORTEM_PANEL:String = "postmortemPanel";
+
+    public static const BATTLE_DAMAGE_LOG_PANEL:String = "battleDamageLogPanel";
 
     public function BATTLE_VIEW_ALIASES() {
         super();

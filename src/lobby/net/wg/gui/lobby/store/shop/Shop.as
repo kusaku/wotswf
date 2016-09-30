@@ -2,6 +2,7 @@ package net.wg.gui.lobby.store.shop {
 import flash.display.InteractiveObject;
 
 import net.wg.data.constants.Linkages;
+import net.wg.data.constants.generated.STORE_CONSTANTS;
 import net.wg.gui.lobby.store.StoreEvent;
 import net.wg.infrastructure.base.meta.IShopMeta;
 import net.wg.infrastructure.base.meta.impl.ShopMeta;
@@ -19,12 +20,19 @@ public class Shop extends ShopMeta implements IShopMeta, IViewStackContent {
 
     override protected function onPopulate():void {
         super.onPopulate();
-        storeTable.addEventListener(StoreEvent.BUY, this.onBuyItemHandler);
+        storeTable.addEventListener(StoreEvent.BUY, this.onStoreTableBuyHandler);
     }
 
     override protected function onDispose():void {
-        form.storeTable.removeEventListener(StoreEvent.BUY, this.onBuyItemHandler);
+        storeTable.removeEventListener(StoreEvent.BUY, this.onStoreTableBuyHandler);
         super.onDispose();
+    }
+
+    override protected function getLinkageFromFittingType(param1:String):String {
+        if (param1 == STORE_CONSTANTS.VEHICLE) {
+            return Linkages.SHOP_ACCORDION_VEHICLE_VIEW;
+        }
+        return super.getLinkageFromFittingType(param1);
     }
 
     public function canShowAutomatically():Boolean {
@@ -46,8 +54,8 @@ public class Shop extends ShopMeta implements IShopMeta, IViewStackContent {
         return Linkages.SHOP_VEHICLE_ITEM_RENDERER;
     }
 
-    private function onBuyItemHandler(param1:StoreEvent):void {
-        buyItemS(param1.data);
+    private function onStoreTableBuyHandler(param1:StoreEvent):void {
+        buyItemS(param1.itemCD);
         param1.stopImmediatePropagation();
     }
 }

@@ -25,6 +25,8 @@ package
       
       public static const GRAPHICSQUALITY:String = "#settings:graphicsQuality";
       
+      public static const FEEDBACK:String = "#settings:feedBack";
+      
       public static const GRAPHICSQUALITY_DESCRIPTION:String = "#settings:graphicsQuality/description";
       
       public static const GRAPHICSQUALITYHDSD_SD:String = "#settings:graphicsQualityHDSD/SD";
@@ -281,6 +283,12 @@ package
       
       public static const GAME_SHOWVEHMODELSONMAP_ALWAYS:String = "#settings:game/showVehModelsOnMap/always";
       
+      public static const GAME_CAROUSELTYPE:String = "#settings:game/carouselType";
+      
+      public static const GAME_CAROUSELTYPE_SINGLE:String = "#settings:game/carouselType/single";
+      
+      public static const GAME_CAROUSELTYPE_DOUBLE:String = "#settings:game/carouselType/double";
+      
       public static const GAME_BATTLELOADINGINFO:String = "#settings:game/battleLoadingInfo";
       
       public static const GAME_BATTLELOADINGINFO_TEXTTIP:String = "#settings:game/battleLoadingInfo/textTip";
@@ -397,21 +405,31 @@ package
       
       public static const SOUNDS_MASTERVOLUMETOGGLE:String = "#settings:sounds/masterVolumeToggle";
       
-      public static const SOUNDS_SOUNDQUALITY:String = "#settings:sounds/soundQuality";
+      public static const SOUNDS_MASTERVOLUMETOGGLE_DESCRIPTION:String = "#settings:sounds/masterVolumeToggle/description";
       
-      public static const SOUNDQUALITY:String = "#settings:soundQuality";
+      public static const SOUNDS_BULBVOICES:String = "#settings:sounds/bulbVoices";
       
-      public static const SOUNDQUALITY_DESCRIPTION:String = "#settings:soundQuality/description";
+      public static const SOUNDS_BULBVOICES_DESCRIPTION:String = "#settings:sounds/bulbVoices/description";
+      
+      public static const SOUNDS_TABCOMMON:String = "#settings:sounds/tabCommon";
+      
+      public static const SOUNDS_TABVIVOX:String = "#settings:sounds/tabVivox";
+      
+      public static const SOUNDS_TABSPECIAL:String = "#settings:sounds/tabSpecial";
       
       public static const SOUNDS_MASTERVOLUME:String = "#settings:sounds/masterVolume";
       
       public static const SOUNDS_ARENA:String = "#settings:sounds/arena";
+      
+      public static const SOUNDS_HANGAR:String = "#settings:sounds/hangar";
       
       public static const SOUNDS_VEHICLES:String = "#settings:sounds/vehicles";
       
       public static const SOUNDS_EFFECTS:String = "#settings:sounds/effects";
       
       public static const SOUNDS_GUI:String = "#settings:sounds/gui";
+      
+      public static const SOUNDS_VOICENOTIFICATION:String = "#settings:sounds/voiceNotification";
       
       public static const SOUNDS_AMBIENT:String = "#settings:sounds/ambient";
       
@@ -433,17 +451,39 @@ package
       
       public static const SOUND_FIELDSET_HEADER:String = "#settings:sound/fieldset/header";
       
-      public static const SOUND_DYNAMICRANGE_BROAD:String = "#settings:sound/dynamicRange/broad";
+      public static const SOUND_SPECIAL_FIELD_SET:String = "#settings:sound/special/field/set";
       
-      public static const SOUND_DYNAMICRANGE_NARROW:String = "#settings:sound/dynamicRange/narrow";
+      public static const SOUNDS_NIGHTMODE:String = "#settings:sounds/nightMode";
       
-      public static const SOUND_DYNAMICRANGE_NIGHTMODE:String = "#settings:sound/dynamicRange/nightMode";
+      public static const SOUNDS_NIGHTMODE_DESCRIPTION:String = "#settings:sounds/nightMode/description";
       
-      public static const SOUND_SOUNDDEVICE_ACOUSTICS:String = "#settings:sound/soundDevice/acoustics";
+      public static const SOUNDS_BASSBOOST:String = "#settings:sounds/bassBoost";
       
-      public static const SOUND_SOUNDDEVICE_HEADPHONES:String = "#settings:sound/soundDevice/headphones";
+      public static const SOUNDS_BASSBOOST_DESCRIPTION:String = "#settings:sounds/bassBoost/description";
       
-      public static const SOUND_SOUNDDEVICE_LAPTOP:String = "#settings:sound/soundDevice/laptop";
+      public static const SOUNDS_SOUNDQUALITY:String = "#settings:sounds/soundQuality";
+      
+      public static const SOUNDS_SOUNDQUALITY_DESCRIPTION:String = "#settings:sounds/soundQuality/description";
+      
+      public static const SOUNDS_SOUNDDEVICE_LABEL:String = "#settings:sounds/soundDevice/label";
+      
+      public static const SOUNDS_SOUNDDEVICE_ACOUSTICS:String = "#settings:sounds/soundDevice/acoustics";
+      
+      public static const SOUNDS_SOUNDDEVICE_ACOUSTICS_HEADER:String = "#settings:sounds/soundDevice/acoustics/header";
+      
+      public static const SOUNDS_SOUNDDEVICE_ACOUSTICS_BODY:String = "#settings:sounds/soundDevice/acoustics/body";
+      
+      public static const SOUNDS_SOUNDDEVICE_HEADPHONES:String = "#settings:sounds/soundDevice/headphones";
+      
+      public static const SOUNDS_SOUNDDEVICE_HEADPHONES_HEADER:String = "#settings:sounds/soundDevice/headphones/header";
+      
+      public static const SOUNDS_SOUNDDEVICE_HEADPHONES_BODY:String = "#settings:sounds/soundDevice/headphones/body";
+      
+      public static const SOUNDS_SOUNDDEVICE_LAPTOP:String = "#settings:sounds/soundDevice/laptop";
+      
+      public static const SOUNDS_SOUNDDEVICE_LAPTOP_HEADER:String = "#settings:sounds/soundDevice/laptop/header";
+      
+      public static const SOUNDS_SOUNDDEVICE_LAPTOP_BODY:String = "#settings:sounds/soundDevice/laptop/body";
       
       public static const SOUND_SOUNDMODES_DEFAULT:String = "#settings:sound/soundModes/default";
       
@@ -458,6 +498,8 @@ package
       public static const SOUND_SOUNDMODES_U04:String = "#settings:sound/soundModes/U04";
       
       public static const VOICE_CHAT_FIELDSET_HEADER:String = "#settings:voice_chat/fieldset/header";
+      
+      public static const VOICE_CHAT_MICROPHONE_FIELDSET_HEADER:String = "#settings:voice_chat/microphone/fieldset/header";
       
       public static const VOICE_CHAT_HEADER_COMMON:String = "#settings:voice_chat/header/common";
       
@@ -516,8 +558,6 @@ package
       public static const GAME_FIELDSET_HEADERCHAT:String = "#settings:game/fieldset/headerChat";
       
       public static const GAME_FIELDSET_HEADERGAMEPLAY:String = "#settings:game/fieldset/headerGameplay";
-      
-      public static const GAME_SHOWBATTLEEFFICIENCYRIBBONS:String = "#settings:game/showBattleEfficiencyRibbons";
       
       public static const GAME_SHOWSIMPLIFIEDVEHPARAMS:String = "#settings:game/showSimplifiedVehParams";
       
@@ -879,15 +919,117 @@ package
       
       public static const ALTERNATIVEVOICES_LABELS_VOICEBATTLE:String = "#settings:alternativeVoices/labels/voiceBattle";
       
+      public static const OTHERSETTINGS_FIELDSET_HEADER:String = "#settings:otherSettings/fieldset/header";
+      
+      public static const OTHERSETTINGS_LABELS_BULB:String = "#settings:otherSettings/labels/bulb";
+      
       public static const DEFAULTNAMEPREFIX:String = "#settings:defaultNamePrefix";
       
       public static const SOUND_PRESETS_TITLE:String = "#settings:sound/presets/title";
       
       public static const SOUND_DYNAMICRANGE_LABEL:String = "#settings:sound/dynamicRange/label";
       
-      public static const SOUND_SOUNDDEVICE_LABEL:String = "#settings:sound/soundDevice/label";
+      public static const SOUND_BULBVOICES_LIGHTBULB:String = "#settings:sound/bulbVoices/lightbulb";
       
-      public static const SOUND_BASSBOOST_LABEL:String = "#settings:sound/bassBoost/label";
+      public static const SOUND_BULBVOICES_LIGHTBULB_02:String = "#settings:sound/bulbVoices/lightbulb_02";
+      
+      public static const SOUND_BULBVOICES_SIXTHSENSE:String = "#settings:sound/bulbVoices/sixthSense";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR:String = "#settings:feedback/tab/damageIndicator";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_TYPELABEL:String = "#settings:feedback/tab/damageIndicator/typeLabel";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_TYPE_STANDARD:String = "#settings:feedback/tab/damageIndicator/type/standard";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_TYPE_EXTENDED:String = "#settings:feedback/tab/damageIndicator/type/extended";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_PRESETS:String = "#settings:feedback/tab/damageIndicator/presets";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_PRESETS_ALL:String = "#settings:feedback/tab/damageIndicator/presets/all";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_PRESETS_WITHOUTCRIT:String = "#settings:feedback/tab/damageIndicator/presets/withoutCrit";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_ITEMS:String = "#settings:feedback/tab/damageIndicator/items";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_ITEMS_DAMAGE:String = "#settings:feedback/tab/damageIndicator/items/damage";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_ITEMS_TANKNAME:String = "#settings:feedback/tab/damageIndicator/items/tankName";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_ITEMS_ANIMATION:String = "#settings:feedback/tab/damageIndicator/items/animation";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_INDICATOR_CRITVALUE:String = "#settings:feedback/tab/damageIndicator/indicator/critValue";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_INDICATOR_DAMAGEMODULE:String = "#settings:feedback/tab/damageIndicator/indicator/damageModule";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_INDICATOR_BLOCKDAMAGECOUNTTF:String = "#settings:feedback/tab/damageIndicator/indicator/blockDamageCountTF";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_INDICATOR_CRITLABEL:String = "#settings:feedback/tab/damageIndicator/indicator/critLabel";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_INDICATOR_BLOCKEDVALUE:String = "#settings:feedback/tab/damageIndicator/indicator/blockedValue";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_INDICATOR_BLOCKEDLABEL:String = "#settings:feedback/tab/damageIndicator/indicator/blockedLabel";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_INDICATOR_DAMAGEVALUE:String = "#settings:feedback/tab/damageIndicator/indicator/damageValue";
+      
+      public static const FEEDBACK_TAB_DAMAGEINDICATOR_INDICATOR_DAMAGELABEL:String = "#settings:feedback/tab/damageIndicator/indicator/damageLabel";
+      
+      public static const FEEDBACK_TAB_DAMAGELOGPANEL:String = "#settings:feedback/tab/damageLogPanel";
+      
+      public static const FEEDBACK_TAB_EVENTSINFO:String = "#settings:feedback/tab/eventsInfo";
+      
+      public static const FEEDBACK_TAB_DETAILSINFOBLOCK:String = "#settings:feedback/tab/detailsInfoBlock";
+      
+      public static const FEEDBACK_TAB_DAMAGELOGPANEL_SUMMLABEL:String = "#settings:feedback/tab/damageLogPanel/summLabel";
+      
+      public static const FEEDBACK_TAB_DAMAGELOGPANEL_DAMAGEDONE:String = "#settings:feedback/tab/damageLogPanel/damageDone";
+      
+      public static const FEEDBACK_TAB_DAMAGELOGPANEL_BLOCKEDDAMAGE:String = "#settings:feedback/tab/damageLogPanel/blockedDamage";
+      
+      public static const FEEDBACK_TAB_DAMAGELOGPANEL_DAMAGEASSIST:String = "#settings:feedback/tab/damageLogPanel/damageAssist";
+      
+      public static const FEEDBACK_TAB_DAMAGELOGPANEL_DETAILSLABEL:String = "#settings:feedback/tab/damageLogPanel/detailsLabel";
+      
+      public static const FEEDBACK_TAB_DAMAGELOGPANEL_DETAILS_ALWAYS:String = "#settings:feedback/tab/damageLogPanel/details/always";
+      
+      public static const FEEDBACK_TAB_DAMAGELOGPANEL_DETAILS_BYALT:String = "#settings:feedback/tab/damageLogPanel/details/byAlt";
+      
+      public static const FEEDBACK_TAB_DAMAGELOGPANEL_DETAILS_HIDE:String = "#settings:feedback/tab/damageLogPanel/details/hide";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_LABEL_COMMONLABEL:String = "#settings:feedback/tab/battleEvents/label/CommonLabel";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_LABEL_VISIBLEEVENTS:String = "#settings:feedback/tab/battleEvents/label/VisibleEvents";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_LABEL_INFORMATION:String = "#settings:feedback/tab/battleEvents/label/Information";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_SHOWINBATTLE:String = "#settings:feedback/tab/battleEvents/checkbox/ShowInBattle";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYHPDAMAGE:String = "#settings:feedback/tab/battleEvents/checkbox/EnemyHpDamage";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYBURNING:String = "#settings:feedback/tab/battleEvents/checkbox/EnemyBurning";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYRAMATTACK:String = "#settings:feedback/tab/battleEvents/checkbox/EnemyRamAttack";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_BLOCKEDDAMAGE:String = "#settings:feedback/tab/battleEvents/checkbox/BlockedDamage";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYDETECTIONDAMAGE:String = "#settings:feedback/tab/battleEvents/checkbox/EnemyDetectionDamage";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYTRACKDAMAGE:String = "#settings:feedback/tab/battleEvents/checkbox/EnemyTrackDamage";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYDETECTION:String = "#settings:feedback/tab/battleEvents/checkbox/EnemyDetection";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYKILL:String = "#settings:feedback/tab/battleEvents/checkbox/EnemyKill";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_BASECAPTUREDROP:String = "#settings:feedback/tab/battleEvents/checkbox/BaseCaptureDrop";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_BASECAPTURE:String = "#settings:feedback/tab/battleEvents/checkbox/BaseCapture";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ENEMYCRITICALHIT:String = "#settings:feedback/tab/battleEvents/checkbox/EnemyCriticalHit";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_EVENTNAME:String = "#settings:feedback/tab/battleEvents/checkbox/EventName";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_VEHICLEINFO:String = "#settings:feedback/tab/battleEvents/checkbox/VehicleInfo";
+      
+      public static const FEEDBACK_TAB_BATTLEEVENTS_INFO:String = "#settings:feedback/tab/battleEvents/info";
       
       public static const AIM_ENUM:Array = [AIM_MIXING,AIM_MIXING_TYPE0,AIM_MIXING_TYPE1,AIM_MIXING_TYPE2,AIM_MIXING_TYPE3,AIM_MIXING_TYPE4,AIM_MIXING_TYPE5,AIM_MIXING_TYPE6,AIM_GUNTAG,AIM_GUNTAG_TYPE0,AIM_GUNTAG_TYPE1,AIM_GUNTAG_TYPE2,AIM_GUNTAG_TYPE3,AIM_GUNTAG_TYPE4,AIM_GUNTAG_TYPE5,AIM_GUNTAG_TYPE6,AIM_GUNTAG_TYPE7,AIM_GUNTAG_TYPE8,AIM_GUNTAG_TYPE9,AIM_GUNTAG_TYPE10,AIM_GUNTAG_TYPE11,AIM_GUNTAG_TYPE12,AIM_GUNTAG_TYPE13,AIM_GUNTAG_TYPE14,AIM_CENTRALTAG,AIM_CENTRALTAG_TYPE0,AIM_CENTRALTAG_TYPE1,AIM_CENTRALTAG_TYPE2,AIM_CENTRALTAG_TYPE3,AIM_CENTRALTAG_TYPE4,AIM_CENTRALTAG_TYPE5,AIM_CENTRALTAG_TYPE6,AIM_CENTRALTAG_TYPE7,AIM_CENTRALTAG_TYPE8,AIM_CENTRALTAG_TYPE9,AIM_CENTRALTAG_TYPE10,AIM_CENTRALTAG_TYPE11,AIM_CENTRALTAG_TYPE12,AIM_CENTRALTAG_TYPE13,AIM_NET,AIM_NET_TYPE0,AIM_NET_TYPE1,AIM_NET_TYPE2,AIM_NET_TYPE3,AIM_RELOADER,AIM_RELOADERTIMER,AIM_CONDITION,AIM_CASSETTE,AIM_ZOOMINDICATOR];
       

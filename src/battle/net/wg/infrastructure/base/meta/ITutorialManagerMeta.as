@@ -15,11 +15,11 @@ public interface ITutorialManagerMeta extends IEventDispatcher {
 
     function as_setDescriptions(param1:Object):void;
 
-    function as_setCriteria(param1:String, param2:String, param3:Boolean = true):void;
+    function as_setCriteria(param1:String, param2:String, param3:Boolean):void;
 
     function as_setTriggers(param1:String, param2:Array):void;
 
-    function as_showHint(param1:String, param2:String, param3:Object, param4:Boolean = false):void;
+    function as_showHint(param1:String, param2:String, param3:Object, param4:Boolean):void;
 
     function as_hideHint(param1:String, param2:String):void;
 }

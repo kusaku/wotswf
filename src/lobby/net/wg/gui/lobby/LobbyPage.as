@@ -13,6 +13,7 @@ import net.wg.gui.components.common.ticker.Ticker;
 import net.wg.gui.events.LobbyEvent;
 import net.wg.gui.lobby.header.LobbyHeader;
 import net.wg.gui.lobby.messengerBar.MessengerBar;
+import net.wg.gui.lobby.settings.config.ControlsFactory;
 import net.wg.gui.notification.NotificationPopUpViewer;
 import net.wg.gui.notification.ServiceMessagePopUp;
 import net.wg.infrastructure.base.meta.ILobbyPageMeta;
@@ -148,6 +149,7 @@ public class LobbyPage extends LobbyPageMeta implements IDraggable, ILobbyPageMe
         this.messengerBar = null;
         this.ticker = null;
         this.tickerBg = null;
+        ControlsFactory.instance.dispose();
         super.onDispose();
     }
 

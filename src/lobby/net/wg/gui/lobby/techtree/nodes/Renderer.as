@@ -6,13 +6,13 @@ import flash.events.EventPhase;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 
+import net.wg.data.constants.generated.NODE_STATE_FLAGS;
 import net.wg.gui.components.controls.ActionPrice;
 import net.wg.gui.components.controls.SoundListItemRenderer;
 import net.wg.gui.components.controls.VO.ActionPriceVO;
 import net.wg.gui.lobby.techtree.TechTreeEvent;
 import net.wg.gui.lobby.techtree.constants.ColorIndex;
 import net.wg.gui.lobby.techtree.constants.IconTextResolver;
-import net.wg.gui.lobby.techtree.constants.NodeState;
 import net.wg.gui.lobby.techtree.constants.TTSoundID;
 import net.wg.gui.lobby.techtree.controls.ActionButton;
 import net.wg.gui.lobby.techtree.data.state.NodeStateCollection;
@@ -30,17 +30,21 @@ import scaleform.gfx.MouseEventEx;
 
 public class Renderer extends SoundListItemRenderer implements IRenderer {
 
-    public static const LINES_AND_ARROWS_NAME:String = "linesAndArrows";
+    private static const LINES_AND_ARROWS_NAME:String = "linesAndArrows";
 
-    private static const STATE_SELECTED:String = "selected_";
+    private static const STATE_PREFIX_SELECTED:String = "selected_";
 
     private static const STATE_UP:String = "up";
+
+    private static const EMPTY_STR:String = "";
 
     public var actionPrice:ActionPrice;
 
     public var hit:MovieClip;
 
     public var button:ActionButton;
+
+    private var _enabledChildren:Vector.<DisplayObjectContainer>;
 
     private var _stateProps:StateProperties;
 
@@ -60,8 +64,6 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
 
     private var _matrixPosition:MatrixPosition;
 
-    private var _enabledChildren:Vector.<DisplayObjectContainer>;
-
     public function Renderer() {
         this._enabledChildren = new Vector.<DisplayObjectContainer>();
         Extensions.enabled = true;
@@ -77,6 +79,7 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
             this.button.removeEventListener(MouseEvent.MOUSE_OVER, this.onButtonMouseOverHandler, false);
             this.button.removeEventListener(MouseEvent.MOUSE_OUT, this.onButtonMouseOutHandler, false);
             this.button.dispose();
+            this.button = null;
         }
         if (this._isDelegateEvents && this.hit != null) {
             this.removeEventsHandlers();
@@ -85,13 +88,18 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
             this.actionPrice.dispose();
             this.actionPrice = null;
         }
-        this._enabledChildren.slice(0, this._enabledChildren.length);
+        this._enabledChildren.splice(0, this._enabledChildren.length);
         this._enabledChildren = null;
         this.hit = null;
         this._valueObject = null;
         this._dataInited = false;
         this._stateProps = null;
         this._matrixPosition = null;
+        if (this._stateProps != null) {
+            this._stateProps.dispose();
+            this._stateProps = null;
+        }
+        this._container = null;
         super.onDispose();
     }
 
@@ -203,7 +211,7 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
     }
 
     public function getIconPath():String {
-        return !!this._dataInited ? this._valueObject.iconPath : "";
+        return !!this._dataInited ? this._valueObject.iconPath : EMPTY_STR;
     }
 
     public function getInX():Number {
@@ -211,11 +219,11 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
     }
 
     public function getItemName():String {
-        return !!this._dataInited ? this._valueObject.nameString : "";
+        return !!this._dataInited ? this._valueObject.nameString : EMPTY_STR;
     }
 
     public function getItemType():String {
-        return !!this._dataInited ? this._valueObject.primaryClassName : "";
+        return !!this._dataInited ? this._valueObject.primaryClassName : EMPTY_STR;
     }
 
     public function getLevel():int {
@@ -224,7 +232,7 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
 
     public function getNamedLabel(param1:String):String {
         if (!this._dataInited) {
-            return "";
+            return EMPTY_STR;
         }
         return this._valueObject.getNamedLabel(param1);
     }
@@ -245,11 +253,11 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
     }
 
     public function getStatus():String {
-        return !!this._dataInited ? this._valueObject.status : "";
+        return !!this._dataInited ? this._valueObject.status : EMPTY_STR;
     }
 
     public function getStatusLevel():String {
-        return !!this._dataInited ? this._valueObject.statusLevel : "";
+        return !!this._dataInited ? this._valueObject.statusLevel : EMPTY_STR;
     }
 
     public function getY():Number {
@@ -257,7 +265,7 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
     }
 
     public function inInventory():Boolean {
-        return this._dataInited && (this._valueObject.state & NodeState.IN_INVENTORY) > 0;
+        return this._dataInited && (this._valueObject.state & NODE_STATE_FLAGS.IN_INVENTORY) > 0;
     }
 
     public function invalidateNodeState(param1:Number):void {
@@ -281,11 +289,11 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
             return false;
         }
         var _loc1_:Number = this._valueObject.state;
-        return (_loc1_ & NodeState.UNLOCKED) > 0 && (_loc1_ & NodeState.ENOUGH_MONEY) > 0 && ((_loc1_ & NodeState.IN_INVENTORY) == 0 || (_loc1_ & NodeState.VEHICLE_IN_RENT) > 0);
+        return (_loc1_ & NODE_STATE_FLAGS.UNLOCKED) > 0 && (_loc1_ & NODE_STATE_FLAGS.ENOUGH_MONEY) > 0 && ((_loc1_ & NODE_STATE_FLAGS.IN_INVENTORY) == 0 || (_loc1_ & NODE_STATE_FLAGS.VEHICLE_IN_RENT) > 0);
     }
 
     public function isAvailable4Sell():Boolean {
-        return this._dataInited && (this._valueObject.state & NodeState.CAN_SELL) > 0;
+        return this._dataInited && (this._valueObject.state & NODE_STATE_FLAGS.CAN_SELL) > 0;
     }
 
     public function isAvailable4Unlock():Boolean {
@@ -293,7 +301,7 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
             return false;
         }
         var _loc1_:Number = this._valueObject.state;
-        return (_loc1_ & NodeState.NEXT_2_UNLOCK) > 0 && (_loc1_ & NodeState.ENOUGH_XP) > 0;
+        return (_loc1_ & NODE_STATE_FLAGS.NEXT_2_UNLOCK) > 0 && (_loc1_ & NODE_STATE_FLAGS.ENOUGH_XP) > 0;
     }
 
     public function isButtonVisible():Boolean {
@@ -301,7 +309,15 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
     }
 
     public function isElite():Boolean {
-        return this._dataInited && (this._valueObject.state & NodeState.ELITE) > 0;
+        return this._dataInited && (this._valueObject.state & NODE_STATE_FLAGS.ELITE) > 0;
+    }
+
+    public function isEnoughMoney():Boolean {
+        return this._dataInited && (this._valueObject.state & NODE_STATE_FLAGS.ENOUGH_MONEY) > 0;
+    }
+
+    public function isEnoughXp():Boolean {
+        return this._dataInited && (this._valueObject.state & NODE_STATE_FLAGS.ENOUGH_XP) > 0;
     }
 
     public function isFake():Boolean {
@@ -313,7 +329,7 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
     }
 
     public function isNext2Unlock():Boolean {
-        return this._dataInited && (this._valueObject.state & NodeState.NEXT_2_UNLOCK) > 0;
+        return this._dataInited && (this._valueObject.state & NODE_STATE_FLAGS.NEXT_2_UNLOCK) > 0;
     }
 
     public function isParentUnlocked(param1:Number):Boolean {
@@ -321,31 +337,45 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
     }
 
     public function isPremium():Boolean {
-        return this._dataInited && (this._valueObject.state & NodeState.PREMIUM) > 0;
+        return this._dataInited && (this._valueObject.state & NODE_STATE_FLAGS.PREMIUM) > 0;
+    }
+
+    public function isRentAvailable():Boolean {
+        if (!this._dataInited) {
+            return false;
+        }
+        return (this._valueObject.state & NODE_STATE_FLAGS.RENT_AVAILABLE) > 0;
     }
 
     public function isRented():Boolean {
-        return this._dataInited && (this._valueObject.state & NodeState.VEHICLE_IN_RENT) > 0;
+        return this._dataInited && (this._valueObject.state & NODE_STATE_FLAGS.VEHICLE_IN_RENT) > 0;
+    }
+
+    public function isRestoreAvailable():Boolean {
+        if (!this._dataInited) {
+            return false;
+        }
+        return (this._valueObject.state & NODE_STATE_FLAGS.RESTORE_AVAILABLE) > 0;
     }
 
     public function isSelected():Boolean {
-        return this._dataInited && (this._valueObject.state & NodeState.SELECTED) > 0;
+        return this._dataInited && (this._valueObject.state & NODE_STATE_FLAGS.SELECTED) > 0;
     }
 
     public function isShopAction():Boolean {
-        return this._dataInited && (this._valueObject.state & NodeState.SHOP_ACTION) > 0;
+        return this._dataInited && (this._valueObject.state & NODE_STATE_FLAGS.SHOP_ACTION) > 0;
     }
 
     public function isUnlocked():Boolean {
-        return this._dataInited && (this._valueObject.state & NodeState.UNLOCKED) > 0;
+        return this._dataInited && (this._valueObject.state & NODE_STATE_FLAGS.UNLOCKED) > 0;
     }
 
     public function isVehicleCanBeChanged():Boolean {
-        return this._dataInited && (this._valueObject.state & NodeState.VEHICLE_CAN_BE_CHANGED) > 0;
+        return this._dataInited && (this._valueObject.state & NODE_STATE_FLAGS.VEHICLE_CAN_BE_CHANGED) > 0;
     }
 
     public function isWasInBattle():Boolean {
-        return this._dataInited && (this._valueObject.state & NodeState.WAS_IN_BATTLE) > 0;
+        return this._dataInited && (this._valueObject.state & NODE_STATE_FLAGS.WAS_IN_BATTLE) > 0;
     }
 
     public function populateUI():void {
@@ -411,7 +441,7 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
     }
 
     protected function getMouseEnabledChildren():Vector.<DisplayObjectContainer> {
-        this._enabledChildren.slice(0, this._enabledChildren.length);
+        this._enabledChildren.splice(0, this._enabledChildren.length);
         if (this.hit != null) {
             this._enabledChildren.push(this.hit);
         }
@@ -425,14 +455,15 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
         var _loc1_:DisplayObject = null;
         var _loc2_:DisplayObjectContainer = null;
         var _loc3_:Vector.<DisplayObjectContainer> = this.getMouseEnabledChildren();
-        var _loc4_:Number = 0;
-        while (_loc4_ < numChildren) {
-            _loc1_ = getChildAt(_loc4_);
+        var _loc4_:int = numChildren;
+        var _loc5_:Number = 0;
+        while (_loc5_ < _loc4_) {
+            _loc1_ = getChildAt(_loc5_);
             if (_loc1_ is DisplayObjectContainer && _loc3_.indexOf(_loc1_) == -1) {
                 _loc2_ = DisplayObjectContainer(_loc1_);
                 _loc2_.mouseEnabled = _loc2_.mouseChildren = false;
             }
-            _loc4_++;
+            _loc5_++;
         }
     }
 
@@ -440,60 +471,32 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
         mouseEnabled = false;
         this.disableMouseChildren();
         this.hit.buttonMode = this.hit.mouseEnabled = true;
-        this.hit.addEventListener(MouseEvent.ROLL_OVER, this.handleMouseRollOver, false, 0, true);
-        this.hit.addEventListener(MouseEvent.ROLL_OUT, this.handleMouseRollOut, false, 0, true);
-        this.hit.addEventListener(MouseEvent.MOUSE_DOWN, this.handleMousePress, false, 0, true);
-        this.hit.addEventListener(MouseEvent.CLICK, this.handleMouseRelease, false, 0, true);
-        this.hit.addEventListener(MouseEvent.DOUBLE_CLICK, this.handleMouseRelease, false, 0, true);
-        this.hit.addEventListener(InputEvent.INPUT, handleInput, false, 0, true);
+        this.hit.addEventListener(MouseEvent.ROLL_OVER, this.onHitRollOverHandler, false, 0, true);
+        this.hit.addEventListener(MouseEvent.ROLL_OUT, this.onHitRollOutHandler, false, 0, true);
+        this.hit.addEventListener(MouseEvent.MOUSE_DOWN, this.onHitMouseDownHandler, false, 0, true);
+        this.hit.addEventListener(MouseEvent.CLICK, this.onHitClickHandler, false, 0, true);
+        this.hit.addEventListener(MouseEvent.DOUBLE_CLICK, this.onHitDoubleClickHandler, false, 0, true);
+        this.hit.addEventListener(InputEvent.INPUT, this.onHitInputHandler, false, 0, true);
     }
 
     private function removeEventsHandlers():void {
-        this.hit.removeEventListener(MouseEvent.ROLL_OVER, this.handleMouseRollOver, false);
-        this.hit.removeEventListener(MouseEvent.ROLL_OUT, this.handleMouseRollOut, false);
-        this.hit.removeEventListener(MouseEvent.MOUSE_DOWN, this.handleMousePress, false);
-        this.hit.removeEventListener(MouseEvent.CLICK, this.handleMouseRelease, false);
-        this.hit.removeEventListener(MouseEvent.DOUBLE_CLICK, this.handleMouseRelease, false);
-        this.hit.removeEventListener(InputEvent.INPUT, handleInput, false);
+        this.hit.removeEventListener(MouseEvent.ROLL_OVER, this.onHitRollOverHandler, false);
+        this.hit.removeEventListener(MouseEvent.ROLL_OUT, this.onHitRollOutHandler, false);
+        this.hit.removeEventListener(MouseEvent.MOUSE_DOWN, this.onHitMouseDownHandler, false);
+        this.hit.removeEventListener(MouseEvent.CLICK, this.onHitClickHandler, false);
+        this.hit.removeEventListener(MouseEvent.DOUBLE_CLICK, this.onHitDoubleClickHandler, false);
+        this.hit.removeEventListener(InputEvent.INPUT, this.onHitInputHandler, false);
     }
 
     private function updateStatesProps():void {
         this._stateProps = NodeStateCollection.getStateProps(this._entityType, !!this._dataInited ? Number(this._valueObject.state) : Number(0), this.getExtraState());
         var _loc1_:String = NodeStateCollection.getStatePrefix(this._stateProps.index);
-        statesSelected = Vector.<String>([STATE_SELECTED, _loc1_]);
+        statesSelected = Vector.<String>([STATE_PREFIX_SELECTED, _loc1_]);
         statesDefault = Vector.<String>([_loc1_]);
     }
 
-    public function get container():INodesContainer {
-        return this._container;
-    }
-
-    public function set container(param1:INodesContainer):void {
-        this._container = param1;
-    }
-
-    public function get matrixPosition():MatrixPosition {
-        return this._matrixPosition;
-    }
-
-    public function get valueObject():NodeData {
-        return this._valueObject;
-    }
-
-    public function get doValidateNow():Boolean {
-        return this._doValidateNow;
-    }
-
-    public function set tooltipID(param1:String):void {
-        this._tooltipID = param1;
-    }
-
-    public function get entityType():uint {
-        return this._entityType;
-    }
-
-    public function set entityType(param1:uint):void {
-        this._entityType = param1;
+    public function get stateProps():StateProperties {
+        return this._stateProps;
     }
 
     public function get dataInited():Boolean {
@@ -504,12 +507,40 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
         this._isDelegateEvents = param1;
     }
 
-    public function get stateProps():StateProperties {
-        return this._stateProps;
+    public function get container():INodesContainer {
+        return this._container;
+    }
+
+    public function set container(param1:INodesContainer):void {
+        this._container = param1;
+    }
+
+    public function get entityType():uint {
+        return this._entityType;
+    }
+
+    public function set entityType(param1:uint):void {
+        this._entityType = param1;
+    }
+
+    public function set tooltipID(param1:String):void {
+        this._tooltipID = param1;
+    }
+
+    public function get doValidateNow():Boolean {
+        return this._doValidateNow;
+    }
+
+    public function get valueObject():NodeData {
+        return this._valueObject;
+    }
+
+    public function get matrixPosition():MatrixPosition {
+        return this._matrixPosition;
     }
 
     override protected function handleMouseRollOver(param1:MouseEvent):void {
-        if (this._tooltipID && App.toolTipMgr != null) {
+        if (this._tooltipID && this._valueObject && this._valueObject.dataIsReady && App.toolTipMgr != null) {
             App.toolTipMgr.showSpecial(this._tooltipID, null, this._valueObject, this._container != null ? this._container.getRootNode().getID() : null);
         }
         super.handleMouseRollOver(param1);
@@ -536,6 +567,26 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
         super.handleMousePress(param1);
     }
 
+    private function onHitInputHandler(param1:InputEvent):void {
+        handleInput(param1);
+    }
+
+    private function onHitDoubleClickHandler(param1:MouseEvent):void {
+        this.handleMouseRelease(param1);
+    }
+
+    private function onHitClickHandler(param1:MouseEvent):void {
+        this.handleMouseRelease(param1);
+    }
+
+    private function onHitMouseDownHandler(param1:MouseEvent):void {
+        this.handleMousePress(param1);
+    }
+
+    private function onHitRollOutHandler(param1:MouseEvent):void {
+        this.handleMouseRollOut(param1);
+    }
+
     private function onButtonMouseOutHandler(param1:MouseEvent):void {
         if (this.actionPrice != null) {
             this.actionPrice.hideTooltip();
@@ -546,6 +597,10 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
         if (this.actionPrice != null && this.actionPrice.visible) {
             this.actionPrice.showTooltip();
         }
+    }
+
+    private function onHitRollOverHandler(param1:MouseEvent):void {
+        this.handleMouseRollOver(param1);
     }
 }
 }

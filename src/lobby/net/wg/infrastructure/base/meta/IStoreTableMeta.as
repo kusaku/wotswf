@@ -7,12 +7,6 @@ public interface IStoreTableMeta extends IEventDispatcher {
 
     function as_getTableDataProvider():Object;
 
-    function as_setTableType(param1:String):void;
-
-    function as_scrollToFirst(param1:Number, param2:String, param3:String):void;
-
-    function as_setGold(param1:Number):void;
-
-    function as_setCredits(param1:Number):void;
+    function as_setData(param1:Object):void;
 }
 }

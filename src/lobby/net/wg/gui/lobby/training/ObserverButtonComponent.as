@@ -2,26 +2,26 @@ package net.wg.gui.lobby.training {
 import flash.events.Event;
 import flash.geom.ColorTransform;
 
-import net.wg.gui.components.controls.SoundButtonEx;
+import net.wg.gui.components.controls.BlackButton;
 import net.wg.gui.components.controls.UILoaderAlt;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class ObserverButtonComponent extends UIComponent {
+public class ObserverButtonComponent extends UIComponentEx {
 
     public static const SELECTED:String = "selChanged";
 
     public var icon:UILoaderAlt;
 
-    public var button:SoundButtonEx;
+    public var button:BlackButton;
 
     private var _selected:Boolean;
 
-    private var defColorTrans:ColorTransform;
+    private var _defColorTrans:ColorTransform;
 
-    private var tooltipViewer:TooltipViewer;
+    private var _tooltipViewer:TooltipViewer;
 
     public function ObserverButtonComponent() {
         super();
@@ -29,13 +29,14 @@ public class ObserverButtonComponent extends UIComponent {
 
     override protected function configUI():void {
         super.configUI();
-        this.defColorTrans = this.icon.transform.colorTransform;
+        this._defColorTrans = this.icon.transform.colorTransform;
         this.icon.source = RES_ICONS.MAPS_ICONS_LIBRARY_USSR_OBSERVER;
+        this.button.toggleEnable = true;
         this.button.mouseEnabledOnDisabled = true;
-        this.button.addEventListener(ButtonEvent.CLICK, this.btnClickHandler, false, 0, true);
+        this.button.addEventListener(ButtonEvent.CLICK, this.onButtonClickHandler, false, 0, true);
         this.button.label = App.utils.locale.makeString(MENU.TRAINING_INFO_OBSERVER);
-        if (this.tooltipViewer == null) {
-            this.tooltipViewer = new TooltipViewer(this.icon);
+        if (this._tooltipViewer == null) {
+            this._tooltipViewer = new TooltipViewer(this.icon);
         }
         this.updateTooltip();
     }
@@ -53,23 +54,24 @@ public class ObserverButtonComponent extends UIComponent {
             this.icon.transform.colorTransform = App.colorSchemeMgr.getTransform(TrainingConstants.VEHICLE_YELLOW_COLOR_SCHEME_ALIAS);
         }
         else {
-            this.icon.transform.colorTransform = this.defColorTrans;
+            this.icon.transform.colorTransform = this._defColorTrans;
         }
         this.updateTooltip();
     }
 
     private function updateTooltip():void {
         if (enabled) {
-            this.tooltipViewer.setTooltip(!!this._selected ? TOOLTIPS.TRAINING_OBSERVER_SELECTEDICON : TOOLTIPS.TRAINING_OBSERVER_ICON);
+            this._tooltipViewer.setTooltip(!!this._selected ? TOOLTIPS.TRAINING_OBSERVER_SELECTEDICON : TOOLTIPS.TRAINING_OBSERVER_ICON);
             this.button.tooltip = TOOLTIPS.TRAINING_OBSERVER_BTN;
         }
         else {
-            this.tooltipViewer.setTooltip(null);
+            this._tooltipViewer.setTooltip(null);
             this.button.tooltip = null;
         }
     }
 
-    private function btnClickHandler(param1:ButtonEvent):void {
+    private function onButtonClickHandler(param1:ButtonEvent):void {
+        this.button.selected = !this.button.selected;
         this._selected = this.button.selected;
         this.updateData();
         dispatchEvent(new Event(SELECTED));
@@ -87,9 +89,14 @@ public class ObserverButtonComponent extends UIComponent {
     }
 
     override protected function onDispose():void {
-        this.tooltipViewer.dispose();
-        this.tooltipViewer = null;
-        this.button.removeEventListener(ButtonEvent.CLICK, this.btnClickHandler);
+        this.button.removeEventListener(ButtonEvent.CLICK, this.onButtonClickHandler);
+        this._tooltipViewer.dispose();
+        this._tooltipViewer = null;
+        this.icon.dispose();
+        this.icon = null;
+        this.button.dispose();
+        this.button = null;
+        this._defColorTrans = null;
         super.onDispose();
     }
 

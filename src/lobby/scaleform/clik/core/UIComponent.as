@@ -12,6 +12,7 @@ import net.wg.infrastructure.events.TutorialEvent;
 import net.wg.infrastructure.exceptions.AssertionException;
 import net.wg.infrastructure.exceptions.InfrastructureException;
 import net.wg.infrastructure.exceptions.LifecycleException;
+import net.wg.utils.IFocusHandler;
 
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.events.ComponentEvent;
@@ -552,7 +553,8 @@ public class UIComponent extends MovieClip implements IUIComponent {
     }
 
     public final function dispose():void {
-        if (App.utils.focusHandler.getFocus(0) == this) {
+        var _loc1_:IFocusHandler = App.utils.focusHandler;
+        if (_loc1_ && _loc1_.getFocus(0) == this) {
             this.forcedResetFocus();
         }
         if (this._deferredDispose) {

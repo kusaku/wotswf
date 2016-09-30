@@ -1,9 +1,11 @@
 package net.wg.gui.lobby.barracks {
 import flash.events.Event;
+import flash.events.MouseEvent;
 import flash.text.TextField;
 
 import net.wg.data.constants.RolesState;
 import net.wg.data.constants.VehicleTypes;
+import net.wg.data.constants.generated.BARRACKS_CONSTANTS;
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.advanced.ButtonBarEx;
 import net.wg.gui.components.controls.CloseButton;
@@ -12,23 +14,26 @@ import net.wg.gui.components.controls.ScrollBar;
 import net.wg.gui.components.controls.TextFieldShort;
 import net.wg.gui.components.controls.TileList;
 import net.wg.gui.events.CrewEvent;
+import net.wg.gui.lobby.barracks.data.BarracksTankmenVO;
+import net.wg.gui.lobby.components.InfoMessageComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.exceptions.TypeCastException;
+import net.wg.infrastructure.managers.ITooltipMgr;
+
+import org.idmedia.as3commons.util.StringUtils;
 
 import scaleform.clik.controls.ButtonBar;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.IndexEvent;
 import scaleform.clik.events.ListEvent;
 
-public class BarracksForm extends UIComponent {
+public class BarracksForm extends UIComponentEx {
 
     private static const INVALIDATE_TANKMEN_FILTER:String = "TankmenFilter";
 
-    private static const LOCATION_FILTER_TANKS:String = "tanks";
+    private static const DEFAULT_LOCATION:int = 3;
 
-    private static const LOCATION_FILTER_BARRACKS:String = "barracks";
-
-    private static const LOCATION_FILTER_ALL:String = "None";
+    private static const EMPTY_STR:String = "";
 
     public var tankmenCountTF:TextField = null;
 
@@ -47,6 +52,8 @@ public class BarracksForm extends UIComponent {
     public var scrollBar:ScrollBar = null;
 
     public var tankmenTileList:TileList = null;
+
+    public var noTankmenCmp:InfoMessageComponent;
 
     public var tank:DropdownMenu = null;
 
@@ -70,30 +77,22 @@ public class BarracksForm extends UIComponent {
 
     private var _nationID:String = "";
 
+    private var _tankmenData:BarracksTankmenVO = null;
+
+    private var _toolTipMgr:ITooltipMgr = null;
+
+    private var _programmaticUpdate:Boolean = false;
+
+    private var _tankSelectedIndex:int = 0;
+
     public function BarracksForm() {
         super();
-    }
-
-    private static function showTooltipHandler(param1:ListEvent):void {
-        App.toolTipMgr.hide();
-        if (param1.itemData.empty) {
-            App.toolTipMgr.showComplex(TOOLTIPS.BARRACKS_ITEM_EMPTY);
-        }
-        else if (param1.itemData.buy) {
-            App.toolTipMgr.showComplex(TOOLTIPS.BARRACKS_ITEM_BUY);
-        }
-        else {
-            App.toolTipMgr.showSpecial(TOOLTIPS_CONSTANTS.TANKMAN, null, param1.itemData.tankmanID, false);
-        }
-    }
-
-    private static function hideTooltipHandler(param1:ListEvent):void {
-        App.toolTipMgr.hide();
+        this._toolTipMgr = App.toolTipMgr;
     }
 
     override protected function configUI():void {
         super.configUI();
-        this.tank.addEventListener(ListEvent.INDEX_CHANGE, this.onFilterTankChangeHandler);
+        this.tank.addEventListener(ListEvent.INDEX_CHANGE, this.onTankIndexChangeHandler);
         this.roleTF.text = MENU.BARRACKS_MENU_ROLEFILTER_TEXTFIELD;
         this.roleButtonBar.dataProvider = new DataProvider([{
             "label": MENU.BARRACKS_MENU_ROLEFILTER_ALL,
@@ -136,33 +135,37 @@ public class BarracksForm extends UIComponent {
         }]);
         this.locationTF.text = MENU.BARRACKS_MENU_LOCATIONFILTER_TEXTFIELD;
         this.locationButtonBar.dataProvider = new DataProvider([{
-            "label": "",
-            "data": ""
+            "label": EMPTY_STR,
+            "data": EMPTY_STR
         }, {
             "label": MENU.BARRACKS_MENU_LOCATIONFILTER_TANKS,
-            "data": LOCATION_FILTER_TANKS
+            "data": BARRACKS_CONSTANTS.LOCATION_FILTER_TANKS
         }, {
             "label": MENU.BARRACKS_MENU_LOCATIONFILTER_BARRACKS,
-            "data": LOCATION_FILTER_BARRACKS
+            "data": BARRACKS_CONSTANTS.LOCATION_FILTER_BARRACKS
         }, {
-            "label": MENU.BARRACKS_MENU_LOCATIONFILTER_ALL,
-            "data": LOCATION_FILTER_ALL
+            "label": MENU.BARRACKS_MENU_LOCATIONFILTER_BARRACKSANDTANKS,
+            "data": BARRACKS_CONSTANTS.LOCATION_FILTER_BARRACKS_AND_TANKS
+        }, {
+            "label": MENU.BARRACKS_MENU_LOCATIONFILTER_DISMISSED,
+            "data": BARRACKS_CONSTANTS.LOCATION_FILTER_DISMISSED
         }]);
-        this.tankmenTileList.addEventListener(ListEvent.ITEM_ROLL_OVER, showTooltipHandler);
-        this.tankmenTileList.addEventListener(ListEvent.ITEM_ROLL_OUT, hideTooltipHandler);
-        this.tankmenTileList.addEventListener(ListEvent.ITEM_PRESS, hideTooltipHandler);
+        this.tankmenTileList.addEventListener(ListEvent.ITEM_ROLL_OVER, this.onTankmenTileListItemRollOverHandler);
+        this.tankmenTileList.addEventListener(ListEvent.ITEM_ROLL_OUT, this.onTankmenTileListItemRollOutHandler);
+        this.tankmenTileList.addEventListener(ListEvent.ITEM_PRESS, this.onTankmenTileListItemPressHandler);
     }
 
     override protected function onDispose():void {
-        App.toolTipMgr.hide();
-        this.tankmenTileList.removeEventListener(ListEvent.ITEM_ROLL_OVER, showTooltipHandler);
-        this.tankmenTileList.removeEventListener(ListEvent.ITEM_ROLL_OUT, hideTooltipHandler);
-        this.tankmenTileList.removeEventListener(ListEvent.ITEM_PRESS, hideTooltipHandler);
-        this.roleButtonBar.removeEventListener(IndexEvent.INDEX_CHANGE, this.onFilterChangeHandler);
-        this.tankTypeButtonBar.removeEventListener(IndexEvent.INDEX_CHANGE, this.tankListInvalidateHandler);
-        this.tank.removeEventListener(ListEvent.INDEX_CHANGE, this.onFilterTankChangeHandler);
-        this.locationButtonBar.removeEventListener(IndexEvent.INDEX_CHANGE, this.onFilterChangeHandler);
-        this.nationDDM.removeEventListener(ListEvent.INDEX_CHANGE, this.tankListInvalidateHandler);
+        this.hideTooltip();
+        this.tankmenTileList.removeEventListener(ListEvent.ITEM_ROLL_OVER, this.onTankmenTileListItemRollOverHandler);
+        this.tankmenTileList.removeEventListener(ListEvent.ITEM_ROLL_OUT, this.onTankmenTileListItemRollOutHandler);
+        this.tankmenTileList.removeEventListener(ListEvent.ITEM_PRESS, this.onTankmenTileListItemPressHandler);
+        this.roleButtonBar.removeEventListener(IndexEvent.INDEX_CHANGE, this.onRoleButtonBarIndexChangeHandler);
+        this.tankTypeButtonBar.removeEventListener(IndexEvent.INDEX_CHANGE, this.onTankTypeButtonBarIndexChangeHandler);
+        this.tank.removeEventListener(ListEvent.INDEX_CHANGE, this.onTankIndexChangeHandler);
+        this.locationButtonBar.removeEventListener(IndexEvent.INDEX_CHANGE, this.onLocationButtonBarIndexChangeHandler);
+        this.nationDDM.removeEventListener(ListEvent.INDEX_CHANGE, this.onNationDDMIndexChangeHandler);
+        this.removePlacesCountTfListeners();
         this.roleButtonBar.dispose();
         this.tankTypeButtonBar.dispose();
         this.locationButtonBar.dispose();
@@ -172,6 +175,7 @@ public class BarracksForm extends UIComponent {
         this.scrollBar.dispose();
         this.titleBtn.dispose();
         this.closeButton.dispose();
+        this.noTankmenCmp.dispose();
         this.scrollBar = null;
         this.titleBtn = null;
         this.tankmenTileList = null;
@@ -181,6 +185,7 @@ public class BarracksForm extends UIComponent {
         this.tankTypeButtonBar = null;
         this.locationButtonBar = null;
         this.closeButton = null;
+        this.noTankmenCmp = null;
         this.roleTF = null;
         this.tankTypeTF = null;
         this.locationTF = null;
@@ -192,6 +197,8 @@ public class BarracksForm extends UIComponent {
         this._tankType = null;
         this._location = null;
         this._nationID = null;
+        this._tankmenData = null;
+        this._toolTipMgr = null;
         super.onDispose();
     }
 
@@ -222,7 +229,7 @@ public class BarracksForm extends UIComponent {
                 this.tank.selectedIndex = _loc1_;
             }
             else {
-                _loc1_ = 3;
+                _loc1_ = DEFAULT_LOCATION;
                 _loc4_ = this.locationButtonBar.dataProvider.length;
                 _loc5_ = 1;
                 while (_loc5_ < _loc4_) {
@@ -235,31 +242,19 @@ public class BarracksForm extends UIComponent {
                 this.locationButtonBar.selectedIndex = _loc1_;
             }
             if (!this.roleButtonBar.hasEventListener(IndexEvent.INDEX_CHANGE)) {
-                this.roleButtonBar.addEventListener(IndexEvent.INDEX_CHANGE, this.onFilterChangeHandler);
+                this.roleButtonBar.addEventListener(IndexEvent.INDEX_CHANGE, this.onRoleButtonBarIndexChangeHandler);
             }
             if (!this.tankTypeButtonBar.hasEventListener(IndexEvent.INDEX_CHANGE)) {
-                this.tankTypeButtonBar.addEventListener(IndexEvent.INDEX_CHANGE, this.tankListInvalidateHandler);
+                this.tankTypeButtonBar.addEventListener(IndexEvent.INDEX_CHANGE, this.onTankTypeButtonBarIndexChangeHandler);
             }
             if (!this.tank.hasEventListener(IndexEvent.INDEX_CHANGE)) {
-                this.locationButtonBar.addEventListener(IndexEvent.INDEX_CHANGE, this.onFilterChangeHandler);
+                this.locationButtonBar.addEventListener(IndexEvent.INDEX_CHANGE, this.onLocationButtonBarIndexChangeHandler);
             }
             if (!this.nationDDM.hasEventListener(ListEvent.INDEX_CHANGE)) {
-                this.nationDDM.addEventListener(ListEvent.INDEX_CHANGE, this.tankListInvalidateHandler);
+                this.nationDDM.addEventListener(ListEvent.INDEX_CHANGE, this.onNationDDMIndexChangeHandler);
             }
             this.checkFilters();
         }
-    }
-
-    public function as_setTankmen(param1:Number, param2:Number, param3:Number, param4:Number, param5:Array):void {
-        this.tankmenCountTF.text = MENU.BARRACKS_TANKMENCOUNT;
-        this.tankmenCountTF.replaceText(this.tankmenCountTF.text.indexOf("{"), this.tankmenCountTF.text.indexOf("}") + 1, param2.toString());
-        this.tankmenCountTF.replaceText(this.tankmenCountTF.text.indexOf("{"), this.tankmenCountTF.text.indexOf("}") + 1, param1.toString());
-        this.tankmenTileList.dataProvider = new DataProvider(param5);
-        this.tankmenTileList.validateNow();
-        this.tankmenTileList.selectedIndex = -1;
-        this.placesCountTF.text = MENU.BARRACKS_PLACESCOUNT;
-        this.placesCountTF.replaceText(this.placesCountTF.text.indexOf("{"), this.placesCountTF.text.indexOf("}") + 1, String(Math.max(param3 - param4, 0)));
-        this.placesCountTF.replaceText(this.placesCountTF.text.indexOf("{"), this.placesCountTF.text.indexOf("}") + 1, String(param3));
     }
 
     public function as_setTankmenFilter(param1:Number, param2:String, param3:String, param4:String, param5:String):void {
@@ -272,6 +267,7 @@ public class BarracksForm extends UIComponent {
     }
 
     public function as_updateTanksList(param1:Array):void {
+        this._programmaticUpdate = true;
         this.tank.dataProvider = new DataProvider(param1);
         if (param1.length > 0) {
             this.tank.selectedIndex = 0;
@@ -279,10 +275,12 @@ public class BarracksForm extends UIComponent {
         }
         else {
             this.tank.selectedIndex = -1;
-            this.locationButtonBar.dataProvider[0].data = "";
+            this.locationButtonBar.dataProvider[0].data = EMPTY_STR;
         }
         this.tank.validateNow();
         this.tank.enabled = param1.length > 0;
+        this._tankSelectedIndex = this.tank.selectedIndex;
+        this._programmaticUpdate = false;
     }
 
     public function onPopulate():void {
@@ -292,13 +290,36 @@ public class BarracksForm extends UIComponent {
         }].concat(App.utils.nations.getNationsData()));
     }
 
+    public function setTankmen(param1:BarracksTankmenVO):void {
+        this._tankmenData = param1;
+        this.tankmenCountTF.htmlText = param1.tankmenCount;
+        if (this.tankmenTileList.dataProvider != null) {
+            this.tankmenTileList.dataProvider.cleanUp();
+        }
+        this.tankmenTileList.dataProvider = new DataProvider(param1.tankmenData);
+        this.tankmenTileList.validateNow();
+        this.tankmenTileList.selectedIndex = -1;
+        this.placesCountTF.htmlText = param1.placesCount;
+        if (StringUtils.isNotEmpty(this._tankmenData.placesCountTooltip)) {
+            this.placesCountTF.addEventListener(MouseEvent.ROLL_OVER, this.onPlacesCountTfRollOverHandler);
+            this.placesCountTF.addEventListener(MouseEvent.ROLL_OUT, this.onPlacesCountTfRollOutHandler);
+        }
+        else {
+            this.removePlacesCountTfListeners();
+        }
+        this.noTankmenCmp.visible = param1.hasNoInfoData;
+        if (param1.hasNoInfoData) {
+            this.noTankmenCmp.setData(param1.noInfoData);
+            this.noTankmenCmp.x = this.tankmenTileList.x + (this.tankmenTileList.width - this.noTankmenCmp.width >> 1) | 0;
+            this.noTankmenCmp.y = this.tankmenTileList.y + (this.tankmenTileList.height - this.noTankmenCmp.height >> 1) | 0;
+        }
+    }
+
     private function updateSelectedIndex(param1:Object, param2:Object):void {
         var _loc5_:Boolean = false;
-        var _loc6_:String = null;
         if (App.instance) {
             _loc5_ = param1 is ButtonBar || param1 is DropdownMenu;
-            _loc6_ = "object in ... must be ButtonBar or DropdownMenu";
-            App.utils.asserter.assert(_loc5_, _loc6_, TypeCastException);
+            App.utils.asserter.assert(_loc5_, "object in ... must be ButtonBar or DropdownMenu", TypeCastException);
         }
         var _loc3_:int = param1.dataProvider.length;
         param1.selectedIndex = 0;
@@ -340,25 +361,88 @@ public class BarracksForm extends UIComponent {
         dispatchEvent(new CrewEvent(CrewEvent.ON_INVALID_TANK_LIST));
     }
 
-    private function onFilterChangeHandler(param1:Event):void {
-        this.checkFilters();
+    private function removePlacesCountTfListeners():void {
+        this.placesCountTF.removeEventListener(MouseEvent.ROLL_OVER, this.onPlacesCountTfRollOverHandler);
+        this.placesCountTF.removeEventListener(MouseEvent.ROLL_OUT, this.onPlacesCountTfRollOutHandler);
     }
 
-    private function tankListInvalidateHandler(param1:Event):void {
+    private function deepCheckFilters():void {
         this.checkFilters();
         this.onInvalidateTanksList();
         this.checkFilters();
     }
 
-    private function onFilterTankChangeHandler(param1:Event):void {
-        this.locationButtonBar.selectedIndex = 0;
-        if (this.tank.dataProvider.length > 0) {
-            this.locationButtonBar.dataProvider[0].data = this.tank.dataProvider[this.tank.selectedIndex].data;
+    private function hideTooltip():void {
+        this._toolTipMgr.hide();
+    }
+
+    private function showComplexTooltip(param1:String):void {
+        this._toolTipMgr.showComplex(param1);
+    }
+
+    private function onRoleButtonBarIndexChangeHandler(param1:Event):void {
+        this.checkFilters();
+    }
+
+    private function onLocationButtonBarIndexChangeHandler(param1:Event):void {
+        this.checkFilters();
+    }
+
+    private function onTankTypeButtonBarIndexChangeHandler(param1:Event):void {
+        this.deepCheckFilters();
+    }
+
+    private function onNationDDMIndexChangeHandler(param1:Event):void {
+        this.deepCheckFilters();
+    }
+
+    private function onTankIndexChangeHandler(param1:Event):void {
+        if (!this._programmaticUpdate) {
+            if (this.locationButtonBar.selectedIndex == 0) {
+                if (this.tank.selectedIndex < 0) {
+                    this.locationButtonBar.selectedIndex = this.locationButtonBar.dataProvider.length - 1;
+                }
+            }
+            else if (this.tank.selectedIndex >= 0 && this._tankSelectedIndex >= 0) {
+                this.locationButtonBar.selectedIndex = 0;
+            }
+            if (this.tank.dataProvider.length > 0) {
+                this.locationButtonBar.dataProvider[0].data = this.tank.dataProvider[this.tank.selectedIndex].data;
+            }
+            else {
+                this.locationButtonBar.dataProvider[0].data = "";
+            }
+            this.checkFilters();
+        }
+    }
+
+    private function onTankmenTileListItemRollOverHandler(param1:ListEvent):void {
+        this.hideTooltip();
+        if (param1.itemData.empty) {
+            this.showComplexTooltip(TOOLTIPS.BARRACKS_ITEM_EMPTY);
+        }
+        else if (param1.itemData.buy) {
+            this.showComplexTooltip(TOOLTIPS.BARRACKS_ITEM_BUY);
         }
         else {
-            this.locationButtonBar.dataProvider[0].data = "";
+            this._toolTipMgr.showSpecial(TOOLTIPS_CONSTANTS.TANKMAN, null, param1.itemData.tankmanID, false);
         }
-        this.checkFilters();
+    }
+
+    private function onTankmenTileListItemRollOutHandler(param1:ListEvent):void {
+        this.hideTooltip();
+    }
+
+    private function onTankmenTileListItemPressHandler(param1:ListEvent):void {
+        this.hideTooltip();
+    }
+
+    private function onPlacesCountTfRollOverHandler(param1:MouseEvent):void {
+        this.showComplexTooltip(this._tankmenData.placesCountTooltip);
+    }
+
+    private function onPlacesCountTfRollOutHandler(param1:MouseEvent):void {
+        this.hideTooltip();
     }
 }
 }

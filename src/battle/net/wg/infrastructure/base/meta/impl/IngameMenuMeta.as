@@ -12,6 +12,8 @@ public class IngameMenuMeta extends AbstractWindowView {
 
     public var cancelClick:Function;
 
+    public var onCounterNeedUpdate:Function;
+
     public function IngameMenuMeta() {
         super();
     }
@@ -34,6 +36,11 @@ public class IngameMenuMeta extends AbstractWindowView {
     public function cancelClickS():void {
         App.utils.asserter.assertNotNull(this.cancelClick, "cancelClick" + Errors.CANT_NULL);
         this.cancelClick();
+    }
+
+    public function onCounterNeedUpdateS():void {
+        App.utils.asserter.assertNotNull(this.onCounterNeedUpdate, "onCounterNeedUpdate" + Errors.CANT_NULL);
+        this.onCounterNeedUpdate();
     }
 }
 }

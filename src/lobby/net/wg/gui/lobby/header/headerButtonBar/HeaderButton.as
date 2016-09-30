@@ -149,8 +149,8 @@ public class HeaderButton extends SoundButtonEx implements IPopOverCaller, IClos
             disableMc.y = disabledFillPadding.top;
             disableMc.scaleX = 1 / this.scaleX;
             disableMc.scaleY = 1 / this.scaleY;
-            disableMc.widthFill = this.bounds.width * this.scaleX | 0 - disabledFillPadding.horizontal;
-            disableMc.heightFill = this.bounds.height * this.scaleY | 0 - disabledFillPadding.vertical;
+            disableMc.widthFill = (this.bounds.width * this.scaleX | 0) - disabledFillPadding.horizontal;
+            disableMc.heightFill = (this.bounds.height * this.scaleY | 0) - disabledFillPadding.vertical;
             disableMc.visible = this.disableMcVisible;
         }
     }

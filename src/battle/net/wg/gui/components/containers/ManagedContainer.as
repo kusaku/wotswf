@@ -8,6 +8,8 @@ import flash.events.MouseEvent;
 import net.wg.data.constants.ContainerTypes;
 import net.wg.data.constants.Errors;
 import net.wg.data.constants.Linkages;
+import net.wg.data.daapi.ViewSettingsVO;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.events.LifeCycleEvent;
 import net.wg.infrastructure.exceptions.InfrastructureException;
 import net.wg.infrastructure.interfaces.IAbstractWrapperView;
@@ -18,10 +20,15 @@ import net.wg.infrastructure.interfaces.IWindow;
 import net.wg.infrastructure.interfaces.IWrapper;
 import net.wg.utils.IAssertable;
 
-import scaleform.clik.core.UIComponent;
+import org.idmedia.as3commons.util.StringUtils;
+
 import scaleform.clik.motion.Tween;
 
-public class ManagedContainer extends UIComponent implements IManagedContainer {
+public class ManagedContainer extends UIComponentEx implements IManagedContainer {
+
+    private static const MODAL_BG_ERROR_MESSAGE:String = "Error until getting ";
+
+    private static const MODAL_BG_EMPTY_MESSAGE:String = "If modalBg is not null, the container must have more then 1 children.";
 
     private var _modalBg:DisplayObject = null;
 
@@ -29,7 +36,7 @@ public class ManagedContainer extends UIComponent implements IManagedContainer {
 
     private var _manageSize:Boolean = true;
 
-    private var groupCounters:Object;
+    private var _groupCounters:Object;
 
     private var _type:String = "view";
 
@@ -42,7 +49,7 @@ public class ManagedContainer extends UIComponent implements IManagedContainer {
     private const GROUP_Y_OFFSET:int = 20;
 
     public function ManagedContainer() {
-        this.groupCounters = {};
+        this._groupCounters = {};
         super();
         this.mouseEnabled = false;
     }
@@ -50,8 +57,9 @@ public class ManagedContainer extends UIComponent implements IManagedContainer {
     override public function addChild(param1:DisplayObject):DisplayObject {
         var _loc3_:IAbstractWrapperView = null;
         var _loc4_:IWrapper = null;
-        var _loc5_:DisplayObject = null;
-        var _loc6_:String = null;
+        var _loc5_:ViewSettingsVO = null;
+        var _loc6_:DisplayObject = null;
+        var _loc7_:String = null;
         this.assertContent(param1);
         var _loc2_:IView = IManagedContent(param1).sourceView;
         if (param1 is IAbstractWrapperView) {
@@ -60,58 +68,59 @@ public class ManagedContainer extends UIComponent implements IManagedContainer {
             _loc4_.wrapperContent = _loc3_;
             _loc4_.wrapperContent.wrapper = _loc4_;
         }
-        _loc2_.addEventListener(LifeCycleEvent.ON_BEFORE_DISPOSE, this.onAfterManagedContentDisposeHandler);
-        if (_loc2_ && _loc2_.as_config && _loc2_.as_config.hasOwnProperty("type")) {
-            _loc5_ = DisplayObject(_loc2_.containerContent);
-            super.addChild(_loc5_);
-            _loc2_.playShowTween(_loc5_);
-            if (ContainerTypes.WINDOW || this.type == ContainerTypes.TOP_WINDOW) {
-                _loc6_ = null;
-                if (_loc2_.as_config.hasOwnProperty("group")) {
-                    _loc6_ = _loc2_.as_config.group;
-                    _loc6_ = !!_loc6_.length ? _loc6_ : null;
+        _loc2_.addEventListener(LifeCycleEvent.ON_BEFORE_DISPOSE, this.onBeforeDisposeHandler);
+        if (_loc2_ && _loc2_.as_config && _loc2_.as_config.configVO) {
+            _loc5_ = _loc2_.as_config.configVO;
+            if (StringUtils.isNotEmpty(_loc5_.type)) {
+                _loc6_ = DisplayObject(_loc2_.containerContent);
+                super.addChild(_loc6_);
+                _loc2_.playShowTween(_loc6_);
+                if (ContainerTypes.WINDOW || this.type == ContainerTypes.TOP_WINDOW) {
+                    _loc7_ = _loc5_.group;
+                    if (_loc5_.isGrouped && StringUtils.isNotEmpty(_loc7_)) {
+                        this.addGroupCounter(_loc7_, _loc2_.as_config.name);
+                        this.movieViewToVector(_loc6_, _loc7_);
+                    }
                 }
-                if (_loc6_) {
-                    this.addGroupCounter(_loc6_, _loc2_.as_name);
-                    this.movieViewToVector(_loc5_, _loc6_);
+                if (this.manageFocus) {
+                    _loc6_.addEventListener(MouseEvent.MOUSE_DOWN, this.onViewMouseDownHandler, false, 0, true);
                 }
+                _loc2_.sourceView.updateStage(width, height);
+                return DisplayObject(_loc2_);
             }
-            if (this.manageFocus) {
-                _loc5_.addEventListener(MouseEvent.MOUSE_DOWN, this.onViewClickHandler, false, 0, true);
-            }
-            _loc2_.sourceView.updateStage(width, height);
-            return DisplayObject(_loc2_);
+            throw new Error(this.ADD_CHILD_ERROR_STR);
         }
         throw new Error(this.ADD_CHILD_ERROR_STR);
     }
 
     override public function removeChild(param1:DisplayObject):DisplayObject {
-        var _loc5_:String = null;
-        var _loc6_:GroupCounter = null;
+        var _loc5_:ViewSettingsVO = null;
+        var _loc6_:String = null;
+        var _loc7_:GroupCounter = null;
         var _loc2_:IAssertable = App.utils.asserter;
         _loc2_.assertNotNull(param1, "child" + Errors.CANT_NULL);
         this.assertContent(param1);
         var _loc3_:IView = IManagedContent(param1).sourceView;
         var _loc4_:DisplayObject = DisplayObject(_loc3_.containerContent);
-        if (_loc3_ && _loc3_.as_config && _loc3_.as_config.hasOwnProperty("type")) {
-            if (_loc3_.as_config.type != ContainerTypes.VIEW) {
-                _loc5_ = null;
-                if (_loc3_.as_config.hasOwnProperty("group")) {
-                    _loc5_ = _loc3_.as_config.group;
-                    _loc5_ = !!_loc5_.length ? _loc5_ : null;
-                }
-                if (_loc5_ && this.groupCounters.hasOwnProperty(_loc5_)) {
-                    _loc6_ = this.groupCounters[_loc5_];
-                    _loc6_.decrement(_loc3_.as_name);
-                    if (_loc6_.views.length == 0) {
-                        delete this.groupCounters[_loc5_];
+        if (_loc3_ && _loc3_.as_config && _loc3_.as_config.configVO) {
+            _loc5_ = _loc3_.as_config.configVO;
+            if (StringUtils.isNotEmpty(_loc5_.type)) {
+                if (_loc5_.type != ContainerTypes.VIEW) {
+                    _loc6_ = _loc5_.group;
+                    if (_loc5_.isGrouped && StringUtils.isNotEmpty(_loc6_) && this._groupCounters.hasOwnProperty(_loc6_)) {
+                        _loc7_ = this._groupCounters[_loc6_];
+                        _loc7_.decrement(_loc3_.as_config.name);
+                        if (_loc7_.views.length == 0) {
+                            delete this._groupCounters[_loc6_];
+                        }
                     }
                 }
+                if (!_loc3_.playHideTween(_loc4_, this.onTweenEnd)) {
+                    this.performRemoveChild(IManagedContent(_loc4_));
+                }
+                return _loc4_;
             }
-            if (!_loc3_.playHideTween(_loc4_, this.onTweenEnd)) {
-                this.performRemoveChild(IManagedContent(_loc4_));
-            }
-            return _loc4_;
+            throw new Error(this.REMOVE_CHILD_ERROR_STR);
         }
         throw new Error(this.REMOVE_CHILD_ERROR_STR);
     }
@@ -120,12 +129,12 @@ public class ManagedContainer extends UIComponent implements IManagedContainer {
         var _loc1_:* = null;
         var _loc2_:GroupCounter = null;
         this.removeAllChildren();
-        for (_loc1_ in this.groupCounters) {
-            _loc2_ = this.groupCounters[_loc1_];
+        for (_loc1_ in this._groupCounters) {
+            _loc2_ = this._groupCounters[_loc1_];
             _loc2_.dispose();
-            delete this.groupCounters[_loc1_];
+            delete this._groupCounters[_loc1_];
         }
-        this.groupCounters = null;
+        this._groupCounters = null;
         this._modalBg = null;
         super.onDispose();
     }
@@ -183,10 +192,10 @@ public class ManagedContainer extends UIComponent implements IManagedContainer {
         while (_loc3_ > -1) {
             _loc4_ = getChildAt(_loc3_);
             if (_loc4_ is IView) {
-                (_loc4_ as IView).updateStage(param1, param2);
+                IView(_loc4_).updateStage(param1, param2);
             }
             else if (_loc4_ is IWindow) {
-                (_loc4_ as IWindow).sourceView.updateStage(param1, param2);
+                IWindow(_loc4_).sourceView.updateStage(param1, param2);
             }
             _loc3_--;
         }
@@ -223,7 +232,7 @@ public class ManagedContainer extends UIComponent implements IManagedContainer {
         if (this._modalBg == null) {
             this._modalBg = MovieClip(App.utils.classFactory.getComponent(this.getModalBgLinkage(), MovieClip));
             if (this._modalBg == null) {
-                DebugUtils.LOG_DEBUG("Error until getting ");
+                DebugUtils.LOG_DEBUG(MODAL_BG_ERROR_MESSAGE);
                 return;
             }
             addChildAt(this._modalBg, numChildren - 1);
@@ -260,7 +269,7 @@ public class ManagedContainer extends UIComponent implements IManagedContainer {
     }
 
     private function assertNumberChildrenForModalBg():void {
-        var _loc1_:String = "If modalBg is not null, the container must have more then 1 children.";
+        var _loc1_:String = MODAL_BG_EMPTY_MESSAGE;
         App.utils.asserter.assert(numChildren > 1, _loc1_);
     }
 
@@ -281,9 +290,9 @@ public class ManagedContainer extends UIComponent implements IManagedContainer {
 
     private function clearViewHandlers(param1:IManagedContent):void {
         if (this.manageFocus) {
-            param1.containerContent.removeEventListener(MouseEvent.MOUSE_DOWN, this.onViewClickHandler, false);
+            param1.containerContent.removeEventListener(MouseEvent.MOUSE_DOWN, this.onViewMouseDownHandler, false);
         }
-        param1.removeEventListener(LifeCycleEvent.ON_BEFORE_DISPOSE, this.onAfterManagedContentDisposeHandler);
+        param1.removeEventListener(LifeCycleEvent.ON_BEFORE_DISPOSE, this.onBeforeDisposeHandler);
         if (App.containerMgr.lastFocusedView == param1) {
             App.containerMgr.lastFocusedView = null;
         }
@@ -314,15 +323,15 @@ public class ManagedContainer extends UIComponent implements IManagedContainer {
         if (param1 == null) {
             return;
         }
-        if (!this.groupCounters.hasOwnProperty(param1)) {
-            this.groupCounters[param1] = new GroupCounter();
+        if (!this._groupCounters.hasOwnProperty(param1)) {
+            this._groupCounters[param1] = new GroupCounter();
         }
-        var _loc3_:GroupCounter = this.groupCounters[param1];
+        var _loc3_:GroupCounter = this._groupCounters[param1];
         _loc3_.increment(param2);
     }
 
     private function movieViewToVector(param1:DisplayObject, param2:String):void {
-        var _loc3_:GroupCounter = this.groupCounters[param2];
+        var _loc3_:GroupCounter = this._groupCounters[param2];
         if (!_loc3_) {
             return;
         }
@@ -350,11 +359,11 @@ public class ManagedContainer extends UIComponent implements IManagedContainer {
         param1.y = _loc5_;
     }
 
-    private function onAfterManagedContentDisposeHandler(param1:LifeCycleEvent):void {
+    private function onBeforeDisposeHandler(param1:LifeCycleEvent):void {
         this.clearViewHandlers(IManagedContent(param1.target));
     }
 
-    private function onViewClickHandler(param1:Event):void {
+    private function onViewMouseDownHandler(param1:Event):void {
         var _loc2_:IManagedContent = null;
         var _loc3_:String = null;
         if (contains(DisplayObject(param1.currentTarget)) && this.isOwnedByMe(DisplayObject(param1.target))) {

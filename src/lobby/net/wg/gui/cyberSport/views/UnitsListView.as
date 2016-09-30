@@ -90,9 +90,10 @@ public class UnitsListView extends CyberSportUnitsListMeta implements ICyberSpor
     }
 
     override public function as_setDetails(param1:Object):void {
+        var _loc4_:* = false;
         var _loc2_:CSCommadDetailsVO = new CSCommadDetailsVO(param1);
         var _loc3_:String = _loc2_.viewLinkage;
-        var _loc4_:* = _loc3_ == CYBER_SPORT_ALIASES.COMMNAD_DETAILS_LINKAGE_JOIN_TO_NONSTATIC;
+        _loc4_ = _loc3_ == CYBER_SPORT_ALIASES.COMMNAD_DETAILS_LINKAGE_JOIN_TO_NONSTATIC;
         this.detailsViewStack.visible = !_loc4_;
         detailsSection.visible = _loc4_;
         if (_loc4_) {
@@ -183,7 +184,7 @@ public class UnitsListView extends CyberSportUnitsListMeta implements ICyberSpor
         this.filterCheckbox.addEventListener(Event.SELECT, this.onFilterCheckboxSelectHandler);
         this.navigationBlock.addEventListener(CSComponentEvent.LOAD_PREVIOUS_REQUEST, this.onNavigationBlockLoadPreviousRequestHandler);
         this.navigationBlock.addEventListener(CSComponentEvent.LOAD_NEXT_REQUEST, this.onNavigationBlockLoadNextRequestHandler);
-        this.detailsViewStack.addEventListener(RallyViewsEvent.JOIN_RALLY_REQUEST, onJoinRequest);
+        this.detailsViewStack.addEventListener(RallyViewsEvent.JOIN_RALLY_REQUEST, this.onJoinRallyRequestHandler);
         this.detailsViewStack.addEventListener(CSRallyInfoEvent.SHOW_PROFILE, this.onDetailsViewStackShowProfileHandler);
         this.helpLink.addEventListener(ButtonEvent.CLICK, this.onHelpLinkClickHandler);
         this.searchBtn.addEventListener(ButtonEvent.CLICK, this.onSearchBtnClickHandler);
@@ -207,7 +208,7 @@ public class UnitsListView extends CyberSportUnitsListMeta implements ICyberSpor
         this.refreshBtn.removeEventListener(ButtonEvent.CLICK, this.onRefreshBtnClickHandler);
         this.refreshBtn.dispose();
         this.refreshBtn = null;
-        this.detailsViewStack.removeEventListener(RallyViewsEvent.JOIN_RALLY_REQUEST, onJoinRequest);
+        this.detailsViewStack.removeEventListener(RallyViewsEvent.JOIN_RALLY_REQUEST, this.onJoinRallyRequestHandler);
         this.detailsViewStack.removeEventListener(CSRallyInfoEvent.SHOW_PROFILE, this.onDetailsViewStackShowProfileHandler);
         this.detailsViewStack.dispose();
         this.detailsViewStack = null;
@@ -226,6 +227,7 @@ public class UnitsListView extends CyberSportUnitsListMeta implements ICyberSpor
         this.searchResultsTF = null;
         this.tableDescrTF = null;
         this.helpLabel = null;
+        this.navigationDescrTF = null;
         this.clearDetailsData();
         this._headerDataVO = null;
         super.onDispose();
@@ -272,7 +274,6 @@ public class UnitsListView extends CyberSportUnitsListMeta implements ICyberSpor
     }
 
     public function as_setSearchResultText(param1:String, param2:String, param3:Object):void {
-        var _loc5_:* = false;
         var _loc6_:CheckBoxIconVO = null;
         this.searchResultsTF.htmlText = param1;
         this.refreshBtn.x = this.searchResultsTF.x + this.searchResultsTF.textWidth + REFRESH_BUTTON_OFFSET | 0;
@@ -281,7 +282,7 @@ public class UnitsListView extends CyberSportUnitsListMeta implements ICyberSpor
         if (_loc4_) {
             this.tableDescrTF.text = param2;
         }
-        _loc5_ = param3 != null;
+        var _loc5_:* = param3 != null;
         this.filterCheckbox.visible = _loc5_;
         if (_loc5_) {
             _loc6_ = new CheckBoxIconVO(param3);
@@ -342,6 +343,10 @@ public class UnitsListView extends CyberSportUnitsListMeta implements ICyberSpor
             param1.handled = true;
             searchTeamsS(this.searchInput.text);
         }
+    }
+
+    private function onJoinRallyRequestHandler(param1:RallyViewsEvent):void {
+        joinRallyRequestPerformer(param1);
     }
 }
 }

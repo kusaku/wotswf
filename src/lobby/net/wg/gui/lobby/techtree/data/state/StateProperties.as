@@ -1,5 +1,7 @@
 package net.wg.gui.lobby.techtree.data.state {
-public class StateProperties {
+import net.wg.infrastructure.interfaces.entity.IDisposable;
+
+public class StateProperties implements IDisposable {
 
     public var id:uint;
 
@@ -26,6 +28,10 @@ public class StateProperties {
         this.icoAlpha = param7;
     }
 
+    public final function dispose():void {
+        this.onDispose();
+    }
+
     public function toString():String {
         var _loc1_:String = "StateProperties(";
         _loc1_ = _loc1_ + ("id = " + this.id);
@@ -36,6 +42,13 @@ public class StateProperties {
         _loc1_ = _loc1_ + (" animation = " + this.animation);
         _loc1_ = _loc1_ + (", icoAlpha = " + this.icoAlpha);
         return _loc1_ + ")";
+    }
+
+    protected function onDispose():void {
+        if (this.animation != null) {
+            this.animation.dispose();
+            this.animation = null;
+        }
     }
 }
 }

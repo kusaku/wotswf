@@ -24,7 +24,7 @@ public class VehParamVO extends DAAPIDataClass {
 
     public var tooltip:String = "";
 
-    public var showDecreaseArrow:Boolean = false;
+    public var buffIconSrc:String = "";
 
     public function VehParamVO(param1:Object) {
         super(param1);

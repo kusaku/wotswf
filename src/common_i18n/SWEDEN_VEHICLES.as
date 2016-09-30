@@ -24,6 +24,28 @@ package
       public static const S01_STRV_74_A2_SHORT:String = "#sweden_vehicles:S01_Strv_74_A2_short";
       
       public static const S01_STRV_74_A2_DESCR:String = "#sweden_vehicles:S01_Strv_74_A2_descr";
+      
+      public static const CHASSIS_S15_L_60:String = "#sweden_vehicles:Chassis_S15_L_60";
+      
+      public static const TURRET_1_S15_L_60:String = "#sweden_vehicles:Turret_1_S15_L_60";
+      
+      public static const C_20MM_AKAN_M_MADSEN_A:String = "#sweden_vehicles:_20mm_akan_m_Madsen_A";
+      
+      public static const C_20MM_SLPPRJ_M_MADSEN:String = "#sweden_vehicles:_20mm_slpprj_m_Madsen";
+      
+      public static const C_20MM_SLPPRJ_M_40_M:String = "#sweden_vehicles:_20mm_slpprj_m_40_M";
+      
+      public static const C_20MM_SLSGR_M_MADSEN:String = "#sweden_vehicles:_20mm_slsgr_m_Madsen";
+      
+      public static const BNAG_L8V_36TR_A:String = "#sweden_vehicles:BNAG_L8V_36TR_A";
+      
+      public static const C_25_W_SV_1_M_39_A:String = "#sweden_vehicles:_25_W_Sv_1_m_39_A";
+      
+      public static const S15_L_60:String = "#sweden_vehicles:S15_L_60";
+      
+      public static const S15_L_60_SHORT:String = "#sweden_vehicles:S15_L_60_short";
+      
+      public static const S15_L_60_DESCR:String = "#sweden_vehicles:S15_L_60_descr";
        
       
       public function SWEDEN_VEHICLES()

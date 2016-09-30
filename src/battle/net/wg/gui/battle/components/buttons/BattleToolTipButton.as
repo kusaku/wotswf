@@ -13,20 +13,6 @@ public class BattleToolTipButton extends BattleButton implements IBattleToolTipB
         super();
     }
 
-    protected function showTooltip():void {
-        if (!this._isTooltipVisible) {
-            this._isTooltipVisible = true;
-            App.toolTipMgr.showComplex(this._tooltipStr);
-        }
-    }
-
-    public function hideTooltip():void {
-        if (this._isTooltipVisible) {
-            this._isTooltipVisible = false;
-            App.toolTipMgr.hide();
-        }
-    }
-
     override protected function invokeReleaseOutsideActions():void {
         this.hideTooltip();
         super.invokeReleaseOutsideActions();
@@ -54,12 +40,22 @@ public class BattleToolTipButton extends BattleButton implements IBattleToolTipB
         super.invokeRollOverActions();
     }
 
-    private function updateMouseEnabled():void {
-        mouseEnabled = !!this.isAllowedToShowToolTipOnDisabledState ? true : Boolean(enabled);
+    public function hideTooltip():void {
+        if (this._isTooltipVisible) {
+            this._isTooltipVisible = false;
+            App.toolTipMgr.hide();
+        }
     }
 
-    private function get allowShowTooltip():Boolean {
-        return !!this.isAllowedToShowToolTipOnDisabledState ? true : Boolean(enabled);
+    protected function showTooltip():void {
+        if (!this._isTooltipVisible) {
+            this._isTooltipVisible = true;
+            App.toolTipMgr.showComplex(this._tooltipStr);
+        }
+    }
+
+    private function updateMouseEnabled():void {
+        mouseEnabled = !!this.isAllowedToShowToolTipOnDisabledState ? true : Boolean(enabled);
     }
 
     public function get isAllowedToShowToolTipOnDisabledState():Boolean {
@@ -77,6 +73,10 @@ public class BattleToolTipButton extends BattleButton implements IBattleToolTipB
 
     public function set tooltipStr(param1:String):void {
         this._tooltipStr = param1;
+    }
+
+    private function get allowShowTooltip():Boolean {
+        return !!this.isAllowedToShowToolTipOnDisabledState ? true : Boolean(enabled);
     }
 }
 }

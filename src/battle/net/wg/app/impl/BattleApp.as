@@ -27,6 +27,7 @@ import net.wg.infrastructure.managers.ISoundManager;
 import net.wg.infrastructure.managers.ITooltipMgr;
 import net.wg.infrastructure.managers.ITutorialManager;
 import net.wg.infrastructure.managers.IVoiceChatManager;
+import net.wg.infrastructure.managers.counter.CounterManager;
 import net.wg.infrastructure.managers.impl.AtlasManager;
 import net.wg.infrastructure.managers.impl.ClassManager;
 import net.wg.infrastructure.managers.impl.ColorSchemeManagerBattle;
@@ -102,7 +103,7 @@ public final class BattleApp extends AbstractApplication {
     }
 
     override protected function getNewUtils():IUtils {
-        var _loc1_:IUtils = new Utils(new Asserter(), new Scheduler(), new LocaleBase(), new WGJSON(), null, new ClassFactory(), new PopupManager(), new CommonsBattle(), new FocusHandlerEx(), new EventCollector(), new IME(), null, null, new StyleSheetManager(), null, null, new DateTimeBattle(), new PoolManager(), new DataUtils());
+        var _loc1_:IUtils = new Utils(new Asserter(), new Scheduler(), new LocaleBase(), new WGJSON(), null, new ClassFactory(), new PopupManager(), new CommonsBattle(), new FocusHandlerEx(), new EventCollector(), new IME(), null, null, new StyleSheetManager(), null, null, new DateTimeBattle(), new PoolManager(), new DataUtils(), new CounterManager());
         return _loc1_;
     }
 
@@ -150,12 +151,8 @@ public final class BattleApp extends AbstractApplication {
         this._toolTips = null;
     }
 
-    override protected function onDispose():void {
-        super.onDispose();
-    }
-
     override protected function getContainers():Vector.<DisplayObject> {
-        var _loc1_:Vector.<DisplayObject> = new <DisplayObject>[this._libraries, this._views, this._windows, this._systemMessages, this._dialogs, this._toolTips, this._cursorCtnr];
+        var _loc1_:Vector.<DisplayObject> = new <DisplayObject>[this._libraries, this._views, this._windows, this._systemMessages, utils.IME.getContainer(), this._dialogs, this._toolTips, this._cursorCtnr];
         return _loc1_;
     }
 
@@ -236,7 +233,12 @@ public final class BattleApp extends AbstractApplication {
     }
 
     override protected function initializeAtlasManager():void {
-        App.atlasMgr.registerAtlas(AtlasConstants.BATTLE_ATLAS);
+        atlasMgr.registerAtlas(AtlasConstants.BATTLE_ATLAS);
+    }
+
+    override protected function onAfterAppConfiguring():void {
+        DebugUtils.LOG_DEBUG("BattleApp configure finished");
+        super.onAfterAppConfiguring();
     }
 
     public function as_traceObject(param1:*):void {
@@ -249,11 +251,6 @@ public final class BattleApp extends AbstractApplication {
 
     override public function get systemMessages():DisplayObjectContainer {
         return this._systemMessages;
-    }
-
-    override protected function onAfterAppConfiguring():void {
-        DebugUtils.LOG_DEBUG("BattleApp configure finished");
-        super.onAfterAppConfiguring();
     }
 }
 }

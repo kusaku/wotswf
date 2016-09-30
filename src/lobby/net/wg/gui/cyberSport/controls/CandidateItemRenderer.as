@@ -85,8 +85,9 @@ public class CandidateItemRenderer extends SoundListItemRenderer implements IDro
     }
 
     protected function updateElements(param1:Object):void {
+        var _loc2_:RallyCandidateVO = null;
         var _loc3_:IUserProps = null;
-        var _loc2_:RallyCandidateVO = RallyCandidateVO(param1);
+        _loc2_ = RallyCandidateVO(param1);
         visible = _loc2_ != null;
         this.voiceWave.visible = App.voiceChatMgr.isVOIPEnabledS();
         if (_loc2_) {

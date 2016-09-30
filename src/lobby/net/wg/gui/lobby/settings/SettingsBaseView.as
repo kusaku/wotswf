@@ -23,11 +23,11 @@ public class SettingsBaseView extends UIComponentEx implements IViewStackContent
 
     private static const OPTION_DATA_KEY:String = "data";
 
-    protected var _data:SettingsDataVo = null;
+    protected var data:SettingsDataVo = null;
 
-    protected var _viewId:String = "";
+    protected var viewId:String = "";
 
-    protected var _headDependedControls:Vector.<String> = null;
+    protected var headDependedControls:Vector.<String> = null;
 
     private var _toolTipMapping:Dictionary = null;
 
@@ -37,8 +37,8 @@ public class SettingsBaseView extends UIComponentEx implements IViewStackContent
 
     override protected function configUI():void {
         super.configUI();
-        if (this._data != null) {
-            this.setData(this._data);
+        if (this.data) {
+            this.setData(this.data);
         }
         this._toolTipMapping = new Dictionary(true);
     }
@@ -47,17 +47,16 @@ public class SettingsBaseView extends UIComponentEx implements IViewStackContent
         var _loc1_:* = null;
         var _loc2_:DisplayObject = null;
         for (_loc1_ in this._toolTipMapping) {
-            _loc2_ = _loc1_ as DisplayObject;
-            App.utils.asserter.assertNotNull(_loc2_, "control" + Errors.CANT_NULL);
+            _loc2_ = DisplayObject(_loc1_);
             _loc2_.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
             _loc2_.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
             delete this._toolTipMapping[_loc1_];
         }
         this._toolTipMapping = null;
-        this._headDependedControls.splice(0, this._headDependedControls.length);
-        this._headDependedControls = null;
-        this._data = null;
-        this._viewId = null;
+        this.headDependedControls.splice(0, this.headDependedControls.length);
+        this.headDependedControls = null;
+        this.data = null;
+        this.viewId = null;
         super.onDispose();
     }
 
@@ -70,11 +69,11 @@ public class SettingsBaseView extends UIComponentEx implements IViewStackContent
     }
 
     public function update(param1:Object):void {
-        this._viewId = param1.id;
-        this._data = param1.data;
+        this.viewId = param1.id;
+        this.data = param1.data;
         if (this.initialized) {
-            this._headDependedControls = new Vector.<String>();
-            this.setData(this._data);
+            this.headDependedControls = new Vector.<String>();
+            this.setData(this.data);
         }
     }
 
@@ -86,7 +85,11 @@ public class SettingsBaseView extends UIComponentEx implements IViewStackContent
             param1.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
             param1.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
         }
-        this._toolTipMapping[param1] = param2;
+        this._toolTipMapping[param1] = this.getTooltipID(param2);
+    }
+
+    protected function getTooltipID(param1:String):String {
+        return param1;
     }
 
     protected function getControlId(param1:DisplayObject):String {
@@ -98,12 +101,12 @@ public class SettingsBaseView extends UIComponentEx implements IViewStackContent
         var _loc5_:LabelControl = null;
         var _loc6_:TextField = null;
         var _loc7_:CheckBox = null;
-        if (this._data[param1]) {
+        if (this.data[param1]) {
             _loc4_ = Values.EMPTY_STR;
-            if (this._data[param1].current != null) {
+            if (this.data[param1].current != null) {
                 _loc4_ = SettingsConfigHelper.LOCALIZATION + param2 + param1 + param3;
             }
-            if (this._data[param1].hasLabel && this[param1 + SettingsConfigHelper.TYPE_LABEL]) {
+            if (this.data[param1].hasLabel && this[param1 + SettingsConfigHelper.TYPE_LABEL]) {
                 if (this[param1 + SettingsConfigHelper.TYPE_LABEL] is LabelControl) {
                     _loc5_ = this[param1 + SettingsConfigHelper.TYPE_LABEL];
                     _loc5_.text = _loc4_;
@@ -114,7 +117,7 @@ public class SettingsBaseView extends UIComponentEx implements IViewStackContent
                     _loc6_.text = _loc4_;
                 }
             }
-            else if (this[param1 + SettingsConfigHelper.TYPE_CHECKBOX] && this[param1 + SettingsConfigHelper.TYPE_CHECKBOX].label == "") {
+            else if (this[param1 + SettingsConfigHelper.TYPE_CHECKBOX] && this[param1 + SettingsConfigHelper.TYPE_CHECKBOX].label == Values.EMPTY_STR) {
                 _loc7_ = this[param1 + SettingsConfigHelper.TYPE_CHECKBOX];
                 _loc7_.label = _loc4_;
             }
@@ -128,18 +131,15 @@ public class SettingsBaseView extends UIComponentEx implements IViewStackContent
     }
 
     protected final function findSelectedIndexForDD(param1:Number, param2:Array):Number {
-        var _loc5_:Number = NaN;
-        var _loc3_:Number = 0;
+        var _loc3_:int = 0;
         var _loc4_:int = param2.length;
-        if (param2 && _loc4_ > 0) {
-            _loc5_ = 0;
-            while (_loc5_ < _loc4_) {
-                if (param2[_loc5_].hasOwnProperty(OPTION_DATA_KEY) && param1 == param2[_loc5_].data) {
-                    _loc3_ = _loc5_;
-                    break;
-                }
-                _loc5_++;
+        var _loc5_:int = 0;
+        while (_loc5_ < _loc4_) {
+            if (param2[_loc5_].hasOwnProperty(OPTION_DATA_KEY) && param1 == param2[_loc5_].data) {
+                _loc3_ = _loc5_;
+                break;
             }
+            _loc5_++;
         }
         return _loc3_;
     }

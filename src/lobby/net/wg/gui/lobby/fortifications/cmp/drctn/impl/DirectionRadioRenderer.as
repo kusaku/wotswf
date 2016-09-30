@@ -4,11 +4,11 @@ import flash.events.MouseEvent;
 
 import net.wg.gui.components.controls.RadioButton;
 import net.wg.gui.lobby.fortifications.data.ConnectedDirectionsVO;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class DirectionRadioRenderer extends UIComponent {
+public class DirectionRadioRenderer extends UIComponentEx {
 
     private static const INVALID_SELECTED:String = "invalidSelected";
 
@@ -30,15 +30,13 @@ public class DirectionRadioRenderer extends UIComponent {
 
     override protected function configUI():void {
         super.configUI();
-        this.directionsCmp.leftDirection.addEventListener(MouseEvent.CLICK, this.clickHandler);
-        this.radioButton.addEventListener(MouseEvent.CLICK, this.clickHandler);
-        this.radioButton.addEventListener(MouseEvent.ROLL_OVER, this.overHandler);
-        this.radioButton.addEventListener(MouseEvent.ROLL_OUT, this.outHandler);
-        this.directionsCmp.leftDirection.useDirectionBuildingTooltips = false;
+        this.directionsCmp.leftDirection.addEventListener(MouseEvent.CLICK, this.onClickHandler);
+        this.radioButton.addEventListener(MouseEvent.CLICK, this.onClickHandler);
+        this.radioButton.addEventListener(MouseEvent.ROLL_OVER, this.onRadioButtonRollOverHandler);
+        this.radioButton.addEventListener(MouseEvent.ROLL_OUT, this.onRadioButtonRollOutHandler);
         this.directionsCmp.leftDirection.disableLowLevelBuildings = true;
         this.directionsCmp.leftDirection.solidMode = true;
         this.directionsCmp.leftDirection.labelVisible = true;
-        this.directionsCmp.rightDirection.useDirectionBuildingTooltips = false;
         this.directionsCmp.rightDirection.disableLowLevelBuildings = true;
         this.directionsCmp.rightDirection.alwaysShowLevels = true;
         this.directionsCmp.rightDirection.solidMode = true;
@@ -48,14 +46,15 @@ public class DirectionRadioRenderer extends UIComponent {
     }
 
     override protected function onDispose():void {
-        this.directionsCmp.leftDirection.removeEventListener(MouseEvent.CLICK, this.clickHandler);
-        this.radioButton.removeEventListener(MouseEvent.CLICK, this.clickHandler);
-        this.radioButton.removeEventListener(MouseEvent.ROLL_OVER, this.overHandler);
-        this.radioButton.removeEventListener(MouseEvent.ROLL_OUT, this.outHandler);
+        this.directionsCmp.leftDirection.removeEventListener(MouseEvent.CLICK, this.onClickHandler);
+        this.radioButton.removeEventListener(MouseEvent.CLICK, this.onClickHandler);
+        this.radioButton.removeEventListener(MouseEvent.ROLL_OVER, this.onRadioButtonRollOverHandler);
+        this.radioButton.removeEventListener(MouseEvent.ROLL_OUT, this.onRadioButtonRollOutHandler);
         this.directionsCmp.dispose();
         this.directionsCmp = null;
         this.radioButton.dispose();
         this.radioButton = null;
+        this._model = null;
         super.onDispose();
     }
 
@@ -101,6 +100,17 @@ public class DirectionRadioRenderer extends UIComponent {
         invalidateData();
     }
 
+    private function updateLevelsShowing():void {
+        if (this._model && this._model.leftDirection.canAttackFrom) {
+            this.directionsCmp.leftDirection.alwaysShowLevels = this._selected;
+            this.directionsCmp.leftDirection.showLevelsOnHover = !this._selected;
+        }
+        else {
+            this.directionsCmp.leftDirection.alwaysShowLevels = false;
+            this.directionsCmp.leftDirection.showLevelsOnHover = this._model && !this._model.leftDirection.isBusy;
+        }
+    }
+
     public function get model():ConnectedDirectionsVO {
         return this._model;
     }
@@ -118,27 +128,16 @@ public class DirectionRadioRenderer extends UIComponent {
         invalidate(INVALID_SELECTED);
     }
 
-    private function updateLevelsShowing():void {
-        if (this._model && this._model.leftDirection.canAttackFrom) {
-            this.directionsCmp.leftDirection.alwaysShowLevels = this._selected;
-            this.directionsCmp.leftDirection.showLevelsOnHover = !this._selected;
-        }
-        else {
-            this.directionsCmp.leftDirection.alwaysShowLevels = false;
-            this.directionsCmp.leftDirection.showLevelsOnHover = this._model && !this._model.leftDirection.isBusy;
-        }
-    }
-
-    private function outHandler(param1:MouseEvent):void {
+    private function onRadioButtonRollOutHandler(param1:MouseEvent):void {
         this.directionsCmp.leftDirection.showHideHowerState(false, true);
     }
 
-    private function overHandler(param1:MouseEvent):void {
+    private function onRadioButtonRollOverHandler(param1:MouseEvent):void {
         this.directionsCmp.leftDirection.showHideHowerState(true, true);
     }
 
-    private function clickHandler(param1:MouseEvent):void {
-        if (param1 is MouseEvent && !App.utils.commons.isLeftButton(param1 as MouseEvent)) {
+    private function onClickHandler(param1:MouseEvent):void {
+        if (param1 is MouseEvent && !App.utils.commons.isLeftButton(param1)) {
             return;
         }
         if (this._model && this._model.leftDirection.canAttackFrom) {

@@ -5,15 +5,12 @@ import flash.display.MovieClip;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
-import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.ui.Keyboard;
 
 import net.wg.data.Aliases;
 import net.wg.data.constants.Linkages;
 import net.wg.data.constants.generated.HANGAR_ALIASES;
-import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
-import net.wg.gui.components.common.serverStats.ServerInfo;
 import net.wg.gui.components.controls.CrewOperationBtn;
 import net.wg.gui.components.miniclient.HangarMiniClientComponent;
 import net.wg.gui.events.LobbyEvent;
@@ -38,65 +35,47 @@ import scaleform.clik.ui.InputDetails;
 
 public class Hangar extends HangarMeta implements IHangar {
 
-    private static const INVALIDATE_SERVER_INFO:String = "serverInfo";
-
     private static const INVALIDATE_ENABLED_CREW:String = "InvalidateEnabledCrew";
 
-    private static const INVALIDATE_CAROUSEL:String = "InvalidateCarousel";
+    private static const INVALIDATE_CAROUSEL_SIZE:String = "InvalidateCarouselSize";
 
     private static const CAROUSEL_NAME:String = "carousel";
 
-    private static const PARAMS_TOP_MARGIN:int = 113;
+    private static const PARAMS_TOP_MARGIN:int = 2;
 
     private static const PARAMS_BOTTOM_MARGIN:int = 80;
 
-    private static const RESEARCH_PANEL_RIGHT_MARGIN:int = 297;
-
     private static const MESSENGER_BAR_PADDING:int = 45;
 
-    private static const START_IGR_Y_POS:Number = 34;
+    private static const TOP_MARGIN:Number = 34;
 
-    private static const IGR_Y_SERVER_OFFSET:int = -5;
+    private static const MINI_CLIENT_GAP:Number = 1;
 
-    private static const IGR_Y_LABEL_OFFSET:int = 1;
+    public var vehResearchPanel:ResearchPanel;
 
-    private static const IGR_Y_ACTION_DAYS_OFFSET:int = -45;
+    public var tmenXpPanel:TmenXpPanel;
 
-    public var vehResearchPanel:ResearchPanel = null;
+    public var crewOperationBtn:CrewOperationBtn;
 
-    public var tmenXpPanel:TmenXpPanel = null;
+    public var crew:Crew;
 
-    public var crewOperationBtn:CrewOperationBtn = null;
+    public var params:IVehicleParameters;
 
-    public var crew:Crew = null;
+    public var ammunitionPanel:AmmunitionPanel;
 
-    public var params:IVehicleParameters = null;
+    public var bottomBg:Sprite;
 
-    public var ammunitionPanel:AmmunitionPanel = null;
+    public var carouselContainer:Sprite;
 
-    public var bottomBg:Sprite = null;
+    public var questsControl:QuestsControl;
 
-    public var carouselContainer:Sprite = null;
+    public var switchModePanel:SwitchModePanel;
 
-    public var igrLabel:IgrLabel = null;
+    public var header:HangarHeader;
 
-    public var igrActionDaysLeft:IgrActionDaysLeft = null;
+    private var _carousel:TankCarousel;
 
-    public var questsControl:QuestsControl = null;
-
-    public var serverInfo:ServerInfo = null;
-
-    public var serverInfoBg:Sprite = null;
-
-    public var switchModePanel:SwitchModePanel = null;
-
-    private var _carousel:TankCarousel = null;
-
-    private var _miniClient:HangarMiniClientComponent = null;
-
-    private var _serverInfoStats:String = null;
-
-    private var _serverInfoToolTipType:String = null;
+    private var _miniClient:HangarMiniClientComponent;
 
     private var _crewEnabled:Boolean = true;
 
@@ -112,7 +91,7 @@ public class Hangar extends HangarMeta implements IHangar {
 
     private var _isControlsVisible:Boolean = false;
 
-    private var _carouselAlias:String = null;
+    private var _carouselAlias:String;
 
     public function Hangar() {
         this._gameInputMgr = App.gameInputMgr;
@@ -130,7 +109,7 @@ public class Hangar extends HangarMeta implements IHangar {
         _originalHeight = param2;
         setSize(param1, param2);
         if (this._carousel != null) {
-            this._carousel.width = param1;
+            this._carousel.updateStage(param1, param2);
             this.updateCarouselPosition();
         }
         if (this.bottomBg != null) {
@@ -139,16 +118,14 @@ public class Hangar extends HangarMeta implements IHangar {
             this.bottomBg.width = _originalWidth;
         }
         this.alignToCenter(this.switchModePanel);
-        this.alignToCenter(this.igrLabel);
-        this.alignToCenter(this.igrActionDaysLeft);
         this.alignToCenter(this._miniClient);
-        this.updatePlayerCounterPosition();
         this.updateParamsPosition();
         if (this.ammunitionPanel != null) {
             this.updateAmmunitionPanelPosition();
         }
+        this.header.x = param1 >> 1;
         if (this.vehResearchPanel != null) {
-            this.vehResearchPanel.x = param1 - RESEARCH_PANEL_RIGHT_MARGIN;
+            this.vehResearchPanel.x = param1;
         }
         this._helpLayout.hide();
     }
@@ -161,6 +138,7 @@ public class Hangar extends HangarMeta implements IHangar {
         registerFlashComponentS(this.questsControl, Aliases.QUESTS_CONTROL);
         registerFlashComponentS(this.switchModePanel, Aliases.SWITCH_MODE_PANEL);
         registerFlashComponentS(this.params, HANGAR_ALIASES.VEHICLE_PARAMETERS);
+        registerFlashComponentS(this.header, HANGAR_ALIASES.HEADER);
         addEventListener(CrewDropDownEvent.SHOW_DROP_DOWN, this.onHangarShowDropDownHandler);
         if (this.vehResearchPanel != null) {
             registerFlashComponentS(this.vehResearchPanel, HANGAR_ALIASES.RESEARCH_PANEL);
@@ -171,8 +149,6 @@ public class Hangar extends HangarMeta implements IHangar {
 
     override protected function onBeforeDispose():void {
         this._gameInputMgr.clearKeyHandler(Keyboard.ESCAPE, KeyboardEvent.KEY_DOWN);
-        this.igrLabel.removeEventListener(MouseEvent.ROLL_OVER, this.onIgrRollOverHandler);
-        this.igrLabel.removeEventListener(MouseEvent.ROLL_OUT, this.onIgrRollOutHandler);
         App.stage.dispatchEvent(new LobbyEvent(LobbyEvent.UNREGISTER_DRAGGING));
         removeEventListener(CrewDropDownEvent.SHOW_DROP_DOWN, this.onHangarShowDropDownHandler);
         this._gameInputMgr.clearKeyHandler(Keyboard.F1, KeyboardEvent.KEY_DOWN);
@@ -182,21 +158,16 @@ public class Hangar extends HangarMeta implements IHangar {
             this._gameInputMgr.clearKeyHandler(Keyboard.F2, KeyboardEvent.KEY_UP);
         }
         this.ammunitionPanel.removeEventListener(FocusRequestEvent.REQUEST_FOCUS, this.onAmmunitionPanelRequestFocusHandler);
+        this.vehResearchPanel.removeEventListener(Event.RESIZE, this.onVehResearchPanelResizeHandler);
         this.switchModePanel.removeEventListener(ComponentEvent.SHOW, this.onSwitchModePanelShowHandler);
         this.switchModePanel.removeEventListener(ComponentEvent.HIDE, this.onSwitchModePanelHideHandler);
+        this._carousel.removeEventListener(Event.RESIZE, this.onCarouselResizeHandler);
         super.onBeforeDispose();
     }
 
     override protected function onDispose():void {
         this.crewOperationBtn.dispose();
         this.crewOperationBtn = null;
-        this.igrLabel.dispose();
-        this.igrLabel = null;
-        this.igrActionDaysLeft.dispose();
-        this.igrActionDaysLeft = null;
-        this.serverInfo.dispose();
-        this.serverInfo = null;
-        this.serverInfoBg = null;
         this.bottomBg = null;
         this._miniClient = null;
         this.vehResearchPanel = null;
@@ -207,6 +178,7 @@ public class Hangar extends HangarMeta implements IHangar {
         this._carousel = null;
         this.switchModePanel = null;
         this.questsControl = null;
+        this.header = null;
         this._gameInputMgr = null;
         this._globalVarsMgr = null;
         this._toolTipMgr = null;
@@ -218,14 +190,10 @@ public class Hangar extends HangarMeta implements IHangar {
 
     override protected function configUI():void {
         super.configUI();
-        this.serverInfo.visible = this.serverInfoBg.visible = this._globalVarsMgr.isShowServerStatsS();
-        this.serverInfo.relativelyOwner = this.serverInfoBg;
         App.stage.dispatchEvent(new LobbyEvent(LobbyEvent.REGISTER_DRAGGING));
         this.updateStage(parent.width, parent.height);
         mouseEnabled = false;
         this.bottomBg.mouseEnabled = false;
-        this.igrLabel.addEventListener(MouseEvent.ROLL_OVER, this.onIgrRollOverHandler);
-        this.igrLabel.addEventListener(MouseEvent.ROLL_OUT, this.onIgrRollOutHandler);
         this._gameInputMgr.setKeyHandler(Keyboard.F1, KeyboardEvent.KEY_DOWN, this.showLayoutHandler, true);
         this._gameInputMgr.setKeyHandler(Keyboard.F1, KeyboardEvent.KEY_UP, this.closeLayoutHandler, true);
         this._gameInputMgr.setKeyHandler(Keyboard.ESCAPE, KeyboardEvent.KEY_DOWN, this.handleEscapeHandler, true);
@@ -239,6 +207,7 @@ public class Hangar extends HangarMeta implements IHangar {
         this.ammunitionPanel.addEventListener(FocusRequestEvent.REQUEST_FOCUS, this.onAmmunitionPanelRequestFocusHandler);
         this.switchModePanel.addEventListener(ComponentEvent.SHOW, this.onSwitchModePanelShowHandler);
         this.switchModePanel.addEventListener(ComponentEvent.HIDE, this.onSwitchModePanelHideHandler);
+        this.vehResearchPanel.addEventListener(Event.RESIZE, this.onVehResearchPanelResizeHandler);
         this.carouselContainer.mouseEnabled = false;
     }
 
@@ -248,11 +217,13 @@ public class Hangar extends HangarMeta implements IHangar {
             this.crew.enabled = this._crewEnabled;
             this.crewOperationBtn.enabled = this._crewEnabled;
         }
-        if (isInvalid(INVALIDATE_SERVER_INFO)) {
-            this.serverInfo.setValues(this._serverInfoStats, this._serverInfoToolTipType);
-        }
-        if (isInvalid(INVALIDATE_CAROUSEL)) {
-            this.updateCarouselLayout();
+        if (isInvalid(INVALIDATE_CAROUSEL_SIZE)) {
+            this.updateCarouselPosition();
+            this.updateAmmunitionPanelPosition();
+            this.updateCrewSize();
+            if (hasEventListener(Event.RESIZE)) {
+                dispatchEvent(new Event(Event.RESIZE));
+            }
         }
     }
 
@@ -273,17 +244,19 @@ public class Hangar extends HangarMeta implements IHangar {
 
     public function as_setCarousel(param1:String, param2:String):void {
         if (this._carousel != null) {
+            this._carousel.removeEventListener(Event.RESIZE, this.onCarouselResizeHandler);
             this.carouselContainer.removeChild(this._carousel);
             unregisterFlashComponentS(this._carouselAlias);
         }
         this._carouselAlias = param2;
         this._carousel = App.instance.utils.classFactory.getComponent(param1, TankCarousel);
-        this._carousel.width = _originalWidth;
+        this._carousel.addEventListener(Event.RESIZE, this.onCarouselResizeHandler);
+        this._carousel.updateStage(_originalWidth, _originalHeight);
         this._carousel.name = CAROUSEL_NAME;
         this.carouselContainer.addChild(this._carousel);
         registerFlashComponentS(this._carousel, this._carouselAlias);
         this._carousel.validateNow();
-        invalidate(INVALIDATE_CAROUSEL);
+        invalidate(INVALIDATE_CAROUSEL_SIZE);
     }
 
     public function as_setCarouselEnabled(param1:Boolean):void {
@@ -300,34 +273,6 @@ public class Hangar extends HangarMeta implements IHangar {
     public function as_setCrewEnabled(param1:Boolean):void {
         this._crewEnabled = param1;
         invalidate(INVALIDATE_ENABLED_CREW);
-    }
-
-    public function as_setIsIGR(param1:Boolean, param2:String):void {
-        if (param1) {
-            this.igrLabel.visible = true;
-            this.igrLabel.mouseChildren = false;
-            this.igrLabel.useHandCursor = this.igrLabel.buttonMode = true;
-            this.igrLabel.igrText.htmlText = param2;
-        }
-        else {
-            this.igrLabel.visible = false;
-        }
-        this.updateElementsPosition();
-    }
-
-    public function as_setServerStats(param1:String, param2:String):void {
-        this._serverInfoStats = param1;
-        this._serverInfoToolTipType = param2;
-        invalidate(INVALIDATE_SERVER_INFO);
-    }
-
-    public function as_setServerStatsInfo(param1:String):void {
-        this.serverInfo.tooltipFullData = param1;
-    }
-
-    public function as_setVehicleIGR(param1:String):void {
-        this.igrActionDaysLeft.updateText(param1);
-        this.updateElementsPosition();
     }
 
     public function as_setVisible(param1:Boolean):void {
@@ -354,9 +299,6 @@ public class Hangar extends HangarMeta implements IHangar {
         if (this.params.visible) {
             _loc2_ = Math.max(this.params.getHelpLayoutWidth(), this.vehResearchPanel.getHelpLayoutWidth());
             this.params.showHelpLayoutEx(this.vehResearchPanel.x - this.params.x, _loc2_);
-        }
-        if (this.vehResearchPanel.visible) {
-            this.vehResearchPanel.showHelpLayoutEx(this.params.x - this.vehResearchPanel.x, _loc2_);
         }
         this._helpLayout.show();
     }
@@ -388,8 +330,8 @@ public class Hangar extends HangarMeta implements IHangar {
 
     private function updateParamsPosition():void {
         this.params.x = _originalWidth - this.params.width ^ 0;
-        this.params.y = PARAMS_TOP_MARGIN;
-        this.params.height = this.ammunitionPanel.y - PARAMS_TOP_MARGIN + PARAMS_BOTTOM_MARGIN;
+        this.params.y = this.vehResearchPanel.y + this.vehResearchPanel.height + PARAMS_TOP_MARGIN;
+        this.params.height = this.ammunitionPanel.y - this.params.y + PARAMS_BOTTOM_MARGIN;
     }
 
     private function hideTooltip():void {
@@ -410,25 +352,12 @@ public class Hangar extends HangarMeta implements IHangar {
     }
 
     private function updateElementsPosition():void {
-        var _loc1_:int = 0;
-        if (this._globalVarsMgr.isShowServerStatsS()) {
-            _loc1_ = this.serverInfo.y + this.serverInfo.height + IGR_Y_SERVER_OFFSET;
-        }
-        else {
-            _loc1_ = START_IGR_Y_POS;
-        }
-        if (this._miniClient) {
+        var _loc1_:int = TOP_MARGIN;
+        if (this._miniClient != null) {
             this._miniClient.y = _loc1_;
-            _loc1_ = _loc1_ + this._miniClient.height;
+            _loc1_ = _loc1_ + (this._miniClient.height + MINI_CLIENT_GAP);
         }
-        if (this.igrLabel.visible) {
-            this.igrLabel.y = _loc1_;
-            _loc1_ = _loc1_ + (this.igrLabel.height + IGR_Y_LABEL_OFFSET);
-        }
-        if (this.igrActionDaysLeft.visible) {
-            this.igrActionDaysLeft.y = _loc1_;
-            _loc1_ = _loc1_ + (this.igrActionDaysLeft.height + IGR_Y_ACTION_DAYS_OFFSET);
-        }
+        this.header.y = _loc1_;
         if (this.switchModePanel.visible) {
             this.switchModePanel.y = _loc1_;
         }
@@ -440,11 +369,6 @@ public class Hangar extends HangarMeta implements IHangar {
         }
     }
 
-    private function updatePlayerCounterPosition():void {
-        this.serverInfoBg.x = width - this.serverInfoBg.width >> 1;
-        this.serverInfo.invalidateSize();
-    }
-
     private function closeLayoutHandler():void {
         closeHelpLayoutS();
     }
@@ -452,12 +376,6 @@ public class Hangar extends HangarMeta implements IHangar {
     private function updateCrewSize():void {
         var _loc1_:int = this.ammunitionPanel.y + this.ammunitionPanel.gun.y - this.crew.y;
         this.crew.updateSize(_loc1_);
-    }
-
-    private function updateCarouselLayout():void {
-        this.updateCarouselPosition();
-        this.updateAmmunitionPanelPosition();
-        this.updateCrewSize();
     }
 
     private function onAmmunitionPanelRequestFocusHandler(param1:FocusRequestEvent):void {
@@ -473,7 +391,6 @@ public class Hangar extends HangarMeta implements IHangar {
     }
 
     private function handleEscapeHandler(param1:InputEvent):void {
-        App.contextMenuMgr.hide();
         if (!this._helpLayout.isShown()) {
             onEscapeS();
         }
@@ -498,20 +415,20 @@ public class Hangar extends HangarMeta implements IHangar {
         showHelpLayoutS();
     }
 
-    private function onIgrRollOverHandler(param1:MouseEvent):void {
-        this._toolTipMgr.showSpecial(TOOLTIPS_CONSTANTS.IGR_INFO, null);
-    }
-
-    private function onIgrRollOutHandler(param1:MouseEvent):void {
-        this.hideTooltip();
-    }
-
     private function onSwitchModePanelShowHandler(param1:ComponentEvent):void {
         this.updateElementsPosition();
     }
 
     private function onSwitchModePanelHideHandler(param1:ComponentEvent):void {
         this.updateElementsPosition();
+    }
+
+    private function onCarouselResizeHandler(param1:Event):void {
+        invalidate(INVALIDATE_CAROUSEL_SIZE);
+    }
+
+    private function onVehResearchPanelResizeHandler(param1:Event):void {
+        this.updateParamsPosition();
     }
 }
 }

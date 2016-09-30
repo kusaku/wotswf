@@ -44,8 +44,9 @@ public class ContactsSettingsView extends ContactsSettingsViewMeta implements IC
     }
 
     override protected function applyInitData(param1:ContactsViewInitDataVO):void {
+        var _loc2_:ContactsSettingsDataVO = null;
         super.applyInitData(param1);
-        var _loc2_:ContactsSettingsDataVO = ContactsSettingsViewInitDataVO(param1).mainDataVO;
+        _loc2_ = ContactsSettingsViewInitDataVO(param1).mainDataVO;
         this.cbIsShowOfflineUsers.selected = _loc2_.showOfflineUsers;
         this.cbIsShowOthers.selected = _loc2_.showOthersCategory;
         if (!this.initDataReceived) {

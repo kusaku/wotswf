@@ -8,8 +8,6 @@ public class RibbonsPanelMeta extends BattleDisplayable {
 
     public var onChange:Function;
 
-    public var onIncCount:Function;
-
     public var onHide:Function;
 
     public function RibbonsPanelMeta() {
@@ -26,14 +24,9 @@ public class RibbonsPanelMeta extends BattleDisplayable {
         this.onChange();
     }
 
-    public function onIncCountS():void {
-        App.utils.asserter.assertNotNull(this.onIncCount, "onIncCount" + Errors.CANT_NULL);
-        this.onIncCount();
-    }
-
-    public function onHideS():void {
+    public function onHideS(param1:String):void {
         App.utils.asserter.assertNotNull(this.onHide, "onHide" + Errors.CANT_NULL);
-        this.onHide();
+        this.onHide(param1);
     }
 }
 }

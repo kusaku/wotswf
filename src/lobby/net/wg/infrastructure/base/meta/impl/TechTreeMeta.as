@@ -11,6 +11,8 @@ public class TechTreeMeta extends ResearchViewMeta {
 
     public var onCloseTechTree:Function;
 
+    public var request4VehCompare:Function;
+
     public function TechTreeMeta() {
         super();
     }
@@ -33,6 +35,11 @@ public class TechTreeMeta extends ResearchViewMeta {
     public function onCloseTechTreeS():void {
         App.utils.asserter.assertNotNull(this.onCloseTechTree, "onCloseTechTree" + Errors.CANT_NULL);
         this.onCloseTechTree();
+    }
+
+    public function request4VehCompareS(param1:Number):void {
+        App.utils.asserter.assertNotNull(this.request4VehCompare, "request4VehCompare" + Errors.CANT_NULL);
+        this.request4VehCompare(param1);
     }
 }
 }

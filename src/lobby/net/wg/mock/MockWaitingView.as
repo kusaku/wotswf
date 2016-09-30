@@ -14,6 +14,7 @@ import flash.geom.Rectangle;
 import flash.geom.Transform;
 import flash.media.SoundTransform;
 
+import net.wg.data.daapi.LoadViewVO;
 import net.wg.infrastructure.interfaces.IManagedContainer;
 import net.wg.infrastructure.interfaces.IManagedContent;
 import net.wg.infrastructure.interfaces.IView;
@@ -57,7 +58,7 @@ public class MockWaitingView implements IWaitingView {
         return false;
     }
 
-    public function dispose():void {
+    public final function dispose():void {
     }
 
     public function getBounds(param1:DisplayObject):Rectangle {
@@ -526,25 +527,11 @@ public class MockWaitingView implements IWaitingView {
     public function set visible(param1:Boolean):void {
     }
 
-    public function get as_alias():String {
-        return "";
-    }
-
-    public function set as_alias(param1:String):void {
-    }
-
-    public function get as_name():String {
-        return "";
-    }
-
-    public function set as_name(param1:String):void {
-    }
-
-    public function get as_config():Object {
+    public function get as_config():LoadViewVO {
         return null;
     }
 
-    public function set as_config(param1:Object):void {
+    public function set as_config(param1:LoadViewVO):void {
     }
 
     public function get loader():Loader {

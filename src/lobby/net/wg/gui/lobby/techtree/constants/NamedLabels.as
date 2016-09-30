@@ -9,6 +9,8 @@ public class NamedLabels {
 
     public static const GOLD_PRICE:String = "goldPriceLabel";
 
+    public static const RESTORE:String = "restore";
+
     public function NamedLabels() {
         super();
     }

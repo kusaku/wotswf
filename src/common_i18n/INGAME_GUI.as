@@ -13,6 +13,10 @@ package
       
       public static const PLAYERS_PANEL_STATE_LARGE:String = "#ingame_gui:players_panel/state/large";
       
+      public static const BATTLEMESSENGER_TOXIC_BLACKLIST_ADD_IN_BLACKLIST:String = "#ingame_gui:battleMessenger/toxic/blackList/ADD_IN_BLACKLIST";
+      
+      public static const BATTLEMESSENGER_TOXIC_BLACKLIST_REMOVE_FROM_BLACKLIST:String = "#ingame_gui:battleMessenger/toxic/blackList/REMOVE_FROM_BLACKLIST";
+      
       public static const DEVICES_ENGINE:String = "#ingame_gui:devices/engine";
       
       public static const DEVICES_AMMO_BAY:String = "#ingame_gui:devices/ammo_bay";
@@ -529,9 +533,23 @@ package
       
       public static const VEHICLE_MESSAGES_DEATH_FROM_SHOT:String = "#ingame_gui:vehicle_messages/DEATH_FROM_SHOT";
       
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_SHOT:String = "#ingame_gui:postmortem_messages/DEATH_FROM_SHOT";
+      
+      public static const POSTMORTEM_MESSAGES_DEATH_UNKNOWN:String = "#ingame_gui:postmortem_messages/DEATH_UNKNOWN";
+      
       public static const VEHICLE_MESSAGES_DEATH_FROM_SHOT_ARTILLERY:String = "#ingame_gui:vehicle_messages/DEATH_FROM_SHOT_ARTILLERY";
       
       public static const VEHICLE_MESSAGES_DEATH_FROM_SHOT_BOMBER:String = "#ingame_gui:vehicle_messages/DEATH_FROM_SHOT_BOMBER";
+      
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_SHOT_ARTILLERY:String = "#ingame_gui:postmortem_messages/DEATH_FROM_SHOT_ARTILLERY";
+      
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_SHOT_BOMBER:String = "#ingame_gui:postmortem_messages/DEATH_FROM_SHOT_BOMBER";
+      
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_OVERTURN_SELF_SUICIDE:String = "#ingame_gui:postmortem_messages/DEATH_FROM_OVERTURN_SELF_SUICIDE";
+      
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_OVERTURN_ENEMY_SELF:String = "#ingame_gui:postmortem_messages/DEATH_FROM_OVERTURN_ENEMY_SELF";
+      
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_OVERTURN_ALLY_SELF:String = "#ingame_gui:postmortem_messages/DEATH_FROM_OVERTURN_ALLY_SELF";
       
       public static const PLAYER_MESSAGES_DEATH_FROM_SHOT_SELF_ALLY:String = "#ingame_gui:player_messages/DEATH_FROM_SHOT_SELF_ALLY";
       
@@ -583,19 +601,33 @@ package
       
       public static const VEHICLE_MESSAGES_DEATH_FROM_FIRE:String = "#ingame_gui:vehicle_messages/DEATH_FROM_FIRE";
       
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_FIRE:String = "#ingame_gui:postmortem_messages/DEATH_FROM_FIRE";
+      
       public static const PLAYER_MESSAGES_DEATH_FROM_INACTIVE_CREW_AT_SHOT:String = "#ingame_gui:player_messages/DEATH_FROM_INACTIVE_CREW_AT_SHOT";
+      
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_INACTIVE_CREW_AT_SHOT:String = "#ingame_gui:postmortem_messages/DEATH_FROM_INACTIVE_CREW_AT_SHOT";
       
       public static const PLAYER_MESSAGES_DEATH_FROM_INACTIVE_CREW:String = "#ingame_gui:player_messages/DEATH_FROM_INACTIVE_CREW";
       
       public static const PLAYER_MESSAGES_DEATH_FROM_DEVICE_EXPLOSION_AT_SHOT:String = "#ingame_gui:player_messages/DEATH_FROM_DEVICE_EXPLOSION_AT_SHOT";
       
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_DEVICE_EXPLOSION_AT_SHOT:String = "#ingame_gui:postmortem_messages/DEATH_FROM_DEVICE_EXPLOSION_AT_SHOT";
+      
       public static const PLAYER_MESSAGES_DEATH_FROM_DEVICE_EXPLOSION_AT_FIRE:String = "#ingame_gui:player_messages/DEATH_FROM_DEVICE_EXPLOSION_AT_FIRE";
+      
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_DEVICE_EXPLOSION_AT_FIRE:String = "#ingame_gui:postmortem_messages/DEATH_FROM_DEVICE_EXPLOSION_AT_FIRE";
       
       public static const VEHICLE_MESSAGES_DEATH_FROM_DROWNING_SELF_SUICIDE:String = "#ingame_gui:vehicle_messages/DEATH_FROM_DROWNING_SELF_SUICIDE";
       
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_DROWNING_SELF_SUICIDE:String = "#ingame_gui:postmortem_messages/DEATH_FROM_DROWNING_SELF_SUICIDE";
+      
       public static const VEHICLE_MESSAGES_DEATH_FROM_DROWNING_ENEMY_SELF:String = "#ingame_gui:vehicle_messages/DEATH_FROM_DROWNING_ENEMY_SELF";
       
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_DROWNING_ENEMY_SELF:String = "#ingame_gui:postmortem_messages/DEATH_FROM_DROWNING_ENEMY_SELF";
+      
       public static const VEHICLE_MESSAGES_DEATH_FROM_DROWNING_ALLY_SELF:String = "#ingame_gui:vehicle_messages/DEATH_FROM_DROWNING_ALLY_SELF";
+      
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_DROWNING_ALLY_SELF:String = "#ingame_gui:postmortem_messages/DEATH_FROM_DROWNING_ALLY_SELF";
       
       public static const PLAYER_MESSAGES_DEATH_FROM_DROWNING_SELF_SUICIDE:String = "#ingame_gui:player_messages/DEATH_FROM_DROWNING_SELF_SUICIDE";
       
@@ -629,9 +661,15 @@ package
       
       public static const VEHICLE_MESSAGES_DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE:String = "#ingame_gui:vehicle_messages/DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE";
       
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE:String = "#ingame_gui:postmortem_messages/DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE";
+      
       public static const VEHICLE_MESSAGES_DEATH_FROM_WORLD_COLLISION_ENEMY_SELF:String = "#ingame_gui:vehicle_messages/DEATH_FROM_WORLD_COLLISION_ENEMY_SELF";
       
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_WORLD_COLLISION_ENEMY_SELF:String = "#ingame_gui:postmortem_messages/DEATH_FROM_WORLD_COLLISION_ENEMY_SELF";
+      
       public static const VEHICLE_MESSAGES_DEATH_FROM_WORLD_COLLISION_ALLY_SELF:String = "#ingame_gui:vehicle_messages/DEATH_FROM_WORLD_COLLISION_ALLY_SELF";
+      
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_WORLD_COLLISION_ALLY_SELF:String = "#ingame_gui:postmortem_messages/DEATH_FROM_WORLD_COLLISION_ALLY_SELF";
       
       public static const PLAYER_MESSAGES_DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE:String = "#ingame_gui:player_messages/DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE";
       
@@ -657,9 +695,15 @@ package
       
       public static const VEHICLE_MESSAGES_DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION_SELF_SUICIDE:String = "#ingame_gui:vehicle_messages/DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION_SELF_SUICIDE";
       
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION_SELF_SUICIDE:String = "#ingame_gui:postmortem_messages/DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION_SELF_SUICIDE";
+      
       public static const VEHICLE_MESSAGES_DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION_ENEMY_SELF:String = "#ingame_gui:vehicle_messages/DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION_ENEMY_SELF";
       
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION_ENEMY_SELF:String = "#ingame_gui:postmortem_messages/DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION_ENEMY_SELF";
+      
       public static const VEHICLE_MESSAGES_DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION_ALLY_SELF:String = "#ingame_gui:vehicle_messages/DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION_ALLY_SELF";
+      
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION_ALLY_SELF:String = "#ingame_gui:postmortem_messages/DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION_ALLY_SELF";
       
       public static const PLAYER_MESSAGES_DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION_SELF_SUICIDE:String = "#ingame_gui:player_messages/DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION_SELF_SUICIDE";
       
@@ -685,9 +729,15 @@ package
       
       public static const VEHICLE_MESSAGES_DEATH_FROM_DEATH_ZONE_SELF_SUICIDE:String = "#ingame_gui:vehicle_messages/DEATH_FROM_DEATH_ZONE_SELF_SUICIDE";
       
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_DEATH_ZONE_SELF_SUICIDE:String = "#ingame_gui:postmortem_messages/DEATH_FROM_DEATH_ZONE_SELF_SUICIDE";
+      
       public static const VEHICLE_MESSAGES_DEATH_FROM_DEATH_ZONE_ENEMY_SELF:String = "#ingame_gui:vehicle_messages/DEATH_FROM_DEATH_ZONE_ENEMY_SELF";
       
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_DEATH_ZONE_ENEMY_SELF:String = "#ingame_gui:postmortem_messages/DEATH_FROM_DEATH_ZONE_ENEMY_SELF";
+      
       public static const VEHICLE_MESSAGES_DEATH_FROM_DEATH_ZONE_ALLY_SELF:String = "#ingame_gui:vehicle_messages/DEATH_FROM_DEATH_ZONE_ALLY_SELF";
+      
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_DEATH_ZONE_ALLY_SELF:String = "#ingame_gui:postmortem_messages/DEATH_FROM_DEATH_ZONE_ALLY_SELF";
       
       public static const VEHICLE_MESSAGES_DEATH_FROM_GAS_ATTACK_ENEMY_SELF:String = "#ingame_gui:vehicle_messages/DEATH_FROM_GAS_ATTACK_ENEMY_SELF";
       
@@ -733,9 +783,15 @@ package
       
       public static const VEHICLE_MESSAGES_DEATH_FROM_RAMMING_SELF_SUICIDE:String = "#ingame_gui:vehicle_messages/DEATH_FROM_RAMMING_SELF_SUICIDE";
       
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_RAMMING_SELF_SUICIDE:String = "#ingame_gui:postmortem_messages/DEATH_FROM_RAMMING_SELF_SUICIDE";
+      
       public static const VEHICLE_MESSAGES_DEATH_FROM_RAMMING_ENEMY_SELF:String = "#ingame_gui:vehicle_messages/DEATH_FROM_RAMMING_ENEMY_SELF";
       
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_RAMMING_ENEMY_SELF:String = "#ingame_gui:postmortem_messages/DEATH_FROM_RAMMING_ENEMY_SELF";
+      
       public static const VEHICLE_MESSAGES_DEATH_FROM_RAMMING_ALLY_SELF:String = "#ingame_gui:vehicle_messages/DEATH_FROM_RAMMING_ALLY_SELF";
+      
+      public static const POSTMORTEM_MESSAGES_DEATH_FROM_RAMMING_ALLY_SELF:String = "#ingame_gui:postmortem_messages/DEATH_FROM_RAMMING_ALLY_SELF";
       
       public static const PLAYER_MESSAGES_DEATH_FROM_RAMMING_SELF_SUICIDE:String = "#ingame_gui:player_messages/DEATH_FROM_RAMMING_SELF_SUICIDE";
       
@@ -750,6 +806,28 @@ package
       public static const PLAYER_MESSAGES_DEATH_FROM_RAMMING_ALLY_ALLY:String = "#ingame_gui:player_messages/DEATH_FROM_RAMMING_ALLY_ALLY";
       
       public static const PLAYER_MESSAGES_DEATH_FROM_RAMMING_ALLY_ENEMY:String = "#ingame_gui:player_messages/DEATH_FROM_RAMMING_ALLY_ENEMY";
+      
+      public static const PLAYER_MESSAGES_DEATH_FROM_OVERTURN_SELF_SUICIDE:String = "#ingame_gui:player_messages/DEATH_FROM_OVERTURN_SELF_SUICIDE";
+      
+      public static const PLAYER_MESSAGES_DEATH_FROM_OVERTURN_SELF_ALLY:String = "#ingame_gui:player_messages/DEATH_FROM_OVERTURN_SELF_ALLY";
+      
+      public static const PLAYER_MESSAGES_DEATH_FROM_OVERTURN_SELF_ENEMY:String = "#ingame_gui:player_messages/DEATH_FROM_OVERTURN_SELF_ENEMY";
+      
+      public static const PLAYER_MESSAGES_DEATH_FROM_OVERTURN_ALLY_SUICIDE:String = "#ingame_gui:player_messages/DEATH_FROM_OVERTURN_ALLY_SUICIDE";
+      
+      public static const PLAYER_MESSAGES_DEATH_FROM_OVERTURN_ALLY_SELF:String = "#ingame_gui:player_messages/DEATH_FROM_OVERTURN_ALLY_SELF";
+      
+      public static const PLAYER_MESSAGES_DEATH_FROM_OVERTURN_ALLY_ALLY:String = "#ingame_gui:player_messages/DEATH_FROM_OVERTURN_ALLY_ALLY";
+      
+      public static const PLAYER_MESSAGES_DEATH_FROM_OVERTURN_ALLY_ENEMY:String = "#ingame_gui:player_messages/DEATH_FROM_OVERTURN_ALLY_ENEMY";
+      
+      public static const PLAYER_MESSAGES_DEATH_FROM_OVERTURN_ENEMY_SUICIDE:String = "#ingame_gui:player_messages/DEATH_FROM_OVERTURN_ENEMY_SUICIDE";
+      
+      public static const PLAYER_MESSAGES_DEATH_FROM_OVERTURN_ENEMY_SELF:String = "#ingame_gui:player_messages/DEATH_FROM_OVERTURN_ENEMY_SELF";
+      
+      public static const PLAYER_MESSAGES_DEATH_FROM_OVERTURN_ENEMY_ALLY:String = "#ingame_gui:player_messages/DEATH_FROM_OVERTURN_ENEMY_ALLY";
+      
+      public static const PLAYER_MESSAGES_DEATH_FROM_OVERTURN_ENEMY_ENEMY:String = "#ingame_gui:player_messages/DEATH_FROM_OVERTURN_ENEMY_ENEMY";
       
       public static const PLAYER_MESSAGES_DEATH_FROM_RAMMING_ENEMY_SUICIDE:String = "#ingame_gui:player_messages/DEATH_FROM_RAMMING_ENEMY_SUICIDE";
       
@@ -779,13 +857,19 @@ package
       
       public static const EFFICIENCYRIBBONS_DAMAGE:String = "#ingame_gui:efficiencyRibbons/damage";
       
+      public static const EFFICIENCYRIBBONS_RAM:String = "#ingame_gui:efficiencyRibbons/ram";
+      
+      public static const EFFICIENCYRIBBONS_BURN:String = "#ingame_gui:efficiencyRibbons/burn";
+      
       public static const EFFICIENCYRIBBONS_DEFENCE:String = "#ingame_gui:efficiencyRibbons/defence";
       
       public static const EFFICIENCYRIBBONS_KILL:String = "#ingame_gui:efficiencyRibbons/kill";
       
       public static const EFFICIENCYRIBBONS_SPOTTED:String = "#ingame_gui:efficiencyRibbons/spotted";
       
-      public static const EFFICIENCYRIBBONS_ASSIST:String = "#ingame_gui:efficiencyRibbons/assist";
+      public static const EFFICIENCYRIBBONS_ASSISTTRACK:String = "#ingame_gui:efficiencyRibbons/assistTrack";
+      
+      public static const EFFICIENCYRIBBONS_ASSISTSPOT:String = "#ingame_gui:efficiencyRibbons/assistSpot";
       
       public static const EFFICIENCYRIBBONS_CRITS:String = "#ingame_gui:efficiencyRibbons/crits";
       
@@ -851,9 +935,31 @@ package
       
       public static const BATTLEENDWARNING_TEXT:String = "#ingame_gui:battleEndWarning/text";
       
+      public static const DAMAGEINDICATOR_MULTIPLIER:String = "#ingame_gui:damageIndicator/multiplier";
+      
+      public static const VEHICLE_MESSAGES_DEATH_FROM_OVERTURN_SELF_SUICIDE:String = "#ingame_gui:vehicle_messages/DEATH_FROM_OVERTURN_SELF_SUICIDE";
+      
+      public static const VEHICLE_MESSAGES_DEATH_FROM_OVERTURN_ENEMY_SELF:String = "#ingame_gui:vehicle_messages/DEATH_FROM_OVERTURN_ENEMY_SELF";
+      
+      public static const VEHICLE_MESSAGES_DEATH_FROM_OVERTURN_ALLY_SELF:String = "#ingame_gui:vehicle_messages/DEATH_FROM_OVERTURN_ALLY_SELF";
+      
+      public static const BATTLEMESSENGER_TOXIC_BLACKLIST_ADD_IN_BLACKLIST_HEADER:String = BATTLEMESSENGER_TOXIC_BLACKLIST_ADD_IN_BLACKLIST + "/header";
+      
+      public static const BATTLEMESSENGER_TOXIC_BLACKLIST_ADD_IN_BLACKLIST_BODY:String = BATTLEMESSENGER_TOXIC_BLACKLIST_ADD_IN_BLACKLIST + "/body";
+      
+      public static const BATTLEMESSENGER_TOXIC_BLACKLIST_CANT_ADD_IN_BLACKLIST_HEADER:String = "#ingame_gui:battleMessenger/toxic/blackList/CANT_ADD_IN_BLACKLIST/header";
+      
+      public static const BATTLEMESSENGER_TOXIC_BLACKLIST_CANT_ADD_IN_BLACKLIST_BODY:String = "#ingame_gui:battleMessenger/toxic/blackList/CANT_ADD_IN_BLACKLIST/body";
+      
+      public static const BATTLEMESSENGER_TOXIC_BLACKLIST_REMOVE_FROM_BLACKLIST_HEADER:String = BATTLEMESSENGER_TOXIC_BLACKLIST_REMOVE_FROM_BLACKLIST + "/header";
+      
+      public static const BATTLEMESSENGER_TOXIC_BLACKLIST_REMOVE_FROM_BLACKLIST_BODY:String = BATTLEMESSENGER_TOXIC_BLACKLIST_REMOVE_FROM_BLACKLIST + "/body";
+      
       public static const CHAT_EXAMPLE_ENUM:Array = [CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE,CHAT_EXAMPLE_RELOADING_GUN,CHAT_EXAMPLE_RELOADING_CASSETTE,CHAT_EXAMPLE_RELOADING_READY,CHAT_EXAMPLE_TURN_BACK,CHAT_EXAMPLE_RELOADING_READY_CASSETTE,CHAT_EXAMPLE_RELOADING_UNAVAILABLE,CHAT_EXAMPLE_STOP,CHAT_EXAMPLE_HELP_ME,CHAT_EXAMPLE_HELP_ME_EX,CHAT_EXAMPLE_FOLLOW_ME,CHAT_EXAMPLE_ATTACK,CHAT_EXAMPLE_BACK_TO_BASE,CHAT_EXAMPLE_POSITIVE,CHAT_EXAMPLE_NEGATIVE,CHAT_EXAMPLE_ATTENTION_TO_CELL,CHAT_EXAMPLE_ATTACK_ENEMY];
       
       public static const CHAT_SHORTCUTS_ENUM:Array = [CHAT_SHORTCUTS_TURN_BACK,CHAT_SHORTCUTS_SUPPORT_ME_WITH_FIRE,CHAT_SHORTCUTS_RELOADING_GUN,CHAT_SHORTCUTS_RELOADING_CASSETTE,CHAT_SHORTCUTS_RELOADING_READY,CHAT_SHORTCUTS_RELOADING_READY_CASSETTE,CHAT_SHORTCUTS_RELOADING_UNAVAILABLE,CHAT_SHORTCUTS_STOP,CHAT_SHORTCUTS_HELP_ME,CHAT_SHORTCUTS_HELP_ME_EX,CHAT_SHORTCUTS_FOLLOW_ME,CHAT_SHORTCUTS_ATTACK,CHAT_SHORTCUTS_BACK_TO_BASE,CHAT_SHORTCUTS_POSITIVE,CHAT_SHORTCUTS_NEGATIVE,CHAT_SHORTCUTS_ATTENTION_TO_CELL,CHAT_SHORTCUTS_ATTACK_ENEMY];
+      
+      public static const EFFICIENCYRIBBONS_ENUM:Array = [EFFICIENCYRIBBONS_ARMOR,EFFICIENCYRIBBONS_CAPTURE,EFFICIENCYRIBBONS_DAMAGE,EFFICIENCYRIBBONS_RAM,EFFICIENCYRIBBONS_BURN,EFFICIENCYRIBBONS_DEFENCE,EFFICIENCYRIBBONS_KILL,EFFICIENCYRIBBONS_SPOTTED,EFFICIENCYRIBBONS_ASSISTTRACK,EFFICIENCYRIBBONS_ASSISTSPOT,EFFICIENCYRIBBONS_CRITS];
        
       
       public function INGAME_GUI()
@@ -878,6 +984,17 @@ package
          if(CHAT_SHORTCUTS_ENUM.indexOf(_loc2_) == -1)
          {
             DebugUtils.LOG_WARNING("[chat_shortcuts]:locale key \"" + _loc2_ + "\" was not found");
+            return null;
+         }
+         return _loc2_;
+      }
+      
+      public static function efficiencyribbons(param1:String) : String
+      {
+         var _loc2_:String = "#ingame_gui:efficiencyRibbons/" + param1;
+         if(EFFICIENCYRIBBONS_ENUM.indexOf(_loc2_) == -1)
+         {
+            DebugUtils.LOG_WARNING("[efficiencyribbons]:locale key \"" + _loc2_ + "\" was not found");
             return null;
          }
          return _loc2_;

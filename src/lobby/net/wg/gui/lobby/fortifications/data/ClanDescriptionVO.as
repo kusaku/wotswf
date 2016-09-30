@@ -44,6 +44,8 @@ public class ClanDescriptionVO extends DAAPIDataClass {
 
     public var isAlreadyFought:Boolean = false;
 
+    public var isAvailableByLevel:Boolean = false;
+
     public var warPlannedDate:String = "";
 
     public var warPlannedTime:String = "";

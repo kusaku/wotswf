@@ -1,16 +1,15 @@
 package net.wg.gui.lobby.techtree.controls {
 import flash.text.TextField;
 
+import net.wg.data.constants.generated.NODE_STATE_FLAGS;
 import net.wg.gui.components.controls.WalletResourcesStatus;
 import net.wg.gui.lobby.techtree.TechTreeEvent;
-import net.wg.gui.lobby.techtree.constants.NodeState;
 import net.wg.gui.lobby.techtree.constants.TTInvalidationType;
 import net.wg.gui.lobby.techtree.constants.XpTypeStrings;
 import net.wg.gui.lobby.techtree.interfaces.IRenderer;
+import net.wg.utils.ILocale;
 
 public class ExperienceInformation extends NodeComponent {
-
-    private var _freeXP:Number = 0;
 
     public var vehXPLabel:TextField;
 
@@ -30,37 +29,41 @@ public class ExperienceInformation extends NodeComponent {
 
     public var haveNotFreeXp:WalletResourcesStatus;
 
-    public function ExperienceInformation() {
-        super();
-    }
+    private var _freeXP:Number = 0;
 
-    override protected function onDispose():void {
-        this.haveNotFreeXp.dispose();
-        this.haveNotFreeXp = null;
-        super.onDispose();
+    private var _locale:ILocale;
+
+    public function ExperienceInformation() {
+        this._locale = App.utils.locale;
+        super();
     }
 
     override public function setOwner(param1:IRenderer, param2:Boolean = false):void {
         if (_owner != null) {
-            _owner.removeEventListener(TechTreeEvent.STATE_CHANGED, this.handleOwnerStateChanged);
+            _owner.removeEventListener(TechTreeEvent.STATE_CHANGED, this.onOwnerStateChangedHandler);
         }
         super.setOwner(param1);
         if (_owner != null) {
-            _owner.addEventListener(TechTreeEvent.STATE_CHANGED, this.handleOwnerStateChanged, false, 0, true);
+            _owner.addEventListener(TechTreeEvent.STATE_CHANGED, this.onOwnerStateChangedHandler, false, 0, true);
         }
         invalidate(TTInvalidationType.ELITE, TTInvalidationType.VEH_XP);
     }
 
-    public function setFreeXP(param1:Number):void {
-        if (this._freeXP == param1) {
-            return;
-        }
-        this._freeXP = param1;
-        invalidate(TTInvalidationType.FREE_XP);
-    }
-
-    public function setWalletStatus():void {
-        this.freeXPField.visible = !this.haveNotFreeXp.updateStatus(App.utils.voMgr.walletStatusVO.freeXpStatus);
+    override protected function onDispose():void {
+        this.vehXPIcon.dispose();
+        this.vehXPIcon = null;
+        this.vehXPInTotalIcon.dispose();
+        this.vehXPInTotalIcon = null;
+        this.haveNotFreeXp.dispose();
+        this.haveNotFreeXp = null;
+        this.totalXPField = null;
+        this.vehXPLabel = null;
+        this.vehXPField = null;
+        this.freeXPLabel = null;
+        this.freeXPField = null;
+        this.totalXPLabel = null;
+        this._locale = null;
+        super.onDispose();
     }
 
     override protected function configUI():void {
@@ -92,6 +95,18 @@ public class ExperienceInformation extends NodeComponent {
         }
     }
 
+    public function setFreeXP(param1:Number):void {
+        if (this._freeXP == param1) {
+            return;
+        }
+        this._freeXP = param1;
+        invalidate(TTInvalidationType.FREE_XP);
+    }
+
+    public function setWalletStatus():void {
+        this.freeXPField.visible = !this.haveNotFreeXp.updateStatus(App.utils.voMgr.walletStatusVO.freeXpStatus);
+    }
+
     private function changeStars():void {
         var _loc1_:String = !!_owner.isElite() ? XpTypeStrings.ELITE_XP_TYPE : XpTypeStrings.EARNED_XP_TYPE;
         this.vehXPIcon.type = _loc1_;
@@ -99,42 +114,19 @@ public class ExperienceInformation extends NodeComponent {
     }
 
     private function makeVehXPString():void {
-        var _loc2_:String = null;
-        var _loc1_:Number = _owner.getEarnedXP();
-        if (App.utils != null) {
-            _loc2_ = App.utils.locale.integer(_loc1_);
-        }
-        else {
-            _loc2_ = _loc1_.toString();
-        }
-        this.vehXPField.text = _loc2_;
+        this.vehXPField.text = this._locale.integer(_owner.getEarnedXP());
     }
 
     private function makeFreeXPString():void {
-        var _loc1_:String = null;
-        if (App.utils != null) {
-            _loc1_ = App.utils.locale.integer(this._freeXP);
-        }
-        else {
-            _loc1_ = this._freeXP.toString();
-        }
-        this.freeXPField.text = _loc1_;
+        this.freeXPField.text = this._locale.integer(this._freeXP);
     }
 
     private function makeTotalXPString():void {
-        var _loc2_:String = null;
-        var _loc1_:Number = _owner.getEarnedXP() + Math.max(0, this._freeXP);
-        if (App.utils != null) {
-            _loc2_ = App.utils.locale.integer(_loc1_);
-        }
-        else {
-            _loc2_ = _loc1_.toString();
-        }
-        this.totalXPField.text = _loc2_;
+        this.totalXPField.text = this._locale.integer(_owner.getEarnedXP() + Math.max(0, this._freeXP));
     }
 
-    private function handleOwnerStateChanged(param1:TechTreeEvent):void {
-        if (param1.primary == NodeState.ELITE) {
+    private function onOwnerStateChangedHandler(param1:TechTreeEvent):void {
+        if (param1.primary == NODE_STATE_FLAGS.ELITE) {
             invalidate(TTInvalidationType.ELITE);
         }
         else if (param1.primary == 0) {

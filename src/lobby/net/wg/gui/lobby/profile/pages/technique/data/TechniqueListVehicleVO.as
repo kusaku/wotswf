@@ -37,6 +37,8 @@ public class TechniqueListVehicleVO extends DAAPIDataClass {
 
     public var level:int;
 
+    public var compareModeAvailable:Boolean;
+
     public function TechniqueListVehicleVO(param1:Object) {
         super(param1);
     }

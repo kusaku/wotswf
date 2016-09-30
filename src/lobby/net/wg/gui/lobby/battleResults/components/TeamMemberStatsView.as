@@ -177,6 +177,10 @@ public class TeamMemberStatsView extends UIComponentEx implements IFocusContaine
         return this.list;
     }
 
+    public function invalidateMedalsListData():void {
+        this.achievements.invalidateData();
+    }
+
     public function setVehicleIdxInGarageDropdown(param1:int):void {
         if (this._selectedVehicleIndex == param1) {
             return;
@@ -185,10 +189,6 @@ public class TeamMemberStatsView extends UIComponentEx implements IFocusContaine
         if (this.selectVehicleDropdown.dataProvider != null) {
             this.selectVehicleDropdown.selectedIndex = this._selectedVehicleIndex;
         }
-    }
-
-    public function invalidateMedalsListData():void {
-        this.achievements.invalidateData();
     }
 
     private function initTargetScale(param1:Number, param2:Number):void {
@@ -214,13 +214,17 @@ public class TeamMemberStatsView extends UIComponentEx implements IFocusContaine
     }
 
     private function applyVehicleData():void {
-        this.vehicleStats.data = this._data.statValues[this._selectedVehicleIndex];
-        var _loc1_:VehicleItemVO = VehicleItemVO(this._data.vehicles[this._selectedVehicleIndex]);
-        this.tankIcon.source = _loc1_.icon;
-        var _loc2_:String = _loc1_.flag;
-        this.tankFlag.visible = _loc2_.length > 0;
-        if (_loc2_ != null) {
-            this.tankFlag.gotoAndStop(_loc2_);
+        var _loc1_:VehicleItemVO = null;
+        var _loc2_:String = null;
+        if (this._selectedVehicleIndex < this._data.statValues.length) {
+            this.vehicleStats.data = this._data.statValues[this._selectedVehicleIndex];
+            _loc1_ = VehicleItemVO(this._data.vehicles[this._selectedVehicleIndex]);
+            this.tankIcon.source = _loc1_.icon;
+            _loc2_ = _loc1_.flag;
+            this.tankFlag.visible = _loc2_.length > 0;
+            if (_loc2_ != null) {
+                this.tankFlag.gotoAndStop(_loc2_);
+            }
         }
     }
 

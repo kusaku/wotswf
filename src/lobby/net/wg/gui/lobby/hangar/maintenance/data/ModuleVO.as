@@ -1,5 +1,5 @@
 package net.wg.gui.lobby.hangar.maintenance.data {
-import net.wg.data.constants.Currencies;
+import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 import net.wg.data.daapi.base.DAAPIDataClass;
 import net.wg.gui.components.controls.VO.ActionPriceVO;
 
@@ -83,7 +83,7 @@ public class ModuleVO extends DAAPIDataClass {
     }
 
     public function get price():int {
-        return this.prices[this.currency == Currencies.CREDITS ? 0 : 1];
+        return this.prices[this.currency == CURRENCIES_CONSTANTS.CREDITS ? 0 : 1];
     }
 }
 }

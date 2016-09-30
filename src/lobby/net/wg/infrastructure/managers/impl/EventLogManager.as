@@ -12,8 +12,14 @@ import net.wg.utils.IAssertable;
 
 public class EventLogManager extends EventLogManagerMeta implements IEventLogManager {
 
+    private var _isSystemEnabled:Boolean = false;
+
     public function EventLogManager() {
         super();
+    }
+
+    public function as_setSystemEnabled(param1:Boolean):void {
+        this._isSystemEnabled = param1;
     }
 
     public function logUIElementDropDown(param1:DisplayObject, param2:String, param3:uint):void {
@@ -65,15 +71,20 @@ public class EventLogManager extends EventLogManagerMeta implements IEventLogMan
     }
 
     private function logSubSystem(param1:uint, param2:String, param3:uint, param4:uint):void {
-        var _loc5_:IAssertable = App.utils.asserter;
-        if (!isDAAPIInited || param3 == Values.EMPTY_UIID) {
-            return;
+        var _loc5_:IAssertable = null;
+        var _loc6_:String = null;
+        var _loc7_:String = null;
+        if (this._isSystemEnabled) {
+            _loc5_ = App.utils.asserter;
+            if (!isDAAPIInited || param3 == Values.EMPTY_UIID) {
+                return;
+            }
+            _loc6_ = "Unknown logging subsytem:" + param1;
+            _loc7_ = "Unknown logged event: " + param2;
+            _loc5_.assert(EVENT_LOG_CONSTANTS.SUB_SYSTEMS.indexOf(param1) != -1, _loc6_);
+            _loc5_.assert(EVENT_LOG_CONSTANTS.EVENT_TYPES.indexOf(param2) != -1, _loc7_);
+            logEventS(param1, param2, param3, param4);
         }
-        var _loc6_:String = "Unknown logging subsytem:" + param1;
-        var _loc7_:String = "Unknown logged event: " + param2;
-        _loc5_.assert(EVENT_LOG_CONSTANTS.SUB_SYSTEMS.indexOf(param1) != -1, _loc6_);
-        _loc5_.assert(EVENT_LOG_CONSTANTS.EVENT_TYPES.indexOf(param2) != -1, _loc7_);
-        logEventS(param1, param2, param3, param4);
     }
 
     private function getIdentifiable(param1:DisplayObject):IIdentifiable {

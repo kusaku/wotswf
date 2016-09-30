@@ -12,7 +12,6 @@ import net.wg.data.constants.Linkages;
 import net.wg.data.constants.RolesState;
 import net.wg.data.constants.Values;
 import net.wg.data.constants.VehicleModules;
-import net.wg.data.constants.VehicleTypes;
 import net.wg.data.constants.generated.BATTLE_ITEM_STATES;
 import net.wg.gui.battle.views.damagePanel.VO.DamagePanelTooltipVO;
 import net.wg.gui.battle.views.damagePanel.VO.TooltipStringByItemStateVO;
@@ -68,9 +67,9 @@ public class DamagePanel extends DamagePanelMeta implements IDamagePanelMeta {
 
     public var tankIndicator:TankIndicator;
 
-    private var _modulesCtrl:IDamagePanelItemsCtrl;
+    private var _modulesCtrl:ModulesCtrl;
 
-    private var _tankmenCtrl:IDamagePanelItemsCtrl;
+    private var _tankmenCtrl:TankmenCtrl;
 
     private var _cruiseVector:Vector.<Shape>;
 
@@ -91,6 +90,8 @@ public class DamagePanel extends DamagePanelMeta implements IDamagePanelMeta {
     private var _clickableAreas:Vector.<DamagePanelItemClickArea>;
 
     private var _isInited:Boolean = false;
+
+    private var _isReseted:Boolean = false;
 
     private var _isDestroyed:Boolean = false;
 
@@ -130,7 +131,7 @@ public class DamagePanel extends DamagePanelMeta implements IDamagePanelMeta {
         var _loc2_:int = 0;
         while (_loc2_ < this._cruiseStateCount) {
             _loc1_ = new Shape();
-            this._atlasManager.drawGraphics(AtlasConstants.BATTLE_ATLAS, BattleAtlasItem.CRUISE + _loc2_, _loc1_.graphics, "", false, true);
+            this._atlasManager.drawGraphics(AtlasConstants.BATTLE_ATLAS, BattleAtlasItem.CRUISE + _loc2_, _loc1_.graphics, Values.EMPTY_STR, false, true);
             _loc1_.visible = false;
             _loc1_.x = CRUISE_X_POSITION;
             _loc1_.y = CRUISE_Y_POSITION;
@@ -227,6 +228,7 @@ public class DamagePanel extends DamagePanelMeta implements IDamagePanelMeta {
             if (this._lockChassis != null) {
                 this._lockChassis.visible = false;
             }
+            this._isReseted = true;
         }
         this._isDestroyed = false;
     }
@@ -280,9 +282,13 @@ public class DamagePanel extends DamagePanelMeta implements IDamagePanelMeta {
             this.changeDisplayListForCtrl(this._tankmenCtrl, false);
             this._tankmenCtrl.dispose();
         }
-        if (param3 == VehicleTypes.AT_SPG || param3 == VehicleTypes.SPG && this._lockChassis == null) {
-            this.addLockChassisIcon(param7);
+        if (!param7) {
+            this.initLockChassis();
+            this._lockChassis.visible = !param7;
         }
+        this.tankIndicator.isVehicleWithTurret = param6;
+        this._modulesCtrl.hasTurretRotator = param6;
+        this.updateModuleAssets();
         this.setRotatorType(param3, param5);
         this._tankmenCtrl = new TankmenCtrl(param4);
         this.changeDisplayListForCtrl(this._tankmenCtrl, true);
@@ -297,6 +303,7 @@ public class DamagePanel extends DamagePanelMeta implements IDamagePanelMeta {
 
     public function as_updateDeviceState(param1:String, param2:String):void {
         if (VehicleModules.MODULES_LIST.indexOf(param1) >= 0) {
+            this.updateModuleAssets();
             this._modulesCtrl.setState(param1, param2);
             this.tankIndicator.setModuleState(param1, param2);
         }
@@ -374,6 +381,9 @@ public class DamagePanel extends DamagePanelMeta implements IDamagePanelMeta {
     }
 
     private function setAutoRotation(param1:Boolean):void {
+        if (!param1) {
+            this.initLockChassis();
+        }
         if (this._lockChassis != null) {
             this._lockChassis.visible = !param1;
         }
@@ -384,6 +394,13 @@ public class DamagePanel extends DamagePanelMeta implements IDamagePanelMeta {
         this._healthInfo = param1;
         this._healthIsInvalid = true;
         invalidateData();
+    }
+
+    private function updateModuleAssets():void {
+        if (this._isReseted) {
+            this._modulesCtrl.updateAvailableAssets();
+            this._isReseted = false;
+        }
     }
 
     private function getTooltipText(param1:String):String {
@@ -443,15 +460,15 @@ public class DamagePanel extends DamagePanelMeta implements IDamagePanelMeta {
         }
     }
 
-    private function addLockChassisIcon(param1:Boolean):void {
-        var _loc2_:Class = App.utils.classFactory.getClass(Linkages.LOCK_CHASSIS);
+    private function initLockChassis():void {
+        var _loc1_:Class = null;
         if (this._lockChassis == null) {
-            this._lockChassis = new Bitmap(new _loc2_());
+            _loc1_ = App.utils.classFactory.getClass(Linkages.LOCK_CHASSIS);
+            this._lockChassis = new Bitmap(new _loc1_());
             addChild(this._lockChassis);
             this._lockChassis.x = LOCK_CHASSIS_ICON_X;
             this._lockChassis.y = LOCK_CHASSIS_ICON_Y;
         }
-        this._lockChassis.visible = !param1;
     }
 
     private function checkTankmanName(param1:String):Boolean {
@@ -522,7 +539,7 @@ public class DamagePanel extends DamagePanelMeta implements IDamagePanelMeta {
         var _loc4_:* = VehicleModules.MODULES_LIST.indexOf(_loc3_) >= 0;
         if (_loc4_) {
             if (_loc3_ == VehicleModules.CHASSIS) {
-                _loc5_ = ModulesCtrl(this._modulesCtrl).lastDestroyedTrackName;
+                _loc5_ = this._modulesCtrl.lastBrokenTrackName;
                 if (_loc5_ != Values.EMPTY_STR) {
                     _loc3_ = _loc5_;
                 }

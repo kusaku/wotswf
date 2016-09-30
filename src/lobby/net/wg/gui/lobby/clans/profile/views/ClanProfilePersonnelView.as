@@ -27,7 +27,7 @@ public class ClanProfilePersonnelView extends ClanProfilePersonnelViewMeta imple
 
     public var group:IGroupEx = null;
 
-    public var membersCountTF:TextField = null;
+    public var titleTF:TextField = null;
 
     public var leftLine:DashLine = null;
 
@@ -63,7 +63,7 @@ public class ClanProfilePersonnelView extends ClanProfilePersonnelViewMeta imple
         this.leftLine = null;
         this.rightLine.dispose();
         this.rightLine = null;
-        this.membersCountTF = null;
+        this.titleTF = null;
         this._dataProvider = null;
         this.clearData();
         super.onDispose();
@@ -72,10 +72,10 @@ public class ClanProfilePersonnelView extends ClanProfilePersonnelViewMeta imple
     override protected function draw():void {
         super.draw();
         if (this._data && isInvalid(InvalidationType.DATA)) {
-            this.membersCountTF.htmlText = this._data.membersCount;
+            this.titleTF.htmlText = this._data.title;
             this.leftLine.x = LINES_BORDER_GAP;
-            this.leftLine.width = this.membersCountTF.x - LINES_BORDER_GAP >> 0;
-            this.rightLine.width = width - this.membersCountTF.x - this.membersCountTF.width - LINES_BORDER_GAP >> 0;
+            this.leftLine.width = this.titleTF.x - LINES_BORDER_GAP >> 0;
+            this.rightLine.width = width - this.titleTF.x - this.titleTF.width - LINES_BORDER_GAP >> 0;
             this.rightLine.x = width - this.rightLine.width - LINES_BORDER_GAP >> 0;
         }
     }
@@ -86,7 +86,7 @@ public class ClanProfilePersonnelView extends ClanProfilePersonnelViewMeta imple
         _loc1_.gap = STATS_GAP;
         this.group.layout = _loc1_;
         this.group.itemRendererLinkage = Linkages.ADVANCED_LINE_DESCR_ICON_TEXT_UI;
-        this.membersCountTF.autoSize = TextFieldAutoSize.CENTER;
+        this.titleTF.autoSize = TextFieldAutoSize.CENTER;
         this.table.isListSelectable = false;
     }
 

@@ -25,14 +25,6 @@ public interface IHangarMeta extends IEventDispatcher {
 
     function as_closeHelpLayout():void;
 
-    function as_setIsIGR(param1:Boolean, param2:String):void;
-
-    function as_setServerStats(param1:String, param2:String):void;
-
-    function as_setServerStatsInfo(param1:String):void;
-
-    function as_setVehicleIGR(param1:String):void;
-
     function as_showMiniClientInfo(param1:String, param2:String):void;
 
     function as_show3DSceneTooltip(param1:String, param2:Array):void;

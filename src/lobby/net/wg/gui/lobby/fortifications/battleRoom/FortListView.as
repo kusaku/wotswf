@@ -28,7 +28,6 @@ import net.wg.utils.ICommons;
 import org.idmedia.as3commons.util.StringUtils;
 
 import scaleform.clik.data.DataProvider;
-import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.events.ListEvent;
 import scaleform.gfx.TextFieldEx;
 
@@ -121,17 +120,21 @@ public class FortListView extends FortListMeta implements IFortListMeta {
         this.alignRegulationText(this.regulationsWarningTF, this.regulationsWarning);
         this.alignRegulationText(this.regulationsTF, this.regulationsInfo);
         this.filterDivision.dataProvider = this._divisionsDP;
-        this.filterDivision.addEventListener(ListEvent.INDEX_CHANGE, this.onFilterChangeHandler);
-        this._commons.addMultipleHandlers(this._hoverEnabledControls, MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this._commons.addMultipleHandlers(this._hoverEnabledControls, MouseEvent.ROLL_OUT, onControlRollOut);
+        this.filterDivision.addEventListener(ListEvent.INDEX_CHANGE, this.onFilterIndexChangeHandler);
+        this._commons.addMultipleHandlers(this._hoverEnabledControls, MouseEvent.ROLL_OVER, this.onCommonsRollOverHandler);
+        this._commons.addMultipleHandlers(this._hoverEnabledControls, MouseEvent.ROLL_OUT, this.onCommonsRollOutHandler);
     }
 
     override protected function onBeforeDispose():void {
         App.utils.scheduler.cancelTask(this.showTextMsg);
-        this.filterDivision.removeEventListener(ListEvent.INDEX_CHANGE, this.onFilterChangeHandler);
-        this._commons.removeMultipleHandlers(this._hoverEnabledControls, MouseEvent.ROLL_OVER, this.onControlRollOver);
-        this._commons.removeMultipleHandlers(this._hoverEnabledControls, MouseEvent.ROLL_OUT, onControlRollOut);
+        this.filterDivision.removeEventListener(ListEvent.INDEX_CHANGE, this.onFilterIndexChangeHandler);
+        this._commons.removeMultipleHandlers(this._hoverEnabledControls, MouseEvent.ROLL_OVER, this.onCommonsRollOverHandler);
+        this._commons.removeMultipleHandlers(this._hoverEnabledControls, MouseEvent.ROLL_OUT, this.onCommonsRollOutHandler);
         super.onBeforeDispose();
+    }
+
+    private function onCommonsRollOutHandler(param1:MouseEvent):void {
+        onControlRollOut();
     }
 
     override protected function onDispose():void {
@@ -209,21 +212,20 @@ public class FortListView extends FortListMeta implements IFortListMeta {
         detailsSection.noRallyScreen.showText(!_loc1_);
     }
 
-    override protected function onItemRollOver(param1:SortableTableListEvent):void {
+    override protected function itemRollOverPerformer(param1:SortableTableListEvent = null):void {
         this._tooltipMgr.show(TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_RENDERERINFO);
     }
 
-    override protected function onBackClickHandler(param1:ButtonEvent):void {
-        super.onBackClickHandler(param1);
+    private function onCommonsRollOverHandler(param1:MouseEvent):void {
+        this.controlRollOverPerformer(param1);
     }
 
-    override protected function onCreateClick(param1:ButtonEvent):void {
-        super.onCreateClick(param1);
-    }
-
-    override protected function onControlRollOver(param1:MouseEvent):void {
+    override protected function controlRollOverPerformer(param1:MouseEvent = null):void {
         var _loc2_:String = null;
         var _loc3_:String = null;
+        if (param1 == null) {
+            return;
+        }
         if (createBtn == param1.currentTarget && createBtn.enabled) {
             this._tooltipMgr.showComplex(TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_CREATEBTN);
         }
@@ -243,7 +245,7 @@ public class FortListView extends FortListMeta implements IFortListMeta {
         }
     }
 
-    private function onFilterChangeHandler(param1:ListEvent):void {
+    private function onFilterIndexChangeHandler(param1:ListEvent):void {
         changeDivisionIndexS(param1.index);
     }
 }

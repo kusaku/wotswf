@@ -1,7 +1,9 @@
 package net.wg.gui.lobby.vehiclePreview.controls {
+import flash.display.Sprite;
 import flash.text.TextField;
 
 import net.wg.gui.components.advanced.interfaces.IBackButton;
+import net.wg.gui.components.tooltips.helpers.TankTypeIco;
 import net.wg.gui.interfaces.ISoundButtonEx;
 import net.wg.gui.lobby.vehiclePreview.data.VehPreviewHeaderVO;
 import net.wg.gui.lobby.vehiclePreview.events.VehPreviewEvent;
@@ -15,9 +17,17 @@ public class VehPreviewHeader extends UIComponentEx implements IVehPreviewHeader
 
     private static const CLOSE_BTN_OFFSET:int = 15;
 
+    private static const GAP:int = 25;
+
+    public var tankTypeIcon:TankTypeIco;
+
+    public var txtTankInfo:TextField;
+
     public var background:VehPreviewBackground = null;
 
     public var titleTf:TextField;
+
+    public var premiumIGRBg:Sprite = null;
 
     private var _closeBtn:ISoundButtonEx;
 
@@ -37,6 +47,10 @@ public class VehPreviewHeader extends UIComponentEx implements IVehPreviewHeader
         this._backBtn.dispose();
         this._backBtn = null;
         this.titleTf = null;
+        this.tankTypeIcon.dispose();
+        this.tankTypeIcon = null;
+        this.txtTankInfo = null;
+        this.premiumIGRBg = null;
         super.onDispose();
     }
 
@@ -44,6 +58,7 @@ public class VehPreviewHeader extends UIComponentEx implements IVehPreviewHeader
         super.configUI();
         this._backBtn.addEventListener(ButtonEvent.CLICK, this.onBackBtnClickHandler);
         this._closeBtn.addEventListener(ButtonEvent.CLICK, this.onCloseBtnClickHandler);
+        this.premiumIGRBg.mouseEnabled = this.premiumIGRBg.mouseChildren = false;
     }
 
     override protected function draw():void {
@@ -56,6 +71,9 @@ public class VehPreviewHeader extends UIComponentEx implements IVehPreviewHeader
 
     public function update(param1:Object):void {
         var _loc2_:VehPreviewHeaderVO = VehPreviewHeaderVO(param1);
+        this.premiumIGRBg.visible = _loc2_.isPremiumIGR;
+        this.tankTypeIcon.type = _loc2_.tankType;
+        this.txtTankInfo.htmlText = _loc2_.tankInfo;
         this._closeBtn.label = _loc2_.closeBtnLabel;
         this._backBtn.label = _loc2_.backBtnLabel;
         this._backBtn.descrLabel = _loc2_.backBtnDescrLabel;
@@ -65,7 +83,11 @@ public class VehPreviewHeader extends UIComponentEx implements IVehPreviewHeader
     }
 
     private function layout():void {
-        this.titleTf.x = width - this.titleTf.width >> 1;
+        var _loc1_:* = width >> 1;
+        this.tankTypeIcon.x = _loc1_;
+        this.titleTf.x = _loc1_ - this.titleTf.width - GAP;
+        this.txtTankInfo.x = _loc1_ + GAP;
+        this.premiumIGRBg.x = _loc1_ - (this.premiumIGRBg.width >> 1);
         this._closeBtn.x = width - this._closeBtn.width - CLOSE_BTN_OFFSET | 0;
     }
 

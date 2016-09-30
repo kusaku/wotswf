@@ -27,6 +27,7 @@ import net.wg.utils.IAnimBuilder;
 import net.wg.utils.IAssertable;
 import net.wg.utils.IClassFactory;
 import net.wg.utils.ICommons;
+import net.wg.utils.ICounterManager;
 import net.wg.utils.IDataUtils;
 import net.wg.utils.IDateTime;
 import net.wg.utils.IEventCollector;
@@ -83,6 +84,8 @@ public class MockUtils implements IUtils {
 
     private var _dataUtils:IDataUtils;
 
+    private var _counterManager:ICounterManager;
+
     public function MockUtils() {
         super();
         this._asserter = new MockAssertable();
@@ -104,6 +107,7 @@ public class MockUtils implements IUtils {
         this._animBuilder = new MockAnimBuilder();
         this._dateTime = new MockDateTime();
         this._dataUtils = new MockDataUtils();
+        this._counterManager = new MockCounterManager();
     }
 
     public function addEventListener(param1:String, param2:Function, param3:Boolean = false, param4:int = 0, param5:Boolean = false):void {
@@ -260,6 +264,10 @@ public class MockUtils implements IUtils {
 
     public function get data():IDataUtils {
         return this._dataUtils;
+    }
+
+    public function get counterManager():ICounterManager {
+        return this._counterManager;
     }
 
     public function dispatchEvent(param1:Event):Boolean {

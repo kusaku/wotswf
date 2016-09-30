@@ -9,9 +9,9 @@ public interface IBattleQueueMeta extends IEventDispatcher {
 
     function onEscapeS():void;
 
-    function as_setTimer(param1:String, param2:String):void;
+    function as_setTimer(param1:String):void;
 
-    function as_setTypeInfo(param1:String, param2:String, param3:String):void;
+    function as_setTypeInfo(param1:Object):void;
 
     function as_setPlayers(param1:String):void;
 

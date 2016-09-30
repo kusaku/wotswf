@@ -55,6 +55,8 @@ public class ICON_TEXT_FRAMES {
 
     public static const REWARD_SHEET:String = "sheets";
 
+    public static const ALERT:String = "alert";
+
     public function ICON_TEXT_FRAMES() {
         super();
     }

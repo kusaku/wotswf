@@ -4,6 +4,7 @@ import flash.display.MovieClip;
 import flash.display.Shape;
 
 import net.wg.data.constants.Linkages;
+import net.wg.data.constants.Values;
 import net.wg.gui.components.tooltips.VO.PersonalCaseBlockItemVO;
 import net.wg.gui.interfaces.IPersonalCaseBlockTitle;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
@@ -18,7 +19,7 @@ public class PersonalCaseBlocksArea extends UIComponent {
 
     private static const PADDING_BETWEEN_BLOCK_TITLE:uint = 11;
 
-    private static const VERTICAL_LINE_X:int = 331;
+    private static const VERTICAL_LINE_X:int = 341;
 
     private static const VERTICAL_LINE_Y:int = 112;
 
@@ -106,7 +107,9 @@ public class PersonalCaseBlocksArea extends UIComponent {
         this.addChild(_loc2_ as DisplayObject);
         this.paddingY = this.paddingY + PADDING_BETWEEN_BLOCKS;
         this.creteRows(param1.stats, _loc3_, _loc4_);
-        this.createVerticalLine();
+        if (param1.hasOwnProperty("secondLabel") && param1.secondLabel != Values.EMPTY_STR) {
+            this.createVerticalLine();
+        }
     }
 
     private function createVerticalLine():void {

@@ -233,21 +233,13 @@ package
       
       public static const C_95_LOST_CITY_DESCRIPTION:String = "#arenas:95_lost_city/description";
       
-      public static const C_105_GERMANY_NAME:String = "#arenas:105_germany/name";
-      
-      public static const C_105_GERMANY_DESCRIPTION:String = "#arenas:105_germany/description";
-      
-      public static const C_111_PARIS_NAME:String = "#arenas:111_paris/name";
-      
-      public static const C_111_PARIS_DESCRIPTION:String = "#arenas:111_paris/description";
-      
-      public static const C_112_EIFFEL_TOWER_NAME:String = "#arenas:112_eiffel_tower/name";
-      
-      public static const C_112_EIFFEL_TOWER_DESCRIPTION:String = "#arenas:112_eiffel_tower/description";
-      
       public static const C_114_CZECH_NAME:String = "#arenas:114_czech/name";
       
       public static const C_114_CZECH_DESCRIPTION:String = "#arenas:114_czech/description";
+      
+      public static const C_112_EIFFEL_TOWER_CTF_NAME:String = "#arenas:112_eiffel_tower_ctf/name";
+      
+      public static const C_112_EIFFEL_TOWER_CTF_DESCRIPTION:String = "#arenas:112_eiffel_tower_ctf/description";
        
       
       public function ARENAS()

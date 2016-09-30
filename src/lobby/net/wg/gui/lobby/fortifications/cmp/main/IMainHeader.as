@@ -1,7 +1,7 @@
 package net.wg.gui.lobby.fortifications.cmp.main {
 import flash.text.TextField;
 
-import net.wg.gui.components.advanced.ToggleSoundButton;
+import net.wg.gui.components.controls.BlackButton;
 import net.wg.gui.components.controls.IconTextButton;
 import net.wg.gui.interfaces.IButtonIconLoader;
 import net.wg.gui.interfaces.ISoundButtonEx;
@@ -33,9 +33,9 @@ public interface IMainHeader extends IFilledBar, IFocusContainer {
 
     function set calendarBtn(param1:IconTextButton):void;
 
-    function get transportBtn():ToggleSoundButton;
+    function get transportBtn():BlackButton;
 
-    function set transportBtn(param1:ToggleSoundButton):void;
+    function set transportBtn(param1:BlackButton):void;
 
     function get settingBtn():IButtonIconLoader;
 

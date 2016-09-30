@@ -45,5 +45,21 @@ public class AimSettingsArcadeDataVo extends SettingsDataVo {
             "reloaderTimer": createSliderWithLabelAndValue().build()
         });
     }
+
+    override protected function onDispose():void {
+        this.netType = null;
+        this.net = null;
+        this.centralTagType = null;
+        this.centralTag = null;
+        this.reloader = null;
+        this.condition = null;
+        this.mixingType = null;
+        this.mixing = null;
+        this.cassette = null;
+        this.gunTagType = null;
+        this.gunTag = null;
+        this.reloaderTimer = null;
+        super.onDispose();
+    }
 }
 }

@@ -1,6 +1,6 @@
 package net.wg.infrastructure.managers.utils.impl {
 import net.wg.data.constants.ColorSchemeNames;
-import net.wg.data.constants.Currencies;
+import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 
 public class LocaleLobby extends LocaleBase {
 
@@ -12,11 +12,11 @@ public class LocaleLobby extends LocaleBase {
 
     override public function htmlTextWithIcon(param1:String, param2:String):String {
         var _loc3_:uint = 0;
-        if (param2 == Currencies.CREDITS) {
+        if (param2 == CURRENCIES_CONSTANTS.CREDITS) {
             _loc3_ = App.colorSchemeMgr.getRGB(ColorSchemeNames.TEXT_COLOR_CREDITS);
             param2 = "Credits";
         }
-        else if (param2 == Currencies.GOLD) {
+        else if (param2 == CURRENCIES_CONSTANTS.GOLD) {
             _loc3_ = App.colorSchemeMgr.getRGB(ColorSchemeNames.TEXT_COLOR_GOLD);
             param2 = "Gold";
         }

@@ -88,6 +88,10 @@ public class VehicleSelectorItemRenderer extends ListItemRendererWithFocusOnDis 
         this.notReadyAlert.addEventListener(MouseEvent.ROLL_OUT, this.onRollOutAlert);
     }
 
+    override public function getData():Object {
+        return this.model;
+    }
+
     override public function setData(param1:Object):void {
         var _loc2_:Point = null;
         var _loc3_:Boolean = false;
@@ -235,6 +239,9 @@ public class VehicleSelectorItemRenderer extends ListItemRendererWithFocusOnDis 
     }
 
     private function dispatchVehicleSelector(param1:Boolean = false):void {
+        if (!this.model) {
+            return;
+        }
         this.model.selected = !!this._multiSelectionMode ? !this.model.selected : true;
         setState(state);
         invalidate(InvalidationType.DATA);

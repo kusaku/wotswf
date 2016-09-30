@@ -6,7 +6,6 @@ import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.text.TextField;
 
-import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.lobby.fortifications.cmp.build.impl.BuildingThumbnail;
 import net.wg.gui.lobby.fortifications.cmp.drctn.IDirectionCmp;
 import net.wg.gui.lobby.fortifications.data.BuildingVO;
@@ -90,8 +89,6 @@ public class DirectionCmp extends UIComponentEx implements IDirectionCmp {
 
     private var _label:String = "";
 
-    private var _useDirectionBuildingTooltips:Boolean = true;
-
     public function DirectionCmp() {
         super();
         this.attackAnimationMC.blendMode = BlendMode.ADD;
@@ -107,13 +104,11 @@ public class DirectionCmp extends UIComponentEx implements IDirectionCmp {
         this.notOpenedTF.htmlText = FORTIFICATIONS.GENERAL_DIRECTION_NOTOPENED;
         this.mouseArea.addEventListener(MouseEvent.ROLL_OVER, this.onMouseAreaRollOverHandler);
         this.mouseArea.addEventListener(MouseEvent.ROLL_OUT, this.onMouseAreaRollOutHandler);
-        this.baseBuilding.addEventListener(MouseEvent.ROLL_OVER, this.onBaseBuildingRollOverHandler);
     }
 
     override protected function onDispose():void {
         this.mouseArea.removeEventListener(MouseEvent.ROLL_OVER, this.onMouseAreaRollOverHandler);
         this.mouseArea.removeEventListener(MouseEvent.ROLL_OUT, this.onMouseAreaRollOutHandler);
-        this.baseBuilding.removeEventListener(MouseEvent.ROLL_OVER, this.onBaseBuildingRollOverHandler);
         this.baseBuilding.dispose();
         this.baseBuilding = null;
         this.battleArrow.dispose();
@@ -275,7 +270,6 @@ public class DirectionCmp extends UIComponentEx implements IDirectionCmp {
                 if (_loc4_) {
                     _loc1_.model = _loc4_;
                     _loc1_.x = _loc5_;
-                    _loc1_.addEventListener(MouseEvent.ROLL_OVER, this.onBaseBuildingRollOverHandler);
                     this.buildingsContainer.addChild(_loc1_);
                 }
                 _loc5_ = _loc5_ + _loc6_;
@@ -290,7 +284,6 @@ public class DirectionCmp extends UIComponentEx implements IDirectionCmp {
         var _loc1_:BuildingThumbnail = null;
         while (this.buildingsContainer.numChildren) {
             _loc1_ = BuildingThumbnail(this.buildingsContainer.getChildAt(0));
-            _loc1_.removeEventListener(MouseEvent.ROLL_OVER, this.onBaseBuildingRollOverHandler);
             this.buildingsContainer.removeChild(_loc1_);
             _loc1_.dispose();
         }
@@ -314,7 +307,8 @@ public class DirectionCmp extends UIComponentEx implements IDirectionCmp {
     private function updateBattleArrow():void {
         var _loc2_:BuildingThumbnail = null;
         var _loc3_:BuildingThumbnail = null;
-        var _loc4_:uint = 0;
+        var _loc4_:int = 0;
+        var _loc5_:uint = 0;
         this.battleArrow.visible = false;
         var _loc1_:String = !!this._model ? this._model.getBuildingUnderAttack() : null;
         if (_loc1_) {
@@ -322,14 +316,15 @@ public class DirectionCmp extends UIComponentEx implements IDirectionCmp {
                 _loc2_ = this.baseBuilding;
             }
             else {
-                _loc4_ = 0;
-                while (_loc4_ < this.buildingsContainer.numChildren) {
-                    _loc3_ = BuildingThumbnail(this.buildingsContainer.getChildAt(_loc4_));
+                _loc4_ = this.buildingsContainer.numChildren;
+                _loc5_ = 0;
+                while (_loc5_ < _loc4_) {
+                    _loc3_ = BuildingThumbnail(this.buildingsContainer.getChildAt(_loc5_));
                     if (_loc3_.model && _loc3_.model.uid == _loc1_) {
                         _loc2_ = _loc3_;
                         break;
                     }
-                    _loc4_++;
+                    _loc5_++;
                 }
             }
         }
@@ -356,12 +351,13 @@ public class DirectionCmp extends UIComponentEx implements IDirectionCmp {
 
     private function showHideBuildingsLevel(param1:Boolean):void {
         var _loc2_:BuildingThumbnail = null;
-        var _loc3_:int = 0;
-        while (_loc3_ < this.buildingsContainer.numChildren) {
-            _loc2_ = BuildingThumbnail(this.buildingsContainer.getChildAt(_loc3_));
+        var _loc3_:int = this.buildingsContainer.numChildren;
+        var _loc4_:int = 0;
+        while (_loc4_ < _loc3_) {
+            _loc2_ = BuildingThumbnail(this.buildingsContainer.getChildAt(_loc4_));
             _loc2_.alwaysShowLvl = this.alwaysShowLevels;
             _loc2_.showLevel = param1;
-            _loc3_++;
+            _loc4_++;
         }
         this.baseBuilding.alwaysShowLvl = this.alwaysShowLevels;
         this.baseBuilding.showLevel = param1;
@@ -369,11 +365,12 @@ public class DirectionCmp extends UIComponentEx implements IDirectionCmp {
 
     private function updateBuildingsDisabling():void {
         var _loc1_:BuildingThumbnail = null;
-        var _loc2_:int = 0;
-        while (_loc2_ < this.buildingsContainer.numChildren) {
-            _loc1_ = BuildingThumbnail(this.buildingsContainer.getChildAt(_loc2_));
+        var _loc2_:int = this.buildingsContainer.numChildren;
+        var _loc3_:int = 0;
+        while (_loc3_ < _loc2_) {
+            _loc1_ = BuildingThumbnail(this.buildingsContainer.getChildAt(_loc3_));
             _loc1_.disableLowLevel = this._disableLowLevelBuildings;
-            _loc2_++;
+            _loc3_++;
         }
         this.baseBuilding.disableLowLevel = this._disableLowLevelBuildings;
     }
@@ -469,27 +466,12 @@ public class DirectionCmp extends UIComponentEx implements IDirectionCmp {
         this.labelTF.htmlText = this._label;
     }
 
-    public function get useDirectionBuildingTooltips():Boolean {
-        return this._useDirectionBuildingTooltips;
-    }
-
-    public function set useDirectionBuildingTooltips(param1:Boolean):void {
-        this._useDirectionBuildingTooltips = param1;
-    }
-
     private function onMouseAreaRollOverHandler(param1:MouseEvent):void {
         this.showHideHowerState(true, true);
     }
 
     private function onMouseAreaRollOutHandler(param1:MouseEvent):void {
         this.showHideHowerState(false, true);
-    }
-
-    private function onBaseBuildingRollOverHandler(param1:MouseEvent):void {
-        var _loc2_:BuildingThumbnail = param1.currentTarget as BuildingThumbnail;
-        if (this._useDirectionBuildingTooltips && this._model && _loc2_ && _loc2_.model) {
-            App.toolTipMgr.showSpecial(TOOLTIPS_CONSTANTS.FORT_BUILDING_INFO, null, _loc2_.model.uid, this._model.isMine);
-        }
     }
 }
 }

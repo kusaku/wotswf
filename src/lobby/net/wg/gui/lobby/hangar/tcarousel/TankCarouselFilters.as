@@ -1,5 +1,6 @@
 package net.wg.gui.lobby.hangar.tcarousel {
 import flash.display.DisplayObject;
+import flash.events.Event;
 
 import net.wg.data.Aliases;
 import net.wg.gui.components.controls.ButtonIconNormal;
@@ -11,8 +12,10 @@ import net.wg.infrastructure.interfaces.IPopOverCaller;
 import net.wg.infrastructure.managers.IPopoverManager;
 
 import scaleform.clik.constants.DirectionMode;
+import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.events.ComponentEvent;
+import scaleform.clik.interfaces.IListItemRenderer;
 
 public class TankCarouselFilters extends UIComponentEx implements IPopOverCaller {
 
@@ -24,15 +27,13 @@ public class TankCarouselFilters extends UIComponentEx implements IPopOverCaller
 
     private static const HOT_FILTER_TILE_WIDTH:uint = 58;
 
-    private static const HOT_FILTER_TILE_HEIGHT:uint = 35;
+    private static const HOT_FILTER_TILE_HEIGHT:uint = 22;
 
-    private static const COUNTER_LAYOUT:String = "counter_layout";
+    private static const HOT_FILTERS_GAP:int = 13;
 
     public var paramsFilter:ButtonIconNormal = null;
 
     public var listHotFilter:SimpleTileList = null;
-
-    public var filterCounter:TankFilterCounter = null;
 
     private var _initVO:TankCarouselFilterInitVO = null;
 
@@ -40,20 +41,25 @@ public class TankCarouselFilters extends UIComponentEx implements IPopOverCaller
 
     private var _popoverMgr:IPopoverManager = null;
 
-    private var _counterPosY:Number = 0;
-
     public function TankCarouselFilters() {
         super();
     }
 
+    override protected function initialize():void {
+        super.initialize();
+    }
+
     override protected function configUI():void {
         super.configUI();
+        initSize();
         mouseEnabled = false;
         this._popoverMgr = App.popoverMgr;
         this.listHotFilter.itemRenderer = App.utils.classFactory.getClass(LINKAGE_TOGGLE_RENDERER);
         this.listHotFilter.tileWidth = HOT_FILTER_TILE_WIDTH;
         this.listHotFilter.tileHeight = HOT_FILTER_TILE_HEIGHT;
+        this.listHotFilter.verticalGap = HOT_FILTERS_GAP;
         this.listHotFilter.directionMode = DirectionMode.HORIZONTAL;
+        this.listHotFilter.autoSize = false;
         this.paramsFilter.addEventListener(ButtonEvent.CLICK, this.onParamsFilterClickHandler);
         addEventListener(ComponentEvent.HIDE, this.onHideHandler);
     }
@@ -62,8 +68,6 @@ public class TankCarouselFilters extends UIComponentEx implements IPopOverCaller
         this._popoverMgr = null;
         this._initVO = null;
         this._selectedVO = null;
-        this.filterCounter.dispose();
-        this.filterCounter = null;
         this.listHotFilter.dispose();
         this.listHotFilter = null;
         this.paramsFilter.removeEventListener(ButtonEvent.CLICK, this.onParamsFilterClickHandler);
@@ -74,40 +78,39 @@ public class TankCarouselFilters extends UIComponentEx implements IPopOverCaller
     }
 
     override protected function draw():void {
-        var _loc1_:Vector.<Boolean> = null;
-        var _loc2_:int = 0;
-        var _loc3_:int = 0;
+        var _loc1_:Number = NaN;
+        var _loc2_:Number = NaN;
+        var _loc3_:Number = NaN;
+        var _loc4_:Vector.<Boolean> = null;
+        var _loc5_:int = 0;
+        var _loc6_:IListItemRenderer = null;
+        var _loc7_:int = 0;
         super.draw();
-        if (isInvalid(INIT_INVALID) && this._initVO != null) {
+        if (isInvalid(INIT_INVALID)) {
             this.paramsFilter.iconSource = this._initVO.mainBtn.value;
             this.paramsFilter.tooltip = this._initVO.mainBtn.tooltip;
             this.listHotFilter.dataProvider = this._initVO.hotFilters;
-            this.filterCounter.setCloseButtonTooltip(this._initVO.counterCloseTooltip);
         }
-        if (isInvalid(SELECTED_INVALID) && this._selectedVO) {
-            _loc1_ = this._selectedVO.hotFilters;
-            _loc2_ = _loc1_.length;
-            _loc3_ = 0;
-            while (_loc3_ < _loc2_) {
-                this.listHotFilter.getRendererAt(_loc3_).selectable = _loc1_[_loc3_];
-                _loc3_++;
+        if (isInvalid(InvalidationType.SIZE)) {
+            _loc1_ = HOT_FILTER_TILE_HEIGHT + HOT_FILTERS_GAP;
+            _loc2_ = Math.round((height - this.listHotFilter.y + HOT_FILTERS_GAP) / _loc1_) * _loc1_ - HOT_FILTERS_GAP;
+            _loc3_ = _loc1_ * this._initVO.hotFilters.length - HOT_FILTERS_GAP;
+            this.listHotFilter.height = Math.min(_loc2_, _loc3_);
+            _height = this.listHotFilter.y + this.listHotFilter.height;
+            dispatchEvent(new Event(Event.RESIZE));
+        }
+        if (isInvalid(SELECTED_INVALID)) {
+            this.listHotFilter.validateNow();
+            _loc4_ = this._selectedVO.hotFilters;
+            _loc5_ = this.listHotFilter.length;
+            _loc7_ = 0;
+            while (_loc7_ < _loc5_) {
+                _loc6_ = this.listHotFilter.getRendererAt(_loc7_);
+                _loc6_.validateNow();
+                _loc6_.selectable = _loc4_[_loc7_];
+                _loc7_++;
             }
         }
-        if (isInvalid(COUNTER_LAYOUT)) {
-            this.filterCounter.y = this._counterPosY;
-        }
-    }
-
-    public function counterBlink():void {
-        this.filterCounter.blink();
-    }
-
-    public function counterHide():void {
-        this.filterCounter.hide();
-    }
-
-    public function counterShow(param1:String, param2:Boolean):void {
-        this.filterCounter.setCount(param1, param2);
     }
 
     public function getHitArea():DisplayObject {
@@ -121,13 +124,6 @@ public class TankCarouselFilters extends UIComponentEx implements IPopOverCaller
     public function initData(param1:TankCarouselFilterInitVO):void {
         this._initVO = param1;
         invalidate(INIT_INVALID);
-    }
-
-    public function setCounterY(param1:Number):void {
-        if (this._counterPosY != param1) {
-            this._counterPosY = param1;
-            invalidate(COUNTER_LAYOUT);
-        }
     }
 
     public function setSelectedData(param1:TankCarouselFilterSelectedVO):void {

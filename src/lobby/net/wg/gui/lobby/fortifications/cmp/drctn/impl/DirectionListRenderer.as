@@ -33,7 +33,6 @@ public class DirectionListRenderer extends UIComponentEx implements IDirectionLi
         this.closeBtn.mouseEnabledOnDisabled = true;
         this.direction.labelVisible = false;
         this.direction.solidMode = false;
-        this.direction.useDirectionBuildingTooltips = false;
         this.closeBtn.addEventListener(ButtonEvent.CLICK, this.onCloseBtnClickHandler);
     }
 

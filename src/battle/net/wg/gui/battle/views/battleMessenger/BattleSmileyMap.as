@@ -25,10 +25,6 @@ public class BattleSmileyMap implements IDisposable {
         this._map = [new BattleImageSubstitution(":)", _loc1_), new BattleImageSubstitution("=)", _loc1_), new BattleImageSubstitution(":-)", _loc1_), new BattleImageSubstitution(":\\", _loc2_), new BattleImageSubstitution("=\\", _loc2_), new BattleImageSubstitution(":-\\", _loc2_), new BattleImageSubstitution(":/", _loc2_), new BattleImageSubstitution("=/", _loc2_), new BattleImageSubstitution(":-/", _loc2_), new BattleImageSubstitution(">:|", _loc3_), new BattleImageSubstitution(">=|", _loc3_), new BattleImageSubstitution(">:-|", _loc3_), new BattleImageSubstitution(">:O", _loc4_), new BattleImageSubstitution(">=O", _loc4_), new BattleImageSubstitution(">:-O", _loc4_), new BattleImageSubstitution(">:o", _loc4_), new BattleImageSubstitution(">=o", _loc4_), new BattleImageSubstitution(">:-o", _loc4_), new BattleImageSubstitution(">:0", _loc4_), new BattleImageSubstitution(">=0", _loc4_), new BattleImageSubstitution(">:-0", _loc4_), new BattleImageSubstitution(":|", _loc5_), new BattleImageSubstitution("=|", _loc5_), new BattleImageSubstitution(":-|", _loc5_), new BattleImageSubstitution(":O", _loc6_), new BattleImageSubstitution("=O", _loc6_), new BattleImageSubstitution(":-O", _loc6_), new BattleImageSubstitution(":o", _loc6_), new BattleImageSubstitution("=o", _loc6_), new BattleImageSubstitution(":-o", _loc6_), new BattleImageSubstitution("=0", _loc6_), new BattleImageSubstitution(":-0", _loc6_), new BattleImageSubstitution(":(", _loc7_), new BattleImageSubstitution("=(", _loc7_), new BattleImageSubstitution(":-(", _loc7_), new BattleImageSubstitution(":P", _loc8_), new BattleImageSubstitution("=P", _loc8_), new BattleImageSubstitution(":-P", _loc8_), new BattleImageSubstitution(":*", _loc10_), new BattleImageSubstitution("=*", _loc10_), new BattleImageSubstitution(":-*", _loc10_), new BattleImageSubstitution(";)", _loc9_), new BattleImageSubstitution(";-)", _loc9_)];
     }
 
-    private function getBitmapData(param1:String):BitmapData {
-        return BitmapData(App.utils.classFactory.getObject(param1));
-    }
-
     public function dispose():void {
         var _loc1_:BattleImageSubstitution = null;
         for each(_loc1_ in this._map) {
@@ -41,6 +37,10 @@ public class BattleSmileyMap implements IDisposable {
 
     public function mapText(param1:TextField):void {
         TextFieldEx.setImageSubstitutions(param1, this._map);
+    }
+
+    private function getBitmapData(param1:String):BitmapData {
+        return BitmapData(App.utils.classFactory.getObject(param1));
     }
 }
 }

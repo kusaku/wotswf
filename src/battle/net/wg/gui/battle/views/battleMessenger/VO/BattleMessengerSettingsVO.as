@@ -27,6 +27,12 @@ public class BattleMessengerSettingsVO extends DAAPIDataClass {
 
     public var recoveredMessagesLifeTime:int = -1;
 
+    public var chatDisableAll:Boolean = false;
+
+    public var chatDisableCommon:Boolean = false;
+
+    public var chatDisableCommonEnabled:Boolean = true;
+
     public function BattleMessengerSettingsVO(param1:Object) {
         super(param1);
     }

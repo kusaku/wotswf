@@ -3,6 +3,7 @@ import flash.display.Sprite;
 
 import net.wg.data.constants.AtlasConstants;
 import net.wg.gui.battle.components.BattleUIComponent;
+import net.wg.gui.battle.views.minimap.MinimapEntryController;
 import net.wg.gui.battle.views.minimap.components.entries.constants.PersonalMinimapEntryConst;
 import net.wg.infrastructure.managers.IAtlasManager;
 
@@ -20,9 +21,11 @@ public class DeadPointMinimapEntry extends BattleUIComponent {
     override protected function configUI():void {
         super.configUI();
         this._atlasManager.drawGraphics(AtlasConstants.BATTLE_ATLAS, PersonalMinimapEntryConst.DEAD_POINT_ATLAS_ITEM_NAME, this.atlasPlaceholder.graphics, "", true);
+        MinimapEntryController.instance.registerScalableEntry(this);
     }
 
     override protected function onDispose():void {
+        MinimapEntryController.instance.unregisterScalableEntry(this);
         this.atlasPlaceholder = null;
         this._atlasManager = null;
         super.onDispose();

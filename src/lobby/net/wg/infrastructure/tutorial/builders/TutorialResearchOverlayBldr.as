@@ -24,11 +24,11 @@ public class TutorialResearchOverlayBldr extends TutorialOverlayBuilder {
         super(param1, param2);
     }
 
-    override public function dispose():void {
+    override protected function onDispose():void {
         this._researchPage = null;
         this._researchItems = null;
         this._rGraphics = null;
-        super.dispose();
+        super.onDispose();
     }
 
     override protected function getViewForHint():void {

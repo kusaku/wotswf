@@ -29,29 +29,6 @@ public class FalloutConsumablesPanel extends FalloutConsumablesPanelMeta impleme
         super();
     }
 
-    public function as_initializeRageProgress(param1:Boolean, param2:Object):void {
-        if (this._rageBar == null) {
-            this._rageBar = App.utils.classFactory.getComponent(Linkages.RAGE_BAR, RageBar);
-            addChild(this._rageBar);
-        }
-        var _loc3_:RageBarVO = new RageBarVO(param2);
-        this._rageBar.maxValue = _loc3_.maxValue;
-        this._rageBar.curValue = _loc3_.curValue;
-        invalidate(INVALIDATE_DRAW_LAYOUT);
-    }
-
-    public function as_updateProgressBarValueByDelta(param1:Number):void {
-        if (this._rageBar) {
-            this._rageBar.updateProgressDelta(param1);
-        }
-    }
-
-    public function as_updateProgressBarValue(param1:Number):void {
-        if (this._rageBar) {
-            this._rageBar.updateProgress(param1);
-        }
-    }
-
     override protected function drawLayout():void {
         var _loc2_:int = 0;
         var _loc7_:IConsumablesButton = null;
@@ -100,6 +77,29 @@ public class FalloutConsumablesPanel extends FalloutConsumablesPanelMeta impleme
         this._rageBar = null;
         this._ragePoint = null;
         super.onDispose();
+    }
+
+    public function as_initializeRageProgress(param1:Boolean, param2:Object):void {
+        if (this._rageBar == null) {
+            this._rageBar = App.utils.classFactory.getComponent(Linkages.RAGE_BAR, RageBar);
+            addChild(this._rageBar);
+        }
+        var _loc3_:RageBarVO = new RageBarVO(param2);
+        this._rageBar.maxValue = _loc3_.maxValue;
+        this._rageBar.curValue = _loc3_.curValue;
+        invalidate(INVALIDATE_DRAW_LAYOUT);
+    }
+
+    public function as_updateProgressBarValue(param1:Number):void {
+        if (this._rageBar) {
+            this._rageBar.updateProgress(param1);
+        }
+    }
+
+    public function as_updateProgressBarValueByDelta(param1:Number):void {
+        if (this._rageBar) {
+            this._rageBar.updateProgressDelta(param1);
+        }
     }
 }
 }

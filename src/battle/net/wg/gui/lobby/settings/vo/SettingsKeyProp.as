@@ -1,8 +1,20 @@
 package net.wg.gui.lobby.settings.vo {
+import net.wg.data.constants.Values;
 import net.wg.gui.lobby.settings.config.SettingsConfigHelper;
+import net.wg.infrastructure.interfaces.entity.IDisposable;
 import net.wg.utils.ILocale;
 
-public class SettingsKeyProp {
+public class SettingsKeyProp implements IDisposable {
+
+    private static const XML_ADD_DISCR_FIRTS_PART:String = " <font size=\"11\" color=\"#615f4f\">";
+
+    private static const XML_ADD_DISCR_SECOND_PART:String = "</font><br/>";
+
+    private static const HEADER_STR:String = "header";
+
+    private static const LABEL_STR:String = "label";
+
+    private static const DEFAULT_RANGE_STR:String = "defaultRange";
 
     public var id:String = null;
 
@@ -31,19 +43,18 @@ public class SettingsKeyProp {
         super();
         this.id = param1;
         this.header = param2;
-        this.keysRang = !!SettingsConfigHelper.KEY_RANGE.hasOwnProperty(param1) ? SettingsConfigHelper.KEY_RANGE[param1] : SettingsConfigHelper.KEY_RANGE["defaultRange"];
+        this.keysRang = !!SettingsConfigHelper.KEY_RANGE.hasOwnProperty(param1) ? SettingsConfigHelper.KEY_RANGE[param1] : SettingsConfigHelper.KEY_RANGE[DEFAULT_RANGE_STR];
         var _loc10_:String = null;
-        _loc10_ = null;
         if (param7) {
             _loc11_ = param7.length;
             if (_loc11_) {
-                _loc10_ = "";
+                _loc10_ = Values.EMPTY_STR;
                 _loc12_ = App.utils.locale;
                 _loc13_ = 0;
                 while (_loc13_ < _loc11_) {
-                    _loc14_ = _loc12_.makeString(param7[_loc13_].hasOwnProperty("header") && param7[_loc13_]["header"] != undefined ? param7[_loc13_]["header"] : "");
-                    _loc15_ = _loc12_.makeString(param7[_loc13_].hasOwnProperty("label") && param7[_loc13_]["label"] != undefined ? param7[_loc13_]["label"] : "");
-                    _loc10_ = _loc10_ + (_loc14_ + " <font size=\"11\" color=\"#615f4f\">" + _loc15_ + "</font><br/>");
+                    _loc14_ = _loc12_.makeString(param7[_loc13_].hasOwnProperty(HEADER_STR) && param7[_loc13_][HEADER_STR] != undefined ? param7[_loc13_][HEADER_STR] : Values.EMPTY_STR);
+                    _loc15_ = _loc12_.makeString(param7[_loc13_].hasOwnProperty(LABEL_STR) && param7[_loc13_][LABEL_STR] != undefined ? param7[_loc13_][LABEL_STR] : Values.EMPTY_STR);
+                    _loc10_ = _loc10_ + (_loc14_ + XML_ADD_DISCR_FIRTS_PART + _loc15_ + XML_ADD_DISCR_SECOND_PART);
                     _loc13_++;
                 }
             }
@@ -73,6 +84,10 @@ public class SettingsKeyProp {
             "showUnderline": this.showUnderline,
             "rendererYOffset": this.rendererYOffset
         };
+    }
+
+    public final function dispose():void {
+        this.keysRang = null;
     }
 }
 }

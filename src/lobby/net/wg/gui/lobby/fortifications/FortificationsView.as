@@ -1,5 +1,6 @@
 package net.wg.gui.lobby.fortifications {
 import flash.events.Event;
+import flash.events.KeyboardEvent;
 import flash.geom.Point;
 import flash.ui.Keyboard;
 
@@ -16,11 +17,9 @@ import net.wg.infrastructure.events.FocusRequestEvent;
 import net.wg.infrastructure.interfaces.IDAAPIModule;
 import net.wg.infrastructure.interfaces.IViewStackContent;
 
-import scaleform.clik.constants.InputValue;
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.InputEvent;
-import scaleform.clik.ui.InputDetails;
 
 public class FortificationsView extends FortificationsViewMeta implements IFortificationsViewMeta {
 
@@ -62,6 +61,11 @@ public class FortificationsView extends FortificationsViewMeta implements IForti
 
     override protected function configUI():void {
         super.configUI();
+        App.gameInputMgr.setKeyHandler(Keyboard.ESCAPE, KeyboardEvent.KEY_DOWN, this.handleEscape, true);
+    }
+
+    private function handleEscape(param1:InputEvent):void {
+        onEscapePressS();
     }
 
     override protected function setCommonData(param1:FortificationVO):void {
@@ -90,10 +94,15 @@ public class FortificationsView extends FortificationsViewMeta implements IForti
         this.viewStack.addEventListener(ViewStackEvent.VIEW_CHANGED, this.onViewChangedHandler);
     }
 
-    override protected function onDispose():void {
+    override protected function onBeforeDispose():void {
         this.viewStack.removeEventListener(ViewStackEvent.VIEW_CHANGED, this.onViewChangedHandler);
         this.viewStack.removeEventListener(FocusRequestEvent.REQUEST_FOCUS, this.onFocusRequestHandler);
         this.viewStack.removeEventListener(FortConstants.ON_FORT_CREATE_EVENT, this.onFortCreateHandler);
+        App.gameInputMgr.clearKeyHandler(Keyboard.ESCAPE, KeyboardEvent.KEY_DOWN);
+        super.onBeforeDispose();
+    }
+
+    override protected function onDispose():void {
         this.viewStack.dispose();
         this.viewStack = null;
         this.waiting.dispose();
@@ -107,11 +116,12 @@ public class FortificationsView extends FortificationsViewMeta implements IForti
     }
 
     private function updateWaitingSize():void {
+        var _loc2_:Number = NaN;
         if (!this.waiting.visible) {
             return;
         }
         var _loc1_:Number = localToGlobal(new Point(0, 0)).y / App.appScale >> 0;
-        var _loc2_:Number = App.appHeight - _loc1_ - FortConstants.CHAT_HEIGHT ^ 0;
+        _loc2_ = App.appHeight - _loc1_ - FortConstants.CHAT_HEIGHT ^ 0;
         this.waiting.x = 0;
         this.waiting.y = 0;
         this.waiting.setSize(App.appWidth, _loc2_);
@@ -123,17 +133,6 @@ public class FortificationsView extends FortificationsViewMeta implements IForti
             _loc1_ = UIComponent(this.viewStack.currentView);
             _loc1_.invalidateSize();
             _loc1_.validateNow();
-        }
-    }
-
-    override public function handleInput(param1:InputEvent):void {
-        if (param1.handled) {
-            return;
-        }
-        var _loc2_:InputDetails = param1.details;
-        if (_loc2_.code == Keyboard.ESCAPE && _loc2_.value == InputValue.KEY_DOWN) {
-            param1.handled = true;
-            onEscapePressS();
         }
     }
 

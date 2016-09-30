@@ -17,6 +17,16 @@ public class BodyMc extends UIComponentEx {
 
     public static const BUTTONS_GROUP_SELECTION_CHANGED:String = "selChanged";
 
+    private static const SCHOOL_GROUP_NAME:String = "scoolGroup";
+
+    private static const TRAINING_TYPE_ACADEMY:String = "academy";
+
+    private static const TRAINING_TYPE_SCOOL:String = "scool";
+
+    private static const TRAINING_TYPE_FREE:String = "free";
+
+    private static const TRAINING_TYPES:Array = [TRAINING_TYPE_FREE, TRAINING_TYPE_SCOOL, TRAINING_TYPE_ACADEMY];
+
     public var freeRentSlot:TextField;
 
     public var slotCheckbox:CheckBox;
@@ -75,15 +85,43 @@ public class BodyMc extends UIComponentEx {
         this.scoolBtn = null;
         this.freeBtn.dispose();
         this.freeBtn = null;
-        this._btnGroup.removeEventListener(Event.CHANGE, this.onBtnGroupHandler);
+        this._btnGroup.removeEventListener(Event.CHANGE, this.onBtnGroupChangeHandler);
         this._btnGroup.dispose();
         this._btnGroup = null;
         this._lastSelectedButton = null;
         super.onDispose();
     }
 
+    override protected function configUI():void {
+        super.configUI();
+        var _loc1_:String = SCHOOL_GROUP_NAME;
+        this._btnGroup = new ButtonGroup(_loc1_, this);
+        this._btnGroup.addButton(this.academyBtn);
+        this._btnGroup.addButton(this.scoolBtn);
+        this._btnGroup.addButton(this.freeBtn);
+        this.academyBtn.groupName = _loc1_;
+        this.scoolBtn.groupName = _loc1_;
+        this.freeBtn.groupName = _loc1_;
+        this._btnGroup.addEventListener(Event.CHANGE, this.onBtnGroupChangeHandler, false, 0, true);
+        var _loc2_:ILocale = App.utils.locale;
+        this.slotCheckbox.label = _loc2_.makeString(DIALOGS.BUYVEHICLEDIALOG_SLOTCHECKBOX);
+        this.ammoCheckbox.label = _loc2_.makeString(DIALOGS.BUYVEHICLEDIALOG_AMMOCHECKBOX);
+        this.crewInVehicle.text = DIALOGS.BUYVEHICLEDIALOG_CREWINVEHICLE;
+        this.freeRentSlot.text = DIALOGS.BUYVEHICLEDIALOG_FREERENTSLOT;
+        this.academyBtn.toggle = true;
+        this.academyBtn.allowDeselect = false;
+        this.scoolBtn.toggle = true;
+        this.scoolBtn.allowDeselect = false;
+        this.freeBtn.toggle = true;
+        this.freeBtn.allowDeselect = false;
+        this.freeBtn.selected = true;
+        this.academyBtn.soundType = SoundTypes.RNDR_NORMAL;
+        this.scoolBtn.soundType = SoundTypes.RNDR_NORMAL;
+        this.freeBtn.soundType = SoundTypes.RNDR_NORMAL;
+    }
+
     public function get selectedPrice():Number {
-        if (this._btnGroup && this._btnGroup.selectedButton) {
+        if (this._btnGroup != null && this._btnGroup.selectedButton) {
             return Number(TankmanTrainingButton(this._btnGroup.selectedButton).data);
         }
         return NaN;
@@ -91,7 +129,7 @@ public class BodyMc extends UIComponentEx {
 
     public function get isGoldPriceSelected():Boolean {
         if (this._btnGroup && this._btnGroup.selectedButton) {
-            return TankmanTrainingButton(this._btnGroup.selectedButton).type == "academy";
+            return TankmanTrainingButton(this._btnGroup.selectedButton).type == TRAINING_TYPE_ACADEMY;
         }
         return false;
     }
@@ -107,7 +145,7 @@ public class BodyMc extends UIComponentEx {
         if (this.lastItemSelected == param1) {
             return;
         }
-        if (this._lastSelectedButton) {
+        if (this._lastSelectedButton != null) {
             this._lastSelectedButton.selected = param1;
         }
         if (!param1) {
@@ -117,51 +155,14 @@ public class BodyMc extends UIComponentEx {
 
     public function get crewType():int {
         var _loc1_:TankmanTrainingButton = null;
-        if (this._btnGroup && this._btnGroup.selectedButton) {
+        if (this._btnGroup != null && this._btnGroup.selectedButton) {
             _loc1_ = TankmanTrainingButton(this._btnGroup.selectedButton);
-            if (_loc1_.type == "academy") {
-                return 2;
-            }
-            if (_loc1_.type == "scool") {
-                return 1;
-            }
-            if (_loc1_.type == "free") {
-                return 0;
-            }
+            return TRAINING_TYPES.indexOf(_loc1_.type);
         }
         return -1;
     }
 
-    override protected function configUI():void {
-        super.configUI();
-        var _loc1_:String = "scoolGroup";
-        this._btnGroup = new ButtonGroup(_loc1_, this);
-        this._btnGroup.addButton(this.academyBtn);
-        this._btnGroup.addButton(this.scoolBtn);
-        this._btnGroup.addButton(this.freeBtn);
-        this.academyBtn.groupName = _loc1_;
-        this.scoolBtn.groupName = _loc1_;
-        this.freeBtn.groupName = _loc1_;
-        this._btnGroup.addEventListener(Event.CHANGE, this.onBtnGroupHandler, false, 0, true);
-        var _loc2_:ILocale = App.utils.locale;
-        this.slotCheckbox.label = _loc2_.makeString(DIALOGS.BUYVEHICLEDIALOG_SLOTCHECKBOX);
-        this.ammoCheckbox.label = _loc2_.makeString(DIALOGS.BUYVEHICLEDIALOG_AMMOCHECKBOX);
-        this.crewCheckbox.label = _loc2_.makeString(DIALOGS.BUYVEHICLEDIALOG_TANKMENCHECKBOX);
-        this.crewInVehicle.text = DIALOGS.BUYVEHICLEDIALOG_CREWINVEHICLE;
-        this.freeRentSlot.text = DIALOGS.BUYVEHICLEDIALOG_FREERENTSLOT;
-        this.academyBtn.toggle = true;
-        this.academyBtn.allowDeselect = false;
-        this.scoolBtn.toggle = true;
-        this.scoolBtn.allowDeselect = false;
-        this.freeBtn.toggle = true;
-        this.freeBtn.allowDeselect = false;
-        this.freeBtn.selected = true;
-        this.academyBtn.soundType = SoundTypes.RNDR_NORMAL;
-        this.scoolBtn.soundType = SoundTypes.RNDR_NORMAL;
-        this.freeBtn.soundType = SoundTypes.RNDR_NORMAL;
-    }
-
-    private function onBtnGroupHandler(param1:Event):void {
+    private function onBtnGroupChangeHandler(param1:Event):void {
         if (this._btnGroup.selectedButton) {
             this._lastSelectedButton = this._btnGroup.selectedButton;
         }

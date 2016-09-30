@@ -1,6 +1,7 @@
 package net.wg.gui.lobby.fortifications.intelligence.impl {
 import flash.display.InteractiveObject;
 import flash.display.MovieClip;
+import flash.display.Sprite;
 import flash.events.MouseEvent;
 import flash.text.TextField;
 import flash.ui.Keyboard;
@@ -44,6 +45,10 @@ public class FortIntelClanDescriptionFooter extends UIComponent implements IFocu
     public var warDescriptionTF:TextField = null;
 
     public var warTimeTF:TextField = null;
+
+    public var warDisableTF:TextField = null;
+
+    public var warningIcon:Sprite = null;
 
     public var divisionIcon:FortTankIcon = null;
 
@@ -104,6 +109,8 @@ public class FortIntelClanDescriptionFooter extends UIComponent implements IFocu
         this.warDeclaredTF = null;
         this.warDescriptionTF = null;
         this.warTimeTF = null;
+        this.warDisableTF = null;
+        this.warningIcon = null;
         this.divisionIcon.dispose();
         this.divisionIcon = null;
         this.calendarBtn.dispose();
@@ -144,6 +151,7 @@ public class FortIntelClanDescriptionFooter extends UIComponent implements IFocu
                 _loc2_ = this.allRenderers[_loc1_];
                 _loc2_.model = _loc3_;
                 _loc2_.canAttackMode = this._model.canAttackDirection && !this._model.isOurFortFrozen;
+                _loc2_.canAvailableMode = this._model.isAvailableByLevel;
                 _loc1_++;
             }
         }
@@ -156,6 +164,20 @@ public class FortIntelClanDescriptionFooter extends UIComponent implements IFocu
 
     private function updateElements():void {
         var _loc1_:Number = NaN;
+        this.warDisableTF.visible = this.warningIcon.visible = !this._model.isAvailableByLevel;
+        if (!this._model.isAvailableByLevel) {
+            this.selectDateTF.visible = false;
+            this.dateSelectedTF.visible = false;
+            this.warDeclaredTF.visible = false;
+            this.warDescriptionTF.visible = false;
+            this.warTimeTF.visible = false;
+            this.divisionIcon.visible = false;
+            this.calendarBtn.visible = false;
+            this.linkBtn.visible = false;
+            this.background.alpha = ALPHA_ENABLE;
+            this.warDisableTF.text = App.utils.locale.makeString(FORTIFICATIONS.FORTINTELLIGENCE_CLANDESCRIPTION_DISABLEATTACK);
+            return;
+        }
         this.selectDateTF.htmlText = this._model.selectedDateText;
         if (this._model.warPlannedTime) {
             this.warTimeTF.visible = true;

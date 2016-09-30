@@ -1,16 +1,26 @@
 package net.wg.data.VO {
 import net.wg.data.constants.Errors;
 import net.wg.data.daapi.base.DAAPIDataClass;
+import net.wg.gui.lobby.store.views.data.DropDownItemData;
+import net.wg.infrastructure.interfaces.entity.IDisposable;
 
 import scaleform.clik.data.DataProvider;
 
 public class ShopSubFilterData extends DAAPIDataClass {
 
-    private var _current:String = "";
+    private static const DATA_PROVIDER_FIELD_NAME:String = "dataProvider";
+
+    private static const VEHICLE_OBTAINING_TYPES_FIELD_NAME:String = "vehicleObtainingTypes";
+
+    private static const ASSERTION_MESSAGE_TYPE_MUST_BE_ARRAY:String = Errors.INVALID_TYPE + "Array";
+
+    private var _current:Number = 0;
 
     private var _dataProvider:DataProvider = null;
 
     private var _nation:int = -1;
+
+    private var _vehicleObtainingTypes:Array = null;
 
     private var _kind:String = "";
 
@@ -22,11 +32,41 @@ public class ShopSubFilterData extends DAAPIDataClass {
         super(param1);
     }
 
+    override protected function onDispose():void {
+        var _loc1_:int = 0;
+        var _loc2_:int = 0;
+        var _loc3_:IDisposable = null;
+        if (this._dataProvider != null) {
+            _loc1_ = this._dataProvider.length;
+            _loc2_ = 0;
+            while (_loc2_ < _loc1_) {
+                IDisposable(this._dataProvider[_loc2_]).dispose();
+                _loc2_++;
+            }
+            this._dataProvider.cleanUp();
+            this._dataProvider = null;
+        }
+        if (this._requestTypes != null) {
+            this._requestTypes.splice(0, this._requestTypes.length);
+            this._requestTypes = null;
+        }
+        if (this._vehicleObtainingTypes != null) {
+            for each(_loc3_ in this._vehicleObtainingTypes) {
+                _loc3_.dispose();
+            }
+            this._vehicleObtainingTypes.splice(0, this._vehicleObtainingTypes.length);
+            this._vehicleObtainingTypes = null;
+        }
+        super.onDispose();
+    }
+
     override protected function onDataWrite(param1:String, param2:Object):Boolean {
         var _loc3_:Object = null;
-        if (param1 == "dataProvider") {
+        var _loc4_:int = 0;
+        var _loc5_:int = 0;
+        if (param1 == DATA_PROVIDER_FIELD_NAME) {
             if (App.instance) {
-                App.utils.asserter.assert(param2 is Array, "value must extends an Array class.");
+                App.utils.asserter.assert(param2 is Array, ASSERTION_MESSAGE_TYPE_MUST_BE_ARRAY);
             }
             if (this._dataProvider) {
                 this._dataProvider.cleanUp();
@@ -39,25 +79,36 @@ public class ShopSubFilterData extends DAAPIDataClass {
             }
             return false;
         }
-        return true;
+        if (param1 == VEHICLE_OBTAINING_TYPES_FIELD_NAME) {
+            if (param2 != null) {
+                this._vehicleObtainingTypes = param2 as Array;
+                App.utils.asserter.assertNotNull(this._vehicleObtainingTypes, ASSERTION_MESSAGE_TYPE_MUST_BE_ARRAY);
+                _loc4_ = this._vehicleObtainingTypes.length;
+                _loc5_ = 0;
+                while (_loc5_ < _loc4_) {
+                    this._vehicleObtainingTypes[_loc5_] = new DropDownItemData(this._vehicleObtainingTypes[_loc5_]);
+                    _loc5_++;
+                }
+            }
+            return false;
+        }
+        return super.onDataWrite(param1, param2);
     }
 
     public function get dataProvider():DataProvider {
         return this._dataProvider;
     }
 
-    public function get current():String {
+    public function get current():Number {
         return this._current;
     }
 
-    public function set current(param1:String):void {
-        var _loc2_:String = null;
+    public function set current(param1:Number):void {
         if (App.instance) {
-            _loc2_ = "invalid current value for filter data: " + param1;
-            if (param1 == null) {
+            if (isNaN(param1)) {
                 DebugUtils.LOG_WARNING("value \"current\" for filter data" + Errors.CANT_NULL);
             }
-            App.utils.asserter.assert(param1 != "0", _loc2_);
+            App.utils.asserter.assert(param1 != 0, "invalid current value for filter data: " + param1);
         }
         this._current = param1;
     }
@@ -92,6 +143,10 @@ public class ShopSubFilterData extends DAAPIDataClass {
 
     public function set fitsType(param1:String):void {
         this._fitsType = param1;
+    }
+
+    public function get vehicleObtainingTypes():Array {
+        return this._vehicleObtainingTypes;
     }
 }
 }

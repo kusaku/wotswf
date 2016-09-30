@@ -1,13 +1,14 @@
 package net.wg.gui.notification {
+import flash.display.DisplayObject;
 import flash.display.InteractiveObject;
 
+import net.wg.gui.components.interfaces.IReusableListItemRenderer;
 import net.wg.gui.notification.events.NotificationListEvent;
 
 import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.ListData;
-import scaleform.clik.interfaces.IListItemRenderer;
 
-public class ServiceMessageItemRenderer extends ServiceMessage implements IListItemRenderer {
+public class ServiceMessageItemRenderer extends ServiceMessage implements IReusableListItemRenderer {
 
     private static const SINGLE_RENDERER_LABEL:String = "single";
 
@@ -31,6 +32,50 @@ public class ServiceMessageItemRenderer extends ServiceMessage implements IListI
         super();
     }
 
+    override public function toString():String {
+        return "[Service message ListItemRenderer " + this.index + ", " + name + "]";
+    }
+
+    override protected function configUI():void {
+        var _loc3_:DisplayObject = null;
+        super.configUI();
+        focusTarget = this._owner;
+        _focusable = tabEnabled = tabChildren = false;
+        var _loc1_:int = numChildren;
+        var _loc2_:int = 0;
+        while (_loc2_ < _loc1_) {
+            _loc3_ = getChildAt(_loc2_);
+            if (_loc3_ is InteractiveObject && _loc3_ != textField && _loc3_ != buttonsGroup) {
+                InteractiveObject(_loc3_).mouseEnabled = false;
+            }
+            _loc2_++;
+        }
+    }
+
+    override protected function onDispose():void {
+        this.owner = null;
+        super.onDispose();
+    }
+
+    public function cleanUp():void {
+        icon.unload();
+        icon.setSourceSize(icon.originalWidth, icon.originalHeight);
+        bgIcon.unload();
+        bgIcon.setSourceSize(bgIcon.originalWidth, bgIcon.originalHeight);
+    }
+
+    public function getData():Object {
+        return this.data;
+    }
+
+    public function setData(param1:Object):void {
+        this.data = param1;
+    }
+
+    public function setListData(param1:ListData):void {
+        this.index = param1.index;
+    }
+
     public function get index():uint {
         return this._index;
     }
@@ -45,18 +90,6 @@ public class ServiceMessageItemRenderer extends ServiceMessage implements IListI
 
     public function set selectable(param1:Boolean):void {
         this._selectable = param1;
-    }
-
-    public function setListData(param1:ListData):void {
-        this.index = param1.index;
-    }
-
-    public function setData(param1:Object):void {
-        this.data = param1;
-    }
-
-    public function getData():Object {
-        return this.data;
     }
 
     public function get owner():UIComponent {
@@ -80,33 +113,6 @@ public class ServiceMessageItemRenderer extends ServiceMessage implements IListI
 
     public function set selected(param1:Boolean):void {
         this._selected = param1;
-    }
-
-    override public function toString():String {
-        return "[Service message ListItemRenderer " + this.index + ", " + name + "]";
-    }
-
-    override protected function configUI():void {
-        var _loc2_:InteractiveObject = null;
-        super.configUI();
-        focusTarget = this._owner;
-        _focusable = tabEnabled = tabChildren = false;
-        var _loc1_:int = 0;
-        while (_loc1_ < numChildren) {
-            _loc2_ = getChildAt(_loc1_) as InteractiveObject;
-            if (_loc2_ && _loc2_ != textField && _loc2_ != buttonsGroup) {
-                _loc2_.mouseEnabled = false;
-            }
-            _loc1_++;
-        }
-    }
-
-    override protected function onDispose():void {
-        if (this._owner) {
-            this._owner.removeEventListener(NotificationListEvent.UPDATE_INDEXES, this.onOwnerUpdateIndexesHandler, false);
-        }
-        this.owner = null;
-        super.onDispose();
     }
 
     private function onOwnerUpdateIndexesHandler(param1:NotificationListEvent):void {

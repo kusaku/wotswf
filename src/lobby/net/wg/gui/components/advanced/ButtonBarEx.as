@@ -35,6 +35,7 @@ public class ButtonBarEx extends ButtonBar implements IGroupedControl {
         var _loc3_:SoundButtonEx = null;
         super.setupRenderer(param1, param2);
         param1.autoSize = this.autoSize;
+        param1.enabled = this.enabled;
         if (param1 is SoundButtonEx) {
             _loc3_ = param1 as SoundButtonEx;
             _loc3_.paddingHorizontal = this.paddingHorizontal;

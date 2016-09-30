@@ -14,10 +14,10 @@ public class TankmenCtrl implements IDamagePanelItemsCtrl {
     private var items:TankmanDumper;
 
     public function TankmenCtrl(param1:Array) {
-        var _loc4_:String = null;
-        var _loc5_:Object = null;
-        var _loc6_:String = null;
-        var _loc7_:TankmanIdentifiers = null;
+        var _loc7_:String = null;
+        var _loc8_:Object = null;
+        var _loc9_:String = null;
+        var _loc10_:TankmanIdentifiers = null;
         super();
         this.identifiersByType = {};
         this.items = new TankmanDumper();
@@ -25,17 +25,27 @@ public class TankmenCtrl implements IDamagePanelItemsCtrl {
         this.identifiersByType[RolesState.GUNNER] = new TankmanIdentifiers(Linkages.TANKMAN_GUNNER, Linkages.TANKMAN_ORANGE_GUNNER);
         this.identifiersByType[RolesState.DRIVER] = new TankmanIdentifiers(Linkages.TANKMAN_DRIVER, Linkages.TANKMAN_ORANGE_DRIVER);
         this.identifiersByType[RolesState.RADIOMAN] = new TankmanIdentifiers(Linkages.TANKMAN_RADIST, Linkages.TANKMAN_ORANGE_RADIOMAN);
-        this.identifiersByType[RolesState.LOADER] = new TankmanIdentifiers(Linkages.TANKMAN_SHELLMAN, Linkages.TANKMAN_ORANGE_LOADER);
+        this.identifiersByType[RolesState.LOADER] = new TankmanIdentifiers(Linkages.TANKMAN_SHELLMAN, Linkages.TANKMAN_ORANGE_LOADER, -1);
         var _loc2_:int = param1.length;
         var _loc3_:int = 0;
-        while (_loc3_ < _loc2_) {
-            _loc4_ = param1[_loc3_];
-            _loc5_ = PATTERN_SIMPLE_TANKMAN_NAME.exec(_loc4_);
-            _loc6_ = _loc5_[0];
-            App.utils.asserter.assert(_loc6_ != "", "Not valid tankmanName");
-            _loc7_ = this.identifiersByType[_loc6_];
-            this.items[_loc4_] = new TankmanAssets(_loc4_, _loc7_.normal, _loc7_.critical, _loc3_, _loc2_);
-            _loc3_++;
+        var _loc4_:int = 0;
+        var _loc5_:int = 3;
+        var _loc6_:int = 0;
+        while (_loc6_ < _loc2_) {
+            _loc7_ = param1[_loc6_];
+            _loc8_ = PATTERN_SIMPLE_TANKMAN_NAME.exec(_loc7_);
+            _loc9_ = _loc8_[0];
+            App.utils.asserter.assert(_loc9_ != "", "Not valid tankmanName");
+            _loc10_ = this.identifiersByType[_loc9_];
+            if (_loc9_ == RolesState.LOADER && _loc10_.adtXPadding != 0) {
+                _loc4_ = _loc4_ + (_loc10_.adtXPadding - _loc3_);
+                _loc3_ = _loc3_ + _loc5_;
+            }
+            else {
+                _loc4_ = 0;
+            }
+            this.items[_loc7_] = new TankmanAssets(_loc7_, _loc10_.normal, _loc10_.critical, _loc6_, _loc2_, _loc4_);
+            _loc6_++;
         }
     }
 

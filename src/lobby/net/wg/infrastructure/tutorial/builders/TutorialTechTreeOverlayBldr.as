@@ -17,10 +17,10 @@ public class TutorialTechTreeOverlayBldr extends TutorialOverlayBuilder {
         super(param1, param2);
     }
 
-    override public function dispose():void {
+    override protected function onDispose():void {
         this._techTreeView = null;
         this._ntGraphics = null;
-        super.dispose();
+        super.onDispose();
     }
 
     override protected function getViewForHint():void {

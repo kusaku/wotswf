@@ -62,15 +62,18 @@ public class KeyInput extends SoundButton {
         this.bg = null;
         this.border = null;
         if (this._keys) {
-            this._keys.splice(0, this._keys.length);
             this._keys = null;
         }
         if (_repeatTimer) {
-            _repeatTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, beginRepeat);
+            _repeatTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, this.onTimerCompleteHandler);
         }
         this.clearEventListeners();
         removeEventListener(Event.SELECT, this.onSelectHandler);
         super.onDispose();
+    }
+
+    private function onTimerCompleteHandler(param1:TimerEvent):void {
+        beginRepeat(param1);
     }
 
     override protected function configUI():void {
@@ -101,14 +104,14 @@ public class KeyInput extends SoundButton {
 
     private function addEventListeners():void {
         addEventListener(ButtonEvent.PRESS, this.onPressHandler);
-        App.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.handleReleaseOutside, false, 0, true);
-        addEventListener(ButtonEvent.RELEASE_OUTSIDE, this.onPressHandler);
+        addEventListener(ButtonEvent.RELEASE_OUTSIDE, this.onReleaseOutsideHandler);
+        App.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.onStageMouseDownHandler, false, 0, true);
     }
 
     private function clearEventListeners():void {
         removeEventListener(ButtonEvent.PRESS, this.onPressHandler);
-        removeEventListener(ButtonEvent.RELEASE_OUTSIDE, this.onPressHandler);
-        App.stage.removeEventListener(MouseEvent.MOUSE_DOWN, this.handleReleaseOutside);
+        removeEventListener(ButtonEvent.RELEASE_OUTSIDE, this.onReleaseOutsideHandler);
+        App.stage.removeEventListener(MouseEvent.MOUSE_DOWN, this.onStageMouseDownHandler);
     }
 
     private function __processCode(param1:Number):void {
@@ -127,8 +130,7 @@ public class KeyInput extends SoundButton {
             this.__inputClose();
         }
         else {
-            _loc3_ = new Point(x + width, y - height - 7);
-            _loc3_ = parent.localToGlobal(_loc3_);
+            _loc3_ = parent.localToGlobal(new Point(x + width, y - height - 7));
             _loc4_ = new TooltipProps(BaseTooltips.TYPE_WARNING, _loc3_.x, _loc3_.y, 0, 0, SHOW_DELAY);
             _loc5_ = App.utils.locale.makeString(TOOLTIPS.SETTING_WINDOW_CONTROLS_KEY_INPUT_WARNING, {"keyName": _loc2_.keyCommand});
             _loc6_ = App.textMgr.getTextStyleById(TEXT_MANAGER_STYLES.ALERT_TEXT, _loc5_);
@@ -156,14 +158,6 @@ public class KeyInput extends SoundButton {
 
     public function get keyCode():Number {
         return this._keyCode;
-    }
-
-    public function get keyString():String {
-        return this._keyString;
-    }
-
-    public function get keyDefault():Number {
-        return this._keyDefault;
     }
 
     public function set keyDefault(param1:Number):void {
@@ -205,15 +199,17 @@ public class KeyInput extends SoundButton {
             if (_loc2_.value == InputValue.KEY_DOWN && selected) {
                 this.__processCode(_loc2_.code);
             }
-            return;
         }
-        super.handleInput(param1);
+        else {
+            super.handleInput(param1);
+        }
     }
 
     override protected function handleMousePress(param1:MouseEvent):void {
+        var _loc3_:uint = 0;
         var _loc5_:ButtonEvent = null;
         var _loc2_:MouseEventEx = param1 as MouseEventEx;
-        var _loc3_:uint = _loc2_ == null ? uint(0) : uint(_loc2_.mouseIdx);
+        _loc3_ = _loc2_ == null ? uint(0) : uint(_loc2_.mouseIdx);
         var _loc4_:uint = _loc2_ == null ? uint(0) : uint(_loc2_.buttonIdx);
         _mouseDown = _mouseDown | 1 << _loc3_;
         if (enabled) {
@@ -221,7 +217,7 @@ public class KeyInput extends SoundButton {
             if (autoRepeat && _repeatTimer == null) {
                 _autoRepeatEvent = new ButtonEvent(ButtonEvent.CLICK, true, false, _loc3_, _loc4_, false, true);
                 _repeatTimer = new Timer(repeatDelay, 1);
-                _repeatTimer.addEventListener(TimerEvent.TIMER_COMPLETE, beginRepeat, false, 0, true);
+                _repeatTimer.addEventListener(TimerEvent.TIMER_COMPLETE, this.onTimerCompleteHandler, false, 0, true);
                 _repeatTimer.start();
             }
             _loc5_ = new ButtonEvent(ButtonEvent.PRESS, true, false, _loc3_, _loc4_, false, false);
@@ -233,7 +229,7 @@ public class KeyInput extends SoundButton {
         }
     }
 
-    override protected function handleReleaseOutside(param1:MouseEvent):void {
+    private function onStageMouseDownHandler(param1:MouseEvent):void {
         var _loc2_:int = 0;
         var _loc3_:int = 0;
         _autoRepeatEvent = null;
@@ -245,7 +241,7 @@ public class KeyInput extends SoundButton {
             _loc2_ = _loc4_.mouseIdx;
             _loc3_ = _loc4_.buttonIdx;
         }
-        stage.removeEventListener(MouseEvent.MOUSE_DOWN, this.handleReleaseOutside, false);
+        stage.removeEventListener(MouseEvent.MOUSE_DOWN, this.onStageMouseDownHandler, false);
         _mouseDown = _mouseDown ^ 1 << _loc2_;
         dispatchEvent(new ButtonEvent(ButtonEvent.RELEASE_OUTSIDE, true, false, _loc2_, _loc3_, false, false));
         if (!enabled) {
@@ -286,6 +282,10 @@ public class KeyInput extends SoundButton {
     }
 
     private function onPressHandler(param1:ButtonEvent):void {
+        this.__processCode(!!param1.isKeyboard ? Number(param1.controllerIdx) : Number(param1.buttonIdx));
+    }
+
+    private function onReleaseOutsideHandler(param1:ButtonEvent):void {
         this.__processCode(!!param1.isKeyboard ? Number(param1.controllerIdx) : Number(param1.buttonIdx));
     }
 }

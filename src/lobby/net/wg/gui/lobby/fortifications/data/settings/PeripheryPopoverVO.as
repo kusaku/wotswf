@@ -24,8 +24,10 @@ public class PeripheryPopoverVO extends DAAPIDataClass {
         this.serverText = null;
         this.applyBtnLabel = null;
         this.cancelBtnLabel = null;
-        this.servers.splice(0, this.servers.length);
-        this.servers = null;
+        if (this.servers != null) {
+            this.servers.splice(0, this.servers.length);
+            this.servers = null;
+        }
     }
 }
 }

@@ -6,7 +6,6 @@ import flash.filters.GlowFilter;
 import flash.text.TextField;
 
 import net.wg.gui.components.controls.Image;
-import net.wg.gui.lobby.hangar.tcarousel.data.TankIconVO;
 import net.wg.infrastructure.base.UIComponentEx;
 
 public class TankIcon extends UIComponentEx {
@@ -18,8 +17,6 @@ public class TankIcon extends UIComponentEx {
     private static const DISTANCE:Number = 0;
 
     private static const ANGEL_IN_DEGREES:Number = 90;
-
-    private static const PREMIUM_COLOR:Number = 16777150;
 
     private static const COLOR:Number = 16723968;
 
@@ -50,6 +47,16 @@ public class TankIcon extends UIComponentEx {
     private static const KNOCKOUT:Boolean = false;
 
     private static const HIDE_OBJECT:Boolean = false;
+
+    private static const EMPTY_STR:String = "";
+
+    private static const TANK_TYPE_POSTFIX_ELITE:String = "_elite";
+
+    private static const DEF_TANK_LEVEL_ELITE_LEFT:int = 21;
+
+    private static const DEF_TANK_LEVEL_PADDING_LEFT:int = 3;
+
+    private static const DEF_MULTI_XP_VALUE:int = 2;
 
     public var flag:MovieClip;
 
@@ -209,44 +216,29 @@ public class TankIcon extends UIComponentEx {
         }
     }
 
-    public function setVehicleCarouselVO(param1:TankIconVO):void {
-        this.image = param1.image;
-        this.showName = true;
-        this.tankName = param1.label;
-        this.level = param1.level;
-        this.isElite = param1.elite;
-        this.isPremium = param1.premium;
-        this.favorite = param1.favorite;
-        this.nation = param1.nation;
-        this.showMultyXp = true;
-        this.multyXpVal = param1.doubleXPReceived;
-        this.tankType = param1.tankType;
-        this.rentInfo = param1.rentLeft;
-    }
-
     private function updateTankType():void {
         if (this.tankType) {
-            this.tankTypeMc.gotoAndStop(this.tankType + (!!this.isElite ? "_elite" : ""));
+            this.tankTypeMc.gotoAndStop(this.tankType + (!!this.isElite ? TANK_TYPE_POSTFIX_ELITE : EMPTY_STR));
         }
         if (this.isElite) {
-            this.levelMc.x = 21;
+            this.levelMc.x = DEF_TANK_LEVEL_ELITE_LEFT;
         }
         else {
-            this.levelMc.x = Math.round(this.tankTypeMc.x + this.tankTypeMc.width + 3);
+            this.levelMc.x = this.tankTypeMc.x + this.tankTypeMc.width + DEF_TANK_LEVEL_PADDING_LEFT >> 0;
         }
     }
 
     private function updateMultyXp():void {
         if (this.showMultyXp) {
-            this.multyXp.visible = this.multyXpVal >= 2;
-            if (this.multyXp.visible && this.multyXpVal > 2) {
+            this.multyXp.visible = this.multyXpVal >= DEF_MULTI_XP_VALUE;
+            if (this.multyXp.visible && this.multyXpVal > DEF_MULTI_XP_VALUE) {
                 this.multyXp.gotoAndStop(ACTION_STATE);
                 this.multyXp.textField.text = this.multyXpVal;
                 this.multyXp.textField.visible = true;
             }
             else if (this.multyXp.visible) {
                 this.multyXp.gotoAndStop(STANDART_STATE);
-                this.multyXp.textField.text = "";
+                this.multyXp.textField.text = EMPTY_STR;
                 this.multyXp.textField.visible = false;
             }
         }

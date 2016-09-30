@@ -3,6 +3,7 @@ import net.wg.data.constants.Errors;
 import net.wg.gui.cyberSport.vo.CSIntroViewStaticTeamVO;
 import net.wg.gui.cyberSport.vo.CSIntroViewTextsVO;
 import net.wg.gui.rally.views.intro.BaseRallyIntroView;
+import net.wg.gui.rally.vo.IntroVehicleVO;
 import net.wg.infrastructure.exceptions.AbstractException;
 
 public class CyberSportIntroMeta extends BaseRallyIntroView {
@@ -21,6 +22,8 @@ public class CyberSportIntroMeta extends BaseRallyIntroView {
 
     public var joinClubUnit:Function;
 
+    private var _introVehicleVO:IntroVehicleVO;
+
     private var _cSIntroViewTextsVO:CSIntroViewTextsVO;
 
     private var _cSIntroViewStaticTeamVO:CSIntroViewStaticTeamVO;
@@ -30,6 +33,10 @@ public class CyberSportIntroMeta extends BaseRallyIntroView {
     }
 
     override protected function onDispose():void {
+        if (this._introVehicleVO) {
+            this._introVehicleVO.dispose();
+            this._introVehicleVO = null;
+        }
         if (this._cSIntroViewTextsVO) {
             this._cSIntroViewTextsVO.dispose();
             this._cSIntroViewTextsVO = null;
@@ -76,6 +83,14 @@ public class CyberSportIntroMeta extends BaseRallyIntroView {
         this.joinClubUnit();
     }
 
+    public function as_setSelectedVehicle(param1:Object):void {
+        if (this._introVehicleVO) {
+            this._introVehicleVO.dispose();
+        }
+        this._introVehicleVO = new IntroVehicleVO(param1);
+        this.setSelectedVehicle(this._introVehicleVO);
+    }
+
     public function as_setTexts(param1:Object):void {
         if (this._cSIntroViewTextsVO) {
             this._cSIntroViewTextsVO.dispose();
@@ -90,6 +105,12 @@ public class CyberSportIntroMeta extends BaseRallyIntroView {
         }
         this._cSIntroViewStaticTeamVO = new CSIntroViewStaticTeamVO(param1);
         this.setStaticTeamData(this._cSIntroViewStaticTeamVO);
+    }
+
+    protected function setSelectedVehicle(param1:IntroVehicleVO):void {
+        var _loc2_:String = "as_setSelectedVehicle" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
     }
 
     protected function setTexts(param1:CSIntroViewTextsVO):void {

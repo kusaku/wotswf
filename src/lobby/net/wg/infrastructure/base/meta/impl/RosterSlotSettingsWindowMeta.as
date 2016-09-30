@@ -2,7 +2,7 @@ package net.wg.infrastructure.base.meta.impl {
 import net.wg.data.constants.Errors;
 import net.wg.gui.cyberSport.data.RosterSlotSettingsWindowStaticVO;
 import net.wg.gui.cyberSport.vo.RosterLimitsVO;
-import net.wg.gui.cyberSport.vo.VehicleSelectorFilterVO;
+import net.wg.gui.lobby.components.data.VehicleSelectorFilterVO;
 import net.wg.gui.rally.vo.SettingRosterVO;
 import net.wg.gui.rally.vo.VehicleVO;
 import net.wg.infrastructure.base.AbstractWindowView;

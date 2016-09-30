@@ -1,13 +1,13 @@
 package net.wg.gui.cyberSport.controls.interfaces {
-import net.wg.data.daapi.base.DAAPIDataClass;
 import net.wg.gui.interfaces.IResettable;
 import net.wg.gui.interfaces.ISoundButtonEx;
+import net.wg.gui.rally.vo.VehicleVO;
 
 public interface IVehicleButton extends IResettable, ISoundButtonEx {
 
     function selectState(param1:Boolean, param2:String = null):void;
 
-    function setVehicle(param1:DAAPIDataClass):void;
+    function setVehicle(param1:VehicleVO):void;
 
     function get showAlertIcon():Boolean;
 

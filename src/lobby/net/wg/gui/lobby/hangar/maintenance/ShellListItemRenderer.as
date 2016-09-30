@@ -5,6 +5,7 @@ import flash.text.TextField;
 
 import net.wg.data.constants.Currencies;
 import net.wg.data.constants.SoundTypes;
+import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.controls.ActionPrice;
 import net.wg.gui.components.controls.IconText;
@@ -68,15 +69,15 @@ public class ShellListItemRenderer extends SoundListItemRenderer {
                 this.title.text = data.ammoName;
                 this.price.icon = data.currency;
                 _loc1_ = App.utils.locale;
-                this.price.textColor = data.prices[0] < data.userCredits[data.currency] ? Number(Currencies.TEXT_COLORS[data.currency]) : Number(Currencies.TEXT_COLORS[Currencies.ERROR]);
+                this.price.textColor = data.prices[0] < data.userCredits[data.currency] ? Number(Currencies.TEXT_COLORS[data.currency]) : Number(Currencies.TEXT_COLORS[CURRENCIES_CONSTANTS.ERROR]);
                 this.actionPrice.textColorType = data.prices[0] < data.userCredits[data.currency] ? ActionPrice.TEXT_COLOR_TYPE_ICON : ActionPrice.TEXT_COLOR_TYPE_ERROR;
-                this.price.text = data.currency == Currencies.CREDITS ? _loc1_.integer(data.prices[0]) : _loc1_.gold(data.prices[1]);
+                this.price.text = data.currency == CURRENCIES_CONSTANTS.CREDITS ? _loc1_.integer(data.prices[0]) : _loc1_.gold(data.prices[1]);
                 this.price.validateNow();
                 _loc2_ = !!data.hasOwnProperty("actionPriceData") ? data.actionPriceData : null;
                 _loc3_ = null;
                 if (_loc2_) {
                     _loc3_ = new ActionPriceVO(_loc2_);
-                    _loc3_.forCredits = data.currency == Currencies.CREDITS;
+                    _loc3_.forCredits = data.currency == CURRENCIES_CONSTANTS.CREDITS;
                 }
                 this.actionPrice.setData(_loc3_);
                 this.actionPrice.setup(this);

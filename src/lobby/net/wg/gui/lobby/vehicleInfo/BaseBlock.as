@@ -2,7 +2,7 @@ package net.wg.gui.lobby.vehicleInfo {
 import flash.display.Sprite;
 import flash.text.TextField;
 
-public class BaseBlock extends Sprite {
+public class BaseBlock extends Sprite implements IVehicleInfoBlock {
 
     public var baseName:TextField;
 
@@ -10,8 +10,12 @@ public class BaseBlock extends Sprite {
         super();
     }
 
-    public function setData(param1:String):void {
-        this.baseName.text = param1;
+    public final function dispose():void {
+        this.baseName = null;
+    }
+
+    public function setData(param1:Object):void {
+        this.baseName.text = String(param1);
     }
 }
 }

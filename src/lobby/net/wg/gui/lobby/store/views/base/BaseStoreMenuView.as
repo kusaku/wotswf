@@ -8,20 +8,28 @@ import net.wg.data.constants.Errors;
 import net.wg.data.constants.generated.STORE_TYPES;
 import net.wg.gui.lobby.store.StoreViewsEvent;
 import net.wg.gui.lobby.store.views.base.interfaces.IStoreMenuView;
+import net.wg.gui.lobby.store.views.data.FiltersVO;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.exceptions.AbstractException;
 import net.wg.infrastructure.exceptions.NullPointerException;
-import net.wg.infrastructure.interfaces.entity.IDisposable;
 import net.wg.utils.IAssertable;
 
 import scaleform.clik.controls.Button;
 import scaleform.clik.controls.ButtonGroup;
-import scaleform.clik.core.UIComponent;
 
-public class BaseStoreMenuView extends UIComponent implements IStoreMenuView {
+public class BaseStoreMenuView extends UIComponentEx implements IStoreMenuView {
 
-    protected static var CHECKBOX_Y_STEP:Number = 20;
+    private static const UPDATE_ASSERTION_MESSAGE:String = "updateData must be StoreMenuViewData";
 
-    protected var isFiltersCountInvalid:String = "isFiltersCountInvalid";
+    private static const DEFAULT_FITS_NAME:String = "fits";
+
+    private static const DEFAULT_TAGS_NAME:String = "tags";
+
+    private static const FITTING_TYPE_WARNING_MESSAGE:String = "fitting type accessor invoked before field has been initialized.";
+
+    private static const NAME_LABEL_SUFFIX:String = "/name";
+
+    private static const SLASH_DELIMITER:String = "/";
 
     private var _fittingType:String = null;
 
@@ -29,16 +37,21 @@ public class BaseStoreMenuView extends UIComponent implements IStoreMenuView {
 
     private var _nation:int = -1;
 
-    private var _tagsArr:Array = null;
+    private var _tagsArr:Vector.<ViewUIElementVO> = null;
 
-    private var _fitsArr:Array = null;
+    private var _fitsArr:Vector.<ViewUIElementVO> = null;
 
     private var _uiName:String = null;
 
     private var _localizator:Function = null;
 
+    private var _filtersDataHash:Object = null;
+
+    private var _asserter:IAssertable;
+
     public function BaseStoreMenuView() {
         super();
+        this._asserter = App.utils.asserter;
     }
 
     protected static function assertGroupSelection(param1:ButtonGroup, param2:String, param3:Boolean = false):void {
@@ -52,51 +65,32 @@ public class BaseStoreMenuView extends UIComponent implements IStoreMenuView {
         }
     }
 
-    protected static function getSelectedFilters(param1:Array, param2:Boolean, param3:Button):Array {
+    private static function initializeControlsByHashLocalized(param1:String, param2:Vector.<ViewUIElementVO>, param3:String, param4:Function):void {
         var _loc5_:ViewUIElementVO = null;
-        var _loc4_:Array = [];
-        for each(_loc5_ in param1) {
-            if (_loc5_.instance.selected || param3 && param3.selected) {
-                App.utils.asserter.assertNotNull(_loc5_.instance.data, _loc5_.instance.name + ".data" + Errors.CANT_NULL);
-                _loc4_.push(_loc5_.instance.data);
-            }
-        }
-        if (param2) {
-            _loc4_.unshift(_loc4_.length);
-        }
-        return _loc4_;
-    }
-
-    private static function initializeControlsByHashLocalized(param1:String, param2:Array, param3:String, param4:String, param5:Function):void {
-        var _loc6_:ViewUIElementVO = null;
         if (App.instance) {
-            for each(_loc6_ in param2) {
-                if (_loc6_.instance.visible) {
-                    _loc6_.instance.data = _loc6_.name;
-                    _loc6_.instance.label = param5(param1 + "/" + param4 + "/" + _loc6_.name + "/name", _loc6_.htmlIcon);
-                }
+            for each(_loc5_ in param2) {
+                _loc5_.instance.data = _loc5_.name;
+                _loc5_.instance.label = param4(param1 + SLASH_DELIMITER + param3 + SLASH_DELIMITER + _loc5_.name + NAME_LABEL_SUFFIX, _loc5_.htmlIcon);
             }
         }
     }
 
     override protected function onDispose():void {
-        var _loc1_:IDisposable = null;
-        var _loc2_:IDisposable = null;
         if (this._tagsArr != null) {
-            for each(_loc1_ in this._tagsArr) {
-                _loc1_.dispose();
-            }
-            this._tagsArr.splice(0);
+            this.disposeUIElementVOs(this._tagsArr);
             this._tagsArr = null;
         }
         if (this._fitsArr != null) {
-            for each(_loc2_ in this._fitsArr) {
-                _loc2_.dispose();
-            }
-            this._fitsArr.splice(0);
+            this.disposeUIElementVOs(this._fitsArr);
             this._fitsArr = null;
         }
         this._filterData = null;
+        if (this._filtersDataHash != null) {
+            App.utils.data.cleanupDynamicObject(this._filtersDataHash);
+            this._filtersDataHash = null;
+        }
+        this._localizator = null;
+        this._asserter = null;
         super.onDispose();
     }
 
@@ -108,11 +102,15 @@ public class BaseStoreMenuView extends UIComponent implements IStoreMenuView {
         return null;
     }
 
-    public function getFilter():Array {
-        throw this.abstractInvoke("getFilter");
+    public function getFiltersData():FiltersVO {
+        throw this.abstractInvoke("getFiltersData");
     }
 
     public function resetTemporaryHandlers():void {
+    }
+
+    public function setFiltersData(param1:FiltersVO, param2:Boolean):void {
+        this._filtersDataHash = param1.toHash();
     }
 
     public function setSubFilterData(param1:int, param2:ShopSubFilterData):void {
@@ -120,29 +118,23 @@ public class BaseStoreMenuView extends UIComponent implements IStoreMenuView {
     }
 
     public function setUIName(param1:String, param2:Function):void {
-        App.utils.asserter.assert(param1 == STORE_TYPES.SHOP || param1 == STORE_TYPES.INVENTORY, "incorrect uiName: \'" + param1 + "\'");
+        this._asserter.assert(param1 == STORE_TYPES.SHOP || param1 == STORE_TYPES.INVENTORY, "incorrect uiName: \'" + param1 + "\'");
         this._uiName = param1;
         gotoAndStop(this._uiName);
         this._localizator = param2;
         if (this._fitsArr != null) {
-            this._fitsArr.splice();
+            this.disposeUIElementVOs(this._fitsArr);
             this._fitsArr = null;
         }
     }
 
-    public function setViewData(param1:Array):void {
-        throw this.abstractInvoke("setViewData", param1);
-    }
-
     public final function update(param1:Object):void {
-        var _loc2_:String = null;
-        var _loc3_:StoreMenuViewData = null;
+        var _loc2_:StoreMenuViewData = null;
         if (App.instance) {
-            _loc2_ = "updateData must be StoreMenuViewData";
-            App.utils.asserter.assert(param1 is StoreMenuViewData, _loc2_);
-            _loc3_ = StoreMenuViewData(param1);
-            if (this._fittingType != _loc3_.fittingType) {
-                this._fittingType = _loc3_.fittingType;
+            this._asserter.assert(param1 is StoreMenuViewData, UPDATE_ASSERTION_MESSAGE);
+            _loc2_ = StoreMenuViewData(param1);
+            if (this._fittingType != _loc2_.fittingType) {
+                this._fittingType = _loc2_.fittingType;
                 this.onKindChanged();
             }
         }
@@ -152,17 +144,29 @@ public class BaseStoreMenuView extends UIComponent implements IStoreMenuView {
         throw this.abstractInvoke("updateSubFilter", param1);
     }
 
+    protected function getSelectedFilters(param1:Vector.<ViewUIElementVO>):Vector.<String> {
+        var _loc3_:ViewUIElementVO = null;
+        var _loc2_:Vector.<String> = new Vector.<String>(0);
+        for each(_loc3_ in param1) {
+            if (_loc3_.instance.selected) {
+                this._asserter.assertNotNull(_loc3_.instance.data, _loc3_.instance.name + ".data" + Errors.CANT_NULL);
+                _loc2_.push(_loc3_.instance.data);
+            }
+        }
+        return _loc2_;
+    }
+
     protected function getUIName():String {
         return this._uiName;
     }
 
-    protected final function selectFilter(param1:Array, param2:Array, param3:Boolean, param4:Boolean):void {
+    protected final function selectFilter(param1:Vector.<ViewUIElementVO>, param2:Vector.<String>, param3:Boolean, param4:Boolean):void {
         var _loc5_:ViewUIElementVO = null;
         var _loc6_:Button = null;
         var _loc7_:String = null;
         for each(_loc5_ in param1) {
             _loc6_ = _loc5_.instance;
-            App.utils.asserter.assertNotNull(_loc6_.data, "data of filter control" + Errors.CANT_NULL);
+            this._asserter.assertNotNull(_loc6_.data, "data of filter control" + Errors.CANT_NULL);
             for each(_loc7_ in param2) {
                 if (_loc7_ == _loc6_.data) {
                     _loc6_.selected = true;
@@ -171,7 +175,7 @@ public class BaseStoreMenuView extends UIComponent implements IStoreMenuView {
             }
             if (param3) {
                 if (!_loc6_.hasEventListener(Event.SELECT)) {
-                    _loc6_.addEventListener(Event.SELECT, this.onFilterChangeHandler);
+                    _loc6_.addEventListener(Event.SELECT, this.onItemSelectHandler);
                 }
             }
         }
@@ -183,13 +187,13 @@ public class BaseStoreMenuView extends UIComponent implements IStoreMenuView {
     protected final function addHandlerToGroup(param1:Button):void {
         var _loc2_:ButtonGroup = param1.group;
         if (App.instance) {
-            App.utils.asserter.assertNotNull(param1, "instance" + Errors.CANT_NULL, NullPointerException);
+            this._asserter.assertNotNull(param1, "instance" + Errors.CANT_NULL, NullPointerException);
         }
         assertGroupSelection(_loc2_, param1.name);
-        _loc2_.addEventListener(Event.CHANGE, this.onFilterChangeHandler);
+        _loc2_.addEventListener(Event.CHANGE, this.onGroupChangeHandler);
     }
 
-    protected final function selectFilterSimple(param1:Array, param2:Object, param3:Boolean):void {
+    protected final function selectFilterSimple(param1:Vector.<ViewUIElementVO>, param2:Object, param3:Boolean):void {
         var _loc4_:ViewUIElementVO = null;
         var _loc5_:Button = null;
         var _loc6_:ButtonGroup = null;
@@ -203,17 +207,17 @@ public class BaseStoreMenuView extends UIComponent implements IStoreMenuView {
         if (param3) {
             _loc6_ = _loc5_.group;
             assertGroupSelection(_loc6_, _loc5_.name);
-            _loc6_.addEventListener(Event.CHANGE, this.onFilterChangeHandler);
+            _loc6_.addEventListener(Event.CHANGE, this.onGroupChangeHandler);
         }
     }
 
-    protected final function resetHandlers(param1:Array, param2:Button):void {
+    protected final function resetHandlers(param1:Vector.<ViewUIElementVO>, param2:Button):void {
         var _loc3_:ViewUIElementVO = null;
         for each(_loc3_ in param1) {
-            _loc3_.instance.removeEventListener(Event.SELECT, this.onFilterChangeHandler);
+            _loc3_.instance.removeEventListener(Event.SELECT, this.onItemSelectHandler);
         }
-        if (param2) {
-            param2.group.removeEventListener(Event.CHANGE, this.onFilterChangeHandler);
+        if (param2 != null) {
+            param2.group.removeEventListener(Event.CHANGE, this.onGroupChangeHandler);
         }
     }
 
@@ -226,12 +230,10 @@ public class BaseStoreMenuView extends UIComponent implements IStoreMenuView {
     }
 
     protected function setFilterData(param1:ShopSubFilterData):void {
-        var _loc2_:IAssertable = null;
         if (App.instance) {
-            _loc2_ = App.utils.asserter;
-            _loc2_.assertNotNull(param1, "shopVehicleFilterData" + Errors.CANT_NULL);
-            _loc2_.assert(param1.current != "0", "incorrect current id from python!");
-            _loc2_.assertNotNull(param1.dataProvider, "shopVehicleFilterData.dataProvider" + Errors.CANT_NULL);
+            this._asserter.assertNotNull(param1, "shopVehicleFilterData" + Errors.CANT_NULL);
+            this._asserter.assert(param1.current != 0, "incorrect current id from python!");
+            this._asserter.assertNotNull(param1.dataProvider, "shopVehicleFilterData.dataProvider" + Errors.CANT_NULL);
         }
         this._filterData = param1;
     }
@@ -241,49 +243,56 @@ public class BaseStoreMenuView extends UIComponent implements IStoreMenuView {
     }
 
     protected function onKindChanged():void {
-        var _loc1_:String = " method result";
-        this.initializeControlsByHash(this.specialKindForTags(), this.getTagsArray(), "getTagsArray" + _loc1_, this.getTagsName());
-        this.initializeControlsByHash(this._fittingType, this.getFitsArray(), "getFitsArray" + _loc1_, this.getFitsName());
+        this.initializeControlsByHash(this.specialKindForTags(), this.getTagsArray(), this.getTagsName());
+        this.initializeControlsByHash(this._fittingType, this.getFitsArray(), this.getFitsName());
         dispatchEvent(this.getStoreViewEvent(StoreViewsEvent.POPULATE_MENU_FILTER));
     }
 
-    protected final function getTagsArray():Array {
+    protected final function getTagsArray():Vector.<ViewUIElementVO> {
         if (this._tagsArr == null) {
             this._tagsArr = this.onTagsArrayRequest();
         }
         return this._tagsArr;
     }
 
-    protected function onTagsArrayRequest():Array {
+    protected function onTagsArrayRequest():Vector.<ViewUIElementVO> {
         throw this.abstractInvoke("onTagsArrayRequest");
     }
 
-    protected final function getFitsArray():Array {
+    protected final function getFitsArray():Vector.<ViewUIElementVO> {
         if (this._fitsArr == null) {
             this._fitsArr = this.onFitsArrayRequest();
         }
         return this._fitsArr;
     }
 
-    protected function onFitsArrayRequest():Array {
+    protected function onFitsArrayRequest():Vector.<ViewUIElementVO> {
         throw this.abstractInvoke("onFitsArrayRequest");
     }
 
     protected function getFitsName():String {
-        return "fits";
+        return DEFAULT_FITS_NAME;
     }
 
     protected function getTagsName():String {
-        return "tags";
+        return DEFAULT_TAGS_NAME;
     }
 
     protected function specialKindForTags():String {
         return this.fittingType;
     }
 
-    protected function initializeControlsByHash(param1:String, param2:Array, param3:String, param4:String):void {
-        App.utils.asserter.assertNotNull(this._localizator, "_localizator" + Errors.CANT_NULL);
-        initializeControlsByHashLocalized(param1, param2, param3, param4, this._localizator);
+    protected function initializeControlsByHash(param1:String, param2:Vector.<ViewUIElementVO>, param3:String):void {
+        this._asserter.assertNotNull(this._localizator, "_localizator" + Errors.CANT_NULL);
+        initializeControlsByHashLocalized(param1, param2, param3, this._localizator);
+    }
+
+    protected function disposeUIElementVOs(param1:Vector.<ViewUIElementVO>):void {
+        var _loc2_:ViewUIElementVO = null;
+        for each(_loc2_ in this._tagsArr) {
+            _loc2_.dispose();
+        }
+        param1.splice(0, param1.length);
     }
 
     private function getStoreViewEvent(param1:String):StoreViewsEvent {
@@ -296,12 +305,20 @@ public class BaseStoreMenuView extends UIComponent implements IStoreMenuView {
 
     public function get fittingType():String {
         if (this._fittingType == null) {
-            DebugUtils.LOG_WARNING("fitting type accessor invoked before field has been initialized.");
+            DebugUtils.LOG_WARNING(FITTING_TYPE_WARNING_MESSAGE);
         }
         return this._fittingType;
     }
 
-    private function onFilterChangeHandler(param1:Event):void {
+    protected function get filtersDataHash():Object {
+        return this._filtersDataHash;
+    }
+
+    private function onItemSelectHandler(param1:Event):void {
+        this.dispatchViewChange();
+    }
+
+    private function onGroupChangeHandler(param1:Event):void {
         this.dispatchViewChange();
     }
 }

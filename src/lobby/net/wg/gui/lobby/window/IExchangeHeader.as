@@ -1,7 +1,8 @@
 package net.wg.gui.lobby.window {
+import net.wg.infrastructure.interfaces.IUIComponentEx;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
-public interface IExchangeHeader extends IDisposable {
+public interface IExchangeHeader extends IDisposable, IUIComponentEx {
 
     function setData(param1:ExchangeHeaderVO):void;
 

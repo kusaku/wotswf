@@ -10,7 +10,7 @@ public class DestroyTimersPanel extends DestroyTimersPanelMeta implements IDestr
 
     private static const TIMER_OFFSET_X:int = 180;
 
-    private static const BOTTOM_OFFSET_Y:int = 250;
+    private static const TOP_OFFSET_Y:int = 114;
 
     private static const X_SHIFT:int = 8;
 
@@ -55,7 +55,7 @@ public class DestroyTimersPanel extends DestroyTimersPanelMeta implements IDestr
             }
             _loc1_ = _loc1_ + X_ADDITIONAL_SHIFT;
             x = this._stageWidth - _loc1_ >> 1;
-            y = this._stageHeight - BOTTOM_OFFSET_Y;
+            y = (this._stageHeight >> 1) + TOP_OFFSET_Y;
         }
     }
 

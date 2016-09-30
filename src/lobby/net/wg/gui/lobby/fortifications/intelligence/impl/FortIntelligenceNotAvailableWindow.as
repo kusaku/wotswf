@@ -51,8 +51,9 @@ public class FortIntelligenceNotAvailableWindow extends FortIntelligenceNotAvail
     }
 
     public function as_setData(param1:Array):void {
-        var _loc2_:int = this.texts.length;
         var _loc3_:int = 0;
+        var _loc2_:int = this.texts.length;
+        _loc3_ = 0;
         _loc3_ = 0;
         while (_loc3_ < _loc2_) {
             TextField(this.texts[_loc3_]).mouseEnabled = false;

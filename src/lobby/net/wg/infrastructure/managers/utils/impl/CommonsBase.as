@@ -99,10 +99,11 @@ public class CommonsBase implements ICommons {
     }
 
     public function initTabIndex(param1:Vector.<InteractiveObject>):void {
-        var _loc2_:Number = 0;
-        while (_loc2_ < param1.length) {
-            InteractiveObject(param1[_loc2_]).tabIndex = _loc2_ + 1;
-            _loc2_++;
+        var _loc2_:int = param1.length;
+        var _loc3_:Number = 0;
+        while (_loc3_ < _loc2_) {
+            InteractiveObject(param1[_loc3_]).tabIndex = _loc3_ + 1;
+            _loc3_++;
         }
     }
 
@@ -284,7 +285,7 @@ public class CommonsBase implements ICommons {
         var _loc4_:String = "..";
         var _loc5_:uint = 4;
         var _loc6_:uint = param2.length;
-        var _loc7_:int = !!param3 ? int(param1.width) : int(param1.height);
+        var _loc7_:int = !!param3 ? int(param1.width / param1.scaleX) : int(param1.height / param1.scaleY);
         param1.text = param2;
         if (param3) {
             while (_loc6_ > 0 && param1.textWidth + _loc5_ > _loc7_) {

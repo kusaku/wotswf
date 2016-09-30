@@ -4,6 +4,7 @@ import flash.events.Event;
 
 import net.wg.gui.components.controls.scroller.IListViewPort;
 import net.wg.gui.components.controls.scroller.IScrollerItemRenderer;
+import net.wg.gui.components.controls.scroller.ListRendererEvent;
 import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.IUIComponentEx;
 import net.wg.infrastructure.managers.ITooltipMgr;
@@ -14,13 +15,21 @@ import scaleform.clik.interfaces.IDataProvider;
 
 public class HorizontalScrollerViewPort extends UIComponentEx implements IListViewPort {
 
-    private static const INVALIDATE_RENDERER:String = "rendererInvalid";
+    protected static const INVALIDATE_RENDERER:String = "rendererInvalid";
 
-    private static const INVALIDATE_LAYOUT_RENDERER:String = "rendererLayoutInvalid";
+    protected static const INVALIDATE_LAYOUT_RENDERER:String = "rendererLayoutInvalid";
 
     private var _activeRenderers:Vector.<IScrollerItemRenderer>;
 
     private var _inactiveRenderers:Vector.<IScrollerItemRenderer>;
+
+    private var _typicalRendererWidth:Number = 0;
+
+    private var _dataCount:Number = 0;
+
+    private var _leftVisibleIndex:int = 0;
+
+    private var _asserter:IAssertable = null;
 
     private var _owner:IUIComponentEx = null;
 
@@ -42,15 +51,9 @@ public class HorizontalScrollerViewPort extends UIComponentEx implements IListVi
 
     private var _tooltipDecorator:ITooltipMgr;
 
-    private var _typicalRendererWidth:Number = 0;
-
-    private var _dataCount:Number = 0;
-
     private var _selectedIndex:int = -1;
 
-    private var _leftVisibleIndex:int = 0;
-
-    private var _asserter:IAssertable = null;
+    private var _rowCount:int = 1;
 
     public function HorizontalScrollerViewPort() {
         this._activeRenderers = new Vector.<IScrollerItemRenderer>(0);
@@ -60,16 +63,11 @@ public class HorizontalScrollerViewPort extends UIComponentEx implements IListVi
     }
 
     override protected function onDispose():void {
-        var _loc1_:IScrollerItemRenderer = null;
         this._dataProvider = null;
         this._itemRendererFactory = null;
         this.deactivateRenderers(0, this._activeRenderers.length);
         this._activeRenderers = null;
-        for each(_loc1_ in this._inactiveRenderers) {
-            _loc1_.removeEventListener(Event.SELECT, this.onRendererSelectHandler);
-            _loc1_.dispose();
-        }
-        this._inactiveRenderers.splice(0, this._inactiveRenderers.length);
+        this.disposeInactiveRenderers();
         this._inactiveRenderers = null;
         this._owner = null;
         this._tooltipDecorator = null;
@@ -80,17 +78,21 @@ public class HorizontalScrollerViewPort extends UIComponentEx implements IListVi
     override protected function draw():void {
         super.draw();
         var _loc1_:Boolean = isInvalid(INVALIDATE_RENDERER);
-        var _loc2_:Boolean = _loc1_ || isInvalid(InvalidationType.SIZE);
-        if (_loc1_) {
+        var _loc2_:Boolean = _loc1_ || isInvalid(InvalidationType.DATA);
+        var _loc3_:Boolean = _loc2_ || isInvalid(InvalidationType.SIZE);
+        if (_loc2_) {
             this.deactivateRenderers(0, this._activeRenderers.length);
         }
-        if (_loc2_) {
+        if (_loc1_) {
+            this.disposeInactiveRenderers();
+        }
+        if (_loc3_) {
             this.updateDataCount();
         }
-        if (_loc2_ || isInvalid(INVALIDATE_LAYOUT_RENDERER)) {
+        if (_loc3_ || isInvalid(INVALIDATE_LAYOUT_RENDERER)) {
             this.updateActiveRenderer();
         }
-        if (_loc2_) {
+        if (_loc3_) {
             this.resize();
         }
     }
@@ -101,18 +103,24 @@ public class HorizontalScrollerViewPort extends UIComponentEx implements IListVi
         }
     }
 
-    private function layoutItemRenderers():void {
+    protected function newRenderer():IScrollerItemRenderer {
+        var _loc1_:IScrollerItemRenderer = new this._itemRendererFactory() as IScrollerItemRenderer;
+        this._asserter.assertNotNull(_loc1_, "Invalid IScrollerItemRenderer factory = " + this._itemRendererFactory);
+        return _loc1_;
+    }
+
+    private function disposeInactiveRenderers():void {
         var _loc1_:IScrollerItemRenderer = null;
-        if (this._activeRenderers.length == 0) {
-            return;
+        for each(_loc1_ in this._inactiveRenderers) {
+            _loc1_.removeEventListener(ListRendererEvent.SELECT, this.onRendererSelectHandler);
+            _loc1_.dispose();
+            removeChild(DisplayObject(_loc1_));
         }
-        for each(_loc1_ in this._activeRenderers) {
-            _loc1_.x = _loc1_.index * this._typicalRendererWidth;
-        }
+        this._inactiveRenderers.splice(0, this._inactiveRenderers.length);
     }
 
     private function resize():void {
-        var _loc1_:Number = this._typicalRendererWidth * this._dataCount - this._gap;
+        var _loc1_:Number = this._typicalRendererWidth * (this._dataCount / this._rowCount) - this._gap;
         if (_width !== _loc1_ || _height !== this._visibleHeight) {
             _width = _loc1_;
             _height = this._visibleHeight;
@@ -133,7 +141,7 @@ public class HorizontalScrollerViewPort extends UIComponentEx implements IListVi
     }
 
     private function updateActiveRenderer():void {
-        var _loc1_:* = 0;
+        var _loc1_:int = 0;
         var _loc2_:int = 0;
         var _loc3_:int = 0;
         var _loc4_:int = 0;
@@ -142,9 +150,9 @@ public class HorizontalScrollerViewPort extends UIComponentEx implements IListVi
         var _loc7_:int = 0;
         var _loc8_:int = 0;
         if (this._dataCount > 0) {
-            _loc1_ = this._horizontalScrollPosition / this._typicalRendererWidth ^ 0;
-            _loc2_ = Math.ceil((this._horizontalScrollPosition + this._visibleWidth + this._gap) / this._typicalRendererWidth);
-            _loc1_ = int(Math.max(0, _loc1_));
+            _loc1_ = (this._horizontalScrollPosition / this._typicalRendererWidth ^ 0) * this._rowCount;
+            _loc2_ = _loc1_ + Math.ceil((this._visibleWidth + this._gap) / this._typicalRendererWidth) * this._rowCount + this._rowCount;
+            _loc1_ = Math.max(0, _loc1_);
             _loc2_ = Math.min(this._dataCount - 1, _loc2_);
             if (this._activeRenderers.length > 0) {
                 _loc4_ = this._activeRenderers[0].index;
@@ -182,7 +190,6 @@ public class HorizontalScrollerViewPort extends UIComponentEx implements IListVi
             else {
                 this.createRenderers(_loc1_, _loc2_ - _loc1_);
             }
-            this.layoutItemRenderers();
         }
     }
 
@@ -198,19 +205,16 @@ public class HorizontalScrollerViewPort extends UIComponentEx implements IListVi
 
     private function getRenderer(param1:Object, param2:int, param3:Boolean):IScrollerItemRenderer {
         var _loc4_:IScrollerItemRenderer = null;
-        var _loc5_:DisplayObject = null;
         if (!param3 || this._inactiveRenderers.length == 0) {
             _loc4_ = this.newRenderer();
             _loc4_.tooltipDecorator = this._tooltipDecorator;
             _loc4_.owner = this;
-            _loc4_.addEventListener(Event.SELECT, this.onRendererSelectHandler);
-            _loc5_ = _loc4_ as DisplayObject;
-            this._asserter.assertNotNull(_loc5_, "IScrollerItemRenderer must be DisplayObject");
-            addChild(_loc5_);
+            _loc4_.addEventListener(ListRendererEvent.SELECT, this.onRendererSelectHandler);
+            this._asserter.assert(_loc4_ is DisplayObject, "IScrollerItemRenderer must be DisplayObject");
+            addChild(DisplayObject(_loc4_));
         }
         else {
-            _loc4_ = this._inactiveRenderers.pop();
-            _loc4_.visible = true;
+            _loc4_ = this._inactiveRenderers.shift();
         }
         _loc4_.data = param1;
         _loc4_.index = param2;
@@ -219,13 +223,9 @@ public class HorizontalScrollerViewPort extends UIComponentEx implements IListVi
         if (this._rendererWidth != 0 && _loc4_.width != this._rendererWidth) {
             _loc4_.width = this._rendererWidth;
         }
+        _loc4_.x = (_loc4_.index / this._rowCount ^ 0) * this._typicalRendererWidth;
+        _loc4_.y = _loc4_.index % this._rowCount * (_loc4_.height + this._gap);
         return _loc4_;
-    }
-
-    private function newRenderer():IScrollerItemRenderer {
-        var _loc1_:IScrollerItemRenderer = new (this._itemRendererFactory as Class)() as IScrollerItemRenderer;
-        this._asserter.assertNotNull(_loc1_, "Invalid IScrollerItemRenderer factory = " + this._itemRendererFactory);
-        return _loc1_;
     }
 
     private function getRendererByIndex(param1:int):IScrollerItemRenderer {
@@ -261,27 +261,17 @@ public class HorizontalScrollerViewPort extends UIComponentEx implements IListVi
     }
 
     private function updateDataCount():void {
-        var _loc1_:int = Math.ceil((this._visibleWidth + this._gap) / this._typicalRendererWidth);
+        var _loc1_:int = Math.ceil((this._visibleWidth + this._gap) / this._typicalRendererWidth) * this._rowCount;
         if (this._dataProvider != null && this._dataProvider.length > _loc1_) {
             this._dataCount = this._dataProvider.length;
         }
         else {
             this._dataCount = _loc1_;
         }
-    }
-
-    public function set tooltipDecorator(param1:ITooltipMgr):void {
-        this._tooltipDecorator = param1;
-    }
-
-    public function get gap():Number {
-        return this._gap;
-    }
-
-    public function set gap(param1:Number):void {
-        this._gap = param1;
-        this._typicalRendererWidth = this._rendererWidth + this._gap;
-        invalidate(InvalidationType.SIZE);
+        var _loc2_:int = this._dataCount % this._rowCount;
+        if (_loc2_ != 0) {
+            this._dataCount = this._dataCount + (this._rowCount - _loc2_);
+        }
     }
 
     public function get owner():IUIComponentEx {
@@ -291,18 +281,8 @@ public class HorizontalScrollerViewPort extends UIComponentEx implements IListVi
     public function set owner(param1:IUIComponentEx):void {
         if (param1 != this._owner) {
             this._owner = param1;
-            invalidate(INVALIDATE_RENDERER);
+            invalidate(InvalidationType.DATA);
         }
-    }
-
-    public function get rendererWidth():Number {
-        return this._rendererWidth;
-    }
-
-    public function set rendererWidth(param1:Number):void {
-        this._rendererWidth = param1;
-        this._typicalRendererWidth = this._rendererWidth + this._gap;
-        invalidate(INVALIDATE_RENDERER);
     }
 
     public function set itemRendererFactory(param1:Class):void {
@@ -318,7 +298,17 @@ public class HorizontalScrollerViewPort extends UIComponentEx implements IListVi
 
     public function set dataProvider(param1:IDataProvider):void {
         this._dataProvider = param1;
-        invalidate(INVALIDATE_RENDERER);
+        invalidate(InvalidationType.DATA);
+    }
+
+    public function get gap():Number {
+        return this._gap;
+    }
+
+    public function set gap(param1:Number):void {
+        this._gap = param1;
+        this._typicalRendererWidth = this._rendererWidth + this._gap;
+        invalidate(InvalidationType.SIZE);
     }
 
     public function get horizontalScrollPosition():Number {
@@ -369,8 +359,39 @@ public class HorizontalScrollerViewPort extends UIComponentEx implements IListVi
         }
     }
 
+    public function get rendererWidth():Number {
+        return this._rendererWidth;
+    }
+
+    public function set rendererWidth(param1:Number):void {
+        this._rendererWidth = param1;
+        this._typicalRendererWidth = this._rendererWidth + this._gap;
+        invalidate(InvalidationType.DATA);
+    }
+
+    public function set tooltipDecorator(param1:ITooltipMgr):void {
+        this._tooltipDecorator = param1;
+    }
+
     public function get selectedIndex():int {
         return this._selectedIndex;
+    }
+
+    public function get rowCount():int {
+        return this._rowCount;
+    }
+
+    public function set rowCount(param1:int):void {
+        this._rowCount = param1;
+        invalidate(InvalidationType.DATA);
+    }
+
+    protected function get activeRenderers():Vector.<IScrollerItemRenderer> {
+        return this._activeRenderers;
+    }
+
+    protected function get inactiveRenderers():Vector.<IScrollerItemRenderer> {
+        return this._inactiveRenderers;
     }
 
     private function onRendererSelectHandler(param1:Event):void {

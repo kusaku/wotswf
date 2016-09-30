@@ -18,6 +18,7 @@ import net.wg.gui.events.FinalStatisticEvent;
 import net.wg.gui.lobby.battleResults.components.AlertMessage;
 import net.wg.gui.lobby.battleResults.components.BattleResultsMedalsList;
 import net.wg.gui.lobby.battleResults.components.DetailsBlock;
+import net.wg.gui.lobby.battleResults.components.EfficiencyHeader;
 import net.wg.gui.lobby.battleResults.components.TankStatsView;
 import net.wg.gui.lobby.battleResults.data.BattleResultsVO;
 import net.wg.gui.lobby.battleResults.data.CommonStatsVO;
@@ -68,6 +69,8 @@ public class CommonStats extends UIComponentEx implements IViewStackContent, IEm
     private static const TEAM_ENEMY_EMBLEM_COMMON:String = "teamEnemyEmblemCommon";
 
     private static const SORTIE_STATE:String = "sortie";
+
+    private static const LABEL_PLAYER_NAME:String = "playerName";
 
     public var resultLbl:TextField;
 
@@ -127,6 +130,8 @@ public class CommonStats extends UIComponentEx implements IViewStackContent, IEm
 
     public var overtimeBg:DisplayObject;
 
+    public var efficiencyHeader:EfficiencyHeader;
+
     private var _progressReport:SubtasksList;
 
     private var _creditsCounterNumber:Number;
@@ -146,15 +151,15 @@ public class CommonStats extends UIComponentEx implements IViewStackContent, IEm
         super();
     }
 
-    private static function onIconEfficiencyRollOutHandler(param1:FinalStatisticEvent):void {
+    private static function onEfficiencyIconRollOutHandler(param1:FinalStatisticEvent):void {
         App.toolTipMgr.hide();
     }
 
     override protected function onDispose():void {
         this.tryCleanMedalListDataProviders();
         this.detailsMc.detailedReportBtn.removeEventListener(ButtonEvent.CLICK, this.onDetailsClickHandler);
-        this.efficiencyList.removeEventListener(FinalStatisticEvent.EFFICIENCY_ICON_ROLL_OVER, this.onIconEfficiencyRollOverHandler);
-        this.efficiencyList.removeEventListener(FinalStatisticEvent.EFFICIENCY_ICON_ROLL_OUT, onIconEfficiencyRollOutHandler);
+        this.efficiencyList.removeEventListener(FinalStatisticEvent.EFFICIENCY_ICON_ROLL_OVER, this.onEfficiencyIconRollOverHandler);
+        this.efficiencyList.removeEventListener(FinalStatisticEvent.EFFICIENCY_ICON_ROLL_OUT, onEfficiencyIconRollOutHandler);
         this.tankSlot.removeEventListener(ListEvent.INDEX_CHANGE, this.onDropDownIndexChangeHandler);
         this.noIncomeAlert.dispose();
         this.tankSlot.dispose();
@@ -186,6 +191,8 @@ public class CommonStats extends UIComponentEx implements IViewStackContent, IEm
         this.creditsCounter = null;
         this.xpCounter = null;
         this.resCounter = null;
+        this.efficiencyHeader.dispose();
+        this.efficiencyHeader = null;
         this.scrollPane.dispose();
         this.scrollPane = null;
         this.subtasksScrollBar = null;
@@ -288,6 +295,7 @@ public class CommonStats extends UIComponentEx implements IViewStackContent, IEm
             this.medalsListLeft.dataProvider = new DataProvider(_loc2_.achievementsLeft);
             this.medalsListRight.dataProvider = new DataProvider(_loc2_.achievementsRight);
             this.initEfficiencyList(_loc2_);
+            this.initEfficiencyHeader(_loc2_);
             _loc6_ = _loc2_.showNoIncomeAlert;
             this.setNoIncomeVisible(_loc6_);
             if (!_loc6_) {
@@ -307,6 +315,16 @@ public class CommonStats extends UIComponentEx implements IViewStackContent, IEm
         invalidateSize();
         this.medalsListLeft.invalidateData();
         this.medalsListRight.invalidateData();
+    }
+
+    private function initEfficiencyHeader(param1:PersonalDataVO):void {
+        if (param1) {
+            this.efficiencyHeader.setData(param1.efficiencyHeader);
+            this.efficiencyHeader.visible = true;
+        }
+        else {
+            this.efficiencyHeader.visible = false;
+        }
     }
 
     private function initResultText(param1:CommonStatsVO):void {
@@ -395,11 +413,11 @@ public class CommonStats extends UIComponentEx implements IViewStackContent, IEm
     }
 
     private function initEfficiencyList(param1:PersonalDataVO):void {
-        this.efficiencyList.addEventListener(FinalStatisticEvent.EFFICIENCY_ICON_ROLL_OVER, this.onIconEfficiencyRollOverHandler);
-        this.efficiencyList.addEventListener(FinalStatisticEvent.EFFICIENCY_ICON_ROLL_OUT, onIconEfficiencyRollOutHandler);
+        this.efficiencyList.addEventListener(FinalStatisticEvent.EFFICIENCY_ICON_ROLL_OVER, this.onEfficiencyIconRollOverHandler);
+        this.efficiencyList.addEventListener(FinalStatisticEvent.EFFICIENCY_ICON_ROLL_OUT, onEfficiencyIconRollOutHandler);
         if (param1.details && param1.details.length > 0) {
             this.noEfficiencyLbl.visible = false;
-            this.efficiencyList.labelField = "playerName";
+            this.efficiencyList.labelField = LABEL_PLAYER_NAME;
             this.tryCleanEfficiencyListDataProvider();
             this.efficiencyList.dataProvider = new DataProvider(param1.details[0]);
             App.utils.scheduler.scheduleOnNextFrame(this.showEfficiencyList);
@@ -465,7 +483,7 @@ public class CommonStats extends UIComponentEx implements IViewStackContent, IEm
         this.detailsMc.currentSelectedVehIdx = _loc2_;
     }
 
-    private function onIconEfficiencyRollOverHandler(param1:FinalStatisticEvent):void {
+    private function onEfficiencyIconRollOverHandler(param1:FinalStatisticEvent):void {
         var _loc3_:* = false;
         var _loc4_:IconEfficiencyTooltipData = null;
         var _loc2_:Object = param1.data;

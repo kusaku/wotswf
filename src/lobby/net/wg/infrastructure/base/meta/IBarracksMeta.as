@@ -9,9 +9,7 @@ public interface IBarracksMeta extends IEventDispatcher {
 
     function onShowRecruitWindowClickS(param1:Object, param2:Boolean):void;
 
-    function unloadTankmanS(param1:String):void;
-
-    function dismissTankmanS(param1:String):void;
+    function actTankmanS(param1:String):void;
 
     function buyBerthsS():void;
 
@@ -21,7 +19,7 @@ public interface IBarracksMeta extends IEventDispatcher {
 
     function openPersonalCaseS(param1:String, param2:uint):void;
 
-    function as_setTankmen(param1:Number, param2:Number, param3:Number, param4:Number, param5:Array):void;
+    function as_setTankmen(param1:Object):void;
 
     function as_updateTanksList(param1:Array):void;
 

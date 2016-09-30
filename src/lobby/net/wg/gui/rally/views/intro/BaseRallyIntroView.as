@@ -22,16 +22,16 @@ public class BaseRallyIntroView extends BaseRallyIntroViewMeta implements IBaseR
 
     override protected function configUI():void {
         super.configUI();
-        this.listRoomBtn.addEventListener(ButtonEvent.CLICK, this.onListRoomBtnClick);
-        this.listRoomBtn.addEventListener(MouseEvent.ROLL_OVER, onControlRollOver);
-        this.listRoomBtn.addEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
+        this.listRoomBtn.addEventListener(ButtonEvent.CLICK, this.onListRoomBtnClickHandler);
+        this.listRoomBtn.addEventListener(MouseEvent.ROLL_OVER, this.onButtonRollOverHandler);
+        this.listRoomBtn.addEventListener(MouseEvent.ROLL_OUT, this.onButtonRollOutHandler);
     }
 
     override protected function onDispose():void {
         if (this.listRoomBtn) {
-            this.listRoomBtn.removeEventListener(ButtonEvent.CLICK, this.onListRoomBtnClick);
-            this.listRoomBtn.removeEventListener(MouseEvent.ROLL_OVER, onControlRollOver);
-            this.listRoomBtn.removeEventListener(MouseEvent.ROLL_OUT, onControlRollOut);
+            this.listRoomBtn.removeEventListener(ButtonEvent.CLICK, this.onListRoomBtnClickHandler);
+            this.listRoomBtn.removeEventListener(MouseEvent.ROLL_OVER, this.onButtonRollOverHandler);
+            this.listRoomBtn.removeEventListener(MouseEvent.ROLL_OUT, this.onButtonRollOutHandler);
             this.listRoomBtn.dispose();
             this.listRoomBtn = null;
         }
@@ -40,7 +40,15 @@ public class BaseRallyIntroView extends BaseRallyIntroViewMeta implements IBaseR
         super.onDispose();
     }
 
-    private function onListRoomBtnClick(param1:ButtonEvent):void {
+    private function onButtonRollOutHandler(param1:MouseEvent):void {
+        onControlRollOut();
+    }
+
+    private function onButtonRollOverHandler(param1:MouseEvent):void {
+        controlRollOverPerformer(param1);
+    }
+
+    private function onListRoomBtnClickHandler(param1:ButtonEvent):void {
         this.showListRoom(param1);
     }
 

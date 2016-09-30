@@ -3,8 +3,8 @@ import flash.display.MovieClip;
 import flash.display.Sprite;
 
 import net.wg.gui.components.advanced.ContentTabBar;
-import net.wg.gui.lobby.questsWindow.data.TabDataVO;
-import net.wg.gui.lobby.questsWindow.data.TabsVO;
+import net.wg.gui.data.TabDataVO;
+import net.wg.gui.data.TabsVO;
 import net.wg.infrastructure.base.meta.IQuestsContentTabsMeta;
 import net.wg.infrastructure.base.meta.impl.QuestsContentTabsMeta;
 
@@ -54,9 +54,7 @@ public class QuestsContentTabs extends QuestsContentTabsMeta implements IQuestsC
         if (this.tabBar.dataProvider != null) {
             this.tabBar.dataProvider.cleanUp();
         }
-        var _loc2_:Array = App.utils.data.vectorToArray(param1.tabs);
-        this.tabBar.dataProvider = new DataProvider(_loc2_);
-        _loc2_.splice(0, _loc2_.length);
+        this.tabBar.dataProvider = new DataProvider(param1.tabs);
     }
 
     public function as_selectTab(param1:int):void {

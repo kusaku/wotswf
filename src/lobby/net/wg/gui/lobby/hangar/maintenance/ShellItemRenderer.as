@@ -6,6 +6,7 @@ import flash.text.TextFieldAutoSize;
 
 import net.wg.data.constants.Currencies;
 import net.wg.data.constants.IconsTypes;
+import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.controls.ActionPrice;
 import net.wg.gui.components.controls.DropdownMenu;
@@ -173,13 +174,13 @@ public class ShellItemRenderer extends SoundListItemRenderer {
                     this.toBuyTf.visible = this.shell.goldShellsForCredits;
                     this.toBuy.visible = !this.shell.goldShellsForCredits;
                     _loc1_ = App.utils.locale;
-                    this.toBuyDropdown.dataProvider = new DataProvider([_loc1_.htmlTextWithIcon(_loc1_.integer(this.shell.prices[0]), Currencies.CREDITS), _loc1_.htmlTextWithIcon(_loc1_.gold(this.shell.prices[1]), Currencies.GOLD)]);
-                    this.toBuyDropdown.selectedIndex = this.shell.currency == Currencies.CREDITS ? 0 : 1;
+                    this.toBuyDropdown.dataProvider = new DataProvider([_loc1_.htmlTextWithIcon(_loc1_.integer(this.shell.prices[0]), CURRENCIES_CONSTANTS.CREDITS), _loc1_.htmlTextWithIcon(_loc1_.gold(this.shell.prices[1]), CURRENCIES_CONSTANTS.GOLD)]);
+                    this.toBuyDropdown.selectedIndex = this.shell.currency == CURRENCIES_CONSTANTS.CREDITS ? 0 : 1;
                     this.price.icon = this.shell.currency;
                     _loc2_ = null;
                     if (this.shell.actionPriceData) {
                         _loc2_ = new ActionPriceVO(this.shell.actionPriceData);
-                        _loc2_.forCredits = this.shell.currency == Currencies.CREDITS;
+                        _loc2_.forCredits = this.shell.currency == CURRENCIES_CONSTANTS.CREDITS;
                     }
                     this.actionPrice.setData(_loc2_);
                     this.actionPrice.setup(this);
@@ -221,21 +222,21 @@ public class ShellItemRenderer extends SoundListItemRenderer {
             _loc2_ = this.shell.prices[this.toBuyDropdown.selectedIndex];
         }
         else {
-            _loc2_ = this.shell.prices[this.shell.currency == Currencies.CREDITS ? 0 : 1];
-            _loc3_ = this.shell.currency == Currencies.CREDITS ? _loc4_.integer(_loc2_) : _loc4_.gold(_loc2_);
+            _loc2_ = this.shell.prices[this.shell.currency == CURRENCIES_CONSTANTS.CREDITS ? 0 : 1];
+            _loc3_ = this.shell.currency == CURRENCIES_CONSTANTS.CREDITS ? _loc4_.integer(_loc2_) : _loc4_.gold(_loc2_);
         }
         var _loc5_:Number = _loc2_ * _loc1_;
         this.toBuy.icon = this.shell.currency;
         this.price.icon = this.shell.currency;
         this.toBuy.textColor = Currencies.TEXT_COLORS[this.shell.currency];
-        this.price.textColor = Currencies.TEXT_COLORS[_loc5_ > this.shell.userCredits[this.shell.currency] ? Currencies.ERROR : this.shell.currency];
+        this.price.textColor = Currencies.TEXT_COLORS[_loc5_ > this.shell.userCredits[this.shell.currency] ? CURRENCIES_CONSTANTS.ERROR : this.shell.currency];
         this.toBuyTf.text = _loc1_ + MULTY_CHARS;
         this.toBuy.text = _loc1_ + MULTY_CHARS + _loc3_;
-        this.price.text = this.shell.currency == Currencies.CREDITS ? _loc4_.integer(_loc5_) : _loc4_.gold(_loc5_);
+        this.price.text = this.shell.currency == CURRENCIES_CONSTANTS.CREDITS ? _loc4_.integer(_loc5_) : _loc4_.gold(_loc5_);
         var _loc6_:ActionPriceVO = null;
         if (this.shell.actionPriceData) {
             _loc6_ = new ActionPriceVO(this.shell.actionPriceData);
-            _loc6_.forCredits = this.shell.currency == Currencies.CREDITS;
+            _loc6_.forCredits = this.shell.currency == CURRENCIES_CONSTANTS.CREDITS;
             if (_loc6_.forCredits) {
                 _loc6_.newPrice = _loc1_ * _loc6_.newPrices[0];
                 _loc6_.oldPrice = _loc1_ * _loc6_.oldPrices[0];
@@ -274,9 +275,9 @@ public class ShellItemRenderer extends SoundListItemRenderer {
     }
 
     private function onShellCurrencyChanged(param1:ListEvent):void {
-        this.price.icon = this.toBuyDropdown.selectedIndex == 0 ? Currencies.CREDITS : Currencies.GOLD;
+        this.price.icon = this.toBuyDropdown.selectedIndex == 0 ? CURRENCIES_CONSTANTS.CREDITS : CURRENCIES_CONSTANTS.GOLD;
         this.actionPrice.ico = this.toBuyDropdown.selectedIndex == 0 ? IconsTypes.CREDITS : IconsTypes.GOLD;
-        var _loc2_:String = this.toBuyDropdown.selectedIndex == 0 ? Currencies.CREDITS : Currencies.GOLD;
+        var _loc2_:String = this.toBuyDropdown.selectedIndex == 0 ? CURRENCIES_CONSTANTS.CREDITS : CURRENCIES_CONSTANTS.GOLD;
         if (this.shell.currency != _loc2_) {
             dispatchEvent(new ShellRendererEvent(ShellRendererEvent.CURRENCY_CHANGED));
         }

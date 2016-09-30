@@ -172,8 +172,8 @@ public class NotificationPopUpViewer extends NotificationPopUpViewerMeta impleme
             this.removePopupAt(0, false, false);
         }
         this._displayingNowPopUps = null;
-        this._smContainer.removeEventListener(MouseEvent.ROLL_OVER, this.onSMContainerMouseOverHandler);
-        this._smContainer.removeEventListener(MouseEvent.ROLL_OUT, this.onSMContainerMouseOutHandler);
+        this._smContainer.removeEventListener(MouseEvent.MOUSE_OVER, this.onSMContainerMouseOverHandler);
+        this._smContainer.removeEventListener(MouseEvent.MOUSE_OUT, this.onSMContainerMouseOutHandler);
         this._smContainer = null;
         this._animationManager.dispose();
         this._animationManager = null;
@@ -264,6 +264,7 @@ public class NotificationPopUpViewer extends NotificationPopUpViewerMeta impleme
     }
 
     private function removePopupAt(param1:int, param2:Boolean, param3:Boolean = true):void {
+        var _loc5_:PopUpNotificationInfoVO = null;
         this.applyHiding(false);
         var _loc4_:ServiceMessagePopUp = this._displayingNowPopUps[param1];
         this._displayingNowPopUps.splice(param1, 1);
@@ -273,7 +274,8 @@ public class NotificationPopUpViewer extends NotificationPopUpViewerMeta impleme
         _loc4_.removeEventListener(ServiceMessageEvent.MESSAGE_BUTTON_CLICKED, this.onPopUpMessageButtonClickedHandler);
         _loc4_.removeEventListener(ServiceMessageEvent.MESSAGE_LINK_CLICKED, this.onPopUpMessageLinkClickedHandler);
         if (param3) {
-            onMessageHidedS(param2, PopUpNotificationInfoVO(_loc4_.data).notify);
+            _loc5_ = PopUpNotificationInfoVO(_loc4_.data);
+            onMessageHiddenS(param2, _loc5_.notify, _loc5_.typeID, _loc5_.entityID);
         }
         _loc4_.dispose();
         if (this._displayingNowPopUps.length > 0) {

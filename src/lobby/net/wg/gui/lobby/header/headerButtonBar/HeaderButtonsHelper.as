@@ -1,11 +1,13 @@
 package net.wg.gui.lobby.header.headerButtonBar {
 import flash.text.TextFieldAutoSize;
 
+import net.wg.data.constants.Linkages;
 import net.wg.data.constants.Values;
 import net.wg.gui.lobby.header.vo.HBC_AccountDataVo;
 import net.wg.gui.lobby.header.vo.HBC_BattleTypeVo;
 import net.wg.gui.lobby.header.vo.HBC_FinanceVo;
 import net.wg.gui.lobby.header.vo.HBC_PremDataVo;
+import net.wg.gui.lobby.header.vo.HBC_PremShopVO;
 import net.wg.gui.lobby.header.vo.HBC_SettingsVo;
 import net.wg.gui.lobby.header.vo.HBC_SquadDataVo;
 import net.wg.gui.lobby.header.vo.HeaderButtonVo;
@@ -17,27 +19,33 @@ import scaleform.clik.interfaces.IDataProvider;
 
 public class HeaderButtonsHelper implements IDisposable {
 
-    public static var ITEM_ID_SETTINGS:String = "settings";
+    public static const ITEM_ID_SETTINGS:String = "settings";
 
-    public static var ITEM_ID_ACCOUNT:String = "account";
+    public static const ITEM_ID_ACCOUNT:String = "account";
 
-    public static var ITEM_ID_PREM:String = "prem";
+    public static const ITEM_ID_PREM:String = "prem";
 
-    public static var ITEM_ID_SQUAD:String = "squad";
+    public static const ITEM_ID_PREMSHOP:String = "premShop";
 
-    public static var ITEM_ID_BATTLE_SELECTOR:String = "battleSelector";
+    public static const ITEM_ID_SQUAD:String = "squad";
 
-    public static var ITEM_ID_GOLD:String = "gold";
+    public static const ITEM_ID_BATTLE_SELECTOR:String = "battleSelector";
 
-    public static var ITEM_ID_SILVER:String = "silver";
+    public static const ITEM_ID_GOLD:String = "gold";
 
-    public static var ITEM_ID_FREEXP:String = "freeXP";
+    public static const ITEM_ID_SILVER:String = "silver";
+
+    public static const ITEM_ID_FREEXP:String = "freeXP";
+
+    private static const BOTTOM_HELP_DIR:String = "B";
 
     private var _settingsData:HeaderButtonVo;
 
     private var _accountData:HeaderButtonVo;
 
     private var _premData:HeaderButtonVo;
+
+    private var _premShopData:HeaderButtonVo;
 
     private var _squadData:HeaderButtonVo;
 
@@ -56,99 +64,110 @@ public class HeaderButtonsHelper implements IDisposable {
     public function HeaderButtonsHelper(param1:HeaderButtonBar) {
         this._settingsData = new HeaderButtonVo({
             "id": ITEM_ID_SETTINGS,
-            "linkage": "HBC_Settings_UI",
+            "linkage": Linkages.HBC_SETTINGS_UI,
             "direction": TextFieldAutoSize.LEFT,
             "align": TextFieldAutoSize.LEFT,
             "isUseFreeSize": false,
             "data": new HBC_SettingsVo(),
             "helpText": LOBBY_HELP.HEADER_SETTINGS_BUTTON,
-            "helpDirection": "B",
+            "helpDirection": BOTTOM_HELP_DIR,
             "enabled": true
         });
         this._accountData = new HeaderButtonVo({
             "id": ITEM_ID_ACCOUNT,
-            "linkage": "HBC_Account_UI",
-            "upperLinkage": "HBC_AccountUpper_UI",
+            "linkage": Linkages.HBC_ACCOUNT_UI,
+            "upperLinkage": Linkages.HBC_ACCOUNT_UPPER_UI,
             "direction": TextFieldAutoSize.LEFT,
             "align": TextFieldAutoSize.LEFT,
             "isUseFreeSize": true,
             "data": new HBC_AccountDataVo(),
             "helpText": LOBBY_HELP.HEADER_ACCOUNT_BUTTON,
-            "helpDirection": "B",
+            "helpDirection": BOTTOM_HELP_DIR,
             "enabled": true
         });
         this._premData = new HeaderButtonVo({
             "id": ITEM_ID_PREM,
-            "linkage": "HBC_Prem_UI",
+            "linkage": Linkages.HBC_PREM_UI,
             "direction": TextFieldAutoSize.LEFT,
             "align": TextFieldAutoSize.LEFT,
             "isUseFreeSize": false,
             "data": new HBC_PremDataVo(),
             "helpText": LOBBY_HELP.HEADER_PREMIUM_BUTTON,
-            "helpDirection": "B",
+            "helpDirection": BOTTOM_HELP_DIR,
+            "enabled": true
+        });
+        this._premShopData = new HeaderButtonVo({
+            "id": ITEM_ID_PREMSHOP,
+            "linkage": Linkages.HBC_PREM_SHOP_UI,
+            "direction": TextFieldAutoSize.LEFT,
+            "align": TextFieldAutoSize.LEFT,
+            "isUseFreeSize": false,
+            "data": new HBC_PremShopVO(),
+            "helpText": Values.EMPTY_STR,
+            "helpDirection": BOTTOM_HELP_DIR,
             "enabled": true
         });
         this._squadData = new HeaderButtonVo({
             "id": ITEM_ID_SQUAD,
-            "linkage": "HBC_Squad_UI",
+            "linkage": Linkages.HBC_SQUAD_UI,
             "direction": TextFieldAutoSize.LEFT,
             "align": TextFieldAutoSize.RIGHT,
             "isUseFreeSize": false,
             "data": new HBC_SquadDataVo(),
             "helpText": LOBBY_HELP.HEADER_SQUAD_BUTTON,
-            "helpDirection": "B",
+            "helpDirection": BOTTOM_HELP_DIR,
             "enabled": true
         });
         this._battleSelectorData = new HeaderButtonVo({
             "id": ITEM_ID_BATTLE_SELECTOR,
-            "linkage": "HBC_BattleSelector_UI",
+            "linkage": Linkages.HBC_BATTLE_SELECTOR_UI,
             "direction": TextFieldAutoSize.RIGHT,
             "align": TextFieldAutoSize.LEFT,
             "isUseFreeSize": true,
             "data": new HBC_BattleTypeVo(),
             "helpText": LOBBY_HELP.HEADER_BATTLETYPE_BUTTON,
-            "helpDirection": "B",
+            "helpDirection": BOTTOM_HELP_DIR,
             "enabled": true
         });
         this._goldData = new HeaderButtonVo({
             "id": ITEM_ID_GOLD,
-            "linkage": "HBC_Finance_UI",
+            "linkage": Linkages.HBC_FINANCE_UI,
             "direction": TextFieldAutoSize.RIGHT,
             "align": TextFieldAutoSize.RIGHT,
             "isUseFreeSize": false,
             "data": new HBC_FinanceVo(),
             "helpText": Values.EMPTY_STR,
-            "helpDirection": "B",
+            "helpDirection": BOTTOM_HELP_DIR,
             "enabled": true
         });
         this._silverData = new HeaderButtonVo({
             "id": ITEM_ID_SILVER,
-            "linkage": "HBC_Finance_UI",
+            "linkage": Linkages.HBC_FINANCE_UI,
             "direction": TextFieldAutoSize.RIGHT,
             "align": TextFieldAutoSize.RIGHT,
             "isUseFreeSize": false,
             "data": new HBC_FinanceVo(),
             "helpText": Values.EMPTY_STR,
-            "helpDirection": "B",
+            "helpDirection": BOTTOM_HELP_DIR,
             "enabled": true
         });
         this._freeXPData = new HeaderButtonVo({
             "id": ITEM_ID_FREEXP,
-            "linkage": "HBC_Finance_UI",
+            "linkage": Linkages.HBC_FINANCE_UI,
             "direction": TextFieldAutoSize.RIGHT,
             "align": TextFieldAutoSize.RIGHT,
             "isUseFreeSize": false,
             "data": new HBC_FinanceVo(),
             "helpText": Values.EMPTY_STR,
-            "helpDirection": "B",
+            "helpDirection": BOTTOM_HELP_DIR,
             "enabled": true
         });
         super();
-        this._buttonsArrData = [this._settingsData, this._accountData, this._premData, this._squadData, this._battleSelectorData, this._goldData, this._silverData, this._freeXPData];
+        this._buttonsArrData = [this._settingsData, this._accountData, this._premData, this._premShopData, this._squadData, this._battleSelectorData, this._goldData, this._silverData, this._freeXPData];
         this._headerButtonBar = param1;
     }
 
-    public function dispose():void {
+    public final function dispose():void {
         var _loc3_:IDisposable = null;
         this._headerButtonBar = null;
         var _loc1_:int = this._buttonsArrData.length;
@@ -161,6 +180,7 @@ public class HeaderButtonsHelper implements IDisposable {
         this._settingsData = null;
         this._accountData = null;
         this._premData = null;
+        this._premShopData = null;
         this._squadData = null;
         this._battleSelectorData = null;
         this._goldData = null;

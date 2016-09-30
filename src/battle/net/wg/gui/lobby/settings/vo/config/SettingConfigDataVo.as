@@ -19,6 +19,8 @@ public class SettingConfigDataVo extends SettingsDataVo {
 
     public var OtherSettings:OtherSettingsDataVo = null;
 
+    public var FeedbackSettings:FeedbackSettingsDataVo = null;
+
     public function SettingConfigDataVo() {
         super({
             "GameSettings": new GameSettingsDataVo(),
@@ -27,8 +29,21 @@ public class SettingConfigDataVo extends SettingsDataVo {
             "ControlsSettings": new ControlsSettingsDataVo(),
             "AimSettings": new AimSettingsDataVo(),
             "MarkerSettings": new MarkerSettingsDataVo(),
-            "OtherSettings": new OtherSettingsDataVo()
+            "OtherSettings": new OtherSettingsDataVo(),
+            "FeedbackSettings": new FeedbackSettingsDataVo()
         });
+    }
+
+    override protected function onDispose():void {
+        this.GameSettings = null;
+        this.GraphicSettings = null;
+        this.SoundSettings = null;
+        this.ControlsSettings = null;
+        this.AimSettings = null;
+        this.MarkerSettings = null;
+        this.OtherSettings = null;
+        this.FeedbackSettings = null;
+        super.onDispose();
     }
 }
 }

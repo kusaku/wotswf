@@ -6,21 +6,19 @@ public class VehicleCarouselVO extends DAAPIUpdatableDataClass {
 
     private static const SLOT_PRICE_ACTION_DATA:String = "slotPriceActionData";
 
-    private static const TANK_ICON_DATA:String = "tankIconData";
-
     public var id:int = -1;
+
+    public var smallInfoText:String = "";
 
     public var infoText:String = "";
 
-    public var additionalText:String = "";
-
     public var icon:String = "";
+
+    public var iconSmall:String = "";
 
     public var clanLock:Number = -1;
 
     public var slotPrice:Number = 0;
-
-    public var showInfoText:Boolean = false;
 
     public var buyTank:Boolean = false;
 
@@ -30,9 +28,25 @@ public class VehicleCarouselVO extends DAAPIUpdatableDataClass {
 
     public var hasSale:Boolean = false;
 
-    private var _slotPriceActionData:ActionPriceVO = null;
+    public var label:String = "";
 
-    private var _tankIconVO:TankIconVO = null;
+    public var level:Number = 0;
+
+    public var elite:Boolean = false;
+
+    public var premium:Boolean = false;
+
+    public var favorite:Boolean = false;
+
+    public var nation:Number = 0;
+
+    public var xpImgSource:String = "";
+
+    public var tankType:String = "";
+
+    public var rentLeft:String = "";
+
+    private var _slotPriceActionData:ActionPriceVO = null;
 
     public function VehicleCarouselVO(param1:Object) {
         super(param1);
@@ -43,11 +57,7 @@ public class VehicleCarouselVO extends DAAPIUpdatableDataClass {
             this._slotPriceActionData = new ActionPriceVO(param2);
             return false;
         }
-        if (param1 == TANK_ICON_DATA) {
-            this._tankIconVO = new TankIconVO(param2);
-            return false;
-        }
-        return true;
+        return super.onDataWrite(param1, param2);
     }
 
     override protected function onDispose():void {
@@ -55,19 +65,11 @@ public class VehicleCarouselVO extends DAAPIUpdatableDataClass {
             this._slotPriceActionData.dispose();
             this._slotPriceActionData = null;
         }
-        if (this._tankIconVO != null) {
-            this._tankIconVO.dispose();
-            this._tankIconVO = null;
-        }
         super.onDispose();
     }
 
     public function getActionPriceVO():ActionPriceVO {
         return this._slotPriceActionData;
-    }
-
-    public function getTankIconVO():TankIconVO {
-        return this._tankIconVO;
     }
 }
 }

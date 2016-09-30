@@ -4,6 +4,7 @@ import flash.display.Stage;
 import flash.events.MouseEvent;
 
 import net.wg.data.constants.Errors;
+import net.wg.gui.components.controls.DropDownListItemRendererSound;
 import net.wg.infrastructure.base.interfaces.IAbstractPopOverView;
 import net.wg.infrastructure.base.meta.IPopoverManagerMeta;
 import net.wg.infrastructure.base.meta.impl.PopoverManagerMeta;
@@ -20,11 +21,32 @@ public class PopoverManager extends PopoverManagerMeta implements IPopoverManage
 
     private var _popoverCaller:IPopOverCaller;
 
-    private var client:IClosePopoverCallback = null;
+    private var _client:IClosePopoverCallback = null;
 
     public function PopoverManager(param1:Stage) {
         super();
         this._stage = param1;
+    }
+
+    public function as_onPopoverDestroy():void {
+        if (this._popoverCaller) {
+            this._stage.removeEventListener(MouseEvent.MOUSE_DOWN, this.onStageMouseDownHandler);
+            if (this._client != null) {
+                this._client.onPopoverClose();
+            }
+            this._popoverCaller = null;
+        }
+    }
+
+    public final function dispose():void {
+        this._popoverCaller = null;
+        this._client = null;
+        this._stage.removeEventListener(MouseEvent.MOUSE_DOWN, this.onStageMouseDownHandler);
+        this._stage = null;
+    }
+
+    public function hide():void {
+        requestHidePopoverS();
     }
 
     public function show(param1:IPopOverCaller, param2:String, param3:Object = null, param4:IClosePopoverCallback = null):void {
@@ -34,49 +56,28 @@ public class PopoverManager extends PopoverManagerMeta implements IPopoverManage
             this.hide();
             return;
         }
-        this._stage.addEventListener(MouseEvent.MOUSE_DOWN, this.stageMouseDownHandler, false, 0, true);
+        this._stage.addEventListener(MouseEvent.MOUSE_DOWN, this.onStageMouseDownHandler, false, 0, true);
         this._popoverCaller = param1;
-        this.client = param4;
+        this._client = param4;
         requestShowPopoverS(param2, param3);
-        if (this.client) {
-            this.client.onPopoverOpen();
+        if (this._client) {
+            this._client.onPopoverOpen();
         }
-    }
-
-    public function hide():void {
-        requestHidePopoverS();
-    }
-
-    public function as_onPopoverDestroy():void {
-        if (this._popoverCaller) {
-            this._stage.removeEventListener(MouseEvent.MOUSE_DOWN, this.stageMouseDownHandler);
-            if (this.client != null) {
-                this.client.onPopoverClose();
-            }
-            this._popoverCaller = null;
-        }
-    }
-
-    public function dispose():void {
-        this._popoverCaller = null;
-        this.client = null;
-        this._stage.removeEventListener(MouseEvent.MOUSE_DOWN, this.stageMouseDownHandler);
-        this._stage = null;
     }
 
     public function get popoverCaller():IPopOverCaller {
         return this._popoverCaller;
     }
 
-    private function stageMouseDownHandler(param1:MouseEvent):void {
+    private function onStageMouseDownHandler(param1:MouseEvent):void {
         App.utils.asserter.assertNotNull(this._popoverCaller, this + " _lastPopoverCaller have not to be NULL!", NullPointerException);
-        var _loc2_:DisplayObject = param1.target as DisplayObject;
-        if (!_loc2_) {
+        if (!(param1.target is DisplayObject)) {
             return;
         }
+        var _loc2_:DisplayObject = DisplayObject(param1.target);
         var _loc3_:DisplayObject = this._popoverCaller.getHitArea();
         while (_loc2_) {
-            if (_loc2_ == this._popoverCaller.getTargetButton() || _loc2_ == _loc3_ || _loc2_ is IPopoverWrapper || _loc2_ is IAbstractPopOverView || _loc2_ is IContextMenu) {
+            if (_loc2_ == this._popoverCaller.getTargetButton() || _loc2_ == _loc3_ || _loc2_ is IPopoverWrapper || _loc2_ is IAbstractPopOverView || _loc2_ is IContextMenu || _loc2_ is DropDownListItemRendererSound) {
                 return;
             }
             _loc2_ = _loc2_.parent;

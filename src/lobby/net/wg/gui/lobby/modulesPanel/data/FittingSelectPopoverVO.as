@@ -16,8 +16,6 @@ public class FittingSelectPopoverVO extends DAAPIDataClass {
 
     public var selectedIndex:int = -1;
 
-    public var minAvailableHeight:int = -1;
-
     public var width:int = -1;
 
     public var rendererName:String = "";

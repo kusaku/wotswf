@@ -1,22 +1,26 @@
 package net.wg.gui.lobby.techtree.nodes {
 import flash.display.MovieClip;
+import flash.events.MouseEvent;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
 import net.wg.data.Aliases;
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.Linkages;
 import net.wg.data.constants.generated.CONTEXT_MENU_HANDLER_TYPE;
+import net.wg.data.constants.generated.NODE_STATE_FLAGS;
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.advanced.ModuleTypesUIWithFill;
 import net.wg.gui.lobby.modulesPanel.components.ExtraIcon;
 import net.wg.gui.lobby.techtree.TechTreeEvent;
 import net.wg.gui.lobby.techtree.constants.NodeEntityType;
-import net.wg.gui.lobby.techtree.constants.NodeState;
 import net.wg.gui.lobby.techtree.constants.TTSoundID;
 import net.wg.gui.lobby.techtree.controls.ExperienceLabel;
 import net.wg.gui.lobby.techtree.interfaces.INodesContainer;
 import net.wg.gui.lobby.techtree.interfaces.IResearchContainer;
 import net.wg.infrastructure.events.IconLoaderEvent;
+
+import org.idmedia.as3commons.util.StringUtils;
 
 public class ResearchItem extends Renderer {
 
@@ -31,6 +35,8 @@ public class ResearchItem extends Renderer {
     private static const EXTRA_ICON_ALPHA_TRANSPARENT:Number = 0.5;
 
     private static const EXTRA_ICON_ALPHA:Number = 1;
+
+    private static const RESEARCH_CONTAINER:String = "researchContainer";
 
     public var typeIcon:ModuleTypesUIWithFill;
 
@@ -55,8 +61,8 @@ public class ResearchItem extends Renderer {
 
     override public function isActionEnabled():Boolean {
         var _loc1_:Boolean = super.isActionEnabled();
-        if (_loc1_ && stateProps.enough == NodeState.ENOUGH_MONEY) {
-            _loc1_ = container != null && this.containerEx.canInstallItems() && (valueObject.state & NodeState.INSTALLED) == 0;
+        if (_loc1_ && stateProps.enough == NODE_STATE_FLAGS.ENOUGH_MONEY) {
+            _loc1_ = container != null && this.containerEx.canInstallItems() && (valueObject.state & NODE_STATE_FLAGS.INSTALLED) == 0;
         }
         return _loc1_;
     }
@@ -65,15 +71,16 @@ public class ResearchItem extends Renderer {
         if (!dataInited) {
             return false;
         }
-        return container != null && this.containerEx.canInstallItems() && (valueObject.state & NodeState.INSTALLED) == 0 && super.isAvailable4Buy();
+        return container != null && this.containerEx.canInstallItems() && (valueObject.state & NODE_STATE_FLAGS.INSTALLED) == 0 && super.isAvailable4Buy();
     }
 
     override public function populateUI():void {
+        var _loc2_:String = null;
         var _loc1_:String = getItemName();
         this.nameField.wordWrap = true;
         this.nameField.autoSize = TextFieldAutoSize.CENTER;
         this.nameField.text = _loc1_;
-        var _loc2_:String = getItemType();
+        _loc2_ = getItemType();
         if (_loc2_.length > 0) {
             this.typeIcon.visible = true;
             App.utils.asserter.assertFrameExists(_loc2_, this.typeIcon);
@@ -151,12 +158,15 @@ public class ResearchItem extends Renderer {
         App.contextMenuMgr.hide();
         if (button != null) {
             button.endAnimation(true);
+            if (!button.enabled) {
+                button.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+            }
         }
         dispatchEvent(new TechTreeEvent(TechTreeEvent.CLICK_2_OPEN, 0, _index, entityType));
     }
 
     public function isAutoUnlocked():Boolean {
-        return dataInited && (valueObject.state & NodeState.AUTO_UNLOCKED) > 0;
+        return dataInited && (valueObject.state & NODE_STATE_FLAGS.AUTO_UNLOCKED) > 0;
     }
 
     private function applyExtraSource():void {
@@ -178,13 +188,13 @@ public class ResearchItem extends Renderer {
 
     private function applyExtraSourceLoad():void {
         var _loc1_:String = valueObject.extraInfo;
-        if (!this._extraIcon && _loc1_ != null && _loc1_ != "") {
+        if (this._extraIcon == null && StringUtils.isNotEmpty(_loc1_)) {
             this._extraIcon = new ExtraIcon();
             this._extraIcon.addEventListener(IconLoaderEvent.ICON_LOADED, this.onExtraIconLoadedHandler, false, 0, true);
             this._extraIcon.visible = false;
             addChild(this._extraIcon);
         }
-        if (this._extraIcon) {
+        if (this._extraIcon != null) {
             this._extraIcon.setSource(_loc1_);
             this._extraIcon.visible = !(button && button.visible || this.xpLabel && this.xpLabel.visible);
             if (this._extraIcon.visible) {
@@ -200,7 +210,13 @@ public class ResearchItem extends Renderer {
     }
 
     public function get containerEx():IResearchContainer {
-        return container != null ? container as IResearchContainer : null;
+        var _loc1_:IResearchContainer = null;
+        if (container != null) {
+            _loc1_ = container as IResearchContainer;
+            App.utils.asserter.assertNotNull(_loc1_, RESEARCH_CONTAINER + Errors.CANT_NULL);
+            return _loc1_;
+        }
+        return null;
     }
 
     private function onExtraIconLoadedHandler(param1:IconLoaderEvent):void {

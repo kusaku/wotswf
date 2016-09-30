@@ -84,8 +84,11 @@ public class FadedTextMessage extends EventDispatcher implements IMessage {
         return this._displayObjects;
     }
 
-    public function setData(param1:String, param2:String):void {
+    public function setData(param1:String, param2:String, param3:Boolean = false, param4:uint = 0):void {
         this._key = param1;
+        if (param3 && this._textField.textColor != param4) {
+            this._textField.textColor = param4;
+        }
         if (this._useHtml) {
             this._textField.htmlText = param2;
         }

@@ -3,6 +3,7 @@ import net.wg.data.VO.DialogSettingsVO;
 import net.wg.data.constants.Currencies;
 import net.wg.data.constants.Errors;
 import net.wg.data.constants.Values;
+import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 import net.wg.gui.components.controls.ActionPrice;
 import net.wg.gui.components.controls.DropdownMenu;
 import net.wg.gui.components.controls.VO.ActionPriceVO;
@@ -119,20 +120,20 @@ public class ConfirmItemWindow extends ConfirmItemWindowMeta implements IConfirm
         var _loc1_:DropdownMenu = content.dropdownMenu;
         content.moduleName.text = this.data.name;
         content.description.htmlText = this.data.description;
-        var _loc2_:int = this.data.price[Currencies.CREDITS_INDEX];
-        var _loc3_:int = this.data.price[Currencies.GOLD_INDEX];
+        var _loc2_:int = this.data.price[CURRENCIES_CONSTANTS.CREDITS_INDEX];
+        var _loc3_:int = this.data.price[CURRENCIES_CONSTANTS.GOLD_INDEX];
         var _loc4_:int = NORMAL_COLOR;
         if (this.data.isActionNow) {
             _loc5_ = _loc1_.selectedIndex != -1 ? int(_loc1_.selectedIndex) : 1;
             if (_loc1_.dataProvider != null) {
                 _loc1_.dataProvider.cleanUp();
             }
-            _loc1_.dataProvider = new DataProvider([this._locale.htmlTextWithIcon(this._locale.integer(_loc2_), Currencies.CREDITS), this._locale.htmlTextWithIcon(this._locale.gold(_loc3_), Currencies.GOLD)]);
+            _loc1_.dataProvider = new DataProvider([this._locale.htmlTextWithIcon(this._locale.integer(_loc2_), CURRENCIES_CONSTANTS.CREDITS), this._locale.htmlTextWithIcon(this._locale.gold(_loc3_), CURRENCIES_CONSTANTS.GOLD)]);
             _loc1_.addEventListener(ListEvent.INDEX_CHANGE, this.onDropDownMenuIndexChangeHandler, false, 0, true);
             _loc1_.selectedIndex = _loc5_;
             _loc4_ = ACTION_COLOR;
         }
-        else if (this.data.currency == Currencies.GOLD) {
+        else if (this.data.currency == CURRENCIES_CONSTANTS.GOLD) {
             content.leftIT.text = this._locale.gold(_loc3_);
         }
         else {
@@ -154,17 +155,17 @@ public class ConfirmItemWindow extends ConfirmItemWindowMeta implements IConfirm
         var _loc1_:uint = 0;
         if (this.data.isActionNow) {
             if (content.dropdownMenu.selectedIndex == 0) {
-                _loc1_ = this.data.maxAvailableCount[Currencies.CREDITS_INDEX];
+                _loc1_ = this.data.maxAvailableCount[CURRENCIES_CONSTANTS.CREDITS_INDEX];
             }
             else {
-                _loc1_ = this.data.maxAvailableCount[Currencies.GOLD_INDEX];
+                _loc1_ = this.data.maxAvailableCount[CURRENCIES_CONSTANTS.GOLD_INDEX];
             }
         }
-        else if (this.data.currency == Currencies.GOLD) {
-            _loc1_ = this.data.maxAvailableCount[Currencies.GOLD_INDEX];
+        else if (this.data.currency == CURRENCIES_CONSTANTS.GOLD) {
+            _loc1_ = this.data.maxAvailableCount[CURRENCIES_CONSTANTS.GOLD_INDEX];
         }
         else {
-            _loc1_ = this.data.maxAvailableCount[Currencies.CREDITS_INDEX];
+            _loc1_ = this.data.maxAvailableCount[CURRENCIES_CONSTANTS.CREDITS_INDEX];
         }
         var _loc2_:Number = Math.min(1, _loc1_);
         content.nsCount.minimum = _loc2_;
@@ -183,29 +184,29 @@ public class ConfirmItemWindow extends ConfirmItemWindowMeta implements IConfirm
         if (this.data.isActionNow) {
             if (content.dropdownMenu.selectedIndex == 0) {
                 _loc3_ = ZERO_STRING;
-                _loc2_ = content.nsCount.value * this.data.price[Currencies.CREDITS_INDEX];
+                _loc2_ = content.nsCount.value * this.data.price[CURRENCIES_CONSTANTS.CREDITS_INDEX];
                 _loc4_ = this._locale.integer(_loc2_);
                 _loc5_ = _loc4_;
-                this._currency = Currencies.CREDITS;
+                this._currency = CURRENCIES_CONSTANTS.CREDITS;
             }
             else {
                 _loc4_ = ZERO_STRING;
-                _loc1_ = content.nsCount.value * this.data.price[Currencies.GOLD_INDEX];
+                _loc1_ = content.nsCount.value * this.data.price[CURRENCIES_CONSTANTS.GOLD_INDEX];
                 _loc3_ = this._locale.gold(_loc1_);
                 _loc5_ = _loc3_;
-                this._currency = Currencies.GOLD;
+                this._currency = CURRENCIES_CONSTANTS.GOLD;
             }
         }
         else {
             this._currency = this.data.currency;
-            if (this.data.currency == Currencies.GOLD) {
-                _loc1_ = content.nsCount.value * this.data.price[Currencies.GOLD_INDEX];
+            if (this.data.currency == CURRENCIES_CONSTANTS.GOLD) {
+                _loc1_ = content.nsCount.value * this.data.price[CURRENCIES_CONSTANTS.GOLD_INDEX];
                 _loc3_ = this._locale.gold(_loc1_);
                 _loc5_ = _loc3_;
                 _loc4_ = ZERO_STRING;
             }
             else {
-                _loc2_ = content.nsCount.value * this.data.price[Currencies.CREDITS_INDEX];
+                _loc2_ = content.nsCount.value * this.data.price[CURRENCIES_CONSTANTS.CREDITS_INDEX];
                 _loc4_ = this._locale.integer(_loc2_);
                 _loc5_ = _loc4_;
                 _loc3_ = ZERO_STRING;
@@ -221,15 +222,15 @@ public class ConfirmItemWindow extends ConfirmItemWindowMeta implements IConfirm
         content.actionPrice.textColorType = ActionPrice.TEXT_COLOR_TYPE_ICON;
         if (this.data.actionPriceData != null) {
             _loc6_ = this.data.actionPriceData;
-            if (this._currency == Currencies.CREDITS) {
-                _loc6_.newPrices = [_loc2_, _loc6_.newPrices[Currencies.GOLD_INDEX]];
-                _loc6_.oldPrices = [_loc6_.oldPrices[Currencies.CREDITS_INDEX] * content.nsCount.value, _loc6_.oldPrices[Currencies.GOLD_INDEX]];
+            if (this._currency == CURRENCIES_CONSTANTS.CREDITS) {
+                _loc6_.newPrices = [_loc2_, _loc6_.newPrices[CURRENCIES_CONSTANTS.GOLD_INDEX]];
+                _loc6_.oldPrices = [_loc6_.oldPrices[CURRENCIES_CONSTANTS.CREDITS_INDEX] * content.nsCount.value, _loc6_.oldPrices[CURRENCIES_CONSTANTS.GOLD_INDEX]];
             }
             else {
-                _loc6_.newPrices = [_loc6_.newPrices[Currencies.CREDITS_INDEX], _loc1_];
-                _loc6_.oldPrices = [_loc6_.oldPrices[Currencies.CREDITS_INDEX], _loc6_.oldPrices[Currencies.GOLD_INDEX] * content.nsCount.value];
+                _loc6_.newPrices = [_loc6_.newPrices[CURRENCIES_CONSTANTS.CREDITS_INDEX], _loc1_];
+                _loc6_.oldPrices = [_loc6_.oldPrices[CURRENCIES_CONSTANTS.CREDITS_INDEX], _loc6_.oldPrices[CURRENCIES_CONSTANTS.GOLD_INDEX] * content.nsCount.value];
             }
-            _loc6_.forCredits = this._currency == Currencies.CREDITS;
+            _loc6_.forCredits = this._currency == CURRENCIES_CONSTANTS.CREDITS;
         }
         content.actionPrice.setData(_loc6_);
         content.rightIT.visible = !content.actionPrice.visible;

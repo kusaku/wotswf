@@ -1,6 +1,6 @@
 package net.wg.infrastructure.base.meta.impl {
 import net.wg.data.constants.Errors;
-import net.wg.gui.lobby.questsWindow.data.TabsVO;
+import net.wg.gui.data.TabsVO;
 import net.wg.infrastructure.base.AbstractWindowView;
 import net.wg.infrastructure.exceptions.AbstractException;
 

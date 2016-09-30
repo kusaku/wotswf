@@ -18,6 +18,8 @@ public class LobbyMenuMeta extends AbstractWindowView {
 
     public var versionInfoClick:Function;
 
+    public var onCounterNeedUpdate:Function;
+
     private var _versionMessageVO:VersionMessageVO;
 
     public function LobbyMenuMeta() {
@@ -60,6 +62,11 @@ public class LobbyMenuMeta extends AbstractWindowView {
     public function versionInfoClickS():void {
         App.utils.asserter.assertNotNull(this.versionInfoClick, "versionInfoClick" + Errors.CANT_NULL);
         this.versionInfoClick();
+    }
+
+    public function onCounterNeedUpdateS():void {
+        App.utils.asserter.assertNotNull(this.onCounterNeedUpdate, "onCounterNeedUpdate" + Errors.CANT_NULL);
+        this.onCounterNeedUpdate();
     }
 
     public function as_setVersionMessage(param1:Object):void {

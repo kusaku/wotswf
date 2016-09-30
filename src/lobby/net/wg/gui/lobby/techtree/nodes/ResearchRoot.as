@@ -9,13 +9,16 @@ import net.wg.data.Aliases;
 import net.wg.data.constants.Values;
 import net.wg.data.constants.VehicleState;
 import net.wg.data.constants.generated.CONTEXT_MENU_HANDLER_TYPE;
+import net.wg.data.constants.generated.NODE_STATE_FLAGS;
 import net.wg.data.constants.generated.TEXT_MANAGER_STYLES;
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.components.tooltips.VO.ToolTipStatusColorsVO;
 import net.wg.gui.components.tooltips.helpers.Utils;
+import net.wg.gui.data.VehCompareEntrypointVO;
 import net.wg.gui.interfaces.ISoundButtonEx;
 import net.wg.gui.lobby.techtree.TechTreeEvent;
+import net.wg.gui.lobby.techtree.constants.ActionName;
 import net.wg.gui.lobby.techtree.constants.ColorIndex;
 import net.wg.gui.lobby.techtree.constants.NodeEntityType;
 import net.wg.gui.lobby.techtree.constants.TTSoundID;
@@ -32,6 +35,8 @@ import scaleform.clik.events.ButtonEvent;
 
 public class ResearchRoot extends Renderer {
 
+    private static const EMPTY_STR:String = "";
+
     public var vIconLoader:UILoaderAlt;
 
     public var nameAndXp:NameAndXpField;
@@ -45,6 +50,8 @@ public class ResearchRoot extends Renderer {
     public var additionalStatusField:TextField;
 
     public var showVehicleBtn:ISoundButtonEx;
+
+    public var compareVehicleBtn:ISoundButtonEx;
 
     private var _statusString:String = "";
 
@@ -81,9 +88,9 @@ public class ResearchRoot extends Renderer {
     }
 
     override public function populateUI():void {
-        var _loc2_:String = null;
-        var _loc5_:ToolTipStatusColorsVO = null;
-        var _loc6_:TextFormat = null;
+        var _loc7_:* = false;
+        var _loc8_:ToolTipStatusColorsVO = null;
+        var _loc9_:TextFormat = null;
         var _loc1_:String = container.getNation();
         if (this.flag.currentFrameLabel != _loc1_) {
             this.flag.gotoAndStop(_loc1_);
@@ -91,7 +98,7 @@ public class ResearchRoot extends Renderer {
         if (this.statusField != null) {
             this.applyVehicleState(this.statusField, this._statusString);
         }
-        _loc2_ = getIconPath();
+        var _loc2_:String = getIconPath();
         this.vIconLoader.alpha = stateProps.icoAlpha;
         if (_loc2_ != this.vIconLoader.source) {
             this.vIconLoader.source = _loc2_;
@@ -101,30 +108,52 @@ public class ResearchRoot extends Renderer {
         this.nameAndXp.setIsInAction(actionPrice && isInAction());
         this.nameAndXp.setOwner(this, doValidateNow);
         if (button != null) {
-            button.label = getNamedLabel(stateProps.label);
-            button.enabled = isActionEnabled();
-            button.visible = stateProps.visible;
-            button.setOwner(this, doValidateNow);
+            _loc7_ = (valueObject.state & NODE_STATE_FLAGS.PURCHASE_DISABLED) > 0;
+            if (!_loc7_) {
+                if (isRestoreAvailable()) {
+                    button.action = ActionName.RESTORE;
+                }
+                else if (isRentAvailable() && isEnoughMoney()) {
+                    button.action = ActionName.RENT;
+                }
+                button.label = getNamedLabel(stateProps.label);
+                button.enabled = isActionEnabled() && isEnoughMoney() || isEnoughXp();
+                button.visible = stateProps.visible;
+                button.setOwner(this, doValidateNow);
+            }
+            else {
+                button.visible = false;
+            }
         }
         var _loc3_:String = getStatus();
         var _loc4_:String = getStatusLevel();
         if (_loc3_ != Values.EMPTY_STR && Utils.instance.allowStatuses.indexOf(_loc4_) != -1) {
-            _loc5_ = Utils.instance.getStatusColor(_loc4_);
+            _loc8_ = Utils.instance.getStatusColor(_loc4_);
             this.additionalStatusField.htmlText = _loc3_;
-            this.additionalStatusField.textColor = _loc5_.textColor;
-            _loc6_ = this.additionalStatusField.getTextFormat();
-            _loc6_.size = _loc5_.headerFontSize;
-            _loc6_.font = _loc5_.headerFontFace;
-            _loc6_.color = _loc5_.textColor;
-            this.additionalStatusField.setTextFormat(_loc6_);
-            this.additionalStatusField.filters = _loc5_.filters;
+            this.additionalStatusField.textColor = _loc8_.textColor;
+            _loc9_ = this.additionalStatusField.getTextFormat();
+            _loc9_.size = _loc8_.headerFontSize;
+            _loc9_.font = _loc8_.headerFontFace;
+            _loc9_.color = _loc8_.textColor;
+            this.additionalStatusField.setTextFormat(_loc9_);
+            this.additionalStatusField.filters = _loc8_.filters;
         }
         else {
-            this.additionalStatusField.htmlText = "";
+            this.additionalStatusField.htmlText = Values.EMPTY_STR;
         }
         this.showVehicleBtn.label = valueObject.showVehicleBtnLabel;
         this.showVehicleBtn.enabled = valueObject.showVehicleBtnEnabled;
         this.showVehicleBtn.addEventListener(ButtonEvent.CLICK, this.onShowVehicleBtnClickHandler, false, 0, true);
+        this.compareVehicleBtn.addEventListener(ButtonEvent.CLICK, this.onCompareVehicleBtnClickHandler, false, 0, true);
+        this.compareVehicleBtn.mouseEnabledOnDisabled = true;
+        var _loc5_:VehCompareEntrypointVO = valueObject.vehCompareVO;
+        var _loc6_:Boolean = _loc5_.modeAvailable;
+        this.compareVehicleBtn.visible = _loc6_;
+        if (_loc6_) {
+            this.compareVehicleBtn.label = _loc5_.btnLabel;
+            this.compareVehicleBtn.enabled = _loc5_.btnEnabled;
+            this.compareVehicleBtn.tooltip = _loc5_.btnTooltip;
+        }
         super.populateUI();
     }
 
@@ -148,6 +177,9 @@ public class ResearchRoot extends Renderer {
         this.showVehicleBtn.removeEventListener(ButtonEvent.CLICK, this.onShowVehicleBtnClickHandler);
         this.showVehicleBtn.dispose();
         this.showVehicleBtn = null;
+        this.compareVehicleBtn.removeEventListener(ButtonEvent.CLICK, this.onCompareVehicleBtnClickHandler);
+        this.compareVehicleBtn.dispose();
+        this.compareVehicleBtn = null;
         this.nameAndXp.dispose();
         this.nameAndXp = null;
         this.typeAndLevel.dispose();
@@ -200,7 +232,7 @@ public class ResearchRoot extends Renderer {
 
     private function applyVehicleState(param1:TextField, param2:String):void {
         if (StringUtils.isEmpty(param2)) {
-            param1.text = "";
+            param1.text = Values.EMPTY_STR;
             return;
         }
         this.setVehicleStateShadowFilter(param1);
@@ -249,6 +281,10 @@ public class ResearchRoot extends Renderer {
 
     private function onShowVehicleBtnClickHandler(param1:ButtonEvent):void {
         dispatchEvent(new TechTreeEvent(TechTreeEvent.GO_TO_VEHICLE_VIEW, 0, _index, entityType));
+    }
+
+    private function onCompareVehicleBtnClickHandler(param1:ButtonEvent):void {
+        dispatchEvent(new TechTreeEvent(TechTreeEvent.CLICK_VEHICLE_COMPARE, 0, _index, entityType));
     }
 }
 }

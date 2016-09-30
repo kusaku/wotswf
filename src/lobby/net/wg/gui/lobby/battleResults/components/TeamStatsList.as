@@ -1,5 +1,6 @@
 package net.wg.gui.lobby.battleResults.components {
 import net.wg.gui.components.controls.ScrollingListEx;
+import net.wg.gui.lobby.battleResults.data.CommonStatsVO;
 
 import scaleform.clik.constants.InputValue;
 import scaleform.clik.constants.InvalidationType;
@@ -12,12 +13,15 @@ import scaleform.clik.ui.InputDetails;
 
 public class TeamStatsList extends ScrollingListEx {
 
-    private var _bonusType:int = -1;
-
-    private var _wasInBattle:Boolean = false;
+    private var _commonStatsVO:CommonStatsVO = null;
 
     public function TeamStatsList() {
         super();
+    }
+
+    override protected function onDispose():void {
+        this._commonStatsVO = null;
+        super.onDispose();
     }
 
     override protected function configUI():void {
@@ -28,16 +32,16 @@ public class TeamStatsList extends ScrollingListEx {
     override protected function drawLayout():void {
         var _loc8_:IListItemRenderer = null;
         var _loc1_:uint = _renderers.length;
-        var _loc2_:Number = rowHeight;
+        var _loc2_:Number = rowHeight ^ 0;
         var _loc3_:Number = availableWidth - padding.horizontal;
-        var _loc4_:Number = margin + padding.left;
-        var _loc5_:Number = margin + padding.top;
+        var _loc4_:Number = margin + padding.left ^ 0;
+        var _loc5_:Number = margin + padding.top ^ 0;
         var _loc6_:Boolean = isInvalid(InvalidationType.DATA);
         var _loc7_:uint = 0;
         while (_loc7_ < _loc1_) {
             _loc8_ = getRendererAt(_loc7_);
-            _loc8_.x = Math.round(_loc4_);
-            _loc8_.y = Math.round(_loc5_ + _loc7_ * _loc2_);
+            _loc8_.x = _loc4_;
+            _loc8_.y = _loc5_ + _loc7_ * _loc2_;
             _loc8_.width = _loc3_;
             if (!_loc6_) {
                 _loc8_.validateNow();
@@ -49,24 +53,8 @@ public class TeamStatsList extends ScrollingListEx {
 
     override protected function externalSetupRenderer(param1:IListItemRenderer):void {
         var _loc2_:TeamMemberRendererBase = TeamMemberRendererBase(param1);
-        _loc2_.bonusType = this.bonusType;
+        _loc2_.setCommonStatsVO(this._commonStatsVO);
         super.externalSetupRenderer(param1);
-    }
-
-    public function get bonusType():int {
-        return this._bonusType;
-    }
-
-    public function set bonusType(param1:int):void {
-        this._bonusType = param1;
-    }
-
-    public function get wasInBattle():Boolean {
-        return this._wasInBattle;
-    }
-
-    public function set wasInBattle(param1:Boolean):void {
-        this._wasInBattle = param1;
     }
 
     override public function handleInput(param1:InputEvent):void {
@@ -154,7 +142,7 @@ public class TeamStatsList extends ScrollingListEx {
     }
 
     override protected function handleItemClick(param1:ButtonEvent):void {
-        var _loc2_:Number = (param1.currentTarget as IListItemRenderer).index;
+        var _loc2_:Number = IListItemRenderer(param1.currentTarget).index;
         if (isNaN(_loc2_)) {
             return;
         }
@@ -164,6 +152,10 @@ public class TeamStatsList extends ScrollingListEx {
                 selectedIndex = _loc2_;
             }
         }
+    }
+
+    public function setCommonStatsVO(param1:CommonStatsVO):void {
+        this._commonStatsVO = param1;
     }
 }
 }

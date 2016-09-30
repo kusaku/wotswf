@@ -28,6 +28,7 @@ import net.wg.infrastructure.managers.ISoundManager;
 import net.wg.infrastructure.managers.ITooltipMgr;
 import net.wg.infrastructure.managers.ITutorialManager;
 import net.wg.infrastructure.managers.IVoiceChatManager;
+import net.wg.infrastructure.managers.counter.CounterManager;
 import net.wg.infrastructure.managers.impl.CacheManager;
 import net.wg.infrastructure.managers.impl.ClassManager;
 import net.wg.infrastructure.managers.impl.ColorSchemeManagerLobby;
@@ -84,8 +85,6 @@ public final class LobbyApp extends AbstractApplication {
 
     public var browserBgClassValue:Class;
 
-    public var altBrowserBgClassValue:Class;
-
     private var _libraries:MovieClip;
 
     private var _serviceLayout:ManagedContainer;
@@ -108,7 +107,6 @@ public final class LobbyApp extends AbstractApplication {
 
     public function LobbyApp() {
         this.browserBgClassValue = LobbyApp_browserBgClassValue;
-        this.altBrowserBgClassValue = LobbyApp_altBrowserBgClassValue;
         super();
         Extensions.enabled = true;
         Extensions.noInvisibleAdvance = true;
@@ -122,7 +120,7 @@ public final class LobbyApp extends AbstractApplication {
     }
 
     override protected function getNewUtils():IUtils {
-        var _loc1_:IUtils = new Utils(new Asserter(), new Scheduler(), new LocaleLobby(), new WGJSON(), new HelpLayoutManager(), new ClassFactory(), new PopupManager(), new CommonsLobby(), new FocusHandlerEx(), new EventCollector(), new IME(), new VOManager(), new Icons(), new StyleSheetManager(), new TweenAnimator(), new AnimBuilder(), new DateTimeLobby(), new PoolManager(), new DataUtils());
+        var _loc1_:IUtils = new Utils(new Asserter(), new Scheduler(), new LocaleLobby(), new WGJSON(), new HelpLayoutManager(), new ClassFactory(), new PopupManager(), new CommonsLobby(), new FocusHandlerEx(), new EventCollector(), new IME(), new VOManager(), new Icons(), new StyleSheetManager(), new TweenAnimator(), new AnimBuilder(), new DateTimeLobby(), new PoolManager(), new DataUtils(), new CounterManager());
         _loc1_.setNations(new Nations(_loc1_));
         return _loc1_;
     }
@@ -284,10 +282,6 @@ public final class LobbyApp extends AbstractApplication {
 
     override public function get browserBgClass():Class {
         return this.browserBgClassValue;
-    }
-
-    override public function get altBrowserBgClass():Class {
-        return this.altBrowserBgClassValue;
     }
 
     override protected function initStage(param1:Event = null):void {

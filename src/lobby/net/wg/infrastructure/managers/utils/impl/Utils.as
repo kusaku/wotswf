@@ -10,6 +10,7 @@ import net.wg.utils.IAnimBuilder;
 import net.wg.utils.IAssertable;
 import net.wg.utils.IClassFactory;
 import net.wg.utils.ICommons;
+import net.wg.utils.ICounterManager;
 import net.wg.utils.IDataUtils;
 import net.wg.utils.IDateTime;
 import net.wg.utils.IEventCollector;
@@ -68,7 +69,9 @@ public class Utils extends UtilsManagerMeta implements IUtils {
 
     private var _dataUtils:IDataUtils;
 
-    public function Utils(param1:IAssertable, param2:IScheduler, param3:ILocale, param4:ISerializable, param5:IHelpLayout, param6:IClassFactory, param7:IPopUpManager, param8:ICommons, param9:IFocusHandler, param10:IEventCollector, param11:IIME, param12:IVOManager, param13:IIcons, param14:IStyleSheetManager, param15:ITweenAnimator, param16:IAnimBuilder, param17:IDateTime, param18:IPoolManager, param19:IDataUtils) {
+    private var _counterManager:ICounterManager;
+
+    public function Utils(param1:IAssertable, param2:IScheduler, param3:ILocale, param4:ISerializable, param5:IHelpLayout, param6:IClassFactory, param7:IPopUpManager, param8:ICommons, param9:IFocusHandler, param10:IEventCollector, param11:IIME, param12:IVOManager, param13:IIcons, param14:IStyleSheetManager, param15:ITweenAnimator, param16:IAnimBuilder, param17:IDateTime, param18:IPoolManager, param19:IDataUtils, param20:ICounterManager) {
         super();
         this._asserter = param1;
         this._scheduler = param2;
@@ -89,9 +92,10 @@ public class Utils extends UtilsManagerMeta implements IUtils {
         this._dateTime = param17;
         this._poolManager = param18;
         this._dataUtils = param19;
+        this._counterManager = param20;
     }
 
-    public function dispose():void {
+    public final function dispose():void {
         if (this._events != null) {
             this._events.dispose();
             this._events = null;
@@ -124,6 +128,14 @@ public class Utils extends UtilsManagerMeta implements IUtils {
             this._tweenAnimator.dispose();
             this._tweenAnimator = null;
         }
+        if (this._counterManager != null) {
+            this._counterManager.dispose();
+            this._counterManager = null;
+        }
+        if (this._poolManager != null) {
+            this._poolManager.dispose();
+            this._poolManager = null;
+        }
         this._animBuilder = null;
         this._dateTime = null;
         this._icons = null;
@@ -134,6 +146,7 @@ public class Utils extends UtilsManagerMeta implements IUtils {
         this._locale = null;
         this._JSON = null;
         this._dataUtils = null;
+        this._commons = null;
     }
 
     public function getImageUrlProperties(param1:String, param2:int, param3:int, param4:int = -4, param5:int = 0):IImageUrlProperties {
@@ -230,6 +243,10 @@ public class Utils extends UtilsManagerMeta implements IUtils {
 
     public function get data():IDataUtils {
         return this._dataUtils;
+    }
+
+    public function get counterManager():ICounterManager {
+        return this._counterManager;
     }
 }
 }

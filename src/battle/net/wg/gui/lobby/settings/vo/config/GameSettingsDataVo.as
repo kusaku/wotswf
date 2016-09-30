@@ -67,13 +67,13 @@ public class GameSettingsDataVo extends SettingsDataVo {
 
     public var showSectorOnMap:SettingsControlProp = null;
 
-    public var showBattleEfficiencyRibbons:SettingsControlProp = null;
-
     public var battleLoadingInfo:SettingsControlProp = null;
 
     public var receiveClanInvitesNotifications:SettingsControlProp = null;
 
     public var simplifiedTTC:SettingsControlProp = null;
+
+    public var carouselType:SettingsControlProp = null;
 
     public function GameSettingsDataVo() {
         super({
@@ -109,82 +109,50 @@ public class GameSettingsDataVo extends SettingsDataVo {
             "showVehModelsOnMap": createControl(ControlsFactory.TYPE_DROPDOWN).build(),
             "showVectorOnMap": createControl(ControlsFactory.TYPE_CHECKBOX).build(),
             "showSectorOnMap": createControl(ControlsFactory.TYPE_CHECKBOX).build(),
-            "showBattleEfficiencyRibbons": createControl(ControlsFactory.TYPE_CHECKBOX).build(),
             "battleLoadingInfo": createControl(ControlsFactory.TYPE_DROPDOWN).build(),
-            "simplifiedTTC": createControl(ControlsFactory.TYPE_CHECKBOX).build()
+            "simplifiedTTC": createControl(ControlsFactory.TYPE_CHECKBOX).build(),
+            "carouselType": createControl(ControlsFactory.TYPE_BUTTON_BAR).build()
         });
     }
 
     override protected function onDispose():void {
-        this.enableOlFilter.dispose();
         this.enableOlFilter = null;
-        this.enableSpamFilter.dispose();
         this.enableSpamFilter = null;
-        this.showDateMessage.dispose();
         this.showDateMessage = null;
-        this.showTimeMessage.dispose();
         this.showTimeMessage = null;
-        this.invitesFromFriendsOnly.dispose();
         this.invitesFromFriendsOnly = null;
-        this.receiveFriendshipRequest.dispose();
         this.receiveFriendshipRequest = null;
-        this.receiveInvitesInBattle.dispose();
         this.receiveInvitesInBattle = null;
-        this.chatContactsListOnly.dispose();
         this.chatContactsListOnly = null;
-        this.dynamicCamera.dispose();
         this.dynamicCamera = null;
-        this.horStabilizationSnp.dispose();
         this.horStabilizationSnp = null;
-        this.disableBattleChat.dispose();
         this.disableBattleChat = null;
-        this.ppShowLevels.dispose();
         this.ppShowLevels = null;
-        this.gameplay_ctf.dispose();
         this.gameplay_ctf = null;
-        this.gameplay_domination.dispose();
         this.gameplay_domination = null;
-        this.gameplay_assault.dispose();
         this.gameplay_assault = null;
-        this.minimapAlpha.dispose();
         this.minimapAlpha = null;
-        this.enablePostMortemEffect.dispose();
         this.enablePostMortemEffect = null;
-        this.enablePostMortemDelay.dispose();
         this.enablePostMortemDelay = null;
-        this.enableOpticalSnpEffect.dispose();
         this.enableOpticalSnpEffect = null;
-        this.replayEnabled.dispose();
         this.replayEnabled = null;
-        this.useServerAim.dispose();
         this.useServerAim = null;
-        this.showVehiclesCounter.dispose();
         this.showVehiclesCounter = null;
-        this.showMarksOnGun.dispose();
         this.showMarksOnGun = null;
-        this.showVehModelsOnMap.dispose();
         this.showVehModelsOnMap = null;
-        this.showVectorOnMap.dispose();
         this.showVectorOnMap = null;
-        this.showSectorOnMap.dispose();
         this.showSectorOnMap = null;
-        this.minimapViewRange.dispose();
         this.minimapViewRange = null;
-        this.minimapMaxViewRange.dispose();
         this.minimapMaxViewRange = null;
-        this.minimapDrawRange.dispose();
         this.minimapDrawRange = null;
-        this.increasedZoom.dispose();
         this.increasedZoom = null;
-        this.sniperModeByShift.dispose();
         this.sniperModeByShift = null;
-        this.showBattleEfficiencyRibbons.dispose();
-        this.showBattleEfficiencyRibbons = null;
-        this.battleLoadingInfo.dispose();
         this.battleLoadingInfo = null;
-        this.receiveClanInvitesNotifications.dispose();
         this.receiveClanInvitesNotifications = null;
+        this.simplifiedTTC.dispose();
         this.simplifiedTTC = null;
+        this.carouselType.dispose();
+        this.carouselType = null;
         super.onDispose();
     }
 }

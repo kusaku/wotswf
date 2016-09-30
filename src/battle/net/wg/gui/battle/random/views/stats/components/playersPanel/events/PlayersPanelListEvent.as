@@ -5,6 +5,8 @@ public class PlayersPanelListEvent extends Event {
 
     public static const ITEM_SELECTED:String = "itemSelected";
 
+    public static const ITEMS_COUNT_CHANGE:String = "itemsCountChange";
+
     public var vehicleID:Number;
 
     public function PlayersPanelListEvent(param1:String, param2:Number, param3:Boolean = false, param4:Boolean = false) {

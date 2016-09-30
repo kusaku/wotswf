@@ -3,6 +3,7 @@ import flash.display.Sprite;
 
 import net.wg.data.constants.AtlasConstants;
 import net.wg.gui.battle.components.BattleUIComponent;
+import net.wg.gui.battle.views.minimap.MinimapEntryController;
 import net.wg.gui.battle.views.minimap.components.entries.constants.TeamBaseMinimapEntryConst;
 import net.wg.gui.battle.views.minimap.constants.MinimapColorConst;
 import net.wg.infrastructure.managers.IAtlasManager;
@@ -16,6 +17,7 @@ public class AllyTeamSpawnMinimapEntry extends BattleUIComponent {
     public function AllyTeamSpawnMinimapEntry() {
         this._atlasManager = App.atlasMgr;
         super();
+        MinimapEntryController.instance.registerScalableEntry(this);
     }
 
     public function setPointNumber(param1:int):void {
@@ -23,6 +25,7 @@ public class AllyTeamSpawnMinimapEntry extends BattleUIComponent {
     }
 
     override protected function onDispose():void {
+        MinimapEntryController.instance.unregisterScalableEntry(this);
         this.atlasPlaceholder = null;
         this._atlasManager = null;
         super.onDispose();

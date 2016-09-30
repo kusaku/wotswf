@@ -13,6 +13,8 @@ import flash.utils.getQualifiedClassName;
 import flash.utils.getTimer;
 
 import net.wg.data.constants.Errors;
+import net.wg.data.daapi.LoadViewVO;
+import net.wg.data.daapi.ViewSettingsVO;
 import net.wg.infrastructure.base.meta.impl.LoaderManagerMeta;
 import net.wg.infrastructure.events.LibraryLoaderEvent;
 import net.wg.infrastructure.events.LoaderEvent;
@@ -21,13 +23,17 @@ import net.wg.infrastructure.managers.ILoaderManager;
 
 public class LoaderManagerBase extends LoaderManagerMeta implements ILoaderManager {
 
-    private var librariesList:Vector.<String>;
+    private static const DEF_VIEW_NAME:String = "main";
 
-    private var processedCounter:int = 0;
+    private static const KEY_NOT_LOADER_MESSAGE:String = "Not loader try to load swf";
 
-    private var loaders:Vector.<Loader> = null;
+    private var _librariesList:Vector.<String>;
 
-    private var container:DisplayObjectContainer;
+    private var _processedCounter:int = 0;
+
+    private var _loaders:Vector.<Loader> = null;
+
+    private var _container:DisplayObjectContainer;
 
     private var loaderToInfo:Dictionary;
 
@@ -35,10 +41,8 @@ public class LoaderManagerBase extends LoaderManagerMeta implements ILoaderManag
 
     private var stats:Object;
 
-    private const DEF_VIEW_NAME:String = "main";
-
     public function LoaderManagerBase() {
-        this.librariesList = Vector.<String>([]);
+        this._librariesList = Vector.<String>([]);
         this.stats = {};
         super();
         this.loaderToInfo = new Dictionary(true);
@@ -47,51 +51,57 @@ public class LoaderManagerBase extends LoaderManagerMeta implements ILoaderManag
     override protected function onDispose():void {
         var _loc1_:* = null;
         var _loc2_:Loader = null;
-        var _loc3_:LoadInfo = null;
-        var _loc4_:Loader = null;
-        var _loc5_:StatsEntity = null;
+        var _loc3_:Loader = null;
+        var _loc4_:StatsEntity = null;
         for (_loc1_ in this.loaderToInfo) {
-            _loc3_ = this.loaderToInfo[_loc1_];
-            _loc3_.dispose();
             _loc2_ = _loc1_ as Loader;
-            _loc2_.close();
-            _loc2_.contentLoaderInfo.removeEventListener(Event.INIT, this.onSWFLoaded);
-            _loc2_.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, this.onSWFLoadError);
-            delete this.loaderToInfo[_loc2_];
+            if (_loc2_) {
+                _loc2_.close();
+                _loc2_.contentLoaderInfo.removeEventListener(Event.INIT, this.onSWFLoaded);
+                _loc2_.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, this.onSWFLoadError);
+                delete this.loaderToInfo[_loc2_];
+            }
+            else {
+                assert(false, KEY_NOT_LOADER_MESSAGE);
+            }
         }
-        for each(_loc4_ in this.loaders) {
-            this.removeListeners(_loc4_.contentLoaderInfo);
-            _loc4_.unloadAndStop(true);
+        this.loaderToInfo = null;
+        for each(_loc3_ in this._loaders) {
+            this.removeListeners(_loc3_.contentLoaderInfo);
+            _loc3_.unloadAndStop(true);
         }
-        this.loaders.splice(0, this.loaders.length);
-        this.loaders = null;
-        this.container = null;
-        for each(_loc5_ in this.stats) {
-            _loc5_.dispose();
-            _loc5_ = null;
+        this._loaders.splice(0, this._loaders.length);
+        this._loaders = null;
+        this._container = null;
+        for each(_loc4_ in this.stats) {
+            _loc4_.dispose();
+            _loc4_ = null;
         }
         this.stats = null;
+        this._librariesList = null;
+        super.onDispose();
     }
 
-    public function as_loadView(param1:Object, param2:String, param3:String, param4:String = null):void {
-        var _loc5_:URLRequest = null;
-        var _loc6_:Loader = null;
-        var _loc7_:LoaderContext = null;
+    override protected function loadView(param1:LoadViewVO):void {
+        var _loc3_:URLRequest = null;
+        var _loc4_:Loader = null;
+        var _loc5_:LoaderContext = null;
         this.loaderTimerValue = getTimer();
-        param1.cached = App.cacheMgr && App.cacheMgr.isCached(param1.url);
+        param1.cached = App.cacheMgr && App.cacheMgr.isCached(param1.configVO.url);
+        var _loc2_:ViewSettingsVO = param1.configVO;
         if (param1.cached) {
-            this.dispatchLoaderEvent(LoaderEvent.VIEW_LOADING, param1, param3);
-            App.utils.scheduler.scheduleOnNextFrame(this.onSWFCached, new LoadInfo(param2, param3, param1, param4));
+            this.dispatchLoaderEvent(LoaderEvent.VIEW_LOADING, _loc2_, param1.name);
+            App.utils.scheduler.scheduleOnNextFrame(this.onSWFCached, param1);
         }
         else {
-            _loc5_ = new URLRequest(param1.url);
-            _loc6_ = new Loader();
-            _loc7_ = new LoaderContext(false, ApplicationDomain.currentDomain);
-            _loc6_.load(_loc5_, _loc7_);
-            _loc6_.contentLoaderInfo.addEventListener(Event.INIT, this.onSWFLoaded, false, 0, true);
-            _loc6_.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, this.onSWFLoadError, false, 0, true);
-            this.loaderToInfo[_loc6_] = new LoadInfo(param2, param3, param1, param4);
-            this.dispatchLoaderEvent(LoaderEvent.VIEW_LOADING, param1, param3);
+            _loc3_ = new URLRequest(_loc2_.url);
+            _loc4_ = new Loader();
+            _loc5_ = new LoaderContext(false, ApplicationDomain.currentDomain);
+            _loc4_.load(_loc3_, _loc5_);
+            _loc4_.contentLoaderInfo.addEventListener(Event.INIT, this.onSWFLoaded, false, 0, true);
+            _loc4_.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, this.onSWFLoadError, false, 0, true);
+            this.loaderToInfo[_loc4_] = param1;
+            this.dispatchLoaderEvent(LoaderEvent.VIEW_LOADING, _loc2_, param1.name);
         }
     }
 
@@ -113,8 +123,8 @@ public class LoaderManagerBase extends LoaderManagerMeta implements ILoaderManag
     }
 
     public function initLibraries(param1:DisplayObjectContainer):void {
-        this.container = param1;
-        this.loaders = new Vector.<Loader>();
+        this._container = param1;
+        this._loaders = new Vector.<Loader>();
     }
 
     public function loadLibraries(param1:Vector.<String>):void {
@@ -122,7 +132,7 @@ public class LoaderManagerBase extends LoaderManagerMeta implements ILoaderManag
         var _loc3_:URLRequest = null;
         var _loc4_:Loader = null;
         var _loc5_:LoaderContext = null;
-        this.librariesList = param1;
+        this._librariesList = param1;
         App.utils.asserter.assertNotNull(param1, "librariesList" + Errors.CANT_NULL);
         if (param1.length) {
             _loc5_ = new LoaderContext(false, ApplicationDomain.currentDomain);
@@ -132,7 +142,7 @@ public class LoaderManagerBase extends LoaderManagerMeta implements ILoaderManag
                 _loc4_ = new Loader();
                 _loc4_.load(_loc3_, _loc5_);
                 this.addListeners(_loc4_.contentLoaderInfo);
-                this.loaders.push(_loc4_);
+                this._loaders.push(_loc4_);
             }
         }
     }
@@ -140,7 +150,7 @@ public class LoaderManagerBase extends LoaderManagerMeta implements ILoaderManag
     public function stopLoadingByAliases(param1:Array):void {
         var _loc2_:* = undefined;
         var _loc3_:Loader = null;
-        var _loc4_:LoadInfo = null;
+        var _loc4_:LoadViewVO = null;
         var _loc5_:int = 0;
         for (_loc2_ in this.loaderToInfo) {
             _loc3_ = Loader(_loc2_);
@@ -157,16 +167,13 @@ public class LoaderManagerBase extends LoaderManagerMeta implements ILoaderManag
         }
     }
 
-    private function dispatchLoaderEvent(param1:String, param2:Object, param3:String, param4:IView = null):void {
+    private function dispatchLoaderEvent(param1:String, param2:ViewSettingsVO, param3:String, param4:IView = null):void {
         dispatchEvent(new LoaderEvent(param1, param2, param3, param4));
     }
 
-    private function applyViewData(param1:IView, param2:LoadInfo, param3:Loader):void {
-        param1.as_config = param2.config;
-        param1.as_alias = param2.alias;
-        param1.as_name = param2.name;
+    private function applyViewData(param1:IView, param2:LoadViewVO, param3:Loader):void {
+        param1.as_config = param2;
         param1.loader = param3;
-        param1.viewTutorialId = param2.viewTutorialId;
     }
 
     private function removeExtraInstances(param1:Loader):void {
@@ -175,20 +182,19 @@ public class LoaderManagerBase extends LoaderManagerMeta implements ILoaderManag
         var _loc3_:int = 0;
         while (_loc3_ < _loc2_) {
             _loc4_ = DisplayObjectContainer(param1.content).getChildAt(_loc3_);
-            if (_loc4_.name != this.DEF_VIEW_NAME) {
+            if (_loc4_.name != DEF_VIEW_NAME) {
                 App.utils.commons.releaseReferences(_loc4_);
             }
             _loc3_++;
         }
     }
 
-    private function onSWFCached(param1:LoadInfo):void {
-        var config:Object = null;
+    private function onSWFCached(param1:LoadViewVO):void {
+        var config:ViewSettingsVO = null;
         var view:IView = null;
         var viewClass:Class = null;
-        var data:LoadInfo = param1;
-        config = data.config;
-        var alias:String = data.alias;
+        var data:LoadViewVO = param1;
+        config = data.configVO;
         var statsEntity:StatsEntity = this.stats[config.url];
         statsEntity.loadTime = getTimer() - this.loaderTimerValue;
         statsEntity.cached = true;
@@ -203,18 +209,18 @@ public class LoaderManagerBase extends LoaderManagerMeta implements ILoaderManag
         if (view) {
             this.applyViewData(view, data, null);
             statsEntity.initTime = getTimer() - this.loaderTimerValue;
-            this.dispatchLoaderEvent(LoaderEvent.VIEW_LOADED, config, data.name, view);
+            this.dispatchLoaderEvent(LoaderEvent.VIEW_LOADED, null, "", view);
             viewLoadedS(data.name, view);
         }
         else {
-            viewInitializationErrorS(config, alias, data.name);
+            viewInitializationErrorS(data.alias, data.name);
         }
         data.dispose();
     }
 
     private function checkLoadComplete():void {
-        this.processedCounter++;
-        if (this.processedCounter == this.librariesList.length) {
+        this._processedCounter++;
+        if (this._processedCounter == this._librariesList.length) {
             DebugUtils.LOG_DEBUG("Libraries loading has been completed.");
             dispatchEvent(new LibraryLoaderEvent(LibraryLoaderEvent.LOADED_COMPLETED, null, null));
         }
@@ -237,8 +243,8 @@ public class LoaderManagerBase extends LoaderManagerMeta implements ILoaderManag
         loader = info.loader;
         info.removeEventListener(Event.INIT, this.onSWFLoaded);
         info.removeEventListener(IOErrorEvent.IO_ERROR, this.onSWFLoadError);
-        var data:LoadInfo = this.loaderToInfo[loader];
-        var config:Object = data.config;
+        var data:LoadViewVO = this.loaderToInfo[loader];
+        var config:ViewSettingsVO = data.configVO;
         var alias:String = data.alias;
         this.loaderTimerValue = getTimer() - this.loaderTimerValue;
         var statsEntity:StatsEntity = this.stats[config.url];
@@ -251,28 +257,27 @@ public class LoaderManagerBase extends LoaderManagerMeta implements ILoaderManag
         var view:IView = loader.content as IView;
         if (!view) {
             try {
-                view = IView(loader.content[this.DEF_VIEW_NAME]);
+                view = IView(loader.content[DEF_VIEW_NAME]);
                 this.removeExtraInstances(loader);
             }
             catch (error:*) {
                 DebugUtils.LOG_ERROR("Couldn\'t initialize loaded object for " + loader.contentLoaderInfo.url + ": \n" + error.toString());
             }
         }
-        config.cached = App.cacheMgr && App.cacheMgr.add(config.url, loader, App.utils.classFactory.getClass(getQualifiedClassName(view)));
-        if (config.cached) {
+        data.cached = App.cacheMgr && App.cacheMgr.add(config.url, loader, App.utils.classFactory.getClass(getQualifiedClassName(view)));
+        if (data.cached) {
             loader.contentLoaderInfo.removeEventListener(Event.INIT, this.onSWFLoaded);
             loader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, this.onSWFLoadError);
         }
         if (view) {
             this.applyViewData(view, data, loader);
             statsEntity.initTime = getTimer() - this.loaderTimerValue;
-            this.dispatchLoaderEvent(LoaderEvent.VIEW_LOADED, config, data.name, view);
+            this.dispatchLoaderEvent(LoaderEvent.VIEW_LOADED, null, "", view);
             viewLoadedS(data.name, view);
         }
         else {
-            viewInitializationErrorS(config, alias, data.name);
+            viewInitializationErrorS(alias, data.name);
         }
-        data.dispose();
         delete this.loaderToInfo[loader];
     }
 
@@ -282,13 +287,11 @@ public class LoaderManagerBase extends LoaderManagerMeta implements ILoaderManag
         _loc2_.removeEventListener(IOErrorEvent.IO_ERROR, this.onSWFLoadError);
         var _loc3_:Loader = _loc2_.loader;
         _loc3_.unloadAndStop();
-        var _loc4_:LoadInfo = this.loaderToInfo[_loc3_];
-        var _loc5_:String = _loc4_.alias;
-        var _loc6_:Object = _loc4_.config;
-        viewLoadErrorS(_loc5_, _loc4_.name, param1.text);
+        var _loc4_:LoadViewVO = this.loaderToInfo[_loc3_];
+        viewLoadErrorS(_loc4_.alias, _loc4_.name, param1.text);
         _loc4_.dispose();
         delete this.loaderToInfo[_loc3_];
-        dispatchEvent(new LoaderEvent(LoaderEvent.VIEW_LOAD_ERROR, _loc6_, _loc4_.name));
+        dispatchEvent(new LoaderEvent(LoaderEvent.VIEW_LOAD_ERROR, _loc4_.configVO, _loc4_.name));
     }
 
     private function onLibraryLoaded(param1:Event):void {
@@ -296,7 +299,7 @@ public class LoaderManagerBase extends LoaderManagerMeta implements ILoaderManag
         this.removeListeners(_loc2_);
         DebugUtils.LOG_DEBUG("Library loaded", _loc2_.url);
         _loc2_.loader.visible = false;
-        this.container.addChild(_loc2_.loader);
+        this._container.addChild(_loc2_.loader);
         dispatchEvent(new LibraryLoaderEvent(LibraryLoaderEvent.LOADED, _loc2_.loader, _loc2_.url));
         this.checkLoadComplete();
     }
@@ -308,31 +311,6 @@ public class LoaderManagerBase extends LoaderManagerMeta implements ILoaderManag
         this.checkLoadComplete();
     }
 }
-}
-
-class LoadInfo {
-
-    public var alias:String;
-
-    public var name:String;
-
-    public var config:Object;
-
-    public var viewTutorialId:String;
-
-    function LoadInfo(param1:String, param2:String, param3:Object, param4:String) {
-        super();
-        this.alias = param1;
-        this.name = param2;
-        this.config = param3;
-        this.viewTutorialId = param4;
-    }
-
-    public function dispose():void {
-        this.alias = null;
-        this.name = null;
-        this.config = null;
-    }
 }
 
 class StatsEntity {

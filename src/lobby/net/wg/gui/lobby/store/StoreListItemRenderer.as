@@ -5,9 +5,9 @@ import flash.geom.Point;
 import flash.text.TextField;
 
 import net.wg.data.VO.StoreTableData;
-import net.wg.data.constants.Currencies;
 import net.wg.data.constants.Errors;
 import net.wg.data.constants.Values;
+import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 import net.wg.data.constants.generated.FITTING_TYPES;
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.controls.ActionPrice;
@@ -43,7 +43,7 @@ public class StoreListItemRenderer extends ComplexListItemRenderer {
     }
 
     override protected function onDispose():void {
-        removeEventListener(MouseEvent.MOUSE_DOWN, this.onMouseClickHandler);
+        removeEventListener(MouseEvent.MOUSE_DOWN, this.onMouseDownHandler);
         this.actionPrice.dispose();
         this.actionPrice = null;
         this.credits.dispose();
@@ -65,7 +65,7 @@ public class StoreListItemRenderer extends ComplexListItemRenderer {
         constraints.addElement(descField.name, descField, Constraints.ALL);
         constraints.addElement(this.credits.name, this.credits, Constraints.RIGHT);
         constraints.addElement(this.errorField.name, this.errorField, Constraints.ALL);
-        addEventListener(MouseEvent.MOUSE_DOWN, this.onMouseClickHandler);
+        addEventListener(MouseEvent.MOUSE_DOWN, this.onMouseDownHandler);
         hitArea = this.hitMc;
     }
 
@@ -144,34 +144,21 @@ public class StoreListItemRenderer extends ComplexListItemRenderer {
     }
 
     protected final function infoItem():void {
-        dispatchEvent(new StoreEvent(StoreEvent.INFO, StoreTableData(data)));
+        dispatchEvent(new StoreEvent(StoreEvent.INFO, StoreTableData(data).id));
     }
 
     protected final function getHelper():StoreHelper {
         return StoreHelper.getInstance();
     }
 
-    protected function onLeftButtonClick():void {
+    protected function onLeftButtonClick(param1:Object):void {
     }
 
     protected function onRightButtonClick():void {
         this.infoItem();
     }
 
-    private function updateRent(param1:StoreTableData):void {
-        if (this.rent) {
-            if (!param1.rentLeft || param1.rentLeft == Values.EMPTY_STR) {
-                this.rent.visible = false;
-            }
-            else {
-                this.rent.updateText(param1.rentLeft);
-                this.rent.y = descField.y + descField.textHeight ^ 0;
-                this.rent.visible = true;
-            }
-        }
-    }
-
-    private function shopTooltip():void {
+    protected function shopTooltip():void {
         var _loc1_:ITooltipMgr = null;
         var _loc2_:StoreTableData = null;
         var _loc3_:String = null;
@@ -189,12 +176,25 @@ public class StoreListItemRenderer extends ComplexListItemRenderer {
                 default:
                     _loc3_ = this.getTooltipMapping().defaultId;
                     if (_loc3_ == TOOLTIPS_CONSTANTS.INVENTORY_MODULE) {
-                        _loc4_ = _loc2_.currency == Currencies.GOLD ? Number(_loc2_.gold) : Number(_loc2_.credits);
+                        _loc4_ = _loc2_.currency == CURRENCIES_CONSTANTS.GOLD ? Number(_loc2_.gold) : Number(_loc2_.credits);
                         _loc1_.showSpecial(_loc3_, null, _loc2_.id, _loc4_, _loc2_.currency, _loc2_.inventoryCount, _loc2_.vehicleCount);
                     }
                     else {
                         _loc1_.showSpecial(_loc3_, null, _loc2_.id, _loc2_.inventoryCount, _loc2_.vehicleCount);
                     }
+            }
+        }
+    }
+
+    private function updateRent(param1:StoreTableData):void {
+        if (this.rent) {
+            if (!param1.rentLeft || param1.rentLeft == Values.EMPTY_STR) {
+                this.rent.visible = false;
+            }
+            else {
+                this.rent.updateText(param1.rentLeft);
+                this.rent.y = descField.y + descField.textHeight ^ 0;
+                this.rent.visible = true;
             }
         }
     }
@@ -223,12 +223,12 @@ public class StoreListItemRenderer extends ComplexListItemRenderer {
         this.shopTooltip();
     }
 
-    private function onMouseClickHandler(param1:MouseEvent):void {
+    private function onMouseDownHandler(param1:MouseEvent):void {
         if (App.utils.commons.isRightButton(param1)) {
             this.onRightButtonClick();
         }
-        else if (App.utils.commons.isLeftButton(param1) && enabled) {
-            this.onLeftButtonClick();
+        else if (App.utils.commons.isLeftButton(param1)) {
+            this.onLeftButtonClick(param1.target);
         }
     }
 }

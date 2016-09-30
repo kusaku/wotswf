@@ -47,8 +47,6 @@ public class ToolTipPrivateQuests extends ToolTipSpecial {
     }
 
     override protected function redraw():void {
-        var _loc5_:Number = NaN;
-        var _loc6_:Number = NaN;
         var _loc8_:PrivateQuestsVO = null;
         var _loc9_:ToolTipBlockVO = null;
         var _loc10_:String = null;
@@ -60,8 +58,8 @@ public class ToolTipPrivateQuests extends ToolTipSpecial {
         blockResults = new Vector.<ToolTipBlockResultVO>();
         var _loc3_:uint = 0;
         var _loc4_:uint = 0;
-        _loc5_ = 300;
-        _loc6_ = bgShadowMargin.left + contentMargin.left;
+        var _loc5_:Number = 300;
+        var _loc6_:Number = bgShadowMargin.left + contentMargin.left;
         var _loc7_:ILocale = App.utils.locale;
         App.utils.asserter.assertNotNull(_loc7_, "App.utils.locale is Null");
         _loc8_ = new PrivateQuestsVO(_data);

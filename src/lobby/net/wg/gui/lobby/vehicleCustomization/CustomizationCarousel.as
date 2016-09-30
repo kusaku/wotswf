@@ -117,6 +117,7 @@ public class CustomizationCarousel extends ScrollCarousel implements IPopOverCal
     public function setData(param1:CarouselDataVO):void {
         if (rendererWidth != param1.rendererWidth) {
             rendererWidth = param1.rendererWidth;
+            pageWidth = param1.rendererWidth + gap;
         }
         dataProvider = new DataProvider(App.utils.data.vectorToArray(param1.renderersList));
         selectedIndex = param1.selectedIndex;

@@ -1,17 +1,12 @@
 package net.wg.gui.lobby.settings {
 import flash.events.Event;
-import flash.text.TextField;
 
 import net.wg.data.constants.Values;
-import net.wg.gui.components.advanced.FieldSet;
 import net.wg.gui.components.controls.CheckBox;
-import net.wg.gui.components.controls.ScrollBar;
 import net.wg.gui.components.controls.Slider;
-import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.events.ListEventEx;
-import net.wg.gui.lobby.settings.components.KeysScrollingList;
 import net.wg.gui.lobby.settings.config.SettingsConfigHelper;
-import net.wg.gui.lobby.settings.evnts.SettingViewEvent;
+import net.wg.gui.lobby.settings.events.SettingViewEvent;
 import net.wg.gui.lobby.settings.vo.SettingsControlProp;
 import net.wg.gui.lobby.settings.vo.SettingsKeyProp;
 import net.wg.gui.lobby.settings.vo.base.SettingsDataVo;
@@ -20,37 +15,7 @@ import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.events.SliderEvent;
 
-public class ControlsSettings extends SettingsBaseView {
-
-    public var keyboardFieldSet:FieldSet = null;
-
-    public var scrollBar:ScrollBar = null;
-
-    public var keys:KeysScrollingList = null;
-
-    public var mouseFieldSet:FieldSet = null;
-
-    public var mouseSensitivityLabel:TextField = null;
-
-    public var mouseArcadeSensLabel:TextField = null;
-
-    public var mouseArcadeSensSlider:Slider = null;
-
-    public var mouseSniperSensLabel:TextField = null;
-
-    public var mouseSniperSensSlider:Slider = null;
-
-    public var mouseStrategicSensLabel:TextField = null;
-
-    public var mouseStrategicSensSlider:Slider = null;
-
-    public var mouseHorzInvertCheckbox:CheckBox = null;
-
-    public var mouseVertInvertCheckbox:CheckBox = null;
-
-    public var backDraftInvertCheckbox:CheckBox = null;
-
-    public var defaultBtn:SoundButtonEx = null;
+public class ControlsSettings extends ControlsSettingsBase {
 
     private var _isControlsChanged:Boolean;
 
@@ -62,6 +27,12 @@ public class ControlsSettings extends SettingsBaseView {
         return "[WG ControlsSettings " + name + "]";
     }
 
+    override protected function onBeforeDispose():void {
+        defaultBtn.removeEventListener(ButtonEvent.CLICK, this.onSetDefaultClickHandler);
+        keys.removeEventListener(ListEventEx.ITEM_TEXT_CHANGE, this.onKeysItemTextChangeHandler);
+        super.onBeforeDispose();
+    }
+
     override protected function onDispose():void {
         var _loc1_:Vector.<String> = null;
         var _loc2_:Vector.<Object> = null;
@@ -71,19 +42,9 @@ public class ControlsSettings extends SettingsBaseView {
         var _loc6_:SettingsControlProp = null;
         var _loc7_:CheckBox = null;
         var _loc8_:Slider = null;
-        if (this.defaultBtn.hasEventListener(ButtonEvent.CLICK)) {
-            this.defaultBtn.removeEventListener(ButtonEvent.CLICK, this.onSetDefaultClick);
-        }
-        if (this.keys) {
-            this.keys.dispose();
-            if (this.keys.hasEventListener(ListEventEx.ITEM_TEXT_CHANGE)) {
-                this.keys.removeEventListener(ListEventEx.ITEM_TEXT_CHANGE, this.onKeysItemTextChangeHandler);
-            }
-            this.keys = null;
-        }
-        if (_data) {
-            _loc1_ = _data.keys;
-            _loc2_ = _data.values;
+        if (data) {
+            _loc1_ = data.keys;
+            _loc2_ = data.values;
             _loc3_ = _loc1_.length;
             _loc4_ = Values.EMPTY_STR;
             _loc5_ = 0;
@@ -96,13 +57,13 @@ public class ControlsSettings extends SettingsBaseView {
                             case SettingsConfigHelper.TYPE_CHECKBOX:
                                 _loc7_ = CheckBox(this[_loc4_ + _loc6_.type]);
                                 if (_loc7_.hasEventListener(Event.SELECT)) {
-                                    _loc7_.removeEventListener(Event.SELECT, this.onCheckBoxSelected);
+                                    _loc7_.removeEventListener(Event.SELECT, this.onCheckBoxSelectHandler);
                                 }
                                 break;
                             case SettingsConfigHelper.TYPE_SLIDER:
                                 _loc8_ = Slider(this[_loc4_ + _loc6_.type]);
                                 if (_loc8_.hasEventListener(SliderEvent.VALUE_CHANGE)) {
-                                    _loc8_.removeEventListener(SliderEvent.VALUE_CHANGE, this.onSliderValueChanged);
+                                    _loc8_.removeEventListener(SliderEvent.VALUE_CHANGE, this.onSliderValueChangeHandler);
                                 }
                         }
                     }
@@ -113,27 +74,13 @@ public class ControlsSettings extends SettingsBaseView {
         super.onDispose();
     }
 
-    override protected function configUI():void {
-        this.keyboardFieldSet.label = SETTINGS.KEYBOARD_KEYBOARD;
-        this.mouseFieldSet.label = SETTINGS.KEYBOARD_MOUSE;
-        this.mouseSensitivityLabel.text = SETTINGS.MOUSE_SENSITIVITY_HEADER;
-        this.mouseArcadeSensLabel.text = SETTINGS.MOUSE_SENSITIVITY_MAIN;
-        this.mouseSniperSensLabel.text = SETTINGS.MOUSE_SENSITIVITY_SNIPER;
-        this.mouseStrategicSensLabel.text = SETTINGS.MOUSE_SENSITIVITY_ART;
-        this.mouseHorzInvertCheckbox.label = SETTINGS.MOUSE_SENSITIVITY_INVERTATIONHOR;
-        this.mouseVertInvertCheckbox.label = SETTINGS.MOUSE_SENSITIVITY_INVERTATIONVERT;
-        this.backDraftInvertCheckbox.label = SETTINGS.KEYBOARD_BACKDRAFTINVERT;
-        this.defaultBtn.label = SETTINGS.DEFAULTBTN;
-        this.defaultBtn.enabled = false;
-        super.configUI();
-    }
-
     override protected function setData(param1:SettingsDataVo):void {
         var _loc5_:String = null;
         var _loc6_:Object = null;
         var _loc8_:CheckBox = null;
         var _loc9_:Slider = null;
-        var _loc10_:Array = null;
+        var _loc10_:SettingsDataVo = null;
+        var _loc11_:Array = null;
         super.setData(param1);
         var _loc2_:Vector.<String> = param1.keys;
         var _loc3_:Vector.<Object> = param1.values;
@@ -145,31 +92,34 @@ public class ControlsSettings extends SettingsBaseView {
             _loc5_ = _loc2_[_loc7_];
             if (_loc3_[_loc7_] is SettingsControlProp) {
                 _loc6_ = _loc3_[_loc7_] as SettingsControlProp;
+                App.utils.asserter.assertNotNull(_loc6_, "valuesView[i] must be SettingsControlProp");
                 if (this[_loc5_ + _loc6_.type]) {
                     switch (_loc6_.type) {
                         case SettingsConfigHelper.TYPE_CHECKBOX:
                             _loc8_ = CheckBox(this[_loc5_ + _loc6_.type]);
                             _loc8_.selected = _loc6_.current;
-                            _loc8_.addEventListener(Event.SELECT, this.onCheckBoxSelected);
+                            _loc8_.addEventListener(Event.SELECT, this.onCheckBoxSelectHandler);
                             _loc8_.enabled = _loc6_.current != null;
                             break;
                         case SettingsConfigHelper.TYPE_SLIDER:
                             _loc9_ = Slider(this[_loc5_ + _loc6_.type]);
                             _loc9_.value = _loc6_.current;
-                            _loc9_.addEventListener(SliderEvent.VALUE_CHANGE, this.onSliderValueChanged);
+                            _loc9_.addEventListener(SliderEvent.VALUE_CHANGE, this.onSliderValueChangeHandler);
                             _loc9_.enabled = _loc6_.current != null;
                     }
                 }
             }
             else if (_loc5_ == SettingsConfigHelper.KEYBOARD) {
-                _loc10_ = this.createDataProviderForKeys(_loc3_[_loc7_] as SettingsDataVo, _data[SettingsConfigHelper.KEYS_LAYOUT_ORDER]);
-                this.keys.dataProvider = new DataProvider(_loc10_);
-                this.keys.addEventListener(ListEventEx.ITEM_TEXT_CHANGE, this.onKeysItemTextChangeHandler);
-                this.keys.validateNow();
+                _loc10_ = _loc3_[_loc7_] as SettingsDataVo;
+                App.utils.asserter.assertNotNull(_loc10_, "valuesView[i] must be SettingsDataVo");
+                _loc11_ = this.createDataProviderForKeys(_loc10_, data[SettingsConfigHelper.KEYS_LAYOUT_ORDER]);
+                keys.dataProvider = new DataProvider(_loc11_);
+                keys.addEventListener(ListEventEx.ITEM_TEXT_CHANGE, this.onKeysItemTextChangeHandler);
+                keys.validateNow();
             }
             _loc7_++;
         }
-        this.defaultBtn.addEventListener(ButtonEvent.CLICK, this.onSetDefaultClick);
+        defaultBtn.addEventListener(ButtonEvent.CLICK, this.onSetDefaultClickHandler);
         this.checkEnabledSetDefBtn();
     }
 
@@ -180,16 +130,13 @@ public class ControlsSettings extends SettingsBaseView {
         var _loc3_:Boolean = this._isControlsChanged;
         this._isControlsChanged = false;
         var _loc5_:Vector.<String> = SettingsConfigHelper.instance.settingsData[SettingsConfigHelper.CONTROLS_SETTINGS][SettingsConfigHelper.KEYBOARD_IMPORTANT_BINDS];
-        for each(_loc6_ in this.keys.dataProvider) {
+        for each(_loc6_ in keys.dataProvider) {
             if (_loc2_ == _loc6_.key && _loc5_.indexOf(_loc6_.id) != -1) {
                 _loc4_ = true;
                 break;
             }
         }
-        if (param1) {
-            return _loc3_ && _loc4_;
-        }
-        return _loc4_;
+        return !!param1 ? _loc3_ && _loc4_ : Boolean(_loc4_);
     }
 
     private function createDataProviderForKeys(param1:SettingsDataVo, param2:Vector.<String>):Array {
@@ -206,7 +153,7 @@ public class ControlsSettings extends SettingsBaseView {
     }
 
     private function checkEnabledSetDefBtn():void {
-        this.defaultBtn.enabled = this.keys.keysWasChanged() || this.controlsChanged();
+        defaultBtn.enabled = keys.keysWasChanged() || this.controlsChanged();
     }
 
     private function controlsChanged():Boolean {
@@ -219,9 +166,9 @@ public class ControlsSettings extends SettingsBaseView {
         var _loc8_:CheckBox = null;
         var _loc9_:Slider = null;
         var _loc1_:* = false;
-        if (_data) {
-            _loc2_ = _data.keys;
-            _loc3_ = _data.values;
+        if (data) {
+            _loc2_ = data.keys;
+            _loc3_ = data.values;
             _loc4_ = _loc2_.length;
             _loc5_ = Values.EMPTY_STR;
             _loc6_ = 0;
@@ -250,7 +197,7 @@ public class ControlsSettings extends SettingsBaseView {
         return _loc1_;
     }
 
-    private function onSetDefaultClick(param1:ButtonEvent):void {
+    private function onSetDefaultClickHandler(param1:ButtonEvent):void {
         var _loc2_:Vector.<String> = null;
         var _loc3_:Vector.<Object> = null;
         var _loc4_:int = 0;
@@ -259,11 +206,11 @@ public class ControlsSettings extends SettingsBaseView {
         var _loc7_:SettingsControlProp = null;
         var _loc8_:CheckBox = null;
         var _loc9_:Slider = null;
-        this.keys.restoreDefault();
+        keys.restoreDefault();
         this._isControlsChanged = true;
-        if (_data) {
-            _loc2_ = _data.keys;
-            _loc3_ = _data.values;
+        if (data) {
+            _loc2_ = data.keys;
+            _loc3_ = data.values;
             _loc4_ = _loc2_.length;
             _loc5_ = Values.EMPTY_STR;
             _loc6_ = 0;
@@ -279,7 +226,7 @@ public class ControlsSettings extends SettingsBaseView {
                                 break;
                             case SettingsConfigHelper.TYPE_SLIDER:
                                 _loc9_ = Slider(this[_loc5_ + _loc7_.type]);
-                                _loc9_.value = _loc7_.defaultValue;
+                                _loc9_.value = Number(_loc7_.defaultValue);
                         }
                     }
                 }
@@ -288,31 +235,31 @@ public class ControlsSettings extends SettingsBaseView {
         }
     }
 
-    private function onSliderValueChanged(param1:SliderEvent):void {
+    private function onSliderValueChangeHandler(param1:SliderEvent):void {
         var _loc2_:Slider = Slider(param1.target);
         var _loc3_:String = SettingsConfigHelper.instance.getControlId(_loc2_.name, SettingsConfigHelper.TYPE_SLIDER);
-        dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_CONTROL_CHANGED, _viewId, _loc3_, _loc2_.value));
+        dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_CONTROL_CHANGED, viewId, _loc3_, _loc2_.value));
         this.checkEnabledSetDefBtn();
     }
 
-    private function onCheckBoxSelected(param1:Event):void {
+    private function onCheckBoxSelectHandler(param1:Event):void {
         var _loc2_:CheckBox = CheckBox(param1.target);
         var _loc3_:String = SettingsConfigHelper.instance.getControlId(_loc2_.name, SettingsConfigHelper.TYPE_CHECKBOX);
-        dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_CONTROL_CHANGED, _viewId, _loc3_, _loc2_.selected));
+        dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_CONTROL_CHANGED, viewId, _loc3_, _loc2_.selected));
         this.checkEnabledSetDefBtn();
     }
 
     private function onKeysItemTextChangeHandler(param1:ListEventEx):void {
         this._isControlsChanged = true;
-        this.keys.updateDataProvider();
+        keys.updateDataProvider();
         var _loc2_:String = param1.itemData.id;
         var _loc3_:Object = {};
         _loc3_[_loc2_] = param1.controllerIdx;
         var _loc4_:String = SettingsConfigHelper.KEYBOARD;
-        dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_CONTROL_CHANGED, _viewId, _loc4_, _loc3_));
+        dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_CONTROL_CHANGED, viewId, _loc4_, _loc3_));
         this.checkEnabledSetDefBtn();
         if (_loc2_ == SettingsConfigHelper.PUSH_TO_TALK) {
-            dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_PTT_CONTROL_CHANGED, _viewId, _loc2_, param1.controllerIdx));
+            dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_PTT_CONTROL_CHANGED, viewId, _loc2_, param1.controllerIdx));
         }
     }
 }

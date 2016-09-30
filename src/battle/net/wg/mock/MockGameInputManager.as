@@ -13,7 +13,7 @@ public class MockGameInputManager implements IGameInputManager {
     public function addEventListener(param1:String, param2:Function, param3:Boolean = false, param4:int = 0, param5:Boolean = false):void {
     }
 
-    public function as_addKeyHandler(param1:Number, param2:String, param3:Boolean, param4:String = null):void {
+    public function as_addKeyHandler(param1:Number, param2:String, param3:Boolean, param4:String):void {
     }
 
     public function as_clearKeyHandler(param1:Number, param2:String):void {

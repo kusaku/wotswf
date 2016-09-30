@@ -1,12 +1,14 @@
 package net.wg.gui.lobby.profile.pages.technique {
 import flash.display.DisplayObject;
 import flash.display.MovieClip;
+import flash.events.MouseEvent;
 import flash.text.TextField;
 
-import net.wg.gui.components.controls.Image;
+import net.wg.data.constants.generated.CONTEXT_MENU_HANDLER_TYPE;
 import net.wg.gui.components.controls.SoundListItemRenderer;
 import net.wg.gui.lobby.profile.components.TechMasteryIcon;
 import net.wg.gui.lobby.profile.pages.technique.data.TechniqueListVehicleVO;
+import net.wg.infrastructure.interfaces.IImage;
 
 import scaleform.clik.constants.InvalidationType;
 
@@ -22,9 +24,9 @@ public class TechniqueRenderer extends SoundListItemRenderer {
 
     public var avgExpTF:TextField = null;
 
-    public var nationIcon:Image = null;
+    public var nationIcon:IImage = null;
 
-    public var typeIcon:Image = null;
+    public var typeIcon:IImage = null;
 
     public var masteryIcon:TechMasteryIcon = null;
 
@@ -34,7 +36,9 @@ public class TechniqueRenderer extends SoundListItemRenderer {
 
     public var hit:MovieClip = null;
 
-    public var tankIcon:Image = null;
+    public var tankIcon:IImage = null;
+
+    private var _compareModeAvailable:Boolean = false;
 
     public function TechniqueRenderer() {
         super();
@@ -64,6 +68,7 @@ public class TechniqueRenderer extends SoundListItemRenderer {
 
     override protected function configUI():void {
         super.configUI();
+        addEventListener(MouseEvent.MOUSE_DOWN, this.onMouseDownHandler);
         this.mouseChildren = true;
         this.masteryIcon.mouseChildren = false;
         this.masteryIcon.buttonMode = true;
@@ -89,6 +94,7 @@ public class TechniqueRenderer extends SoundListItemRenderer {
             if (data) {
                 _loc1_ = true;
                 _loc5_ = TechniqueListVehicleVO(data);
+                this._compareModeAvailable = _loc5_.compareModeAvailable;
                 this.vehicleTF.htmlText = _loc5_.shortUserName;
                 this.battlesTF.text = getString(_loc5_.battlesCount);
                 this.winsTF.text = _loc5_.winsEfficiencyStr;
@@ -118,6 +124,7 @@ public class TechniqueRenderer extends SoundListItemRenderer {
     }
 
     override protected function onDispose():void {
+        removeEventListener(MouseEvent.MOUSE_DOWN, this.onMouseDownHandler);
         this.nationIcon.dispose();
         this.nationIcon = null;
         this.typeIcon.dispose();
@@ -138,6 +145,12 @@ public class TechniqueRenderer extends SoundListItemRenderer {
 
     override public function set mouseChildren(param1:Boolean):void {
         super.mouseChildren = true;
+    }
+
+    private function onMouseDownHandler(param1:MouseEvent):void {
+        if (this._compareModeAvailable && App.utils.commons.isRightButton(param1)) {
+            App.contextMenuMgr.show(CONTEXT_MENU_HANDLER_TYPE.PROFILE_VEHICLE, this, {"id": TechniqueListVehicleVO(data).id});
+        }
     }
 }
 }

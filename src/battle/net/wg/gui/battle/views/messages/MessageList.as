@@ -14,17 +14,17 @@ public class MessageList extends EventDispatcher implements IMessageList {
 
     private static const DEF_MESSAGE_GAP:Number = 5;
 
-    private var _disposed:Boolean = false;
+    protected var messages:Vector.<IMessage>;
 
-    private var _messages:Vector.<IMessage>;
+    protected var direction:String = "up";
 
-    private var _direction:String = "up";
-
-    private var _messageGap:Number = 5.0;
+    protected var messageGap:Number = 5.0;
 
     private var _x:Number;
 
     private var _y:Number;
+
+    private var _disposed:Boolean = false;
 
     private var _container:DisplayObjectContainer;
 
@@ -33,21 +33,21 @@ public class MessageList extends EventDispatcher implements IMessageList {
     public function MessageList(param1:DisplayObjectContainer = null) {
         super();
         this.container = param1;
-        this._messages = new Vector.<IMessage>();
+        this.messages = new Vector.<IMessage>();
     }
 
     public function clearMessages():void {
         var _loc1_:IMessage = null;
-        for each(_loc1_ in this._messages) {
+        for each(_loc1_ in this.messages) {
             this.clearMessage(_loc1_);
             _loc1_.close();
         }
-        this._messages.splice(0, this._messages.length);
+        this.messages.splice(0, this.messages.length);
     }
 
     public function closeOldestMessage():void {
-        if (this._messages.length > 0) {
-            this._messages[0].close();
+        if (this.messages.length > 0) {
+            this.messages[0].close();
         }
     }
 
@@ -61,7 +61,7 @@ public class MessageList extends EventDispatcher implements IMessageList {
 
     public function isNowShowed(param1:String):Boolean {
         var _loc2_:IMessage = null;
-        for each(_loc2_ in this._messages) {
+        for each(_loc2_ in this.messages) {
             if (_loc2_.key == param1) {
                 return true;
             }
@@ -74,15 +74,23 @@ public class MessageList extends EventDispatcher implements IMessageList {
     }
 
     public function pushMessage(param1:IMessage):void {
+        this.pushMessageIntoQueue(param1);
+        this.startMessageShowing(param1);
+    }
+
+    protected function pushMessageIntoQueue(param1:IMessage):void {
+        this.messages.push(param1);
+        param1.addEventListener(Event.CLOSE, this.onMessageCloseHandler);
+    }
+
+    protected function startMessageShowing(param1:IMessage):void {
         var _loc3_:DisplayObject = null;
-        this._messages.push(param1);
         var _loc2_:Vector.<DisplayObject> = param1.getDisplayObjects();
         for each(_loc3_ in _loc2_) {
             if (_loc3_ != null) {
                 this._container.addChild(_loc3_);
             }
         }
-        param1.addEventListener(Event.CLOSE, this.onMessageCloseHandler);
         param1.show();
         this.rearrangeMessages();
         this.setMessageVisibility(param1);
@@ -95,13 +103,13 @@ public class MessageList extends EventDispatcher implements IMessageList {
     }
 
     public function setup(param1:MessageListSettingsVO):void {
-        this._direction = param1.direction;
-        this._messageGap = param1.messageGap;
+        this.direction = param1.direction;
+        this.messageGap = param1.messageGap;
     }
 
     protected function onDispose():void {
         this.clearMessages();
-        this._messages = null;
+        this.messages = null;
         this.disposeContainer();
         this._container = null;
     }
@@ -111,16 +119,16 @@ public class MessageList extends EventDispatcher implements IMessageList {
         var _loc3_:int = 0;
         var _loc4_:IMessage = null;
         var _loc5_:Number = NaN;
-        var _loc1_:int = this._messages.length - 1;
+        var _loc1_:int = this.messages.length - 1;
         if (_loc1_ >= 0) {
-            _loc2_ = this._direction == BATTLE_MESSAGES_CONSTS.LIST_DIRECTION_DOWN;
-            _loc3_ = this._messageGap + this._messages[0].height;
+            _loc2_ = this.direction == BATTLE_MESSAGES_CONSTS.LIST_DIRECTION_DOWN;
+            _loc3_ = this.messageGap + this.messages[0].height;
             if (!_loc2_) {
                 _loc3_ = -_loc3_;
             }
             _loc5_ = this._y;
             while (_loc1_ >= 0) {
-                _loc4_ = this._messages[_loc1_];
+                _loc4_ = this.messages[_loc1_];
                 _loc4_.x = this._x;
                 _loc4_.y = _loc5_ | 0;
                 _loc5_ = _loc5_ + _loc3_;
@@ -130,9 +138,9 @@ public class MessageList extends EventDispatcher implements IMessageList {
     }
 
     protected function onMessageClose(param1:IMessage):void {
-        var _loc2_:int = this._messages.indexOf(param1);
+        var _loc2_:int = this.messages.indexOf(param1);
         if (_loc2_ >= 0) {
-            this._messages.splice(_loc2_, 1);
+            this.messages.splice(_loc2_, 1);
             this.clearMessage(param1);
         }
         else {
@@ -162,7 +170,7 @@ public class MessageList extends EventDispatcher implements IMessageList {
     }
 
     public function get length():int {
-        return this._messages.length;
+        return this.messages.length;
     }
 
     public function get x():Number {
@@ -203,16 +211,6 @@ public class MessageList extends EventDispatcher implements IMessageList {
         dispatchEvent(new Event(Event.ADDED_TO_STAGE));
     }
 
-    public function set visible(param1:Boolean):void {
-        this._visible = param1;
-        var _loc2_:int = this._messages.length;
-        var _loc3_:uint = 0;
-        while (_loc3_ < _loc2_) {
-            this.setMessageVisibility(this._messages[_loc3_]);
-            _loc3_++;
-        }
-    }
-
     private function setMessageVisibility(param1:IMessage):void {
         var _loc2_:Vector.<DisplayObject> = param1.getDisplayObjects();
         var _loc3_:uint = _loc2_.length;
@@ -227,6 +225,16 @@ public class MessageList extends EventDispatcher implements IMessageList {
 
     public function get visible():Boolean {
         return this._visible;
+    }
+
+    public function set visible(param1:Boolean):void {
+        this._visible = param1;
+        var _loc2_:int = this.messages.length;
+        var _loc3_:uint = 0;
+        while (_loc3_ < _loc2_) {
+            this.setMessageVisibility(this.messages[_loc3_]);
+            _loc3_++;
+        }
     }
 
     public function setCompVisible(param1:Boolean):void {

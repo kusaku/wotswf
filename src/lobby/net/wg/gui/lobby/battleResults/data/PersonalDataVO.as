@@ -23,6 +23,8 @@ public class PersonalDataVO extends DAAPIDataClass {
 
     public static const ACHIEVEMENTS_RIGHT:String = "achievementsRight";
 
+    private static const FIELD_EFFICIENCY_HEADER:String = "efficiencyHeader";
+
     public var getPremVO:GetPremiumPopoverVO = null;
 
     public var hasGetPremBtn:Boolean = false;
@@ -77,6 +79,8 @@ public class PersonalDataVO extends DAAPIDataClass {
 
     public var statValues:Vector.<Vector.<StatItemVO>> = null;
 
+    public var efficiencyHeader:EfficiencyHeaderVO = null;
+
     public function PersonalDataVO(param1:Object) {
         super(param1);
     }
@@ -120,6 +124,9 @@ public class PersonalDataVO extends DAAPIDataClass {
                 _loc3_ = param2 as Array;
                 App.utils.asserter.assertNotNull(_loc3_, Errors.CANT_NULL);
                 this.fillAchievementsRight(_loc3_);
+                return false;
+            case FIELD_EFFICIENCY_HEADER:
+                this.efficiencyHeader = new EfficiencyHeaderVO(param2);
                 return false;
             default:
                 return super.onDataWrite(param1, param2);
@@ -195,6 +202,10 @@ public class PersonalDataVO extends DAAPIDataClass {
             this.noIncomeAlert.dispose();
             this.noIncomeAlert = null;
         }
+        if (this.efficiencyHeader) {
+            this.efficiencyHeader.dispose();
+            this.efficiencyHeader = null;
+        }
         super.onDispose();
     }
 
@@ -222,18 +233,18 @@ public class PersonalDataVO extends DAAPIDataClass {
         if (param2) {
             _loc3_ = param2.length;
             _loc4_ = new Vector.<Vector.<DetailedStatsItemVO>>();
-            _loc8_ = 0;
-            while (_loc8_ < _loc3_) {
-                _loc5_ = param2[_loc8_] as Array;
+            _loc7_ = 0;
+            while (_loc7_ < _loc3_) {
+                _loc5_ = param2[_loc7_] as Array;
                 App.utils.asserter.assertNotNull(_loc5_, Errors.CANT_NULL);
                 _loc6_ = _loc5_.length;
                 _loc4_.push(new Vector.<DetailedStatsItemVO>(_loc6_));
-                _loc7_ = 0;
-                while (_loc7_ < _loc6_) {
-                    _loc4_[_loc8_][_loc7_] = new DetailedStatsItemVO(_loc5_[_loc7_]);
-                    _loc7_++;
+                _loc8_ = 0;
+                while (_loc8_ < _loc6_) {
+                    _loc4_[_loc7_][_loc8_] = new DetailedStatsItemVO(_loc5_[_loc8_]);
+                    _loc8_++;
                 }
-                _loc8_++;
+                _loc7_++;
             }
             this[param1] = _loc4_;
         }

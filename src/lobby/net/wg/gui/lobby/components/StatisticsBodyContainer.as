@@ -61,7 +61,6 @@ public class StatisticsBodyContainer extends UIComponentEx {
                 this.bar.selectedIndex = 0;
             }
             this.viewStack.show(StatisticsLabelLinkageDataVO(_loc1_[this.bar.selectedIndex]).linkage);
-            _loc1_.slice(0, _loc1_.length);
             this.updateDataAt(this.bar.selectedIndex);
         }
         if (isInvalid(LAYOUT_INVALID)) {

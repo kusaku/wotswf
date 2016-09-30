@@ -7,12 +7,16 @@ public interface INotificationsListMeta extends IEventDispatcher {
 
     function getMessageActualTimeS(param1:Number):String;
 
+    function onGroupChangeS(param1:uint):void;
+
     function as_setInitData(param1:Object):void;
 
-    function as_setMessagesList(param1:Array):void;
+    function as_setMessagesList(param1:Object):void;
 
     function as_appendMessage(param1:Object):void;
 
     function as_updateMessage(param1:Object):void;
+
+    function as_updateCounters(param1:Array):void;
 }
 }

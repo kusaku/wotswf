@@ -105,6 +105,7 @@ public class TutorialManager extends TutorialManagerMeta implements ITutorialMan
             _loc7_.splice(0, _loc7_.length);
         }
         App.utils.data.cleanupDynamicObject(this._aliasToPathsList);
+        this._aliasToPathsList = null;
         for (_loc4_ in this._fullPathToVO) {
             _loc8_ = this._fullPathToVO[_loc4_];
             _loc8_.dispose();
@@ -142,7 +143,7 @@ public class TutorialManager extends TutorialManagerMeta implements ITutorialMan
     }
 
     public function addListenersToCustomTutorialComponent(param1:ITutorialCustomComponent):void {
-        param1.addEventListener(TutorialEvent.VIEW_READY_FOR_TUTORIAL, this.customComponentReadyForTutorialHandler);
+        param1.addEventListener(TutorialEvent.VIEW_READY_FOR_TUTORIAL, this.onViewReadyForTutorialHandler);
     }
 
     public function as_hideHint(param1:String, param2:String):void {
@@ -157,7 +158,7 @@ public class TutorialManager extends TutorialManagerMeta implements ITutorialMan
         }
     }
 
-    public function as_setCriteria(param1:String, param2:String, param3:Boolean = true):void {
+    public function as_setCriteria(param1:String, param2:String, param3:Boolean):void {
         var _loc4_:Array = null;
         var _loc5_:Vector.<String> = null;
         var _loc6_:Vector.<DisplayObject> = null;
@@ -218,7 +219,7 @@ public class TutorialManager extends TutorialManagerMeta implements ITutorialMan
         }
     }
 
-    public function as_showHint(param1:String, param2:String, param3:Object, param4:Boolean = false):void {
+    public function as_showHint(param1:String, param2:String, param3:Object, param4:Boolean):void {
         var _loc6_:DisplayObject = null;
         var _loc5_:TutorialComponentPathVO = this._idToVO[param2];
         if (_loc5_) {
@@ -328,7 +329,7 @@ public class TutorialManager extends TutorialManagerMeta implements ITutorialMan
     }
 
     public function removeListenersFromCustomTutorialComponent(param1:ITutorialCustomComponent):void {
-        param1.removeEventListener(TutorialEvent.VIEW_READY_FOR_TUTORIAL, this.customComponentReadyForTutorialHandler);
+        param1.removeEventListener(TutorialEvent.VIEW_READY_FOR_TUTORIAL, this.onViewReadyForTutorialHandler);
     }
 
     public function setupHintBuilder(param1:IView, param2:String, param3:Object, param4:DisplayObject = null):void {
@@ -340,7 +341,7 @@ public class TutorialManager extends TutorialManagerMeta implements ITutorialMan
             _loc5_ = Values.EMPTY_STR;
             _loc6_ = null;
             _loc7_ = false;
-            _loc8_ = new TutorialHintEvent(TutorialHintEvent.SETUP_HINT, param1.viewTutorialId, param4, param3);
+            _loc8_ = new TutorialHintEvent(TutorialHintEvent.SETUP_HINT, param1.as_config.viewTutorialId, param4, param3);
             dispatchEvent(_loc8_);
             if (!_loc8_.handled) {
                 if (param2 != Values.EMPTY_STR) {
@@ -484,55 +485,59 @@ public class TutorialManager extends TutorialManagerMeta implements ITutorialMan
     private function checkPartialMatch(param1:Array, param2:Vector.<String>, param3:Vector.<DisplayObject>):DisplayObject {
         var _loc4_:int = 0;
         var _loc5_:String = null;
-        var _loc7_:Boolean = false;
-        var _loc8_:int = 0;
-        var _loc9_:Object = null;
-        var _loc10_:DisplayObject = null;
+        var _loc6_:DisplayObjectContainer = null;
+        var _loc8_:Boolean = false;
+        var _loc9_:int = 0;
+        var _loc10_:Object = null;
+        var _loc11_:DisplayObject = null;
         do
         {
-            _loc7_ = false;
-            _loc8_ = param1.length;
+            _loc8_ = false;
+            _loc9_ = param1.length;
             _loc4_ = 0;
-            while (_loc4_ < _loc8_) {
+            while (_loc4_ < _loc9_) {
                 _loc5_ = param1[_loc4_];
-                _loc9_ = this.parseParamString(_loc5_);
-                if (_loc9_ != null) {
-                    _loc10_ = this.getObjectByParams(param3[_loc4_], _loc9_);
-                    if (_loc10_ != null) {
-                        _loc7_ = true;
-                        param3[_loc4_] = _loc10_;
+                _loc10_ = this.parseParamString(_loc5_);
+                if (_loc10_ != null) {
+                    _loc11_ = this.getObjectByParams(param3[_loc4_], _loc10_);
+                    if (_loc11_ != null) {
+                        _loc8_ = true;
+                        param3[_loc4_] = _loc11_;
                         param1[_loc4_] = param2[_loc4_];
                     }
                 }
                 _loc4_++;
             }
         }
-        while (_loc7_);
+        while (_loc8_);
 
         _loc4_ = 0;
         while (_loc4_ < param2.length) {
             _loc5_ = param2[_loc4_];
             if (this.isNULLString(_loc5_)) {
-                _loc10_ = (param3[_loc4_ - 1] as DisplayObjectContainer).getChildByName(param1[_loc4_]);
-                if (_loc10_) {
-                    param2[_loc4_] = param1[_loc4_];
-                    param3[_loc4_] = _loc10_;
+                _loc6_ = param3[_loc4_ - 1] as DisplayObjectContainer;
+                if (_loc6_) {
+                    _loc11_ = _loc6_.getChildByName(param1[_loc4_]);
+                    if (_loc11_) {
+                        param2[_loc4_] = param1[_loc4_];
+                        param3[_loc4_] = _loc11_;
+                    }
                 }
             }
             _loc4_++;
         }
-        var _loc6_:Boolean = true;
+        var _loc7_:Boolean = true;
         _loc4_ = 0;
         while (_loc4_ < param2.length) {
             if (param2[_loc4_] != param1[_loc4_]) {
-                _loc6_ = false;
+                _loc7_ = false;
             }
             _loc4_++;
         }
-        if (_loc6_) {
-            _loc10_ = param3[param3.length - 1] as DisplayObject;
-            if (_loc10_) {
-                return _loc10_;
+        if (_loc7_) {
+            _loc11_ = param3[param3.length - 1] as DisplayObject;
+            if (_loc11_) {
+                return _loc11_;
             }
         }
         return null;
@@ -683,7 +688,9 @@ public class TutorialManager extends TutorialManagerMeta implements ITutorialMan
 
     private function onTriggerActivatedHandler(param1:TriggerEvent):void {
         var _loc2_:ITriggerWatcher = param1.target as ITriggerWatcher;
-        onTriggerActivatedS(_loc2_.componentId, _loc2_.type);
+        if (_loc2_) {
+            onTriggerActivatedS(_loc2_.componentId, _loc2_.type);
+        }
     }
 
     private function onComponentDisposedHandler(param1:LifeCycleEvent):void {
@@ -722,7 +729,7 @@ public class TutorialManager extends TutorialManagerMeta implements ITutorialMan
         this._ignoredInTutorialComponents.splice(this._ignoredInTutorialComponents.indexOf(DisplayObject(param1.target)), 1);
     }
 
-    private function customComponentReadyForTutorialHandler(param1:TutorialEvent):void {
+    private function onViewReadyForTutorialHandler(param1:TutorialEvent):void {
         var _loc3_:ITutorialCustomComponent = null;
         var _loc2_:ITutorialCustomComponent = ITutorialCustomComponent(param1.currentTarget);
         if (param1.target != param1.currentTarget) {

@@ -6,6 +6,7 @@ import flash.text.TextFieldAutoSize;
 
 import net.wg.data.constants.Currencies;
 import net.wg.data.constants.Values;
+import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.controls.AlertIco;
 import net.wg.gui.components.controls.CheckBox;
@@ -411,7 +412,7 @@ public class TechnicalMaintenance extends TechnicalMaintenanceMeta implements IT
         this.repairAuto.removeEventListener(Event.SELECT, this.updateRefillSettings);
         this.repairAuto.selected = this._maintenanceData.autoRepair;
         this.repairAuto.addEventListener(Event.SELECT, this.updateRefillSettings);
-        this.repairPrice.textColor = Currencies.TEXT_COLORS[this._maintenanceData.repairCost > this._maintenanceData.credits ? Currencies.ERROR : Currencies.CREDITS];
+        this.repairPrice.textColor = Currencies.TEXT_COLORS[this._maintenanceData.repairCost > this._maintenanceData.credits ? CURRENCIES_CONSTANTS.ERROR : CURRENCIES_CONSTANTS.CREDITS];
         this.repairPrice.text = App.utils.locale.integer(this._maintenanceData.repairCost);
         this.repairIndicator.maximum = this._maintenanceData.maxRepairCost;
         this.repairIndicator.value = this._maintenanceData.maxRepairCost - this._maintenanceData.repairCost;
@@ -593,10 +594,10 @@ public class TechnicalMaintenance extends TechnicalMaintenanceMeta implements IT
     }
 
     private function updatePriceLabels(param1:IconText, param2:IconText, param3:Prices):void {
-        param1.textColor = Currencies.TEXT_COLORS[param3.credits > this._maintenanceData.credits ? Currencies.ERROR : Currencies.CREDITS];
+        param1.textColor = Currencies.TEXT_COLORS[param3.credits > this._maintenanceData.credits ? CURRENCIES_CONSTANTS.ERROR : CURRENCIES_CONSTANTS.CREDITS];
         var _loc4_:ILocale = App.utils.locale;
         param1.text = _loc4_.integer(param3.credits || 0);
-        param2.textColor = Currencies.TEXT_COLORS[param3.gold > this._maintenanceData.gold ? Currencies.ERROR : Currencies.GOLD];
+        param2.textColor = Currencies.TEXT_COLORS[param3.gold > this._maintenanceData.gold ? CURRENCIES_CONSTANTS.ERROR : CURRENCIES_CONSTANTS.GOLD];
         param2.text = _loc4_.gold(param3.gold || 0);
     }
 

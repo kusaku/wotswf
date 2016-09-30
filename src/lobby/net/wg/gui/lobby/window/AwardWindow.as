@@ -316,8 +316,7 @@ public class AwardWindow extends AwardWindowMeta implements IAwardWindow {
     }
 
     private function updateComponentsVisible():void {
-        var _loc1_:Boolean = false;
-        _loc1_ = StringUtils.isNotEmpty(this._model.additionalText);
+        var _loc1_:Boolean = StringUtils.isNotEmpty(this._model.additionalText);
         var _loc2_:Boolean = this._model.hasAchievements;
         this.medalsList.visible = _loc2_;
         this.awardImage.visible = !_loc2_;

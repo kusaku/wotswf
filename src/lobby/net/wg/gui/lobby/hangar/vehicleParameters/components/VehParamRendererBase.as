@@ -2,6 +2,7 @@ package net.wg.gui.lobby.hangar.vehicleParameters.components {
 import flash.display.Sprite;
 import flash.text.TextField;
 
+import net.wg.data.constants.generated.HANGAR_ALIASES;
 import net.wg.gui.components.controls.SoundListItemRenderer;
 import net.wg.gui.lobby.hangar.vehicleParameters.data.VehParamVO;
 
@@ -36,6 +37,7 @@ public class VehParamRendererBase extends SoundListItemRenderer {
         super.configUI();
         this.valueTF.mouseEnabled = false;
         this.titleTF.mouseEnabled = false;
+        this.hitMC.height = height;
         hitArea = this.hitMC;
     }
 
@@ -49,15 +51,26 @@ public class VehParamRendererBase extends SoundListItemRenderer {
 
     override protected function draw():void {
         super.draw();
-        if (this.model != null && isInvalid(InvalidationType.DATA)) {
-            enabled = buttonMode = this.model.isEnabled;
-            if (StringUtils.isNotEmpty(this.model.valueText)) {
-                this.valueTF.htmlText = this.model.valueText;
+        this.hitMC.height = height;
+        if (this.model != null) {
+            if (isInvalid(InvalidationType.DATA)) {
+                enabled = buttonMode = this.model.isEnabled;
+                if (StringUtils.isNotEmpty(this.model.valueText)) {
+                    this.valueTF.htmlText = this.model.valueText;
+                }
+                if (StringUtils.isNotEmpty(this.model.valueText)) {
+                    this.titleTF.htmlText = this.model.titleText;
+                }
             }
-            if (StringUtils.isNotEmpty(this.model.valueText)) {
-                this.titleTF.htmlText = this.model.titleText;
+            if (this.model.state != HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED) {
+                this.layoutHitArea();
             }
         }
+    }
+
+    protected function layoutHitArea():void {
+        this.hitMC.x = this.valueTF.width - this.valueTF.textWidth;
+        this.hitMC.width = width - this.hitMC.x;
     }
 }
 }

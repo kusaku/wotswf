@@ -6,8 +6,8 @@ import flash.geom.Rectangle;
 import flash.text.TextField;
 import flash.text.TextFormat;
 
+import net.wg.data.constants.ComponentState;
 import net.wg.data.constants.SoundManagerStates;
-import net.wg.data.daapi.base.DAAPIDataClass;
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.cyberSport.controls.data.CSVehicleButtonSelectionVO;
 import net.wg.gui.cyberSport.controls.interfaces.IVehicleButton;
@@ -23,6 +23,8 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
 
     private static const CUT_RECTANGLE:Rectangle = new Rectangle(0, 2, 70, 20);
 
+    private static const UPDATE_INIT_DATA:String = "updateInitDFata";
+
     public static const SELECTED_VEHICLE:int = 0;
 
     public static const CHOOSE_VEHICLE:int = 1;
@@ -35,7 +37,7 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
 
     public static const ROSTER_SETTINGS:int = 5;
 
-    private static const UPDATE_INIT_DATA:String = "updateInitDFata";
+    public static const ALERT_DATA_TYPE:uint = 1;
 
     public var cutVehicleIcon:MovieClip;
 
@@ -81,7 +83,7 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
 
     public var clickableArea:MovieClip;
 
-    public var _currentViewType:String = "autoSearch";
+    private var _currentViewType:String = "autoSearch";
 
     private var _showAlertIcon:Boolean = false;
 
@@ -120,7 +122,7 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
             this.vehicleLevel.setState(_newFrame);
         }
         super.draw();
-        if (isInvalid(UPDATE_INIT_DATA) && !this._updatedFlag) {
+        if (!this._updatedFlag && isInvalid(UPDATE_INIT_DATA)) {
             if (this._vehicleModel) {
                 this.initMedallion();
             }
@@ -138,10 +140,8 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
     override protected function configUI():void {
         super.configUI();
         mouseChildren = this._clickableAreaEnable;
-        if (enabled) {
-            buttonMode = false;
-            this.updateClickableArea();
-        }
+        this.updateClickableArea(enabled);
+        buttonMode = false;
         this.cutVehicleIcon.mouseEnabled = false;
         this.cutVehicleIconEff.mouseEnabled = false;
         this.vehicleName.mouseEnabled = false;
@@ -168,14 +168,14 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
         this._utils = App.utils;
         this.defaultMsg.text = CYBERSPORT.BUTTON_MEDALLION_AVAILABLEQUANTITY;
         App.soundMgr.removeSoundHdlrs(this);
-        this.alertIcon.addEventListener(MouseEvent.ROLL_OVER, this.onAlertRollOver);
-        this.alertIcon.addEventListener(MouseEvent.ROLL_OUT, this.onAlertRollOut);
+        this.alertIcon.addEventListener(MouseEvent.ROLL_OVER, this.onAlertRollOverHandler);
+        this.alertIcon.addEventListener(MouseEvent.ROLL_OUT, this.onAlertRollOutHandler);
         this.alertIcon.useHandCursor = false;
         this.alertIcon.mouseEnabled = true;
         this.alertIcon.buttonMode = false;
         this.clickableArea.mouseEnabled = true;
-        this.clickableArea.addEventListener(MouseEvent.ROLL_OUT, this.rollOutHandler);
-        this.clickableArea.addEventListener(MouseEvent.ROLL_OVER, this.rollOverHandler);
+        this.clickableArea.addEventListener(MouseEvent.ROLL_OUT, this.onComponentRollOutHandler);
+        this.clickableArea.addEventListener(MouseEvent.ROLL_OVER, this.onComponentRollOverHandler);
     }
 
     override protected function onDispose():void {
@@ -191,11 +191,14 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
             this.rangeView.dispose();
             this.rangeView = null;
         }
+        if (this.vehicleLevel) {
+            this.vehicleLevel.dispose();
+            this.vehicleLevel = null;
+        }
         this.cutVehicleIcon = null;
         this.cutVehicleIconEff = null;
         this.vehicleNameEff = null;
         this.vehicleName = null;
-        this.vehicleLevel = null;
         this.vehicleType = null;
         this.vehicleTypeEff = null;
         this.nationTypeEff = null;
@@ -213,19 +216,19 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
         this._rangeModel = null;
         this._utils = null;
         this._vehicleModel = null;
-        this.alertIcon.removeEventListener(MouseEvent.ROLL_OVER, this.onAlertRollOver);
-        this.alertIcon.removeEventListener(MouseEvent.ROLL_OUT, this.onAlertRollOut);
+        this.alertIcon.removeEventListener(MouseEvent.ROLL_OVER, this.onAlertRollOverHandler);
+        this.alertIcon.removeEventListener(MouseEvent.ROLL_OUT, this.onAlertRollOutHandler);
         this.alertIcon = null;
-        this.clickableArea.removeEventListener(MouseEvent.ROLL_OUT, this.rollOutHandler);
-        this.clickableArea.removeEventListener(MouseEvent.ROLL_OVER, this.rollOverHandler);
-        this.clickableArea.removeEventListener(MouseEvent.CLICK, this.areaOnClickHandler);
+        this.clickableArea.removeEventListener(MouseEvent.ROLL_OUT, this.onComponentRollOutHandler);
+        this.clickableArea.removeEventListener(MouseEvent.ROLL_OVER, this.onComponentRollOverHandler);
+        this.clickableArea.removeEventListener(MouseEvent.CLICK, this.onAreaClickHandler);
         this.clickableArea = null;
         super.onDispose();
     }
 
     override protected function handleRelease(param1:uint = 0):void {
         super.handleRelease(param1);
-        setState(focusIndicator == null ? "out" : "kb_release");
+        setState(focusIndicator == null ? ComponentState.OUT : ComponentState.KB_RELEASE);
         if (!enabled || !this._clickableAreaEnable) {
             return;
         }
@@ -249,6 +252,7 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
     }
 
     public function selectState(param1:Boolean, param2:String = null):void {
+        this._updatedFlag = false;
         this._selectedStateText = param2 == null ? CYBERSPORT.BUTTON_MEDALLION_CHOOSEVEHICLE : param2;
         this._selectSate = param1;
         invalidate(UPDATE_INIT_DATA);
@@ -263,9 +267,9 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
         invalidate(UPDATE_INIT_DATA);
     }
 
-    public function setVehicle(param1:DAAPIDataClass):void {
+    public function setVehicle(param1:VehicleVO):void {
         this.clearData();
-        this._vehicleModel = VehicleVO(param1);
+        this._vehicleModel = param1;
         invalidate(UPDATE_INIT_DATA);
     }
 
@@ -278,20 +282,20 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
     }
 
     private function updateRange():void {
-        this.currentState = RANGE_ROSTER;
-        this.rangeView.setData(this._rangeModel as SettingRosterVO);
+        this._currentState = RANGE_ROSTER;
+        this.rangeView.setData(this._rangeModel);
     }
 
     private function initVehicleCount():void {
         var _loc1_:TextFormat = null;
         if (this._showCommanderSettings) {
-            this.currentState = ROSTER_SETTINGS;
+            this._currentState = ROSTER_SETTINGS;
         }
         else if (this._selectSate) {
-            this.initChooseVehicle();
+            this.applyChooseVehicle();
         }
         else {
-            this.currentState = this.vehicleCount != -1 ? int(COUNT_VEHICLE) : int(DEFAULT_STATE);
+            this._currentState = this.vehicleCount != -1 ? int(COUNT_VEHICLE) : int(DEFAULT_STATE);
             this.vCountMsg.htmlText = this.vehicleCount.toString();
             if (this._vehicleCount == 0) {
                 _loc1_ = this.vCountMsg.getTextFormat();
@@ -302,7 +306,7 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
     }
 
     private function initMedallion():void {
-        this.currentState = SELECTED_VEHICLE;
+        this._currentState = SELECTED_VEHICLE;
         var _loc1_:String = this._utils.nations.getNationName(this._vehicleModel.nationID);
         this.nationType.gotoAndStop(_loc1_);
         this.nationTypeEff.gotoAndStop(_loc1_);
@@ -315,50 +319,39 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
         this.vehicleTypeEff.gotoAndStop(this._vehicleModel.type);
     }
 
-    private function updateClickableArea():void {
-        this.clickableArea.buttonMode = this._clickableAreaEnable;
-        if (this._clickableAreaEnable) {
-            this.clickableArea.addEventListener(MouseEvent.CLICK, this.areaOnClickHandler);
-        }
-        else {
-            this.clickableArea.removeEventListener(MouseEvent.CLICK, this.areaOnClickHandler);
-        }
-    }
-
-    private function initChooseVehicle():void {
-        this.currentState = CHOOSE_VEHICLE;
+    private function applyChooseVehicle():void {
+        this._currentState = CHOOSE_VEHICLE;
         this.chooseVhclAnim.chooseVehicle.text = this._selectedStateText;
         this.chooseVhclAnimEffect.chooseVehicle.text = this._selectedStateText;
-        this.changeViewState();
     }
 
     private function changeViewState():void {
         if (enabled) {
-            if (this.currentState == COUNT_VEHICLE || this.currentState == DEFAULT_STATE || this.currentState == ROSTER_SETTINGS) {
+            if (this._currentState == COUNT_VEHICLE || this._currentState == DEFAULT_STATE || this._currentState == ROSTER_SETTINGS) {
                 this.clickableArea.buttonMode = this._forceSoundEnable;
             }
             else {
                 this.clickableArea.buttonMode = true;
             }
-            if (this.currentState == ROSTER_SETTINGS) {
+            if (this._currentState == ROSTER_SETTINGS) {
                 this.clickableArea.hitArea = this.gearIcon;
             }
             else {
                 this.clickableArea.hitArea = this.clickableArea;
             }
         }
-        this.gearIcon.visible = this.currentState == ROSTER_SETTINGS;
+        this.gearIcon.visible = this._currentState == ROSTER_SETTINGS;
         var _loc1_:Array = [COUNT_VEHICLE, ROSTER_SETTINGS];
         if (!enabled) {
             _loc1_.push(SELECTED_VEHICLE);
         }
-        this.defaultBg.visible = _loc1_.indexOf(this.currentState) == -1;
-        this.nationType.visible = this.nationTypeEff.visible = Boolean(this.currentState == SELECTED_VEHICLE);
-        this.cutVehicleIcon.visible = this.cutVehicleIconEff.visible = Boolean(this.currentState == SELECTED_VEHICLE);
-        this.vehicleName.visible = this.vehicleNameEff.visible = Boolean(this.currentState == SELECTED_VEHICLE);
-        this.vehicleTypeEff.visible = this.vehicleType.visible = Boolean(this.currentState == SELECTED_VEHICLE);
-        this.vehicleLevel.visible = Boolean(this.currentState == SELECTED_VEHICLE);
-        this.btnIconVCount.visible = this.vCountMsg.visible = this.defaultMsg.visible = this.currentState == COUNT_VEHICLE;
+        this.defaultBg.visible = _loc1_.indexOf(this._currentState) == -1;
+        this.nationType.visible = this.nationTypeEff.visible = this._currentState == SELECTED_VEHICLE;
+        this.cutVehicleIcon.visible = this.cutVehicleIconEff.visible = this._currentState == SELECTED_VEHICLE;
+        this.vehicleName.visible = this.vehicleNameEff.visible = this._currentState == SELECTED_VEHICLE;
+        this.vehicleTypeEff.visible = this.vehicleType.visible = this._currentState == SELECTED_VEHICLE;
+        this.vehicleLevel.visible = this._currentState == SELECTED_VEHICLE;
+        this.btnIconVCount.visible = this.vCountMsg.visible = this.defaultMsg.visible = this._currentState == COUNT_VEHICLE;
         this.chooseVhclAnim.visible = this.chooseVhclAnimEffect.visible = this.currentState == CHOOSE_VEHICLE;
         this.bgAnimationSelectVehicle.visible = enabled && this.defaultBg.visible;
         this.bgAnimationSelectVehicleDef.visible = enabled && this.defaultBg.visible;
@@ -403,21 +396,9 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
     }
 
     override public function set enabled(param1:Boolean):void {
-        var _loc2_:Boolean = false;
-        if (enabled == false && param1 == true) {
-            _loc2_ = true;
-        }
         super.enabled = param1;
-        if (param1 == false) {
-            buttonMode = false;
-            mouseChildren = true;
-            this.clickableArea.buttonMode = false;
-            this.clickableArea.removeEventListener(MouseEvent.CLICK, this.areaOnClickHandler);
-        }
-        else if (_loc2_) {
-            mouseChildren = true;
-            this.updateClickableArea();
-        }
+        mouseChildren = true;
+        this.updateClickableArea(param1);
     }
 
     public function get currentViewType():String {
@@ -467,14 +448,23 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
 
     public function set clickableAreaEnable(param1:Boolean):void {
         this._clickableAreaEnable = param1;
+        this.updateClickableArea(enabled);
+    }
+
+    private function updateClickableArea(param1:Boolean):void {
+        this.clickableArea.buttonMode = this._clickableAreaEnable && param1;
+        if (this._clickableAreaEnable && param1) {
+            if (!this.clickableArea.hasEventListener(MouseEvent.CLICK)) {
+                this.clickableArea.addEventListener(MouseEvent.CLICK, this.onAreaClickHandler);
+            }
+        }
+        else {
+            this.clickableArea.removeEventListener(MouseEvent.CLICK, this.onAreaClickHandler);
+        }
     }
 
     public function get currentState():int {
         return this._currentState;
-    }
-
-    public function set currentState(param1:int):void {
-        this._currentState = param1;
     }
 
     public function get showAlertIcon():Boolean {
@@ -497,7 +487,7 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
     override protected function handleMouseRollOut(param1:MouseEvent):void {
     }
 
-    private function rollOverHandler(param1:MouseEvent):void {
+    private function onComponentRollOverHandler(param1:MouseEvent):void {
         super.handleMouseRollOver(param1);
         this.playSounds(param1.type);
         if (!this._mouseOverAlert) {
@@ -505,7 +495,7 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
         }
     }
 
-    private function rollOutHandler(param1:MouseEvent):void {
+    private function onComponentRollOutHandler(param1:MouseEvent):void {
         super.handleMouseRollOut(param1);
         this.playSounds(param1.type);
         if (!this._mouseOverAlert) {
@@ -513,7 +503,7 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
         }
     }
 
-    private function areaOnClickHandler(param1:MouseEvent):void {
+    private function onAreaClickHandler(param1:MouseEvent):void {
         var _loc2_:MouseEventEx = param1 as MouseEventEx;
         var _loc3_:uint = _loc2_ == null ? uint(0) : uint(_loc2_.buttonIdx);
         if (_loc3_ != MouseEventEx.LEFT_BUTTON) {
@@ -529,15 +519,15 @@ public class CSVehicleButton extends SoundButtonEx implements IVehicleButton {
         }
     }
 
-    private function onAlertRollOver(param1:MouseEvent):void {
+    private function onAlertRollOverHandler(param1:MouseEvent):void {
         this._mouseOverAlert = true;
         dispatchEvent(new RallyViewsEvent(RallyViewsEvent.VEH_BTN_ROLL_OVER, {
-            "type": "alert",
+            "type": ALERT_DATA_TYPE,
             "state": this._vehicleModel.state
         }));
     }
 
-    private function onAlertRollOut(param1:MouseEvent):void {
+    private function onAlertRollOutHandler(param1:MouseEvent):void {
         this._mouseOverAlert = false;
         dispatchEvent(new RallyViewsEvent(RallyViewsEvent.VEH_BTN_ROLL_OUT));
         var _loc2_:Point = new Point(mouseX, mouseY);

@@ -13,15 +13,18 @@ public class HorizontalScrollerCursorManager extends Sprite implements IHorizont
 
     public function HorizontalScrollerCursorManager() {
         super();
+        alpha = 0;
         var _loc1_:Shape = new Shape();
-        _loc1_.graphics.beginFill(0, 0);
+        _loc1_.graphics.beginFill(0);
         _loc1_.graphics.drawRect(0, 0, 1, 1);
         _loc1_.graphics.endFill();
         addChild(_loc1_);
         App.cursor.registerDragging(this, Cursors.MOVE);
+        alpha = 0;
     }
 
-    public function dispose():void {
+    public final function dispose():void {
+        this.onDispose();
         App.cursor.unRegisterDragging(this);
         while (numChildren > 0) {
             removeChildAt(0);
@@ -58,6 +61,9 @@ public class HorizontalScrollerCursorManager extends Sprite implements IHorizont
 
     public function stopTouchScroll():void {
         dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP, false));
+    }
+
+    protected function onDispose():void {
     }
 
     public function get enable():Boolean {

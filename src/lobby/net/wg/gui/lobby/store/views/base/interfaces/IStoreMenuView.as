@@ -2,17 +2,18 @@ package net.wg.gui.lobby.store.views.base.interfaces {
 import flash.events.IEventDispatcher;
 
 import net.wg.data.VO.ShopSubFilterData;
+import net.wg.gui.lobby.store.views.data.FiltersVO;
 import net.wg.infrastructure.interfaces.IViewStackContent;
 
 public interface IStoreMenuView extends IViewStackContent, IEventDispatcher {
 
-    function setViewData(param1:Array):void;
+    function setFiltersData(param1:FiltersVO, param2:Boolean):void;
 
     function setSubFilterData(param1:int, param2:ShopSubFilterData):void;
 
     function updateSubFilter(param1:int):void;
 
-    function getFilter():Array;
+    function getFiltersData():FiltersVO;
 
     function resetTemporaryHandlers():void;
 

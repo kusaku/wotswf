@@ -49,13 +49,7 @@ package
       
       public static const PRIVATEQUESTS_ACTIONPANNEL_REPEAT:String = "#tooltips:privateQuests/actionPannel/repeat";
       
-      public static const PRIVATEQUESTS_QUESTCONTROL_NEW:String = "#tooltips:privateQuests/questControl/new";
-      
-      public static const PRIVATEQUESTS_QUESTCONTROL_AVAILABLE:String = "#tooltips:privateQuests/questControl/available";
-      
-      public static const PRIVATEQUESTS_QUESTCONTROL_RECEIVETHEAWARD:String = "#tooltips:privateQuests/questControl/receiveTheAward";
-      
-      public static const PRIVATEQUESTS_QUESTCONTROL_EMPTY:String = "#tooltips:privateQuests/questControl/empty";
+      public static const PRIVATEQUESTS_QUESTCONTROL:String = "#tooltips:privateQuests/questControl";
       
       public static const PRIVATEQUESTS_QUESTSSTATS_TOKEN:String = "#tooltips:privateQuests/questsStats/token";
       
@@ -181,11 +175,15 @@ package
       
       public static const HEADER_BUTTONS_BROWSER:String = "#tooltips:header/buttons/browser";
       
+      public static const HEADER_BUTTONS_ENCYCLOPEDIA:String = "#tooltips:header/buttons/encyclopedia";
+      
       public static const HEADER_ELITEICON:String = "#tooltips:header/eliteIcon";
       
       public static const HEADER_PREMIUM_BUY:String = "#tooltips:header/premium_buy";
       
       public static const HEADER_PREMIUM_EXTEND:String = "#tooltips:header/premium_extend";
+      
+      public static const HEADER_PREMSHOP:String = "#tooltips:header/premShop";
       
       public static const HEADER_REFILL:String = "#tooltips:header/refill";
       
@@ -210,6 +208,8 @@ package
       public static const BARRACKS_TANKMEN_UNLOAD:String = "#tooltips:barracks/tankmen/unload";
       
       public static const BARRACKS_TANKMEN_DISMISS:String = "#tooltips:barracks/tankmen/dismiss";
+      
+      public static const BARRACKS_PLACESCOUNT_DISMISS:String = "#tooltips:barracks/placesCount/dismiss";
       
       public static const VEHICLESELLDIALOG_RENDERER_ALERTICON:String = "#tooltips:vehicleSellDialog/renderer/alertIcon";
       
@@ -264,6 +264,8 @@ package
       public static const LOBY_MESSENGER_SERVICE_BUTTON:String = "#tooltips:loby_messenger/service_button";
       
       public static const LOBY_MESSENGER_CONTACTS_BUTTON:String = "#tooltips:loby_messenger/contacts_button";
+      
+      public static const LOBY_MESSENGER_VEHICLE_COMPARE_BUTTON:String = "#tooltips:loby_messenger/vehicle_compare_button";
       
       public static const LOBY_MESSENGER_CHANNELS_BUTTON:String = "#tooltips:loby_messenger/channels_button";
       
@@ -348,8 +350,6 @@ package
       public static const TURNOFFCOMBATCHAT:String = "#tooltips:turnOffCombatChat";
       
       public static const SHOWMARKSONGUN:String = "#tooltips:showMarksOnGun";
-      
-      public static const SHOWBATTLEEFFICIENCYRIBBONS:String = "#tooltips:showBattleEfficiencyRibbons";
       
       public static const SHOWSIMPLIFIEDVEHPARAMS:String = "#tooltips:showSimplifiedVehParams";
       
@@ -779,7 +779,7 @@ package
       
       public static const AWARDITEM_FREEXP:String = "#tooltips:awardItem/freeXP";
       
-      public static const AWARDITEM_PREMDAYS:String = "#tooltips:awardItem/premDays";
+      public static const AWARDITEM_PREMIUM:String = "#tooltips:awardItem/premium";
       
       public static const FALLOUTBATTLESELECTORWINDOW_BTNINSQUADDISABLED:String = "#tooltips:falloutBattleSelectorWindow/btnInSquadDisabled";
       
@@ -790,8 +790,6 @@ package
       public static const SOUNDQUALITY:String = "#tooltips:soundQuality";
       
       public static const SOUND_DYNAMICRANGE_HELP:String = "#tooltips:sound/dynamicRange/help";
-      
-      public static const SOUND_SOUNDDEVICE_HELP:String = "#tooltips:sound/soundDevice/help";
       
       public static const RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED:String = "#tooltips:researchPage/vehicle/status/parentModuleIsLocked";
       
@@ -808,6 +806,26 @@ package
       public static const SQUADWINDOW_INFOICON_TECH:String = "#tooltips:squadWindow/infoIcon/tech";
       
       public static const VEHICLEPREVIEW_CREW:String = "#tooltips:vehiclePreview/crew";
+      
+      public static const RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_ADD:String = "#tooltips:researchPage/vehicle/button/compare/add";
+      
+      public static const RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_DISABLED:String = "#tooltips:researchPage/vehicle/button/compare/disabled";
+      
+      public static const VEHICLEPREVIEW_VEHICLEPANEL_INFO:String = "#tooltips:vehiclePreview/vehiclePanel/info";
+      
+      public static const RECEIVECLANINVITESNOTIFICATIONS:String = "#tooltips:receiveClanInvitesNotifications";
+      
+      public static const SETTINGS_DAMAGELOG_DETAILS:String = "#tooltips:settings/damagelog/details";
+      
+      public static const DISMISSTANKMANDIALOG_CANTRESTORALERT:String = "#tooltips:dismissTankmanDialog/cantRestorAlert";
+      
+      public static const TEMPLATE_DAYS_SHORT:String = "#tooltips:template/days/short";
+      
+      public static const TEMPLATE_HOURS_SHORT:String = "#tooltips:template/hours/short";
+      
+      public static const TEMPLATE_MINUTES_SHORT:String = "#tooltips:template/minutes/short";
+      
+      public static const TEMPLATE_TIME_LESSTHENMINUTE:String = "#tooltips:template/time/lessThenMinute";
       
       public static const PREMIUM_DAYS_HEADER:String = "#tooltips:premium/days/header";
       
@@ -907,27 +925,9 @@ package
       
       public static const PRIVATEQUESTS_ACTIONPANNEL_REPEAT_NOTE:String = PRIVATEQUESTS_ACTIONPANNEL_REPEAT + "/note";
       
-      public static const PRIVATEQUESTS_QUESTCONTROL_NEW_HEADER:String = PRIVATEQUESTS_QUESTCONTROL_NEW + "/header";
+      public static const PRIVATEQUESTS_QUESTCONTROL_HEADER:String = PRIVATEQUESTS_QUESTCONTROL + "/header";
       
-      public static const PRIVATEQUESTS_QUESTCONTROL_NEW_BODY:String = PRIVATEQUESTS_QUESTCONTROL_NEW + "/body";
-      
-      public static const PRIVATEQUESTS_QUESTCONTROL_NEW_ATTENTION:String = PRIVATEQUESTS_QUESTCONTROL_NEW + "/attention";
-      
-      public static const PRIVATEQUESTS_QUESTCONTROL_AVAILABLE_HEADER:String = PRIVATEQUESTS_QUESTCONTROL_AVAILABLE + "/header";
-      
-      public static const PRIVATEQUESTS_QUESTCONTROL_AVAILABLE_BODY:String = PRIVATEQUESTS_QUESTCONTROL_AVAILABLE + "/body";
-      
-      public static const PRIVATEQUESTS_QUESTCONTROL_AVAILABLE_ATTENTION:String = PRIVATEQUESTS_QUESTCONTROL_AVAILABLE + "/attention";
-      
-      public static const PRIVATEQUESTS_QUESTCONTROL_RECEIVETHEAWARD_HEADER:String = PRIVATEQUESTS_QUESTCONTROL_RECEIVETHEAWARD + "/header";
-      
-      public static const PRIVATEQUESTS_QUESTCONTROL_RECEIVETHEAWARD_BODY:String = PRIVATEQUESTS_QUESTCONTROL_RECEIVETHEAWARD + "/body";
-      
-      public static const PRIVATEQUESTS_QUESTCONTROL_RECEIVETHEAWARD_ATTENTION:String = PRIVATEQUESTS_QUESTCONTROL_RECEIVETHEAWARD + "/attention";
-      
-      public static const PRIVATEQUESTS_QUESTCONTROL_EMPTY_HEADER:String = PRIVATEQUESTS_QUESTCONTROL_EMPTY + "/header";
-      
-      public static const PRIVATEQUESTS_QUESTCONTROL_EMPTY_BODY:String = PRIVATEQUESTS_QUESTCONTROL_EMPTY + "/body";
+      public static const PRIVATEQUESTS_QUESTCONTROL_BODY:String = PRIVATEQUESTS_QUESTCONTROL + "/body";
       
       public static const PRIVATEQUESTS_QUESTSSTATS_TOKEN_HEADER:String = PRIVATEQUESTS_QUESTSSTATS_TOKEN + "/header";
       
@@ -1157,6 +1157,10 @@ package
       
       public static const SETTINGS_MINIMAPCIRCLES_DRAWRANGE_BODY:String = "#tooltips:settings/minimapCircles/drawRange/body";
       
+      public static const SETTINGS_DAMAGELOG_DETAILS_HEADER:String = SETTINGS_DAMAGELOG_DETAILS + "/header";
+      
+      public static const SETTINGS_DAMAGELOG_DETAILS_BODY:String = SETTINGS_DAMAGELOG_DETAILS + "/body";
+      
       public static const LOBBYMENU_VERSIONINFOBUTTON_BODY:String = LOBBYMENU_VERSIONINFOBUTTON + "/body";
       
       public static const WINDOWHELP_HEADER:String = WINDOWHELP + "/header";
@@ -1201,6 +1205,10 @@ package
       
       public static const RECEIVEINVITESINBATTLE_BODY:String = RECEIVEINVITESINBATTLE + "/body";
       
+      public static const RECEIVECLANINVITESNOTIFICATIONS_HEADER:String = RECEIVECLANINVITESNOTIFICATIONS + "/header";
+      
+      public static const RECEIVECLANINVITESNOTIFICATIONS_BODY:String = RECEIVECLANINVITESNOTIFICATIONS + "/body";
+      
       public static const CHATCONTACTSLISTONLY_HEADER:String = CHATCONTACTSLISTONLY + "/header";
       
       public static const CHATCONTACTSLISTONLY_BODY:String = CHATCONTACTSLISTONLY + "/body";
@@ -1231,10 +1239,6 @@ package
       
       public static const SHOWSECTORONMAP_BODY:String = SHOWSECTORONMAP + "/body";
       
-      public static const SHOWBATTLEEFFICIENCYRIBBONS_HEADER:String = SHOWBATTLEEFFICIENCYRIBBONS + "/header";
-      
-      public static const SHOWBATTLEEFFICIENCYRIBBONS_BODY:String = SHOWBATTLEEFFICIENCYRIBBONS + "/body";
-      
       public static const SHOWSIMPLIFIEDVEHPARAMS_HEADER:String = SHOWSIMPLIFIEDVEHPARAMS + "/header";
       
       public static const SHOWSIMPLIFIEDVEHPARAMS_BODY:String = SHOWSIMPLIFIEDVEHPARAMS + "/body";
@@ -1251,17 +1255,9 @@ package
       
       public static const SOUNDQUALITYON_BODY:String = SOUNDQUALITY + "On/body";
       
-      public static const SOUNDQUALITY_HEADER:String = SOUNDQUALITY + "/header";
-      
-      public static const SOUNDQUALITY_BODY:String = SOUNDQUALITY + "/body";
-      
       public static const SOUND_DYNAMICRANGE_HELP_HEADER:String = SOUND_DYNAMICRANGE_HELP + "/header";
       
       public static const SOUND_DYNAMICRANGE_HELP_BODY:String = SOUND_DYNAMICRANGE_HELP + "/body";
-      
-      public static const SOUND_SOUNDDEVICE_HELP_HEADER:String = SOUND_SOUNDDEVICE_HELP + "/header";
-      
-      public static const SOUND_SOUNDDEVICE_HELP_BODY:String = SOUND_SOUNDDEVICE_HELP + "/body";
       
       public static const GOLD_HEADER:String = "#tooltips:gold/header";
       
@@ -1497,6 +1493,14 @@ package
       
       public static const MEMBERS_INVALIDVEHICLETYPE_BODY:String = "#tooltips:members/invalidVehicleType/body";
       
+      public static const HANGAR_STARTBTN_SQUADNOTREADY_HEADER:String = "#tooltips:hangar/startBtn/squadNotReady/header";
+      
+      public static const HANGAR_STARTBTN_SQUADNOTREADY_BODY:String = "#tooltips:hangar/startBtn/squadNotReady/body";
+      
+      public static const HANGAR_TANKCARUSEL_WRONGSQUADVEHICLE_HEADER:String = "#tooltips:hangar/tankCarusel/wrongSquadVehicle/header";
+      
+      public static const HANGAR_TANKCARUSEL_WRONGSQUADVEHICLE_BODY:String = "#tooltips:hangar/tankCarusel/wrongSquadVehicle/body";
+      
       public static const ACHIEVEMENT_HISTORYDESCRIPTIONHEADER:String = "#tooltips:achievement/historyDescriptionHeader";
       
       public static const ACHIEVEMENT_CURRENTDEGREE:String = "#tooltips:achievement/currentDegree";
@@ -1622,6 +1626,10 @@ package
       public static const HEADER_PREMIUM_EXTEND_HEADER:String = HEADER_PREMIUM_EXTEND + "/header";
       
       public static const HEADER_PREMIUM_EXTEND_BODY:String = HEADER_PREMIUM_EXTEND + "/body";
+      
+      public static const HEADER_PREMSHOP_HEADER:String = HEADER_PREMSHOP + "/header";
+      
+      public static const HEADER_PREMSHOP_BODY:String = HEADER_PREMSHOP + "/body";
       
       public static const HEADER_SQUAD_MEMBER_HEADER:String = HEADER_SQUAD + "_member/header";
       
@@ -1957,6 +1965,10 @@ package
       
       public static const LOBY_MESSENGER_CONTACTS_BUTTON_BODY:String = LOBY_MESSENGER_CONTACTS_BUTTON + "/body";
       
+      public static const LOBY_MESSENGER_VEHICLE_COMPARE_BUTTON_HEADER:String = LOBY_MESSENGER_VEHICLE_COMPARE_BUTTON + "/header";
+      
+      public static const LOBY_MESSENGER_VEHICLE_COMPARE_BUTTON_BODY:String = LOBY_MESSENGER_VEHICLE_COMPARE_BUTTON + "/body";
+      
       public static const LOBY_MESSENGER_CHANNELS_BUTTON_HEADER:String = LOBY_MESSENGER_CHANNELS_BUTTON + "/header";
       
       public static const LOBY_MESSENGER_CHANNELS_BUTTON_BODY:String = LOBY_MESSENGER_CHANNELS_BUTTON + "/body";
@@ -2011,6 +2023,20 @@ package
       
       public static const BARRACKS_TANKMEN_DISMISS_BODY:String = BARRACKS_TANKMEN_DISMISS + "/body";
       
+      public static const BARRACKS_TANKMEN_RECOVERYBTN_HEADER:String = "#tooltips:barracks/tankmen/recoveryBtn/header";
+      
+      public static const BARRACKS_TANKMEN_RECOVERY_HEADER:String = "#tooltips:barracks/tankmen/recovery/header";
+      
+      public static const BARRACKS_TANKMEN_RECOVERY_FREE_BODY:String = "#tooltips:barracks/tankmen/recovery/free/body";
+      
+      public static const BARRACKS_TANKMEN_RECOVERY_GOLD_BODY:String = "#tooltips:barracks/tankmen/recovery/gold/body";
+      
+      public static const BARRACKS_PLACESCOUNT_DISMISS_HEADER:String = BARRACKS_PLACESCOUNT_DISMISS + "/header";
+      
+      public static const BARRACKS_PLACESCOUNT_DISMISS_BODY:String = BARRACKS_PLACESCOUNT_DISMISS + "/body";
+      
+      public static const BARRACKS_TANKMEN_RECOVERY_NEWSKILL:String = "#tooltips:barracks/tankmen/recovery/newSkill";
+      
       public static const HEADER_INFO_PLAYERS_UNAVAILABLE_HEADER:String = HEADER_INFO_PLAYERS_UNAVAILABLE + "/header";
       
       public static const HEADER_INFO_PLAYERS_UNAVAILABLE_BODY:String = HEADER_INFO_PLAYERS_UNAVAILABLE + "/body";
@@ -2058,6 +2084,10 @@ package
       public static const HEADER_BUTTONS_BROWSER_HEADER:String = HEADER_BUTTONS_BROWSER + "/header";
       
       public static const HEADER_BUTTONS_BROWSER_BODY:String = HEADER_BUTTONS_BROWSER + "/body";
+      
+      public static const HEADER_BUTTONS_ENCYCLOPEDIA_HEADER:String = HEADER_BUTTONS_ENCYCLOPEDIA + "/header";
+      
+      public static const HEADER_BUTTONS_ENCYCLOPEDIA_BODY:String = HEADER_BUTTONS_ENCYCLOPEDIA + "/body";
       
       public static const BARRACKS_ITEM_EMPTY_HEADER:String = BARRACKS_ITEM_EMPTY + "/header";
       
@@ -2237,6 +2267,8 @@ package
       
       public static const VEHICLE_CREW:String = "#tooltips:vehicle/crew";
       
+      public static const VEHICLE_CREW_AWARD:String = "#tooltips:vehicle/crew_award";
+      
       public static const VEHICLE_AMMO:String = "#tooltips:vehicle/ammo";
       
       public static const VEHICLE_XP:String = "#tooltips:vehicle/xp";
@@ -2246,6 +2278,8 @@ package
       public static const VEHICLE_UNLOCK_PRICE:String = "#tooltips:vehicle/unlock_price";
       
       public static const VEHICLE_BUY_PRICE:String = "#tooltips:vehicle/buy_price";
+      
+      public static const VEHICLE_RESTORE_PRICE:String = "#tooltips:vehicle/restore_price";
       
       public static const VEHICLE_ACTION_PRC:String = "#tooltips:vehicle/action_prc";
       
@@ -2276,6 +2310,16 @@ package
       public static const VEHICLE_RENTLEFT_DAYS:String = "#tooltips:vehicle/rentLeft/days";
       
       public static const VEHICLE_RENTLEFT_HOURS:String = "#tooltips:vehicle/rentLeft/hours";
+      
+      public static const VEHICLE_RENTLEFTFUTURE_DAYS:String = "#tooltips:vehicle/rentLeftFuture/days";
+      
+      public static const VEHICLE_RENTLEFTFUTURE_HOURS:String = "#tooltips:vehicle/rentLeftFuture/hours";
+      
+      public static const VEHICLE_RENTAVAILABLE:String = "#tooltips:vehicle/rentAvailable";
+      
+      public static const VEHICLE_RESTORELEFT_DAYS:String = "#tooltips:vehicle/restoreLeft/days";
+      
+      public static const VEHICLE_RESTORELEFT_HOURS:String = "#tooltips:vehicle/restoreLeft/hours";
       
       public static const VEHICLE_RENTLEFT_BATTLES:String = "#tooltips:vehicle/rentLeft/battles";
       
@@ -2314,8 +2358,6 @@ package
       public static const QUESTS_STATUS_NOTREADY:String = "#tooltips:quests/status/notready";
       
       public static const QUESTS_STATUS_NOTDONE:String = "#tooltips:quests/status/notDone";
-      
-      public static const QUESTS_COMPLEXTASK_LABEL:String = "#tooltips:quests/complexTask/label";
       
       public static const QUESTS_RENDERER_LABEL:String = "#tooltips:quests/renderer/label";
       
@@ -2377,6 +2419,10 @@ package
       
       public static const VEHICLESTATUS_INHANGAR_HEADER:String = "#tooltips:vehicleStatus/inHangar/header";
       
+      public static const VEHICLESTATUS_RESTORECOOLDOWN_DAYS:String = "#tooltips:vehicleStatus/restoreCooldown/days";
+      
+      public static const VEHICLESTATUS_RESTORECOOLDOWN_HOURS:String = "#tooltips:vehicleStatus/restoreCooldown/hours";
+      
       public static const VEHICLESTATUS_SERVERRESTRICTION_HEADER:String = "#tooltips:vehicleStatus/serverRestriction/header";
       
       public static const VEHICLESTATUS_DEALISOVER_HEADER:String = "#tooltips:vehicleStatus/dealIsOver/header";
@@ -2390,6 +2436,8 @@ package
       public static const VEHICLESTATUS_NOTENOUGHGOLD_HEADER:String = "#tooltips:vehicleStatus/notEnoughGold/header";
       
       public static const VEHICLESTATUS_NOTENOUGHGOLD_TEXT:String = "#tooltips:vehicleStatus/notEnoughGold/text";
+      
+      public static const VEHICLESTATUS_OPERATIONERROR_HEADER:String = "#tooltips:vehicleStatus/operationError/header";
       
       public static const VEHICLESTATUS_NOTSUITABLE_HEADER:String = "#tooltips:vehicleStatus/notSuitable/header";
       
@@ -2473,6 +2521,14 @@ package
       
       public static const RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED_TEXT:String = RESEARCHPAGE_VEHICLE_STATUS_PARENTMODULEISLOCKED + "/text";
       
+      public static const RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_ADD_HEADER:String = RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_ADD + "/header";
+      
+      public static const RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_ADD_BODY:String = RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_ADD + "/body";
+      
+      public static const RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_DISABLED_HEADER:String = RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_DISABLED + "/header";
+      
+      public static const RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_DISABLED_BODY:String = RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_DISABLED + "/body";
+      
       public static const TECHTREEPAGE_NATIONS_USSR:String = "#tooltips:techTreePage/nations/ussr";
       
       public static const TECHTREEPAGE_NATIONS_GERMANY:String = "#tooltips:techTreePage/nations/germany";
@@ -2494,6 +2550,10 @@ package
       public static const VEHICLESELLDIALOG_RENDERER_ALERTICON_HEADER:String = VEHICLESELLDIALOG_RENDERER_ALERTICON + "/header";
       
       public static const VEHICLESELLDIALOG_RENDERER_ALERTICON_BODY:String = VEHICLESELLDIALOG_RENDERER_ALERTICON + "/body";
+      
+      public static const VEHICLESELLDIALOG_CREW_ALERTICON_RECOVERY_HEADER:String = "#tooltips:vehicleSellDialog/crew/alertIcon/recovery/header";
+      
+      public static const VEHICLESELLDIALOG_CREW_ALERTICON_RECOVERY_BODY:String = "#tooltips:vehicleSellDialog/crew/alertIcon/recovery/body";
       
       public static const ACHIEVEMENT_CUSTOM_NOTENOUGH:String = "#tooltips:achievement/custom/notEnough";
       
@@ -3707,6 +3767,20 @@ package
       
       public static const BATTLERESULTS_VICTORYSCOREDESCRIPTION_DAMAGEPATTERN:String = BATTLERESULTS_VICTORYSCOREDESCRIPTION + "/damagePattern";
       
+      public static const BATTLERESULTS_EFFICIENCYHEADER_SUMMSPOTTED:String = "#tooltips:battleResults/efficiencyHeader/summSpotted";
+      
+      public static const BATTLERESULTS_EFFICIENCYHEADER_SUMMASSIST:String = "#tooltips:battleResults/efficiencyHeader/summAssist";
+      
+      public static const BATTLERESULTS_EFFICIENCYHEADER_SUMMARMOR:String = "#tooltips:battleResults/efficiencyHeader/summArmor";
+      
+      public static const BATTLERESULTS_EFFICIENCYHEADER_SUMMCRITS:String = "#tooltips:battleResults/efficiencyHeader/summCrits";
+      
+      public static const BATTLERESULTS_EFFICIENCYHEADER_SUMMDAMAGE:String = "#tooltips:battleResults/efficiencyHeader/summDamage";
+      
+      public static const BATTLERESULTS_EFFICIENCYHEADER_SUMMKILL:String = "#tooltips:battleResults/efficiencyHeader/summKill";
+      
+      public static const BATTLERESULTS_EFFICIENCYHEADER_VALUE:String = "#tooltips:battleResults/efficiencyHeader/value";
+      
       public static const STATICFORMATIONSUMMARYVIEW_STATS_BATTLES_HEADER:String = STATICFORMATIONSUMMARYVIEW_STATS_BATTLES + "/header";
       
       public static const STATICFORMATIONSUMMARYVIEW_STATS_BATTLES_BODY:String = STATICFORMATIONSUMMARYVIEW_STATS_BATTLES + "/body";
@@ -4131,6 +4205,8 @@ package
       
       public static const HANGARTUTORIAL_RESEARCHTREE_BUTTONSBLOCK_INHANGAR:String = "#tooltips:hangarTutorial/researchTree/buttonsBlock/inHangar";
       
+      public static const HANGARTUTORIAL_RESEARCHTREE_BUTTONSBLOCK_ADDTOCOMPARE:String = "#tooltips:hangarTutorial/researchTree/buttonsBlock/addToCompare";
+      
       public static const HANGARTUTORIAL_PERSONALCASE_SKILLS_TITLE:String = "#tooltips:hangarTutorial/personalCase/skills/title";
       
       public static const HANGARTUTORIAL_PERSONALCASE_SKILLS_HEADERDESCRIPTION:String = "#tooltips:hangarTutorial/personalCase/skills/headerDescription";
@@ -4299,9 +4375,53 @@ package
       
       public static const AWARDITEM_FREEXP_BODY:String = AWARDITEM_FREEXP + "/body";
       
-      public static const AWARDITEM_PREMDAYS_HEADER:String = AWARDITEM_PREMDAYS + "/header";
+      public static const AWARDITEM_PREMIUM_HEADER:String = AWARDITEM_PREMIUM + "/header";
       
-      public static const AWARDITEM_PREMDAYS_BODY:String = AWARDITEM_PREMDAYS + "/body";
+      public static const AWARDITEM_PREMIUM_BODY:String = AWARDITEM_PREMIUM + "/body";
+      
+      public static const AWARDITEM_BERTHS_HEADER:String = "#tooltips:awardItem/berths/header";
+      
+      public static const AWARDITEM_BERTHS_BODY:String = "#tooltips:awardItem/berths/body";
+      
+      public static const AWARDITEM_CREDITSFACTOR_HEADER:String = AWARDITEM_CREDITS + "Factor/header";
+      
+      public static const AWARDITEM_CREDITSFACTOR_BODY:String = AWARDITEM_CREDITS + "Factor/body";
+      
+      public static const AWARDITEM_FREEXPFACTOR_HEADER:String = AWARDITEM_FREEXP + "Factor/header";
+      
+      public static const AWARDITEM_FREEXPFACTOR_BODY:String = AWARDITEM_FREEXP + "Factor/body";
+      
+      public static const AWARDITEM_TANKMENXP_HEADER:String = "#tooltips:awardItem/tankmenXP/header";
+      
+      public static const AWARDITEM_TANKMENXP_BODY:String = "#tooltips:awardItem/tankmenXP/body";
+      
+      public static const AWARDITEM_TANKMENXPFACTOR_HEADER:String = "#tooltips:awardItem/tankmenXPFactor/header";
+      
+      public static const AWARDITEM_TANKMENXPFACTOR_BODY:String = "#tooltips:awardItem/tankmenXPFactor/body";
+      
+      public static const AWARDITEM_XP_HEADER:String = "#tooltips:awardItem/xp/header";
+      
+      public static const AWARDITEM_XP_BODY:String = "#tooltips:awardItem/xp/body";
+      
+      public static const AWARDITEM_XPFACTOR_HEADER:String = "#tooltips:awardItem/xpFactor/header";
+      
+      public static const AWARDITEM_XPFACTOR_BODY:String = "#tooltips:awardItem/xpFactor/body";
+      
+      public static const AWARDITEM_SLOTS_HEADER:String = "#tooltips:awardItem/slots/header";
+      
+      public static const AWARDITEM_SLOTS_BODY:String = "#tooltips:awardItem/slots/body";
+      
+      public static const AWARDITEM_TOKENS_HEADER:String = "#tooltips:awardItem/tokens/header";
+      
+      public static const AWARDITEM_TOKENS_BODY:String = "#tooltips:awardItem/tokens/body";
+      
+      public static const AWARDITEM_TANKMEN_HEADER:String = "#tooltips:awardItem/tankmen/header";
+      
+      public static const AWARDITEM_TANKMEN_BODY:String = "#tooltips:awardItem/tankmen/body";
+      
+      public static const AWARDITEM_TANKWOMEN_HEADER:String = "#tooltips:awardItem/tankwomen/header";
+      
+      public static const AWARDITEM_TANKWOMEN_BODY:String = "#tooltips:awardItem/tankwomen/body";
       
       public static const CUSTOMIZATION_HEADERCLOSEBTN_HEADER:String = "#tooltips:customization/headerCloseBtn/header";
       
@@ -4523,7 +4643,55 @@ package
       
       public static const VEHICLEPREVIEW_CREW_ADDITIONALROLES:String = VEHICLEPREVIEW_CREW + "/additionalRoles";
       
+      public static const VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER:String = VEHICLEPREVIEW_VEHICLEPANEL_INFO + "/header";
+      
+      public static const VEHICLEPREVIEW_VEHICLEPANEL_INFO_BODY:String = VEHICLEPREVIEW_VEHICLEPANEL_INFO + "/body";
+      
       public static const SQUADWINDOW_EVENTVEHICLE:String = "#tooltips:squadWindow/eventVehicle";
+      
+      public static const DISMISSTANKMANDIALOG_CANTRESTORALERT_HEADER:String = DISMISSTANKMANDIALOG_CANTRESTORALERT + "/header";
+      
+      public static const DISMISSTANKMANDIALOG_CANTRESTORALERT_BODY:String = DISMISSTANKMANDIALOG_CANTRESTORALERT + "/body";
+      
+      public static const DISMISSTANKMANDIALOG_BUFFERISFULL_HEADER:String = "#tooltips:dismissTankmanDialog/bufferIsFull/header";
+      
+      public static const DISMISSTANKMANDIALOG_BUFFERISFULL_BODY:String = "#tooltips:dismissTankmanDialog/bufferIsFull/body";
+      
+      public static const DISMISSTANKMANDIALOG_BUFFERISFULLMULTIPLE_BODY:String = "#tooltips:dismissTankmanDialog/bufferIsFullMultiple/body";
+      
+      public static const NOTIFICATIONSVIEW_TAB_INFO_BODY:String = "#tooltips:notificationsView/tab/info/body";
+      
+      public static const NOTIFICATIONSVIEW_TAB_INVITES_BODY:String = "#tooltips:notificationsView/tab/invites/body";
+      
+      public static const NOTIFICATIONSVIEW_TAB_OFFERS_BODY:String = "#tooltips:notificationsView/tab/offers/body";
+      
+      public static const HANGAR_HEADER_BATTLEQUESTS_AVAILABLE_HEADER:String = "#tooltips:hangar/header/battleQuests/available/header";
+      
+      public static const HANGAR_HEADER_BATTLEQUESTS_AVAILABLE_BODY:String = "#tooltips:hangar/header/battleQuests/available/body";
+      
+      public static const HANGAR_HEADER_BATTLEQUESTS_DISABLED_HEADER:String = "#tooltips:hangar/header/battleQuests/disabled/header";
+      
+      public static const HANGAR_HEADER_BATTLEQUESTS_DISABLED_BODY:String = "#tooltips:hangar/header/battleQuests/disabled/body";
+      
+      public static const HANGAR_HEADER_PERSONALQUESTS_DISABLED_HEADER:String = "#tooltips:hangar/header/personalQuests/disabled/header";
+      
+      public static const HANGAR_HEADER_PERSONALQUESTS_DISABLED_BODY:String = "#tooltips:hangar/header/personalQuests/disabled/body";
+      
+      public static const HANGAR_HEADER_PERSONALQUESTS_UNAVAILABLE_HEADER:String = "#tooltips:hangar/header/personalQuests/unavailable/header";
+      
+      public static const HANGAR_HEADER_PERSONALQUESTS_UNAVAILABLE_BODY:String = "#tooltips:hangar/header/personalQuests/unavailable/body";
+      
+      public static const HANGAR_HEADER_PERSONALQUESTS_AVAILABLE_HEADER:String = "#tooltips:hangar/header/personalQuests/available/header";
+      
+      public static const HANGAR_HEADER_PERSONALQUESTS_AVAILABLE_BODY:String = "#tooltips:hangar/header/personalQuests/available/body";
+      
+      public static const HANGAR_HEADER_PERSONALQUESTS_INPROGRESS_HEADER:String = "#tooltips:hangar/header/personalQuests/inprogress/header";
+      
+      public static const HANGAR_HEADER_PERSONALQUESTS_INPROGRESS_BODY:String = "#tooltips:hangar/header/personalQuests/inprogress/body";
+      
+      public static const HANGAR_HEADER_PERSONALQUESTS_AWARD_HEADER:String = "#tooltips:hangar/header/personalQuests/award/header";
+      
+      public static const HANGAR_HEADER_PERSONALQUESTS_AWARD_BODY:String = "#tooltips:hangar/header/personalQuests/award/body";
       
       public static const TANK_PARAMS_DESC_ENUM:Array = [TANK_PARAMS_DESC_MAXHEALTH,TANK_PARAMS_DESC_VEHICLEWEIGHT,TANK_PARAMS_DESC_ENGINEPOWER,TANK_PARAMS_DESC_ENGINEPOWERPERTON,TANK_PARAMS_DESC_SPEEDLIMITS,TANK_PARAMS_DESC_CHASSISROTATIONSPEED,TANK_PARAMS_DESC_HULLARMOR,TANK_PARAMS_DESC_TURRETARMOR,TANK_PARAMS_DESC_RELOADTIME,TANK_PARAMS_DESC_RELOADTIMESECS,TANK_PARAMS_DESC_PIERCINGPOWER,TANK_PARAMS_DESC_DAMAGE,TANK_PARAMS_DESC_DAMAGEAVG,TANK_PARAMS_DESC_DAMAGEAVGPERMINUTE,TANK_PARAMS_DESC_TURRETROTATIONSPEED,TANK_PARAMS_DESC_GUNROTATIONSPEED,TANK_PARAMS_DESC_CIRCULARVISIONRADIUS,TANK_PARAMS_DESC_RADIODISTANCE,TANK_PARAMS_DESC_TURRETYAWLIMITS,TANK_PARAMS_DESC_PITCHLIMITS,TANK_PARAMS_DESC_GUNYAWLIMITS,TANK_PARAMS_DESC_CLIPFIRERATE,TANK_PARAMS_DESC_RELATIVEPOWER,TANK_PARAMS_DESC_RELATIVEARMOR,TANK_PARAMS_DESC_RELATIVEMOBILITY,TANK_PARAMS_DESC_RELATIVEVISIBILITY,TANK_PARAMS_DESC_RELATIVECAMOUFLAGE,TANK_PARAMS_DESC_SHOTDISPERSIONANGLE,TANK_PARAMS_DESC_AIMINGTIME,TANK_PARAMS_DESC_EXPLOSIONRADIUS,TANK_PARAMS_DESC_INVISIBILITYSTILLFACTOR,TANK_PARAMS_DESC_INVISIBILITYMOVINGFACTOR];
       
@@ -4531,7 +4699,9 @@ package
       
       public static const TECHTREEPAGE_NATIONS_ENUM:Array = [TECHTREEPAGE_NATIONS_USSR,TECHTREEPAGE_NATIONS_GERMANY,TECHTREEPAGE_NATIONS_USA,TECHTREEPAGE_NATIONS_CHINA,TECHTREEPAGE_NATIONS_FRANCE,TECHTREEPAGE_NATIONS_UK,TECHTREEPAGE_NATIONS_JAPAN,TECHTREEPAGE_NATIONS_CZECH,TECHTREEPAGE_NATIONS_SWEDEN];
       
-      public static const VEHICLE_RENTLEFT_ENUM:Array = [VEHICLE_RENTLEFT_DAYS,VEHICLE_RENTLEFT_HOURS,VEHICLE_RENTLEFT_BATTLES];
+      public static const VEHICLE_RENTLEFT_ENUM:Array = [VEHICLE_RENTLEFT_DAYS,VEHICLE_RENTLEFT_HOURS,VEHICLE_RENTLEFTFUTURE_DAYS,VEHICLE_RENTLEFTFUTURE_HOURS,VEHICLE_RENTLEFT_BATTLES];
+      
+      public static const BATTLERESULTS_EFFICIENCYHEADER_ENUM:Array = [BATTLERESULTS_EFFICIENCYHEADER_SUMMSPOTTED,BATTLERESULTS_EFFICIENCYHEADER_SUMMASSIST,BATTLERESULTS_EFFICIENCYHEADER_SUMMARMOR,BATTLERESULTS_EFFICIENCYHEADER_SUMMCRITS,BATTLERESULTS_EFFICIENCYHEADER_SUMMDAMAGE,BATTLERESULTS_EFFICIENCYHEADER_SUMMKILL,BATTLERESULTS_EFFICIENCYHEADER_VALUE];
       
       public static const FORTIFICATION_TRANSPORTING_ENUM:Array = [FORTIFICATION_TRANSPORTING_EMPTYSTORAGE_HEADER,FORTIFICATION_TRANSPORTING_EMPTYSTORAGE_BODY,FORTIFICATION_TRANSPORTING_COOLDOWN_HEADER,FORTIFICATION_TRANSPORTING_COOLDOWN_BODY,FORTIFICATION_TRANSPORTING_FOUNDATION_HEADER,FORTIFICATION_TRANSPORTING_FOUNDATION_BODY,FORTIFICATION_TRANSPORTING_NOTEMPTYSPACE_HEADER,FORTIFICATION_TRANSPORTING_NOTEMPTYSPACE_BODY];
       
@@ -4551,7 +4721,7 @@ package
       
       public static const ACHIEVEMENT_PARAMS_LEFT_ENUM:Array = [ACHIEVEMENT_PARAMS_LEFT4,ACHIEVEMENT_PARAMS_LEFT3,ACHIEVEMENT_PARAMS_LEFT2,ACHIEVEMENT_PARAMS_LEFT1];
       
-      public static const VEHICLE_ENUM:Array = [VEHICLE_GRAPH_NOTES_SHOWCONTEXTMENU,VEHICLE_GRAPH_NOTES_SHOWINFOWINDOW,VEHICLE_GRAPH_NOTES_VEHICLEUNLOCK,VEHICLE_GRAPH_NOTES_MODULEUNLOCK,VEHICLE_GRAPH_NOTES_EQUIP,VEHICLE_GRAPH_NOTES_BUYANDEQUIP,VEHICLE_GRAPH_NOTES_GOTONATIONTREE,VEHICLE_GRAPH_NOTES_GOTONEXTVEHICLE,VEHICLE_GRAPH_BODY_MODULEINSTALLED,VEHICLE_GRAPH_BODY_NOTENOUGH,VEHICLEPARAMS_SPEEDLIMITS,VEHICLEPARAMS_ENGINEPOWER,VEHICLEPARAMS_CHASSISROTATIONSPEED,VEHICLEPARAMS_DAMAGE,VEHICLEPARAMS_HULLARMOR,VEHICLEPARAMS_TURRETARMOR,VEHICLEPARAMS_PIERCINGPOWER,VEHICLE_INVENTORYCOUNT,VEHICLE_VEHICLECOUNT,VEHICLE_LEVEL,VEHICLE_MASTERING,VEHICLE_MASTERING_VERYSIMPLE,VEHICLE_STATS_FOOTNOTE,VEHICLE_ELITE,VEHICLE_CREW,VEHICLE_AMMO,VEHICLE_XP,VEHICLE_MULTIPLIED_XP,VEHICLE_UNLOCK_PRICE,VEHICLE_BUY_PRICE,VEHICLE_ACTION_PRC,VEHICLE_MINRENTALSPRICE,VEHICLE_BUY_PRICE_ACTION,VEHICLE_SELL_PRICE,VEHICLE_EQUIPMENTS,VEHICLE_DEVICES,VEHICLE_FAVORITE,VEHICLE_DAILYXPFACTOR,VEHICLE_SPEEDLIMITS,VEHICLE_DAMAGE,VEHICLE_TURRETROTATIONSPEED,VEHICLE_RADIODISTANCE,VEHICLE_TEXTDELIMITER_OR,VEHICLE_RENTLEFT_DAYS,VEHICLE_RENTLEFT_HOURS,VEHICLE_RENTLEFT_BATTLES,VEHICLEIGR_SPECIALABILITY,VEHICLEIGR_DAYS,VEHICLEIGR_HOURS,VEHICLE_DEAL_TELECOM_MAIN,VEHICLESTATUS_BODY,VEHICLESTATUS_BATTLE_HEADER,VEHICLESTATUS_LOCKED_HEADER,VEHICLESTATUS_RENTALISOVER_HEADER,VEHICLESTATUS_IGRRENTALISOVER_HEADER,VEHICLESTATUS_INPREMIUMIGRONLY_HEADER,VEHICLESTATUS_INPREBATTLE_HEADER,VEHICLESTATUS_CLANLOCKED_HEADER,VEHICLESTATUS_AMMONOTFULL_HEADER,VEHICLESTATUS_AMMONOTFULLEVENTS_HEADER,VEHICLESTATUS_DAMAGED_HEADER,VEHICLESTATUS_DESTROYED_HEADER,VEHICLESTATUS_EXPLODED_HEADER,VEHICLESTATUS_NOTPRESENT_HEADER,VEHICLESTATUS_UNDAMAGED_HEADER,VEHICLESTATUS_CREWNOTFULL_HEADER,VEHICLESTATUS_NOTUNLOCKED_HEADER,VEHICLESTATUS_INHANGAR_HEADER,VEHICLESTATUS_SERVERRESTRICTION_HEADER,VEHICLESTATUS_DEALISOVER_HEADER,VEHICLESTATUS_DEALISOVER_TEXT,VEHICLESTATUS_NOTENOUGHCREDITS_HEADER,VEHICLESTATUS_NOTENOUGHCREDITS_TEXT,VEHICLESTATUS_NOTENOUGHGOLD_HEADER,VEHICLESTATUS_NOTENOUGHGOLD_TEXT,VEHICLESTATUS_NOTSUITABLE_HEADER,VEHICLESTATUS_GROUP_IS_NOT_READY_HEADER,VEHICLESTATUS_GROUPAMMONOTFULL_HEADER,VEHICLESTATUS_FALLOUT_ONLY_HEADER,VEHICLESTATUS_NOT_SUITABLE_HEADER,VEHICLESTATUS_UNSUITABLETOQUEUE_HEADER,VEHICLESELLDIALOG_RENDERER_ALERTICON_HEADER,VEHICLESELLDIALOG_RENDERER_ALERTICON_BODY,VEHICLESELECTOR_FILTER_NATION,VEHICLESELECTOR_FILTER_VEHTYPE,VEHICLESELECTOR_FILTER_VEHLVL,VEHICLESELECTOR_FILTER_MAINVEHICLE,VEHICLESELECTOR_SORTING_NATION_HEADER,VEHICLESELECTOR_SORTING_NATION_BODY,VEHICLESELECTOR_SORTING_VEHTYPE_HEADER,VEHICLESELECTOR_SORTING_VEHTYPE_BODY,VEHICLESELECTOR_SORTING_VEHLVL_HEADER,VEHICLESELECTOR_SORTING_VEHLVL_BODY,VEHICLESELECTOR_SORTING_VEHNAME_HEADER,VEHICLESELECTOR_SORTING_VEHNAME_BODY,VEHICLESELECTOR_OVERFLOWLEVEL_HEADER,VEHICLESELECTOR_OVERFLOWLEVEL_BODY,VEHICLESELECTOR_INCOMPATIBLETYPE_HEADER,VEHICLESELECTOR_INCOMPATIBLETYPE_BODY,VEHICLEPARAMS_TITLE_VALUETEMPLATE,VEHICLEPARAMS_POSSIBLEBONUSES_DESC,VEHICLEPARAMS_BONUSES_TITLE,VEHICLEPARAMS_PENALTIES_TITLE,VEHICLEPARAMS_BONUS_ARTEFACT_TEMPLATE,VEHICLEPARAMS_BONUS_SKILL_TEMPLATE,VEHICLEPARAMS_BONUS_ROLE_TEMPLATE,VEHICLEPARAMS_BONUS_EXTRA_CAMOUFLAGE,VEHICLEPARAMS_SKILL_NAME,VEHICLEPARAMS_BONUS_TANKMANLEVEL_COMMANDER,VEHICLEPARAMS_BONUS_TANKMANLEVEL_GUNNER,VEHICLEPARAMS_BONUS_TANKMANLEVEL_LOADER,VEHICLEPARAMS_BONUS_TANKMANLEVEL_DRIVER,VEHICLEPARAMS_BONUS_TANKMANLEVEL_RADIOMAN,VEHICLEPARAMS_PENALTY_TANKMANLEVEL_TEMPLATE,VEHICLEPARAMS_PENALTY_TANKMANDIFFERENTVEHICLE_TEMPLATE,VEHICLEPARAMS_PENALTY_TANKMANLEVEL_VALUE,VEHICLEPARAMS_WARNING_TANKMANISOUT,VEHICLEPARAMS_COMMON_TITLE,VEHICLEPARAMS_SIMPLIFIED_TITLE,VEHICLEPREVIEW_CREW_COMMANDER,VEHICLEPREVIEW_CREW_DRIVER,VEHICLEPREVIEW_CREW_RADIOMAN,VEHICLEPREVIEW_CREW_GUNNER,VEHICLEPREVIEW_CREW_LOADER,VEHICLEPREVIEW_CREW_INFLUENCE_RECONNAISSANCE,VEHICLEPREVIEW_CREW_INFLUENCE_VISIONRADIUS,VEHICLEPREVIEW_CREW_INFLUENCE_FIREPOWER,VEHICLEPREVIEW_CREW_INFLUENCE_AIMINGTIME,VEHICLEPREVIEW_CREW_INFLUENCE_MOBILITY,VEHICLEPREVIEW_CREW_INFLUENCE_CHASSISROTATIONSPEED,VEHICLEPREVIEW_CREW_INFLUENCE_ENGINEPOWER,VEHICLEPREVIEW_CREW_INFLUENCE_RADIODISTANCE,VEHICLEPREVIEW_CREW_ADDITIONALROLES];
+      public static const VEHICLE_ENUM:Array = [VEHICLE_GRAPH_NOTES_SHOWCONTEXTMENU,VEHICLE_GRAPH_NOTES_SHOWINFOWINDOW,VEHICLE_GRAPH_NOTES_VEHICLEUNLOCK,VEHICLE_GRAPH_NOTES_MODULEUNLOCK,VEHICLE_GRAPH_NOTES_EQUIP,VEHICLE_GRAPH_NOTES_BUYANDEQUIP,VEHICLE_GRAPH_NOTES_GOTONATIONTREE,VEHICLE_GRAPH_NOTES_GOTONEXTVEHICLE,VEHICLE_GRAPH_BODY_MODULEINSTALLED,VEHICLE_GRAPH_BODY_NOTENOUGH,VEHICLEPARAMS_SPEEDLIMITS,VEHICLEPARAMS_ENGINEPOWER,VEHICLEPARAMS_CHASSISROTATIONSPEED,VEHICLEPARAMS_DAMAGE,VEHICLEPARAMS_HULLARMOR,VEHICLEPARAMS_TURRETARMOR,VEHICLEPARAMS_PIERCINGPOWER,VEHICLE_INVENTORYCOUNT,VEHICLE_VEHICLECOUNT,VEHICLE_LEVEL,VEHICLE_MASTERING,VEHICLE_MASTERING_VERYSIMPLE,VEHICLE_STATS_FOOTNOTE,VEHICLE_ELITE,VEHICLE_CREW,VEHICLE_CREW_AWARD,VEHICLE_AMMO,VEHICLE_XP,VEHICLE_MULTIPLIED_XP,VEHICLE_UNLOCK_PRICE,VEHICLE_BUY_PRICE,VEHICLE_RESTORE_PRICE,VEHICLE_ACTION_PRC,VEHICLE_MINRENTALSPRICE,VEHICLE_BUY_PRICE_ACTION,VEHICLE_SELL_PRICE,VEHICLE_EQUIPMENTS,VEHICLE_DEVICES,VEHICLE_FAVORITE,VEHICLE_DAILYXPFACTOR,VEHICLE_SPEEDLIMITS,VEHICLE_DAMAGE,VEHICLE_TURRETROTATIONSPEED,VEHICLE_RADIODISTANCE,VEHICLE_TEXTDELIMITER_OR,VEHICLE_RENTLEFT_DAYS,VEHICLE_RENTLEFT_HOURS,VEHICLE_RENTLEFTFUTURE_DAYS,VEHICLE_RENTLEFTFUTURE_HOURS,VEHICLE_RENTAVAILABLE,VEHICLE_RESTORELEFT_DAYS,VEHICLE_RESTORELEFT_HOURS,VEHICLE_RENTLEFT_BATTLES,VEHICLEIGR_SPECIALABILITY,VEHICLEIGR_DAYS,VEHICLEIGR_HOURS,VEHICLE_DEAL_TELECOM_MAIN,VEHICLESTATUS_BODY,VEHICLESTATUS_BATTLE_HEADER,VEHICLESTATUS_LOCKED_HEADER,VEHICLESTATUS_RENTALISOVER_HEADER,VEHICLESTATUS_IGRRENTALISOVER_HEADER,VEHICLESTATUS_INPREMIUMIGRONLY_HEADER,VEHICLESTATUS_INPREBATTLE_HEADER,VEHICLESTATUS_CLANLOCKED_HEADER,VEHICLESTATUS_AMMONOTFULL_HEADER,VEHICLESTATUS_AMMONOTFULLEVENTS_HEADER,VEHICLESTATUS_DAMAGED_HEADER,VEHICLESTATUS_DESTROYED_HEADER,VEHICLESTATUS_EXPLODED_HEADER,VEHICLESTATUS_NOTPRESENT_HEADER,VEHICLESTATUS_UNDAMAGED_HEADER,VEHICLESTATUS_CREWNOTFULL_HEADER,VEHICLESTATUS_NOTUNLOCKED_HEADER,VEHICLESTATUS_INHANGAR_HEADER,VEHICLESTATUS_RESTORECOOLDOWN_DAYS,VEHICLESTATUS_RESTORECOOLDOWN_HOURS,VEHICLESTATUS_SERVERRESTRICTION_HEADER,VEHICLESTATUS_DEALISOVER_HEADER,VEHICLESTATUS_DEALISOVER_TEXT,VEHICLESTATUS_NOTENOUGHCREDITS_HEADER,VEHICLESTATUS_NOTENOUGHCREDITS_TEXT,VEHICLESTATUS_NOTENOUGHGOLD_HEADER,VEHICLESTATUS_NOTENOUGHGOLD_TEXT,VEHICLESTATUS_OPERATIONERROR_HEADER,VEHICLESTATUS_NOTSUITABLE_HEADER,VEHICLESTATUS_GROUP_IS_NOT_READY_HEADER,VEHICLESTATUS_GROUPAMMONOTFULL_HEADER,VEHICLESTATUS_FALLOUT_ONLY_HEADER,VEHICLESTATUS_NOT_SUITABLE_HEADER,VEHICLESTATUS_UNSUITABLETOQUEUE_HEADER,VEHICLESELLDIALOG_RENDERER_ALERTICON_HEADER,VEHICLESELLDIALOG_RENDERER_ALERTICON_BODY,VEHICLESELLDIALOG_CREW_ALERTICON_RECOVERY_HEADER,VEHICLESELLDIALOG_CREW_ALERTICON_RECOVERY_BODY,VEHICLESELECTOR_FILTER_NATION,VEHICLESELECTOR_FILTER_VEHTYPE,VEHICLESELECTOR_FILTER_VEHLVL,VEHICLESELECTOR_FILTER_MAINVEHICLE,VEHICLESELECTOR_SORTING_NATION_HEADER,VEHICLESELECTOR_SORTING_NATION_BODY,VEHICLESELECTOR_SORTING_VEHTYPE_HEADER,VEHICLESELECTOR_SORTING_VEHTYPE_BODY,VEHICLESELECTOR_SORTING_VEHLVL_HEADER,VEHICLESELECTOR_SORTING_VEHLVL_BODY,VEHICLESELECTOR_SORTING_VEHNAME_HEADER,VEHICLESELECTOR_SORTING_VEHNAME_BODY,VEHICLESELECTOR_OVERFLOWLEVEL_HEADER,VEHICLESELECTOR_OVERFLOWLEVEL_BODY,VEHICLESELECTOR_INCOMPATIBLETYPE_HEADER,VEHICLESELECTOR_INCOMPATIBLETYPE_BODY,VEHICLEPARAMS_TITLE_VALUETEMPLATE,VEHICLEPARAMS_POSSIBLEBONUSES_DESC,VEHICLEPARAMS_BONUSES_TITLE,VEHICLEPARAMS_PENALTIES_TITLE,VEHICLEPARAMS_BONUS_ARTEFACT_TEMPLATE,VEHICLEPARAMS_BONUS_SKILL_TEMPLATE,VEHICLEPARAMS_BONUS_ROLE_TEMPLATE,VEHICLEPARAMS_BONUS_EXTRA_CAMOUFLAGE,VEHICLEPARAMS_SKILL_NAME,VEHICLEPARAMS_BONUS_TANKMANLEVEL_COMMANDER,VEHICLEPARAMS_BONUS_TANKMANLEVEL_GUNNER,VEHICLEPARAMS_BONUS_TANKMANLEVEL_LOADER,VEHICLEPARAMS_BONUS_TANKMANLEVEL_DRIVER,VEHICLEPARAMS_BONUS_TANKMANLEVEL_RADIOMAN,VEHICLEPARAMS_PENALTY_TANKMANLEVEL_TEMPLATE,VEHICLEPARAMS_PENALTY_TANKMANDIFFERENTVEHICLE_TEMPLATE,VEHICLEPARAMS_PENALTY_TANKMANLEVEL_VALUE,VEHICLEPARAMS_WARNING_TANKMANISOUT,VEHICLEPARAMS_COMMON_TITLE,VEHICLEPARAMS_SIMPLIFIED_TITLE,VEHICLEPREVIEW_CREW_COMMANDER,VEHICLEPREVIEW_CREW_DRIVER,VEHICLEPREVIEW_CREW_RADIOMAN,VEHICLEPREVIEW_CREW_GUNNER,VEHICLEPREVIEW_CREW_LOADER,VEHICLEPREVIEW_CREW_INFLUENCE_RECONNAISSANCE,VEHICLEPREVIEW_CREW_INFLUENCE_VISIONRADIUS,VEHICLEPREVIEW_CREW_INFLUENCE_FIREPOWER,VEHICLEPREVIEW_CREW_INFLUENCE_AIMINGTIME,VEHICLEPREVIEW_CREW_INFLUENCE_MOBILITY,VEHICLEPREVIEW_CREW_INFLUENCE_CHASSISROTATIONSPEED,VEHICLEPREVIEW_CREW_INFLUENCE_ENGINEPOWER,VEHICLEPREVIEW_CREW_INFLUENCE_RADIODISTANCE,VEHICLEPREVIEW_CREW_ADDITIONALROLES,VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER,VEHICLEPREVIEW_VEHICLEPANEL_INFO_BODY];
       
       public static const LOGIN_SOCIAL_ENUM:Array = [LOGIN_SOCIAL_ENTER_HEADER,LOGIN_SOCIAL_ENTER_BODY,LOGIN_SOCIAL_FACEBOOK,LOGIN_SOCIAL_GOOGLE,LOGIN_SOCIAL_YAHOO,LOGIN_SOCIAL_TWITTER,LOGIN_SOCIAL_VKONTAKTE,LOGIN_SOCIAL_ODNOKLASSNIKI,LOGIN_SOCIAL_WGNI,LOGIN_SOCIAL_NAVER];
       
@@ -4606,6 +4776,18 @@ package
          if(VEHICLE_RENTLEFT_ENUM.indexOf(_loc2_) == -1)
          {
             DebugUtils.LOG_WARNING("[vehicle_rentleft]:locale key \"" + _loc2_ + "\" was not found");
+            return null;
+         }
+         return _loc2_;
+      }
+      
+      public static function battleresults_efficiencyheader(param1:String) : String
+      {
+         var _loc2_:String = null;
+         _loc2_ = "#tooltips:battleResults/efficiencyHeader/" + param1;
+         if(BATTLERESULTS_EFFICIENCYHEADER_ENUM.indexOf(_loc2_) == -1)
+         {
+            DebugUtils.LOG_WARNING("[battleresults_efficiencyheader]:locale key \"" + _loc2_ + "\" was not found");
             return null;
          }
          return _loc2_;

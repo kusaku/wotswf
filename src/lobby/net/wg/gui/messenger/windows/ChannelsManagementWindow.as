@@ -51,10 +51,10 @@ public class ChannelsManagementWindow extends ChannelsManagementWindowMeta {
 
     private const tabsDataProvider:Array = [{
         "label": MESSENGER.DIALOGS_CHANNELS_BUTTONS_SEARCHANDJOIN,
-        "linkage": "searchChannelFormUI"
+        "linkage": SEARCH_CHANNEL_FORM_ID
     }, {
         "label": MESSENGER.DIALOGS_CHANNELS_BUTTONS_CREATE,
-        "linkage": "createChannelFormUI"
+        "linkage": CREATE_CHANNEL_FORM_ID
     }];
 
     public function ChannelsManagementWindow() {
