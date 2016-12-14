@@ -4,11 +4,10 @@ import flash.text.TextFieldAutoSize;
 
 import net.wg.data.constants.Values;
 import net.wg.gui.components.tooltips.helpers.Utils;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.utils.ILocale;
 
-import scaleform.clik.core.UIComponent;
-
-public class ModuleEffects extends UIComponent {
+public class ModuleEffects extends UIComponentEx {
 
     private static const MARGIN_BETWEEN_EFFECTS:int = 25;
 

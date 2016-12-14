@@ -8,7 +8,6 @@ import flash.events.Event;
 import flash.geom.Point;
 
 import net.wg.infrastructure.interfaces.IDynamicContent;
-import net.wg.utils.IEventCollector;
 
 import scaleform.clik.controls.ScrollingList;
 import scaleform.gfx.FocusManager;
@@ -48,25 +47,22 @@ public class PopUpManager {
         if (!_stage) {
             return;
         }
-        var _loc5_:IEventCollector = App.utils.events;
-        _loc5_.disableDisposingForObj(param1);
         if (param1.parent) {
             param1.parent.removeChild(param1);
         }
         handleStageAddedEvent(null);
         _defaultPopupCanvas.addChild(param1);
-        _loc5_.enableDisposingForObj(param1);
         if (!param4) {
             param4 = _stage;
         }
-        var _loc6_:Point = new Point(param2, param3);
-        _loc6_ = param4.localToGlobal(_loc6_);
+        var _loc5_:Point = new Point(param2, param3);
+        _loc5_ = param4.localToGlobal(_loc5_);
         if (param1 is ScrollingList || param1 is IDynamicContent) {
-            _loc6_.x = _loc6_.x / App.appScale >> 0;
-            _loc6_.y = _loc6_.y / App.appScale >> 0;
+            _loc5_.x = _loc5_.x / App.appScale >> 0;
+            _loc5_.y = _loc5_.y / App.appScale >> 0;
         }
-        param1.x = _loc6_.x;
-        param1.y = _loc6_.y;
+        param1.x = _loc5_.x;
+        param1.y = _loc5_.y;
         _stage.setChildIndex(_defaultPopupCanvas, _stage.numChildren - 1);
         _stage.addEventListener(Event.ADDED, PopUpManager.handleStageAddedEvent, false, 0, true);
     }

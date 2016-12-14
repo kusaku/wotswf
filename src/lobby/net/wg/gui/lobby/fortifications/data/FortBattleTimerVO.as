@@ -1,4 +1,5 @@
 package net.wg.gui.lobby.fortifications.data {
+import net.wg.data.constants.Errors;
 import net.wg.data.daapi.base.DAAPIDataClass;
 
 public class FortBattleTimerVO extends DAAPIDataClass {
@@ -17,7 +18,8 @@ public class FortBattleTimerVO extends DAAPIDataClass {
         var _loc3_:Date = null;
         var _loc4_:Number = NaN;
         if (param1 == "timeBeforeBattle") {
-            this._timeBeforeBattle = param2 as Number;
+            this._timeBeforeBattle = Number(param2);
+            App.utils.asserter.assert(!isNaN(this._timeBeforeBattle), "_timeBeforeBattle" + Errors.CANT_NAN);
             _loc3_ = App.utils.dateTime.now();
             _loc4_ = App.utils.dateTime.toPyTimestamp(_loc3_);
             this._battleStartTime = _loc4_ + this._timeBeforeBattle;

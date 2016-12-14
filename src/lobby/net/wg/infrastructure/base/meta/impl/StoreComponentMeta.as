@@ -18,20 +18,22 @@ public class StoreComponentMeta extends BaseDAAPIComponent {
 
     public var onAddVehToCompare:Function;
 
-    private var _shopSubFilterData:ShopSubFilterData;
+    private var _array:Array;
 
     private var _filtersDataVO:FiltersDataVO;
 
     private var _shopNationFilterData:ShopNationFilterData;
+
+    private var _shopSubFilterData:ShopSubFilterData;
 
     public function StoreComponentMeta() {
         super();
     }
 
     override protected function onDispose():void {
-        if (this._shopSubFilterData) {
-            this._shopSubFilterData.dispose();
-            this._shopSubFilterData = null;
+        if (this._array) {
+            this._array.splice(0, this._array.length);
+            this._array = null;
         }
         if (this._filtersDataVO) {
             this._filtersDataVO.dispose();
@@ -40,6 +42,10 @@ public class StoreComponentMeta extends BaseDAAPIComponent {
         if (this._shopNationFilterData) {
             this._shopNationFilterData.dispose();
             this._shopNationFilterData = null;
+        }
+        if (this._shopSubFilterData) {
+            this._shopSubFilterData.dispose();
+            this._shopSubFilterData = null;
         }
         super.onDispose();
     }
@@ -69,28 +75,46 @@ public class StoreComponentMeta extends BaseDAAPIComponent {
         this.onAddVehToCompare(param1);
     }
 
-    public function as_setFilterType(param1:Object):void {
-        if (this._shopNationFilterData) {
-            this._shopNationFilterData.dispose();
+    public final function as_setNations(param1:Array):void {
+        var _loc2_:Array = this._array;
+        this._array = param1;
+        this.setNations(this._array);
+        if (_loc2_) {
+            _loc2_.splice(0, _loc2_.length);
         }
+    }
+
+    public final function as_setFilterType(param1:Object):void {
+        var _loc2_:ShopNationFilterData = this._shopNationFilterData;
         this._shopNationFilterData = new ShopNationFilterData(param1);
         this.setFilterType(this._shopNationFilterData);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setSubFilter(param1:Object):void {
-        if (this._shopSubFilterData) {
-            this._shopSubFilterData.dispose();
-        }
+    public final function as_setSubFilter(param1:Object):void {
+        var _loc2_:ShopSubFilterData = this._shopSubFilterData;
         this._shopSubFilterData = new ShopSubFilterData(param1);
         this.setSubFilter(this._shopSubFilterData);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setFilterOptions(param1:Object):void {
-        if (this._filtersDataVO) {
-            this._filtersDataVO.dispose();
-        }
+    public final function as_setFilterOptions(param1:Object):void {
+        var _loc2_:FiltersDataVO = this._filtersDataVO;
         this._filtersDataVO = new FiltersDataVO(param1);
         this.setFilterOptions(this._filtersDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
+    }
+
+    protected function setNations(param1:Array):void {
+        var _loc2_:String = "as_setNations" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
     }
 
     protected function setFilterType(param1:ShopNationFilterData):void {

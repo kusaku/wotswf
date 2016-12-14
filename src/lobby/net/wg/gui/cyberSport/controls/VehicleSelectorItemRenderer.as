@@ -75,7 +75,7 @@ public class VehicleSelectorItemRenderer extends ListItemRendererWithFocusOnDis 
 
     private var _isVehicleReady:Boolean = true;
 
-    private var mouseOverAlert:Boolean = false;
+    private var _mouseOverAlert:Boolean = false;
 
     public function VehicleSelectorItemRenderer() {
         this.statesSelectedNotReady = Vector.<String>(["notReady_selected_", ""]);
@@ -83,6 +83,7 @@ public class VehicleSelectorItemRenderer extends ListItemRendererWithFocusOnDis 
         super();
         this.notReadyAlert.visible = false;
         preventAutosizing = true;
+        mouseEnabledOnDisabled = true;
         this.settingsAlert.autoSize = false;
         this.notReadyAlert.addEventListener(MouseEvent.ROLL_OVER, this.onRollOverAlert);
         this.notReadyAlert.addEventListener(MouseEvent.ROLL_OUT, this.onRollOutAlert);
@@ -93,34 +94,10 @@ public class VehicleSelectorItemRenderer extends ListItemRendererWithFocusOnDis 
     }
 
     override public function setData(param1:Object):void {
-        var _loc2_:Point = null;
-        var _loc3_:Boolean = false;
-        var _loc4_:Boolean = false;
+        super.setData(param1);
         this.model = param1 as VehicleSelectorItemVO;
         if (this.model) {
             visible = true;
-            enabled = this.checkBox.enabled = this.model.enabled;
-            this.settingsAlert.visible = this.model.showAlert;
-            if (this.model.showAlert) {
-                this.settingsAlert.source = this.model.alertSource;
-            }
-            this._isVehicleReady = !!this._userVehiclesMode ? Boolean(this.model.isReadyToFight) : true;
-            setState(state);
-            _loc2_ = new Point(mouseX, mouseY);
-            _loc2_ = localToGlobal(_loc2_);
-            _loc3_ = this.notReadyAlert.hitTestPoint(_loc2_.x, _loc2_.y, true) && this.notReadyAlert.visible;
-            _loc4_ = this.hitTestPoint(_loc2_.x, _loc2_.y, true);
-            if (_loc3_) {
-                this.showAlertTooltip();
-            }
-            if (_loc4_ && !_loc3_) {
-                if (this.model && this.model.tooltip && !enabled && !this.mouseOverAlert) {
-                    App.toolTipMgr.showComplex(this.model.tooltip);
-                }
-                else if (enabled) {
-                    App.toolTipMgr.hide();
-                }
-            }
             invalidateData();
         }
         else {
@@ -145,14 +122,48 @@ public class VehicleSelectorItemRenderer extends ListItemRendererWithFocusOnDis 
 
     override protected function configUI():void {
         super.configUI();
-        this.checkBox.label = "";
-        addEventListener(ButtonEvent.CLICK, this.onClick);
-        addEventListener(MouseEvent.DOUBLE_CLICK, this.onDoubleClick);
+        this.checkBox.label = Values.EMPTY_STR;
+        addEventListener(ButtonEvent.CLICK, this.onRendererClickHandler);
+        addEventListener(MouseEvent.DOUBLE_CLICK, this.onRendererDoubleClickHandler);
         this.updateModeLayout();
     }
 
     override protected function draw():void {
+        var _loc1_:Point = null;
+        var _loc2_:Boolean = false;
+        var _loc3_:Boolean = false;
         super.draw();
+        if (this.model && isInvalid(InvalidationType.DATA)) {
+            if (selected) {
+                this.dispatchVehicleSelector(false);
+            }
+            else {
+                setState(state);
+            }
+            this.settingsAlert.visible = this.model.showAlert;
+            if (this.model.showAlert) {
+                this.settingsAlert.source = this.model.alertSource;
+            }
+            this._isVehicleReady = !!this._userVehiclesMode ? Boolean(this.model.isReadyToFight) : true;
+            _loc1_ = new Point(mouseX, mouseY);
+            _loc1_ = localToGlobal(_loc1_);
+            _loc2_ = this.notReadyAlert.hitTestPoint(_loc1_.x, _loc1_.y, true) && this.notReadyAlert.visible;
+            _loc3_ = this.hitTestPoint(_loc1_.x, _loc1_.y, true);
+            if (_loc2_) {
+                this.showAlertTooltip();
+            }
+            else if (_loc3_) {
+                if (this.model.tooltip && !enabled && !this._mouseOverAlert) {
+                    App.toolTipMgr.showComplex(this.model.tooltip);
+                }
+            }
+            this.checkBox.selected = this.model.selected;
+            this.vehicleNameTF.htmlText = this.model.shortUserName;
+            this.vehicleTypeIcon.gotoAndStop(this.model.type);
+            this.levelIcon.gotoAndStop(this.model.level);
+            this.flagLoader.source = App.utils.nations.getNationIcon(this.model.nationID);
+            this.tankIcon.source = this.model.smallIconPath;
+        }
         if (isInvalid(InvalidationType.STATE)) {
             if (this.bg) {
                 this.bg.mouseEnabled = false;
@@ -161,35 +172,24 @@ public class VehicleSelectorItemRenderer extends ListItemRendererWithFocusOnDis 
                 this.disabledMC.mouseEnabled = false;
             }
         }
-        if (isInvalid(InvalidationType.DATA) && this.model) {
-            this.checkBox.selected = this.model.selected;
-            this.vehicleNameTF.htmlText = this.model.shortUserName;
-            this.vehicleTypeIcon.gotoAndStop(this.model.type);
-            this.levelIcon.gotoAndStop(this.model.level);
-            this.flagLoader.source = "../maps/icons/filters/nations/" + App.utils.nations.getNationName(this.model.nationID) + ".png";
-            this.tankIcon.source = this.model.smallIconPath;
-        }
     }
 
     override protected function onDispose():void {
-        removeEventListener(ButtonEvent.CLICK, this.onClick);
-        removeEventListener(MouseEvent.DOUBLE_CLICK, this.onDoubleClick);
-        if (this.model) {
-            this.model.dispose();
-            this.model = null;
-        }
+        this.statesSelectedNotReady.splice(0, this.statesSelectedNotReady.length);
+        this.statesSelectedNotReady = null;
+        this.statesNotReady.splice(0, this.statesNotReady.length);
+        this.statesNotReady = null;
+        removeEventListener(ButtonEvent.CLICK, this.onRendererClickHandler);
+        removeEventListener(MouseEvent.DOUBLE_CLICK, this.onRendererDoubleClickHandler);
+        this.model = null;
         this.notReadyAlert.removeEventListener(MouseEvent.ROLL_OVER, this.onRollOverAlert);
         this.notReadyAlert.removeEventListener(MouseEvent.ROLL_OUT, this.onRollOutAlert);
         this.checkBox.dispose();
         this.flagLoader.dispose();
         this.tankIcon.dispose();
         this.settingsAlert.dispose();
-        if (this.disabledMC) {
-            this.disabledMC = null;
-        }
-        if (this.bg) {
-            this.bg = null;
-        }
+        this.disabledMC = null;
+        this.bg = null;
         this.vehicleNameTF = null;
         this.levelIcon = null;
         this.vehicleTypeIcon = null;
@@ -215,7 +215,7 @@ public class VehicleSelectorItemRenderer extends ListItemRendererWithFocusOnDis 
     }
 
     private function showDisabledToolTip():void {
-        if (this.model && this.model.tooltip && !enabled && !this.mouseOverAlert) {
+        if (this.model && this.model.tooltip && !enabled && !this._mouseOverAlert) {
             App.toolTipMgr.showComplex(this.model.tooltip);
         }
     }
@@ -251,11 +251,15 @@ public class VehicleSelectorItemRenderer extends ListItemRendererWithFocusOnDis 
         }
     }
 
-    override public function set selected(param1:Boolean):void {
-        super.selected = param1;
-        if (param1) {
-            this.dispatchVehicleSelector(false);
-        }
+    private function hideTooltip():void {
+        App.toolTipMgr.hide();
+    }
+
+    override public function set enabled(param1:Boolean):void {
+        super.enabled = param1;
+        this.checkBox.enabled = param1;
+        mouseChildren = param1;
+        buttonMode = param1;
     }
 
     override public function handleInput(param1:InputEvent):void {
@@ -279,13 +283,11 @@ public class VehicleSelectorItemRenderer extends ListItemRendererWithFocusOnDis 
 
     override protected function handleMouseRollOut(param1:MouseEvent):void {
         super.handleMouseRollOut(param1);
-        if (!enabled) {
-            App.toolTipMgr.hide();
-        }
+        this.hideTooltip();
     }
 
     private function onRollOverAlert(param1:MouseEvent):void {
-        this.mouseOverAlert = true;
+        this._mouseOverAlert = true;
         if (!enabled) {
             App.toolTipMgr.hide();
         }
@@ -293,16 +295,22 @@ public class VehicleSelectorItemRenderer extends ListItemRendererWithFocusOnDis 
     }
 
     private function onRollOutAlert(param1:MouseEvent):void {
-        this.mouseOverAlert = false;
+        this._mouseOverAlert = false;
         App.toolTipMgr.hide();
         this.showDisabledToolTip();
     }
 
-    private function onClick(param1:ButtonEvent):void {
+    private function onRendererClickHandler(param1:ButtonEvent):void {
+        if (!enabled) {
+            return;
+        }
         this.dispatchVehicleSelector(false);
     }
 
-    private function onDoubleClick(param1:MouseEvent):void {
+    private function onRendererDoubleClickHandler(param1:MouseEvent):void {
+        if (!enabled) {
+            return;
+        }
         var _loc2_:MouseEventEx = param1 as MouseEventEx;
         var _loc3_:uint = _loc2_ == null ? uint(0) : uint(_loc2_.buttonIdx);
         if (_loc3_ != MouseEventEx.LEFT_BUTTON) {

@@ -1395,52 +1395,63 @@ package
       
       public static const FORTCONSUMABLEORDER_BATTLEPARAMS:String = "#fortifications:fortConsumableOrder/battleParams";
       
+      public static const GENERAL_ORDERTYPE_ENUM:Array = [GENERAL_ORDERTYPE_BATTLEPAYMENTS,GENERAL_ORDERTYPE_REQUISITION,GENERAL_ORDERTYPE_EVACUATION,GENERAL_ORDERTYPE_HEAVYTRUCKS,GENERAL_ORDERTYPE_MILITARYMANEUVERS,GENERAL_ORDERTYPE_ADDITIONALBRIEFING,GENERAL_ORDERTYPE_TACTICALTRAINING,GENERAL_ORDERTYPE_SPECIALMISSION,GENERAL_ORDERTYPE_ARTILLERY,GENERAL_ORDERTYPE_BOMBER];
+      
       public static const FORTCONSUMABLEORDER_DESCR_ENUM:Array = [FORTCONSUMABLEORDER_DESCR_11,FORTCONSUMABLEORDER_DESCR_12];
       
       public static const SORTIE_DIVISION_NAME_ENUM:Array = [SORTIE_DIVISION_NAME_ALL,SORTIE_DIVISION_NAME_ABSOLUTE,SORTIE_DIVISION_NAME_CHAMPION,SORTIE_DIVISION_NAME_MIDDLE];
       
-      public static const GENERAL_ORDERTYPE_ENUM:Array = [GENERAL_ORDERTYPE_BATTLEPAYMENTS,GENERAL_ORDERTYPE_REQUISITION,GENERAL_ORDERTYPE_EVACUATION,GENERAL_ORDERTYPE_HEAVYTRUCKS,GENERAL_ORDERTYPE_MILITARYMANEUVERS,GENERAL_ORDERTYPE_ADDITIONALBRIEFING,GENERAL_ORDERTYPE_TACTICALTRAINING,GENERAL_ORDERTYPE_SPECIALMISSION,GENERAL_ORDERTYPE_ARTILLERY,GENERAL_ORDERTYPE_BOMBER];
-      
-      public static const BUILDINGS_DEFRESINFO_ENUM:Array = [BUILDINGS_DEFRESINFO_BASE_BUILDING,BUILDINGS_DEFRESINFO_WARSCHOOL_BUILDING,BUILDINGS_DEFRESINFO_TROPHY_BUILDING,BUILDINGS_DEFRESINFO_TRAINING_BUILDING,BUILDINGS_DEFRESINFO_TANKODROM_BUILDING,BUILDINGS_DEFRESINFO_INTENDANCY_BUILDING,BUILDINGS_DEFRESINFO_FINANCE_BUILDING,BUILDINGS_DEFRESINFO_CAR_BUILDING,BUILDINGS_DEFRESINFO_OFFICE_BUILDING,BUILDINGS_DEFRESINFO_BOMBER_BUILDING,BUILDINGS_DEFRESINFO_ARTILLERY_BUILDING];
-      
-      public static const BUILDINGPOPOVER_HEADER_TITLESTATUS_ENUM:Array = [BUILDINGPOPOVER_HEADER_TITLESTATUS_FOUNDATION,BUILDINGPOPOVER_HEADER_TITLESTATUS_MODERNIZATION,BUILDINGPOPOVER_HEADER_TITLESTATUS_HALFDESTROY,BUILDINGPOPOVER_HEADER_TITLESTATUS_CONGRATULATION,BUILDINGPOPOVER_HEADER_TITLESTATUS_FREEZE];
-      
-      public static const FORTCLANBATTLELIST_RENDERDAYOFBATTLE_ENUM:Array = [FORTCLANBATTLELIST_RENDERDAYOFBATTLE_TODAY,FORTCLANBATTLELIST_RENDERDAYOFBATTLE_TOMORROW];
-      
-      public static const FORTCLANBATTLELIST_RENDERBATTLENAME_ENUM:Array = [FORTCLANBATTLELIST_RENDERBATTLENAME_CLANBATTLEDEFENCE,FORTCLANBATTLELIST_RENDERBATTLENAME_CLANBATTLEOFFENCE];
-      
-      public static const CHOICEDIVISION_DIVISIONTYPE_ENUM:Array = [CHOICEDIVISION_DIVISIONTYPE_MIDDLEDIVISION,CHOICEDIVISION_DIVISIONTYPE_CHAMPIONDIVISION,CHOICEDIVISION_DIVISIONTYPE_ABSOLUTEDIVISION];
-      
-      public static const ORDERS_ORDERPOPOVER_ORDERTYPE_ENUM:Array = [ORDERS_ORDERPOPOVER_ORDERTYPE_BATTLEPAYMENTS,ORDERS_ORDERPOPOVER_ORDERTYPE_REQUISITION,ORDERS_ORDERPOPOVER_ORDERTYPE_EVACUATION,ORDERS_ORDERPOPOVER_ORDERTYPE_HEAVYTRUCKS,ORDERS_ORDERPOPOVER_ORDERTYPE_MILITARYMANEUVERS,ORDERS_ORDERPOPOVER_ORDERTYPE_ADDITIONALBRIEFING,ORDERS_ORDERPOPOVER_ORDERTYPE_TACTICALTRAINING,ORDERS_ORDERPOPOVER_ORDERTYPE_SPECIALMISSION,ORDERS_ORDERPOPOVER_ORDERTYPE_ARTILLERY,ORDERS_ORDERPOPOVER_ORDERTYPE_BOMBER,ORDERS_ORDERPOPOVER_ORDERTYPE_EMPTYORDER];
-      
-      public static const FORTMAINVIEW_ENUM:Array = [FORTMAINVIEW_COMMON_TOTALDEPOTQUANTITYTEXT,FORTMAINVIEW_COMMON_TITLE,FORTMAINVIEW_DIRECTIONS_TITLE,FORTMAINVIEW_DIRECTIONS_SELECTINGSTATUS,FORTMAINVIEW_TRANSPORTING_TITLE,FORTMAINVIEW_TRANSPORTING_EXPORTINGSTATUS,FORTMAINVIEW_TRANSPORTING_IMPORTINGSTATUS,FORTMAINVIEW_TRANSPORTING_NOTAVAILABLESTATUS,FORTMAINVIEW_TRANSPORTING_TUTORIALDESCR,FORTMAINVIEW_SORTIEBUTTON_TITLE,FORTMAINVIEW_INTELLIGENCEBUTTON_TITLE,FORTMAINVIEW_HEADER_LEVELSLBL,FORTMAINVIEW_HEADER_DEFENCEPERIOD,FORTMAINVIEW_HEADER_FORTFROZEN,FORTMAINVIEW_LEAVE_BUTTON_LABEL,FORTMAINVIEW_DIRECTIONSTUTOR_TITLE,FORTMAINVIEW_COMMONTUTOR_TITLE,FORTMAINVIEW_TRANSPORTINGTUTOR_TITLE];
-      
-      public static const ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_ENUM:Array = [ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_1,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_2,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_3,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_4,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_5,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_6,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_7,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_8,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_9,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_10];
-      
-      public static const BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_ENUM:Array = [BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_FOUNDATION,BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_FREEZE,BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_HALFDESTROY];
+      public static const BUILDINGS_BUILDINGNAME_ENUM:Array = [BUILDINGS_BUILDINGNAME_UNKNOWN,BUILDINGS_BUILDINGNAME_BASE_BUILDING,BUILDINGS_BUILDINGNAME_WARSCHOOL_BUILDING,BUILDINGS_BUILDINGNAME_TROPHY_BUILDING,BUILDINGS_BUILDINGNAME_TRAINING_BUILDING,BUILDINGS_BUILDINGNAME_TANKODROM_BUILDING,BUILDINGS_BUILDINGNAME_INTENDANCY_BUILDING,BUILDINGS_BUILDINGNAME_FINANCE_BUILDING,BUILDINGS_BUILDINGNAME_CAR_BUILDING,BUILDINGS_BUILDINGNAME_OFFICE_BUILDING,BUILDINGS_BUILDINGNAME_BOMBER_BUILDING,BUILDINGS_BUILDINGNAME_ARTILLERY_BUILDING];
       
       public static const BUILDINGSPROCESS_LONGDESCR_ENUM:Array = [BUILDINGSPROCESS_LONGDESCR_BASE_BUILDING,BUILDINGSPROCESS_LONGDESCR_WARSCHOOL_BUILDING,BUILDINGSPROCESS_LONGDESCR_OFFICE_BUILDING,BUILDINGSPROCESS_LONGDESCR_TROPHY_BUILDING,BUILDINGSPROCESS_LONGDESCR_TRAINING_BUILDING,BUILDINGSPROCESS_LONGDESCR_TANKODROM_BUILDING,BUILDINGSPROCESS_LONGDESCR_INTENDANCY_BUILDING,BUILDINGSPROCESS_LONGDESCR_FINANCE_BUILDING,BUILDINGSPROCESS_LONGDESCR_CAR_BUILDING,BUILDINGSPROCESS_LONGDESCR_BOMBER_BUILDING,BUILDINGSPROCESS_LONGDESCR_ARTILLERY_BUILDING];
       
-      public static const BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_ENUM:Array = [BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_FOUNDATION,BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_HALFDESTROY,BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_MODERNIZATION,BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_CONGRATULATION,BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_FREEZE];
+      public static const BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_ENUM:Array = [BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_FOUNDATION,BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_FREEZE,BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_HALFDESTROY];
       
       public static const SETTINGSWINDOW_BLOCKCONDITION_ENUM:Array = [SETTINGSWINDOW_BLOCKCONDITION_DEFENCEPERIODTIME,SETTINGSWINDOW_BLOCKCONDITION_WEEKEND,SETTINGSWINDOW_BLOCKCONDITION_NOWEEKEND,SETTINGSWINDOW_BLOCKCONDITION_VACATION,SETTINGSWINDOW_BLOCKCONDITION_VACATIONNOTPLANNED,SETTINGSWINDOW_BLOCKCONDITION_INPROGRESS,SETTINGSWINDOW_BLOCKCONDITION_RECENTLYSCHEDULED];
       
-      public static const SETTINGSWINDOW_BLOCKDESCR_ENUM:Array = [SETTINGSWINDOW_BLOCKDESCR_DEFENCEPERIODTIME,SETTINGSWINDOW_BLOCKDESCR_WEEKEND,SETTINGSWINDOW_BLOCKDESCR_VACATION];
+      public static const FORTCLANBATTLELIST_RENDERDAYOFBATTLE_ENUM:Array = [FORTCLANBATTLELIST_RENDERDAYOFBATTLE_TODAY,FORTCLANBATTLELIST_RENDERDAYOFBATTLE_TOMORROW];
       
-      public static const BUILDINGS_BUILDINGNAME_ENUM:Array = [BUILDINGS_BUILDINGNAME_UNKNOWN,BUILDINGS_BUILDINGNAME_BASE_BUILDING,BUILDINGS_BUILDINGNAME_WARSCHOOL_BUILDING,BUILDINGS_BUILDINGNAME_TROPHY_BUILDING,BUILDINGS_BUILDINGNAME_TRAINING_BUILDING,BUILDINGS_BUILDINGNAME_TANKODROM_BUILDING,BUILDINGS_BUILDINGNAME_INTENDANCY_BUILDING,BUILDINGS_BUILDINGNAME_FINANCE_BUILDING,BUILDINGS_BUILDINGNAME_CAR_BUILDING,BUILDINGS_BUILDINGNAME_OFFICE_BUILDING,BUILDINGS_BUILDINGNAME_BOMBER_BUILDING,BUILDINGS_BUILDINGNAME_ARTILLERY_BUILDING];
+      public static const ORDERS_ORDERPOPOVER_ORDERTYPE_ENUM:Array = [ORDERS_ORDERPOPOVER_ORDERTYPE_BATTLEPAYMENTS,ORDERS_ORDERPOPOVER_ORDERTYPE_REQUISITION,ORDERS_ORDERPOPOVER_ORDERTYPE_EVACUATION,ORDERS_ORDERPOPOVER_ORDERTYPE_HEAVYTRUCKS,ORDERS_ORDERPOPOVER_ORDERTYPE_MILITARYMANEUVERS,ORDERS_ORDERPOPOVER_ORDERTYPE_ADDITIONALBRIEFING,ORDERS_ORDERPOPOVER_ORDERTYPE_TACTICALTRAINING,ORDERS_ORDERPOPOVER_ORDERTYPE_SPECIALMISSION,ORDERS_ORDERPOPOVER_ORDERTYPE_ARTILLERY,ORDERS_ORDERPOPOVER_ORDERTYPE_BOMBER,ORDERS_ORDERPOPOVER_ORDERTYPE_EMPTYORDER];
       
       public static const BUILDINGSPROCESS_SHORTDESCR_ENUM:Array = [BUILDINGSPROCESS_SHORTDESCR_WARSCHOOL_BUILDING,BUILDINGSPROCESS_SHORTDESCR_OFFICE_BUILDING,BUILDINGSPROCESS_SHORTDESCR_TROPHY_BUILDING,BUILDINGSPROCESS_SHORTDESCR_TRAINING_BUILDING,BUILDINGSPROCESS_SHORTDESCR_TANKODROM_BUILDING,BUILDINGSPROCESS_SHORTDESCR_INTENDANCY_BUILDING,BUILDINGSPROCESS_SHORTDESCR_FINANCE_BUILDING,BUILDINGSPROCESS_SHORTDESCR_CAR_BUILDING,BUILDINGSPROCESS_SHORTDESCR_BOMBER_BUILDING,BUILDINGSPROCESS_SHORTDESCR_ARTILLERY_BUILDING];
       
+      public static const BUILDINGS_PROCESSORDERINFO_ENUM:Array = [BUILDINGS_PROCESSORDERINFO_WARSCHOOL_BUILDING,BUILDINGS_PROCESSORDERINFO_TROPHY_BUILDING,BUILDINGS_PROCESSORDERINFO_TRAINING_BUILDING,BUILDINGS_PROCESSORDERINFO_TANKODROM_BUILDING,BUILDINGS_PROCESSORDERINFO_INTENDANCY_BUILDING,BUILDINGS_PROCESSORDERINFO_FINANCE_BUILDING,BUILDINGS_PROCESSORDERINFO_CAR_BUILDING,BUILDINGS_PROCESSORDERINFO_OFFICE_BUILDING,BUILDINGS_PROCESSORDERINFO_BOMBER_BUILDING,BUILDINGS_PROCESSORDERINFO_ARTILLERY_BUILDING];
+      
       public static const BUILDINGDIRECTION_LABEL_ENUM:Array = [BUILDINGDIRECTION_LABEL1,BUILDINGDIRECTION_LABEL2,BUILDINGDIRECTION_LABEL3,BUILDINGDIRECTION_LABEL4];
+      
+      public static const CHOICEDIVISION_DIVISIONTYPE_ENUM:Array = [CHOICEDIVISION_DIVISIONTYPE_MIDDLEDIVISION,CHOICEDIVISION_DIVISIONTYPE_CHAMPIONDIVISION,CHOICEDIVISION_DIVISIONTYPE_ABSOLUTEDIVISION];
       
       public static const FORTINTELLIGENCE_CLANTYPES_ENUM:Array = [FORTINTELLIGENCE_CLANTYPES_ALL,FORTINTELLIGENCE_CLANTYPES_BOOKED,FORTINTELLIGENCE_CLANTYPES_LAST];
       
-      public static const BUILDINGS_PROCESSORDERINFO_ENUM:Array = [BUILDINGS_PROCESSORDERINFO_WARSCHOOL_BUILDING,BUILDINGS_PROCESSORDERINFO_TROPHY_BUILDING,BUILDINGS_PROCESSORDERINFO_TRAINING_BUILDING,BUILDINGS_PROCESSORDERINFO_TANKODROM_BUILDING,BUILDINGS_PROCESSORDERINFO_INTENDANCY_BUILDING,BUILDINGS_PROCESSORDERINFO_FINANCE_BUILDING,BUILDINGS_PROCESSORDERINFO_CAR_BUILDING,BUILDINGS_PROCESSORDERINFO_OFFICE_BUILDING,BUILDINGS_PROCESSORDERINFO_BOMBER_BUILDING,BUILDINGS_PROCESSORDERINFO_ARTILLERY_BUILDING];
+      public static const SETTINGSWINDOW_BLOCKDESCR_ENUM:Array = [SETTINGSWINDOW_BLOCKDESCR_DEFENCEPERIODTIME,SETTINGSWINDOW_BLOCKDESCR_WEEKEND,SETTINGSWINDOW_BLOCKDESCR_VACATION];
+      
+      public static const FORTCLANBATTLELIST_RENDERBATTLENAME_ENUM:Array = [FORTCLANBATTLELIST_RENDERBATTLENAME_CLANBATTLEDEFENCE,FORTCLANBATTLELIST_RENDERBATTLENAME_CLANBATTLEOFFENCE];
+      
+      public static const BUILDINGS_DEFRESINFO_ENUM:Array = [BUILDINGS_DEFRESINFO_BASE_BUILDING,BUILDINGS_DEFRESINFO_WARSCHOOL_BUILDING,BUILDINGS_DEFRESINFO_TROPHY_BUILDING,BUILDINGS_DEFRESINFO_TRAINING_BUILDING,BUILDINGS_DEFRESINFO_TANKODROM_BUILDING,BUILDINGS_DEFRESINFO_INTENDANCY_BUILDING,BUILDINGS_DEFRESINFO_FINANCE_BUILDING,BUILDINGS_DEFRESINFO_CAR_BUILDING,BUILDINGS_DEFRESINFO_OFFICE_BUILDING,BUILDINGS_DEFRESINFO_BOMBER_BUILDING,BUILDINGS_DEFRESINFO_ARTILLERY_BUILDING];
+      
+      public static const BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_ENUM:Array = [BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_FOUNDATION,BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_HALFDESTROY,BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_MODERNIZATION,BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_CONGRATULATION,BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_FREEZE];
+      
+      public static const ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_ENUM:Array = [ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_1,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_2,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_3,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_4,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_5,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_6,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_7,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_8,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_9,ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_10];
+      
+      public static const FORTMAINVIEW_ENUM:Array = [FORTMAINVIEW_COMMON_TOTALDEPOTQUANTITYTEXT,FORTMAINVIEW_COMMON_TITLE,FORTMAINVIEW_DIRECTIONS_TITLE,FORTMAINVIEW_DIRECTIONS_SELECTINGSTATUS,FORTMAINVIEW_TRANSPORTING_TITLE,FORTMAINVIEW_TRANSPORTING_EXPORTINGSTATUS,FORTMAINVIEW_TRANSPORTING_IMPORTINGSTATUS,FORTMAINVIEW_TRANSPORTING_NOTAVAILABLESTATUS,FORTMAINVIEW_TRANSPORTING_TUTORIALDESCR,FORTMAINVIEW_SORTIEBUTTON_TITLE,FORTMAINVIEW_INTELLIGENCEBUTTON_TITLE,FORTMAINVIEW_HEADER_LEVELSLBL,FORTMAINVIEW_HEADER_DEFENCEPERIOD,FORTMAINVIEW_HEADER_FORTFROZEN,FORTMAINVIEW_LEAVE_BUTTON_LABEL,FORTMAINVIEW_DIRECTIONSTUTOR_TITLE,FORTMAINVIEW_COMMONTUTOR_TITLE,FORTMAINVIEW_TRANSPORTINGTUTOR_TITLE];
+      
+      public static const BUILDINGPOPOVER_HEADER_TITLESTATUS_ENUM:Array = [BUILDINGPOPOVER_HEADER_TITLESTATUS_FOUNDATION,BUILDINGPOPOVER_HEADER_TITLESTATUS_MODERNIZATION,BUILDINGPOPOVER_HEADER_TITLESTATUS_HALFDESTROY,BUILDINGPOPOVER_HEADER_TITLESTATUS_CONGRATULATION,BUILDINGPOPOVER_HEADER_TITLESTATUS_FREEZE];
        
       
       public function FORTIFICATIONS()
       {
          super();
+      }
+      
+      public static function general_ordertype(param1:String) : String
+      {
+         var _loc2_:String = "#fortifications:General/orderType/" + param1;
+         if(GENERAL_ORDERTYPE_ENUM.indexOf(_loc2_) == -1)
+         {
+            DebugUtils.LOG_WARNING("[general_ordertype]:locale key \"" + _loc2_ + "\" was not found");
+            return null;
+         }
+         return _loc2_;
       }
       
       public static function fortconsumableorder_descr(param1:String) : String
@@ -1465,77 +1476,10 @@ package
          return _loc2_;
       }
       
-      public static function general_ordertype(param1:String) : String
+      public static function buildings_buildingname(param1:String) : String
       {
-         var _loc2_:String = "#fortifications:General/orderType/" + param1;
-         if(GENERAL_ORDERTYPE_ENUM.indexOf(_loc2_) == -1)
-         {
-            DebugUtils.LOG_WARNING("[general_ordertype]:locale key \"" + _loc2_ + "\" was not found");
-            return null;
-         }
-         return _loc2_;
-      }
-      
-      public static function buildings_defresinfo(param1:String) : String
-      {
-         var _loc2_:String = "#fortifications:Buildings/defResInfo/" + param1;
-         App.utils.asserter.assert(BUILDINGS_DEFRESINFO_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
-      }
-      
-      public static function buildingpopover_header_titlestatus(param1:String) : String
-      {
-         var _loc2_:String = "#fortifications:BuildingPopover/header/titleStatus/" + param1;
-         App.utils.asserter.assert(BUILDINGPOPOVER_HEADER_TITLESTATUS_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
-      }
-      
-      public static function fortclanbattlelist_renderdayofbattle(param1:String) : String
-      {
-         var _loc2_:String = "#fortifications:FortClanBattleList/renderDayOfBattle/" + param1;
-         App.utils.asserter.assert(FORTCLANBATTLELIST_RENDERDAYOFBATTLE_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
-      }
-      
-      public static function fortclanbattlelist_renderbattlename(param1:String) : String
-      {
-         var _loc2_:String = "#fortifications:FortClanBattleList/renderBattleName/" + param1;
-         App.utils.asserter.assert(FORTCLANBATTLELIST_RENDERBATTLENAME_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
-      }
-      
-      public static function choicedivision_divisiontype(param1:String) : String
-      {
-         var _loc2_:String = "#fortifications:ChoiceDivision/divisionType/" + param1;
-         App.utils.asserter.assert(CHOICEDIVISION_DIVISIONTYPE_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
-      }
-      
-      public static function orders_orderpopover_ordertype(param1:String) : String
-      {
-         var _loc2_:String = "#fortifications:Orders/orderPopover/orderType/" + param1;
-         App.utils.asserter.assert(ORDERS_ORDERPOPOVER_ORDERTYPE_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
-      }
-      
-      public static function fortmainview(param1:String) : String
-      {
-         var _loc2_:String = "#fortifications:FortMainView/" + param1;
-         App.utils.asserter.assert(FORTMAINVIEW_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
-      }
-      
-      public static function orders_specialmission_possibleaward_description_level(param1:String) : String
-      {
-         var _loc2_:String = "#fortifications:Orders/specialMission/possibleAward/description/level/" + param1;
-         App.utils.asserter.assert(ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
-      }
-      
-      public static function buildingpopover_soldierstatus_bodystatus(param1:String) : String
-      {
-         var _loc2_:String = "#fortifications:BuildingPopover/soldierStatus/bodyStatus/" + param1;
-         App.utils.asserter.assert(BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         var _loc2_:String = "#fortifications:Buildings/buildingName/" + param1;
+         App.utils.asserter.assert(BUILDINGS_BUILDINGNAME_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
          return _loc2_;
       }
       
@@ -1546,10 +1490,10 @@ package
          return _loc2_;
       }
       
-      public static function buildingpopover_commanderstatus_bodystatus(param1:String) : String
+      public static function buildingpopover_soldierstatus_bodystatus(param1:String) : String
       {
-         var _loc2_:String = "#fortifications:BuildingPopover/commanderStatus/bodyStatus/" + param1;
-         App.utils.asserter.assert(BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         var _loc2_:String = "#fortifications:BuildingPopover/soldierStatus/bodyStatus/" + param1;
+         App.utils.asserter.assert(BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
          return _loc2_;
       }
       
@@ -1560,17 +1504,17 @@ package
          return _loc2_;
       }
       
-      public static function settingswindow_blockdescr(param1:String) : String
+      public static function fortclanbattlelist_renderdayofbattle(param1:String) : String
       {
-         var _loc2_:String = "#fortifications:SettingsWindow/blockDescr/" + param1;
-         App.utils.asserter.assert(SETTINGSWINDOW_BLOCKDESCR_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         var _loc2_:String = "#fortifications:FortClanBattleList/renderDayOfBattle/" + param1;
+         App.utils.asserter.assert(FORTCLANBATTLELIST_RENDERDAYOFBATTLE_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
          return _loc2_;
       }
       
-      public static function buildings_buildingname(param1:String) : String
+      public static function orders_orderpopover_ordertype(param1:String) : String
       {
-         var _loc2_:String = "#fortifications:Buildings/buildingName/" + param1;
-         App.utils.asserter.assert(BUILDINGS_BUILDINGNAME_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         var _loc2_:String = "#fortifications:Orders/orderPopover/orderType/" + param1;
+         App.utils.asserter.assert(ORDERS_ORDERPOPOVER_ORDERTYPE_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
          return _loc2_;
       }
       
@@ -1581,10 +1525,24 @@ package
          return _loc2_;
       }
       
+      public static function buildings_processorderinfo(param1:String) : String
+      {
+         var _loc2_:String = "#fortifications:Buildings/processOrderInfo/" + param1;
+         App.utils.asserter.assert(BUILDINGS_PROCESSORDERINFO_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
       public static function buildingdirection_label(param1:String) : String
       {
          var _loc2_:String = "#fortifications:BuildingDirection/label1" + param1;
          App.utils.asserter.assert(BUILDINGDIRECTION_LABEL_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
+      public static function choicedivision_divisiontype(param1:String) : String
+      {
+         var _loc2_:String = "#fortifications:ChoiceDivision/divisionType/" + param1;
+         App.utils.asserter.assert(CHOICEDIVISION_DIVISIONTYPE_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
          return _loc2_;
       }
       
@@ -1595,10 +1553,52 @@ package
          return _loc2_;
       }
       
-      public static function buildings_processorderinfo(param1:String) : String
+      public static function settingswindow_blockdescr(param1:String) : String
       {
-         var _loc2_:String = "#fortifications:Buildings/processOrderInfo/" + param1;
-         App.utils.asserter.assert(BUILDINGS_PROCESSORDERINFO_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         var _loc2_:String = "#fortifications:SettingsWindow/blockDescr/" + param1;
+         App.utils.asserter.assert(SETTINGSWINDOW_BLOCKDESCR_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
+      public static function fortclanbattlelist_renderbattlename(param1:String) : String
+      {
+         var _loc2_:String = "#fortifications:FortClanBattleList/renderBattleName/" + param1;
+         App.utils.asserter.assert(FORTCLANBATTLELIST_RENDERBATTLENAME_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
+      public static function buildings_defresinfo(param1:String) : String
+      {
+         var _loc2_:String = "#fortifications:Buildings/defResInfo/" + param1;
+         App.utils.asserter.assert(BUILDINGS_DEFRESINFO_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
+      public static function buildingpopover_commanderstatus_bodystatus(param1:String) : String
+      {
+         var _loc2_:String = "#fortifications:BuildingPopover/commanderStatus/bodyStatus/" + param1;
+         App.utils.asserter.assert(BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
+      public static function orders_specialmission_possibleaward_description_level(param1:String) : String
+      {
+         var _loc2_:String = "#fortifications:Orders/specialMission/possibleAward/description/level/" + param1;
+         App.utils.asserter.assert(ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
+      public static function fortmainview(param1:String) : String
+      {
+         var _loc2_:String = "#fortifications:FortMainView/" + param1;
+         App.utils.asserter.assert(FORTMAINVIEW_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
+      public static function buildingpopover_header_titlestatus(param1:String) : String
+      {
+         var _loc2_:String = "#fortifications:BuildingPopover/header/titleStatus/" + param1;
+         App.utils.asserter.assert(BUILDINGPOPOVER_HEADER_TITLESTATUS_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
          return _loc2_;
       }
    }

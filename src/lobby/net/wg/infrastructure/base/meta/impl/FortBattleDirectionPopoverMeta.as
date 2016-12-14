@@ -27,12 +27,13 @@ public class FortBattleDirectionPopoverMeta extends SmartPopOverView {
         this.requestToJoin(param1);
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._battleDirectionPopoverVO) {
-            this._battleDirectionPopoverVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:BattleDirectionPopoverVO = this._battleDirectionPopoverVO;
         this._battleDirectionPopoverVO = new BattleDirectionPopoverVO(param1);
         this.setData(this._battleDirectionPopoverVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:BattleDirectionPopoverVO):void {

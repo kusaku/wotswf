@@ -83,5 +83,11 @@ public class SettingsChangesMap implements IDisposable {
     public function get length():uint {
         return this._len;
     }
+
+    public function debug():void {
+        var _loc1_:* = null;
+        for (_loc1_ in this._data) {
+        }
+    }
 }
 }

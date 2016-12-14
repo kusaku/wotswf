@@ -25,34 +25,34 @@ public class QuestsTileChainsViewMeta extends BaseDAAPIComponent {
 
     public var showAwardVehicleInHangar:Function;
 
-    private var _questsTileChainsViewVO:QuestsTileChainsViewVO;
+    private var _chainProgressVO:ChainProgressVO;
 
     private var _questTaskDetailsVO:QuestTaskDetailsVO;
 
-    private var _chainProgressVO:ChainProgressVO;
-
     private var _questTileVO:QuestTileVO;
+
+    private var _questsTileChainsViewVO:QuestsTileChainsViewVO;
 
     public function QuestsTileChainsViewMeta() {
         super();
     }
 
     override protected function onDispose():void {
-        if (this._questsTileChainsViewVO) {
-            this._questsTileChainsViewVO.dispose();
-            this._questsTileChainsViewVO = null;
+        if (this._chainProgressVO) {
+            this._chainProgressVO.dispose();
+            this._chainProgressVO = null;
         }
         if (this._questTaskDetailsVO) {
             this._questTaskDetailsVO.dispose();
             this._questTaskDetailsVO = null;
         }
-        if (this._chainProgressVO) {
-            this._chainProgressVO.dispose();
-            this._chainProgressVO = null;
-        }
         if (this._questTileVO) {
             this._questTileVO.dispose();
             this._questTileVO = null;
+        }
+        if (this._questsTileChainsViewVO) {
+            this._questsTileChainsViewVO.dispose();
+            this._questsTileChainsViewVO = null;
         }
         super.onDispose();
     }
@@ -97,36 +97,40 @@ public class QuestsTileChainsViewMeta extends BaseDAAPIComponent {
         this.showAwardVehicleInHangar(param1);
     }
 
-    public function as_setHeaderData(param1:Object):void {
-        if (this._questsTileChainsViewVO) {
-            this._questsTileChainsViewVO.dispose();
-        }
+    public final function as_setHeaderData(param1:Object):void {
+        var _loc2_:QuestsTileChainsViewVO = this._questsTileChainsViewVO;
         this._questsTileChainsViewVO = new QuestsTileChainsViewVO(param1);
         this.setHeaderData(this._questsTileChainsViewVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_updateTileData(param1:Object):void {
-        if (this._questTileVO) {
-            this._questTileVO.dispose();
-        }
+    public final function as_updateTileData(param1:Object):void {
+        var _loc2_:QuestTileVO = this._questTileVO;
         this._questTileVO = new QuestTileVO(param1);
         this.updateTileData(this._questTileVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_updateChainProgress(param1:Object):void {
-        if (this._chainProgressVO) {
-            this._chainProgressVO.dispose();
-        }
+    public final function as_updateChainProgress(param1:Object):void {
+        var _loc2_:ChainProgressVO = this._chainProgressVO;
         this._chainProgressVO = new ChainProgressVO(param1);
         this.updateChainProgress(this._chainProgressVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_updateTaskDetails(param1:Object):void {
-        if (this._questTaskDetailsVO) {
-            this._questTaskDetailsVO.dispose();
-        }
+    public final function as_updateTaskDetails(param1:Object):void {
+        var _loc2_:QuestTaskDetailsVO = this._questTaskDetailsVO;
         this._questTaskDetailsVO = new QuestTaskDetailsVO(param1);
         this.updateTaskDetails(this._questTaskDetailsVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setHeaderData(param1:QuestsTileChainsViewVO):void {

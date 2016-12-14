@@ -7,11 +7,11 @@ import flash.text.TextField;
 
 import net.wg.data.constants.Values;
 import net.wg.gui.components.advanced.InviteIndicator;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class ServerInfo extends UIComponent {
+public class ServerInfo extends UIComponentEx {
 
     private static const TYPE_UNAVAILABLE:String = "unavailable";
 

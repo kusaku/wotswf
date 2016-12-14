@@ -86,6 +86,14 @@ public class VerticalListViewPort extends UIComponentEx implements IViewPort {
         }
     }
 
+    public function get validWidth():Number {
+        return width;
+    }
+
+    public function get validHeight():Number {
+        return this.height;
+    }
+
     override protected function onDispose():void {
         this.tryDisposeDataProvider();
         this.tryDisposeRenderersBounds();

@@ -31,8 +31,6 @@ public interface ITweenAnimator extends ITweenHandler, IDisposable {
 
     function createPropsForAlpha(param1:DisplayObject, param2:uint, param3:Number, param4:uint = 0):ITweenPropertiesVO;
 
-    function createPropsForFrameBasedAnim(param1:DisplayObject, param2:int, param3:int):ITweenPropertiesVO;
-
     function addHalfTurnAnim(param1:DisplayObject):void;
 
     function addHalfTurnAnimEx(param1:DisplayObject):ITween;

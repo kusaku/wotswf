@@ -71,7 +71,7 @@ public class CoreList extends UIComponent implements ITutorialCustomComponent {
     }
 
     public function set itemRendererName(param1:String):void {
-        if (_inspector && param1 == "" || param1 == "") {
+        if (_inspector && param1 == "" || param1 == "" || param1 == "DefaultListItemRenderer") {
             return;
         }
         var _loc2_:Class = App.utils.classFactory.getClass(param1);
@@ -322,9 +322,6 @@ public class CoreList extends UIComponent implements ITutorialCustomComponent {
         var _loc2_:uint = 0;
         var _loc3_:IListItemRenderer = null;
         var _loc4_:DisplayObject = null;
-        if (isInvalid(InvalidationType.SELECTED_INDEX)) {
-            this.updateSelectedIndex();
-        }
         if (isInvalid(InvalidationType.STATE)) {
             if (this._newFrame) {
                 gotoAndPlay(this._newFrame);
@@ -366,6 +363,9 @@ public class CoreList extends UIComponent implements ITutorialCustomComponent {
         }
         if (_baseDisposed) {
             return;
+        }
+        if (isInvalid(InvalidationType.SELECTED_INDEX)) {
+            this.updateSelectedIndex();
         }
         if (isInvalid(InvalidationType.DATA)) {
             this.refreshData();

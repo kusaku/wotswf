@@ -7,6 +7,7 @@ import flash.geom.Point;
 import flash.ui.Keyboard;
 
 import net.wg.data.Aliases;
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.generated.PREBATTLE_ALIASES;
 import net.wg.data.daapi.base.DAAPIDataProvider;
 import net.wg.gui.components.advanced.interfaces.ISearchInput;
@@ -21,7 +22,6 @@ import net.wg.gui.prebattle.company.events.CompanyEvent;
 import net.wg.gui.rally.events.RallyViewsEvent;
 import net.wg.infrastructure.base.meta.ICompanyListMeta;
 import net.wg.infrastructure.base.meta.impl.CompanyListMeta;
-import net.wg.utils.IEventCollector;
 
 import scaleform.clik.constants.ConstrainMode;
 import scaleform.clik.constants.InputValue;
@@ -89,6 +89,7 @@ public class CompanyListView extends CompanyListMeta implements ICompanyListMeta
         _loc1_ = this.channelComponent.messageInput;
         constraints.addElement(_loc1_.name, _loc1_, Constraints.BOTTOM | Constraints.LEFT | Constraints.RIGHT);
         _loc1_ = this.channelComponent.sendButton as DisplayObject;
+        App.utils.asserter.assertNotNull(_loc1_, "component" + Errors.CANT_NULL);
         constraints.addElement(_loc1_.name, _loc1_, Constraints.BOTTOM | Constraints.RIGHT);
         constraints.addElement(this.cmpList.name, this.cmpList, Constraints.TOP | Constraints.BOTTOM | Constraints.RIGHT);
         constraints.addElement(this.topPanel.name, this.topPanel, Constraints.TOP | Constraints.LEFT | Constraints.RIGHT);
@@ -292,10 +293,7 @@ public class CompanyListView extends CompanyListMeta implements ICompanyListMeta
             _loc4_ = _loc3_.y + _loc2_.height - y - height;
         }
         _loc3_.y = _loc3_.y - _loc4_;
-        var _loc5_:IEventCollector = App.utils.events;
-        _loc5_.disableDisposingForObj(_loc2_);
         addChild(_loc2_);
-        _loc5_.enableDisposingForObj(_loc2_);
         _loc2_.x = _loc3_.x;
         _loc2_.y = _loc3_.y;
         _loc2_.replaceArrow(_loc4_);

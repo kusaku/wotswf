@@ -35,6 +35,41 @@ import net.wg.data.constants.generated.FLAG_NOTIFICATION_CONSTS;
 import net.wg.data.constants.generated.INTERFACE_STATES;
 import net.wg.data.constants.generated.KEYBOARD_KEYS;
 import net.wg.data.constants.generated.PLAYERS_PANEL_STATE;
+import net.wg.gui.battle.battleloading.BaseBattleLoading;
+import net.wg.gui.battle.battleloading.BaseLoadingForm;
+import net.wg.gui.battle.battleloading.BattleLoading;
+import net.wg.gui.battle.battleloading.BattleLoadingForm;
+import net.wg.gui.battle.battleloading.BattleLoadingHelper;
+import net.wg.gui.battle.battleloading.FalloutMultiTeamBattleLoading;
+import net.wg.gui.battle.battleloading.FalloutMultiTeamForm;
+import net.wg.gui.battle.battleloading.TutorialBattleLoading;
+import net.wg.gui.battle.battleloading.components.FalloutPlayerTypeIcon;
+import net.wg.gui.battle.battleloading.components.MultiTeamIcons;
+import net.wg.gui.battle.battleloading.constants.FalloutMultiTeamTypes;
+import net.wg.gui.battle.battleloading.constants.VehicleStatusSchemes;
+import net.wg.gui.battle.battleloading.data.EnemyVehiclesDataProvider;
+import net.wg.gui.battle.battleloading.data.TeamVehiclesDataProvider;
+import net.wg.gui.battle.battleloading.interfaces.IVehiclesDataProvider;
+import net.wg.gui.battle.battleloading.renderers.BasePlayerItemRenderer;
+import net.wg.gui.battle.battleloading.renderers.MultiTeamFFARenderer;
+import net.wg.gui.battle.battleloading.renderers.MultiTeamRenderer;
+import net.wg.gui.battle.battleloading.renderers.RendererContainer;
+import net.wg.gui.battle.battleloading.renderers.TablePlayerItemRenderer;
+import net.wg.gui.battle.battleloading.renderers.TipPlayerItemRenderer;
+import net.wg.gui.battle.battleloading.util.BattleLoadingUtil;
+import net.wg.gui.battle.battleloading.vo.FullInfoVO;
+import net.wg.gui.battle.battleloading.vo.LoadingFormDisplayDataVO;
+import net.wg.gui.battle.battleloading.vo.MultiTeamIconInfoVO;
+import net.wg.gui.battle.battleloading.vo.ShortInfoVO;
+import net.wg.gui.battle.battleloading.vo.TutorialInfoVO;
+import net.wg.gui.battle.battleloading.vo.VehInfoWithSortedIDTeamVO;
+import net.wg.gui.battle.battleloading.vo.VehInfoWithSortedIDVO;
+import net.wg.gui.battle.battleloading.vo.VehStatusTeamVO;
+import net.wg.gui.battle.battleloading.vo.VehStatusVO;
+import net.wg.gui.battle.battleloading.vo.VehicleDataTeamVO;
+import net.wg.gui.battle.battleloading.vo.VehicleDataVO;
+import net.wg.gui.battle.battleloading.vo.VehicleInfoVO;
+import net.wg.gui.battle.battleloading.vo.VisualTipInfoVO;
 import net.wg.gui.battle.components.BattleAtlasSprite;
 import net.wg.gui.battle.components.BattleDAAPIComponent;
 import net.wg.gui.battle.components.BattleDisplayable;
@@ -45,6 +80,7 @@ import net.wg.gui.battle.components.BattleUIDisplayable;
 import net.wg.gui.battle.components.CoolDownTimer;
 import net.wg.gui.battle.components.DestroyTimersPanel;
 import net.wg.gui.battle.components.FrameAnimationTimer;
+import net.wg.gui.battle.components.HintPanel;
 import net.wg.gui.battle.components.buttons.BattleButton;
 import net.wg.gui.battle.components.buttons.BattleStateButton;
 import net.wg.gui.battle.components.buttons.BattleToolTipButton;
@@ -62,7 +98,6 @@ import net.wg.gui.battle.components.buttons.interfaces.IStateChangedButtonHandle
 import net.wg.gui.battle.components.buttons.interfaces.ITooltipTarget;
 import net.wg.gui.battle.components.constants.InteractiveStates;
 import net.wg.gui.battle.components.damageIndicator.AnimationContainer;
-import net.wg.gui.battle.components.damageIndicator.DamageIndicator;
 import net.wg.gui.battle.components.damageIndicator.DamageIndicatorItem;
 import net.wg.gui.battle.components.damageIndicator.ExtendedStateContainer;
 import net.wg.gui.battle.components.damageIndicator.ItemWithRotation;
@@ -74,6 +109,10 @@ import net.wg.gui.battle.components.falloutScorePanel.FalloutMultiteamScorePanel
 import net.wg.gui.battle.components.interfaces.IBattleDisplayable;
 import net.wg.gui.battle.components.interfaces.IBattleUIComponent;
 import net.wg.gui.battle.components.interfaces.ICoolDownCompleteHandler;
+import net.wg.gui.battle.eventInfoPanel.EventInfoPanel;
+import net.wg.gui.battle.eventInfoPanel.data.EventInfoPanelItemVO;
+import net.wg.gui.battle.eventInfoPanel.data.EventInfoPanelVO;
+import net.wg.gui.battle.eventInfoPanel.interfaces.IEventInfoPanel;
 import net.wg.gui.battle.falloutClassic.components.fullStats.FCFullStats;
 import net.wg.gui.battle.falloutClassic.components.fullStats.FCStatsTable;
 import net.wg.gui.battle.falloutClassic.components.fullStats.FCStatsTableController;
@@ -171,6 +210,7 @@ import net.wg.gui.battle.views.battleMessenger.actionPanel.BattleMessengerAction
 import net.wg.gui.battle.views.battleMessenger.interfaces.IBattleMessenger;
 import net.wg.gui.battle.views.battleTimer.BattleAnimationTimer;
 import net.wg.gui.battle.views.battleTimer.BattleTimer;
+import net.wg.gui.battle.views.battleTimer.TimerDisplay;
 import net.wg.gui.battle.views.consumablesPanel.BattleEquipmentButton;
 import net.wg.gui.battle.views.consumablesPanel.BattleOptionalDeviceButton;
 import net.wg.gui.battle.views.consumablesPanel.BattleOrderButton;
@@ -186,6 +226,7 @@ import net.wg.gui.battle.views.consumablesPanel.interfaces.IBattleShellButton;
 import net.wg.gui.battle.views.consumablesPanel.interfaces.IConsumablesButton;
 import net.wg.gui.battle.views.consumablesPanel.interfaces.IConsumablesPanel;
 import net.wg.gui.battle.views.consumablesPanel.interfaces.IEntityStateButton;
+import net.wg.gui.battle.views.damageIndicator.DamageIndicator;
 import net.wg.gui.battle.views.damageInfoPanel.DamageInfoPanel;
 import net.wg.gui.battle.views.damageInfoPanel.components.DamageItem;
 import net.wg.gui.battle.views.damageInfoPanel.components.Fire;
@@ -291,7 +332,8 @@ import net.wg.gui.battle.views.minimap.constants.MinimapColorConst;
 import net.wg.gui.battle.views.minimap.constants.MinimapSizeConst;
 import net.wg.gui.battle.views.minimap.containers.MinimapEntriesContainer;
 import net.wg.gui.battle.views.minimap.events.MinimapEvent;
-import net.wg.gui.battle.views.postmortemPanel.PostmortemGasInfo;
+import net.wg.gui.battle.views.postMortemTips.PostmortemGasInfo;
+import net.wg.gui.battle.views.postMortemTips.PostmortemTips;
 import net.wg.gui.battle.views.postmortemPanel.PostmortemPanel;
 import net.wg.gui.battle.views.postmortemPanel.VehiclePanel;
 import net.wg.gui.battle.views.prebattleTimer.PrebattleTimer;
@@ -309,11 +351,13 @@ import net.wg.gui.battle.views.ribbonsPanel.RibbonIcons;
 import net.wg.gui.battle.views.ribbonsPanel.RibbonTexts;
 import net.wg.gui.battle.views.ribbonsPanel.RibbonsPanel;
 import net.wg.gui.battle.views.ribbonsPanel.data.BackgroundAtlasNames;
+import net.wg.gui.battle.views.ribbonsPanel.data.PaddingSettings;
 import net.wg.gui.battle.views.ribbonsPanel.data.RibbonAnimationStates;
 import net.wg.gui.battle.views.ribbonsPanel.data.RibbonQueue;
 import net.wg.gui.battle.views.ribbonsPanel.data.RibbonQueueItem;
 import net.wg.gui.battle.views.ribbonsPanel.data.RibbonSettings;
 import net.wg.gui.battle.views.ribbonsPanel.data.RibbonTextSettings;
+import net.wg.gui.battle.views.siegeModePanel.SiegeModePanel;
 import net.wg.gui.battle.views.sixthSense.SixthSense;
 import net.wg.gui.battle.views.staticMarkers.flag.FlagIcon;
 import net.wg.gui.battle.views.staticMarkers.flag.FlagMarker;
@@ -371,8 +415,11 @@ import net.wg.gui.battle.windows.DeserterDialog;
 import net.wg.gui.battle.windows.IngameHelpWindow;
 import net.wg.gui.battle.windows.IngameMenu;
 import net.wg.gui.battle.windows.ReplenishAmmoDialog;
+import net.wg.gui.components.controls.ReadOnlyScrollingList;
+import net.wg.gui.tutorial.controls.TipLoadingForm;
 import net.wg.infrastructure.base.BaseBattleDAAPIComponent;
 import net.wg.infrastructure.base.meta.IBaseBattleDAAPIComponentMeta;
+import net.wg.infrastructure.base.meta.IBaseBattleLoadingMeta;
 import net.wg.infrastructure.base.meta.IBattleDAAPIComponentMeta;
 import net.wg.infrastructure.base.meta.IBattleDamageLogPanelMeta;
 import net.wg.infrastructure.base.meta.IBattleEndWarningPanelMeta;
@@ -407,9 +454,11 @@ import net.wg.infrastructure.base.meta.IPrebattleTimerMeta;
 import net.wg.infrastructure.base.meta.IRadialMenuMeta;
 import net.wg.infrastructure.base.meta.IRepairPointTimerMeta;
 import net.wg.infrastructure.base.meta.IRibbonsPanelMeta;
+import net.wg.infrastructure.base.meta.ISiegeModeIndicatorMeta;
 import net.wg.infrastructure.base.meta.ISixthSenseMeta;
 import net.wg.infrastructure.base.meta.IStatsBaseMeta;
 import net.wg.infrastructure.base.meta.ITeamBasesPanelMeta;
+import net.wg.infrastructure.base.meta.ITutorialLoadingMeta;
 import net.wg.infrastructure.base.meta.IVehicleMarkersManagerMeta;
 import net.wg.infrastructure.helpers.statisticsDataController.BattleStatisticDataController;
 import net.wg.infrastructure.helpers.statisticsDataController.FalloutStatisticsDataController;
@@ -453,7 +502,7 @@ public class ClassManagerMeta {
 
     public static const NET_WG_DATA_CONSTANTS_BATTLESTATISTICSMODELSTATUS:Class = BattleStatisticsModelStatus;
 
-    public static const NET_WG_DATA_CONSTANTS_INTERACTIVESTATES:Class = net.wg.data.constants.InteractiveStates;
+    public static const NET_WG_DATA_CONSTANTS_INTERACTIVESTATES:Class = InteractiveStates;
 
     public static const NET_WG_DATA_CONSTANTS_INVALIDATIONTYPE:Class = InvalidationType;
 
@@ -491,6 +540,80 @@ public class ClassManagerMeta {
 
     public static const NET_WG_DATA_CONSTANTS_GENERATED_PLAYERS_PANEL_STATE:Class = PLAYERS_PANEL_STATE;
 
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_BASEBATTLELOADING:Class = BaseBattleLoading;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_BASELOADINGFORM:Class = BaseLoadingForm;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_BATTLELOADING:Class = BattleLoading;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_BATTLELOADINGFORM:Class = BattleLoadingForm;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_BATTLELOADINGHELPER:Class = BattleLoadingHelper;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_FALLOUTMULTITEAMBATTLELOADING:Class = FalloutMultiTeamBattleLoading;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_FALLOUTMULTITEAMFORM:Class = FalloutMultiTeamForm;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_TUTORIALBATTLELOADING:Class = TutorialBattleLoading;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_COMPONENTS_FALLOUTPLAYERTYPEICON:Class = FalloutPlayerTypeIcon;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_COMPONENTS_MULTITEAMICONS:Class = MultiTeamIcons;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_CONSTANTS_FALLOUTMULTITEAMTYPES:Class = FalloutMultiTeamTypes;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_CONSTANTS_PLAYERSTATUS:Class = net.wg.gui.battle.battleloading.constants.PlayerStatus;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_CONSTANTS_VEHICLESTATUS:Class = net.wg.gui.battle.battleloading.constants.VehicleStatus;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_CONSTANTS_VEHICLESTATUSSCHEMES:Class = VehicleStatusSchemes;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_DATA_ENEMYVEHICLESDATAPROVIDER:Class = EnemyVehiclesDataProvider;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_DATA_TEAMVEHICLESDATAPROVIDER:Class = TeamVehiclesDataProvider;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_INTERFACES_IVEHICLESDATAPROVIDER:Class = IVehiclesDataProvider;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_RENDERERS_BASEPLAYERITEMRENDERER:Class = BasePlayerItemRenderer;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_RENDERERS_MULTITEAMFFARENDERER:Class = MultiTeamFFARenderer;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_RENDERERS_MULTITEAMRENDERER:Class = MultiTeamRenderer;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_RENDERERS_RENDERERCONTAINER:Class = RendererContainer;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_RENDERERS_TABLEPLAYERITEMRENDERER:Class = TablePlayerItemRenderer;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_RENDERERS_TIPPLAYERITEMRENDERER:Class = TipPlayerItemRenderer;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_UTIL_BATTLELOADINGUTIL:Class = BattleLoadingUtil;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_VO_FULLINFOVO:Class = FullInfoVO;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_VO_LOADINGFORMDISPLAYDATAVO:Class = LoadingFormDisplayDataVO;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_VO_MULTITEAMICONINFOVO:Class = MultiTeamIconInfoVO;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_VO_SHORTINFOVO:Class = ShortInfoVO;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_VO_TUTORIALINFOVO:Class = TutorialInfoVO;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_VO_VEHINFOWITHSORTEDIDTEAMVO:Class = VehInfoWithSortedIDTeamVO;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_VO_VEHINFOWITHSORTEDIDVO:Class = VehInfoWithSortedIDVO;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_VO_VEHSTATUSTEAMVO:Class = VehStatusTeamVO;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_VO_VEHSTATUSVO:Class = VehStatusVO;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_VO_VEHICLEDATATEAMVO:Class = VehicleDataTeamVO;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_VO_VEHICLEDATAVO:Class = VehicleDataVO;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_VO_VEHICLEINFOVO:Class = VehicleInfoVO;
+
+    public static const NET_WG_GUI_BATTLE_BATTLELOADING_VO_VISUALTIPINFOVO:Class = VisualTipInfoVO;
+
     public static const NET_WG_GUI_BATTLE_COMPONENTS_BATTLEATLASSPRITE:Class = BattleAtlasSprite;
 
     public static const NET_WG_GUI_BATTLE_COMPONENTS_BATTLEDAAPICOMPONENT:Class = BattleDAAPIComponent;
@@ -510,6 +633,8 @@ public class ClassManagerMeta {
     public static const NET_WG_GUI_BATTLE_COMPONENTS_DESTROYTIMERSPANEL:Class = DestroyTimersPanel;
 
     public static const NET_WG_GUI_BATTLE_COMPONENTS_FRAMEANIMATIONTIMER:Class = FrameAnimationTimer;
+
+    public static const NET_WG_GUI_BATTLE_COMPONENTS_HINTPANEL:Class = HintPanel;
 
     public static const NET_WG_GUI_BATTLE_COMPONENTS_BUTTONS_BATTLEBUTTON:Class = BattleButton;
 
@@ -570,6 +695,14 @@ public class ClassManagerMeta {
     public static const NET_WG_GUI_BATTLE_COMPONENTS_INTERFACES_IBATTLEUICOMPONENT:Class = IBattleUIComponent;
 
     public static const NET_WG_GUI_BATTLE_COMPONENTS_INTERFACES_ICOOLDOWNCOMPLETEHANDLER:Class = ICoolDownCompleteHandler;
+
+    public static const NET_WG_GUI_BATTLE_EVENTINFOPANEL_EVENTINFOPANEL:Class = EventInfoPanel;
+
+    public static const NET_WG_GUI_BATTLE_EVENTINFOPANEL_DATA_EVENTINFOPANELITEMVO:Class = EventInfoPanelItemVO;
+
+    public static const NET_WG_GUI_BATTLE_EVENTINFOPANEL_DATA_EVENTINFOPANELVO:Class = EventInfoPanelVO;
+
+    public static const NET_WG_GUI_BATTLE_EVENTINFOPANEL_INTERFACES_IEVENTINFOPANEL:Class = IEventInfoPanel;
 
     public static const NET_WG_GUI_BATTLE_FALLOUTCLASSIC_COMPONENTS_FULLSTATS_FCFULLSTATS:Class = FCFullStats;
 
@@ -765,6 +898,8 @@ public class ClassManagerMeta {
 
     public static const NET_WG_GUI_BATTLE_VIEWS_BATTLETIMER_BATTLETIMER:Class = BattleTimer;
 
+    public static const NET_WG_GUI_BATTLE_VIEWS_BATTLETIMER_TIMERDISPLAY:Class = TimerDisplay;
+
     public static const NET_WG_GUI_BATTLE_VIEWS_CONSUMABLESPANEL_BATTLEEQUIPMENTBUTTON:Class = BattleEquipmentButton;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_CONSUMABLESPANEL_BATTLEOPTIONALDEVICEBUTTON:Class = BattleOptionalDeviceButton;
@@ -794,6 +929,8 @@ public class ClassManagerMeta {
     public static const NET_WG_GUI_BATTLE_VIEWS_CONSUMABLESPANEL_INTERFACES_ICONSUMABLESPANEL:Class = IConsumablesPanel;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_CONSUMABLESPANEL_INTERFACES_IENTITYSTATEBUTTON:Class = IEntityStateButton;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_DAMAGEINDICATOR_DAMAGEINDICATOR:Class = DamageIndicator;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_DAMAGEINFOPANEL_DAMAGEINFOPANEL:Class = DamageInfoPanel;
 
@@ -1005,7 +1142,11 @@ public class ClassManagerMeta {
 
     public static const NET_WG_GUI_BATTLE_VIEWS_MINIMAP_EVENTS_MINIMAPEVENT:Class = MinimapEvent;
 
-    public static const NET_WG_GUI_BATTLE_VIEWS_POSTMORTEMPANEL_POSTMORTEMGASINFO:Class = PostmortemGasInfo;
+    public static const NET_WG_GUI_BATTLE_VIEWS_POSTMORTEMTIPS_POSTMORTEMGASINFO:Class = PostmortemGasInfo;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_POSTMORTEMTIPS_POSTMORTEMTIPS:Class = PostmortemTips;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_POSTMORTEMPANEL_POSTMORTEMGASINFO:Class = net.wg.gui.battle.views.postmortemPanel.PostmortemGasInfo;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_POSTMORTEMPANEL_POSTMORTEMPANEL:Class = PostmortemPanel;
 
@@ -1041,6 +1182,8 @@ public class ClassManagerMeta {
 
     public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_DATA_BACKGROUNDATLASNAMES:Class = BackgroundAtlasNames;
 
+    public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_DATA_PADDINGSETTINGS:Class = PaddingSettings;
+
     public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_DATA_RIBBONANIMATIONSTATES:Class = RibbonAnimationStates;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_DATA_RIBBONQUEUE:Class = RibbonQueue;
@@ -1050,6 +1193,8 @@ public class ClassManagerMeta {
     public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_DATA_RIBBONSETTINGS:Class = RibbonSettings;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_RIBBONSPANEL_DATA_RIBBONTEXTSETTINGS:Class = RibbonTextSettings;
+
+    public static const NET_WG_GUI_BATTLE_VIEWS_SIEGEMODEPANEL_SIEGEMODEPANEL:Class = SiegeModePanel;
 
     public static const NET_WG_GUI_BATTLE_VIEWS_SIXTHSENSE_SIXTHSENSE:Class = SixthSense;
 
@@ -1167,9 +1312,15 @@ public class ClassManagerMeta {
 
     public static const NET_WG_GUI_BATTLE_WINDOWS_REPLENISHAMMODIALOG:Class = ReplenishAmmoDialog;
 
+    public static const NET_WG_GUI_COMPONENTS_CONTROLS_READONLYSCROLLINGLIST:Class = ReadOnlyScrollingList;
+
+    public static const NET_WG_GUI_TUTORIAL_CONTROLS_TIPLOADINGFORM:Class = TipLoadingForm;
+
     public static const NET_WG_INFRASTRUCTURE_BASE_BASEBATTLEDAAPICOMPONENT:Class = BaseBattleDAAPIComponent;
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IBASEBATTLEDAAPICOMPONENTMETA:Class = IBaseBattleDAAPIComponentMeta;
+
+    public static const NET_WG_INFRASTRUCTURE_BASE_META_IBASEBATTLELOADINGMETA:Class = IBaseBattleLoadingMeta;
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IBATTLEDAAPICOMPONENTMETA:Class = IBattleDAAPIComponentMeta;
 
@@ -1239,15 +1390,21 @@ public class ClassManagerMeta {
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IRIBBONSPANELMETA:Class = IRibbonsPanelMeta;
 
+    public static const NET_WG_INFRASTRUCTURE_BASE_META_ISIEGEMODEINDICATORMETA:Class = ISiegeModeIndicatorMeta;
+
     public static const NET_WG_INFRASTRUCTURE_BASE_META_ISIXTHSENSEMETA:Class = ISixthSenseMeta;
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_ISTATSBASEMETA:Class = IStatsBaseMeta;
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_ITEAMBASESPANELMETA:Class = ITeamBasesPanelMeta;
 
+    public static const NET_WG_INFRASTRUCTURE_BASE_META_ITUTORIALLOADINGMETA:Class = ITutorialLoadingMeta;
+
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IVEHICLEMARKERSMANAGERMETA:Class = IVehicleMarkersManagerMeta;
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_BASEBATTLEDAAPICOMPONENTMETA:Class = BaseBattleDAAPIComponentMeta;
+
+    public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_BASEBATTLELOADINGMETA:Class = BaseBattleLoadingMeta;
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_BATTLEDAAPICOMPONENTMETA:Class = BattleDAAPIComponentMeta;
 
@@ -1317,11 +1474,15 @@ public class ClassManagerMeta {
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_RIBBONSPANELMETA:Class = RibbonsPanelMeta;
 
+    public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_SIEGEMODEINDICATORMETA:Class = SiegeModeIndicatorMeta;
+
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_SIXTHSENSEMETA:Class = SixthSenseMeta;
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_STATSBASEMETA:Class = StatsBaseMeta;
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_TEAMBASESPANELMETA:Class = TeamBasesPanelMeta;
+
+    public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_TUTORIALLOADINGMETA:Class = TutorialLoadingMeta;
 
     public static const NET_WG_INFRASTRUCTURE_BASE_META_IMPL_VEHICLEMARKERSMANAGERMETA:Class = VehicleMarkersManagerMeta;
 

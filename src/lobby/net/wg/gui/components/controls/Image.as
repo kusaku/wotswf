@@ -5,7 +5,6 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
 
-import net.wg.data.constants.Values;
 import net.wg.infrastructure.interfaces.IImage;
 import net.wg.infrastructure.interfaces.IImageData;
 import net.wg.infrastructure.managers.IImageManager;
@@ -69,10 +68,14 @@ public class Image extends Sprite implements IImage {
         if (this._source != param1) {
             this._source = param1;
             this.removeImgData();
-            if (this._source != Values.EMPTY_STR && this._source != null) {
+            if (this._source) {
                 this.setImgData(this._mgr.getImageData(this._source));
             }
         }
+    }
+
+    public function get source():String {
+        return this._source;
     }
 
     public function set bitmapData(param1:BitmapData):void {

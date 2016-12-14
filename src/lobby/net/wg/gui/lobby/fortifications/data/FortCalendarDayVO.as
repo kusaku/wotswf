@@ -1,4 +1,5 @@
 package net.wg.gui.lobby.fortifications.data {
+import net.wg.data.constants.Errors;
 import net.wg.data.daapi.base.DAAPIDataClass;
 import net.wg.gui.interfaces.ICalendarDayVO;
 
@@ -23,8 +24,11 @@ public class FortCalendarDayVO extends DAAPIDataClass implements ICalendarDayVO 
     }
 
     override protected function onDataWrite(param1:String, param2:Object):Boolean {
+        var _loc3_:Number = NaN;
         if (param1 == RAW_DATE_FIELD) {
-            this.parsedDate = App.utils.dateTime.fromPyTimestamp(param2 as Number);
+            _loc3_ = Number(param2);
+            App.utils.asserter.assert(!isNaN(_loc3_), "time" + Errors.CANT_NAN);
+            this.parsedDate = App.utils.dateTime.fromPyTimestamp(_loc3_);
         }
         return true;
     }

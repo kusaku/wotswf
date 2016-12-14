@@ -15,6 +15,8 @@ public class AccountPopoverBlockVO extends DAAPIDataClass {
 
     public var btnTooltip:String = "";
 
+    public var disabledTooltip:String = "";
+
     public var isDoActionBtnVisible:Boolean = true;
 
     public var isTextFieldNameVisible:Boolean = true;

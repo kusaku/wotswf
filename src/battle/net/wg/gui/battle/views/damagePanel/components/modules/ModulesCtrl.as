@@ -144,7 +144,7 @@ public class ModulesCtrl implements IDamagePanelItemsCtrl {
     }
 
     public function setState(param1:String, param2:String):void {
-        var _loc4_:Boolean = false;
+        var _loc4_:* = false;
         if (this._isDestroyed) {
             this._isDestroyed = param2 == BATTLE_ITEM_STATES.DESTROYED;
         }
@@ -155,6 +155,9 @@ public class ModulesCtrl implements IDamagePanelItemsCtrl {
                 this._destroyedTracks[param1] = 0;
                 this._lastBrokenTrack = param1;
                 this._lastDestroyedTrack = param1;
+            }
+            else if (param2 == BATTLE_ITEM_STATES.CRITICAL) {
+                _loc4_ = this._lastDestroyedTrack == Values.EMPTY_STR;
             }
             else if (param2 == BATTLE_ITEM_STATES.REPAIRED || param2 == BATTLE_ITEM_STATES.REPAIRED_FULL) {
                 this._destroyedTracks[param1] = 0;

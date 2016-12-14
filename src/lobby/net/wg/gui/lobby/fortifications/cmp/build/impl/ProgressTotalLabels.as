@@ -15,21 +15,22 @@ public class ProgressTotalLabels extends MovieClip implements IDisposable {
 
     public var separator:TextField;
 
-    private var model:BuildingProgressLblVO;
+    private var _model:BuildingProgressLblVO;
 
     public function ProgressTotalLabels() {
         super();
+        this.separator.text = COMMON.COMMON_SLASH;
     }
 
     public function dispose():void {
-        this.model = null;
+        this._model = null;
     }
 
     public function set setData(param1:BuildingProgressLblVO):void {
-        this.model = param1;
-        this.currentValue.htmlText = this.model.currentValueFormatter.replace(FORMAT_PATTERN, this.model.currentValue);
-        this.totalValue.htmlText = this.model.totalValue;
-        this.separator.htmlText = this.model.separator;
+        this._model = param1;
+        this.currentValue.htmlText = this._model.currentValueFormatter.replace(FORMAT_PATTERN, this._model.currentValue);
+        this.totalValue.htmlText = this._model.totalValue;
+        this.separator.htmlText = this._model.separator;
     }
 }
 }

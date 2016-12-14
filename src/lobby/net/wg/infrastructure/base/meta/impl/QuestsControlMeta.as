@@ -27,12 +27,13 @@ public class QuestsControlMeta extends SoundButton {
         this.showQuestsWindow();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._questsControlBtnVO) {
-            this._questsControlBtnVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:QuestsControlBtnVO = this._questsControlBtnVO;
         this._questsControlBtnVO = new QuestsControlBtnVO(param1);
         this.setData(this._questsControlBtnVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:QuestsControlBtnVO):void {

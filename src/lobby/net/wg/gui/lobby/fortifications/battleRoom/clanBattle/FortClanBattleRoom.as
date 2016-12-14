@@ -133,7 +133,7 @@ public class FortClanBattleRoom extends FortClanBattleRoomMeta implements IFortC
         return FORTIFICATIONS.SORTIE_ROOM_TITLE;
     }
 
-    override protected function getRallyVO(param1:Object):IRallyVO {
+    override protected function getIRallyVO(param1:Object):IRallyVO {
         return new SortieVO(param1);
     }
 

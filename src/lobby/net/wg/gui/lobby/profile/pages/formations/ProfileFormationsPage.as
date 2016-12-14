@@ -122,7 +122,7 @@ public class ProfileFormationsPage extends ProfileFormationsPageMeta implements 
         this.team.header.icon.setImage(param1);
     }
 
-    public function as_setClubHistory(param1:Array):void {
+    override protected function setClubHistory(param1:Array):void {
     }
 
     public function as_setClubInfo(param1:Object):void {

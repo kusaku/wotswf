@@ -11,7 +11,6 @@ import net.wg.gui.lobby.battleResults.data.BattleResultsVO;
 import net.wg.gui.lobby.battleResults.data.ColumnCollection;
 import net.wg.gui.lobby.battleResults.data.ColumnData;
 import net.wg.gui.lobby.battleResults.data.CommonStatsVO;
-import net.wg.gui.lobby.battleResults.data.TeamMemberItemVO;
 import net.wg.gui.lobby.battleResults.event.TeamTableSortEvent;
 import net.wg.infrastructure.exceptions.AbstractException;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
@@ -86,11 +85,9 @@ public class TeamStatsControllerAbstract implements IDisposable {
         throw new AbstractException("TeamStatsControllerAbstract.setupLists" + Errors.ABSTRACT_INVOKE);
     }
 
-    protected function setupList(param1:Vector.<TeamMemberItemVO>, param2:CommonStatsVO, param3:TeamStatsList):void {
-        var _loc4_:Array = App.utils.data.vectorToArray(param1);
-        param3.dataProvider = new DataProvider(_loc4_);
+    protected function setupList(param1:DataProvider, param2:CommonStatsVO, param3:TeamStatsList):void {
+        param3.dataProvider = param1;
         param3.setCommonStatsVO(param2);
-        _loc4_.splice(0, _loc4_.length);
     }
 
     protected function initColumnsData():void {

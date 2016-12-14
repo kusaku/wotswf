@@ -45,11 +45,8 @@ public class ModuleVO extends DAAPIDataClass {
 
     public var moduleLabel:String = "";
 
-    private var _originalHash:Object;
-
-    public function ModuleVO(param1:Object) {
+    public function ModuleVO(param1:Object = null) {
         super(param1);
-        this._originalHash = param1;
     }
 
     override protected function onDispose():void {
@@ -61,7 +58,6 @@ public class ModuleVO extends DAAPIDataClass {
         this.actionPriceData = App.utils.data.cleanupDynamicObject(this.actionPriceData);
         this.prices.splice(0);
         this.fits.splice(0);
-        this._originalHash = App.utils.data.cleanupDynamicObject(this._originalHash);
         super.onDispose();
     }
 
@@ -70,12 +66,6 @@ public class ModuleVO extends DAAPIDataClass {
             this.actionPriceVo = new ActionPriceVO(param2);
         }
         return super.onDataWrite(param1, param2);
-    }
-
-    public function clone(param1:int):ModuleVO {
-        var _loc2_:ModuleVO = new ModuleVO(this._originalHash);
-        _loc2_.slotIndex = param1;
-        return _loc2_;
     }
 
     public function get status():String {

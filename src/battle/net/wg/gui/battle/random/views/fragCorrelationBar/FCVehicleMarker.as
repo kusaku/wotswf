@@ -107,7 +107,7 @@ public class FCVehicleMarker extends MovieClip implements IDisposable {
         this.redraw();
     }
 
-    public function dispose():void {
+    public final function dispose():void {
         App.utils.asserter.assert(!this._isDisposed, "FCVehicleMarker is already disposed!");
         this._isDisposed = true;
         this.normalMarker = null;

@@ -1,5 +1,6 @@
 package net.wg.gui.lobby.store.shop {
 import flash.display.DisplayObject;
+import flash.display.Sprite;
 import flash.text.TextField;
 
 import net.wg.data.VO.StoreTableData;
@@ -13,6 +14,7 @@ import net.wg.gui.lobby.store.shop.base.ShopTableItemRenderer;
 import net.wg.utils.IAssertable;
 import net.wg.utils.ILocale;
 
+import scaleform.clik.events.ComponentEvent;
 import scaleform.clik.utils.Constraints;
 
 public class ShopModuleListItemRenderer extends ShopTableItemRenderer {
@@ -29,27 +31,34 @@ public class ShopModuleListItemRenderer extends ShopTableItemRenderer {
 
     public var count:TextField = null;
 
+    public var icoBg:Sprite = null;
+
+    public var icoDisabled:Sprite = null;
+
     public function ShopModuleListItemRenderer() {
         super();
         this.showHideAction();
     }
 
     override protected function onDispose():void {
+        removeEventListener(ComponentEvent.STATE_CHANGE, this.onStateChangeHandler);
         if (this.moduleIcon != null) {
             this.moduleIcon.dispose();
             this.moduleIcon = null;
         }
-        this.orTextField = null;
         if (this.actionCredits != null) {
             this.actionCredits.dispose();
             this.actionCredits = null;
         }
-        this.vehCount = null;
-        this.count = null;
         if (this.actionPriceLeft != null) {
             this.actionPriceLeft.dispose();
             this.actionPriceLeft = null;
         }
+        this.orTextField = null;
+        this.vehCount = null;
+        this.count = null;
+        this.icoBg = null;
+        this.icoDisabled = null;
         super.onDispose();
     }
 
@@ -57,7 +66,9 @@ public class ShopModuleListItemRenderer extends ShopTableItemRenderer {
         super.configUI();
         constraints.addElement(this.moduleIcon.name, this.moduleIcon, Constraints.LEFT);
         constraints.addElement(this.count.name, this.count, Constraints.RIGHT);
+        constraints.addElement(this.icoBg.name, this.icoBg, Constraints.LEFT);
         this.orTextField.text = MENU.SHOP_TABLE_BUYACTIONOR;
+        addEventListener(ComponentEvent.STATE_CHANGE, this.onStateChangeHandler);
     }
 
     override protected function draw():void {
@@ -133,6 +144,12 @@ public class ShopModuleListItemRenderer extends ShopTableItemRenderer {
         }
         this.moduleIcon.setValuesWithType(param1.requestType, param1.moduleLabel, param1.level);
         this.moduleIcon.extraIconSource = param1.extraModuleInfo;
+    }
+
+    private function onStateChangeHandler(param1:ComponentEvent):void {
+        if (this.icoDisabled) {
+            constraints.addElement(this.icoDisabled.name, this.icoDisabled, Constraints.LEFT);
+        }
     }
 }
 }

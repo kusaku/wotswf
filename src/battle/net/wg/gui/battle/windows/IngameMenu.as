@@ -8,7 +8,6 @@ import flash.text.TextFieldAutoSize;
 
 import net.wg.data.constants.Values;
 import net.wg.data.constants.generated.BATTLE_VIEW_ALIASES;
-import net.wg.data.constants.generated.GLOBAL_VARS_MGR_CONSTS;
 import net.wg.data.constants.generated.INTERFACE_STATES;
 import net.wg.gui.components.common.bugreport.ReportBugPanel;
 import net.wg.gui.components.controls.SoundButtonEx;
@@ -29,6 +28,8 @@ public class IngameMenu extends IngameMenuMeta implements IIngameMenuMeta {
     private static const INVALIDATE_SERVER_INFO:String = "serverInfo";
 
     private static const INVALIDATE_SERVER_STATS:String = "serverStats";
+
+    private static const INVALIDATE_BUTTONS_LABELS:String = "buttonsLabels";
 
     private static const PADDING:int = 5;
 
@@ -66,6 +67,14 @@ public class IngameMenu extends IngameMenuMeta implements IIngameMenuMeta {
 
     private var _isSettingsCounterAdded:Boolean = false;
 
+    private var _quitLabel:String = "";
+
+    private var _settingsLabel:String = "";
+
+    private var _helpLabel:String = "";
+
+    private var _cancelLabel:String = "";
+
     private var _tooltipType:String = "unavailable";
 
     private var _tooltipFullData:String = "";
@@ -93,15 +102,6 @@ public class IngameMenu extends IngameMenuMeta implements IIngameMenuMeta {
 
     override protected function configUI():void {
         super.configUI();
-        if (App.globalVarsMgr.isTutorialRunningS(GLOBAL_VARS_MGR_CONSTS.BATTLE)) {
-            this.quitBattleBtn.label = MENU.LOBBY_MENU_BUTTONS_REFUSE_TRAINING;
-        }
-        else {
-            this.quitBattleBtn.label = MENU.INGAME_MENU_BUTTONS_LOGOFF;
-        }
-        this.settingsBtn.label = MENU.INGAME_MENU_BUTTONS_SETTINGS;
-        this.helpBtn.label = MENU.INGAME_MENU_BUTTONS_HELP;
-        this.cancelBtn.label = MENU.INGAME_MENU_BUTTONS_BACK;
     }
 
     override protected function onPopulate():void {
@@ -112,8 +112,8 @@ public class IngameMenu extends IngameMenuMeta implements IIngameMenuMeta {
         this.helpBtn.addEventListener(ButtonEvent.PRESS, this.onHelpBtnPressHandler);
         this.cancelBtn.addEventListener(ButtonEvent.PRESS, this.onCancelBtnPressHandler);
         this.hitMC.useHandCursor = false;
-        this.hitMC.addEventListener(MouseEvent.ROLL_OVER, this.showPlayersTooltip);
-        this.hitMC.addEventListener(MouseEvent.ROLL_OUT, this.hideTooltip);
+        this.hitMC.addEventListener(MouseEvent.ROLL_OVER, this.onHitMCRollOverHandler);
+        this.hitMC.addEventListener(MouseEvent.ROLL_OUT, this.onHitMCRollOutHandler);
         this.headerTF.text = MENU.INGAME_MENU_TITLE;
         this.serverNameTF.autoSize = TextFieldAutoSize.CENTER;
         registerFlashComponentS(this.reportBugPanel, BATTLE_VIEW_ALIASES.REPORT_BUG);
@@ -130,8 +130,8 @@ public class IngameMenu extends IngameMenuMeta implements IIngameMenuMeta {
         this.settingsBtn.removeEventListener(ButtonEvent.PRESS, this.onSettingsBtnPressHandler);
         this.helpBtn.removeEventListener(ButtonEvent.PRESS, this.onHelpBtnPressHandler);
         this.cancelBtn.removeEventListener(ButtonEvent.PRESS, this.onCancelBtnPressHandler);
-        this.hitMC.removeEventListener(MouseEvent.ROLL_OVER, this.showPlayersTooltip);
-        this.hitMC.removeEventListener(MouseEvent.ROLL_OUT, this.hideTooltip);
+        this.hitMC.removeEventListener(MouseEvent.ROLL_OVER, this.onHitMCRollOverHandler);
+        this.hitMC.removeEventListener(MouseEvent.ROLL_OUT, this.onHitMCRollOutHandler);
         this.quitBattleBtn.dispose();
         this.settingsBtn.dispose();
         this.helpBtn.dispose();
@@ -161,6 +161,12 @@ public class IngameMenu extends IngameMenuMeta implements IIngameMenuMeta {
         var _loc1_:int = 0;
         var _loc2_:* = 0;
         super.draw();
+        if (isInvalid(INVALIDATE_BUTTONS_LABELS)) {
+            this.quitBattleBtn.label = this._quitLabel;
+            this.settingsBtn.label = this._settingsLabel;
+            this.helpBtn.label = this._helpLabel;
+            this.cancelBtn.label = this._cancelLabel;
+        }
         if (isInvalid(INVALIDATE_SERVER_INFO)) {
             this.serverNameTF.htmlText = App.utils.locale.makeString(MENU.INGAME_MENU_SERVERSTATS_SERVER) + SERVER_SEPARATOR + this._serverName;
             if (this._serverState == INTERFACE_STATES.HIDE_SERVER_STATS) {
@@ -207,11 +213,11 @@ public class IngameMenu extends IngameMenuMeta implements IIngameMenuMeta {
         this.serverStatsTF.visible = false;
     }
 
-    private function hideTooltip(param1:MouseEvent):void {
+    private function onHitMCRollOutHandler(param1:MouseEvent):void {
         App.toolTipMgr.hide();
     }
 
-    private function showPlayersTooltip(param1:MouseEvent):void {
+    private function onHitMCRollOverHandler(param1:MouseEvent):void {
         switch (this._tooltipType) {
             case TYPE_UNAVAILABLE:
                 App.toolTipMgr.showComplex(TOOLTIPS.HEADER_INFO_PLAYERS_UNAVAILABLE);
@@ -259,6 +265,21 @@ public class IngameMenu extends IngameMenuMeta implements IIngameMenuMeta {
     public function as_setSettingsBtnCounter(param1:String):void {
         this._isSettingsCounterAdded = true;
         App.utils.counterManager.setCounter(this.settingsBtn, param1);
+    }
+
+    public function as_removeSettingsBtnCounter():void {
+        if (this._isSettingsCounterAdded) {
+            App.utils.counterManager.removeCounter(this.settingsBtn);
+            this._isSettingsCounterAdded = false;
+        }
+    }
+
+    public function as_setMenuButtonsLabels(param1:String, param2:String, param3:String, param4:String):void {
+        this._quitLabel = param4;
+        this._settingsLabel = param2;
+        this._helpLabel = param1;
+        this._cancelLabel = param3;
+        invalidate(INVALIDATE_BUTTONS_LABELS);
     }
 }
 }

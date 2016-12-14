@@ -1,10 +1,11 @@
 package net.wg.gui.components.common.markers {
 import flash.display.MovieClip;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
+
 import scaleform.clik.motion.Tween;
 
-public class VehicleActionMarker extends UIComponent {
+public class VehicleActionMarker extends UIComponentEx {
 
     private static const HIDE_DURATION:Number = 1000;
 

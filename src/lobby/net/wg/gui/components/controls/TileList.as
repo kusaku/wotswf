@@ -2,8 +2,6 @@ package net.wg.gui.components.controls {
 import flash.display.DisplayObject;
 import flash.display.Sprite;
 
-import net.wg.utils.IEventCollector;
-
 import scaleform.clik.constants.DirectionMode;
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.controls.ScrollIndicator;
@@ -108,11 +106,10 @@ public class TileList extends scaleform.clik.controls.TileList {
     }
 
     override protected function drawScrollBar():void {
-        var _loc1_:ScrollIndicator = null;
         if (!_autoScrollBar) {
             return;
         }
-        _loc1_ = _scrollBar as ScrollIndicator;
+        var _loc1_:ScrollIndicator = _scrollBar as ScrollIndicator;
         _loc1_.direction = _direction;
         if (_direction == DirectionMode.VERTICAL) {
             _loc1_.rotation = 0;
@@ -144,7 +141,6 @@ public class TileList extends scaleform.clik.controls.TileList {
         var _loc2_:uint = 0;
         var _loc3_:IListItemRenderer = null;
         var _loc4_:DisplayObject = null;
-        var _loc5_:IEventCollector = null;
         if (isInvalid(InvalidationType.SCROLL_BAR)) {
             createScrollBar();
         }
@@ -186,15 +182,12 @@ public class TileList extends scaleform.clik.controls.TileList {
             invalidateData();
         }
         if (!_usingExternalRenderers && isInvalid(InvalidationType.SIZE)) {
-            _loc5_ = App.utils.events;
-            _loc5_.disableDisposingForObj(container);
             removeChild(container);
             setActualSize(_width, _height);
             container.scaleX = 1 / scaleX;
             container.scaleY = 1 / scaleY;
             _totalRenderers = this.calculateRendererTotal(availableWidth, availableHeight);
             addChild(container);
-            _loc5_.enableDisposingForObj(container);
             invalidateData();
         }
         if (!_usingExternalRenderers && isInvalid(InvalidationType.RENDERERS, InvalidationType.SIZE)) {

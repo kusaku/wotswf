@@ -22,6 +22,10 @@ public class PostmortemPanel extends PostmortemPanelMeta implements IPostmortemP
 
     private static const PLAYER_INFO_DELTA_Y:int = 250;
 
+    private static const VEHICLE_PANEL_OFFSET_Y:int = 120;
+
+    private static const GAP_VEHICLE_PANEL_DEAD_REASON:int = 20;
+
     public var bg:BattleAtlasSprite = null;
 
     public var observerModeTitleTF:TextField = null;
@@ -138,6 +142,8 @@ public class PostmortemPanel extends PostmortemPanelMeta implements IPostmortemP
 
     private function updatePlayerInfoPosition():void {
         this.playerInfoTF.y = -PLAYER_INFO_DELTA_Y * App.appScale - (App.appHeight >> 1);
+        this.vehiclePanel.y = -(App.appHeight >> 1) + VEHICLE_PANEL_OFFSET_Y * App.appScale;
+        this.deadReasonTF.y = this.vehiclePanel.y - GAP_VEHICLE_PANEL_DEAD_REASON * App.appScale - this.deadReasonTF.height;
     }
 }
 }

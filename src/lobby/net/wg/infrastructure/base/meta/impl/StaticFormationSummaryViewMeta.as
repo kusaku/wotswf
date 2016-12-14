@@ -20,12 +20,13 @@ public class StaticFormationSummaryViewMeta extends BaseDAAPIComponent {
         super.onDispose();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._staticFormationSummaryVO) {
-            this._staticFormationSummaryVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:StaticFormationSummaryVO = this._staticFormationSummaryVO;
         this._staticFormationSummaryVO = new StaticFormationSummaryVO(param1);
         this.setData(this._staticFormationSummaryVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:StaticFormationSummaryVO):void {

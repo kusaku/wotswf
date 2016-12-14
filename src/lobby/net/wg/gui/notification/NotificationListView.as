@@ -9,7 +9,7 @@ import net.wg.data.constants.Values;
 import net.wg.gui.components.advanced.ContentTabBar;
 import net.wg.gui.components.controls.ScrollBar;
 import net.wg.gui.components.controls.events.ScrollEvent;
-import net.wg.gui.components.popOvers.PopOver;
+import net.wg.gui.components.popovers.PopOver;
 import net.wg.gui.notification.events.ServiceMessageEvent;
 import net.wg.gui.notification.vo.NotificationInfoVO;
 import net.wg.gui.notification.vo.NotificationMessagesListVO;
@@ -23,7 +23,6 @@ import net.wg.utils.ICounterProps;
 
 import org.idmedia.as3commons.util.StringUtils;
 
-import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.IndexEvent;
 import scaleform.clik.interfaces.IDataProvider;
 import scaleform.gfx.TextFieldEx;
@@ -118,23 +117,20 @@ public class NotificationListView extends NotificationsListMeta implements INoti
         this._scrollStepSize = param1.scrollStepFactor;
         this.list.verticalScrollStep = this._scrollStepSize;
         this.updateScrollBarProperties();
-        this.buttonBar.dataProvider.cleanUp();
-        this.buttonBar.dataProvider = new DataProvider(param1.tabsData.tabs);
+        this.buttonBar.dataProvider = param1.tabsData.tabs;
         this.setTabIndex(param1.btnBarSelectedIdx);
         this.buttonBar.addEventListener(IndexEvent.INDEX_CHANGE, this.onButtonBarIndexChangeHandler);
     }
 
     override protected function setMessagesList(param1:NotificationMessagesListVO):void {
+        var _loc2_:NotificationInfoVO = null;
         this.setTabIndex(param1.btnBarSelectedIdx);
         this.emptyListTF.visible = StringUtils.isNotEmpty(param1.emptyListText);
         if (this.emptyListTF.visible) {
             this.emptyListTF.text = param1.emptyListText;
         }
-        var _loc2_:uint = param1.messages.length;
-        var _loc3_:int = 0;
-        while (_loc3_ < _loc2_) {
-            this.updateTimestamp(param1.messages[_loc3_]);
-            _loc3_++;
+        for each(_loc2_ in param1.messages) {
+            this.updateTimestamp(_loc2_);
         }
         this.list.setData(param1);
     }
@@ -144,7 +140,7 @@ public class NotificationListView extends NotificationsListMeta implements INoti
         this.list.updateData(param1);
     }
 
-    public function as_updateCounters(param1:Array):void {
+    override protected function updateCounters(param1:Array):void {
         var _loc4_:DisplayObject = null;
         if (this.buttonBar.getButtonAt(0) == null) {
             this.buttonBar.validateNow();

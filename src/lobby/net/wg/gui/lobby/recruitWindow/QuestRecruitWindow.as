@@ -14,23 +14,18 @@ import scaleform.clik.events.ButtonEvent;
 
 public class QuestRecruitWindow extends QuestRecruitWindowMeta implements IQuestRecruitWindowMeta {
 
-    private static const INIT_DATA_INV:String = "initDataInv";
-
     public var card:TankmanCard;
 
     public var paramsComponent:RecruitParametersComponent;
 
     public var btnApply:SoundButtonEx;
 
-    private var initData:Object;
-
     public function QuestRecruitWindow() {
         super();
     }
 
-    public function as_setInitData(param1:Object):void {
-        this.initData = param1;
-        invalidate(INIT_DATA_INV);
+    override protected function setInitData(param1:TankmanCardVO):void {
+        this.card.model = param1;
     }
 
     override protected function onPopulate():void {
@@ -57,19 +52,14 @@ public class QuestRecruitWindow extends QuestRecruitWindowMeta implements IQuest
         });
     }
 
-    override protected function draw():void {
-        super.draw();
-        if (isInvalid(INIT_DATA_INV) && this.initData) {
-            this.card.model = new TankmanCardVO(this.initData);
-            this.initData = null;
-        }
-    }
-
     override protected function onDispose():void {
-        this.initData = null;
         this.btnApply.removeEventListener(ButtonEvent.CLICK, this.btnApplyClickHandler);
+        this.btnApply.dispose();
+        this.btnApply = null;
         this.paramsComponent.removeEventListener(Event.CHANGE, this.paramsChangeHandler);
+        this.paramsComponent = null;
         this.card.dispose();
+        this.card = null;
         super.onDispose();
     }
 

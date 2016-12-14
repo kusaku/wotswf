@@ -8,6 +8,7 @@ public class RedCounter extends CounterComponent {
     override protected function configUI():void {
         super.configUI();
         minBgWindowWidth = 14;
+        buttonMode = false;
     }
 }
 }

@@ -42,9 +42,9 @@ public class FortMainViewMeta extends BaseDAAPIComponent {
 
     private var _battleNotifiersDataVO:BattleNotifiersDataVO;
 
-    private var _fortificationVO:FortificationVO;
-
     private var _fortModeStateVO:FortModeStateVO;
+
+    private var _fortificationVO:FortificationVO;
 
     public function FortMainViewMeta() {
         super();
@@ -55,13 +55,13 @@ public class FortMainViewMeta extends BaseDAAPIComponent {
             this._battleNotifiersDataVO.dispose();
             this._battleNotifiersDataVO = null;
         }
-        if (this._fortificationVO) {
-            this._fortificationVO.dispose();
-            this._fortificationVO = null;
-        }
         if (this._fortModeStateVO) {
             this._fortModeStateVO.dispose();
             this._fortModeStateVO = null;
+        }
+        if (this._fortificationVO) {
+            this._fortificationVO.dispose();
+            this._fortificationVO = null;
         }
         super.onDispose();
     }
@@ -146,28 +146,31 @@ public class FortMainViewMeta extends BaseDAAPIComponent {
         this.onSelectOrderSelector(param1);
     }
 
-    public function as_switchMode(param1:Object):void {
-        if (this._fortModeStateVO) {
-            this._fortModeStateVO.dispose();
-        }
+    public final function as_switchMode(param1:Object):void {
+        var _loc2_:FortModeStateVO = this._fortModeStateVO;
         this._fortModeStateVO = new FortModeStateVO(param1);
         this.switchMode(this._fortModeStateVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setMainData(param1:Object):void {
-        if (this._fortificationVO) {
-            this._fortificationVO.dispose();
-        }
+    public final function as_setMainData(param1:Object):void {
+        var _loc2_:FortificationVO = this._fortificationVO;
         this._fortificationVO = new FortificationVO(param1);
         this.setMainData(this._fortificationVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setBattlesDirectionData(param1:Object):void {
-        if (this._battleNotifiersDataVO) {
-            this._battleNotifiersDataVO.dispose();
-        }
+    public final function as_setBattlesDirectionData(param1:Object):void {
+        var _loc2_:BattleNotifiersDataVO = this._battleNotifiersDataVO;
         this._battleNotifiersDataVO = new BattleNotifiersDataVO(param1);
         this.setBattlesDirectionData(this._battleNotifiersDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function switchMode(param1:FortModeStateVO):void {

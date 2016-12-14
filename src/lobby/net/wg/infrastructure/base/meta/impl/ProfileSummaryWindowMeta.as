@@ -40,20 +40,22 @@ public class ProfileSummaryWindowMeta extends ProfileSummary {
         this.openClubProfile(param1);
     }
 
-    public function as_setClanData(param1:Object):void {
-        if (this._profileGroupBlockVO) {
-            this._profileGroupBlockVO.dispose();
-        }
+    public final function as_setClanData(param1:Object):void {
+        var _loc2_:ProfileGroupBlockVO = this._profileGroupBlockVO;
         this._profileGroupBlockVO = new ProfileGroupBlockVO(param1);
         this.setClanData(this._profileGroupBlockVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setClubData(param1:Object):void {
-        if (this._profileGroupBlockVO1) {
-            this._profileGroupBlockVO1.dispose();
-        }
+    public final function as_setClubData(param1:Object):void {
+        var _loc2_:ProfileGroupBlockVO = this._profileGroupBlockVO1;
         this._profileGroupBlockVO1 = new ProfileGroupBlockVO(param1);
         this.setClubData(this._profileGroupBlockVO1);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setClanData(param1:ProfileGroupBlockVO):void {

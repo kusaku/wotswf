@@ -46,7 +46,7 @@ public class NotificationsList extends ScrollerBase {
             this._viewPort.itemRendererClassName = this._itemRendererClassName;
         }
         if (isInvalid(InvalidationType.DATA) && this._data != null) {
-            this._viewPort.dataProvider = new DataProvider(this._data.messages);
+            this._viewPort.dataProvider = this._data.messages;
             App.utils.scheduler.scheduleOnNextFrame(this.scrollToMaxPosition);
         }
     }

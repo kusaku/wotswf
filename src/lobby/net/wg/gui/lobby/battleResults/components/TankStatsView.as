@@ -72,7 +72,7 @@ public class TankStatsView extends UIComponentEx {
         var _loc1_:CommonStatsVO = null;
         var _loc2_:* = false;
         super.draw();
-        if (isInvalid(InvalidationType.DATA)) {
+        if (this._data && isInvalid(InvalidationType.DATA)) {
             _loc1_ = this._data.common;
             this.areaIcon.source = _loc1_.arenaIcon;
             this.playerNameLbl.userVO = new UserVO({

@@ -15,11 +15,11 @@ public class StaticFormationLadderViewMeta extends BaseDAAPIComponent {
 
     private var _ladderStateDataVO:LadderStateDataVO;
 
-    private var _staticFormationLadderViewLadderVO:StaticFormationLadderViewLadderVO;
+    private var _staticFormationLadderViewHeaderVO:StaticFormationLadderViewHeaderVO;
 
     private var _staticFormationLadderViewIconsVO:StaticFormationLadderViewIconsVO;
 
-    private var _staticFormationLadderViewHeaderVO:StaticFormationLadderViewHeaderVO;
+    private var _staticFormationLadderViewLadderVO:StaticFormationLadderViewLadderVO;
 
     public function StaticFormationLadderViewMeta() {
         super();
@@ -30,17 +30,17 @@ public class StaticFormationLadderViewMeta extends BaseDAAPIComponent {
             this._ladderStateDataVO.dispose();
             this._ladderStateDataVO = null;
         }
-        if (this._staticFormationLadderViewLadderVO) {
-            this._staticFormationLadderViewLadderVO.dispose();
-            this._staticFormationLadderViewLadderVO = null;
+        if (this._staticFormationLadderViewHeaderVO) {
+            this._staticFormationLadderViewHeaderVO.dispose();
+            this._staticFormationLadderViewHeaderVO = null;
         }
         if (this._staticFormationLadderViewIconsVO) {
             this._staticFormationLadderViewIconsVO.dispose();
             this._staticFormationLadderViewIconsVO = null;
         }
-        if (this._staticFormationLadderViewHeaderVO) {
-            this._staticFormationLadderViewHeaderVO.dispose();
-            this._staticFormationLadderViewHeaderVO = null;
+        if (this._staticFormationLadderViewLadderVO) {
+            this._staticFormationLadderViewLadderVO.dispose();
+            this._staticFormationLadderViewLadderVO = null;
         }
         super.onDispose();
     }
@@ -55,36 +55,40 @@ public class StaticFormationLadderViewMeta extends BaseDAAPIComponent {
         this.updateClubIcons(param1);
     }
 
-    public function as_updateHeaderData(param1:Object):void {
-        if (this._staticFormationLadderViewHeaderVO) {
-            this._staticFormationLadderViewHeaderVO.dispose();
-        }
+    public final function as_updateHeaderData(param1:Object):void {
+        var _loc2_:StaticFormationLadderViewHeaderVO = this._staticFormationLadderViewHeaderVO;
         this._staticFormationLadderViewHeaderVO = new StaticFormationLadderViewHeaderVO(param1);
         this.updateHeaderData(this._staticFormationLadderViewHeaderVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_updateLadderData(param1:Object):void {
-        if (this._staticFormationLadderViewLadderVO) {
-            this._staticFormationLadderViewLadderVO.dispose();
-        }
+    public final function as_updateLadderData(param1:Object):void {
+        var _loc2_:StaticFormationLadderViewLadderVO = this._staticFormationLadderViewLadderVO;
         this._staticFormationLadderViewLadderVO = new StaticFormationLadderViewLadderVO(param1);
         this.updateLadderData(this._staticFormationLadderViewLadderVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setLadderState(param1:Object):void {
-        if (this._ladderStateDataVO) {
-            this._ladderStateDataVO.dispose();
-        }
+    public final function as_setLadderState(param1:Object):void {
+        var _loc2_:LadderStateDataVO = this._ladderStateDataVO;
         this._ladderStateDataVO = new LadderStateDataVO(param1);
         this.setLadderState(this._ladderStateDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_onUpdateClubIcons(param1:Object):void {
-        if (this._staticFormationLadderViewIconsVO) {
-            this._staticFormationLadderViewIconsVO.dispose();
-        }
+    public final function as_onUpdateClubIcons(param1:Object):void {
+        var _loc2_:StaticFormationLadderViewIconsVO = this._staticFormationLadderViewIconsVO;
         this._staticFormationLadderViewIconsVO = new StaticFormationLadderViewIconsVO(param1);
         this.onUpdateClubIcons(this._staticFormationLadderViewIconsVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function updateHeaderData(param1:StaticFormationLadderViewHeaderVO):void {

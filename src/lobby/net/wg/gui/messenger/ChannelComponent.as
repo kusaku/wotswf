@@ -14,6 +14,7 @@ import net.wg.gui.messenger.meta.impl.ChannelComponentMeta;
 import net.wg.infrastructure.events.FocusRequestEvent;
 
 import scaleform.clik.constants.InputValue;
+import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.events.InputEvent;
 import scaleform.clik.ui.InputDetails;
@@ -23,6 +24,8 @@ public class ChannelComponent extends ChannelComponentMeta implements IChannelCo
     private static const INVALIDATE_CONTROLS:String = "invalidateControls";
 
     private static const INVALIDATE_HISTORY:String = "invalidateHistory";
+
+    private static const MESSAGE_INPUT_MARGIN_TOP:int = 1;
 
     public var messageAreaScrollBar:ScrollBar = null;
 
@@ -42,8 +45,13 @@ public class ChannelComponent extends ChannelComponentMeta implements IChannelCo
 
     private var _externalHintTF:TextField = null;
 
+    private var _startHeight:Number;
+
+    private var _isReturnToNormalScale:Boolean = false;
+
     public function ChannelComponent() {
         super();
+        this._startHeight = _height;
     }
 
     override protected function onPopulate():void {
@@ -116,8 +124,12 @@ public class ChannelComponent extends ChannelComponentMeta implements IChannelCo
         if (isInvalid(INVALIDATE_CONTROLS)) {
             this.enableControls(this._isJoined);
         }
-        if (isInvalid(INVALIDATE_HISTORY) && this._isJoined) {
+        if (this._isJoined && isInvalid(INVALIDATE_HISTORY)) {
             this.setHistory();
+        }
+        if (this._isReturnToNormalScale && isInvalid(InvalidationType.SIZE)) {
+            this.messageArea.height = this._startHeight - this.messageInput.height - MESSAGE_INPUT_MARGIN_TOP | 0;
+            this.messageInput.y = this.messageArea.height + MESSAGE_INPUT_MARGIN_TOP | 0;
         }
     }
 
@@ -204,6 +216,17 @@ public class ChannelComponent extends ChannelComponentMeta implements IChannelCo
         }
         this._needDispose = false;
         this.sendButton = param1;
+    }
+
+    public function get isReturnToNormalScale():Boolean {
+        return this._isReturnToNormalScale;
+    }
+
+    public function set isReturnToNormalScale(param1:Boolean):void {
+        if (this._isReturnToNormalScale != param1) {
+            this._isReturnToNormalScale = param1;
+            scaleY = 1;
+        }
     }
 
     private function onSendButtonClickHandler(param1:ButtonEvent):void {

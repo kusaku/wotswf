@@ -4,6 +4,7 @@ import flash.events.EventPhase;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.SoundTypes;
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.components.windows.Window;
@@ -172,9 +173,10 @@ public class SimpleDialog extends SimpleDialogMeta implements ISimpleDialogMeta 
         invalidate(BUTTON_FOCUS_INVALID);
     }
 
-    public function as_setButtons(param1:Array):void {
+    override protected function setButtons(param1:Array):void {
         var _loc6_:SoundButtonEx = null;
-        var _loc7_:String = null;
+        var _loc7_:Object = null;
+        var _loc8_:String = null;
         var _loc2_:Vector.<Button> = this.getButtonsOrder();
         var _loc3_:int = param1.length;
         var _loc4_:int = _loc2_.length - _loc3_;
@@ -182,13 +184,15 @@ public class SimpleDialog extends SimpleDialogMeta implements ISimpleDialogMeta 
         var _loc5_:int = _loc3_ - 1;
         while (_loc5_ >= 0) {
             _loc6_ = _loc2_[_loc5_ + _loc4_] as SoundButtonEx;
-            _loc7_ = param1[_loc5_].id;
-            if (_loc7_ == CLOSE_BUTTON) {
+            App.utils.asserter.assertNotNull(_loc6_, "button" + Errors.CANT_NULL);
+            _loc7_ = param1[_loc5_];
+            _loc8_ = _loc7_.id;
+            if (_loc8_ == CLOSE_BUTTON) {
                 this.dynamicWhiteButton.x = _loc6_.x;
                 this.dynamicWhiteButton.y = _loc6_.y;
-                this.dynamicWhiteButton.data = param1[_loc5_];
-                this.dynamicWhiteButton.label = param1[_loc5_].label;
-                if (param1[_loc5_].focused) {
+                this.dynamicWhiteButton.data = _loc7_;
+                this.dynamicWhiteButton.label = _loc7_.label;
+                if (_loc7_.focused) {
                     this._lastFocusedBtn = this.dynamicWhiteButton;
                 }
                 this.dynamicWhiteButton.visible = true;
@@ -197,13 +201,13 @@ public class SimpleDialog extends SimpleDialogMeta implements ISimpleDialogMeta 
                 _loc6_.visible = false;
             }
             else {
-                _loc6_.data = param1[_loc5_];
-                _loc6_.label = param1[_loc5_].label;
-                if (param1[_loc5_].focused) {
+                _loc6_.data = _loc7_;
+                _loc6_.label = _loc7_.label;
+                if (_loc7_.focused) {
                     this._lastFocusedBtn = _loc6_;
                 }
                 _loc6_.visible = true;
-                if (_loc7_ == SUBMIT_BUTTON) {
+                if (_loc8_ == SUBMIT_BUTTON) {
                     _loc6_.soundType = SoundTypes.OK_BTN;
                 }
                 else {

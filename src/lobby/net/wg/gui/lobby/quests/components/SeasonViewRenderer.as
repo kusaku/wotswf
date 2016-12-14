@@ -38,11 +38,9 @@ public class SeasonViewRenderer extends UIComponentEx implements IContentSize {
 
     override protected function draw():void {
         super.draw();
-        if (isInvalid(InvalidationType.DATA)) {
-            if (this._model != null) {
-                this.redrawItems();
-                this.titleTF.htmlText = this._model.title;
-            }
+        if (this._model && isInvalid(InvalidationType.DATA)) {
+            this.redrawItems();
+            this.titleTF.htmlText = this._model.title;
         }
     }
 

@@ -25,6 +25,10 @@ public interface ISettingsWindowMeta extends IEventDispatcher {
 
     function onCounterTargetVisitedS(param1:String):void;
 
+    function autodetectAcousticTypeS():String;
+
+    function canSelectAcousticTypeS(param1:Number):Boolean;
+
     function as_setData(param1:Object):void;
 
     function as_setCaptureDevices(param1:Number, param2:Array):void;
@@ -44,5 +48,7 @@ public interface ISettingsWindowMeta extends IEventDispatcher {
     function as_isPresetApplied():Boolean;
 
     function as_setCountersData(param1:Array):void;
+
+    function as_onSoundSpeakersPresetApply(param1:Boolean):void;
 }
 }

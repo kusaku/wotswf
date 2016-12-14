@@ -3,11 +3,10 @@ import flash.text.TextField;
 
 import net.wg.gui.components.advanced.ClanEmblem;
 import net.wg.gui.lobby.fortifications.data.settings.FortSettingsClanInfoVO;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.ISpriteEx;
 
-import scaleform.clik.core.UIComponent;
-
-public class FortSettingsClanInfo extends UIComponent implements ISpriteEx {
+public class FortSettingsClanInfo extends UIComponentEx implements ISpriteEx {
 
     public var clanIcon:ClanEmblem = null;
 

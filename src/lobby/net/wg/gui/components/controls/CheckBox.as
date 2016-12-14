@@ -259,6 +259,7 @@ public class CheckBox extends scaleform.clik.controls.CheckBox implements ISound
     private function createInfoIco():void {
         if (!owner && parent) {
             owner = UIComponent(parent);
+            App.utils.asserter.assertNotNull(owner, "owner" + Errors.CANT_NULL);
         }
         this._infoIco = InfoIcon(App.utils.classFactory.getComponent(LINKAGE_INFO_ICON_UI, InfoIcon));
         owner.addChild(this._infoIco);

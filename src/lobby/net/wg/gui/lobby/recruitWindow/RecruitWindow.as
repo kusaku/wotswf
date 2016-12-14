@@ -216,11 +216,11 @@ public class RecruitWindow extends RecruitWindowMeta implements IRecruitWindowMe
         invalidateData();
     }
 
-    public function as_setAllDropdowns(param1:Array, param2:Array, param3:Array, param4:Array):void {
-        this.as_setNations(param1);
-        this.as_setVehicleClassDropdown(param2);
-        this.as_setVehicleTypeDropdown(param3);
-        this.as_setRoleDropdown(param4);
+    override protected function setAllDropdowns(param1:DataProvider, param2:DataProvider, param3:DataProvider, param4:DataProvider):void {
+        as_setNations(param1);
+        as_setVehicleClassDropdown(param2);
+        as_setVehicleTypeDropdown(param3);
+        as_setRoleDropdown(param4);
     }
 
     public function as_setCreditsChanged(param1:Number):void {
@@ -231,9 +231,9 @@ public class RecruitWindow extends RecruitWindowMeta implements IRecruitWindowMe
         this.btnAcademy.enabled = param1 > this._data.academyUpgradePrice;
     }
 
-    public function as_setNations(param1:Array):void {
+    override protected function setNations(param1:DataProvider):void {
         var _loc2_:* = null;
-        this.nationDropdown.dataProvider = new DataProvider(param1);
+        this.nationDropdown.dataProvider = param1;
         this.nationDropdown.selectedIndex = 0;
         if (!this._menuEnabled) {
             this.nationDropdown.enabled = false;
@@ -252,9 +252,9 @@ public class RecruitWindow extends RecruitWindowMeta implements IRecruitWindowMe
         }
     }
 
-    public function as_setRoleDropdown(param1:Array):void {
+    override protected function setRoleDropdown(param1:DataProvider):void {
         var _loc2_:* = null;
-        this.roleDropdown.dataProvider = new DataProvider(param1);
+        this.roleDropdown.dataProvider = param1;
         this.roleDropdown.selectedIndex = 0;
         if (!this._menuEnabled) {
             for (_loc2_ in this.roleDropdown.dataProvider) {
@@ -267,9 +267,9 @@ public class RecruitWindow extends RecruitWindowMeta implements IRecruitWindowMe
         }
     }
 
-    public function as_setVehicleClassDropdown(param1:Array):void {
+    override protected function setVehicleClassDropdown(param1:DataProvider):void {
         var _loc2_:* = null;
-        this.vehicleClassDropdown.dataProvider = new DataProvider(param1);
+        this.vehicleClassDropdown.dataProvider = param1;
         this.vehicleClassDropdown.selectedIndex = 0;
         if (this.vehicleClassDropdown.selectedIndex == 0) {
             this.vehicleTypeDropdown.selectedIndex = 0;
@@ -288,9 +288,9 @@ public class RecruitWindow extends RecruitWindowMeta implements IRecruitWindowMe
         }
     }
 
-    public function as_setVehicleTypeDropdown(param1:Array):void {
+    override protected function setVehicleTypeDropdown(param1:DataProvider):void {
         var _loc2_:* = null;
-        this.vehicleTypeDropdown.dataProvider = new DataProvider(param1);
+        this.vehicleTypeDropdown.dataProvider = param1;
         this.vehicleTypeDropdown.selectedIndex = 0;
         if (this.vehicleTypeDropdown.selectedIndex == 0) {
             this.roleDropdown.selectedIndex = 0;
@@ -342,7 +342,7 @@ public class RecruitWindow extends RecruitWindowMeta implements IRecruitWindowMe
     }
 
     public function studyTypeDoubleClickHandler(param1:MouseEvent):void {
-        (param1.target as IEventDispatcher).dispatchEvent(new ButtonEvent(ButtonEvent.CLICK));
+        IEventDispatcher(param1.target).dispatchEvent(new ButtonEvent(ButtonEvent.CLICK));
         if (App.utils.commons.isLeftButton(param1)) {
             this.recruitTankmanClickHandler(param1);
         }

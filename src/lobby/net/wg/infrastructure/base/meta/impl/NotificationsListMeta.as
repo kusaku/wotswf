@@ -14,9 +14,7 @@ public class NotificationsListMeta extends SmartPopOverView {
 
     public var onGroupChange:Function;
 
-    private var _notificationInfoVO1:NotificationInfoVO;
-
-    private var _notificationInfoVO:NotificationInfoVO;
+    private var _array:Array;
 
     private var _notificationMessagesListVO:NotificationMessagesListVO;
 
@@ -27,13 +25,9 @@ public class NotificationsListMeta extends SmartPopOverView {
     }
 
     override protected function onDispose():void {
-        if (this._notificationInfoVO1) {
-            this._notificationInfoVO1.dispose();
-            this._notificationInfoVO1 = null;
-        }
-        if (this._notificationInfoVO) {
-            this._notificationInfoVO.dispose();
-            this._notificationInfoVO = null;
+        if (this._array) {
+            this._array.splice(0, this._array.length);
+            this._array = null;
         }
         if (this._notificationMessagesListVO) {
             this._notificationMessagesListVO.dispose();
@@ -61,36 +55,39 @@ public class NotificationsListMeta extends SmartPopOverView {
         this.onGroupChange(param1);
     }
 
-    public function as_setInitData(param1:Object):void {
-        if (this._notificationViewInitVO) {
-            this._notificationViewInitVO.dispose();
-        }
+    public final function as_setInitData(param1:Object):void {
+        var _loc2_:NotificationViewInitVO = this._notificationViewInitVO;
         this._notificationViewInitVO = new NotificationViewInitVO(param1);
         this.setInitData(this._notificationViewInitVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setMessagesList(param1:Object):void {
-        if (this._notificationMessagesListVO) {
-            this._notificationMessagesListVO.dispose();
-        }
+    public final function as_setMessagesList(param1:Object):void {
+        var _loc2_:NotificationMessagesListVO = this._notificationMessagesListVO;
         this._notificationMessagesListVO = new NotificationMessagesListVO(param1);
         this.setMessagesList(this._notificationMessagesListVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_appendMessage(param1:Object):void {
-        if (this._notificationInfoVO) {
-            this._notificationInfoVO.dispose();
-        }
-        this._notificationInfoVO = new NotificationInfoVO(param1);
-        this.appendMessage(this._notificationInfoVO);
+    public final function as_appendMessage(param1:Object):void {
+        this.appendMessage(new NotificationInfoVO(param1));
     }
 
-    public function as_updateMessage(param1:Object):void {
-        if (this._notificationInfoVO1) {
-            this._notificationInfoVO1.dispose();
+    public final function as_updateMessage(param1:Object):void {
+        this.updateMessage(new NotificationInfoVO(param1));
+    }
+
+    public final function as_updateCounters(param1:Array):void {
+        var _loc2_:Array = this._array;
+        this._array = param1;
+        this.updateCounters(this._array);
+        if (_loc2_) {
+            _loc2_.splice(0, _loc2_.length);
         }
-        this._notificationInfoVO1 = new NotificationInfoVO(param1);
-        this.updateMessage(this._notificationInfoVO1);
     }
 
     protected function setInitData(param1:NotificationViewInitVO):void {
@@ -113,6 +110,12 @@ public class NotificationsListMeta extends SmartPopOverView {
 
     protected function updateMessage(param1:NotificationInfoVO):void {
         var _loc2_:String = "as_updateMessage" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
+    }
+
+    protected function updateCounters(param1:Array):void {
+        var _loc2_:String = "as_updateCounters" + Errors.ABSTRACT_INVOKE;
         DebugUtils.LOG_ERROR(_loc2_);
         throw new AbstractException(_loc2_);
     }

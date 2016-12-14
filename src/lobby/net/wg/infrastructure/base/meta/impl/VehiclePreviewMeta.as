@@ -18,21 +18,17 @@ public class VehiclePreviewMeta extends AbstractView {
 
     public var onCompareClick:Function;
 
-    private var _vehPreviewStaticDataVO:VehPreviewStaticDataVO;
-
     private var _vehPreviewInfoPanelVO:VehPreviewInfoPanelVO;
 
     private var _vehPreviewPriceDataVO:VehPreviewPriceDataVO;
+
+    private var _vehPreviewStaticDataVO:VehPreviewStaticDataVO;
 
     public function VehiclePreviewMeta() {
         super();
     }
 
     override protected function onDispose():void {
-        if (this._vehPreviewStaticDataVO) {
-            this._vehPreviewStaticDataVO.dispose();
-            this._vehPreviewStaticDataVO = null;
-        }
         if (this._vehPreviewInfoPanelVO) {
             this._vehPreviewInfoPanelVO.dispose();
             this._vehPreviewInfoPanelVO = null;
@@ -40,6 +36,10 @@ public class VehiclePreviewMeta extends AbstractView {
         if (this._vehPreviewPriceDataVO) {
             this._vehPreviewPriceDataVO.dispose();
             this._vehPreviewPriceDataVO = null;
+        }
+        if (this._vehPreviewStaticDataVO) {
+            this._vehPreviewStaticDataVO.dispose();
+            this._vehPreviewStaticDataVO = null;
         }
         super.onDispose();
     }
@@ -69,28 +69,31 @@ public class VehiclePreviewMeta extends AbstractView {
         this.onCompareClick();
     }
 
-    public function as_setStaticData(param1:Object):void {
-        if (this._vehPreviewStaticDataVO) {
-            this._vehPreviewStaticDataVO.dispose();
-        }
+    public final function as_setStaticData(param1:Object):void {
+        var _loc2_:VehPreviewStaticDataVO = this._vehPreviewStaticDataVO;
         this._vehPreviewStaticDataVO = new VehPreviewStaticDataVO(param1);
         this.setStaticData(this._vehPreviewStaticDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_updateInfoData(param1:Object):void {
-        if (this._vehPreviewInfoPanelVO) {
-            this._vehPreviewInfoPanelVO.dispose();
-        }
+    public final function as_updateInfoData(param1:Object):void {
+        var _loc2_:VehPreviewInfoPanelVO = this._vehPreviewInfoPanelVO;
         this._vehPreviewInfoPanelVO = new VehPreviewInfoPanelVO(param1);
         this.updateInfoData(this._vehPreviewInfoPanelVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_updatePrice(param1:Object):void {
-        if (this._vehPreviewPriceDataVO) {
-            this._vehPreviewPriceDataVO.dispose();
-        }
+    public final function as_updatePrice(param1:Object):void {
+        var _loc2_:VehPreviewPriceDataVO = this._vehPreviewPriceDataVO;
         this._vehPreviewPriceDataVO = new VehPreviewPriceDataVO(param1);
         this.updatePrice(this._vehPreviewPriceDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setStaticData(param1:VehPreviewStaticDataVO):void {

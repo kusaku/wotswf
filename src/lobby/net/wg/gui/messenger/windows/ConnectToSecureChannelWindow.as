@@ -4,6 +4,7 @@ import flash.events.MouseEvent;
 import flash.text.TextField;
 import flash.ui.Keyboard;
 
+import net.wg.data.constants.Errors;
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.components.controls.TextInput;
 import net.wg.gui.messenger.meta.IConnectToSecureChannelWindowMeta;
@@ -55,6 +56,7 @@ public class ConnectToSecureChannelWindow extends ConnectToSecureChannelWindowMe
         window.useBottomBtns = true;
         window.title = MESSENGER.DIALOGS_CONNECTINGTOSECURECHANNEL_TITLE;
         var _loc1_:Padding = window.contentPadding as Padding;
+        App.utils.asserter.assertNotNull(_loc1_, "windowPadding" + Errors.CANT_NULL);
         _loc1_.top = 41;
         _loc1_.left = 11;
         _loc1_.right = 8;

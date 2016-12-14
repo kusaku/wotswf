@@ -14,17 +14,21 @@ public class FortSettingsWindowMeta extends AbstractWindowView {
 
     public var cancelDisableDefencePeriod:Function;
 
+    private var _fortSettingsActivatedViewVO:FortSettingsActivatedViewVO;
+
     private var _fortSettingsClanInfoVO:FortSettingsClanInfoVO;
 
     private var _fortSettingsNotActivatedViewVO:FortSettingsNotActivatedViewVO;
-
-    private var _fortSettingsActivatedViewVO:FortSettingsActivatedViewVO;
 
     public function FortSettingsWindowMeta() {
         super();
     }
 
     override protected function onDispose():void {
+        if (this._fortSettingsActivatedViewVO) {
+            this._fortSettingsActivatedViewVO.dispose();
+            this._fortSettingsActivatedViewVO = null;
+        }
         if (this._fortSettingsClanInfoVO) {
             this._fortSettingsClanInfoVO.dispose();
             this._fortSettingsClanInfoVO = null;
@@ -32,10 +36,6 @@ public class FortSettingsWindowMeta extends AbstractWindowView {
         if (this._fortSettingsNotActivatedViewVO) {
             this._fortSettingsNotActivatedViewVO.dispose();
             this._fortSettingsNotActivatedViewVO = null;
-        }
-        if (this._fortSettingsActivatedViewVO) {
-            this._fortSettingsActivatedViewVO.dispose();
-            this._fortSettingsActivatedViewVO = null;
         }
         super.onDispose();
     }
@@ -55,28 +55,31 @@ public class FortSettingsWindowMeta extends AbstractWindowView {
         this.cancelDisableDefencePeriod();
     }
 
-    public function as_setFortClanInfo(param1:Object):void {
-        if (this._fortSettingsClanInfoVO) {
-            this._fortSettingsClanInfoVO.dispose();
-        }
+    public final function as_setFortClanInfo(param1:Object):void {
+        var _loc2_:FortSettingsClanInfoVO = this._fortSettingsClanInfoVO;
         this._fortSettingsClanInfoVO = new FortSettingsClanInfoVO(param1);
         this.setFortClanInfo(this._fortSettingsClanInfoVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setDataForActivated(param1:Object):void {
-        if (this._fortSettingsActivatedViewVO) {
-            this._fortSettingsActivatedViewVO.dispose();
-        }
+    public final function as_setDataForActivated(param1:Object):void {
+        var _loc2_:FortSettingsActivatedViewVO = this._fortSettingsActivatedViewVO;
         this._fortSettingsActivatedViewVO = new FortSettingsActivatedViewVO(param1);
         this.setDataForActivated(this._fortSettingsActivatedViewVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setDataForNotActivated(param1:Object):void {
-        if (this._fortSettingsNotActivatedViewVO) {
-            this._fortSettingsNotActivatedViewVO.dispose();
-        }
+    public final function as_setDataForNotActivated(param1:Object):void {
+        var _loc2_:FortSettingsNotActivatedViewVO = this._fortSettingsNotActivatedViewVO;
         this._fortSettingsNotActivatedViewVO = new FortSettingsNotActivatedViewVO(param1);
         this.setDataForNotActivated(this._fortSettingsNotActivatedViewVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setFortClanInfo(param1:FortSettingsClanInfoVO):void {

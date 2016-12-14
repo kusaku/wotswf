@@ -4,6 +4,7 @@ import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.ui.Keyboard;
 
+import net.wg.data.constants.Errors;
 import net.wg.gui.events.ListEventEx;
 import net.wg.gui.interfaces.IDropList;
 import net.wg.gui.messenger.data.ContactsGroupEvent;
@@ -233,6 +234,7 @@ public class ContactScrollingList extends BaseContactsScrollingList implements I
                 return true;
         }
         var _loc3_:IListItemRenderer = param1.currentTarget as IListItemRenderer;
+        App.utils.asserter.assertNotNull(_loc3_, "renderer" + Errors.CANT_NULL);
         var _loc4_:uint = 0;
         if (param1 is ButtonEvent) {
             _loc4_ = (param1 as ButtonEvent).controllerIdx;
@@ -278,6 +280,7 @@ public class ContactScrollingList extends BaseContactsScrollingList implements I
         if (this.currentDropCandidate) {
             _loc2_ = new ContactsGroupEvent(!!this.isCtrlPressed ? ContactsGroupEvent.CONTACT_COPY_GROUP : ContactsGroupEvent.CONTACT_CHANGE_GROUP, true);
             _loc3_ = App.cursor.getAttachedSprite() as ContactsTreeItemRenderer;
+            App.utils.asserter.assertNotNull(_loc3_, "draggingItem" + Errors.CANT_NULL);
             _loc4_ = ITreeItemInfo(_loc3_.getData());
             _loc2_.contactID = Number(_loc4_.id);
             _loc2_.contactName = _loc4_.data.userProps.userName;

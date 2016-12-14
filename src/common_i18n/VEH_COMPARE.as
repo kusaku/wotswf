@@ -51,6 +51,8 @@ package
       
       public static const VEHICLECOMPAREVIEW_TOOLTIPS_ATTENTIONEQUIPMENT:String = "#veh_compare:vehicleCompareView/tooltips/attentionEquipment";
       
+      public static const VEHICLECOMPAREVIEW_TOOLTIPS_DIFFERENTMODULESORCREW:String = "#veh_compare:vehicleCompareView/tooltips/differentModulesOrCrew";
+      
       public static const ADDVEHPOPOVER_TOOLTIPS_SELECTVEHICLE:String = "#veh_compare:addVehPopover/tooltips/selectVehicle";
       
       public static const ADDVEHPOPOVER_TOOLTIPS_NATION:String = "#veh_compare:addVehPopover/tooltips/nation";
@@ -226,6 +228,10 @@ package
       public static const VEHICLECOMPAREVIEW_TOOLTIPS_CREWDROPDOWN_HEADER:String = VEHICLECOMPAREVIEW_TOOLTIPS_CREWDROPDOWN + "/header";
       
       public static const VEHICLECOMPAREVIEW_TOOLTIPS_CREWDROPDOWN_BODY:String = VEHICLECOMPAREVIEW_TOOLTIPS_CREWDROPDOWN + "/body";
+      
+      public static const VEHICLECOMPAREVIEW_TOOLTIPS_DIFFERENTMODULESORCREW_HEADER:String = VEHICLECOMPAREVIEW_TOOLTIPS_DIFFERENTMODULESORCREW + "/header";
+      
+      public static const VEHICLECOMPAREVIEW_TOOLTIPS_DIFFERENTMODULESORCREW_BODY:String = VEHICLECOMPAREVIEW_TOOLTIPS_DIFFERENTMODULESORCREW + "/body";
       
       public static const VEHICLECOMPAREVIEW_TOOLTIPS_INFO_HEADER:String = VEHICLECOMPAREVIEW_TOOLTIPS_INFO + "/header";
       

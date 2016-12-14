@@ -54,8 +54,12 @@ public class StateViewBase extends UIComponentEx implements IAutoSearchFormView 
     override protected function configUI():void {
         super.configUI();
         this.currentState = this.getSearchState();
-        if (this.sec && this.min && this.timerSeparator) {
-            this.timerSeparator.mouseEnabled = this.sec.mouseEnabled = this.min.mouseEnabled = false;
+        if (this.sec && this.min) {
+            this.sec.mouseEnabled = this.min.mouseEnabled = false;
+        }
+        if (this.timerSeparator) {
+            this.timerSeparator.mouseEnabled = false;
+            this.timerSeparator.text = COMMON.COMMON_COLON;
         }
         if (this.mainField) {
             this.mainField.mouseEnabled = false;

@@ -34,12 +34,13 @@ public class StoreViewMeta extends AbstractView {
         this.onTabChange(param1);
     }
 
-    public function as_init(param1:Object):void {
-        if (this._storeViewInitVO) {
-            this._storeViewInitVO.dispose();
-        }
+    public final function as_init(param1:Object):void {
+        var _loc2_:StoreViewInitVO = this._storeViewInitVO;
         this._storeViewInitVO = new StoreViewInitVO(param1);
         this.init(this._storeViewInitVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function init(param1:StoreViewInitVO):void {

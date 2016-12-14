@@ -45,19 +45,18 @@ public class OrdersPanel extends BaseSlotsPanel implements IOrdersPanel {
         super(ORDER_TYPES.FORT_ORDER_ALL_GROUP);
     }
 
-    override public function as_setSlots(param1:Array):void {
-        var _loc4_:int = 0;
-        var _loc5_:OrderVO = null;
-        super.as_setSlots(param1);
-        var _loc2_:Vector.<SlotVO> = this.slotsData;
-        var _loc3_:int = _loc2_.length;
-        _loc4_ = 0;
-        while (_loc4_ < _loc3_) {
-            _loc5_ = OrderVO(_loc2_[_loc4_]);
-            if (_loc5_.group != ORDER_TYPES.FORT_ORDER_CONSUMABLES_GROUP) {
-                _loc5_.orderUIID = _loc4_ + ORDER_UIID_OFFSET;
+    override protected function setSlots(param1:Vector.<SlotVO>):void {
+        var _loc3_:int = 0;
+        var _loc4_:OrderVO = null;
+        super.setSlots(param1);
+        var _loc2_:int = param1.length;
+        _loc3_ = 0;
+        while (_loc3_ < _loc2_) {
+            _loc4_ = OrderVO(param1[_loc3_]);
+            if (_loc4_.group != ORDER_TYPES.FORT_ORDER_CONSUMABLES_GROUP) {
+                _loc4_.orderUIID = _loc3_ + ORDER_UIID_OFFSET;
             }
-            _loc4_++;
+            _loc3_++;
         }
     }
 
@@ -80,7 +79,7 @@ public class OrdersPanel extends BaseSlotsPanel implements IOrdersPanel {
         }
     }
 
-    override protected function parseDataItem(param1:Object):SlotVO {
+    override protected function getSlotVO(param1:Object):SlotVO {
         return new OrderVO(param1);
     }
 

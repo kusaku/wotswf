@@ -183,8 +183,8 @@ public class GameLoading extends UIComponentEx {
         stage.scaleX = stage.scaleY = param3;
         this._appWidth = param1;
         this._appHeight = param2;
-        x = x - (param3 - 1) * (width / 2 + this.background.x) / param3;
-        y = y - (param3 - 1) * (height / 2 + this.background.y) / param3;
+        x = -(param3 - 1) * ((width >> 1) + this.background.x) / param3;
+        y = -(param3 - 1) * ((height >> 1) + this.background.y) / param3;
         invalidateSize();
     }
 

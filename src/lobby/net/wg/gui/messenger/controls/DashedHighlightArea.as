@@ -1,10 +1,11 @@
 package net.wg.gui.messenger.controls {
 import flash.display.Graphics;
 
-import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class DashedHighlightArea extends UIComponent {
+import scaleform.clik.constants.InvalidationType;
+
+public class DashedHighlightArea extends UIComponentEx {
 
     private static const REDRAW_LINE_INV:String = "redrawLineInv";
 

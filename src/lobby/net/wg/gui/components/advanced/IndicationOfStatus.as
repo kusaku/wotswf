@@ -1,8 +1,9 @@
 package net.wg.gui.components.advanced {
-import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class IndicationOfStatus extends UIComponent {
+import scaleform.clik.constants.InvalidationType;
+
+public class IndicationOfStatus extends UIComponentEx {
 
     public static var STATUS_NORMAL:String = "normal";
 
@@ -29,9 +30,6 @@ public class IndicationOfStatus extends UIComponent {
         super.draw();
         if (isInvalid(InvalidationType.DATA)) {
             gotoAndStop(this._status);
-            if (_baseDisposed) {
-                return;
-            }
         }
     }
 

@@ -3,7 +3,7 @@ import flash.display.InteractiveObject;
 import flash.text.TextField;
 
 import net.wg.gui.components.advanced.DashLine;
-import net.wg.gui.components.common.ArrowSeparator;
+import net.wg.gui.components.assets.ArrowSeparator;
 import net.wg.gui.interfaces.ISoundButtonEx;
 import net.wg.gui.lobby.fortifications.cmp.build.impl.ModernizationCmp;
 import net.wg.gui.lobby.fortifications.data.BuildingModernizationVO;

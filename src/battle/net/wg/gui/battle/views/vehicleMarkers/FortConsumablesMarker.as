@@ -5,6 +5,7 @@ import flash.geom.Point;
 import flash.text.TextField;
 import flash.utils.getDefinitionByName;
 
+import net.wg.data.constants.Errors;
 import net.wg.gui.battle.components.BattleUIComponent;
 
 import scaleform.gfx.TextFieldEx;
@@ -65,16 +66,24 @@ public class FortConsumablesMarker extends BattleUIComponent {
     }
 
     private function initIconFrames():void {
+        var shapeBitmapClass:Class = null;
         if (this._markerBitmap != null) {
             this.marker.removeChild(this._markerBitmap);
             this._markerBitmap.bitmapData.dispose();
             this._markerBitmap.bitmapData = null;
         }
-        var _loc1_:Class = getDefinitionByName(this._orderType) as Class;
-        this._markerBitmap = new Bitmap(new _loc1_());
-        this._markerBitmap.x = MARKER_XY.x;
-        this._markerBitmap.y = MARKER_XY.y;
-        this.marker.addChild(this._markerBitmap);
+        try {
+            shapeBitmapClass = getDefinitionByName(this._orderType) as Class;
+            this._markerBitmap = new Bitmap(new shapeBitmapClass());
+            this._markerBitmap.x = MARKER_XY.x;
+            this._markerBitmap.y = MARKER_XY.y;
+            this.marker.addChild(this._markerBitmap);
+            return;
+        }
+        catch (error:ReferenceError) {
+            DebugUtils.LOG_ERROR(Errors.BAD_LINKAGE + _orderType);
+            return;
+        }
     }
 
     private function updateDefaultText():void {

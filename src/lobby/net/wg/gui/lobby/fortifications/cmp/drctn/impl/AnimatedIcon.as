@@ -3,14 +3,13 @@ import flash.display.BlendMode;
 
 import net.wg.data.constants.DelayTypes;
 import net.wg.gui.components.controls.UILoaderAlt;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.ITween;
 import net.wg.infrastructure.interfaces.ITweenPropertiesVO;
 import net.wg.utils.ITweenAnimator;
 import net.wg.utils.animation.ITweenConstruction;
 
-import scaleform.clik.core.UIComponent;
-
-public class AnimatedIcon extends UIComponent {
+public class AnimatedIcon extends UIComponentEx {
 
     private static const INVALID_FADE_IN:String = "invalidFadeIn";
 

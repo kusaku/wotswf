@@ -6,7 +6,6 @@ import net.wg.data.constants.Linkages;
 import net.wg.data.constants.SoundTypes;
 import net.wg.gui.components.controls.DropdownMenu;
 import net.wg.gui.components.controls.ScrollingListEx;
-import net.wg.utils.IEventCollector;
 
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.controls.CoreList;
@@ -68,15 +67,11 @@ public class FittingSelectDropDown extends DropdownMenu {
 
     override protected function showDropdown():void {
         var _loc1_:ScrollingListEx = null;
-        var _loc2_:IEventCollector = null;
         super.showDropdown();
         if (_dropdownRef) {
             _loc1_ = ScrollingListEx(_dropdownRef);
             _loc1_.sbPadding = new Padding(SB_PADDING_TOP, SB_PADDING_LEFT, SB_PADDING_BOTTOM, SB_PADDING_RIGHT);
-            _loc2_ = App.utils.events;
-            _loc2_.disableDisposingForObj(_dropdownRef);
             parent.parent.parent.addChild(_dropdownRef);
-            _loc2_.enableDisposingForObj(_dropdownRef);
             this.updateDDPosition(null);
             invalidate(SIZE_INVALID);
         }
@@ -92,8 +87,8 @@ public class FittingSelectDropDown extends DropdownMenu {
         super.draw();
         if (isInvalid(SIZE_INVALID, InvalidationType.DATA)) {
             _loc1_ = STANDARD_RENDERER_HEIGHT;
-            if (_dropdownRef && _dropdownRef as CoreList) {
-                _loc3_ = (_dropdownRef as CoreList).getRendererAt(0);
+            if (_dropdownRef && _dropdownRef is CoreList) {
+                _loc3_ = CoreList(_dropdownRef).getRendererAt(0);
                 if (_loc3_) {
                     _loc1_ = _loc3_.height;
                 }

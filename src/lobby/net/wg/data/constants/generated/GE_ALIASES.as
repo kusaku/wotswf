@@ -7,10 +7,6 @@ public class GE_ALIASES {
 
     public static const G_E_INSPECT_WINDOW_PY:String = "GUIEditor/InspectWindow";
 
-    public static const G_E_DESIGNER_WINDOW_UI:String = "GUIEditor/DesignerWindow";
-
-    public static const G_E_DESIGNER_WINDOW_PY:String = "development\\gEDesignerWindow.swf";
-
     public function GE_ALIASES() {
         super();
     }

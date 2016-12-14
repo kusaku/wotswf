@@ -79,8 +79,7 @@ public class ToolTipComplex extends ToolTipBase {
     }
 
     override protected function updateSize():void {
-        var _loc1_:Object = null;
-        _loc1_ = this.calcDimension();
+        var _loc1_:Object = this.calcDimension();
         background.x = background.y = 0;
         background.width = Math.round(_loc1_.w) + contentMargin.horizontal + bgShadowMargin.horizontal;
         background.height = Math.round(_loc1_.h) + contentMargin.vertical + bgShadowMargin.vertical;
@@ -120,11 +119,9 @@ public class ToolTipComplex extends ToolTipBase {
     }
 
     private function setContent():void {
-        var _loc2_:TextFormat = null;
-        var _loc3_:Number = NaN;
         var _loc1_:String = _data.toString();
-        _loc2_ = new TextFormat();
-        _loc3_ = 10;
+        var _loc2_:TextFormat = new TextFormat();
+        var _loc3_:Number = 10;
         var _loc4_:Number = this._minWidth == 0 ? Number(500) : Number(this._minWidth);
         var _loc5_:TextField = App.textMgr.createTextField();
         _loc5_.x = contentMargin.left + bgShadowMargin.left;

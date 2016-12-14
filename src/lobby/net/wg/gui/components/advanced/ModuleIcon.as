@@ -3,10 +3,9 @@ import flash.display.MovieClip;
 
 import net.wg.data.constants.generated.FITTING_TYPES;
 import net.wg.gui.components.controls.UILoaderAlt;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
-
-public class ModuleIcon extends UIComponent {
+public class ModuleIcon extends UIComponentEx {
 
     public var moduleType:ModuleTypesUIWithFill;
 

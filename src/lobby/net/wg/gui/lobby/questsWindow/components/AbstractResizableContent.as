@@ -1,9 +1,8 @@
 package net.wg.gui.lobby.questsWindow.components {
 import net.wg.gui.lobby.questsWindow.components.interfaces.IResizableContent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
-
-public class AbstractResizableContent extends UIComponent implements IResizableContent {
+public class AbstractResizableContent extends UIComponentEx implements IResizableContent {
 
     private var _isReadyForLayout:Boolean = false;
 

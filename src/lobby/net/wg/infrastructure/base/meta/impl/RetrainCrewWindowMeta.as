@@ -17,9 +17,9 @@ public class RetrainCrewWindowMeta extends AbstractWindowView {
 
     private var _retrainCrewBlockVOBase:RetrainCrewBlockVOBase;
 
-    private var _retrainVehicleBlockVO:RetrainVehicleBlockVO;
-
     private var _retrainCrewOperationVO:RetrainCrewOperationVO;
+
+    private var _retrainVehicleBlockVO:RetrainVehicleBlockVO;
 
     public function RetrainCrewWindowMeta() {
         super();
@@ -34,13 +34,13 @@ public class RetrainCrewWindowMeta extends AbstractWindowView {
             this._retrainCrewBlockVOBase.dispose();
             this._retrainCrewBlockVOBase = null;
         }
-        if (this._retrainVehicleBlockVO) {
-            this._retrainVehicleBlockVO.dispose();
-            this._retrainVehicleBlockVO = null;
-        }
         if (this._retrainCrewOperationVO) {
             this._retrainCrewOperationVO.dispose();
             this._retrainCrewOperationVO = null;
+        }
+        if (this._retrainVehicleBlockVO) {
+            this._retrainVehicleBlockVO.dispose();
+            this._retrainVehicleBlockVO = null;
         }
         super.onDispose();
     }
@@ -55,36 +55,40 @@ public class RetrainCrewWindowMeta extends AbstractWindowView {
         this.changeRetrainType(param1);
     }
 
-    public function as_setCrewData(param1:Object):void {
-        if (this._retrainCrewBlockVO) {
-            this._retrainCrewBlockVO.dispose();
-        }
+    public final function as_setCrewData(param1:Object):void {
+        var _loc2_:RetrainCrewBlockVO = this._retrainCrewBlockVO;
         this._retrainCrewBlockVO = new RetrainCrewBlockVO(param1);
         this.setCrewData(this._retrainCrewBlockVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setVehicleData(param1:Object):void {
-        if (this._retrainVehicleBlockVO) {
-            this._retrainVehicleBlockVO.dispose();
-        }
+    public final function as_setVehicleData(param1:Object):void {
+        var _loc2_:RetrainVehicleBlockVO = this._retrainVehicleBlockVO;
         this._retrainVehicleBlockVO = new RetrainVehicleBlockVO(param1);
         this.setVehicleData(this._retrainVehicleBlockVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setCrewOperationData(param1:Object):void {
-        if (this._retrainCrewOperationVO) {
-            this._retrainCrewOperationVO.dispose();
-        }
+    public final function as_setCrewOperationData(param1:Object):void {
+        var _loc2_:RetrainCrewOperationVO = this._retrainCrewOperationVO;
         this._retrainCrewOperationVO = new RetrainCrewOperationVO(param1);
         this.setCrewOperationData(this._retrainCrewOperationVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setAllCrewData(param1:Object):void {
-        if (this._retrainCrewBlockVOBase) {
-            this._retrainCrewBlockVOBase.dispose();
-        }
+    public final function as_setAllCrewData(param1:Object):void {
+        var _loc2_:RetrainCrewBlockVOBase = this._retrainCrewBlockVOBase;
         this._retrainCrewBlockVOBase = new RetrainCrewBlockVOBase(param1);
         this.setAllCrewData(this._retrainCrewBlockVOBase);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setCrewData(param1:RetrainCrewBlockVO):void {

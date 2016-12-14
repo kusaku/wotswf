@@ -27,12 +27,13 @@ public class FortIntelligenceWindowMeta extends AbstractWindowView {
         this.requestClanFortInfo(param1);
     }
 
-    public function as_setTableHeader(param1:Object):void {
-        if (this._normalSortingTableHeaderVO) {
-            this._normalSortingTableHeaderVO.dispose();
-        }
+    public final function as_setTableHeader(param1:Object):void {
+        var _loc2_:NormalSortingTableHeaderVO = this._normalSortingTableHeaderVO;
         this._normalSortingTableHeaderVO = new NormalSortingTableHeaderVO(param1);
         this.setTableHeader(this._normalSortingTableHeaderVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setTableHeader(param1:NormalSortingTableHeaderVO):void {

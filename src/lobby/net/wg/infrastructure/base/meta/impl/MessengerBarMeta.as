@@ -34,20 +34,22 @@ public class MessengerBarMeta extends BaseDAAPIComponent {
         this.channelButtonClick();
     }
 
-    public function as_setInitData(param1:Object):void {
-        if (this._messegerBarInitVO) {
-            this._messegerBarInitVO.dispose();
-        }
+    public final function as_setInitData(param1:Object):void {
+        var _loc2_:MessegerBarInitVO = this._messegerBarInitVO;
         this._messegerBarInitVO = new MessegerBarInitVO(param1);
         this.setInitData(this._messegerBarInitVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_showAddVehicleCompareAnim(param1:Object):void {
-        if (this._vehicleCompareAnimVO) {
-            this._vehicleCompareAnimVO.dispose();
-        }
+    public final function as_showAddVehicleCompareAnim(param1:Object):void {
+        var _loc2_:VehicleCompareAnimVO = this._vehicleCompareAnimVO;
         this._vehicleCompareAnimVO = new VehicleCompareAnimVO(param1);
         this.showAddVehicleCompareAnim(this._vehicleCompareAnimVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setInitData(param1:MessegerBarInitVO):void {

@@ -27,12 +27,13 @@ public class QuestsWindowMeta extends AbstractWindowView {
         this.onTabSelected(param1);
     }
 
-    public function as_init(param1:Object):void {
-        if (this._tabsVO) {
-            this._tabsVO.dispose();
-        }
+    public final function as_init(param1:Object):void {
+        var _loc2_:TabsVO = this._tabsVO;
         this._tabsVO = new TabsVO(param1);
         this.init(this._tabsVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function init(param1:TabsVO):void {

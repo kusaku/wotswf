@@ -21,6 +21,17 @@ public class KeysScrollingList extends ScrollingListPx {
         scrollPosition = 0;
     }
 
+    override public function scrollToIndex(param1:uint):void {
+        if (this.isSelected()) {
+            return;
+        }
+        super.scrollToIndex(param1);
+    }
+
+    override public function toString():String {
+        return "[Wargaming KeysScrollingList " + name + "]";
+    }
+
     override protected function draw():void {
         var _loc1_:Graphics = null;
         if (isInvalid(InvalidationType.SCROLL_BAR)) {
@@ -40,32 +51,19 @@ public class KeysScrollingList extends ScrollingListPx {
                 _newFrame = null;
             }
         }
-        if (!_usingExternalRenderers && isInvalid(InvalidationType.RENDERERS, InvalidationType.DATA) && _renderers == null) {
-            _renderers = new Vector.<IListItemRenderer>();
-            if (_dataProvider) {
-                this.drawRenderers(_dataProvider.length);
+        if (!_usingExternalRenderers && isInvalid(InvalidationType.RENDERERS, InvalidationType.DATA)) {
+            if (_renderers == null) {
+                _renderers = new Vector.<IListItemRenderer>();
+                if (_dataProvider) {
+                    this.drawRenderers(_dataProvider.length);
+                }
+            }
+            else {
+                this.updateDataProvider();
             }
         }
         if (isInvalid(SCROLL_UPDATE_INV)) {
             applyScrollBarUpdating();
-        }
-    }
-
-    public function updateDataProvider():void {
-        var _loc1_:uint = 0;
-        var _loc2_:uint = 0;
-        var _loc3_:IListItemRenderer = null;
-        var _loc4_:Object = null;
-        if (_dataProvider && _renderers) {
-            _loc1_ = _renderers.length;
-            _loc2_ = 0;
-            while (_loc2_ < _loc1_) {
-                _loc3_ = getRendererAt(_loc2_);
-                _loc4_ = _dataProvider[_loc2_];
-                _loc3_.setListData(new ListData(_loc2_, itemToLabel(_loc4_), false));
-                _loc3_.setData(_loc4_);
-                _loc2_++;
-            }
         }
     }
 
@@ -138,32 +136,73 @@ public class KeysScrollingList extends ScrollingListPx {
         param1.removeEventListener(KeyInputEvents.CHANGE, this.onChangeHandler);
     }
 
-    private function onPressHandler(param1:ButtonEvent):void {
-        this.dispatchItemEvent(param1);
+    override protected function scrollList(param1:int):void {
+        if (this.isSelected()) {
+            return;
+        }
+        super.scrollList(param1);
     }
 
-    private function onClickHandler(param1:ButtonEvent):void {
-        handleItemClick(param1);
+    public function keysWasChanged():Boolean {
+        var _loc1_:Boolean = false;
+        var _loc2_:uint = dataProvider.length;
+        var _loc3_:uint = 0;
+        while (_loc3_ < _loc2_) {
+            if (!dataProvider[_loc3_].header && dataProvider[_loc3_].key != dataProvider[_loc3_].keyDefault) {
+                _loc1_ = true;
+                break;
+            }
+            _loc3_++;
+        }
+        return _loc1_;
     }
 
-    private function onDoubleClickHandler(param1:MouseEvent):void {
-        this.dispatchItemEvent(param1);
+    public function restoreDefault():void {
+        var _loc3_:ListEventEx = null;
+        var _loc1_:uint = dataProvider.length;
+        var _loc2_:uint = 0;
+        while (_loc2_ < _loc1_) {
+            if (!dataProvider[_loc2_].header && dataProvider[_loc2_].key != dataProvider[_loc2_].keyDefault) {
+                dataProvider[_loc2_].key = dataProvider[_loc2_].keyDefault;
+                _loc3_ = new ListEventEx(ListEventEx.ITEM_TEXT_CHANGE, false, true, 0, 0, 0, null, dataProvider[_loc2_], dataProvider[_loc2_].key);
+                dispatchEvent(_loc3_);
+            }
+            _loc2_++;
+        }
+        dataProvider.invalidate();
     }
 
-    private function onRollOverHandler(param1:MouseEvent):void {
-        this.dispatchItemEvent(param1);
+    public function updateDataProvider():void {
+        var _loc1_:uint = 0;
+        var _loc2_:uint = 0;
+        var _loc3_:IListItemRenderer = null;
+        var _loc4_:Object = null;
+        if (_dataProvider && _renderers) {
+            _loc1_ = _renderers.length;
+            _loc2_ = 0;
+            while (_loc2_ < _loc1_) {
+                _loc3_ = getRendererAt(_loc2_);
+                _loc4_ = _dataProvider[_loc2_];
+                _loc3_.setListData(new ListData(_loc2_, itemToLabel(_loc4_), false));
+                _loc3_.setData(_loc4_);
+                _loc2_++;
+            }
+        }
     }
 
-    private function onRollOutHandler(param1:MouseEvent):void {
-        this.dispatchItemEvent(param1);
-    }
-
-    private function onMouseWheelHandler(param1:MouseEvent):void {
-        handleMouseWheel(param1);
-    }
-
-    private function onChangeHandler(param1:KeyInputEvents):void {
-        this.dispatchItemEvent(param1);
+    private function isSelected():Boolean {
+        var _loc3_:KeysItemRenderer = null;
+        var _loc1_:uint = _renderers.length;
+        var _loc2_:uint = 0;
+        while (_loc2_ < _loc1_) {
+            _loc3_ = getRendererAt(_loc2_) as KeysItemRenderer;
+            App.utils.asserter.assertNotNull(_loc3_, "getRendererAt(i) must be KeysItemRenderer");
+            if (_loc3_.isSelected()) {
+                return true;
+            }
+            _loc2_++;
+        }
+        return false;
     }
 
     override protected function dispatchItemEvent(param1:Event):Boolean {
@@ -220,66 +259,32 @@ public class KeysScrollingList extends ScrollingListPx {
         return dispatchEvent(_loc7_);
     }
 
-    override protected function scrollList(param1:int):void {
-        if (this.isSelected()) {
-            return;
-        }
-        super.scrollList(param1);
+    private function onPressHandler(param1:ButtonEvent):void {
+        this.dispatchItemEvent(param1);
     }
 
-    override public function scrollToIndex(param1:uint):void {
-        if (this.isSelected()) {
-            return;
-        }
-        super.scrollToIndex(param1);
+    private function onClickHandler(param1:ButtonEvent):void {
+        handleItemClick(param1);
     }
 
-    private function isSelected():Boolean {
-        var _loc3_:KeysItemRenderer = null;
-        var _loc1_:uint = _renderers.length;
-        var _loc2_:uint = 0;
-        while (_loc2_ < _loc1_) {
-            _loc3_ = getRendererAt(_loc2_) as KeysItemRenderer;
-            App.utils.asserter.assertNotNull(_loc3_, "getRendererAt(i) must be KeysItemRenderer");
-            if (_loc3_.isSelected()) {
-                return true;
-            }
-            _loc2_++;
-        }
-        return false;
+    private function onDoubleClickHandler(param1:MouseEvent):void {
+        this.dispatchItemEvent(param1);
     }
 
-    public function restoreDefault():void {
-        var _loc3_:ListEventEx = null;
-        var _loc1_:uint = dataProvider.length;
-        var _loc2_:uint = 0;
-        while (_loc2_ < _loc1_) {
-            if (!dataProvider[_loc2_].header && dataProvider[_loc2_].key != dataProvider[_loc2_].keyDefault) {
-                dataProvider[_loc2_].key = dataProvider[_loc2_].keyDefault;
-                _loc3_ = new ListEventEx(ListEventEx.ITEM_TEXT_CHANGE, false, true, 0, 0, 0, null, dataProvider[_loc2_], dataProvider[_loc2_].key);
-                dispatchEvent(_loc3_);
-            }
-            _loc2_++;
-        }
-        dataProvider.invalidate();
+    private function onRollOverHandler(param1:MouseEvent):void {
+        this.dispatchItemEvent(param1);
     }
 
-    public function keysWasChanged():Boolean {
-        var _loc1_:Boolean = false;
-        var _loc2_:uint = dataProvider.length;
-        var _loc3_:uint = 0;
-        while (_loc3_ < _loc2_) {
-            if (!dataProvider[_loc3_].header && dataProvider[_loc3_].key != dataProvider[_loc3_].keyDefault) {
-                _loc1_ = true;
-                break;
-            }
-            _loc3_++;
-        }
-        return _loc1_;
+    private function onRollOutHandler(param1:MouseEvent):void {
+        this.dispatchItemEvent(param1);
     }
 
-    override public function toString():String {
-        return "[Wargaming KeysScrollingList " + name + "]";
+    private function onMouseWheelHandler(param1:MouseEvent):void {
+        handleMouseWheel(param1);
+    }
+
+    private function onChangeHandler(param1:KeyInputEvents):void {
+        this.dispatchItemEvent(param1);
     }
 }
 }

@@ -24,6 +24,7 @@ import net.wg.gui.lobby.settings.events.AlternativeVoiceEvent;
 import net.wg.gui.lobby.settings.events.SettingViewEvent;
 import net.wg.gui.lobby.settings.vo.SettingsControlProp;
 import net.wg.gui.lobby.settings.vo.SettingsKeyProp;
+import net.wg.gui.lobby.settings.vo.SettingsViewData;
 import net.wg.gui.lobby.settings.vo.base.SettingsDataIncomeVo;
 import net.wg.gui.lobby.settings.vo.base.SettingsDataVo;
 import net.wg.gui.lobby.settings.vo.config.ControlsSettingsDataVo;
@@ -85,11 +86,7 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
 
     private var _invalidTabs:Object;
 
-    private var _settingsData:SettingsDataVo = null;
-
     private var _pythonSettingsData:SettingsDataVo = null;
-
-    private var _changesData:SettingsChangesMap = null;
 
     private var _needToUpdateGraphicSettings:Boolean = false;
 
@@ -139,7 +136,10 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
         }
         addEventListener(SettingViewEvent.ON_CONTROL_CHANGED, this.onOnControlChangedHandler);
         addEventListener(SettingViewEvent.ON_PTT_CONTROL_CHANGED, this.onOnPttControlChangedHandler);
+        addEventListener(SettingViewEvent.ON_PTT_SOUND_CONTROL_CHANGED, this.onOnPttSoundControlChangedHandler);
         addEventListener(SettingViewEvent.ON_AUTO_DETECT_QUALITY, this.onOnAutoDetectQualityHandler);
+        addEventListener(SettingViewEvent.ON_AUTO_DETECT_ACOUSTIC, this.onOnAutoDetectAcousticHandler);
+        addEventListener(SettingViewEvent.ON_SOUND_SPEAKER_CHANGE, this.onSoundSpeakerChange);
         addEventListener(SettingViewEvent.ON_VIVOX_TEST, this.onOnVivoxTestHandler);
         addEventListener(SettingViewEvent.ON_UPDATE_CAPTURE_DEVICE, this.onOnUpdateCaptureDeviceHandler);
         addEventListener(AlternativeVoiceEvent.ON_TEST_ALTERNATIVE_VOICES, this.onOnTestAlternativeVoicesHandler);
@@ -180,16 +180,17 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
             this.tabs = null;
         }
         removeEventListener(SettingViewEvent.ON_PTT_CONTROL_CHANGED, this.onOnPttControlChangedHandler);
+        removeEventListener(SettingViewEvent.ON_PTT_SOUND_CONTROL_CHANGED, this.onOnPttSoundControlChangedHandler);
         removeEventListener(SettingViewEvent.ON_CONTROL_CHANGED, this.onOnControlChangedHandler);
         removeEventListener(SettingViewEvent.ON_AUTO_DETECT_QUALITY, this.onOnAutoDetectQualityHandler);
+        removeEventListener(SettingViewEvent.ON_AUTO_DETECT_ACOUSTIC, this.onOnAutoDetectAcousticHandler);
+        removeEventListener(SettingViewEvent.ON_SOUND_SPEAKER_CHANGE, this.onSoundSpeakerChange);
         removeEventListener(SettingViewEvent.ON_VIVOX_TEST, this.onOnVivoxTestHandler);
         removeEventListener(SettingViewEvent.ON_UPDATE_CAPTURE_DEVICE, this.onOnUpdateCaptureDeviceHandler);
         removeEventListener(AlternativeVoiceEvent.ON_TEST_ALTERNATIVE_VOICES, this.onOnTestAlternativeVoicesHandler);
         removeEventListener(AlternativeVoiceEvent.ON_TEST_BULB_VOICES, this.onOnTestBulbVoicesHandler);
-        this._changesData.dispose();
-        this._changesData = null;
+        this._settingsConfigHelper.changesData.clear();
         this._settingsConfigHelper = null;
-        this._settingsData = null;
         this._invalidTabs = App.utils.data.cleanupDynamicObject(this._invalidTabs);
         this._invalidTabs = null;
         this._pythonSettingsData.dispose();
@@ -204,14 +205,14 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
     }
 
     public function as_ConfirmationOfApplication(param1:Boolean):void {
-        this.updateSettingsConfig(param1);
+        this.updateSettingsConfig();
     }
 
     public function as_confirmWarningDialog(param1:Boolean, param2:String):void {
         var _loc3_:Object = null;
         var _loc4_:SettingsControlProp = null;
         var _loc5_:SoundSettings = null;
-        this.updateSettingsConfig(param1);
+        this.updateSettingsConfig();
         if (param1) {
             if (param2.indexOf(SOUND_MODE_WARNING, 0) >= 0) {
                 _loc3_ = this._settingsConfigHelper.settingsData[SettingsConfigHelper.SOUND_SETTINGS];
@@ -224,7 +225,7 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
             }
         }
         else {
-            this.tabs.selectedIndex = param2.indexOf(CONTROLS_WARNING, 0) != -1 ? int(SOUND_SETTINGS_TAB_INDEX) : int(CONTROL_SETTINGS_TAB_INDEX);
+            this.tabs.selectedIndex = param2.indexOf(CONTROLS_WARNING, 0) != -1 ? int(CONTROL_SETTINGS_TAB_INDEX) : int(SOUND_SETTINGS_TAB_INDEX);
         }
     }
 
@@ -256,11 +257,21 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
         }
     }
 
-    public function as_setCaptureDevices(param1:Number, param2:Array):void {
+    override protected function setCaptureDevices(param1:Number, param2:DataProvider):void {
         var _loc3_:SoundSettings = this.getSoundSettings();
         if (_loc3_ != null) {
             _loc3_.setCaptureDevices(param1, param2);
         }
+    }
+
+    override protected function setCountersData(param1:Array):void {
+        if (this._settingsCounterHelper != null) {
+            this._settingsCounterHelper.removeEventListener(CounterEvent.COUNTER_VISITED, this.onCounterVisitedHandler);
+            this._settingsCounterHelper.dispose();
+        }
+        this._settingsCounterHelper = new SettingsCounterDelegate();
+        this._settingsCounterHelper.addEventListener(CounterEvent.COUNTER_VISITED, this.onCounterVisitedHandler);
+        this._settingsCounterHelper.setSettingsItems(param1, this.tabs, this.view);
     }
 
     public function as_setData(param1:Object):void {
@@ -336,6 +347,13 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
         }
     }
 
+    public function as_onSoundSpeakersPresetApply(param1:Boolean):void {
+        var _loc2_:SoundSettings = this.getSoundSettings();
+        if (_loc2_ != null) {
+            _loc2_.isPresetApply(param1);
+        }
+    }
+
     private function getGraphicsSettings():GraphicSettings {
         return GraphicSettings(this.tryGetView(SettingsConfigHelper.GRAPHIC_SETTINGS));
     }
@@ -353,6 +371,10 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
         }
     }
 
+    private function invalidateTab(param1:String):void {
+        this._invalidTabs[param1] = true;
+    }
+
     private function isTabInvalid(param1:String):Boolean {
         var _loc2_:Boolean = false;
         if (this._invalidTabs.hasOwnProperty(param1) && this._invalidTabs[param1]) {
@@ -362,31 +384,31 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
     }
 
     private function updateTabIfNeeded(param1:String, param2:IViewStackContent):void {
+        var _loc3_:ISettingsBase = null;
+        var _loc4_:SettingsDataVo = null;
         if (this.isTabInvalid(param1)) {
-            param2.update({
-                "id": param1,
-                "data": this._settingsData[param1]
-            });
+            _loc3_ = ISettingsBase(param2);
+            _loc4_ = this._settingsConfigHelper.getDataItem(param1, _loc3_.needDataWithChanges());
+            param2.update(new SettingsViewData(param1, _loc4_));
             this._invalidTabs[param1] = false;
         }
     }
 
     private function initializeCommonData(param1:SettingsDataVo):void {
-        var _loc2_:String = null;
-        var _loc3_:IViewStackContent = null;
-        this._settingsData = this.normalize(param1);
-        this._changesData = new SettingsChangesMap();
+        var _loc2_:SettingsDataVo = null;
+        var _loc3_:String = null;
+        var _loc4_:IViewStackContent = null;
+        this.normalize(param1);
+        this._settingsConfigHelper.changesData.clear();
         this.updateApplyBtnState();
         if (this.tabs) {
-            this.updateTabs(SettingsControlProp(this._settingsData[SettingsConfigHelper.OTHER_SETTINGS].vibroIsConnected).current);
-            _loc2_ = this._settingsConfigHelper.tabsDataProviderWithOther[_currentTab].linkage;
-            this.view.show(_loc2_);
-            _loc3_ = IViewStackContent(this.view.currentView);
-            _loc3_.update({
-                "id": _loc2_,
-                "data": this._settingsData[_loc2_]
-            });
-            this._invalidTabs[_loc2_] = false;
+            _loc2_ = this._settingsConfigHelper.settingsData;
+            this.updateTabs(SettingsControlProp(_loc2_[SettingsConfigHelper.OTHER_SETTINGS].vibroIsConnected).current);
+            _loc3_ = this._settingsConfigHelper.tabsDataProviderWithOther[_currentTab].linkage;
+            this.view.show(_loc3_);
+            _loc4_ = IViewStackContent(this.view.currentView);
+            _loc4_.update(new SettingsViewData(_loc3_, _loc2_[_loc3_]));
+            this._invalidTabs[_loc3_] = false;
             this.tabs.validateNow();
         }
     }
@@ -441,16 +463,16 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
 
     private function checkChanges(param1:Boolean, param2:String, param3:Object):void {
         if (param1) {
-            this._changesData.tryCutChanges(param2, param3);
+            this._settingsConfigHelper.changesData.tryCutChanges(param2, param3);
         }
         else {
-            this._changesData.tryAddChanges(param2, param3);
+            this._settingsConfigHelper.changesData.tryAddChanges(param2, param3);
         }
         this.updateApplyBtnState();
     }
 
     private function updateApplyBtnState():void {
-        this.applyBtn.enabled = this._changesData && this._changesData.length > 0;
+        this.applyBtn.enabled = this._settingsConfigHelper.changesData.length > 0;
     }
 
     private function tryGetView(param1:String):MovieClip {
@@ -460,7 +482,7 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
         return this.view.cachedViews[param1];
     }
 
-    private function normalize(param1:SettingsDataVo):SettingsDataVo {
+    private function normalize(param1:SettingsDataVo):void {
         var _loc7_:SettingsControlProp = null;
         var _loc8_:SettingsKeyProp = null;
         var _loc2_:SettingsDataVo = this._settingsConfigHelper.settingsData;
@@ -480,7 +502,6 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
             _loc7_.current = _loc8_.key;
         }
         SettingsControlProp(_loc2_[SettingsConfigHelper.GAME_SETTINGS][SettingsConfigHelper.ENABLE_OL_FILTER]).readOnly = App.globalVarsMgr.isChinaS();
-        return _loc2_;
     }
 
     private function normalizeInside(param1:SettingsDataVo, param2:SettingsDataVo):void {
@@ -496,7 +517,7 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
         while (_loc8_ < _loc3_) {
             _loc4_ = param1.keys[_loc8_];
             _loc5_ = param1.values[_loc8_];
-            if (_loc5_ != undefined) {
+            if (_loc5_ != null) {
                 switch (_loc4_) {
                     case SettingsConfigHelper.PRESETS:
                         param2[_loc4_] = new SettingsDataVo(_loc7_.cloneObject(_loc5_));
@@ -522,7 +543,7 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
                         param2[_loc4_] = Vector.<String>(_loc5_);
                         break;
                     case SettingsConfigHelper.KEYBOARD:
-                        this.normalizeKeys(_loc5_, _loc5_[SettingsConfigHelper.KEYS_LAYOUT], param2[_loc4_], param2[SettingsConfigHelper.KEYS_LAYOUT_ORDER]);
+                        this.normalizeKeys(_loc5_, param2[_loc4_], param2[SettingsConfigHelper.KEYS_LAYOUT_ORDER]);
                         break;
                     default:
                         this.normalizeDefault(param2, _loc4_, _loc5_);
@@ -605,55 +626,57 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
         param2.defaultValue = _loc4_;
     }
 
-    private function normalizeKeys(param1:Object, param2:Array, param3:SettingsDataVo, param4:Vector.<String>):void {
-        var _loc5_:String = null;
-        var _loc6_:Array = null;
+    private function normalizeKeys(param1:Object, param2:SettingsDataVo, param3:Vector.<String>):void {
+        var _loc4_:String = null;
+        var _loc5_:Array = null;
+        var _loc6_:Object = null;
         var _loc7_:Object = null;
-        var _loc8_:Object = null;
-        var _loc9_:uint = 0;
+        var _loc8_:uint = 0;
+        var _loc9_:String = null;
         var _loc10_:String = null;
-        var _loc11_:String = null;
-        var _loc12_:Array = null;
-        var _loc13_:Object = null;
+        var _loc11_:Array = null;
+        var _loc12_:Object = null;
+        var _loc13_:Number = NaN;
         var _loc14_:Number = NaN;
-        var _loc15_:Number = NaN;
+        var _loc19_:uint = 0;
+        param2.keys.splice(0, param2.keys.length);
+        param2.values.splice(0, param2.values.length);
+        param3.splice(0, param3.length);
+        var _loc15_:Array = param1[SettingsConfigHelper.KEYS_LAYOUT];
+        var _loc16_:Object = param1[SettingsConfigHelper.KEYS_TOOLTIPS];
+        var _loc17_:uint = _loc15_.length;
         var _loc18_:uint = 0;
-        param3.keys.splice(0, param3.keys.length);
-        param3.values.splice(0, param3.values.length);
-        param4.splice(0, param4.length);
-        var _loc16_:uint = param2.length;
-        var _loc17_:uint = 0;
-        while (_loc17_ < _loc16_) {
-            _loc8_ = param2[_loc17_];
-            _loc5_ = _loc8_[FIELD_KEY];
-            _loc6_ = _loc8_[FIELD_VALUES];
-            _loc9_ = _loc6_.length;
-            param4.push(_loc5_);
-            param3.keys.push(_loc5_);
-            param3.values.push(new SettingsKeyProp(_loc5_, true, _loc5_, null, NaN, NaN, null, false, _loc17_ == 0 ? Number(0) : Number(MAX_RENDERER_Y_OFFSET)));
-            _loc18_ = 0;
-            while (_loc18_ < _loc9_) {
-                _loc7_ = _loc6_[_loc18_];
-                _loc10_ = _loc7_[FIELD_KEY];
-                _loc11_ = _loc7_[FIELD_CMD];
-                _loc12_ = !!_loc7_.hasOwnProperty(FIELD_DESCR) ? _loc7_[FIELD_DESCR] : null;
-                _loc13_ = param1[_loc10_];
-                if (_loc13_[FIELD_CURRENT] >= 0) {
-                    _loc14_ = _loc13_[FIELD_CURRENT];
-                    _loc15_ = _loc13_[FIELD_DEF];
-                    param4.push(_loc10_);
-                    param3.keys.push(_loc10_);
-                    param3.values.push(new SettingsKeyProp(_loc10_, false, _loc10_, _loc11_, _loc14_, _loc15_, _loc12_, true));
+        while (_loc18_ < _loc17_) {
+            _loc7_ = _loc15_[_loc18_];
+            _loc4_ = _loc7_[FIELD_KEY];
+            _loc5_ = _loc7_[FIELD_VALUES];
+            _loc8_ = _loc5_.length;
+            param3.push(_loc4_);
+            param2.keys.push(_loc4_);
+            param2.values.push(new SettingsKeyProp(_loc4_, true, _loc4_, null, NaN, NaN, null, false, _loc18_ == 0 ? Number(0) : Number(MAX_RENDERER_Y_OFFSET)));
+            _loc19_ = 0;
+            while (_loc19_ < _loc8_) {
+                _loc6_ = _loc5_[_loc19_];
+                _loc9_ = _loc6_[FIELD_KEY];
+                _loc10_ = _loc6_[FIELD_CMD];
+                _loc11_ = !!_loc6_.hasOwnProperty(FIELD_DESCR) ? _loc6_[FIELD_DESCR] : null;
+                _loc12_ = param1[_loc9_];
+                if (_loc12_[FIELD_CURRENT] >= 0) {
+                    _loc13_ = _loc12_[FIELD_CURRENT];
+                    _loc14_ = _loc12_[FIELD_DEF];
+                    param3.push(_loc9_);
+                    param2.keys.push(_loc9_);
+                    param2.values.push(new SettingsKeyProp(_loc9_, false, _loc9_, _loc10_, _loc13_, _loc14_, _loc11_, true, 0, _loc16_[_loc9_]));
                 }
-                _loc18_++;
+                _loc19_++;
             }
-            _loc17_++;
+            _loc18_++;
         }
     }
 
     private function sendData(param1:Boolean):void {
-        var _loc5_:String = null;
-        var _loc6_:GraphicSettings = null;
+        var _loc6_:String = null;
+        var _loc7_:GraphicSettings = null;
         this.cancelBtn.enabled = this.applyBtn.enabled = this.submitBtn.enabled = false;
         var _loc2_:SoundSettings = this.getSoundSettings();
         if (_loc2_) {
@@ -661,17 +684,18 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
         }
         var _loc3_:Boolean = this.checkControlsWrong();
         var _loc4_:* = !isSoundModeValidS();
+        var _loc5_:Object = this._settingsConfigHelper.changesData.getChanges();
         if (_loc3_ || _loc4_) {
-            _loc5_ = !!_loc3_ ? CONTROLS_WARNING : Values.EMPTY_STR;
-            _loc5_ = _loc5_ + (!!_loc4_ ? SOUND_MODE_WARNING : Values.EMPTY_STR);
-            showWarningDialogS(_loc5_, this._changesData.getChanges(), param1);
+            _loc6_ = !!_loc3_ ? CONTROLS_WARNING : Values.EMPTY_STR;
+            _loc6_ = _loc6_ + (!!_loc4_ ? SOUND_MODE_WARNING : Values.EMPTY_STR);
+            showWarningDialogS(_loc6_, _loc5_, param1);
         }
         else {
-            _loc6_ = this.getGraphicsSettings();
-            if (_loc6_) {
-                _loc6_.rewriteInitialValues();
+            _loc7_ = this.getGraphicsSettings();
+            if (_loc7_) {
+                _loc7_.rewriteInitialValues();
             }
-            applySettingsS(this._changesData.getChanges(), param1);
+            applySettingsS(_loc5_, param1);
             if (!param1) {
                 this.as_ConfirmationOfApplication(false);
             }
@@ -696,67 +720,19 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
         return false;
     }
 
-    private function updateSettingsConfig(param1:Boolean):void {
-        var _loc2_:Object = null;
-        if (param1 && this._changesData) {
-            _loc2_ = this._changesData.getChanges();
-            this.searchAndOverride(this._settingsConfigHelper.settingsData, _loc2_);
-            this._changesData.clear();
-        }
+    private function updateSettingsConfig():void {
+        this._settingsConfigHelper.applyChangesToCurrentData();
         this.cancelBtn.enabled = this.submitBtn.enabled = true;
         this.updateApplyBtnState();
     }
 
-    private function searchAndOverride(param1:SettingsDataVo, param2:Object):void {
-        var _loc5_:SettingsDataVo = null;
-        var _loc6_:* = null;
-        var _loc3_:Object = {};
-        var _loc4_:Object = null;
-        for (_loc6_ in param2) {
-            _loc4_ = param2[_loc6_];
-            _loc3_ = this.getControlInLayer(param1, _loc6_);
-            if (_loc4_ is Boolean || _loc4_ is Number || _loc4_ is String) {
-                if (_loc3_ != null && _loc4_ != null) {
-                    if (_loc3_ is SettingsControlProp) {
-                        SettingsControlProp(_loc3_).current = _loc4_;
-                    }
-                    else if (_loc3_ is SettingsKeyProp) {
-                        SettingsKeyProp(_loc3_).key = Number(_loc4_);
-                    }
-                }
-            }
-            else if (_loc3_ is SettingsControlProp) {
-                SettingsControlProp(_loc3_).current = _loc4_;
-            }
-            else {
-                _loc5_ = SettingsDataVo(_loc3_);
-                if (_loc5_ != null) {
-                    this.searchAndOverride(_loc5_, _loc4_);
-                }
-            }
-        }
-    }
-
-    private function getControlInLayer(param1:SettingsDataVo, param2:String):Object {
-        var _loc7_:int = 0;
-        var _loc3_:Vector.<Object> = param1.values;
-        var _loc4_:int = param1.keys.length;
-        var _loc5_:Object = param1.getByKey(param2);
-        var _loc6_:SettingsDataVo = null;
-        if (_loc5_ == null) {
-            _loc7_ = 0;
-            while (_loc7_ < _loc4_) {
-                _loc6_ = _loc3_[_loc7_] as SettingsDataVo;
-                if (_loc6_) {
-                    _loc5_ = _loc6_.getByKey(param2);
-                }
-                if (_loc5_ != null) {
-                    return _loc5_;
-                }
-                _loc7_++;
-            }
-        }
-        return _loc5_;
+    private function showSoundTestErrorTooltip(param1:IButtonIconLoader):void {
+        var _loc2_:Number = param1.x;
+        var _loc3_:Number = param1.y;
+        var _loc4_:Point = this.localToGlobal(new Point(_loc2_, _loc3_));
+        var _loc5_:ITooltipProps = new TooltipProps(BaseTooltips.TYPE_WARNING, _loc4_.x, _loc4_.y, 0, 0, MAX_TOOLTIP_WIDTH);
+        var _loc6_:String = App.textMgr.getTextStyleById(TEXT_MANAGER_STYLES.ERROR_TEXT, App.utils.locale.makeString(TOOLTIPS.SETTINGS_DIALOG_SOUND_SOUNDMODEINVALID));
+        App.toolTipMgr.show(_loc6_, _loc5_);
     }
 
     private function onTabIndexChangeHandler(param1:IndexEvent):void {
@@ -802,13 +778,18 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
         }
     }
 
+    private function onOnPttSoundControlChangedHandler(param1:SettingViewEvent):void {
+        this.invalidateTab(SettingsConfigHelper.CONTROLS_SETTINGS);
+    }
+
     private function onOnControlChangedHandler(param1:SettingViewEvent):void {
         var _loc2_:String = param1.viewId;
         var _loc3_:String = param1.controlId;
         var _loc4_:Object = param1.controlValue;
-        var _loc5_:Boolean = this.controlDefValEqNewVal(this._settingsData.getByKey(_loc2_).getByKey(_loc3_), _loc4_);
+        var _loc5_:SettingsDataVo = this._settingsConfigHelper.settingsData;
+        var _loc6_:Boolean = this.controlDefValEqNewVal(_loc5_.getByKey(_loc2_).getByKey(_loc3_), _loc4_);
         onSettingsChangeS(_loc3_, _loc4_);
-        this.checkChanges(_loc5_, _loc3_, _loc4_);
+        this.checkChanges(_loc6_, _loc3_, _loc4_);
     }
 
     private function onOnVivoxTestHandler(param1:SettingViewEvent):void {
@@ -825,6 +806,22 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
         var _loc3_:GraphicSettings = this.getGraphicsSettings();
         if (_loc3_ != null) {
             _loc3_.setPresetAfterAutoDetect(_loc2_);
+        }
+    }
+
+    private function onOnAutoDetectAcousticHandler(param1:SettingViewEvent):void {
+        var _loc2_:String = autodetectAcousticTypeS();
+        var _loc3_:SoundSettings = this.getSoundSettings();
+        if (_loc3_ != null) {
+            _loc3_.updateAcousticDeviceByType(_loc2_);
+        }
+    }
+
+    private function onSoundSpeakerChange(param1:SettingViewEvent):void {
+        var _loc2_:Boolean = canSelectAcousticTypeS(Number(param1.controlValue));
+        var _loc3_:SoundSettings = this.getSoundSettings();
+        if (_loc3_ != null) {
+            _loc3_.isCanSelectAcousticType(_loc2_);
         }
     }
 
@@ -862,16 +859,6 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
         onWindowCloseS();
     }
 
-    private function showSoundTestErrorTooltip(param1:IButtonIconLoader):void {
-        var _loc2_:SoundSettings = this.getSoundSettings();
-        var _loc3_:Number = param1.x;
-        var _loc4_:Number = param1.y;
-        var _loc5_:Point = this.localToGlobal(new Point(_loc3_, _loc4_));
-        var _loc6_:ITooltipProps = new TooltipProps(BaseTooltips.TYPE_WARNING, _loc5_.x, _loc5_.y, 0, 0, MAX_TOOLTIP_WIDTH);
-        var _loc7_:String = App.textMgr.getTextStyleById(TEXT_MANAGER_STYLES.ERROR_TEXT, App.utils.locale.makeString(TOOLTIPS.SETTINGS_DIALOG_SOUND_SOUNDMODEINVALID));
-        App.toolTipMgr.show(_loc7_, _loc6_);
-    }
-
     private function onApplyBtnClickHandler(param1:ButtonEvent):void {
         this.sendData(false);
     }
@@ -882,16 +869,6 @@ public class SettingsWindow extends SettingsWindowMeta implements ISettingsWindo
 
     private function onWindowScaleYChangedHandler(param1:WindowEvent):void {
         invalidate(WindowViewInvalidationType.POSITION_INVALID);
-    }
-
-    public function as_setCountersData(param1:Array):void {
-        if (this._settingsCounterHelper != null) {
-            this._settingsCounterHelper.removeEventListener(CounterEvent.COUNTER_VISITED, this.onCounterVisitedHandler);
-            this._settingsCounterHelper.dispose();
-        }
-        this._settingsCounterHelper = new SettingsCounterDelegate();
-        this._settingsCounterHelper.addEventListener(CounterEvent.COUNTER_VISITED, this.onCounterVisitedHandler);
-        this._settingsCounterHelper.setSettingsItems(param1, this.tabs, this.view);
     }
 
     private function onCounterVisitedHandler(param1:CounterEvent):void {

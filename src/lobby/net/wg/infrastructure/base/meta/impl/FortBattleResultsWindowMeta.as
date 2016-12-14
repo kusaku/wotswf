@@ -34,12 +34,13 @@ public class FortBattleResultsWindowMeta extends AbstractWindowView {
         this.getClanEmblem();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._battleResultsVO) {
-            this._battleResultsVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:BattleResultsVO = this._battleResultsVO;
         this._battleResultsVO = new BattleResultsVO(param1);
         this.setData(this._battleResultsVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:BattleResultsVO):void {

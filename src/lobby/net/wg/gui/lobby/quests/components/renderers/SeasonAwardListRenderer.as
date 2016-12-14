@@ -3,9 +3,9 @@ import flash.display.InteractiveObject;
 import flash.text.TextField;
 
 import net.wg.data.constants.Linkages;
-import net.wg.gui.components.common.SeparatorConstants;
+import net.wg.gui.components.assets.data.SeparatorConstants;
+import net.wg.gui.components.assets.interfaces.ISeparatorAsset;
 import net.wg.gui.components.controls.UILoaderAlt;
-import net.wg.gui.components.interfaces.ISeparatorAsset;
 import net.wg.gui.lobby.quests.components.IconTitleDescSeasonAward;
 import net.wg.gui.lobby.quests.components.VehicleSeasonAward;
 import net.wg.gui.lobby.quests.data.seasonAwards.SeasonAwardListRendererVO;

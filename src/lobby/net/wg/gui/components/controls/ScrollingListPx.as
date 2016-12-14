@@ -5,6 +5,8 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
+import net.wg.data.constants.Errors;
+
 import scaleform.clik.constants.InputValue;
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.constants.NavigationCode;
@@ -127,6 +129,7 @@ public class ScrollingListPx extends CoreListEx {
                     _loc3_ = getRendererAt(_loc1_);
                     cleanUpRenderer(_loc3_);
                     _loc4_ = _loc3_ as DisplayObject;
+                    App.utils.asserter.assertNotNull(_loc4_, "displayObject" + Errors.CANT_NULL);
                     if (container.contains(_loc4_)) {
                         container.removeChild(_loc4_);
                     }
@@ -175,7 +178,7 @@ public class ScrollingListPx extends CoreListEx {
         if (_loc2_ == null) {
             return;
         }
-        container.addChild(_loc2_ as DisplayObject);
+        container.addChild(DisplayObject(_loc2_));
         _renderers.push(_loc2_);
         var _loc3_:Object = _dataProvider[param1];
         _loc2_.setListData(new ListData(param1, itemToLabel(_loc3_), false));
@@ -199,14 +202,17 @@ public class ScrollingListPx extends CoreListEx {
 
     protected function createScrollBar():void {
         var _loc1_:IScrollBar = null;
-        var _loc2_:Class = null;
-        var _loc3_:Object = null;
+        var _loc2_:DisplayObject = null;
+        var _loc3_:Class = null;
+        var _loc4_:Object = null;
         if (this._scrollBar) {
             this._scrollBar.removeEventListener(Event.SCROLL, this.handleScroll, false);
             this._scrollBar.removeEventListener(Event.CHANGE, this.handleScroll, false);
             this._scrollBar.focusTarget = null;
-            if (this.contains(this._scrollBar as DisplayObject)) {
-                this.removeChild(this._scrollBar as DisplayObject);
+            _loc2_ = this.scrollBar as DisplayObject;
+            App.utils.asserter.assertNotNull(_loc2_, "displayObject" + Errors.CANT_NULL);
+            if (this.contains(_loc2_)) {
+                this.removeChild(_loc2_);
             }
             this._scrollBar = null;
         }
@@ -219,19 +225,19 @@ public class ScrollingListPx extends CoreListEx {
                 _loc1_ = parent.getChildByName(this._scrollBarValue.toString()) as IScrollBar;
             }
             if (_loc1_ == null) {
-                _loc2_ = App.utils.classFactory.getClass(this._scrollBarValue.toString()) as Class;
-                if (_loc2_) {
+                _loc3_ = App.utils.classFactory.getClass(this._scrollBarValue.toString()) as Class;
+                if (_loc3_) {
                     _loc1_ = App.utils.classFactory.getComponent(this._scrollBarValue.toString(), IScrollBar) as IScrollBar;
                 }
                 if (_loc1_) {
                     this._autoScrollBar = true;
-                    _loc3_ = _loc1_ as Object;
-                    if (_loc3_ && this.thumbOffset) {
-                        _loc3_.offsetTop = this.thumbOffset.top;
-                        _loc3_.offsetBottom = this.thumbOffset.bottom;
+                    _loc4_ = _loc1_ as Object;
+                    if (_loc4_ && this.thumbOffset) {
+                        _loc4_.offsetTop = this.thumbOffset.top;
+                        _loc4_.offsetBottom = this.thumbOffset.bottom;
                     }
                     _loc1_.addEventListener(MouseEvent.MOUSE_WHEEL, this.blockMouseWheel, false, 0, true);
-                    this.addChild(_loc1_ as DisplayObject);
+                    this.addChild(DisplayObject(_loc1_));
                 }
             }
         }
@@ -240,9 +246,9 @@ public class ScrollingListPx extends CoreListEx {
             _loc1_.addEventListener(MouseEvent.MOUSE_WHEEL, this.blockMouseWheel, false, 0, true);
             if (_loc1_ != null) {
                 this._autoScrollBar = true;
-                (_loc1_ as Object).offsetTop = this.thumbOffset.top;
-                (_loc1_ as Object).offsetBottom = this.thumbOffset.bottom;
-                this.addChild(_loc1_ as DisplayObject);
+                Object(_loc1_).offsetTop = this.thumbOffset.top;
+                Object(_loc1_).offsetBottom = this.thumbOffset.bottom;
+                this.addChild(DisplayObject(_loc1_));
             }
         }
         else {
@@ -250,13 +256,12 @@ public class ScrollingListPx extends CoreListEx {
         }
         this._scrollBar = _loc1_;
         invalidateSize();
-        if (this._scrollBar == null) {
-            return;
+        if (_loc1_ != null) {
+            _loc1_.addEventListener(Event.SCROLL, this.handleScroll, false, 0, true);
+            _loc1_.addEventListener(Event.CHANGE, this.handleScroll, false, 0, true);
+            _loc1_.focusTarget = this;
+            _loc1_.tabEnabled = false;
         }
-        this._scrollBar.addEventListener(Event.SCROLL, this.handleScroll, false, 0, true);
-        this._scrollBar.addEventListener(Event.CHANGE, this.handleScroll, false, 0, true);
-        this._scrollBar.focusTarget = this;
-        this._scrollBar.tabEnabled = false;
     }
 
     protected function handleScroll(param1:Event):void {

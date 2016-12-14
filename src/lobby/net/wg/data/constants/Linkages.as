@@ -157,10 +157,6 @@ public class Linkages {
 
     public static const TEXT_FIELD_FRAME_UI:String = "TextFieldFrameUI";
 
-    public static const UI_LOADER_ALT:String = "UILoaderAlt";
-
-    public static const FLASH_TWEEN:String = "net.wg.data.managers.impl.FlashTween";
-
     public static const PYTHON_TWEEN:String = "net.wg.data.managers.impl.PythonTween";
 
     public static const GLOW_IN_ANIM:String = "GlowInAnimUI";
@@ -239,10 +235,6 @@ public class Linkages {
 
     public static const SEPARATOR_BIG_ROTATED_CENTER:String = "RotatedBigSeparator_UI";
 
-    public static const CHAT_USER_STATUS_PREFIX:String = "ChatIconUserStatus_";
-
-    public static const TOOLTIP_USER_STATUS_PREFIX:String = "TooltipIconUserStatus_";
-
     public static const TEAM_LEFT_MEMBER_RENDERER:String = "TeamLeftMemberRendererUI";
 
     public static const TEAM_RIGHT_MEMBER_RENDERER:String = "TeamRightMemberRendererUI";
@@ -266,6 +258,8 @@ public class Linkages {
     public static const MAGAZINE_GUN_ICON:String = "MagazineGunIcon";
 
     public static const FALLOUT_PLAYER_TYPE_ICON:String = "FalloutPlayerTypeIconUI";
+
+    public static const HYDRAULIC_CHASSIS_ICON:String = "HydraulicChassisIconUI";
 
     public static const GOLD_FISH_BUTTON_ANIMATION:String = "GoldFishButtonAnimation_UI";
 
@@ -394,6 +388,10 @@ public class Linkages {
     public static const MODULE_REPAIR_ANIM:String = "ModuleRepairAnimUI";
 
     public static const MODULE_WARNING_ANIM:String = "WarningAnimUI";
+
+    public static const BATTLE_LOADING_TABLE_RENDERERS:String = "BattleTableRenderersUI";
+
+    public static const BATTLE_LOADING_TIPS_RENDERERS:String = "BattleTipRenderersUI";
 
     public static const TANKMAN_SHELLMAN:String = "Shellman";
 
@@ -550,6 +548,14 @@ public class Linkages {
     public static const HBC_BATTLE_SELECTOR_UI:String = "HBC_BattleSelector_UI";
 
     public static const HBC_FINANCE_UI:String = "HBC_Finance_UI";
+
+    public static const ACOUSTIC_BTN:String = "AcousticBtn_UI";
+
+    public static const CHRISTMAS_DECORATION_ITEM_UI:String = "ChristmasDecorationItemUI";
+
+    public static const CHRISTMAS_AWARD_ANIM_RENDERER_UI:String = "ChristmasAwardAnimRendererUI";
+
+    public static const BATTLE_HINT_PANEL:String = "HintPanelUI";
 
     public function Linkages() {
         super();

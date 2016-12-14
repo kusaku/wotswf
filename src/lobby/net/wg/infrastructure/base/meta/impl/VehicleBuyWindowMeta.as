@@ -34,12 +34,13 @@ public class VehicleBuyWindowMeta extends AbstractWindowView {
         this.storeSettings(param1);
     }
 
-    public function as_setInitData(param1:Object):void {
-        if (this._buyingVehicleVO) {
-            this._buyingVehicleVO.dispose();
-        }
+    public final function as_setInitData(param1:Object):void {
+        var _loc2_:BuyingVehicleVO = this._buyingVehicleVO;
         this._buyingVehicleVO = new BuyingVehicleVO(param1);
         this.setInitData(this._buyingVehicleVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setInitData(param1:BuyingVehicleVO):void {

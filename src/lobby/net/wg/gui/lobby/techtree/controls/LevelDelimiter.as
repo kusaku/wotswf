@@ -2,12 +2,13 @@ package net.wg.gui.lobby.techtree.controls {
 import flash.display.MovieClip;
 import flash.display.Sprite;
 
+import net.wg.infrastructure.base.UIComponentEx;
+
 import scaleform.clik.constants.ConstrainMode;
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.utils.Constraints;
 
-public class LevelDelimiter extends UIComponent {
+public class LevelDelimiter extends UIComponentEx {
 
     private var _levelNumber:int = 1;
 

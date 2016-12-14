@@ -11,22 +11,22 @@ public class FortPeriodDefenceWindowMeta extends AbstractWindowView {
 
     public var onCancel:Function;
 
-    private var _periodDefenceVO:PeriodDefenceVO;
-
     private var _periodDefenceInitVO:PeriodDefenceInitVO;
+
+    private var _periodDefenceVO:PeriodDefenceVO;
 
     public function FortPeriodDefenceWindowMeta() {
         super();
     }
 
     override protected function onDispose():void {
-        if (this._periodDefenceVO) {
-            this._periodDefenceVO.dispose();
-            this._periodDefenceVO = null;
-        }
         if (this._periodDefenceInitVO) {
             this._periodDefenceInitVO.dispose();
             this._periodDefenceInitVO = null;
+        }
+        if (this._periodDefenceVO) {
+            this._periodDefenceVO.dispose();
+            this._periodDefenceVO = null;
         }
         super.onDispose();
     }
@@ -41,20 +41,22 @@ public class FortPeriodDefenceWindowMeta extends AbstractWindowView {
         this.onCancel();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._periodDefenceVO) {
-            this._periodDefenceVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:PeriodDefenceVO = this._periodDefenceVO;
         this._periodDefenceVO = new PeriodDefenceVO(param1);
         this.setData(this._periodDefenceVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setInitData(param1:Object):void {
-        if (this._periodDefenceInitVO) {
-            this._periodDefenceInitVO.dispose();
-        }
+    public final function as_setInitData(param1:Object):void {
+        var _loc2_:PeriodDefenceInitVO = this._periodDefenceInitVO;
         this._periodDefenceInitVO = new PeriodDefenceInitVO(param1);
         this.setInitData(this._periodDefenceInitVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:PeriodDefenceVO):void {

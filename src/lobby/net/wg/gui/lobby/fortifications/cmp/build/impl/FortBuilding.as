@@ -266,7 +266,6 @@ public class FortBuilding extends FortBuildingUIBase implements IFortBuilding {
 
     public function setData(param1:IBuildingVO):void {
         var _loc2_:String = null;
-        _loc2_ = null;
         if (this._model != null) {
             _loc2_ = this._model.cooldown;
         }

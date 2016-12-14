@@ -145,6 +145,7 @@ public class HelpLayoutManager implements IHelpLayout {
                 }
                 else {
                     _loc6_ = _loc1_.popupMgr.create(Linkages.HELP_LAYOUT_CONTROL_LINKAGE, _loc5_) as HelpLayoutControl;
+                    App.utils.asserter.assertNotNull(_loc6_, "control" + Errors.CANT_NULL);
                     this._controlsByComponentsMap[_loc3_][_loc5_.id] = _loc6_;
                 }
                 _loc6_.setData(_loc5_);

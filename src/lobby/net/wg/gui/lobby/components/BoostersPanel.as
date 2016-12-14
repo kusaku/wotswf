@@ -31,13 +31,13 @@ public class BoostersPanel extends BaseSlotsPanel {
         return _loc3_.slotLinkage == _loc4_.slotLinkage;
     }
 
-    override public function as_setSlots(param1:Array):void {
-        super.as_setSlots(param1);
+    override protected function setSlots(param1:Vector.<SlotVO>):void {
+        super.setSlots(param1);
         invalidate(InvalidationType.RENDERERS);
     }
 
-    override public function as_updateSlot(param1:Object):void {
-        super.as_updateSlot(param1);
+    override protected function updateSlot(param1:SlotVO):void {
+        super.updateSlot(param1);
         invalidate(InvalidationType.RENDERERS);
     }
 
@@ -64,7 +64,7 @@ public class BoostersPanel extends BaseSlotsPanel {
         param1.removeEventListener(ButtonEvent.CLICK, this.onSlotClickHandler);
     }
 
-    override protected function parseDataItem(param1:Object):SlotVO {
+    override protected function getSlotVO(param1:Object):SlotVO {
         return new BoosterSlotVO(param1);
     }
 

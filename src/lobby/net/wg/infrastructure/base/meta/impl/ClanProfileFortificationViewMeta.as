@@ -20,12 +20,13 @@ public class ClanProfileFortificationViewMeta extends ClanViewWithVariableConten
         super.onDispose();
     }
 
-    public function as_showBodyDummy(param1:Object):void {
-        if (this._dummyVO) {
-            this._dummyVO.dispose();
-        }
+    public final function as_showBodyDummy(param1:Object):void {
+        var _loc2_:DummyVO = this._dummyVO;
         this._dummyVO = new DummyVO(param1);
         this.showBodyDummy(this._dummyVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function showBodyDummy(param1:DummyVO):void {

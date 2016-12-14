@@ -3,6 +3,20 @@ package
    public class SETTINGS
    {
       
+      public static const SOUNDS_SPEAKERS_SIDES:String = "#settings:sounds/speakers/sides";
+      
+      public static const SOUNDS_SPEAKERS_FRONT:String = "#settings:sounds/speakers/front";
+      
+      public static const SOUNDS_SPEAKERS_BACK:String = "#settings:sounds/speakers/back";
+      
+      public static const SOUNDS_SPEAKERS_SIDELONG:String = "#settings:sounds/speakers/sidelong";
+      
+      public static const SOUNDS_SPEAKERS_CENTER:String = "#settings:sounds/speakers/center";
+      
+      public static const SOUNDS_SPEAKERS_SUB:String = "#settings:sounds/speakers/sub";
+      
+      public static const SOUNDS_SPEAKERS_OPTIONALSUB:String = "#settings:sounds/speakers/optionalsub";
+      
       public static const LANGUAGE_CODE:String = "#settings:LANGUAGE_CODE";
       
       public static const WINDOWTITLE:String = "#settings:windowTitle";
@@ -347,9 +361,21 @@ package
       
       public static const INTERFACESCALEDISABLED_WARNING:String = "#settings:interfaceScaleDisabled/warning";
       
-      public static const FULLSCREEN:String = "#settings:fullScreen";
+      public static const SCREENMODE:String = "#settings:screenMode";
       
-      public static const FULLSCREEN_DESCRIPTION:String = "#settings:fullScreen/description";
+      public static const SCREENMODE_DESCRIPTION:String = "#settings:screenMode/description";
+      
+      public static const SCREENMODE_LABEL:String = "#settings:screenMode/label";
+      
+      public static const SCREENMODE_FULLSCREEN:String = "#settings:screenMode/fullscreen";
+      
+      public static const SCREENMODE_WINDOWED:String = "#settings:screenMode/windowed";
+      
+      public static const SCREENMODE_BORDERLESS:String = "#settings:screenMode/borderless";
+      
+      public static const BORDERLESSSIZE:String = "#settings:borderlessSize";
+      
+      public static const BORDERLESSSIZE_DESCRIPTION:String = "#settings:borderlessSize/description";
       
       public static const GAMMA:String = "#settings:gamma";
       
@@ -465,21 +491,105 @@ package
       
       public static const SOUNDS_SOUNDQUALITY_DESCRIPTION:String = "#settings:sounds/soundQuality/description";
       
-      public static const SOUNDS_SOUNDDEVICE_LABEL:String = "#settings:sounds/soundDevice/label";
+      public static const SOUNDS_ACOUSTICTYPE_ACOUSTICS20:String = "#settings:sounds/acousticType/acoustics20";
       
-      public static const SOUNDS_SOUNDDEVICE_ACOUSTICS:String = "#settings:sounds/soundDevice/acoustics";
+      public static const SOUNDS_ACOUSTICTYPE_ACOUSTICS51:String = "#settings:sounds/acousticType/acoustics51";
       
-      public static const SOUNDS_SOUNDDEVICE_ACOUSTICS_HEADER:String = "#settings:sounds/soundDevice/acoustics/header";
+      public static const SOUNDS_ACOUSTICTYPE_ACOUSTICS71:String = "#settings:sounds/acousticType/acoustics71";
       
-      public static const SOUNDS_SOUNDDEVICE_ACOUSTICS_BODY:String = "#settings:sounds/soundDevice/acoustics/body";
+      public static const SOUNDS_ACOUSTICTYPE_AUTO:String = "#settings:sounds/acousticType/auto";
       
-      public static const SOUNDS_SOUNDDEVICE_HEADPHONES:String = "#settings:sounds/soundDevice/headphones";
+      public static const SOUNDS_ACOUSTICTYPE_TESTBUTTON:String = "#settings:sounds/acousticType/testButton";
+      
+      public static const SOUNDS_ACOUSTICTYPE_POPOVER_TITLE:String = "#settings:sounds/acousticType/popover/title";
+      
+      public static const SOUNDS_ACOUSTICTYPE_POPOVER_HEADPHONES:String = "#settings:sounds/acousticType/popover/headphones";
+      
+      public static const SOUNDS_ACOUSTICTYPE_POPOVER_LAPTOP:String = "#settings:sounds/acousticType/popover/laptop";
+      
+      public static const SOUNDS_ACOUSTICTYPE_POPOVER_ACOUSTICS20:String = "#settings:sounds/acousticType/popover/acoustics20";
+      
+      public static const SOUNDS_ACOUSTICTYPE_POPOVER_ACOUSTICS51:String = "#settings:sounds/acousticType/popover/acoustics51";
+      
+      public static const SOUNDS_ACOUSTICTYPE_POPOVER_ACOUSTICS71:String = "#settings:sounds/acousticType/popover/acoustics71";
+      
+      public static const SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_LEFT:String = "#settings:sounds/acousticType/popover/item/left";
+      
+      public static const SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_RIGHT:String = "#settings:sounds/acousticType/popover/item/right";
+      
+      public static const SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_LEFTSIDE:String = "#settings:sounds/acousticType/popover/item/leftSide";
+      
+      public static const SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_RIGHTSIDE:String = "#settings:sounds/acousticType/popover/item/rightSide";
+      
+      public static const SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_LEFTFRONT:String = "#settings:sounds/acousticType/popover/item/leftFront";
+      
+      public static const SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_RIGHTFRONT:String = "#settings:sounds/acousticType/popover/item/rightFront";
+      
+      public static const SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_LEFTBACK:String = "#settings:sounds/acousticType/popover/item/leftBack";
+      
+      public static const SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_RIGHTBACK:String = "#settings:sounds/acousticType/popover/item/rightBack";
+      
+      public static const SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_CENTER:String = "#settings:sounds/acousticType/popover/item/center";
+      
+      public static const SOUNDS_ACOUSTICTYPE_POPOVER_ITEM_SUB:String = "#settings:sounds/acousticType/popover/item/sub";
+      
+      public static const SOUNDS_SOUNDDEVICE_ACOUSTICS20:String = "#settings:sounds/soundDevice/acoustics20";
+      
+      public static const SOUNDS_SOUNDDEVICE_ACOUSTICS20_HEADER:String = "#settings:sounds/soundDevice/acoustics20/header";
+      
+      public static const SOUNDS_SOUNDDEVICE_ACOUSTICS20_BODY:String = "#settings:sounds/soundDevice/acoustics20/body";
+      
+      public static const SOUNDS_SOUNDDEVICE_ACOUSTICS51:String = "#settings:sounds/soundDevice/acoustics51";
+      
+      public static const SOUNDS_SOUNDDEVICE_ACOUSTICS51_HEADER:String = "#settings:sounds/soundDevice/acoustics51/header";
+      
+      public static const SOUNDS_SOUNDDEVICE_ACOUSTICS51_BODY:String = "#settings:sounds/soundDevice/acoustics51/body";
+      
+      public static const SOUNDS_SOUNDDEVICE_ACOUSTICS71:String = "#settings:sounds/soundDevice/acoustics71";
+      
+      public static const SOUNDS_SOUNDDEVICE_ACOUSTICS71_HEADER:String = "#settings:sounds/soundDevice/acoustics71/header";
+      
+      public static const SOUNDS_SOUNDDEVICE_ACOUSTICS71_BODY:String = "#settings:sounds/soundDevice/acoustics71/body";
+      
+      public static const SOUNDS_SOUNDDEVICE_AUTO:String = "#settings:sounds/soundDevice/auto";
+      
+      public static const SOUNDS_SOUNDDEVICE_AUTO_HEADER:String = "#settings:sounds/soundDevice/auto/header";
+      
+      public static const SOUNDS_SOUNDDEVICE_AUTO_BODY:String = "#settings:sounds/soundDevice/auto/body";
       
       public static const SOUNDS_SOUNDDEVICE_HEADPHONES_HEADER:String = "#settings:sounds/soundDevice/headphones/header";
       
       public static const SOUNDS_SOUNDDEVICE_HEADPHONES_BODY:String = "#settings:sounds/soundDevice/headphones/body";
       
       public static const SOUNDS_SOUNDDEVICE_LAPTOP:String = "#settings:sounds/soundDevice/laptop";
+      
+      public static const SOUNDS_SPEAKERS_SIDES_HEADER:String = SOUNDS_SPEAKERS_SIDES + "/header";
+      
+      public static const SOUNDS_SPEAKERS_SIDES_BODY:String = SOUNDS_SPEAKERS_SIDES + "/body";
+      
+      public static const SOUNDS_SPEAKERS_FRONT_HEADER:String = SOUNDS_SPEAKERS_FRONT + "/header";
+      
+      public static const SOUNDS_SPEAKERS_FRONT_BODY:String = SOUNDS_SPEAKERS_FRONT + "/body";
+      
+      public static const SOUNDS_SPEAKERS_BACK_HEADER:String = SOUNDS_SPEAKERS_BACK + "/header";
+      
+      public static const SOUNDS_SPEAKERS_BACK_BODY:String = SOUNDS_SPEAKERS_BACK + "/body";
+      
+      public static const SOUNDS_SPEAKERS_SIDELONG_HEADER:String = SOUNDS_SPEAKERS_SIDELONG + "/header";
+      
+      public static const SOUNDS_SPEAKERS_SIDELONG_BODY:String = SOUNDS_SPEAKERS_SIDELONG + "/body";
+      
+      public static const SOUNDS_SPEAKERS_CENTER_HEADER:String = SOUNDS_SPEAKERS_CENTER + "/header";
+      
+      public static const SOUNDS_SPEAKERS_CENTER_BODY:String = SOUNDS_SPEAKERS_CENTER + "/body";
+      
+      public static const SOUNDS_SPEAKERS_SUB_HEADER:String = SOUNDS_SPEAKERS_SUB + "/header";
+      
+      public static const SOUNDS_SPEAKERS_SUB_BODY:String = SOUNDS_SPEAKERS_SUB + "/body";
+      
+      public static const SOUNDS_SPEAKERS_OPTIONALSUB_HEADER:String = SOUNDS_SPEAKERS_OPTIONALSUB + "/header";
+      
+      public static const SOUNDS_SPEAKERS_OPTIONALSUB_BODY:String = SOUNDS_SPEAKERS_OPTIONALSUB + "/body";
       
       public static const SOUNDS_SOUNDDEVICE_LAPTOP_HEADER:String = "#settings:sounds/soundDevice/laptop/header";
       
@@ -791,41 +901,19 @@ package
       
       public static const KEYBOARD_KEYSBLOCKS_GROUP_SHORTCUTS:String = "#settings:keyboard/keysBlocks/group/shortcuts";
       
-      public static const KEYBOARD_KEYSBLOCKS_COMMAND_MY_TARGET:String = "#settings:keyboard/keysBlocks/command/my_target";
-      
-      public static const KEYBOARD_KEYSBLOCKS_COMMAND_MY_TARGET_EXT:String = "#settings:keyboard/keysBlocks/command/my_target/ext";
+      public static const KEYBOARD_KEYSBLOCKS_COMMAND_MY_TARGET_FOLLOW_ME:String = "#settings:keyboard/keysBlocks/command/my_target/follow_me";
       
       public static const KEYBOARD_KEYSBLOCKS_COMMAND_ATTACK:String = "#settings:keyboard/keysBlocks/command/attack";
       
-      public static const KEYBOARD_KEYSBLOCKS_COMMAND_ATTACK_EXT:String = "#settings:keyboard/keysBlocks/command/attack/ext";
-      
-      public static const KEYBOARD_KEYSBLOCKS_COMMAND_TO_BASE:String = "#settings:keyboard/keysBlocks/command/to_base";
-      
-      public static const KEYBOARD_KEYSBLOCKS_COMMAND_TO_BACK:String = "#settings:keyboard/keysBlocks/command/to_back";
-      
-      public static const KEYBOARD_KEYSBLOCKS_COMMAND_TO_BACK_EXT:String = "#settings:keyboard/keysBlocks/command/to_back/ext";
-      
-      public static const KEYBOARD_KEYSBLOCKS_COMMAND_FOLLOW_ME:String = "#settings:keyboard/keysBlocks/command/follow_me";
-      
-      public static const KEYBOARD_KEYSBLOCKS_COMMAND_FOLLOW_ME_EXT:String = "#settings:keyboard/keysBlocks/command/follow_me/ext";
+      public static const KEYBOARD_KEYSBLOCKS_COMMAND_TO_BASE_TO_BACK:String = "#settings:keyboard/keysBlocks/command/to_base/to_back";
       
       public static const KEYBOARD_KEYSBLOCKS_COMMAND_POSITIVE:String = "#settings:keyboard/keysBlocks/command/positive";
       
       public static const KEYBOARD_KEYSBLOCKS_COMMAND_NEGATIVE:String = "#settings:keyboard/keysBlocks/command/negative";
       
-      public static const KEYBOARD_KEYSBLOCKS_COMMAND_HELP_ME:String = "#settings:keyboard/keysBlocks/command/help_me";
+      public static const KEYBOARD_KEYSBLOCKS_COMMAND_SOS_HELP_ME:String = "#settings:keyboard/keysBlocks/command/sos/help_me";
       
-      public static const KEYBOARD_KEYSBLOCKS_COMMAND_HELP_ME_TEMP:String = "#settings:keyboard/keysBlocks/command/help_me_temp";
-      
-      public static const KEYBOARD_KEYSBLOCKS_COMMAND_HELP_ME_TEMP_EXT:String = "#settings:keyboard/keysBlocks/command/help_me_temp/ext";
-      
-      public static const KEYBOARD_KEYSBLOCKS_COMMAND_HELP_ME_TEMP2:String = "#settings:keyboard/keysBlocks/command/help_me_temp2";
-      
-      public static const KEYBOARD_KEYSBLOCKS_COMMAND_STOP:String = "#settings:keyboard/keysBlocks/command/stop";
-      
-      public static const KEYBOARD_KEYSBLOCKS_COMMAND_STOP_EXT:String = "#settings:keyboard/keysBlocks/command/stop/ext";
-      
-      public static const KEYBOARD_KEYSBLOCKS_COMMAND_RELOAD:String = "#settings:keyboard/keysBlocks/command/reload";
+      public static const KEYBOARD_KEYSBLOCKS_COMMAND_RELOAD_STOP:String = "#settings:keyboard/keysBlocks/command/reload/stop";
       
       public static const KEYBOARD_KEYSBLOCKS_GROUP_CAMERA:String = "#settings:keyboard/keysBlocks/group/camera";
       
@@ -1033,11 +1121,11 @@ package
       
       public static const AIM_ENUM:Array = [AIM_MIXING,AIM_MIXING_TYPE0,AIM_MIXING_TYPE1,AIM_MIXING_TYPE2,AIM_MIXING_TYPE3,AIM_MIXING_TYPE4,AIM_MIXING_TYPE5,AIM_MIXING_TYPE6,AIM_GUNTAG,AIM_GUNTAG_TYPE0,AIM_GUNTAG_TYPE1,AIM_GUNTAG_TYPE2,AIM_GUNTAG_TYPE3,AIM_GUNTAG_TYPE4,AIM_GUNTAG_TYPE5,AIM_GUNTAG_TYPE6,AIM_GUNTAG_TYPE7,AIM_GUNTAG_TYPE8,AIM_GUNTAG_TYPE9,AIM_GUNTAG_TYPE10,AIM_GUNTAG_TYPE11,AIM_GUNTAG_TYPE12,AIM_GUNTAG_TYPE13,AIM_GUNTAG_TYPE14,AIM_CENTRALTAG,AIM_CENTRALTAG_TYPE0,AIM_CENTRALTAG_TYPE1,AIM_CENTRALTAG_TYPE2,AIM_CENTRALTAG_TYPE3,AIM_CENTRALTAG_TYPE4,AIM_CENTRALTAG_TYPE5,AIM_CENTRALTAG_TYPE6,AIM_CENTRALTAG_TYPE7,AIM_CENTRALTAG_TYPE8,AIM_CENTRALTAG_TYPE9,AIM_CENTRALTAG_TYPE10,AIM_CENTRALTAG_TYPE11,AIM_CENTRALTAG_TYPE12,AIM_CENTRALTAG_TYPE13,AIM_NET,AIM_NET_TYPE0,AIM_NET_TYPE1,AIM_NET_TYPE2,AIM_NET_TYPE3,AIM_RELOADER,AIM_RELOADERTIMER,AIM_CONDITION,AIM_CASSETTE,AIM_ZOOMINDICATOR];
       
-      public static const KEYBOARD_KEYSBLOCKS_COMMAND_ENUM:Array = [KEYBOARD_KEYSBLOCKS_COMMAND_FORWARD,KEYBOARD_KEYSBLOCKS_COMMAND_FORWARD_CRUISE,KEYBOARD_KEYSBLOCKS_COMMAND_BACKWARD,KEYBOARD_KEYSBLOCKS_COMMAND_BACKWARD_CRUISE,KEYBOARD_KEYSBLOCKS_COMMAND_LEFT,KEYBOARD_KEYSBLOCKS_COMMAND_RIGHT,KEYBOARD_KEYSBLOCKS_COMMAND_AUTO_ROTATION,KEYBOARD_KEYSBLOCKS_COMMAND_BLOCK_TRACKS,KEYBOARD_KEYSBLOCKS_COMMAND_STOP_FIRE,KEYBOARD_KEYSBLOCKS_COMMAND_FIRE,KEYBOARD_KEYSBLOCKS_COMMAND_LOCK_TARGET,KEYBOARD_KEYSBLOCKS_COMMAND_LOCK_TARGET_OFF,KEYBOARD_KEYSBLOCKS_COMMAND_ALTERNATE_MODE,KEYBOARD_KEYSBLOCKS_COMMAND_RELOADPARTIALCLIP,KEYBOARD_KEYSBLOCKS_COMMAND_ITEM01,KEYBOARD_KEYSBLOCKS_COMMAND_ITEM02,KEYBOARD_KEYSBLOCKS_COMMAND_ITEM03,KEYBOARD_KEYSBLOCKS_COMMAND_ITEM04,KEYBOARD_KEYSBLOCKS_COMMAND_ITEM05,KEYBOARD_KEYSBLOCKS_COMMAND_ITEM06,KEYBOARD_KEYSBLOCKS_COMMAND_ITEM07,KEYBOARD_KEYSBLOCKS_COMMAND_ITEM08,KEYBOARD_KEYSBLOCKS_COMMAND_MY_TARGET,KEYBOARD_KEYSBLOCKS_COMMAND_MY_TARGET_EXT,KEYBOARD_KEYSBLOCKS_COMMAND_ATTACK,KEYBOARD_KEYSBLOCKS_COMMAND_ATTACK_EXT,KEYBOARD_KEYSBLOCKS_COMMAND_TO_BASE,KEYBOARD_KEYSBLOCKS_COMMAND_TO_BACK,KEYBOARD_KEYSBLOCKS_COMMAND_TO_BACK_EXT,KEYBOARD_KEYSBLOCKS_COMMAND_FOLLOW_ME,KEYBOARD_KEYSBLOCKS_COMMAND_FOLLOW_ME_EXT,KEYBOARD_KEYSBLOCKS_COMMAND_POSITIVE,KEYBOARD_KEYSBLOCKS_COMMAND_NEGATIVE,KEYBOARD_KEYSBLOCKS_COMMAND_HELP_ME,KEYBOARD_KEYSBLOCKS_COMMAND_HELP_ME_TEMP,KEYBOARD_KEYSBLOCKS_COMMAND_HELP_ME_TEMP_EXT,KEYBOARD_KEYSBLOCKS_COMMAND_HELP_ME_TEMP2,KEYBOARD_KEYSBLOCKS_COMMAND_STOP,KEYBOARD_KEYSBLOCKS_COMMAND_STOP_EXT,KEYBOARD_KEYSBLOCKS_COMMAND_RELOAD,KEYBOARD_KEYSBLOCKS_COMMAND_CAMERA_UP,KEYBOARD_KEYSBLOCKS_COMMAND_CAMERA_DOWN,KEYBOARD_KEYSBLOCKS_COMMAND_CAMERA_LEFT,KEYBOARD_KEYSBLOCKS_COMMAND_CAMERA_RIGHT,KEYBOARD_KEYSBLOCKS_COMMAND_PUSHTOTALK,KEYBOARD_KEYSBLOCKS_COMMAND_VOICECHAT_ENABLE,KEYBOARD_KEYSBLOCKS_COMMAND_USEHORN,KEYBOARD_KEYSBLOCKS_COMMAND_SHOWHUD,KEYBOARD_KEYSBLOCKS_COMMAND_SHOWRADIALMENU,KEYBOARD_KEYSBLOCKS_COMMAND_SWITCH_VIEW,KEYBOARD_KEYSBLOCKS_COMMAND_SIZEUP,KEYBOARD_KEYSBLOCKS_COMMAND_SIZEDOWN,KEYBOARD_KEYSBLOCKS_COMMAND_VISIBLE];
+      public static const KEYBOARD_KEYSBLOCKS_GROUP_ENUM:Array = [KEYBOARD_KEYSBLOCKS_GROUP_MOVEMENT,KEYBOARD_KEYSBLOCKS_GROUP_CRUIS_CONTROL,KEYBOARD_KEYSBLOCKS_GROUP_FIRING,KEYBOARD_KEYSBLOCKS_GROUP_EQUIPMENT,KEYBOARD_KEYSBLOCKS_GROUP_SHORTCUTS,KEYBOARD_KEYSBLOCKS_GROUP_CAMERA,KEYBOARD_KEYSBLOCKS_GROUP_VOICECHAT,KEYBOARD_KEYSBLOCKS_GROUP_LOGITECH_KEYBOARD,KEYBOARD_KEYSBLOCKS_GROUP_VEHICLE_OTHER,KEYBOARD_KEYSBLOCKS_GROUP_MINIMAP];
+      
+      public static const KEYBOARD_KEYSBLOCKS_COMMAND_ENUM:Array = [KEYBOARD_KEYSBLOCKS_COMMAND_FORWARD,KEYBOARD_KEYSBLOCKS_COMMAND_FORWARD_CRUISE,KEYBOARD_KEYSBLOCKS_COMMAND_BACKWARD,KEYBOARD_KEYSBLOCKS_COMMAND_BACKWARD_CRUISE,KEYBOARD_KEYSBLOCKS_COMMAND_LEFT,KEYBOARD_KEYSBLOCKS_COMMAND_RIGHT,KEYBOARD_KEYSBLOCKS_COMMAND_AUTO_ROTATION,KEYBOARD_KEYSBLOCKS_COMMAND_BLOCK_TRACKS,KEYBOARD_KEYSBLOCKS_COMMAND_STOP_FIRE,KEYBOARD_KEYSBLOCKS_COMMAND_FIRE,KEYBOARD_KEYSBLOCKS_COMMAND_LOCK_TARGET,KEYBOARD_KEYSBLOCKS_COMMAND_LOCK_TARGET_OFF,KEYBOARD_KEYSBLOCKS_COMMAND_ALTERNATE_MODE,KEYBOARD_KEYSBLOCKS_COMMAND_RELOADPARTIALCLIP,KEYBOARD_KEYSBLOCKS_COMMAND_ITEM01,KEYBOARD_KEYSBLOCKS_COMMAND_ITEM02,KEYBOARD_KEYSBLOCKS_COMMAND_ITEM03,KEYBOARD_KEYSBLOCKS_COMMAND_ITEM04,KEYBOARD_KEYSBLOCKS_COMMAND_ITEM05,KEYBOARD_KEYSBLOCKS_COMMAND_ITEM06,KEYBOARD_KEYSBLOCKS_COMMAND_ITEM07,KEYBOARD_KEYSBLOCKS_COMMAND_ITEM08,KEYBOARD_KEYSBLOCKS_COMMAND_MY_TARGET_FOLLOW_ME,KEYBOARD_KEYSBLOCKS_COMMAND_ATTACK,KEYBOARD_KEYSBLOCKS_COMMAND_TO_BASE_TO_BACK,KEYBOARD_KEYSBLOCKS_COMMAND_POSITIVE,KEYBOARD_KEYSBLOCKS_COMMAND_NEGATIVE,KEYBOARD_KEYSBLOCKS_COMMAND_SOS_HELP_ME,KEYBOARD_KEYSBLOCKS_COMMAND_RELOAD_STOP,KEYBOARD_KEYSBLOCKS_COMMAND_CAMERA_UP,KEYBOARD_KEYSBLOCKS_COMMAND_CAMERA_DOWN,KEYBOARD_KEYSBLOCKS_COMMAND_CAMERA_LEFT,KEYBOARD_KEYSBLOCKS_COMMAND_CAMERA_RIGHT,KEYBOARD_KEYSBLOCKS_COMMAND_PUSHTOTALK,KEYBOARD_KEYSBLOCKS_COMMAND_VOICECHAT_ENABLE,KEYBOARD_KEYSBLOCKS_COMMAND_USEHORN,KEYBOARD_KEYSBLOCKS_COMMAND_SHOWHUD,KEYBOARD_KEYSBLOCKS_COMMAND_SHOWRADIALMENU,KEYBOARD_KEYSBLOCKS_COMMAND_SWITCH_VIEW,KEYBOARD_KEYSBLOCKS_COMMAND_SIZEUP,KEYBOARD_KEYSBLOCKS_COMMAND_SIZEDOWN,KEYBOARD_KEYSBLOCKS_COMMAND_VISIBLE];
       
       public static const GRAPHICSSETTINGSOPTIONS_ENUM:Array = [GRAPHICSSETTINGSOPTIONS_DEFERRED,GRAPHICSSETTINGSOPTIONS_FORWARD,GRAPHICSSETTINGSOPTIONS_ON,GRAPHICSSETTINGSOPTIONS_OFF,GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_16X,GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_8X,GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_4X,GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_2X,GRAPHICSSETTINGSOPTIONS_TRILINEAR,GRAPHICSSETTINGSOPTIONS_BILINEAR,GRAPHICSSETTINGSOPTIONS_POINT,GRAPHICSSETTINGSOPTIONS_CUSTOM,GRAPHICSSETTINGSOPTIONS_ULTRA,GRAPHICSSETTINGSOPTIONS_VERY_HIGH,GRAPHICSSETTINGSOPTIONS_MAX,GRAPHICSSETTINGSOPTIONS_VERYHIGH,GRAPHICSSETTINGSOPTIONS_HIGH,GRAPHICSSETTINGSOPTIONS_MEDIUM,GRAPHICSSETTINGSOPTIONS_FAR,GRAPHICSSETTINGSOPTIONS_NEAR,GRAPHICSSETTINGSOPTIONS_LOW,GRAPHICSSETTINGSOPTIONS_LOWEST,GRAPHICSSETTINGSOPTIONS_MIN,GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_3,GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_2,GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_1,GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_0,GRAPHICSSETTINGSOPTIONS_NONE,GRAPHICSSETTINGSOPTIONS_COLORIZATION,GRAPHICSSETTINGSOPTIONS_MUTED,GRAPHICSSETTINGSOPTIONS_CONTRASTY,GRAPHICSSETTINGSOPTIONS_SOFT_COLORS,GRAPHICSSETTINGSOPTIONS_PHOTOCHROMATIC,GRAPHICSSETTINGSOPTIONS_SOFT,GRAPHICSSETTINGSOPTIONS_RANDOM];
-      
-      public static const KEYBOARD_KEYSBLOCKS_GROUP_ENUM:Array = [KEYBOARD_KEYSBLOCKS_GROUP_MOVEMENT,KEYBOARD_KEYSBLOCKS_GROUP_CRUIS_CONTROL,KEYBOARD_KEYSBLOCKS_GROUP_FIRING,KEYBOARD_KEYSBLOCKS_GROUP_EQUIPMENT,KEYBOARD_KEYSBLOCKS_GROUP_SHORTCUTS,KEYBOARD_KEYSBLOCKS_GROUP_CAMERA,KEYBOARD_KEYSBLOCKS_GROUP_VOICECHAT,KEYBOARD_KEYSBLOCKS_GROUP_LOGITECH_KEYBOARD,KEYBOARD_KEYSBLOCKS_GROUP_VEHICLE_OTHER,KEYBOARD_KEYSBLOCKS_GROUP_MINIMAP];
        
       
       public function SETTINGS()
@@ -1052,6 +1140,13 @@ package
          return _loc2_;
       }
       
+      public static function keyboard_keysblocks_group(param1:String) : String
+      {
+         var _loc2_:String = "#settings:keyboard/keysBlocks/group/" + param1;
+         App.utils.asserter.assert(KEYBOARD_KEYSBLOCKS_GROUP_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
       public static function keyboard_keysblocks_command(param1:String) : String
       {
          var _loc2_:String = "#settings:keyboard/keysBlocks/command/" + param1;
@@ -1063,13 +1158,6 @@ package
       {
          var _loc2_:String = "#settings:graphicsSettingsOptions/" + param1;
          App.utils.asserter.assert(GRAPHICSSETTINGSOPTIONS_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
-      }
-      
-      public static function keyboard_keysblocks_group(param1:String) : String
-      {
-         var _loc2_:String = "#settings:keyboard/keysBlocks/group/" + param1;
-         App.utils.asserter.assert(KEYBOARD_KEYSBLOCKS_GROUP_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
          return _loc2_;
       }
    }

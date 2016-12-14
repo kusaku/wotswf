@@ -34,12 +34,13 @@ public class FortModernizationWindowMeta extends AbstractWindowView {
         this.openOrderDetailsWindow();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._buildingModernizationVO) {
-            this._buildingModernizationVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:BuildingModernizationVO = this._buildingModernizationVO;
         this._buildingModernizationVO = new BuildingModernizationVO(param1);
         this.setData(this._buildingModernizationVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:BuildingModernizationVO):void {

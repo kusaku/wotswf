@@ -6,21 +6,28 @@ import flash.events.MouseEvent;
 
 import net.wg.data.constants.Errors;
 import net.wg.data.constants.Values;
+import net.wg.data.constants.generated.ACOUSTICS;
 import net.wg.gui.components.advanced.ButtonBarEx;
 import net.wg.gui.components.controls.CheckBox;
 import net.wg.gui.components.controls.DropdownMenu;
 import net.wg.gui.components.controls.InfoIcon;
 import net.wg.gui.components.controls.LabelControl;
 import net.wg.gui.components.controls.Slider;
+import net.wg.gui.data.Aliases;
 import net.wg.gui.lobby.settings.components.KeyInput;
+import net.wg.gui.lobby.settings.components.SoundDeviceTabButton;
 import net.wg.gui.lobby.settings.components.evnts.KeyInputEvents;
 import net.wg.gui.lobby.settings.config.SettingsConfigHelper;
 import net.wg.gui.lobby.settings.events.AlternativeVoiceEvent;
 import net.wg.gui.lobby.settings.events.SettingViewEvent;
 import net.wg.gui.lobby.settings.interfaces.IViewWithCounteredBar;
 import net.wg.gui.lobby.settings.vo.SettingsControlProp;
+import net.wg.gui.lobby.settings.vo.SettingsKeyProp;
 import net.wg.gui.lobby.settings.vo.base.SettingsDataVo;
+import net.wg.infrastructure.interfaces.IPopOverCaller;
 import net.wg.infrastructure.managers.ITooltipMgr;
+import net.wg.utils.ICommons;
+import net.wg.utils.IUtils;
 
 import scaleform.clik.controls.ButtonBar;
 import scaleform.clik.data.DataProvider;
@@ -28,8 +35,9 @@ import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.events.IndexEvent;
 import scaleform.clik.events.ListEvent;
 import scaleform.clik.events.SliderEvent;
+import scaleform.clik.interfaces.IDataProvider;
 
-public class SoundSettings extends SoundSettingsBase implements IViewWithCounteredBar {
+public class SoundSettings extends SoundSettingsBase implements IViewWithCounteredBar, IPopOverCaller {
 
     private static const VOICE_TEST_DURATION:Number = 10;
 
@@ -68,12 +76,20 @@ public class SoundSettings extends SoundSettingsBase implements IViewWithCounter
         return "[WG SoundSettings " + name + "]";
     }
 
+    override public function updateDependentData():void {
+        this.updatesPttKeyList();
+    }
+
     override protected function configUI():void {
+        soundSpeakersTestButton.addEventListener(ButtonEvent.CLICK, this.onSoundSpeakersTestButtonClickHandler);
         btnVivoxTest.addEventListener(ButtonEvent.CLICK, this.onBtnVivoxTestClickHandler);
         btnCaptureDevicesUpdate.addEventListener(ButtonEvent.CLICK, this.onBtnCaptureDevicesUpdateClickHandler);
         PTTKeyInput.addEventListener(KeyInputEvents.DISABLE_OVER, this.onPTTKeyInputDisableOverHandler);
         PTTKeyInput.addEventListener(KeyInputEvents.DISABLE_OUT, this.onPTTKeyInputDisableOutHandler);
         PTTKeyInput.addEventListener(KeyInputEvents.DISABLE_PRESS, this.onPTTKeyInputDisablePressHandler);
+        PTTKeyInput.addEventListener(KeyInputEvents.CHANGE, this.onPTTKeyInputChangeHandler);
+        PTTKeyInput.alertMessageAlias = TOOLTIPS.SETTING_WINDOW_CONTROLS_KEY_INPUT_PTT_WARNING;
+        this.updatesPttKeyList();
         testAlternativeVoicesButton.addEventListener(ButtonEvent.CLICK, this.onTestAlternativeVoicesButtonClickHandler);
         testAlternativeVoicesButton.addEventListener(MouseEvent.MOUSE_OVER, this.onTestAlternativeVoicesButtonMouseOverHandler);
         testAlternativeVoicesButton.addEventListener(MouseEvent.MOUSE_OUT, this.onTestAlternativeVoicesButtonMouseOutHandler);
@@ -86,7 +102,6 @@ public class SoundSettings extends SoundSettingsBase implements IViewWithCounter
     }
 
     override protected function setData(param1:SettingsDataVo):void {
-        var _loc3_:Boolean = false;
         var _loc9_:String = null;
         var _loc11_:String = null;
         var _loc12_:String = null;
@@ -96,7 +111,7 @@ public class SoundSettings extends SoundSettingsBase implements IViewWithCounter
         this.controlsUnsubscribe();
         super.setData(param1);
         var _loc2_:SettingsControlProp = SettingsControlProp(param1.getByKey(SettingsConfigHelper.VOICE_CHAT_SUPPORTED));
-        _loc3_ = _loc2_.current;
+        var _loc3_:Boolean = _loc2_.current;
         var _loc4_:Array = [{"label": SETTINGS.SOUNDS_TABCOMMON}];
         var _loc5_:Boolean = App.voiceChatMgr.getYY();
         if (_loc3_ || _loc5_) {
@@ -138,7 +153,7 @@ public class SoundSettings extends SoundSettingsBase implements IViewWithCounter
                     _loc16_.validateNow();
                 }
                 else if (SettingsConfigHelper.TYPE_BUTTON_BAR == _loc11_) {
-                    this.prepareButtonBar(ButtonBarEx(_loc13_), _loc15_, _loc10_);
+                    this.prepareButtonBar(ButtonBarEx(_loc13_), _loc9_, _loc15_, _loc10_);
                 }
                 trySetLabel(_loc9_, LOCALIZATION_PREFIX);
             }
@@ -155,6 +170,7 @@ public class SoundSettings extends SoundSettingsBase implements IViewWithCounter
         this.breakSoundCheck();
         this.forceFinishVivoxTest();
         btnCaptureDevicesUpdate.removeEventListener(ButtonEvent.CLICK, this.onBtnCaptureDevicesUpdateClickHandler);
+        soundSpeakersTestButton.removeEventListener(ButtonEvent.CLICK, this.onSoundSpeakersTestButtonClickHandler);
         btnVivoxTest.removeEventListener(ButtonEvent.CLICK, this.onBtnVivoxTestClickHandler);
         testAlternativeVoicesButton.removeEventListener(ButtonEvent.CLICK, this.onTestAlternativeVoicesButtonClickHandler);
         testAlternativeVoicesButton.removeEventListener(MouseEvent.MOUSE_OVER, this.onTestAlternativeVoicesButtonMouseOverHandler);
@@ -165,6 +181,7 @@ public class SoundSettings extends SoundSettingsBase implements IViewWithCounter
         PTTKeyInput.removeEventListener(KeyInputEvents.DISABLE_OVER, this.onPTTKeyInputDisableOverHandler);
         PTTKeyInput.removeEventListener(KeyInputEvents.DISABLE_OUT, this.onPTTKeyInputDisableOutHandler);
         PTTKeyInput.removeEventListener(KeyInputEvents.DISABLE_PRESS, this.onPTTKeyInputDisablePressHandler);
+        PTTKeyInput.removeEventListener(KeyInputEvents.CHANGE, this.onPTTKeyInputChangeHandler);
         this.controlsUnsubscribe();
         this._toolTipMgr = null;
         this._existsBulbVoices.splice(0, this._existsBulbVoices.length);
@@ -179,12 +196,43 @@ public class SoundSettings extends SoundSettingsBase implements IViewWithCounter
         }
     }
 
+    public function getCounteredBar():ButtonBar {
+        return tabs;
+    }
+
+    public function getHitArea():DisplayObject {
+        return soundSpeakersTestButton;
+    }
+
+    public function getTargetButton():DisplayObject {
+        return soundSpeakersTestButton;
+    }
+
+    public function isCanSelectAcousticType(param1:Boolean):void {
+        if (param1) {
+            this.applyNewSoundSpeakers(soundSpeakersDropDown.selectedIndex);
+        }
+    }
+
+    public function isPresetApply(param1:Boolean):void {
+        var _loc2_:SettingsControlProp = null;
+        if (param1) {
+            this.applyNewSoundSpeakers(soundSpeakersDropDown.selectedIndex);
+        }
+        else {
+            _loc2_ = SettingsControlProp(data[SettingsConfigHelper.SOUND_SPEAKERS]);
+            soundSpeakersDropDown.removeEventListener(ListEvent.INDEX_CHANGE, this.onDropdownIndexChangeHandler);
+            soundSpeakersDropDown.selectedIndex = Number(_loc2_.changedVal);
+            soundSpeakersDropDown.addEventListener(ListEvent.INDEX_CHANGE, this.onDropdownIndexChangeHandler);
+        }
+    }
+
     public function onViewChanged():void {
         this.breakSoundCheck();
     }
 
-    public function setCaptureDevices(param1:Number, param2:Array):void {
-        captureDeviceDropDown.dataProvider = new DataProvider(param2);
+    public function setCaptureDevices(param1:Number, param2:DataProvider):void {
+        captureDeviceDropDown.dataProvider = param2;
         captureDeviceDropDown.selectedIndex = param1;
         var _loc3_:String = SettingsConfigHelper.instance.getControlId(captureDeviceDropDown.name, SettingsConfigHelper.TYPE_DROPDOWN);
         var _loc4_:SettingsControlProp = SettingsControlProp(data[_loc3_]);
@@ -212,8 +260,61 @@ public class SoundSettings extends SoundSettingsBase implements IViewWithCounter
         }
     }
 
+    public function updateAcousticDeviceByType(param1:String):void {
+        var _loc2_:IDataProvider = soundSpeakersDropDown.dataProvider;
+        if (!_loc2_) {
+            return;
+        }
+        var _loc3_:int = _loc2_.length;
+        var _loc4_:int = 0;
+        var _loc5_:Object = null;
+        _loc4_ = 0;
+        while (_loc4_ < _loc3_) {
+            _loc5_ = _loc2_.requestItemAt(_loc4_);
+            if (_loc5_.hasOwnProperty(SettingsConfigHelper.SOUND_SPEAKERS_ID_FIELD) && _loc5_[SettingsConfigHelper.SOUND_SPEAKERS_ID_FIELD] == param1) {
+                this.updateAcousticDeviceLabel(_loc5_);
+                soundSpeakersTestButton.enabled = true;
+                break;
+            }
+            _loc4_++;
+        }
+    }
+
     public function updatePTTControl(param1:Number):void {
         PTTKeyInput.key = param1;
+    }
+
+    private function updatesPttKeyList():void {
+        var _loc6_:int = 0;
+        var _loc7_:String = null;
+        var _loc11_:Object = null;
+        var _loc1_:SettingsConfigHelper = SettingsConfigHelper.instance;
+        var _loc2_:SettingsDataVo = _loc1_.getDataItem(SettingsConfigHelper.CONTROLS_SETTINGS, true);
+        var _loc3_:SettingsDataVo = SettingsDataVo(_loc2_.getByKey(SettingsConfigHelper.KEYBOARD));
+        var _loc4_:Vector.<Object> = _loc3_.values;
+        var _loc5_:Array = this.copyItemsInUpperCase(SettingsConfigHelper.pttKeyRange);
+        var _loc8_:IUtils = App.utils;
+        var _loc9_:ICommons = _loc8_.commons;
+        var _loc10_:String = _loc8_.toUpperOrLowerCase(_loc9_.keyToString(PTTKeyInput.key).keyCommand, true);
+        for each(_loc11_ in _loc4_) {
+            _loc7_ = _loc8_.toUpperOrLowerCase(_loc9_.keyToString(SettingsKeyProp(_loc11_).key).keyCommand, true);
+            if (_loc7_ != _loc10_) {
+                _loc6_ = _loc5_.indexOf(_loc8_.toUpperOrLowerCase(_loc7_, true));
+                if (_loc6_ >= 0) {
+                    _loc5_.splice(_loc6_, 1);
+                }
+            }
+        }
+        PTTKeyInput.keys = _loc5_;
+    }
+
+    private function copyItemsInUpperCase(param1:Array):Array {
+        var _loc3_:String = null;
+        var _loc2_:Array = [];
+        for each(_loc3_ in param1) {
+            _loc2_.push(App.utils.toUpperOrLowerCase(_loc3_, true));
+        }
+        return _loc2_;
     }
 
     private function controlsUnsubscribe():void {
@@ -248,11 +349,14 @@ public class SoundSettings extends SoundSettingsBase implements IViewWithCounter
         }
     }
 
-    private function prepareButtonBar(param1:ButtonBarEx, param2:Boolean, param3:SettingsControlProp):void {
-        param1.dataProvider = new DataProvider(param3.options);
-        param1.selectedIndex = int(param3.current);
+    private function prepareButtonBar(param1:ButtonBarEx, param2:String, param3:Boolean, param4:SettingsControlProp):void {
+        param1.dataProvider = new DataProvider(param4.options);
+        param1.selectedIndex = int(param4.current);
         param1.addEventListener(IndexEvent.INDEX_CHANGE, this.onButtonBarIndexChangeHandler);
-        param1.enabled = param2;
+        param1.enabled = param3;
+        if (param2 == SettingsConfigHelper.SOUND_DEVICE) {
+            this.updateSoundSpeakersDependencies(param1.selectedIndex);
+        }
     }
 
     private function prepareDropdown(param1:DropdownMenu, param2:Boolean, param3:SettingsControlProp):void {
@@ -343,7 +447,6 @@ public class SoundSettings extends SoundSettingsBase implements IViewWithCounter
         musicHangarLabel.enabled = _loc1_;
         musicHangarSlider.enabled = _loc1_;
         musicHangarValue.enabled = _loc1_;
-        soundDeviceLabel.enabled = _loc1_;
         if (soundDeviceButtonBar != null) {
             soundDeviceButtonBar.enabled = _loc1_;
         }
@@ -357,6 +460,8 @@ public class SoundSettings extends SoundSettingsBase implements IViewWithCounter
         bulbVoicesButton.enabled = _loc1_ && this._existsBulbVoices[bulbVoicesDropDown.selectedIndex];
         commonForm.bulbIcon.enabled = _loc1_;
         soundQualityCheckbox.enabled = _loc1_;
+        soundSpeakersDropDown.enabled = _loc1_;
+        soundSpeakersTestButton.enabled = _loc1_;
     }
 
     private function updateVoiceChatEnabled():void {
@@ -399,6 +504,30 @@ public class SoundSettings extends SoundSettingsBase implements IViewWithCounter
         this._toolTipMgr.hide();
     }
 
+    private function updateAcousticDeviceLabel(param1:Object):void {
+        if (param1 && param1.hasOwnProperty(SettingsConfigHelper.SOUND_SPEAKERS_TOOLTIP_FIELD) && param1.hasOwnProperty(SettingsConfigHelper.SOUND_SPEAKERS_ID_FIELD)) {
+            this.updateSoundDeviceLabel(ACOUSTICS.TYPE_ACOUSTICS, param1[SettingsConfigHelper.SOUND_SPEAKERS_TOOLTIP_FIELD], param1[SettingsConfigHelper.SOUND_SPEAKERS_ID_FIELD]);
+        }
+    }
+
+    private function updateSoundDeviceLabel(param1:String, param2:String, param3:String):void {
+        soundDeviceButtonBar.updateDataById(param1, param2, param3);
+    }
+
+    private function applyNewSoundSpeakers(param1:Number):void {
+        var _loc2_:SettingsControlProp = SettingsControlProp(data[SettingsConfigHelper.SOUND_SPEAKERS]);
+        _loc2_.changedVal = param1;
+        var _loc3_:Object = _loc2_.options[param1];
+        this.updateAcousticDeviceLabel(_loc3_);
+        dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_CONTROL_CHANGED, viewId, SettingsConfigHelper.SOUND_SPEAKERS, param1));
+    }
+
+    private function updateSoundSpeakersDependencies(param1:Number):void {
+        var _loc2_:SettingsControlProp = SettingsControlProp(data[SettingsConfigHelper.SOUND_DEVICE]);
+        var _loc3_:String = _loc2_.options[param1][SettingsConfigHelper.SOUND_DEVICE_ID_FIELD];
+        soundSpeakersDropDown.enabled = _loc3_ == ACOUSTICS.TYPE_ACOUSTICS;
+    }
+
     private function onBtnVivoxTestClickHandler(param1:ButtonEvent):void {
         if (this._isVoiceTestStarted) {
             return;
@@ -412,6 +541,14 @@ public class SoundSettings extends SoundSettingsBase implements IViewWithCounter
 
     private function onPTTKeyInputDisableOutHandler(param1:KeyInputEvents):void {
         this._toolTipMgr.hide();
+    }
+
+    private function onPTTKeyInputChangeHandler(param1:KeyInputEvents):void {
+        var _loc2_:Object = {};
+        var _loc3_:Number = param1.keyCode;
+        _loc2_[SettingsConfigHelper.PUSH_TO_TALK] = _loc3_;
+        dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_CONTROL_CHANGED, SettingsConfigHelper.CONTROLS_SETTINGS, SettingsConfigHelper.KEYBOARD, _loc2_));
+        dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_PTT_SOUND_CONTROL_CHANGED, SettingsConfigHelper.CONTROLS_SETTINGS, SettingsConfigHelper.KEYBOARD, _loc2_));
     }
 
     private function onPTTKeyInputDisableOverHandler(param1:KeyInputEvents):void {
@@ -446,6 +583,11 @@ public class SoundSettings extends SoundSettingsBase implements IViewWithCounter
         dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_UPDATE_CAPTURE_DEVICE, viewId));
     }
 
+    private function onSoundSpeakersTestButtonClickHandler(param1:ButtonEvent):void {
+        var _loc2_:SoundDeviceTabButton = SoundDeviceTabButton(soundDeviceButtonBar.selectedButton);
+        App.popoverMgr.show(this, Aliases.ACOUSTIC_POPOVER, _loc2_.speakerId);
+    }
+
     private function onCheckboxSelectHandler(param1:Event):void {
         var _loc2_:CheckBox = CheckBox(param1.target);
         var _loc3_:String = SettingsConfigHelper.instance.getControlId(_loc2_.name, SettingsConfigHelper.TYPE_CHECKBOX);
@@ -474,17 +616,40 @@ public class SoundSettings extends SoundSettingsBase implements IViewWithCounter
     }
 
     private function onDropdownIndexChangeHandler(param1:ListEvent):void {
+        var _loc4_:SettingsControlProp = null;
+        var _loc5_:Object = null;
+        var _loc6_:Boolean = false;
         var _loc2_:DropdownMenu = DropdownMenu(param1.target);
         var _loc3_:String = SettingsConfigHelper.instance.getControlId(_loc2_.name, SettingsConfigHelper.TYPE_DROPDOWN);
-        dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_CONTROL_CHANGED, viewId, _loc3_, _loc2_.selectedIndex));
         if (_loc3_ == BULB_VOICES) {
             bulbVoicesButton.enabled = this._existsBulbVoices[bulbVoicesDropDown.selectedIndex];
+        }
+        if (_loc3_ == SettingsConfigHelper.SOUND_SPEAKERS) {
+            _loc4_ = SettingsControlProp(data[SettingsConfigHelper.SOUND_SPEAKERS]);
+            _loc5_ = _loc4_.options[_loc2_.selectedIndex];
+            _loc6_ = _loc5_[SettingsConfigHelper.SOUND_SPEAKERS_IS_AUTODETECT_FIELD];
+            if (_loc6_) {
+                soundSpeakersTestButton.enabled = false;
+                soundDeviceButtonBar.updateDataById(ACOUSTICS.TYPE_ACOUSTICS, Values.EMPTY_STR, Values.EMPTY_STR);
+                dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_AUTO_DETECT_ACOUSTIC, viewId));
+                dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_CONTROL_CHANGED, viewId, _loc3_, _loc2_.selectedIndex));
+                _loc4_.changedVal = _loc2_.selectedIndex;
+            }
+            else {
+                dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_SOUND_SPEAKER_CHANGE, viewId, _loc3_, _loc2_.selectedIndex));
+            }
+        }
+        else {
+            dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_CONTROL_CHANGED, viewId, _loc3_, _loc2_.selectedIndex));
         }
     }
 
     private function onButtonBarIndexChangeHandler(param1:IndexEvent):void {
         var _loc2_:ButtonBarEx = ButtonBarEx(param1.target);
         var _loc3_:String = SettingsConfigHelper.instance.getControlId(_loc2_.name, SettingsConfigHelper.TYPE_BUTTON_BAR);
+        if (_loc3_ == SettingsConfigHelper.SOUND_DEVICE) {
+            this.updateSoundSpeakersDependencies(_loc2_.selectedIndex);
+        }
         dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_CONTROL_CHANGED, viewId, _loc3_, _loc2_.selectedIndex));
     }
 
@@ -502,10 +667,6 @@ public class SoundSettings extends SoundSettingsBase implements IViewWithCounter
             case SPECIAL_TAB_INDEX:
                 specialForm.visible = true;
         }
-    }
-
-    public function getCounteredBar():ButtonBar {
-        return !!tabs.visible ? tabs : null;
     }
 }
 }

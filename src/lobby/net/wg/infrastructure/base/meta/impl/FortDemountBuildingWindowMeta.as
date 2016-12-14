@@ -27,12 +27,13 @@ public class FortDemountBuildingWindowMeta extends AbstractWindowView {
         this.applyDemount();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._fortDemountBuildingVO) {
-            this._fortDemountBuildingVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:FortDemountBuildingVO = this._fortDemountBuildingVO;
         this._fortDemountBuildingVO = new FortDemountBuildingVO(param1);
         this.setData(this._fortDemountBuildingVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:FortDemountBuildingVO):void {

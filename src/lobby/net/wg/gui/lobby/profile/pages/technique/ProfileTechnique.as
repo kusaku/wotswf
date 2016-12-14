@@ -46,7 +46,7 @@ public class ProfileTechnique extends ProfileTechniqueMeta implements IProfileTe
     }
 
     protected function applyInitData():void {
-        this.listComponent.headerDataProvider = new DataProvider(App.utils.data.vectorToArray(this.techniqueInitVO.tableHeader));
+        this.listComponent.headerDataProvider = this.techniqueInitVO.tableHeader;
         battlesDropdown.dataProvider = new DataProvider(this.techniqueInitVO.dropDownProvider);
     }
 
@@ -57,11 +57,10 @@ public class ProfileTechnique extends ProfileTechniqueMeta implements IProfileTe
     }
 
     override protected function applyData(param1:Object):void {
-        var _loc3_:* = false;
         var _loc5_:TechniqueListVehicleVO = null;
         var _loc6_:Object = null;
         var _loc2_:Array = [];
-        _loc3_ = false;
+        var _loc3_:* = false;
         var _loc4_:Array = param1 as Array;
         if (_loc4_) {
             for each(_loc6_ in _loc4_) {
@@ -117,13 +116,8 @@ public class ProfileTechnique extends ProfileTechniqueMeta implements IProfileTe
         super.onDispose();
     }
 
-    public function as_responseVehicleDossier(param1:Object):void {
-        if (param1 != null) {
-            this.stackComponent.updateTankData(new ProfileVehicleDossierVO(param1));
-        }
-        else {
-            this.stackComponent.updateTankData(new ProfileVehicleDossierVO({}));
-        }
+    override protected function responseVehicleDossier(param1:ProfileVehicleDossierVO):void {
+        this.stackComponent.updateTankData(param1);
     }
 
     private function onListComponentDataChangedHandler(param1:Event):void {

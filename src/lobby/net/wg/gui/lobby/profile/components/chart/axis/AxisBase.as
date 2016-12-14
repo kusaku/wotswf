@@ -1,14 +1,14 @@
 package net.wg.gui.lobby.profile.components.chart.axis {
 import net.wg.gui.lobby.profile.components.chart.IChartItem;
 import net.wg.gui.lobby.profile.components.chart.layout.IChartLayout;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.interfaces.IDataProvider;
 import scaleform.clik.interfaces.IListItemRenderer;
 
-public class AxisBase extends UIComponent implements IChartAxis {
+public class AxisBase extends UIComponentEx implements IChartAxis {
 
     protected var _points:Vector.<IListItemRenderer>;
 

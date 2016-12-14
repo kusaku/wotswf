@@ -143,10 +143,6 @@ public class PrebattleTimer extends PrebattleTimerMeta implements IPrebattleTime
                 if (alpha != Values.DEFAULT_ALPHA) {
                     alpha = Values.DEFAULT_ALPHA;
                 }
-                visible = true;
-            }
-            else {
-                visible = false;
             }
         }
     }

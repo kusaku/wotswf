@@ -1,8 +1,10 @@
 package net.wg.gui.lobby.profile.components.chart {
+import net.wg.infrastructure.base.UIComponentEx;
+
 import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.ListData;
 
-public class ChartItemBase extends UIComponent implements IChartItem {
+public class ChartItemBase extends UIComponentEx implements IChartItem {
 
     protected var _data:Object;
 

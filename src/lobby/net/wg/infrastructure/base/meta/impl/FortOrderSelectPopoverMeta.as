@@ -34,12 +34,13 @@ public class FortOrderSelectPopoverMeta extends SmartPopOverView {
         this.removeOrder(param1);
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._orderSelectPopoverVO) {
-            this._orderSelectPopoverVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:OrderSelectPopoverVO = this._orderSelectPopoverVO;
         this._orderSelectPopoverVO = new OrderSelectPopoverVO(param1);
         this.setData(this._orderSelectPopoverVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:OrderSelectPopoverVO):void {

@@ -1,9 +1,8 @@
 package net.wg.gui.lobby.hangar.crew {
 import net.wg.gui.components.controls.UILoaderAlt;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
-
-public class TankmenIcons extends UIComponent {
+public class TankmenIcons extends UIComponentEx {
 
     public var imageLoader:UILoaderAlt;
 

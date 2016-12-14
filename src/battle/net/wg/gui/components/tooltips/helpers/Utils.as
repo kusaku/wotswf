@@ -105,10 +105,8 @@ public class Utils {
     }
 
     public function addHeader(param1:String, param2:Number, param3:Number, param4:String):TextField {
-        var _loc5_:TextField = null;
-        var _loc6_:TextFormat = null;
-        _loc5_ = App.textMgr.createTextField();
-        _loc6_ = new TextFormat();
+        var _loc5_:TextField = App.textMgr.createTextField();
+        var _loc6_:TextFormat = new TextFormat();
         _loc6_.leading = -3;
         _loc6_.align = TextFormatAlign.LEFT;
         _loc5_.name = param1;

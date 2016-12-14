@@ -6,13 +6,13 @@ import flash.text.TextFieldAutoSize;
 
 import net.wg.data.constants.generated.TEXT_MANAGER_STYLES;
 import net.wg.gui.components.controls.DropdownMenu;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ListEvent;
 import scaleform.clik.interfaces.IDataProvider;
 
-public class BattlesTypeDropdown extends UIComponent {
+public class BattlesTypeDropdown extends UIComponentEx {
 
     public var txtLabel:TextField = null;
 

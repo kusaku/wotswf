@@ -2,12 +2,12 @@ package net.wg.gui.lobby.fortifications.cmp.impl {
 import flash.display.InteractiveObject;
 import flash.display.MovieClip;
 
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.entity.IFocusContainer;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class FortWelcomeCommanderView extends UIComponent implements IFocusContainer {
+public class FortWelcomeCommanderView extends UIComponentEx implements IFocusContainer {
 
     public var background:MovieClip = null;
 

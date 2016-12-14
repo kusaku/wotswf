@@ -7,13 +7,13 @@ import net.wg.gui.cyberSport.controls.CSVehicleButton;
 import net.wg.gui.cyberSport.controls.events.CSComponentEvent;
 import net.wg.gui.rally.vo.SettingRosterVO;
 import net.wg.gui.rally.vo.VehicleVO;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.motion.Tween;
 
-public class AnimatedRosterSettingsView extends UIComponent {
+public class AnimatedRosterSettingsView extends UIComponentEx {
 
     public var leftBtn:CSVehicleButton;
 

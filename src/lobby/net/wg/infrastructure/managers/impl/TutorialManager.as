@@ -206,7 +206,7 @@ public class TutorialManager extends TutorialManagerMeta implements ITutorialMan
         this._isSystemEnabled = param1;
     }
 
-    public function as_setTriggers(param1:String, param2:Array):void {
+    override protected function setTriggers(param1:String, param2:Array):void {
         var _loc3_:Vector.<ITriggerWatcher> = this._compIdToWatchers[param1];
         if (_loc3_ && _loc3_.length > 0) {
             this.cleanupTriggerWatchers(_loc3_);
@@ -473,7 +473,7 @@ public class TutorialManager extends TutorialManagerMeta implements ITutorialMan
             this._componentToVO[param1] = param2;
             _loc3_ = onComponentFoundS(param2.id);
             if (_loc3_ != null) {
-                this.as_setTriggers(param2.id, _loc3_);
+                as_setTriggers(param2.id, _loc3_);
             }
         }
     }

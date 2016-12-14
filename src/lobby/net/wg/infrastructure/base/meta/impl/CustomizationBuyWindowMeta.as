@@ -55,20 +55,22 @@ public class CustomizationBuyWindowMeta extends AbstractWindowView {
         this.changePriceItem(param1, param2);
     }
 
-    public function as_setInitData(param1:Object):void {
-        if (this._initBuyWindowVO) {
-            this._initBuyWindowVO.dispose();
-        }
+    public final function as_setInitData(param1:Object):void {
+        var _loc2_:InitBuyWindowVO = this._initBuyWindowVO;
         this._initBuyWindowVO = new InitBuyWindowVO(param1);
         this.setInitData(this._initBuyWindowVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setTotalData(param1:Object):void {
-        if (this._purchasesTotalVO) {
-            this._purchasesTotalVO.dispose();
-        }
+    public final function as_setTotalData(param1:Object):void {
+        var _loc2_:PurchasesTotalVO = this._purchasesTotalVO;
         this._purchasesTotalVO = new PurchasesTotalVO(param1);
         this.setTotalData(this._purchasesTotalVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setInitData(param1:InitBuyWindowVO):void {

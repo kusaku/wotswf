@@ -7,6 +7,7 @@ import flash.events.MouseEvent;
 
 import net.wg.data.constants.Cursors;
 import net.wg.data.constants.DragType;
+import net.wg.data.constants.Errors;
 import net.wg.gui.components.carousels.interfaces.ICarouselItemRenderer;
 import net.wg.gui.components.controls.SoundButton;
 import net.wg.infrastructure.interfaces.entity.IDraggable;
@@ -173,7 +174,7 @@ public class CarouselBase extends CoreList implements IDraggable {
             }
             this.tryToDisableHandCursorForRenderer(_loc4_);
             _renderers.push(_loc4_);
-            container.addChild(_loc4_ as DisplayObject);
+            container.addChild(DisplayObject(_loc4_));
             _loc2_++;
         }
         _loc3_ = _renderers.length;
@@ -183,6 +184,7 @@ public class CarouselBase extends CoreList implements IDraggable {
             if (_loc4_ != null) {
                 cleanUpRenderer(_loc4_);
                 _loc5_ = _loc4_ as DisplayObject;
+                App.utils.asserter.assertNotNull(_loc5_, "displayObject" + Errors.CANT_NULL);
                 if (container.contains(_loc5_)) {
                     container.removeChild(_loc5_);
                 }

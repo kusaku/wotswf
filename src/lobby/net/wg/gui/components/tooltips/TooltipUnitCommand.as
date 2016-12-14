@@ -6,7 +6,6 @@ import flash.text.TextFieldAutoSize;
 import net.wg.gui.components.controls.UnitCommanderStats;
 import net.wg.gui.components.tooltips.VO.UnitCommandVO;
 import net.wg.gui.components.tooltips.helpers.Utils;
-import net.wg.infrastructure.interfaces.IImageUrlProperties;
 import net.wg.utils.ILocale;
 
 public class TooltipUnitCommand extends ToolTipSpecial {
@@ -57,10 +56,10 @@ public class TooltipUnitCommand extends ToolTipSpecial {
     }
 
     override protected function redraw():void {
-        var _loc2_:UnitCommandVO = null;
+        var _loc1_:ILocale = null;
         var _loc4_:String = null;
-        var _loc1_:ILocale = App.utils.locale;
-        _loc2_ = new UnitCommandVO(_data);
+        _loc1_ = App.utils.locale;
+        var _loc2_:UnitCommandVO = new UnitCommandVO(_data);
         separators = new Vector.<Separator>();
         topPosition = topPosition + this.setHeader(_loc2_.commanderName);
         this.addSeparatorWithMargin();
@@ -81,7 +80,7 @@ public class TooltipUnitCommand extends ToolTipSpecial {
         }
         this.whiteBg.height = topPosition - this.whiteBg.y - Utils.instance.MARGIN_AFTER_SEPARATE;
         if (_loc2_.conditions && _loc2_.vehiclesList && _loc2_.vehiclesList.length > 0) {
-            _loc4_ = App.utils.getHtmlIconTextS(App.utils.getImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_TANKICON, TANK_ICON_WIDTH, TANK_ICON_HEIGHT, TANK_ICON_VERTICAL_SPACE) as IImageUrlProperties);
+            _loc4_ = App.utils.getHtmlIconTextS(App.utils.getImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_TANKICON, TANK_ICON_WIDTH, TANK_ICON_HEIGHT, TANK_ICON_VERTICAL_SPACE));
             this.notEnoughTF.htmlText = Utils.instance.htmlWrapper(_loc1_.makeString(TOOLTIPS.SUITABLEVEHICLE_MATCHES), Utils.instance.COLOR_NORMAL, NOT_ENOUGH_FONT_SIZE, "$FieldFont") + " " + Utils.instance.htmlWrapper((_loc2_.vehiclesList.length + _loc2_.leftCount).toString(), Utils.instance.COLOR_NUMBER, NOT_ENOUGH_FONT_SIZE, "$TitleFont") + " " + _loc4_;
             this.notEnoughTF.height = this.notEnoughTF.textHeight + NOT_ENOUGH_VERTICAL_SPACE;
             this.notEnoughTF.y = topPosition ^ 0;

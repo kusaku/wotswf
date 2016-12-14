@@ -3,12 +3,12 @@ import flash.events.MouseEvent;
 
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.controls.UILoaderAlt;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.entity.IUpdatable;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class RetrainCrewRoleIR extends UIComponent implements IUpdatable {
+public class RetrainCrewRoleIR extends UIComponentEx implements IUpdatable {
 
     public var loader:UILoaderAlt;
 

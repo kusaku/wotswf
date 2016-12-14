@@ -10,22 +10,22 @@ public class TutorialDialogMeta extends AbstractWindowView {
 
     public var cancel:Function;
 
-    private var _tutorialDialogVO1:TutorialDialogVO;
-
     private var _tutorialDialogVO:TutorialDialogVO;
+
+    private var _tutorialDialogVO1:TutorialDialogVO;
 
     public function TutorialDialogMeta() {
         super();
     }
 
     override protected function onDispose():void {
-        if (this._tutorialDialogVO1) {
-            this._tutorialDialogVO1.dispose();
-            this._tutorialDialogVO1 = null;
-        }
         if (this._tutorialDialogVO) {
             this._tutorialDialogVO.dispose();
             this._tutorialDialogVO = null;
+        }
+        if (this._tutorialDialogVO1) {
+            this._tutorialDialogVO1.dispose();
+            this._tutorialDialogVO1 = null;
         }
         super.onDispose();
     }
@@ -40,20 +40,22 @@ public class TutorialDialogMeta extends AbstractWindowView {
         this.cancel();
     }
 
-    public function as_setContent(param1:Object):void {
-        if (this._tutorialDialogVO) {
-            this._tutorialDialogVO.dispose();
-        }
+    public final function as_setContent(param1:Object):void {
+        var _loc2_:TutorialDialogVO = this._tutorialDialogVO;
         this._tutorialDialogVO = new TutorialDialogVO(param1);
         this.setContent(this._tutorialDialogVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_updateContent(param1:Object):void {
-        if (this._tutorialDialogVO1) {
-            this._tutorialDialogVO1.dispose();
-        }
+    public final function as_updateContent(param1:Object):void {
+        var _loc2_:TutorialDialogVO = this._tutorialDialogVO1;
         this._tutorialDialogVO1 = new TutorialDialogVO(param1);
         this.updateContent(this._tutorialDialogVO1);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setContent(param1:TutorialDialogVO):void {

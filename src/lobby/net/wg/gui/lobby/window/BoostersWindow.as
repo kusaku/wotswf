@@ -111,7 +111,7 @@ public class BoostersWindow extends BoostersWindowMeta implements IBoostersWindo
 
     override protected function draw():void {
         super.draw();
-        if (isInvalid(InvalidationType.DATA)) {
+        if (this._model && isInvalid(InvalidationType.DATA)) {
             this.activeTF.htmlText = this._model.activeText;
             this.noInfoBg.visible = this._model.isHaveNotInfo;
             this.tabs.dataProvider.cleanUp();
@@ -130,9 +130,8 @@ public class BoostersWindow extends BoostersWindowMeta implements IBoostersWindo
         }
     }
 
-    public function as_setListData(param1:Array, param2:Boolean):void {
-        this.boostersList.listDP.cleanUp();
-        this.boostersList.listDP = new DataProvider(param1);
+    override protected function setListData(param1:DataProvider, param2:Boolean):void {
+        this.boostersList.listDP = param1;
         if (param2) {
             this.boostersList.listSelectedIndex = 0;
         }

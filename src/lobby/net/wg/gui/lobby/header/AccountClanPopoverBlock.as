@@ -75,7 +75,7 @@ public class AccountClanPopoverBlock extends AccountPopoverBlockBase implements 
 
     override protected function applyData():void {
         super.applyData();
-        var _loc1_:AccountClanPopoverBlockVO = AccountClanPopoverBlockVO(_data);
+        var _loc1_:AccountClanPopoverBlockVO = AccountClanPopoverBlockVO(data);
         this._clansResearchBtnYposition = _loc1_.clansResearchBtnYposition;
         this._textFieldPositionYposition = _loc1_.textFieldPositionYposition;
         this._isSearchClanBtnVisible = _loc1_.isSearchClanBtnVisible;

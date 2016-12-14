@@ -183,8 +183,6 @@ package
       
       public static const WINDOW_UNIT_MESSAGE_UNITISLOCKED:String = "#cyberSport:window/unit/message/unitIsLocked";
       
-      public static const WINDOW_UNIT_MESSAGE_VEHICLENOTFOUND:String = "#cyberSport:window/unit/message/vehicleNotFound";
-      
       public static const WINDOW_UNIT_MESSAGE_UNITISFULL:String = "#cyberSport:window/unit/message/unitIsFull";
       
       public static const WINDOW_UNIT_MESSAGE_CURFEW:String = "#cyberSport:window/unit/message/curfew";

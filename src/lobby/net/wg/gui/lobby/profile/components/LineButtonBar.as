@@ -4,6 +4,7 @@ import flash.display.DisplayObjectContainer;
 import flash.display.Graphics;
 import flash.display.Sprite;
 
+import net.wg.data.constants.Errors;
 import net.wg.gui.components.advanced.ButtonBarEx;
 
 public class LineButtonBar extends ButtonBarEx {
@@ -56,6 +57,7 @@ public class LineButtonBar extends ButtonBarEx {
         if (selectedIndex != -1 && _renderers && _renderers.length > 0) {
             _loc1_.lineStyle(1, this.lineColor);
             _loc3_ = _renderers[selectedIndex] as DisplayObject;
+            App.utils.asserter.assertNotNull(_loc3_, "selItem" + Errors.CANT_NULL);
             _loc4_ = _loc3_.x;
             _loc1_.moveTo(0, 0);
             if (_loc4_ > 0) {

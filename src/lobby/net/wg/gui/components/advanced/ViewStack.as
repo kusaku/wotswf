@@ -7,6 +7,7 @@ import net.wg.data.constants.generated.EVENT_LOG_CONSTANTS;
 import net.wg.gui.events.ViewStackContentEvent;
 import net.wg.gui.events.ViewStackEvent;
 import net.wg.gui.interfaces.IGroupedControl;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.events.LifeCycleEvent;
 import net.wg.infrastructure.exceptions.ArgumentException;
 import net.wg.infrastructure.exceptions.InfrastructureException;
@@ -20,7 +21,7 @@ import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.IndexEvent;
 
-public class ViewStack extends UIComponent implements ITutorialCustomComponent {
+public class ViewStack extends UIComponentEx implements ITutorialCustomComponent {
 
     public var cache:Boolean = false;
 
@@ -153,7 +154,7 @@ public class ViewStack extends UIComponent implements ITutorialCustomComponent {
     private function changeView():void {
         var _loc1_:Object = null;
         var _loc2_:String = null;
-        if (this._targetGroup.selectedItem != null) {
+        if (this._targetGroup && this._targetGroup.selectedItem != null) {
             _loc1_ = this._targetGroup.data;
             if (_loc1_ != null) {
                 if (_loc1_.hasOwnProperty("linkage")) {
@@ -181,7 +182,7 @@ public class ViewStack extends UIComponent implements ITutorialCustomComponent {
                 if (param3) {
                     this.callLogEvent(this._currentView, EVENT_LOG_CONSTANTS.EVENT_TYPE_VIEWSTAK_ITEM_HIDE);
                     if (!(param1 is IDAAPIEntity)) {
-                        (this._currentView as IDisposable).dispose();
+                        IDisposable(this._currentView).dispose();
                     }
                     else {
                         this.clearSubView(this._currentView);
@@ -249,7 +250,7 @@ public class ViewStack extends UIComponent implements ITutorialCustomComponent {
     }
 
     public function get targetGroup():String {
-        return this._targetGroup.name;
+        return !!this._targetGroup ? this._targetGroup.name : null;
     }
 
     public function set targetGroup(param1:String):void {

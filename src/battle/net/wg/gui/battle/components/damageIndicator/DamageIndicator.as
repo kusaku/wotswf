@@ -9,6 +9,8 @@ public class DamageIndicator extends Sprite implements IDisposable {
 
     private static const DEFAULT_HEIGHT:int = 1018;
 
+    private static const FLA_HALF_STAGE_BOUNDS:Number = 340;
+
     public var hit_0:DamageIndicatorItem = null;
 
     public var hit_1:DamageIndicatorItem = null;
@@ -21,7 +23,13 @@ public class DamageIndicator extends Sprite implements IDisposable {
 
     private var _items:Vector.<DamageIndicatorItem> = null;
 
-    private var _stageHeight:int = 1018;
+    private var _stageHalfWidth:Number = 0;
+
+    private var _stageHalfHeight:Number = 0;
+
+    private var _xPos:Number = 0;
+
+    private var _yPos:Number = 0;
 
     private var _guiScale:int = 1;
 
@@ -39,16 +47,29 @@ public class DamageIndicator extends Sprite implements IDisposable {
     public function as_setScreenSettings(param1:Number, param2:Number, param3:Number):void {
         var _loc4_:DamageIndicatorItem = null;
         this._guiScale = param1;
-        this._stageHeight = param3;
+        this._stageHalfWidth = param2 >> 1;
+        this._stageHalfHeight = param3 >> 1;
         for each(_loc4_ in this._items) {
-            _loc4_.scaleX = _loc4_.scaleY = this._guiScale;
+            _loc4_.scaleX = _loc4_.scaleY = param1;
             if (param1 <= 1) {
-                _loc4_.standardAnimation.stateContainer.setYOffset(DEFAULT_HEIGHT - this._stageHeight >> 1);
+                _loc4_.standardAnimation.stateContainer.setYOffset(DEFAULT_HEIGHT - this._stageHalfHeight >> 1);
             }
             else {
-                _loc4_.standardAnimation.stateContainer.setYOffset(DEFAULT_HEIGHT - this._stageHeight / this._guiScale >> 1);
+                _loc4_.standardAnimation.stateContainer.setYOffset(DEFAULT_HEIGHT - this._stageHalfHeight / param1 >> 1);
             }
         }
+        this.updatePosition();
+    }
+
+    public function as_setPosition(param1:Number, param2:Number):void {
+        this._xPos = param1;
+        this._yPos = param2;
+        this.updatePosition();
+    }
+
+    private function updatePosition():void {
+        x = FLA_HALF_STAGE_BOUNDS - this._stageHalfWidth + this._xPos;
+        y = FLA_HALF_STAGE_BOUNDS - this._stageHalfHeight + this._yPos;
     }
 
     public function as_hide(param1:int):void {

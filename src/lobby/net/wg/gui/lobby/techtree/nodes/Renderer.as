@@ -382,7 +382,7 @@ public class Renderer extends SoundListItemRenderer implements IRenderer {
         var _loc1_:ActionPriceVO = null;
         if (this.actionPrice != null && this._dataInited) {
             _loc1_ = this._valueObject.getActionData(this._stateProps.label);
-            this.actionPrice.visible = this.isInAction();
+            this.actionPrice.visible = this.isInAction() && !this.isWasInBattle();
             if (_loc1_) {
                 _loc1_.ico = IconTextResolver.getFromNamedLabel(this._stateProps.label);
             }

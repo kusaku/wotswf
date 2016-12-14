@@ -1,6 +1,5 @@
 package net.wg.data.VO {
 import net.wg.data.daapi.base.DAAPIDataClass;
-import net.wg.gui.lobby.profile.data.ProgressSimpleInfo;
 
 public class AchievementProgressVO extends AchievementCounterVO {
 

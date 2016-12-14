@@ -2,9 +2,9 @@ package net.wg.gui.components.common.markers {
 import flash.display.MovieClip;
 import flash.events.Event;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class HealthBar extends UIComponent {
+public class HealthBar extends UIComponentEx {
 
     private static const ORIGINAL_SPLASH_WIDTH:Number = 26;
 

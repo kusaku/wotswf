@@ -1,6 +1,10 @@
 package net.wg.infrastructure.base.meta.impl {
 import net.wg.data.constants.Errors;
+import net.wg.gui.prebattle.data.PlayerPrbInfoVO;
 import net.wg.gui.rally.AbstractRallyView;
+import net.wg.infrastructure.exceptions.AbstractException;
+
+import scaleform.clik.data.DataProvider;
 
 public class BasePrebattleRoomViewMeta extends AbstractRallyView {
 
@@ -76,6 +80,23 @@ public class BasePrebattleRoomViewMeta extends AbstractRallyView {
     public function getClientIDS():Number {
         App.utils.asserter.assertNotNull(this.getClientID, "getClientID" + Errors.CANT_NULL);
         return this.getClientID();
+    }
+
+    public final function as_setRosterList(param1:int, param2:Boolean, param3:Array):void {
+        var _loc4_:DataProvider = new DataProvider();
+        var _loc5_:uint = param3.length;
+        var _loc6_:int = 0;
+        while (_loc6_ < _loc5_) {
+            _loc4_[_loc6_] = new PlayerPrbInfoVO(param3[_loc6_]);
+            _loc6_++;
+        }
+        this.setRosterList(param1, param2, _loc4_);
+    }
+
+    protected function setRosterList(param1:int, param2:Boolean, param3:DataProvider):void {
+        var _loc4_:String = "as_setRosterList" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc4_);
+        throw new AbstractException(_loc4_);
     }
 }
 }

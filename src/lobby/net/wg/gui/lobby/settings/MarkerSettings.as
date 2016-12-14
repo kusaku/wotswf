@@ -1,5 +1,4 @@
 package net.wg.gui.lobby.settings {
-import net.wg.data.constants.Errors;
 import net.wg.data.constants.MarkerState;
 import net.wg.data.constants.Values;
 import net.wg.gui.components.common.markers.VehicleMarker;
@@ -147,7 +146,6 @@ public class MarkerSettings extends MarkerSettingsBase {
                 if (!this._dynamicMarkersData.hasOwnProperty(_loc8_)) {
                     this._dynamicMarkersData[_loc8_] = {};
                 }
-                App.utils.asserter.assertNotNull(_loc10_, "ViewData[formID] " + Errors.CANT_NULL);
                 this._dynamicMarkersData[_loc8_][_loc9_] = SettingsControlProp(_loc12_[_loc14_]).current;
                 _loc14_++;
             }

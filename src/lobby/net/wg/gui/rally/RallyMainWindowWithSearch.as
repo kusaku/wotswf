@@ -6,9 +6,10 @@ import net.wg.gui.cyberSport.controls.events.CSComponentEvent;
 import net.wg.gui.cyberSport.interfaces.ICSAutoSearchMainView;
 import net.wg.gui.cyberSport.views.events.SCUpdateFocusEvent;
 import net.wg.gui.cyberSport.vo.AutoSearchVO;
+import net.wg.infrastructure.base.meta.IRallyMainWindowWithSearchMeta;
 import net.wg.infrastructure.base.meta.impl.RallyMainWindowWithSearchMeta;
 
-public class RallyMainWindowWithSearch extends RallyMainWindowWithSearchMeta {
+public class RallyMainWindowWithSearch extends RallyMainWindowWithSearchMeta implements IRallyMainWindowWithSearchMeta {
 
     private static const UPDATE_AUTO_SEARCH_MODEL:String = "autoSearchModel";
 
@@ -45,11 +46,11 @@ public class RallyMainWindowWithSearch extends RallyMainWindowWithSearchMeta {
         this.hideAutoSearch();
     }
 
-    public function as_changeAutoSearchState(param1:Object):void {
+    override protected function changeAutoSearchState(param1:AutoSearchVO):void {
         if (param1 == null) {
             return;
         }
-        this._autoSearchModel = new AutoSearchVO(param1);
+        this._autoSearchModel = param1;
         invalidate(UPDATE_AUTO_SEARCH_MODEL);
     }
 
@@ -74,10 +75,7 @@ public class RallyMainWindowWithSearch extends RallyMainWindowWithSearchMeta {
         this._lastFocusedElementUnderAS = null;
         this.autoSearch.dispose();
         this.autoSearch = null;
-        if (this._autoSearchModel) {
-            this._autoSearchModel.dispose();
-            this._autoSearchModel = null;
-        }
+        this._autoSearchModel = null;
         super.onDispose();
     }
 

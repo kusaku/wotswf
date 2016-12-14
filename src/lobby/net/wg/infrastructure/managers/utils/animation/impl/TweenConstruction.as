@@ -1,16 +1,13 @@
 package net.wg.infrastructure.managers.utils.animation.impl {
 import flash.display.DisplayObject;
-import flash.display.MovieClip;
 
 import net.wg.data.TweenDataByType;
 import net.wg.data.constants.DelayTypes;
 import net.wg.data.constants.Linkages;
 import net.wg.data.constants.TweenTypes;
-import net.wg.infrastructure.interfaces.IAnimation;
 import net.wg.infrastructure.interfaces.ISimpleTweenPropertiesVO;
 import net.wg.infrastructure.interfaces.ITween;
 import net.wg.infrastructure.interfaces.ITweenConstructionHandler;
-import net.wg.infrastructure.interfaces.ITweenPropertiesVO;
 import net.wg.infrastructure.interfaces.ITweenTypesDuration;
 import net.wg.infrastructure.managers.ITweenManagerHelper;
 import net.wg.utils.IAssertable;
@@ -99,26 +96,6 @@ public class TweenConstruction implements ITweenConstruction {
 
     public function addHalfTurn(param1:int, param2:String = "global"):ITweenConstruction {
         this.createPythonTween(TweenTypes.TURN_HALF, param1, param2);
-        return this;
-    }
-
-    public function addGlowIn(param1:int, param2:String = "global"):ITweenConstruction {
-        this.createFlashTween(Linkages.GLOW_IN_ANIM, param1, param2);
-        return this;
-    }
-
-    public function addGlowOut(param1:int, param2:String = "global"):ITweenConstruction {
-        this.createFlashTween(Linkages.GLOW_OUT_ANIM, param1, param2);
-        return this;
-    }
-
-    public function addShadowIn(param1:int, param2:String = "global"):ITweenConstruction {
-        this.createFlashTween(Linkages.SHADOW_IN_ANIM, param1, param2);
-        return this;
-    }
-
-    public function addShadowOut(param1:int, param2:String = "global"):ITweenConstruction {
-        this.createFlashTween(Linkages.SHADOW_OUT_ANIM, param1, param2);
         return this;
     }
 
@@ -252,11 +229,6 @@ public class TweenConstruction implements ITweenConstruction {
         }
     }
 
-    private function createFlashTween(param1:String, param2:int, param3:String):void {
-        var _loc4_:ITween = this.createFrameBasedTween(param1);
-        this.addInStack(new TweenLinkedObjects(_loc4_, param2, param3));
-    }
-
     private function getAsserter():IAssertable {
         return App.utils.asserter;
     }
@@ -308,19 +280,6 @@ public class TweenConstruction implements ITweenConstruction {
         for (_loc2_ in param1) {
             this.tweenWrapper[_loc2_] = param1[_loc2_];
         }
-    }
-
-    private function createFrameBasedTween(param1:String):ITween {
-        var _loc2_:* = "Didn\'t found class " + param1 + " in list of frame based tweens!";
-        var _loc3_:String = this.tweenTypesMap.get(param1);
-        this.getAsserter().assertNotNull(_loc3_, _loc2_);
-        var _loc4_:ITweenTypesDuration = getTweenSettingByType(_loc3_);
-        var _loc5_:IAnimation = this.tweenWrapper.addAnimationByClassName(param1);
-        var _loc6_:ITweenPropertiesVO = this.getAnimator().createPropsForFrameBasedAnim(MovieClip(_loc5_), _loc4_.duration, 0);
-        _loc6_.setPaused(false);
-        var _loc7_:ITween = App.tweenMgr.createNewTween(_loc6_);
-        _loc7_.memberData = {"type": _loc3_};
-        return _loc7_;
     }
 
     private function getDelays(param1:int, param2:String = "global"):Array {

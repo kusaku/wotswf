@@ -5,24 +5,14 @@ public class CrosshairSniper extends CrosshairBase {
 
     private static const ZOOM_VALIDATION:String = "zoom";
 
-    private var _zoomStr:String = "";
+    public var zoomTF:TextField = null;
 
     protected var _zoomIndicatorAlphaValue:Number = 1;
 
-    public var zoomTF:TextField = null;
+    private var _zoomStr:String = "";
 
     public function CrosshairSniper() {
         super();
-    }
-
-    override protected function draw():void {
-        super.draw();
-        if (isInvalid(ZOOM_VALIDATION)) {
-            this.zoomTF.text = this._zoomStr;
-        }
-        if (isInvalid(ALPHA_VALIDATION)) {
-            this.zoomTF.alpha = this._zoomIndicatorAlphaValue;
-        }
     }
 
     override public function setComponentsAlpha(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number, param7:Number):void {
@@ -33,6 +23,16 @@ public class CrosshairSniper extends CrosshairBase {
     override public function setZoom(param1:String):void {
         this._zoomStr = param1;
         invalidate(ZOOM_VALIDATION);
+    }
+
+    override protected function draw():void {
+        super.draw();
+        if (isInvalid(ZOOM_VALIDATION)) {
+            this.zoomTF.text = this._zoomStr;
+        }
+        if (isInvalid(ALPHA_VALIDATION)) {
+            this.zoomTF.alpha = this._zoomIndicatorAlphaValue;
+        }
     }
 
     override protected function onDispose():void {

@@ -1,13 +1,12 @@
 package net.wg.gui.lobby.tankman {
 import flash.events.Event;
 
-import net.wg.gui.lobby.tankman.vo.RoleChangeItemVO;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.ISpriteEx;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class RoleChangeItems extends UIComponent implements ISpriteEx {
+public class RoleChangeItems extends UIComponentEx implements ISpriteEx {
 
     public var item0:RoleChangeItem;
 
@@ -65,19 +64,16 @@ public class RoleChangeItems extends UIComponent implements ISpriteEx {
     public function update(param1:Object):void {
         var _loc5_:* = false;
         var _loc6_:RoleChangeItem = null;
-        var _loc7_:RoleChangeItemVO = null;
         var _loc2_:Array = param1 as Array;
         var _loc3_:int = _loc2_.length;
         var _loc4_:int = 0;
         while (_loc4_ < this._itemsLength) {
-            this._items[_loc4_].selected = false;
             _loc5_ = _loc4_ < _loc3_;
             _loc6_ = this._items[_loc4_];
             _loc6_.visible = _loc5_;
+            _loc6_.selected = false;
             if (_loc5_) {
-                _loc7_ = new RoleChangeItemVO(_loc2_[_loc4_]);
-                _loc6_.update(_loc7_);
-                _loc7_.dispose();
+                _loc6_.update(_loc2_[_loc4_]);
             }
             _loc4_++;
         }

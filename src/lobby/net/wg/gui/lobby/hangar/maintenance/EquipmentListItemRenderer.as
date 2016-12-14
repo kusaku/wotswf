@@ -14,7 +14,6 @@ import net.wg.gui.components.controls.VO.ActionPriceVO;
 import net.wg.gui.events.ModuleInfoEvent;
 import net.wg.gui.lobby.hangar.maintenance.data.ModuleVO;
 import net.wg.gui.lobby.hangar.maintenance.events.OnEquipmentRendererOver;
-import net.wg.utils.IEventCollector;
 
 import scaleform.clik.constants.InvalidationType;
 import scaleform.gfx.MouseEventEx;
@@ -60,10 +59,9 @@ public class EquipmentListItemRenderer extends SoundListItemRenderer {
 
     override protected function configUI():void {
         super.configUI();
-        var _loc1_:IEventCollector = App.utils.events;
-        _loc1_.addEvent(this, MouseEvent.ROLL_OVER, this.onRollOverHandler);
-        _loc1_.addEvent(this, MouseEvent.ROLL_OUT, this.onRollOutHandler);
-        _loc1_.addEvent(this, MouseEvent.CLICK, this.onClickHandler);
+        addEventListener(MouseEvent.ROLL_OVER, this.onRollOverHandler);
+        addEventListener(MouseEvent.ROLL_OUT, this.onRollOutHandler);
+        addEventListener(MouseEvent.CLICK, this.onClickHandler);
         soundType = SoundTypes.NORMAL_BTN;
         if (this.hitMc) {
             hitArea = this.hitMc;
@@ -71,6 +69,9 @@ public class EquipmentListItemRenderer extends SoundListItemRenderer {
     }
 
     override protected function onDispose():void {
+        removeEventListener(MouseEvent.ROLL_OVER, this.onRollOverHandler);
+        removeEventListener(MouseEvent.ROLL_OUT, this.onRollOutHandler);
+        removeEventListener(MouseEvent.CLICK, this.onClickHandler);
         this.moduleType.dispose();
         this.moduleType = null;
         this.titleField = null;

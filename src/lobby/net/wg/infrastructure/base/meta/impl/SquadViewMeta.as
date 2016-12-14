@@ -34,20 +34,22 @@ public class SquadViewMeta extends BaseRallyRoomView {
         this.leaveSquad();
     }
 
-    public function as_updateBattleType(param1:Object):void {
-        if (this._squadViewHeaderVO) {
-            this._squadViewHeaderVO.dispose();
-        }
+    public final function as_updateBattleType(param1:Object):void {
+        var _loc2_:SquadViewHeaderVO = this._squadViewHeaderVO;
         this._squadViewHeaderVO = new SquadViewHeaderVO(param1);
         this.updateBattleType(this._squadViewHeaderVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setSimpleTeamSectionData(param1:Object):void {
-        if (this._simpleSquadTeamSectionVO) {
-            this._simpleSquadTeamSectionVO.dispose();
-        }
+    public final function as_setSimpleTeamSectionData(param1:Object):void {
+        var _loc2_:SimpleSquadTeamSectionVO = this._simpleSquadTeamSectionVO;
         this._simpleSquadTeamSectionVO = new SimpleSquadTeamSectionVO(param1);
         this.setSimpleTeamSectionData(this._simpleSquadTeamSectionVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function updateBattleType(param1:SquadViewHeaderVO):void {

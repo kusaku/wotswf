@@ -1,6 +1,9 @@
 package net.wg.infrastructure.base.meta.impl {
 import net.wg.data.constants.Errors;
 import net.wg.infrastructure.base.AbstractWindowView;
+import net.wg.infrastructure.exceptions.AbstractException;
+
+import scaleform.clik.data.DataProvider;
 
 public class SettingsWindowMeta extends AbstractWindowView {
 
@@ -26,8 +29,28 @@ public class SettingsWindowMeta extends AbstractWindowView {
 
     public var onCounterTargetVisited:Function;
 
+    public var autodetectAcousticType:Function;
+
+    public var canSelectAcousticType:Function;
+
+    private var _array:Array;
+
+    private var _dataProvider:DataProvider;
+
     public function SettingsWindowMeta() {
         super();
+    }
+
+    override protected function onDispose():void {
+        if (this._array) {
+            this._array.splice(0, this._array.length);
+            this._array = null;
+        }
+        if (this._dataProvider) {
+            this._dataProvider.cleanUp();
+            this._dataProvider = null;
+        }
+        super.onDispose();
     }
 
     public function applySettingsS(param1:Object, param2:Boolean):void {
@@ -83,6 +106,46 @@ public class SettingsWindowMeta extends AbstractWindowView {
     public function onCounterTargetVisitedS(param1:String):void {
         App.utils.asserter.assertNotNull(this.onCounterTargetVisited, "onCounterTargetVisited" + Errors.CANT_NULL);
         this.onCounterTargetVisited(param1);
+    }
+
+    public function autodetectAcousticTypeS():String {
+        App.utils.asserter.assertNotNull(this.autodetectAcousticType, "autodetectAcousticType" + Errors.CANT_NULL);
+        return this.autodetectAcousticType();
+    }
+
+    public function canSelectAcousticTypeS(param1:Number):Boolean {
+        App.utils.asserter.assertNotNull(this.canSelectAcousticType, "canSelectAcousticType" + Errors.CANT_NULL);
+        return this.canSelectAcousticType(param1);
+    }
+
+    public final function as_setCaptureDevices(param1:Number, param2:Array):void {
+        var _loc3_:DataProvider = this._dataProvider;
+        this._dataProvider = new DataProvider(param2);
+        this.setCaptureDevices(param1, this._dataProvider);
+        if (_loc3_) {
+            _loc3_.cleanUp();
+        }
+    }
+
+    public final function as_setCountersData(param1:Array):void {
+        var _loc2_:Array = this._array;
+        this._array = param1;
+        this.setCountersData(this._array);
+        if (_loc2_) {
+            _loc2_.splice(0, _loc2_.length);
+        }
+    }
+
+    protected function setCaptureDevices(param1:Number, param2:DataProvider):void {
+        var _loc3_:String = "as_setCaptureDevices" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc3_);
+        throw new AbstractException(_loc3_);
+    }
+
+    protected function setCountersData(param1:Array):void {
+        var _loc2_:String = "as_setCountersData" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
     }
 }
 }

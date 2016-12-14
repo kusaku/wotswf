@@ -265,7 +265,7 @@ public class FalloutBaseScorePanel extends FalloutBaseScorePanelMeta implements 
         this.updateTotalStats(DAAPIVehiclesInteractiveStatsVO(param1).totalStats);
     }
 
-    public function updateVehiclesStats(param1:IDAAPIDataClass):void {
+    public function updateVehiclesStat(param1:IDAAPIDataClass):void {
         this.updateTotalStats(DAAPIVehiclesInteractiveStatsVO(param1).totalStats);
     }
 
@@ -305,7 +305,7 @@ public class FalloutBaseScorePanel extends FalloutBaseScorePanelMeta implements 
     public function addVehiclesInfo(param1:IDAAPIDataClass):void {
     }
 
-    public function updateVehiclesInfo(param1:IDAAPIDataClass):void {
+    public function updateVehiclesData(param1:IDAAPIDataClass):void {
     }
 
     public function updateVehicleStatus(param1:IDAAPIDataClass):void {

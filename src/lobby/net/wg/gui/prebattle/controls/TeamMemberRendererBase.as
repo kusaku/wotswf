@@ -41,14 +41,15 @@ public class TeamMemberRendererBase extends SoundListItemRenderer {
         if (param1 == null) {
             this.setSpeakers(false, true);
             visible = false;
-            return;
         }
-        if (this.data && param1 && this.currentDbID == param1.dbID) {
-            param1.isPlayerSpeaking = this.data.isPlayerSpeaking;
-        }
-        this.currentDbID = param1.dbID;
-        if (!visible) {
-            visible = true;
+        else {
+            if (this.data && this.currentDbID == param1.dbID) {
+                param1.isPlayerSpeaking = this.data.isPlayerSpeaking;
+            }
+            this.currentDbID = param1.dbID;
+            if (!visible) {
+                visible = true;
+            }
         }
         this.data = param1;
         invalidate(UPDATE_STATUS);

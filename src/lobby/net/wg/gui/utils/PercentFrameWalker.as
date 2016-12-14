@@ -101,7 +101,7 @@ public class PercentFrameWalker implements IFrameWalker {
 
     private function walkEnd():void {
         this._targetMC.setPercents(100);
-        if (this._callback) {
+        if (this._callback != null) {
             this._callback.call();
         }
     }

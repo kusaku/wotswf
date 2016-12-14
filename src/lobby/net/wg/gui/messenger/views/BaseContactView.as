@@ -58,7 +58,7 @@ public class BaseContactView extends BaseContactViewMeta implements IBaseContact
         this.background.dispose();
         this.background = null;
         this.title = null;
-        this.clearInitData();
+        this._initData = null;
         super.onDispose();
     }
 
@@ -66,9 +66,8 @@ public class BaseContactView extends BaseContactViewMeta implements IBaseContact
         dispatchEvent(new Event(ON_CANCEL_CLICKED, true));
     }
 
-    public function as_setInitData(param1:Object):void {
-        this.clearInitData();
-        this._initData = this.getCastedInitData(param1);
+    override protected function setInitData(param1:ContactsViewInitDataVO):void {
+        this._initData = param1;
         invalidate(INIT_DATA_INV);
     }
 
@@ -81,13 +80,6 @@ public class BaseContactView extends BaseContactViewMeta implements IBaseContact
 
     public function canShowAutomatically():Boolean {
         return true;
-    }
-
-    public function clearInitData():void {
-        if (this._initData) {
-            this._initData.dispose();
-            this._initData = null;
-        }
     }
 
     public function getComponentForFocus():InteractiveObject {
@@ -106,7 +98,7 @@ public class BaseContactView extends BaseContactViewMeta implements IBaseContact
     public function update(param1:Object):void {
     }
 
-    protected function getCastedInitData(param1:Object):ContactsViewInitDataVO {
+    override protected function getContactsViewInitDataVO(param1:Object):ContactsViewInitDataVO {
         return new ContactsViewInitDataVO(param1);
     }
 

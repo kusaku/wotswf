@@ -5,6 +5,7 @@ import flash.display.Sprite;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 
+import net.wg.data.constants.Errors;
 import net.wg.gui.components.controls.events.RangeSliderEvent;
 import net.wg.gui.components.controls.interfaces.ISliderKeyPoint;
 
@@ -31,6 +32,10 @@ public class RangeSlider extends Slider {
     private static const ENABLE_ALPHA_VALUE:int = 1;
 
     private static const RENDERER_LINE_SIZE:int = 1;
+
+    private static const LEFT_PROGRESS_MASK_NAME:String = "left_progress_mask";
+
+    private static const RIGHT_PROGRESS_MASK_NAME:String = "progress_mask";
 
     public var leftThumb:Button = null;
 
@@ -82,8 +87,8 @@ public class RangeSlider extends Slider {
 
     public function RangeSlider() {
         super();
-        this._leftProgressMask = track["left_progress_mask"];
-        this._rightProgressMask = track["progress_mask"];
+        this._leftProgressMask = track[LEFT_PROGRESS_MASK_NAME];
+        this._rightProgressMask = track[RIGHT_PROGRESS_MASK_NAME];
     }
 
     override protected function configUI():void {
@@ -93,8 +98,8 @@ public class RangeSlider extends Slider {
         this.rightThumb.addEventListener(MouseEvent.MOUSE_DOWN, this.beginDrag);
         this.leftThumb.doubleClickEnabled = true;
         this.rightThumb.doubleClickEnabled = true;
-        this.leftThumb.addEventListener(MouseEvent.DOUBLE_CLICK, this.onLeftThumbDoubleClick);
-        this.rightThumb.addEventListener(MouseEvent.DOUBLE_CLICK, this.onRightThumbDoubleClick);
+        this.leftThumb.addEventListener(MouseEvent.DOUBLE_CLICK, this.onLeftThumbDoubleClickHandler);
+        this.rightThumb.addEventListener(MouseEvent.DOUBLE_CLICK, this.onRightThumbDoubleClickHandler);
         offsetRight = 0;
         offsetLeft = -1;
     }
@@ -102,8 +107,8 @@ public class RangeSlider extends Slider {
     override protected function onDispose():void {
         this.leftThumb.removeEventListener(MouseEvent.MOUSE_DOWN, this.beginDrag);
         this.rightThumb.removeEventListener(MouseEvent.MOUSE_DOWN, this.beginDrag);
-        this.leftThumb.removeEventListener(MouseEvent.DOUBLE_CLICK, this.onLeftThumbDoubleClick);
-        this.rightThumb.removeEventListener(MouseEvent.DOUBLE_CLICK, this.onRightThumbDoubleClick);
+        this.leftThumb.removeEventListener(MouseEvent.DOUBLE_CLICK, this.onLeftThumbDoubleClickHandler);
+        this.rightThumb.removeEventListener(MouseEvent.DOUBLE_CLICK, this.onRightThumbDoubleClickHandler);
         this.clearDivisionScale();
         this.divisionScaleContainer = null;
         this.leftThumb.dispose();
@@ -168,9 +173,8 @@ public class RangeSlider extends Slider {
     }
 
     protected function updateRangeThumbs():void {
-        var _loc2_:Number = NaN;
         var _loc1_:Number = track.width - (this._trackHorizontalPadding << 1) - RENDERER_LINE_SIZE;
-        _loc2_ = _maximum - _minimum;
+        var _loc2_:Number = _maximum - _minimum;
         var _loc3_:Number = this._trackEdge + offsetLeft - (thumb.width >> 1);
         this.leftThumb.x = (this._leftValue - _minimum) / _loc2_ * _loc1_ + _loc3_ + this._trackHorizontalPadding ^ 0;
         this.rightThumb.x = (this._rightValue - _minimum) / _loc2_ * _loc1_ + _loc3_ + this._trackHorizontalPadding ^ 0;
@@ -433,10 +437,12 @@ public class RangeSlider extends Slider {
             }
             _trackDragMouseIndex = 0;
             _dragOffset = {"x": 0};
-            _loc6_ = new MouseEvent(MouseEvent.MOUSE_DOWN, false, true);
-            _loc6_.localX = this._draggingThumb.mouseX;
-            _loc6_.localY = this._draggingThumb.mouseY;
-            this._draggingThumb.dispatchEvent(_loc6_);
+            if (this._draggingThumb) {
+                _loc6_ = new MouseEvent(MouseEvent.MOUSE_DOWN, false, true);
+                _loc6_.localX = this._draggingThumb.mouseX;
+                _loc6_.localY = this._draggingThumb.mouseY;
+                this._draggingThumb.dispatchEvent(_loc6_);
+            }
         }
         else {
             super.trackPress(param1);
@@ -453,6 +459,7 @@ public class RangeSlider extends Slider {
         var _loc2_:Point = null;
         if (App.utils.commons.isLeftButton(param1)) {
             this._draggingThumb = param1.currentTarget as Button;
+            App.utils.asserter.assertNotNull(this._draggingThumb, "_draggingThumb" + Errors.CANT_NULL);
             this._draggingThumb.selected = true;
             _thumbPressed = true;
             _loc2_ = globalToLocal(new Point(param1.stageX, param1.stageY));
@@ -493,11 +500,11 @@ public class RangeSlider extends Slider {
         return _loc4_;
     }
 
-    private function onLeftThumbDoubleClick(param1:MouseEvent):void {
+    private function onLeftThumbDoubleClickHandler(param1:MouseEvent):void {
         this.rightValue = this.leftValue + this.minRangeDistance;
     }
 
-    private function onRightThumbDoubleClick(param1:MouseEvent):void {
+    private function onRightThumbDoubleClickHandler(param1:MouseEvent):void {
         this.leftValue = this.rightValue - this.minRangeDistance;
     }
 }

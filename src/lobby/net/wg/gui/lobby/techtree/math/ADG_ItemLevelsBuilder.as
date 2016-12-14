@@ -785,7 +785,6 @@ public class ADG_ItemLevelsBuilder {
     }
 }
 }
-
 class LevelItem {
 
     public var index:uint;
@@ -801,7 +800,6 @@ class LevelItem {
         this.fake = param3;
     }
 }
-
 class LevelLine {
 
     public var start:uint;

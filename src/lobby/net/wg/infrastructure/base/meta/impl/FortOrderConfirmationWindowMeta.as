@@ -11,22 +11,22 @@ public class FortOrderConfirmationWindowMeta extends AbstractConfirmItemDialog {
 
     public var getTimeStr:Function;
 
-    private var _dialogSettingsVO:DialogSettingsVO;
-
     private var _confirmOrderVO:ConfirmOrderVO;
+
+    private var _dialogSettingsVO:DialogSettingsVO;
 
     public function FortOrderConfirmationWindowMeta() {
         super();
     }
 
     override protected function onDispose():void {
-        if (this._dialogSettingsVO) {
-            this._dialogSettingsVO.dispose();
-            this._dialogSettingsVO = null;
-        }
         if (this._confirmOrderVO) {
             this._confirmOrderVO.dispose();
             this._confirmOrderVO = null;
+        }
+        if (this._dialogSettingsVO) {
+            this._dialogSettingsVO.dispose();
+            this._dialogSettingsVO = null;
         }
         super.onDispose();
     }
@@ -41,20 +41,22 @@ public class FortOrderConfirmationWindowMeta extends AbstractConfirmItemDialog {
         return this.getTimeStr(param1);
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._confirmOrderVO) {
-            this._confirmOrderVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:ConfirmOrderVO = this._confirmOrderVO;
         this._confirmOrderVO = new ConfirmOrderVO(param1);
         this.setData(this._confirmOrderVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setSettings(param1:Object):void {
-        if (this._dialogSettingsVO) {
-            this._dialogSettingsVO.dispose();
-        }
+    public final function as_setSettings(param1:Object):void {
+        var _loc2_:DialogSettingsVO = this._dialogSettingsVO;
         this._dialogSettingsVO = new DialogSettingsVO(param1);
         this.setSettings(this._dialogSettingsVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:ConfirmOrderVO):void {

@@ -1,9 +1,12 @@
 package net.wg.infrastructure.base.meta.impl {
 import net.wg.data.constants.Errors;
+import net.wg.gui.lobby.boosters.data.BoostersTableRendererVO;
 import net.wg.gui.lobby.boosters.data.BoostersWindowStaticVO;
 import net.wg.gui.lobby.boosters.data.BoostersWindowVO;
 import net.wg.infrastructure.base.AbstractWindowView;
 import net.wg.infrastructure.exceptions.AbstractException;
+
+import scaleform.clik.data.DataProvider;
 
 public class BoostersWindowMeta extends AbstractWindowView {
 
@@ -19,11 +22,14 @@ public class BoostersWindowMeta extends AbstractWindowView {
 
     private var _boostersWindowVO:BoostersWindowVO;
 
+    private var _dataProviderBoostersTableRendererVO:DataProvider;
+
     public function BoostersWindowMeta() {
         super();
     }
 
     override protected function onDispose():void {
+        var _loc1_:BoostersTableRendererVO = null;
         if (this._boostersWindowStaticVO) {
             this._boostersWindowStaticVO.dispose();
             this._boostersWindowStaticVO = null;
@@ -31,6 +37,13 @@ public class BoostersWindowMeta extends AbstractWindowView {
         if (this._boostersWindowVO) {
             this._boostersWindowVO.dispose();
             this._boostersWindowVO = null;
+        }
+        if (this._dataProviderBoostersTableRendererVO) {
+            for each(_loc1_ in this._dataProviderBoostersTableRendererVO) {
+                _loc1_.dispose();
+            }
+            this._dataProviderBoostersTableRendererVO.cleanUp();
+            this._dataProviderBoostersTableRendererVO = null;
         }
         super.onDispose();
     }
@@ -55,20 +68,41 @@ public class BoostersWindowMeta extends AbstractWindowView {
         this.onResetFilters();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._boostersWindowVO) {
-            this._boostersWindowVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:BoostersWindowVO = this._boostersWindowVO;
         this._boostersWindowVO = new BoostersWindowVO(param1);
         this.setData(this._boostersWindowVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setStaticData(param1:Object):void {
-        if (this._boostersWindowStaticVO) {
-            this._boostersWindowStaticVO.dispose();
-        }
+    public final function as_setStaticData(param1:Object):void {
+        var _loc2_:BoostersWindowStaticVO = this._boostersWindowStaticVO;
         this._boostersWindowStaticVO = new BoostersWindowStaticVO(param1);
         this.setStaticData(this._boostersWindowStaticVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
+    }
+
+    public final function as_setListData(param1:Array, param2:Boolean):void {
+        var _loc6_:BoostersTableRendererVO = null;
+        var _loc3_:DataProvider = this._dataProviderBoostersTableRendererVO;
+        this._dataProviderBoostersTableRendererVO = new DataProvider();
+        var _loc4_:uint = param1.length;
+        var _loc5_:int = 0;
+        while (_loc5_ < _loc4_) {
+            this._dataProviderBoostersTableRendererVO[_loc5_] = new BoostersTableRendererVO(param1[_loc5_]);
+            _loc5_++;
+        }
+        this.setListData(this._dataProviderBoostersTableRendererVO, param2);
+        if (_loc3_) {
+            for each(_loc6_ in _loc3_) {
+                _loc6_.dispose();
+            }
+            _loc3_.cleanUp();
+        }
     }
 
     protected function setData(param1:BoostersWindowVO):void {
@@ -81,6 +115,12 @@ public class BoostersWindowMeta extends AbstractWindowView {
         var _loc2_:String = "as_setStaticData" + Errors.ABSTRACT_INVOKE;
         DebugUtils.LOG_ERROR(_loc2_);
         throw new AbstractException(_loc2_);
+    }
+
+    protected function setListData(param1:DataProvider, param2:Boolean):void {
+        var _loc3_:String = "as_setListData" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc3_);
+        throw new AbstractException(_loc3_);
     }
 }
 }

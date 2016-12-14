@@ -5,7 +5,6 @@ import net.wg.data.constants.Linkages;
 import net.wg.gui.components.controls.BitmapFill;
 import net.wg.gui.components.interfaces.IAccordionItemRenderer;
 import net.wg.infrastructure.interfaces.IDynamicContent;
-import net.wg.utils.IEventCollector;
 
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.controls.Button;
@@ -17,7 +16,7 @@ public class Accordion extends ButtonBarEx implements IDynamicContent {
 
     private static const INVALID_BORDER:String = "border";
 
-    public var view:ViewStack = null;
+    public var view:net.wg.gui.components.advanced.ViewStack = null;
 
     public var border:MovieClip = null;
 
@@ -75,10 +74,7 @@ public class Accordion extends ButtonBarEx implements IDynamicContent {
     }
 
     override protected function draw():void {
-        var _loc1_:IEventCollector = null;
         if (isInvalid(InvalidationType.RENDERERS) || isInvalid(InvalidationType.DATA) || isInvalid(InvalidationType.SETTINGS) || isInvalid(InvalidationType.SIZE)) {
-            _loc1_ = App.utils.events;
-            _loc1_.disableDisposingForObj(container);
             removeChild(container);
             _originalWidth = _width;
             _originalHeight = _height;
@@ -87,7 +83,6 @@ public class Accordion extends ButtonBarEx implements IDynamicContent {
             container.scaleX = 1 / scaleX;
             container.scaleY = 1 / scaleY;
             addChild(container);
-            _loc1_.enableDisposingForObj(container);
             updateRenderers();
         }
         if (isInvalid(InvalidationType.DATA)) {

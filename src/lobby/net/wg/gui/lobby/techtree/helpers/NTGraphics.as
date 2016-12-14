@@ -465,7 +465,6 @@ class TopLineInfo {
         return this.point.y;
     }
 }
-
 class RSetLineInfo {
 
     public var idx:Number;

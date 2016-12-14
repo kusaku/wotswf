@@ -7,11 +7,11 @@ import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 
 import net.wg.gui.lobby.techtree.data.vo.ExtraInformation;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class PremiumDescription extends UIComponent {
+public class PremiumDescription extends UIComponentEx {
 
     public static const ELITE_SUFFIX:String = "_elite";
 

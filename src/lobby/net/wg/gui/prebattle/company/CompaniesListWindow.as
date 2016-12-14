@@ -8,6 +8,7 @@ import flash.geom.Point;
 import flash.ui.Keyboard;
 
 import net.wg.data.Aliases;
+import net.wg.data.constants.Errors;
 import net.wg.data.daapi.base.DAAPIDataProvider;
 import net.wg.gui.components.controls.CheckBox;
 import net.wg.gui.components.controls.DropdownMenu;
@@ -24,7 +25,6 @@ import net.wg.gui.prebattle.meta.ICompaniesWindowMeta;
 import net.wg.gui.prebattle.meta.impl.CompaniesWindowMeta;
 import net.wg.infrastructure.events.FocusRequestEvent;
 import net.wg.infrastructure.interfaces.entity.IFocusContainer;
-import net.wg.utils.IEventCollector;
 
 import scaleform.clik.constants.ConstrainMode;
 import scaleform.clik.constants.InputValue;
@@ -90,6 +90,7 @@ public class CompaniesListWindow extends CompaniesWindowMeta implements ICompani
         canMinimize = true;
         showWindowBgForm = false;
         var _loc1_:Padding = window.contentPadding as Padding;
+        App.utils.asserter.assertNotNull(_loc1_, "windowPadding" + Errors.CANT_NULL);
         _loc1_.top = this.windowContentPadding.top;
         _loc1_.left = this.windowContentPadding.left;
         _loc1_.right = this.windowContentPadding.right;
@@ -127,6 +128,7 @@ public class CompaniesListWindow extends CompaniesWindowMeta implements ICompani
         _loc1_ = this.channelComponent.messageInput;
         constraints.addElement(_loc1_.name, _loc1_, Constraints.BOTTOM | Constraints.LEFT | Constraints.RIGHT);
         _loc1_ = this.channelComponent.sendButton as DisplayObject;
+        App.utils.asserter.assertNotNull(_loc1_, "component" + Errors.CANT_NULL);
         constraints.addElement(_loc1_.name, _loc1_, Constraints.BOTTOM | Constraints.RIGHT);
         constraints.addElement(this.cmpList.name, this.cmpList, Constraints.TOP | Constraints.BOTTOM | Constraints.RIGHT);
         constraints.addElement(this.topPanel.name, this.topPanel, Constraints.TOP | Constraints.LEFT | Constraints.RIGHT);
@@ -334,10 +336,7 @@ public class CompaniesListWindow extends CompaniesWindowMeta implements ICompani
 
     private function onShowDropwDownHandler(param1:CompanyDropDownEvent):void {
         var _loc2_:Point = globalToLocal(new Point(param1.dropDownref.x, param1.dropDownref.y));
-        var _loc3_:IEventCollector = App.utils.events;
-        _loc3_.disableDisposingForObj(param1.dropDownref);
         addChild(param1.dropDownref);
-        _loc3_.enableDisposingForObj(param1.dropDownref);
         param1.dropDownref.x = _loc2_.x;
         param1.dropDownref.y = _loc2_.y;
     }

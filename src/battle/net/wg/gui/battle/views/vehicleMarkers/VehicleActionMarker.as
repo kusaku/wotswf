@@ -3,6 +3,7 @@ import flash.display.MovieClip;
 import flash.display.Sprite;
 import flash.utils.getDefinitionByName;
 
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.Values;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
@@ -85,14 +86,21 @@ public class VehicleActionMarker extends Sprite implements IDisposable {
     }
 
     private function createActionRenderer(param1:String):MovieClip {
+        var rendererClass:Class = null;
+        var rendererLinkage:String = param1;
         this.removeActionRenderer();
-        var _loc2_:MovieClip = null;
-        var _loc3_:Class = getDefinitionByName(param1) as Class;
-        _loc2_ = new _loc3_();
-        if (_loc2_) {
-            addChild(_loc2_);
+        var renderer:MovieClip = null;
+        try {
+            rendererClass = getDefinitionByName(rendererLinkage) as Class;
+            renderer = new rendererClass();
+            if (renderer) {
+                addChild(renderer);
+            }
         }
-        return _loc2_;
+        catch (error:ReferenceError) {
+            DebugUtils.LOG_ERROR(Errors.BAD_LINKAGE + rendererLinkage);
+        }
+        return renderer;
     }
 
     public function get entityName():String {

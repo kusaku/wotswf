@@ -1,9 +1,9 @@
 package net.wg.gui.lobby.window {
 import flash.text.TextField;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class ExchangeXPWarningScreen extends UIComponent {
+public class ExchangeXPWarningScreen extends UIComponentEx {
 
     public static const TEXT_INVALID:String = "textInvalid";
 

@@ -1,6 +1,7 @@
 package net.wg.gui.components.advanced {
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.interfaces.IGroupedControl;
+import net.wg.gui.interfaces.ISoundButtonEx;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
 import scaleform.clik.constants.InputValue;
@@ -171,6 +172,13 @@ public class ButtonBarEx extends ButtonBar implements IGroupedControl {
     }
 
     public function get selectedRenderer():IListItemRenderer {
+        if (_selectedIndex >= 0) {
+            return _renderers[_selectedIndex];
+        }
+        return null;
+    }
+
+    public function get selectedButton():ISoundButtonEx {
         if (_selectedIndex >= 0) {
             return _renderers[_selectedIndex];
         }

@@ -23,10 +23,12 @@ public class VehCompareTankCarousel extends ScrollCarousel {
     override protected function configUI():void {
         super.configUI();
         rendererWidth = RENDERER_WIDTH;
+        scrollList.pageWidth = VehCompareVehParamRenderer.LINE_WIDTH;
         scrollList.hasHorizontalElasticEdges = false;
         scrollList.snapScrollPositionToItemRendererSize = false;
         scrollList.snapToPages = true;
         scrollList.cropContent = true;
+        scrollList.viewPort.mouseEnabled = false;
         scrollList.addEventListener(Event.SCROLL, this.onScrollListScrollHandler);
         this.shadowLeft.mouseEnabled = this.shadowLeft.mouseChildren = false;
         this.shadowRight.mouseEnabled = this.shadowRight.mouseChildren = false;
@@ -50,7 +52,6 @@ public class VehCompareTankCarousel extends ScrollCarousel {
     override protected function updateAvailableScroll(param1:Boolean, param2:Boolean):void {
         super.updateAvailableScroll(param1, param2);
         leftArrow.visible = param1;
-        rightArrow.visible = param2;
     }
 
     public function updateTableScrollPosition(param1:int):void {
@@ -66,7 +67,6 @@ public class VehCompareTankCarousel extends ScrollCarousel {
         this.shadowLeft.alpha = Math.min(scrollList.horizontalScrollPosition / SHADOW_ALPHA_WIDTH, 1);
         this.shadowRight.alpha = Math.min((scrollList.maxHorizontalScrollPosition - scrollList.horizontalScrollPosition) / SHADOW_ALPHA_WIDTH, 1);
         this.shadowLeft.visible = this.shadowLeft.alpha > 0;
-        this.shadowRight.visible = this.shadowRight.alpha > 0;
     }
 
     private function onScrollListScrollHandler(param1:Event):void {

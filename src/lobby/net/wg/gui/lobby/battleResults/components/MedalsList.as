@@ -107,7 +107,6 @@ public class MedalsList extends CoreListEx {
             }
             _loc8_++;
         }
-        this.stripesUpdatePosition();
     }
 
     override protected function refreshData():void {
@@ -168,6 +167,7 @@ public class MedalsList extends CoreListEx {
             _loc4_++;
         }
         this.drawLayout();
+        this.stripesUpdatePosition();
     }
 
     protected function updateFilters():void {

@@ -8,12 +8,9 @@ import net.wg.gui.data.TabsVO;
 import net.wg.infrastructure.base.meta.IQuestsContentTabsMeta;
 import net.wg.infrastructure.base.meta.impl.QuestsContentTabsMeta;
 
-import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.IndexEvent;
 
 public class QuestsContentTabs extends QuestsContentTabsMeta implements IQuestsContentTabsMeta {
-
-    private static const SEPARATOR_OFFSET:int = -97;
 
     public var tabBar:ContentTabBar = null;
 
@@ -33,7 +30,6 @@ public class QuestsContentTabs extends QuestsContentTabsMeta implements IQuestsC
         addChild(this._separatorsHitArea);
         this.tabsSeparator.hitArea = this._separatorsHitArea;
         this.tabsSeparator.mouseChildren = this.tabsSeparator.mouseEnabled = false;
-        this.tabsSeparator.y = this.tabBar.y + SEPARATOR_OFFSET;
         this.tabBar.addEventListener(IndexEvent.INDEX_CHANGE, this.onTabsIndexChangeHandler);
     }
 
@@ -51,10 +47,7 @@ public class QuestsContentTabs extends QuestsContentTabsMeta implements IQuestsC
     }
 
     override protected function setTabs(param1:TabsVO):void {
-        if (this.tabBar.dataProvider != null) {
-            this.tabBar.dataProvider.cleanUp();
-        }
-        this.tabBar.dataProvider = new DataProvider(param1.tabs);
+        this.tabBar.dataProvider = param1.tabs;
     }
 
     public function as_selectTab(param1:int):void {

@@ -2,10 +2,11 @@ package net.wg.gui.messenger.controls {
 import flash.display.MovieClip;
 import flash.display.Sprite;
 
-import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class ContactsWindowViewBG extends UIComponent {
+import scaleform.clik.constants.InvalidationType;
+
+public class ContactsWindowViewBG extends UIComponentEx {
 
     public var hit:MovieClip;
 

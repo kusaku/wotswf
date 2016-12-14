@@ -34,12 +34,13 @@ public class ClanProfileGlobalMapPromoViewMeta extends BaseDAAPIComponent {
         this.showMap();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._clanProfileGlobalMapPromoVO) {
-            this._clanProfileGlobalMapPromoVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:ClanProfileGlobalMapPromoVO = this._clanProfileGlobalMapPromoVO;
         this._clanProfileGlobalMapPromoVO = new ClanProfileGlobalMapPromoVO(param1);
         this.setData(this._clanProfileGlobalMapPromoVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:ClanProfileGlobalMapPromoVO):void {

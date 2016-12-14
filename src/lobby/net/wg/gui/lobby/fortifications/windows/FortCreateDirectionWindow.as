@@ -73,24 +73,18 @@ public class FortCreateDirectionWindow extends FortCreateDirectionWindowMeta imp
         this.descriptionTF.htmlText = param1;
     }
 
-    public function as_setDirections(param1:Array):void {
-        var _loc2_:IDirectionListRenderer = null;
-        var _loc3_:DirectionVO = null;
-        var _loc4_:uint = param1.length;
-        var _loc5_:int = 0;
-        while (_loc5_ < _loc4_) {
-            _loc3_ = new DirectionVO(param1[_loc5_]);
-            _loc2_ = this._allRenderers[_loc5_];
-            _loc2_.setData(_loc3_);
-            _loc5_++;
+    override protected function setDirections(param1:Vector.<DirectionVO>):void {
+        var _loc2_:uint = param1.length;
+        var _loc3_:int = 0;
+        while (_loc3_ < _loc2_) {
+            this._allRenderers[_loc3_].setData(param1[_loc3_]);
+            _loc3_++;
         }
-        var _loc6_:uint = this._allRenderers.length;
-        while (_loc5_ < _loc6_) {
-            _loc2_ = this._allRenderers[_loc5_];
-            _loc2_.setData(null);
-            _loc5_++;
+        var _loc4_:uint = this._allRenderers.length;
+        while (_loc3_ < _loc4_) {
+            this._allRenderers[_loc3_].setData(null);
+            _loc3_++;
         }
-        param1.splice(0, _loc4_);
     }
 
     public function as_setupButton(param1:Boolean, param2:Boolean, param3:String):void {

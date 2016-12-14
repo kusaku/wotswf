@@ -116,6 +116,7 @@ public class CyberSportTeamSectionBase extends TeamSectionWithDropIndicators {
 
     public function closeSlot(param1:uint, param2:Boolean, param3:uint, param4:String, param5:Boolean, param6:int):void {
         var _loc7_:RallySlotVO = getSlotModel(param1) as RallySlotVO;
+        App.utils.asserter.assertNotNull(_loc7_, "unitSlot" + Errors.CANT_NULL);
         _loc7_.selectedVehicleLevel = param3;
         _loc7_.compatibleVehiclesCount = param6;
         _loc7_.isClosed = param5;

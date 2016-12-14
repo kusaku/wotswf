@@ -19,9 +19,13 @@ package
       
       public static const CHAT:Class = CHAT;
       
+      public static const CHRISTMAS:Class = CHRISTMAS;
+      
       public static const CLANS:Class = CLANS;
       
       public static const CLUBS_QUESTS:Class = CLUBS_QUESTS;
+      
+      public static const COMMON:Class = COMMON;
       
       public static const CONTROLS:Class = CONTROLS;
       
@@ -82,10 +86,6 @@ package
       public static const RETRAIN_CREW:Class = RETRAIN_CREW;
       
       public static const SETTINGS:Class = SETTINGS;
-      
-      public static const SWEDEN_TANKMEN:Class = SWEDEN_TANKMEN;
-      
-      public static const SWEDEN_VEHICLES:Class = SWEDEN_VEHICLES;
       
       public static const SYSTEM_MESSAGES:Class = SYSTEM_MESSAGES;
       

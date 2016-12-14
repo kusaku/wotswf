@@ -4,12 +4,12 @@ import flash.text.TextField;
 import net.wg.data.VO.ConfirmDialogVO;
 import net.wg.gui.components.controls.CheckBox;
 import net.wg.gui.components.controls.SoundButtonEx;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.entity.IUpdatable;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class ConfirmComponent extends UIComponent implements IUpdatable {
+public class ConfirmComponent extends UIComponentEx implements IUpdatable {
 
     private static const TEXT_HEIGHT_PADDING:uint = 3;
 

@@ -32,9 +32,8 @@ public class ToolTipMap extends ToolTipSpecial {
     }
 
     override protected function redraw():void {
-        var _loc1_:MapVO = null;
         var _loc2_:Separator = null;
-        _loc1_ = new MapVO(_data);
+        var _loc1_:MapVO = new MapVO(_data);
         separators = new Vector.<Separator>();
         this.headerTF.htmlText = Utils.instance.htmlWrapper(_loc1_.mapName, Utils.instance.COLOR_HEADER, 18, "$TitleFont");
         this.headerTF.x = bgShadowMargin.left + contentMargin.left;

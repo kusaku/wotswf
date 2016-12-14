@@ -4,16 +4,17 @@ import flash.events.MouseEvent;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.Values;
 import net.wg.gui.interfaces.IButtonIconLoader;
 import net.wg.gui.lobby.fortifications.data.settings.FortSettingsBlockVO;
 import net.wg.gui.lobby.fortifications.events.FortSettingsEvent;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.ISpriteEx;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class FortSettingBlock extends UIComponent implements ISpriteEx {
+public class FortSettingBlock extends UIComponentEx implements ISpriteEx {
 
     public var blockButton:IButtonIconLoader = null;
 
@@ -94,6 +95,7 @@ public class FortSettingBlock extends UIComponent implements ISpriteEx {
     private function onBlockBtnClickHandler(param1:ButtonEvent):void {
         var _loc2_:FortSettingsEvent = new FortSettingsEvent(FortSettingsEvent.CLICK_BLOCK_BUTTON);
         _loc2_.blockButtonPoints = this.blockButton as DisplayObject;
+        App.utils.asserter.assertNotNull(_loc2_.blockButtonPoints, "blockButtonPoints" + Errors.CANT_NULL);
         dispatchEvent(_loc2_);
     }
 

@@ -74,14 +74,8 @@ public class BaseRallyRoomView extends BaseRallyRoomViewMeta implements IBaseRal
             this.chatSection.dispose();
             this.chatSection = null;
         }
-        if (this._actionButtonData) {
-            this._actionButtonData.dispose();
-            this._actionButtonData = null;
-        }
-        if (this._rallyData) {
-            this._rallyData.dispose();
-            this._rallyData = null;
-        }
+        this._actionButtonData = null;
+        this._rallyData = null;
         super.onDispose();
     }
 
@@ -89,13 +83,13 @@ public class BaseRallyRoomView extends BaseRallyRoomViewMeta implements IBaseRal
         return null;
     }
 
-    public function as_highlightSlots(param1:Array):void {
+    override protected function highlightSlots(param1:Array):void {
         this.teamSection.highlightSlots(param1);
     }
 
-    public function as_setActionButtonState(param1:Object):void {
+    override protected function setActionButtonState(param1:ActionButtonVO):void {
         if (param1) {
-            this._actionButtonData = new ActionButtonVO(param1);
+            this._actionButtonData = param1;
             invalidate(RallyInvalidationType.ACTION_BUTTON_DATA);
         }
     }
@@ -119,28 +113,26 @@ public class BaseRallyRoomView extends BaseRallyRoomViewMeta implements IBaseRal
         }
     }
 
-    public function as_setMemberVehicle(param1:uint, param2:uint, param3:Object):void {
+    override protected function setMemberVehicle(param1:uint, param2:uint, param3:VehicleVO):void {
         if (this.rallyData) {
-            this.teamSection.setMemberVehicle(param1, param2, !!param3 ? new VehicleVO(param3) : null);
+            this.teamSection.setMemberVehicle(param1, param2, param3);
         }
     }
 
-    public function as_setMembers(param1:Boolean, param2:Array):void {
+    override protected function setMembers(param1:Boolean, param2:Array):void {
         if (this.rallyData) {
             this.teamSection.updateMembers(param1, param2);
         }
     }
 
-    public function as_setVehiclesTitle(param1:String, param2:Object):void {
-        var _loc3_:TooltipDataVO = new TooltipDataVO(param2);
-        this.teamSection.setVehiclesInfoTooltipId(_loc3_.id, _loc3_.header, _loc3_.body);
+    override protected function setVehiclesTitle(param1:String, param2:TooltipDataVO):void {
+        this.teamSection.setVehiclesInfoTooltipId(param2.id, param2.header, param2.body);
         this.teamSection.vehiclesLabel = param1;
-        _loc3_.dispose();
     }
 
-    public function as_updateRally(param1:Object):void {
+    override protected function updateRally(param1:IRallyVO):void {
         if (param1) {
-            this.rallyData = this.getRallyVO(param1);
+            this.rallyData = param1;
             this.teamSection.rallyData = this.rallyData;
             invalidate(RallyInvalidationType.RALLY_DATA);
         }
@@ -162,10 +154,6 @@ public class BaseRallyRoomView extends BaseRallyRoomViewMeta implements IBaseRal
         return new RallyDragDropListDelegateController(Vector.<InteractiveObject>(param1), _loc2_, Linkages.CANDIDATE_LIST_ITEM_RENDERER_UI, onSlotsHighlihgtingNeedS, assignSlotRequestS, leaveSlotRequestS);
     }
 
-    protected function getRallyVO(param1:Object):IRallyVO {
-        return null;
-    }
-
     protected function getTitleStr():String {
         return null;
     }
@@ -176,14 +164,6 @@ public class BaseRallyRoomView extends BaseRallyRoomViewMeta implements IBaseRal
 
     public function set rallyData(param1:IRallyVO):void {
         this._rallyData = param1;
-    }
-
-    public function get actionButtonData():ActionButtonVO {
-        return this._actionButtonData;
-    }
-
-    public function set actionButtonData(param1:ActionButtonVO):void {
-        this._actionButtonData = param1;
     }
 
     protected function onAssignPlaceRequest(param1:RallyViewsEvent):void {

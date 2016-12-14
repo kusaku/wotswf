@@ -273,8 +273,7 @@ public class UnitsListView extends CyberSportUnitsListMeta implements ICyberSpor
         detailsSection.updateNoRallyScreenVisibility(!param1);
     }
 
-    public function as_setSearchResultText(param1:String, param2:String, param3:Object):void {
-        var _loc6_:CheckBoxIconVO = null;
+    override protected function setSearchResultText(param1:String, param2:String, param3:CheckBoxIconVO):void {
         this.searchResultsTF.htmlText = param1;
         this.refreshBtn.x = this.searchResultsTF.x + this.searchResultsTF.textWidth + REFRESH_BUTTON_OFFSET | 0;
         var _loc4_:Boolean = param2 != null && param2.length > 0;
@@ -283,13 +282,11 @@ public class UnitsListView extends CyberSportUnitsListMeta implements ICyberSpor
             this.tableDescrTF.text = param2;
         }
         var _loc5_:* = param3 != null;
-        this.filterCheckbox.visible = _loc5_;
         if (_loc5_) {
-            _loc6_ = new CheckBoxIconVO(param3);
-            this.filterCheckbox.label = _loc6_.label;
-            this.filterCheckbox.selected = _loc6_.isSelected;
-            _loc6_.dispose();
+            this.filterCheckbox.label = param3.label;
+            this.filterCheckbox.selected = param3.isSelected;
         }
+        this.filterCheckbox.visible = _loc5_;
     }
 
     public function as_updateRallyIcon(param1:String):void {

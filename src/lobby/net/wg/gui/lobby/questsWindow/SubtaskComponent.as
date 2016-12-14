@@ -12,12 +12,12 @@ import net.wg.gui.lobby.interfaces.ISubtaskComponent;
 import net.wg.gui.lobby.questsWindow.components.QuestStatusComponent;
 import net.wg.gui.lobby.questsWindow.components.QuestsCounter;
 import net.wg.gui.lobby.questsWindow.data.SubtaskVO;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class SubtaskComponent extends UIComponent implements ISubtaskComponent {
+public class SubtaskComponent extends UIComponentEx implements ISubtaskComponent {
 
     private static const BOTTOM_PADDING:int = 20;
 

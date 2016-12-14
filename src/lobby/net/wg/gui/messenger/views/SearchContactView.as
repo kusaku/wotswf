@@ -282,7 +282,7 @@ public class SearchContactView extends SearchContactViewMeta implements ISearchC
         invalidate(INPUT_TEXT_INV);
     }
 
-    override protected function getCastedInitData(param1:Object):ContactsViewInitDataVO {
+    override protected function getContactsViewInitDataVO(param1:Object):ContactsViewInitDataVO {
         return new SearchViewInitData(param1);
     }
 

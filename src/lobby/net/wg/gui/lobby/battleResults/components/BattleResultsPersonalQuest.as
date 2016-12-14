@@ -13,14 +13,14 @@ import net.wg.gui.events.QuestEvent;
 import net.wg.gui.lobby.interfaces.ISubtaskComponent;
 import net.wg.gui.lobby.questsWindow.components.QuestStatusComponent;
 import net.wg.gui.lobby.questsWindow.data.PersonalInfoVO;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.utils.IClassFactory;
 
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.constants.LayoutMode;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class BattleResultsPersonalQuest extends UIComponent implements ISubtaskComponent {
+public class BattleResultsPersonalQuest extends UIComponentEx implements ISubtaskComponent {
 
     private static var LINE_SEPARATOR_PADDING:int = 15;
 

@@ -7,6 +7,7 @@ import flash.events.MouseEvent;
 import flash.text.TextFieldType;
 import flash.ui.Keyboard;
 
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.Values;
 import net.wg.data.constants.generated.TEXT_MANAGER_STYLES;
 import net.wg.gui.events.NumericStepperEvent;
@@ -155,7 +156,9 @@ public class NumericStepper extends scaleform.clik.controls.NumericStepper {
 
     override protected function initialize():void {
         nextBtn = this.nextBtn1 as SoundButton;
+        App.utils.asserter.assertNotNull(nextBtn, "nextBtn" + Errors.CANT_NULL);
         prevBtn = this.prevBtn1 as SoundButton;
+        App.utils.asserter.assertNotNull(prevBtn, "prevBtn" + Errors.CANT_NULL);
         super.initialize();
         if (this.states) {
             _labelHash = UIComponent.generateLabelHash(this.states);
@@ -501,7 +504,7 @@ public class NumericStepper extends scaleform.clik.controls.NumericStepper {
 
     public function set emptyFieldPattern(param1:String):void {
         this._emptyFieldPattern = param1;
-        isInvalid(InvalidationType.DATA);
+        invalidate(InvalidationType.DATA);
     }
 
     public function get skipValues():Array {
@@ -510,7 +513,7 @@ public class NumericStepper extends scaleform.clik.controls.NumericStepper {
 
     public function set skipValues(param1:Array):void {
         this._skipValues = param1;
-        isInvalid(InvalidationType.DATA);
+        invalidate(InvalidationType.DATA);
     }
 
     public function set isShowZero(param1:Boolean):void {

@@ -8,14 +8,14 @@ import net.wg.gui.components.controls.ScrollBar;
 import net.wg.gui.components.controls.ScrollingListEx;
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.events.PersonalCaseEvent;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.IViewStackContent;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.events.ListEvent;
 
-public class PersonalCaseSkills extends UIComponent implements IViewStackContent {
+public class PersonalCaseSkills extends UIComponentEx implements IViewStackContent {
 
     private static const UPDATE_DATA_PROVIDER:String = "updateDataProvider";
 

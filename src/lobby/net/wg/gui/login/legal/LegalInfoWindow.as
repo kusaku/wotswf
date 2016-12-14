@@ -2,6 +2,7 @@ package net.wg.gui.login.legal {
 import flash.display.InteractiveObject;
 import flash.display.Sprite;
 
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.Values;
 import net.wg.gui.components.controls.BorderShadowScrollPane;
 import net.wg.gui.components.controls.SoundButtonEx;
@@ -37,12 +38,9 @@ public class LegalInfoWindow extends LegalInfoWindowMeta implements ILegalInfoWi
         window.contentPadding = _loc1_;
         this.scrollPane.setSize(455, 376);
         this.legalContent = this.scrollPane.target as LegalContent;
+        App.utils.asserter.assertNotNull(this.legalContent, "legalContent" + Errors.CANT_NULL);
         this.closeBtn.addEventListener(ButtonEvent.CLICK, this.onClose);
         getLegalInfoS();
-    }
-
-    override protected function configUI():void {
-        super.configUI();
     }
 
     override protected function draw():void {

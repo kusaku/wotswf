@@ -69,12 +69,13 @@ public class FortIntelligenceClanDescriptionMeta extends BaseDAAPIComponent {
         this.onHoverDirection();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._clanDescriptionVO) {
-            this._clanDescriptionVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:ClanDescriptionVO = this._clanDescriptionVO;
         this._clanDescriptionVO = new ClanDescriptionVO(param1);
         this.setData(this._clanDescriptionVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:ClanDescriptionVO):void {

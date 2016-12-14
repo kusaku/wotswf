@@ -113,6 +113,8 @@ package
       
       public static const TUTORIALQUEST_AWARD_QUEST5:String = "#tutorial:tutorialQuest/award/quest5";
       
+      public static const TUTORIALQUEST_AWARD_QUEST5_ALTBONUS:String = "#tutorial:tutorialQuest/award/quest5/altBonus";
+      
       public static const TUTORIALQUEST_AWARD_QUEST5_KR:String = "#tutorial:tutorialQuest/award/quest5/kr";
       
       public static const TUTORIALQUEST_TITLE_QUEST6:String = "#tutorial:tutorialQuest/title/quest6";
@@ -286,6 +288,10 @@ package
       public static const CHAIN9_HINT_SUBMIT:String = "#tutorial:chain9/hint/submit";
       
       public static const CUSTOMIZATION_SLOTS:String = "#tutorial:customization/slots";
+      
+      public static const ALCHEMY_BTN:String = "#tutorial:alchemy/btn";
+      
+      public static const CHRISTMAS_DECORATIONLIST:String = "#tutorial:christmas/decorationList";
        
       
       public function TUTORIAL()

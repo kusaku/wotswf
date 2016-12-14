@@ -38,6 +38,7 @@ public class SortieSimpleSlot extends RallySimpleSlotRenderer {
 
     public function set grayTakePlaceFirstButton(param1:IButtonIconTextTransparent):void {
         takePlaceFirstTimeBtn = param1 as SoundButtonEx;
+        App.utils.asserter.assertNotNull(takePlaceFirstTimeBtn, "takePlaceFirstTimeBtn" + Errors.CANT_NULL);
     }
 }
 }

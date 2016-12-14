@@ -1,6 +1,7 @@
 package net.wg.gui.prebattle.squads.simple {
 import flash.display.InteractiveObject;
 
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.UserTags;
 import net.wg.data.constants.Values;
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
@@ -29,53 +30,58 @@ public class SimpleSquadSlotHelper extends BaseRallySlotHelper {
     }
 
     override public function onControlRollOver(param1:InteractiveObject, param2:IRallySimpleSlotRenderer, param3:IRallySlotVO, param4:* = null):void {
+        var _loc6_:SimpleSquadSlotRenderer = null;
+        var _loc7_:String = null;
+        var _loc8_:ITooltipFormatter = null;
+        var _loc9_:String = null;
+        var _loc10_:Boolean = false;
         var _loc11_:VehicleVO = null;
         var _loc12_:Boolean = false;
         var _loc5_:RallySlotVO = param3 as RallySlotVO;
-        var _loc6_:SimpleSquadSlotRenderer = param2 as SimpleSquadSlotRenderer;
-        if (!_loc5_) {
-            return;
-        }
-        var _loc7_:String = Values.EMPTY_STR;
-        var _loc8_:ITooltipFormatter = null;
-        var _loc9_:String = Values.EMPTY_STR;
-        var _loc10_:Boolean = false;
-        switch (param1) {
-            case _loc6_.statusIndicator:
-                _loc9_ = TOOLTIPS.squadwindow_status(RallySimpleSlotRenderer.STATUSES[_loc5_.playerStatus]);
-                _loc8_ = App.toolTipMgr.getNewFormatter();
-                _loc8_.addBody(_loc9_, true);
-                break;
-            case _loc6_.commander:
-                _loc9_ = TOOLTIPS.SQUADWINDOW_STATUS_COMMANDER;
-                _loc8_ = App.toolTipMgr.getNewFormatter();
-                _loc8_.addBody(_loc9_, true);
-                break;
-            case _loc6_.vehicleBtn:
-                if (_loc6_.vehicleBtn.currentState == CSVehicleButton.SELECTED_VEHICLE) {
-                    _loc11_ = _loc5_.selectedVehicle;
-                    if (_loc11_ != null) {
-                        _loc12_ = _loc11_.isFalloutVehicle && !_loc5_.isFallout;
-                        _loc12_ = _loc12_ || _loc5_.isFallout && !_loc11_.isFalloutVehicle;
-                        if (_loc12_) {
-                            App.toolTipMgr.showComplex(_loc11_.tooltip);
+        if (_loc5_) {
+            _loc6_ = param2 as SimpleSquadSlotRenderer;
+            App.utils.asserter.assertNotNull(_loc6_, "squadSlot" + Errors.CANT_NULL);
+            _loc7_ = Values.EMPTY_STR;
+            _loc8_ = null;
+            _loc9_ = Values.EMPTY_STR;
+            _loc10_ = false;
+            switch (param1) {
+                case _loc6_.statusIndicator:
+                    _loc9_ = TOOLTIPS.squadwindow_status(RallySimpleSlotRenderer.STATUSES[_loc5_.playerStatus]);
+                    _loc8_ = App.toolTipMgr.getNewFormatter();
+                    _loc8_.addBody(_loc9_, true);
+                    break;
+                case _loc6_.commander:
+                    _loc9_ = TOOLTIPS.SQUADWINDOW_STATUS_COMMANDER;
+                    _loc8_ = App.toolTipMgr.getNewFormatter();
+                    _loc8_.addBody(_loc9_, true);
+                    break;
+                case _loc6_.vehicleBtn:
+                    if (_loc6_.vehicleBtn.currentState == CSVehicleButton.SELECTED_VEHICLE) {
+                        _loc11_ = _loc5_.selectedVehicle;
+                        if (_loc11_ != null) {
+                            _loc12_ = _loc11_.isFalloutVehicle && !_loc5_.isFallout;
+                            _loc12_ = _loc12_ || _loc5_.isFallout && !_loc11_.isFalloutVehicle;
+                            if (_loc12_) {
+                                App.toolTipMgr.showComplex(_loc11_.tooltip);
+                            }
+                            else {
+                                App.toolTipMgr.showSpecial(TOOLTIPS_CONSTANTS.SQUAD_SLOT_VEHICLE_SELECTED, null, param2.index, _loc5_.rallyIdx);
+                            }
                         }
-                        else {
-                            App.toolTipMgr.showSpecial(TOOLTIPS_CONSTANTS.SQUAD_SLOT_VEHICLE_SELECTED, null, param2.index, _loc5_.rallyIdx);
-                        }
+                        _loc10_ = true;
                     }
-                    _loc10_ = true;
+            }
+            if (!_loc10_) {
+                if (_loc7_ != Values.EMPTY_STR) {
+                    App.toolTipMgr.showComplex(_loc7_);
                 }
-        }
-        if (!_loc10_) {
-            if (_loc7_ != Values.EMPTY_STR) {
-                App.toolTipMgr.showComplex(_loc7_);
-            }
-            else if (_loc8_) {
-                App.toolTipMgr.showComplex(_loc8_.make());
-            }
-            else {
-                super.onControlRollOver(param1, param2, param3, param4);
+                else if (_loc8_) {
+                    App.toolTipMgr.showComplex(_loc8_.make());
+                }
+                else {
+                    super.onControlRollOver(param1, param2, param3, param4);
+                }
             }
         }
     }
@@ -83,7 +89,9 @@ public class SimpleSquadSlotHelper extends BaseRallySlotHelper {
     override public function updateComponents(param1:IRallySimpleSlotRenderer, param2:IRallySlotVO):void {
         var _loc3_:SimpleSquadSlotRenderer = null;
         _loc3_ = param1 as SimpleSquadSlotRenderer;
+        App.utils.asserter.assertNotNull(_loc3_, "squadSlot" + Errors.CANT_NULL);
         var _loc4_:SimpleSquadRallySlotVO = param2 as SimpleSquadRallySlotVO;
+        App.utils.asserter.assertNotNull(_loc4_, "unitSlotData" + Errors.CANT_NULL);
         _loc3_.slotLabel.width = _loc4_.playerStatus && _loc4_.selectedVehicle || _loc4_.isVisibleAdtMsg ? Number(_loc3_.vehicleBtn.x - _loc3_.slotLabel.x) : Number(_loc3_.vehicleBtn.x + _loc3_.vehicleBtn.width - _loc3_.slotLabel.x);
         super.updateComponents(param1, param2);
         _loc3_.slotLabel.visible = true;

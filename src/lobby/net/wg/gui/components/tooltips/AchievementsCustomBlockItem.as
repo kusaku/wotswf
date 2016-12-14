@@ -3,10 +3,9 @@ import flash.display.MovieClip;
 import flash.text.TextField;
 
 import net.wg.gui.components.controls.UILoaderAlt;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
-
-public class AchievementsCustomBlockItem extends UIComponent {
+public class AchievementsCustomBlockItem extends UIComponentEx {
 
     private var _data:Object = null;
 

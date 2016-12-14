@@ -36,8 +36,6 @@ public interface ISimpleTweenPropertiesVO extends IEventDispatcher, IDisposable 
 
     function getRotation():Number;
 
-    function getIsOnCodeBased():Boolean;
-
     function getTweenIdx():int;
 }
 }

@@ -5,6 +5,7 @@ import flash.events.MouseEvent;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
+import net.wg.data.constants.ComponentState;
 import net.wg.data.constants.Values;
 import net.wg.data.managers.IToolTipParams;
 import net.wg.gui.events.StateManagerEvent;
@@ -190,6 +191,13 @@ public class SoundButtonEx extends SoundButton implements ISoundButtonEx {
         this.updateDisable();
     }
 
+    override protected function setState(param1:String):void {
+        if (!visible) {
+            return;
+        }
+        super.setState(param1);
+    }
+
     public function getLayoutProperties():Vector.<HelpLayoutVO> {
         if (!this._helpLayoutId) {
             this._helpLayoutId = name + "_" + Math.random();
@@ -251,6 +259,27 @@ public class SoundButtonEx extends SoundButton implements ISoundButtonEx {
             this._isTooltipShown = false;
             App.toolTipMgr.hide();
         }
+    }
+
+    private function initState(param1:String):void {
+        if (_state == param1) {
+            return;
+        }
+        var _loc2_:Array = _stateMap[param1];
+        if (_loc2_ == null || _loc2_.length == 0) {
+            return;
+        }
+        this.setState(param1);
+    }
+
+    override public function set visible(param1:Boolean):void {
+        if (visible == param1) {
+            return;
+        }
+        if (!param1 && !toggle) {
+            this.initState(ComponentState.UP);
+        }
+        super.visible = param1;
     }
 
     public function get helpText():String {

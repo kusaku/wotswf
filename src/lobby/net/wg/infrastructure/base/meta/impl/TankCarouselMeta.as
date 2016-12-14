@@ -1,6 +1,7 @@
 package net.wg.infrastructure.base.meta.impl {
 import net.wg.data.constants.Errors;
 import net.wg.gui.components.carousels.ScrollCarousel;
+import net.wg.gui.lobby.christmas.data.ChristmasButtonVO;
 import net.wg.gui.lobby.hangar.tcarousel.data.TankCarouselFilterInitVO;
 import net.wg.gui.lobby.hangar.tcarousel.data.TankCarouselFilterSelectedVO;
 import net.wg.infrastructure.exceptions.AbstractException;
@@ -19,6 +20,10 @@ public class TankCarouselMeta extends ScrollCarousel {
 
     public var updateHotFilters:Function;
 
+    public var onChristmasBtnClick:Function;
+
+    private var _christmasButtonVO:ChristmasButtonVO;
+
     private var _tankCarouselFilterInitVO:TankCarouselFilterInitVO;
 
     private var _tankCarouselFilterSelectedVO:TankCarouselFilterSelectedVO;
@@ -28,6 +33,10 @@ public class TankCarouselMeta extends ScrollCarousel {
     }
 
     override protected function onDispose():void {
+        if (this._christmasButtonVO) {
+            this._christmasButtonVO.dispose();
+            this._christmasButtonVO = null;
+        }
         if (this._tankCarouselFilterInitVO) {
             this._tankCarouselFilterInitVO.dispose();
             this._tankCarouselFilterInitVO = null;
@@ -69,20 +78,36 @@ public class TankCarouselMeta extends ScrollCarousel {
         this.updateHotFilters();
     }
 
-    public function as_setCarouselFilter(param1:Object):void {
-        if (this._tankCarouselFilterSelectedVO) {
-            this._tankCarouselFilterSelectedVO.dispose();
-        }
-        this._tankCarouselFilterSelectedVO = new TankCarouselFilterSelectedVO(param1);
-        this.setCarouselFilter(this._tankCarouselFilterSelectedVO);
+    public function onChristmasBtnClickS():void {
+        App.utils.asserter.assertNotNull(this.onChristmasBtnClick, "onChristmasBtnClick" + Errors.CANT_NULL);
+        this.onChristmasBtnClick();
     }
 
-    public function as_initCarouselFilter(param1:Object):void {
-        if (this._tankCarouselFilterInitVO) {
-            this._tankCarouselFilterInitVO.dispose();
+    public final function as_setCarouselFilter(param1:Object):void {
+        var _loc2_:TankCarouselFilterSelectedVO = this._tankCarouselFilterSelectedVO;
+        this._tankCarouselFilterSelectedVO = new TankCarouselFilterSelectedVO(param1);
+        this.setCarouselFilter(this._tankCarouselFilterSelectedVO);
+        if (_loc2_) {
+            _loc2_.dispose();
         }
+    }
+
+    public final function as_initCarouselFilter(param1:Object):void {
+        var _loc2_:TankCarouselFilterInitVO = this._tankCarouselFilterInitVO;
         this._tankCarouselFilterInitVO = new TankCarouselFilterInitVO(param1);
         this.initCarouselFilter(this._tankCarouselFilterInitVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
+    }
+
+    public final function as_setChristmasBtnData(param1:Object):void {
+        var _loc2_:ChristmasButtonVO = this._christmasButtonVO;
+        this._christmasButtonVO = new ChristmasButtonVO(param1);
+        this.setChristmasBtnData(this._christmasButtonVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setCarouselFilter(param1:TankCarouselFilterSelectedVO):void {
@@ -93,6 +118,12 @@ public class TankCarouselMeta extends ScrollCarousel {
 
     protected function initCarouselFilter(param1:TankCarouselFilterInitVO):void {
         var _loc2_:String = "as_initCarouselFilter" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
+    }
+
+    protected function setChristmasBtnData(param1:ChristmasButtonVO):void {
+        var _loc2_:String = "as_setChristmasBtnData" + Errors.ABSTRACT_INVOKE;
         DebugUtils.LOG_ERROR(_loc2_);
         throw new AbstractException(_loc2_);
     }

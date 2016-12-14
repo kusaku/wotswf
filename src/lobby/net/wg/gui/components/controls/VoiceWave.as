@@ -8,9 +8,9 @@ public class VoiceWave extends UIComponent {
 
     private static const INVALIDATE_SPEAKING:String = "invSpeaking";
 
-    public var cross_x:int;
+    public var crossX:int;
 
-    public var cross_y:int;
+    public var crossY:int;
 
     public var mutedClip:MovieClip;
 
@@ -34,8 +34,8 @@ public class VoiceWave extends UIComponent {
 
     override protected function configUI():void {
         super.configUI();
-        this.mutedClip.cross.x = this.cross_x;
-        this.mutedClip.cross.y = this.cross_y;
+        this.mutedClip.cross.x = this.crossX;
+        this.mutedClip.cross.y = this.crossY;
     }
 
     public function isSpeak():Boolean {

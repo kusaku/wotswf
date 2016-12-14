@@ -78,6 +78,14 @@ public class SettingsArcadeForm extends UIComponentEx {
         super();
     }
 
+    override protected function configUI():void {
+        super.configUI();
+    }
+
+    override protected function draw():void {
+        super.draw();
+    }
+
     override protected function onDispose():void {
         var _loc1_:String = null;
         var _loc2_:int = 0;

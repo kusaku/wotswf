@@ -193,7 +193,6 @@ public class SettingsCounterDelegate extends EventDispatcher implements IDisposa
         this._subTabsWithCounters = null;
         this._tabsMap = null;
         this._tabsDataProvider = null;
-        this._countersData.splice(0, this._countersData.length);
         this._countersData = null;
         this._mainViewStack.removeEventListener(IndexEvent.INDEX_CHANGE, this.onViewIndexChangeHandler);
         this._mainTabs.removeEventListener(IndexEvent.INDEX_CHANGE, this.onTabIndexChangeHandler);

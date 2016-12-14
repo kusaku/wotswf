@@ -2,6 +2,7 @@ package net.wg.gui.lobby.profile.pages.formations {
 import flash.events.MouseEvent;
 import flash.text.TextField;
 
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.Values;
 import net.wg.data.managers.IToolTipParams;
 import net.wg.data.managers.impl.ToolTipParams;
@@ -42,6 +43,7 @@ public class PreviousTeamRenderer extends TableRenderer {
         super.setData(param1);
         if (param1 != null) {
             _loc2_ = param1 as PreviousTeamsItemVO;
+            App.utils.asserter.assertNotNull(_loc2_, "itemData" + Errors.CANT_NULL);
             this._tooltipParams.body.wins = _loc2_.wins.toString();
             this._tooltipParams.body.losses = _loc2_.losses.toString();
             this._tooltipParams.body.draws = _loc2_.draws.toString();
@@ -54,7 +56,6 @@ public class PreviousTeamRenderer extends TableRenderer {
         super.draw();
         if (isInvalid(InvalidationType.DATA)) {
             _loc1_ = data as PreviousTeamsItemVO;
-            visible = _loc1_ != null;
             if (_loc1_ != null) {
                 this._teamId = _loc1_.teamId;
                 this.dates.text = _loc1_.dates;
@@ -65,6 +66,7 @@ public class PreviousTeamRenderer extends TableRenderer {
                     App.utils.commons.moveDsiplObjToEndOfText(this.link, this.team, TOOLTIP_OFFSET);
                 }
             }
+            visible = _loc1_ != null;
         }
     }
 

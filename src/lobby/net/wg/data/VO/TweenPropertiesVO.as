@@ -39,8 +39,6 @@ public class TweenPropertiesVO extends EventDispatcher implements ITweenProperti
 
     private static const ALPHA:String = "alpha";
 
-    private static const IS_ON_CODE_BASED:String = "IsOnCodeBased";
-
     public var x:Number = NaN;
 
     public var y:Number = NaN;
@@ -70,8 +68,6 @@ public class TweenPropertiesVO extends EventDispatcher implements ITweenProperti
     private var _paused:Boolean = true;
 
     private var _handler:ITweenHandler = null;
-
-    private var _isOnCodeBased:Boolean = false;
 
     private var _idx:int = -1;
 
@@ -129,9 +125,6 @@ public class TweenPropertiesVO extends EventDispatcher implements ITweenProperti
         }
         if (ALPHA in param1) {
             this.setAlpha(param1[ALPHA]);
-        }
-        if (IS_ON_CODE_BASED in param1) {
-            this.setIsOnCodeBased(param1[IS_ON_CODE_BASED]);
         }
     }
 
@@ -219,7 +212,6 @@ public class TweenPropertiesVO extends EventDispatcher implements ITweenProperti
     }
 
     public function setX(param1:Number):void {
-        this.setIsOnCodeBased(true);
         this.x = param1;
     }
 
@@ -228,7 +220,6 @@ public class TweenPropertiesVO extends EventDispatcher implements ITweenProperti
     }
 
     public function setY(param1:Number):void {
-        this.setIsOnCodeBased(true);
         this.y = param1;
     }
 
@@ -237,7 +228,6 @@ public class TweenPropertiesVO extends EventDispatcher implements ITweenProperti
     }
 
     public function setScaleX(param1:Number):void {
-        this.setIsOnCodeBased(true);
         this.scaleX = param1;
     }
 
@@ -246,7 +236,6 @@ public class TweenPropertiesVO extends EventDispatcher implements ITweenProperti
     }
 
     public function setScaleY(param1:Number):void {
-        this.setIsOnCodeBased(true);
         this.scaleY = param1;
     }
 
@@ -255,7 +244,6 @@ public class TweenPropertiesVO extends EventDispatcher implements ITweenProperti
     }
 
     public function setAlpha(param1:Number):void {
-        this.setIsOnCodeBased(true);
         this.alpha = param1 * 100;
     }
 
@@ -264,20 +252,11 @@ public class TweenPropertiesVO extends EventDispatcher implements ITweenProperti
     }
 
     public function setRotation(param1:Number):void {
-        this.setIsOnCodeBased(true);
         this.rotation = param1 * Math.PI / 180;
     }
 
     public function dispose():void {
         this._target = null;
-    }
-
-    public function getIsOnCodeBased():Boolean {
-        return this._isOnCodeBased;
-    }
-
-    public function setIsOnCodeBased(param1:Boolean):void {
-        this._isOnCodeBased = param1;
     }
 
     public function setTweenIdx(param1:int):void {

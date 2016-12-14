@@ -6,10 +6,9 @@ import net.wg.gui.components.advanced.DashLine;
 import net.wg.gui.components.controls.ActionPrice;
 import net.wg.gui.components.controls.IconText;
 import net.wg.gui.components.controls.VO.ActionPriceVO;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
-
-public class PriceMc extends UIComponent {
+public class PriceMc extends UIComponentEx {
 
     public static var IS_INVALID_PRICE:String = "isInvalidPrice";
 

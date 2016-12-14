@@ -3,8 +3,12 @@ import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 import flash.display.MovieClip;
 import flash.display.Sprite;
+import flash.net.registerClassAlias;
 
 import net.wg.app.iml.base.AbstractApplication;
+import net.wg.data.VO.daapi.DAAPIVehicleInfoVO;
+import net.wg.data.VO.daapi.DAAPIVehicleStatsVO;
+import net.wg.data.VO.daapi.DAAPIVehicleUserTagsVO;
 import net.wg.data.constants.AtlasConstants;
 import net.wg.data.constants.ContainerTypes;
 import net.wg.data.constants.generated.APP_CONTAINERS_NAMES;
@@ -37,6 +41,7 @@ import net.wg.infrastructure.managers.impl.ContextMenuManager;
 import net.wg.infrastructure.managers.impl.EnvironmentManager;
 import net.wg.infrastructure.managers.impl.LoaderManagerBase;
 import net.wg.infrastructure.managers.impl.MockEventLogManager;
+import net.wg.infrastructure.managers.impl.PopoverManagerBattle;
 import net.wg.infrastructure.managers.impl.SoundManager;
 import net.wg.infrastructure.managers.impl.TextManager;
 import net.wg.infrastructure.managers.impl.ToolTipManagerBattle;
@@ -47,13 +52,13 @@ import net.wg.infrastructure.managers.utils.impl.Asserter;
 import net.wg.infrastructure.managers.utils.impl.ClassFactory;
 import net.wg.infrastructure.managers.utils.impl.DataUtils;
 import net.wg.infrastructure.managers.utils.impl.DateTimeBattle;
-import net.wg.infrastructure.managers.utils.impl.EventCollector;
 import net.wg.infrastructure.managers.utils.impl.FocusHandlerEx;
 import net.wg.infrastructure.managers.utils.impl.IME;
 import net.wg.infrastructure.managers.utils.impl.LocaleBase;
 import net.wg.infrastructure.managers.utils.impl.PopupManager;
 import net.wg.infrastructure.managers.utils.impl.Scheduler;
 import net.wg.infrastructure.managers.utils.impl.StyleSheetManager;
+import net.wg.infrastructure.managers.utils.impl.TweenAnimator;
 import net.wg.infrastructure.managers.utils.impl.TweenManager;
 import net.wg.infrastructure.managers.utils.impl.Utils;
 import net.wg.infrastructure.managers.utils.impl.WGJSON;
@@ -92,6 +97,13 @@ public final class BattleApp extends AbstractApplication {
         CLIK.disableNullFocusMoves = true;
     }
 
+    override protected function registerAliases():void {
+        super.registerAliases();
+        registerClassAlias("net.wg.data.VO.daapi.DAAPIVehicleStatsVO", DAAPIVehicleStatsVO);
+        registerClassAlias("net.wg.data.VO.daapi.DAAPIVehicleUserTagsVO", DAAPIVehicleUserTagsVO);
+        registerClassAlias("net.wg.data.VO.daapi.DAAPIVehicleInfoVO", DAAPIVehicleInfoVO);
+    }
+
     override protected function onBeforeAppConfiguring():void {
         super.onBeforeAppConfiguring();
         loaderMgr.initLibraries(this._libraries);
@@ -103,7 +115,7 @@ public final class BattleApp extends AbstractApplication {
     }
 
     override protected function getNewUtils():IUtils {
-        var _loc1_:IUtils = new Utils(new Asserter(), new Scheduler(), new LocaleBase(), new WGJSON(), null, new ClassFactory(), new PopupManager(), new CommonsBattle(), new FocusHandlerEx(), new EventCollector(), new IME(), null, null, new StyleSheetManager(), null, null, new DateTimeBattle(), new PoolManager(), new DataUtils(), new CounterManager());
+        var _loc1_:IUtils = new Utils(new Asserter(), new Scheduler(), new LocaleBase(), new WGJSON(), null, new ClassFactory(), new PopupManager(), new CommonsBattle(), new FocusHandlerEx(), new IME(), null, null, new StyleSheetManager(), new TweenAnimator(), null, new DateTimeBattle(), new PoolManager(), new DataUtils(), new CounterManager());
         return _loc1_;
     }
 
@@ -185,7 +197,7 @@ public final class BattleApp extends AbstractApplication {
     }
 
     override protected function getNewPopoverManager():IPopoverManager {
-        return null;
+        return new PopoverManagerBattle(stage);
     }
 
     override protected function getNewTutorialManager():ITutorialManager {

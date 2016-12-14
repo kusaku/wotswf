@@ -98,6 +98,7 @@ public class VehicleSelector extends UIComponentEx implements IViewStackContent 
         this.allCheckBox.label = CYBERSPORT.WINDOW_VEHICLESELECTOR_FILTERS_ALL;
         this.allCheckBox.addEventListener(Event.SELECT, this.onAllCheckBoxSelectHandler);
         this.list.smartScrollBar = true;
+        this.list.setSelectionNavigator(new VehicleSelectorNavigator());
         this.list.addEventListener(VehicleSelectorItemEvent.SELECT_VEHICLE, this.onListSelectVehicleHandler);
         this.list.addEventListener(SortableScrollingListEvent.SORT_APPLIED, this.onListSortAppliedHandler);
         this.header.addEventListener(SortingEvent.SORT_DIRECTION_CHANGED, this.onHeaderSortDirectionChangedHandler, false, 0, true);
@@ -136,10 +137,7 @@ public class VehicleSelector extends UIComponentEx implements IViewStackContent 
         this.header = null;
         this._localSelectionOverrides.splice(0, this._localSelectionOverrides.length);
         this._localSelectionOverrides = null;
-        if (this._selectedItemVO) {
-            this._selectedItemVO.dispose();
-            this._selectedItemVO = null;
-        }
+        this._selectedItemVO = null;
         super.onDispose();
     }
 
@@ -157,7 +155,7 @@ public class VehicleSelector extends UIComponentEx implements IViewStackContent 
         var _loc1_:Array = [];
         for each(_loc2_ in this.list.dataProvider) {
             if (_loc2_.selected) {
-                _loc1_.push(_loc2_.vehicle.intCD);
+                _loc1_.push(_loc2_.intCD);
             }
         }
         for each(_loc3_ in this._localSelectionOverrides) {
@@ -175,8 +173,8 @@ public class VehicleSelector extends UIComponentEx implements IViewStackContent 
         var _loc2_:Vector.<uint> = new Vector.<uint>();
         for each(_loc3_ in this.list.dataProvider) {
             if (_loc3_.selected) {
-                _loc1_.push(_loc3_.vehicle);
-                _loc2_.push(_loc3_.vehicle.intCD);
+                _loc1_.push(_loc3_);
+                _loc2_.push(_loc3_.intCD);
             }
         }
         for each(_loc4_ in this._localSelectionOverrides) {
@@ -191,33 +189,29 @@ public class VehicleSelector extends UIComponentEx implements IViewStackContent 
         this.filtersView.setData(param1);
     }
 
-    public function setListItems(param1:Array):void {
+    public function setListItems(param1:DataProvider):void {
         if (this.list.dataProvider) {
-            if (this._selectedItemVO) {
-                this._selectedItemVO = null;
-            }
-            this.list.dataProvider.cleanUp();
-            this.list.dataProvider = null;
+            this._selectedItemVO = null;
         }
         this.applyOverrides(param1);
-        this.list.dataProvider = new DataProvider(param1);
+        this.list.dataProvider = param1;
         this.header.selectedIndex = !!this.multiSelection ? int(HEADER_SHORT_USER_NAME_SORT_ORDER) : int(HEADER_LEVEL_SORT_ORDER);
         this.list.sortByField(HEADER_LEVEL_ID, false);
         this.dispatchUpdate();
     }
 
     public function setupSelectionOverrides(param1:Array):void {
-        var _loc2_:Object = null;
+        var _loc2_:VehicleAlertVO = null;
         if (!this._isOverridesInitialized) {
             for each(_loc2_ in param1) {
-                this.updateOverride(new VehicleAlertVO(_loc2_), true);
+                this.updateOverride(_loc2_, true);
             }
             this._isOverridesInitialized = true;
         }
     }
 
     public function update(param1:Object):void {
-        var _loc2_:Array = param1 as Array;
+        var _loc2_:DataProvider = param1 as DataProvider;
         App.utils.asserter.assertNotNull(_loc2_, "items " + Errors.CANT_NULL);
         this.setListItems(_loc2_);
     }
@@ -249,10 +243,12 @@ public class VehicleSelector extends UIComponentEx implements IViewStackContent 
         var _loc2_:VehicleSelectorItemVO = null;
         var _loc3_:SelectionInfo = null;
         for each(_loc2_ in param1) {
-            _loc3_ = this.getOverride(_loc2_.vehicle);
+            _loc3_ = this.getOverride(_loc2_);
             if (_loc3_) {
-                _loc2_.selected = _loc3_.selected;
-                if (!this._multiSelection) {
+                if (this._multiSelection) {
+                    _loc2_.selected = _loc3_.selected;
+                }
+                else {
                     this._selectedItemVO = _loc2_;
                 }
             }
@@ -338,7 +334,7 @@ public class VehicleSelector extends UIComponentEx implements IViewStackContent 
     private function dispatchUpdate(param1:VehicleSelectorItemVO = null, param2:Boolean = false):void {
         if (!this._multiSelection) {
             if (param1) {
-                if (this._selectedItemVO && this._selectedItemVO.compactDescriptor != param1.compactDescriptor) {
+                if (this._selectedItemVO && this._selectedItemVO.intCD != param1.intCD) {
                     this._selectedItemVO.selected = false;
                 }
                 this._selectedItemVO = param1;
@@ -346,7 +342,7 @@ public class VehicleSelector extends UIComponentEx implements IViewStackContent 
         }
         else {
             if (param1) {
-                this.updateOverride(param1.vehicle, param1.selected);
+                this.updateOverride(param1, param1.selected);
             }
             this.checkAllSelected();
         }
@@ -376,21 +372,32 @@ public class VehicleSelector extends UIComponentEx implements IViewStackContent 
     }
 
     private function onListSortAppliedHandler(param1:SortableScrollingListEvent):void {
-        var _loc3_:Number = NaN;
+        var _loc3_:Boolean = false;
         var _loc4_:Number = NaN;
-        var _loc5_:VehicleSelectorItemVO = null;
+        var _loc5_:Number = NaN;
+        var _loc6_:Number = NaN;
+        var _loc7_:VehicleSelectorItemVO = null;
         var _loc2_:Number = 0;
         if (!this._multiSelection) {
-            _loc3_ = 0;
-            _loc4_ = this.list.dataProvider.length;
-            _loc5_ = null;
-            _loc3_ = 0;
-            while (_loc3_ < _loc4_) {
-                _loc5_ = this.list.dataProvider[_loc3_];
-                if (_loc5_.selected) {
-                    _loc2_ = _loc3_;
+            _loc3_ = false;
+            _loc4_ = 0;
+            _loc5_ = 0;
+            _loc6_ = this.list.dataProvider.length;
+            _loc7_ = null;
+            _loc5_ = 0;
+            while (_loc5_ < _loc6_) {
+                _loc7_ = this.list.dataProvider[_loc5_];
+                if (_loc7_.selected && !_loc3_) {
+                    _loc3_ = true;
+                    _loc2_ = _loc5_;
                 }
-                _loc3_++;
+                if (_loc4_ == 0 && _loc7_.enabled) {
+                    _loc4_ = _loc5_;
+                }
+                _loc5_++;
+            }
+            if (!_loc3_) {
+                _loc2_ = _loc4_;
             }
         }
         this.list.selectedIndex = _loc2_;
@@ -410,7 +417,7 @@ public class VehicleSelector extends UIComponentEx implements IViewStackContent 
         var _loc2_:Boolean = this.allCheckBox.selected;
         for each(_loc3_ in this.list.dataProvider) {
             _loc3_.selected = _loc2_ && _loc3_.enabled;
-            this.updateOverride(_loc3_.vehicle, _loc3_.selected);
+            this.updateOverride(_loc3_, _loc3_.selected);
         }
         this.list.dataProvider.invalidate();
         this.dispatchUpdate();

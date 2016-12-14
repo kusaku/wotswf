@@ -3,10 +3,9 @@ import flash.events.MouseEvent;
 import flash.text.TextField;
 
 import net.wg.gui.components.controls.interfaces.ISliderKeyPoint;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
-
-public class SliderKeyPoint extends UIComponent implements ISliderKeyPoint {
+public class SliderKeyPoint extends UIComponentEx implements ISliderKeyPoint {
 
     public var labelTF:TextField = null;
 

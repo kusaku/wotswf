@@ -24,7 +24,6 @@ import net.wg.gui.rally.vo.VehicleVO;
 import net.wg.infrastructure.base.meta.IRosterSlotSettingsWindowMeta;
 import net.wg.infrastructure.base.meta.impl.RosterSlotSettingsWindowMeta;
 import net.wg.infrastructure.interfaces.IWindow;
-import net.wg.infrastructure.interfaces.entity.IDisposable;
 import net.wg.utils.INations;
 
 import org.idmedia.as3commons.util.StringUtils;
@@ -65,7 +64,7 @@ public class RosterSlotSettingsWindow extends RosterSlotSettingsWindowMeta imple
 
     private var _rangeRoster:RangeRosterSettingsView;
 
-    private var _listData:Array = null;
+    private var _listData:DataProvider;
 
     private var _selectTabIndex:int = -1;
 
@@ -181,7 +180,7 @@ public class RosterSlotSettingsWindow extends RosterSlotSettingsWindowMeta imple
             this._vehicleSelector = null;
         }
         this.tryClearRangeModel();
-        this.tryClearListData();
+        this._listData = null;
         this.viewStack.removeEventListener(ViewStackEvent.NEED_UPDATE, this.onViewStackNeedUpdateHandler);
         this.viewStack.dispose();
         this.viewStack = null;
@@ -209,21 +208,17 @@ public class RosterSlotSettingsWindow extends RosterSlotSettingsWindowMeta imple
         invalidate(TAB_SELECTION_INVALIDATION_TYPE);
     }
 
-    public function as_setListData(param1:Array):void {
-        var _loc2_:Object = null;
-        var _loc3_:VehicleSelectorItemVO = null;
-        var _loc4_:Array = null;
-        var _loc5_:INations = null;
+    override protected function setListData(param1:DataProvider):void {
+        var _loc2_:Array = null;
+        var _loc3_:INations = null;
+        var _loc4_:VehicleSelectorItemVO = null;
         if (param1 != null) {
-            this.tryClearListData();
-            this._listData = [];
-            _loc4_ = App.utils.getGUINationsS();
-            _loc5_ = App.utils.nations;
-            for each(_loc2_ in param1) {
-                _loc3_ = new VehicleSelectorItemVO(_loc2_, true);
-                _loc3_.nationOrderIdx = _loc4_.indexOf(_loc5_.getNationName(_loc3_.nationID));
-                this._listData.push(_loc3_);
+            _loc2_ = App.utils.getGUINationsS();
+            _loc3_ = App.utils.nations;
+            for each(_loc4_ in param1) {
+                _loc4_.nationOrderIdx = _loc2_.indexOf(_loc3_.getNationName(_loc4_.nationID));
             }
+            this._listData = param1;
             if (initialized) {
                 this.updateWindowVisibility(true);
             }
@@ -248,17 +243,6 @@ public class RosterSlotSettingsWindow extends RosterSlotSettingsWindowMeta imple
     private function resetSelectionResult():void {
         this.selectedResultBtn.reset();
         this.setSelectionResultBtnVisible(false);
-    }
-
-    private function tryClearListData():void {
-        var _loc1_:IDisposable = null;
-        if (this._listData != null) {
-            for each(_loc1_ in this._listData) {
-                _loc1_.dispose();
-            }
-            this._listData.splice(0, this._listData.length);
-            this._listData = null;
-        }
     }
 
     private function updateWindowVisibility(param1:Boolean):void {

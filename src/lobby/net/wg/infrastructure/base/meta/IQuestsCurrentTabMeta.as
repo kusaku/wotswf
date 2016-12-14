@@ -11,7 +11,7 @@ public interface IQuestsCurrentTabMeta extends IEventDispatcher {
 
     function collapseS(param1:String):void;
 
-    function as_showNoData():void;
+    function as_showNoData(param1:String):void;
 
     function as_showWaiting(param1:Boolean):void;
 

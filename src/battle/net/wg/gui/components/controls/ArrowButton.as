@@ -12,6 +12,8 @@ public class ArrowButton extends SoundButtonEx implements IArrowButton {
 
     private static const MIN_HEIGHT:int = 48;
 
+    private static const EXTRA_WIDTH:int = 12;
+
     public var arrowStates:MovieClip = null;
 
     public var borderStates:MovieClip = null;
@@ -56,8 +58,10 @@ public class ArrowButton extends SoundButtonEx implements IArrowButton {
             focusIndicator.width = width;
             focusIndicator.height = height;
         }
-        this.borderStates.width = hitMc.width = width;
+        this.borderStates.width = width;
         this.borderStates.height = hitMc.height = height;
+        hitMc.width = width + EXTRA_WIDTH;
+        hitMc.x = -EXTRA_WIDTH;
         this.arrowStates.y = height - this.arrowStates.height >> 1;
     }
 

@@ -22,7 +22,7 @@ public class BlackButton extends SoundButtonEx {
 
     private static const FILTERS_GLOW_OFSET:int = -2;
 
-    public var image:Image = null;
+    public var image:net.wg.gui.components.controls.Image = null;
 
     public var states:MovieClip = null;
 
@@ -57,6 +57,7 @@ public class BlackButton extends SoundButtonEx {
             constraintsDisabled = true;
             preventAutosizing = true;
         }
+        this.toggleGlow.alpha = 0;
         this.rescaleItems();
     }
 
@@ -67,7 +68,6 @@ public class BlackButton extends SoundButtonEx {
         this.image.visible = false;
         this.image.addEventListener(Event.CHANGE, this.onIconChangeHandler);
         this.glow.visible = false;
-        this.toggleGlow.alpha = 0;
     }
 
     override protected function draw():void {

@@ -61,10 +61,9 @@ public class EliteWindow extends EliteWindowMeta implements IEliteWindowMeta {
         constraints.addElement("closeBtn", this.closeBtn, Constraints.CENTER_H);
     }
 
-    public function as_setVehicle(param1:Object):void {
-        var _loc2_:VehicleVO = new VehicleVO(param1);
-        this.vName = _loc2_.userName;
-        this.vType = _loc2_.type;
+    override protected function setVehicle(param1:VehicleVO):void {
+        this.vName = param1.userName;
+        this.vType = param1.type;
         this.closeBtn.soundType = SoundTypes.CANCEL_BTN;
         invalidate(this.INVALIDATE_TANK_DATA);
     }

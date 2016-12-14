@@ -10,7 +10,8 @@ public class QuestListSelectionNavigator extends AbstractListSelectionNavigator 
     }
 
     override protected function isSelectable(param1:int):Boolean {
-        return QuestRendererVO(getItemByIndex(param1)).rendererType == QUESTS_ALIASES.RENDERER_TYPE_QUEST;
+        var _loc2_:QuestRendererVO = QuestRendererVO(getItemByIndex(param1));
+        return _loc2_ != null && _loc2_.rendererType == QUESTS_ALIASES.RENDERER_TYPE_QUEST;
     }
 }
 }

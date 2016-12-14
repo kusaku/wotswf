@@ -3,15 +3,15 @@ import flash.text.TextField;
 
 import net.wg.gui.lobby.techtree.TechTreeEvent;
 import net.wg.gui.lobby.techtree.constants.TTInvalidationType;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.utils.Constraints;
 import scaleform.gfx.Extensions;
 import scaleform.gfx.TextFieldEx;
 
-public class ResearchTitleBar extends UIComponent {
+public class ResearchTitleBar extends UIComponentEx {
 
     public var titleField:TextField;
 

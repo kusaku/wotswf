@@ -257,7 +257,7 @@ public class BarracksForm extends UIComponentEx {
         }
     }
 
-    public function as_setTankmenFilter(param1:Number, param2:String, param3:String, param4:String, param5:String):void {
+    public function setTankmenFilter(param1:Number, param2:String, param3:String, param4:String, param5:String):void {
         this._nation = param1;
         this._role = param2;
         this._tankType = param3;
@@ -266,9 +266,9 @@ public class BarracksForm extends UIComponentEx {
         invalidate(INVALIDATE_TANKMEN_FILTER);
     }
 
-    public function as_updateTanksList(param1:Array):void {
+    public function updateTanksList(param1:DataProvider):void {
         this._programmaticUpdate = true;
-        this.tank.dataProvider = new DataProvider(param1);
+        this.tank.dataProvider = param1;
         if (param1.length > 0) {
             this.tank.selectedIndex = 0;
             this.locationButtonBar.dataProvider[0].data = this.tank.dataProvider[this.tank.selectedIndex].data;

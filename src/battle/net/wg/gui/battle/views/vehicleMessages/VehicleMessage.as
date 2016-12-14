@@ -59,8 +59,6 @@ public class VehicleMessage extends EventDispatcher implements IMessage {
 
     private var _textBottomPadding:Number;
 
-    private var _pool:VehicleMessagesPool;
-
     private var _isEnterFrameEnable:Boolean = false;
 
     private var _useMinWidth:Boolean = false;

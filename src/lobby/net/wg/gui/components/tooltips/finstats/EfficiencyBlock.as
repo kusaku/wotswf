@@ -2,9 +2,9 @@ package net.wg.gui.components.tooltips.finstats {
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class EfficiencyBlock extends UIComponent {
+public class EfficiencyBlock extends UIComponentEx {
 
     public var leftTF:TextField;
 

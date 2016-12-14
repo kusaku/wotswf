@@ -1,4 +1,5 @@
 package net.wg.gui.lobby.quests.data.questsTileChains {
+import net.wg.data.constants.Errors;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
 public class QuestTaskListRendererVO implements IDisposable {
@@ -28,14 +29,17 @@ public class QuestTaskListRendererVO implements IDisposable {
         switch (param1) {
             case QuestTaskListRendererVO.STATISTICS:
                 this.statData = param2 as QuestTileStatisticsVO;
+                App.utils.asserter.assertNotNull(this.statData, "statData" + Errors.CANT_NULL);
                 this.enabled = true;
                 break;
             case QuestTaskListRendererVO.CHAIN:
                 this.chainData = param2 as QuestChainVO;
+                App.utils.asserter.assertNotNull(this.chainData, "chainData" + Errors.CANT_NULL);
                 this.enabled = this.chainData.enabled;
                 break;
             case QuestTaskListRendererVO.TASK:
                 this.taskData = param2 as QuestTaskVO;
+                App.utils.asserter.assertNotNull(this.taskData, "taskData" + Errors.CANT_NULL);
                 this.enabled = this.taskData.enabled;
         }
     }

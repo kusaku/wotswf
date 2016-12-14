@@ -7,11 +7,11 @@ import flash.text.TextLineMetrics;
 
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.login.impl.ev.LoginLogosEv;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class Copyright extends UIComponent {
+public class Copyright extends UIComponentEx {
 
     public var logotypes:LoginLogos = null;
 
@@ -75,8 +75,7 @@ public class Copyright extends UIComponent {
     }
 
     private function updateLinkPosition():void {
-        var _loc1_:Number = NaN;
-        _loc1_ = this.textField.numLines - 1;
+        var _loc1_:Number = this.textField.numLines - 1;
         if (_loc1_ < 0) {
             return;
         }

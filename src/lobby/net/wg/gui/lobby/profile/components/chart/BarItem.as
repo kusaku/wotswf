@@ -1,7 +1,7 @@
 package net.wg.gui.lobby.profile.components.chart {
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class BarItem extends UIComponent {
+public class BarItem extends UIComponentEx {
 
     public static const PERCENT_INV:String = "percInv";
 

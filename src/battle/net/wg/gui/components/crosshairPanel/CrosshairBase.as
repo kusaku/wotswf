@@ -85,30 +85,6 @@ public class CrosshairBase extends SimpleContainer implements ICrosshair {
         super.onDispose();
     }
 
-    public function setNetType(param1:Number):void {
-        if (this._netType != param1) {
-            this._netType = param1;
-            invalidate(NET_TYPE_VALIDATION);
-        }
-    }
-
-    public function setCenterType(param1:Number):void {
-        if (this._centerType != param1) {
-            this._centerType = param1;
-            invalidate(CENTER_TYPE_VALIDATION);
-        }
-    }
-
-    public function setComponentsAlpha(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number, param7:Number):void {
-        this._netAlpha = param1;
-        this._centerAlpha = param2;
-        this._reloadingBarAlpha = param3;
-        this._healthBarAlpha = param4;
-        this._cassetteAlpha = param5;
-        this._reloadingTimeFieldAlpha = param6;
-        invalidate(ALPHA_VALIDATION);
-    }
-
     override protected function draw():void {
         var _loc1_:int = 0;
         var _loc2_:int = 0;
@@ -144,13 +120,8 @@ public class CrosshairBase extends SimpleContainer implements ICrosshair {
         }
     }
 
-    protected function updateNetType():void {
-        gotoAndStop(TYPE_PREFIX + this._netType);
-    }
-
-    public function setHealth(param1:Number):void {
-        this._health = param1;
-        invalidate(HEALTH_VALIDATION);
+    public function clearDistance(param1:Boolean):void {
+        this.distance.clearDistance(param1);
     }
 
     public function setAmmoStock(param1:Number, param2:Number, param3:Boolean, param4:String, param5:Boolean = false):void {
@@ -159,8 +130,57 @@ public class CrosshairBase extends SimpleContainer implements ICrosshair {
         this.cassetteMC.updateInfo(param2, param4, param5);
     }
 
+    public function setCenterType(param1:Number):void {
+        if (this._centerType != param1) {
+            this._centerType = param1;
+            invalidate(CENTER_TYPE_VALIDATION);
+        }
+    }
+
     public function setClipsParam(param1:Number, param2:Number):void {
         this.cassetteMC.setClipsParam(param1, param2);
+    }
+
+    public function setComponentsAlpha(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number, param7:Number):void {
+        this._netAlpha = param1;
+        this._centerAlpha = param2;
+        this._reloadingBarAlpha = param3;
+        this._healthBarAlpha = param4;
+        this._cassetteAlpha = param5;
+        this._reloadingTimeFieldAlpha = param6;
+        invalidate(ALPHA_VALIDATION);
+    }
+
+    public function setDistance(param1:String):void {
+        this.distance.setDistance(param1);
+    }
+
+    public function setDistanceVisibility(param1:Boolean):void {
+    }
+
+    public function setHealth(param1:Number):void {
+        this._health = param1;
+        invalidate(HEALTH_VALIDATION);
+    }
+
+    public function setInfo(param1:Number, param2:String, param3:String, param4:Boolean, param5:Boolean, param6:String, param7:String, param8:Number, param9:Number, param10:String, param11:Number, param12:Number, param13:Boolean, param14:String, param15:Boolean = false):void {
+        this.setHealth(param1);
+        this.setZoom(param2);
+        this.setReloadingState(param3);
+        this.showReloadingTimeField(param4);
+        this.setDistanceVisibility(param5);
+        this.setDistance(param6);
+        this.updatePlayerInfo(param7);
+        this.setClipsParam(param8, param9);
+        this.setAmmoStock(param11, param12, param13, param14, param15);
+        this.updateAmmoState(param10);
+    }
+
+    public function setNetType(param1:Number):void {
+        if (this._netType != param1) {
+            this._netType = param1;
+            invalidate(NET_TYPE_VALIDATION);
+        }
     }
 
     public function setReloadingAsPercent(param1:Number):void {
@@ -173,6 +193,32 @@ public class CrosshairBase extends SimpleContainer implements ICrosshair {
             this._reloadingState = param1;
             this.updateReloadingState();
         }
+    }
+
+    public function setReloadingTime(param1:Number):void {
+        this.reloadingTimeField.updateTime(param1);
+    }
+
+    public function setVisibleNet(param1:Boolean):void {
+        this.netMC.visible = param1;
+        this.ammoCountField.visible = param1;
+    }
+
+    public function setZoom(param1:String):void {
+    }
+
+    public function showReloadingTimeField(param1:Boolean):void {
+        this.reloadingTimeField.visible = param1;
+    }
+
+    public function updateAmmoState(param1:String):void {
+    }
+
+    public function updatePlayerInfo(param1:String):void {
+    }
+
+    protected function updateNetType():void {
+        gotoAndStop(TYPE_PREFIX + this._netType);
     }
 
     protected function updateReloadingState():void {
@@ -188,47 +234,6 @@ public class CrosshairBase extends SimpleContainer implements ICrosshair {
         else {
             this.reloadingAnimationMC.visible = false;
         }
-    }
-
-    public function setReloadingTime(param1:Number):void {
-        this.reloadingTimeField.updateTime(param1);
-    }
-
-    public function setDistance(param1:String):void {
-        this.distance.setDistance(param1);
-    }
-
-    public function setDistanceVisibility(param1:Boolean):void {
-    }
-
-    public function clearDistance(param1:Boolean):void {
-        this.distance.clearDistance(param1);
-    }
-
-    public function showReloadingTimeField(param1:Boolean):void {
-        this.reloadingTimeField.visible = param1;
-    }
-
-    public function updateAmmoState(param1:String):void {
-    }
-
-    public function updatePlayerInfo(param1:String):void {
-    }
-
-    public function setZoom(param1:String):void {
-    }
-
-    public function setInfo(param1:Number, param2:String, param3:String, param4:Boolean, param5:Boolean, param6:String, param7:String, param8:Number, param9:Number, param10:String, param11:Number, param12:Number, param13:Boolean, param14:String, param15:Boolean = false):void {
-        this.setHealth(param1);
-        this.setZoom(param2);
-        this.setReloadingState(param3);
-        this.showReloadingTimeField(param4);
-        this.setDistanceVisibility(param5);
-        this.setDistance(param6);
-        this.updatePlayerInfo(param7);
-        this.setClipsParam(param8, param9);
-        this.setAmmoStock(param11, param12, param13, param14, param15);
-        this.updateAmmoState(param10);
     }
 }
 }

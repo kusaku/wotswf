@@ -1,7 +1,7 @@
 package net.wg.gui.lobby.fortifications.popovers.impl {
 import net.wg.data.Aliases;
 import net.wg.gui.components.advanced.Calendar;
-import net.wg.gui.components.popOvers.PopOver;
+import net.wg.gui.components.popovers.PopOver;
 import net.wg.gui.lobby.fortifications.data.FortCalendarDayVO;
 import net.wg.infrastructure.base.meta.IFortDatePickerPopoverMeta;
 import net.wg.infrastructure.base.meta.impl.FortDatePickerPopoverMeta;
@@ -15,8 +15,8 @@ public class FortDatePickerPopover extends FortDatePickerPopoverMeta implements 
         super();
     }
 
-    override protected function configUI():void {
-        super.configUI();
+    override protected function initialize():void {
+        super.initialize();
         this.calendar.needToInitFocus = false;
         this.calendar.dayVOClass = FortCalendarDayVO;
         this.calendar.setOutOfBoundsTooltip(App.utils.locale.makeString(FORTIFICATIONS.FORTDATEPICKERPOPOVER_CALENDAR_DAYTOOLTIP_NOTAVAILABLE_HEADER), App.utils.locale.makeString(FORTIFICATIONS.FORTDATEPICKERPOPOVER_CALENDAR_DAYTOOLTIP_NOTAVAILABLE_BODY));

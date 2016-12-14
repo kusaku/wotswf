@@ -5,6 +5,7 @@ import flash.display.MovieClip;
 import flash.text.TextField;
 import flash.text.TextLineMetrics;
 
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.ValObject;
 import net.wg.data.constants.generated.FITTING_TYPES;
 import net.wg.gui.components.advanced.ExtraModuleIcon;
@@ -62,6 +63,7 @@ public class ModuleInfo extends ModuleInfoMeta implements IModuleInfoMeta {
         this.actionButtonBottom.addEventListener(ButtonEvent.CLICK, this.onActionClick);
         window.useBottomBtns = true;
         var _loc1_:Padding = window.contentPadding as Padding;
+        App.utils.asserter.assertNotNull(_loc1_, "padding" + Errors.CANT_NULL);
         _loc1_.right = _loc1_.right + 10;
         window.contentPadding = _loc1_;
     }
@@ -106,8 +108,7 @@ public class ModuleInfo extends ModuleInfoMeta implements IModuleInfoMeta {
     }
 
     override protected function setActionButton(param1:ModuleInfoActionVO):void {
-        var _loc2_:Boolean = false;
-        _loc2_ = param1.visible;
+        var _loc2_:Boolean = param1.visible;
         this.actionButtonBottom.visible = _loc2_;
         if (_loc2_) {
             this.actionButtonBottom.label = param1.label;
@@ -189,6 +190,7 @@ public class ModuleInfo extends ModuleInfoMeta implements IModuleInfoMeta {
                 _loc14_ = App.utils.classFactory;
                 for each(_loc13_ in this.moduleInfo.compatible) {
                     _loc15_ = _loc14_.getComponent("ModuleCompatibilityMC", MovieClip) as MovieClip;
+                    App.utils.asserter.assertNotNull(_loc15_, "mc" + Errors.CANT_NULL);
                     _loc15_.x = this.moduleParams.x;
                     _loc15_.y = _loc4_;
                     addChild(_loc15_);
@@ -204,6 +206,7 @@ public class ModuleInfo extends ModuleInfoMeta implements IModuleInfoMeta {
             }
             if (_loc6_) {
                 _loc19_ = _loc14_.getComponent("additionalInfoUI", MovieClip) as MovieClip;
+                App.utils.asserter.assertNotNull(_loc19_, "info" + Errors.CANT_NULL);
                 _loc19_.x = this.moduleParams.x;
                 _loc19_.y = _loc4_;
                 _loc20_ = _loc19_.textField;

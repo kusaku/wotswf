@@ -3,12 +3,11 @@ import flash.events.MouseEvent;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
-import net.wg.data.constants.Linkages;
 import net.wg.data.constants.Values;
+import net.wg.gui.components.controls.Image;
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.components.controls.TableRenderer;
 import net.wg.gui.components.controls.UserNameField;
-import net.wg.gui.messenger.controls.ContactStatusIndicator;
 
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.events.ButtonEvent;
@@ -25,7 +24,7 @@ public class ReferralsTableRenderer extends TableRenderer {
 
     public var createSquadBtn:SoundButtonEx = null;
 
-    public var statusIndicator:ContactStatusIndicator = null;
+    public var statusIndicator:Image = null;
 
     private var _referralID:Number = 0;
 
@@ -41,17 +40,14 @@ public class ReferralsTableRenderer extends TableRenderer {
     }
 
     override public function setData(param1:Object):void {
-        if (param1) {
-            this._model = new ReferralsTableRendererVO(param1);
-            invalidateData();
-        }
+        this._model = ReferralsTableRendererVO(param1);
+        invalidateData();
     }
 
     override protected function configUI():void {
         super.configUI();
         this.createSquadBtn.mouseEnabledOnDisabled = true;
         this.multiplierTF.autoSize = TextFieldAutoSize.CENTER;
-        this.statusIndicator.setLinkage(Linkages.REF_STATUS_PREFIX);
     }
 
     override protected function onDispose():void {
@@ -66,6 +62,7 @@ public class ReferralsTableRenderer extends TableRenderer {
         this.createSquadBtn = null;
         this.statusIndicator.dispose();
         this.statusIndicator = null;
+        this._model = null;
         super.onDispose();
     }
 
@@ -90,7 +87,7 @@ public class ReferralsTableRenderer extends TableRenderer {
                     else {
                         this.createSquadBtn.removeEventListener(ButtonEvent.CLICK, this.onCreateSquadBtnClickHandler);
                     }
-                    this.statusIndicator.update(this._model.contactDataVO);
+                    this.statusIndicator.source = this._model.contactDataVO.resource;
                     if (this._model.multiplierTooltip != Values.EMPTY_STR) {
                         this.multiplierTF.addEventListener(MouseEvent.ROLL_OVER, this.onMultiplierRollOverHandler);
                         this.multiplierTF.addEventListener(MouseEvent.ROLL_OUT, onMultiplierRollOutHandler);

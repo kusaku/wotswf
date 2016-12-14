@@ -66,7 +66,7 @@ public class CandidatesList extends BaseDropList {
     }
 
     private function checkTextVisibility():void {
-        var _loc1_:* = !(_dataProvider != 0 && _dataProvider.length > 0);
+        var _loc1_:* = !(_dataProvider && _dataProvider.length > 0);
         if (_loc1_) {
             if (this.underDrugging) {
                 this.activeHighlight.title.visible = this.isMouseOver;

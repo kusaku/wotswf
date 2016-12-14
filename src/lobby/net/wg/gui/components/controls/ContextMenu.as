@@ -38,7 +38,7 @@ public class ContextMenu extends UIComponentEx implements IContextMenu {
 
     public var hit:MovieClip = null;
 
-    private var _groupItemSelected:ContextMenuItem;
+    private var _groupItemSelected:net.wg.gui.components.controls.ContextMenuItem;
 
     private var _margin:Number = 0;
 
@@ -64,9 +64,9 @@ public class ContextMenu extends UIComponentEx implements IContextMenu {
 
     private var _data:Vector.<IContextItem> = null;
 
-    private var _contextMenuItems:Vector.<ContextMenuItem>;
+    private var _contextMenuItems:Vector.<net.wg.gui.components.controls.ContextMenuItem>;
 
-    private var _separators:Vector.<ContextMenuItemSeparate>;
+    private var _separators:Vector.<net.wg.gui.components.controls.ContextMenuItemSeparate>;
 
     public function ContextMenu() {
         this._memberItemData = {};
@@ -74,8 +74,8 @@ public class ContextMenu extends UIComponentEx implements IContextMenu {
         this._padding = new Padding();
         super();
         this.padding = new Padding(0, 0, 0, 0);
-        this._contextMenuItems = new Vector.<ContextMenuItem>();
-        this._separators = new Vector.<ContextMenuItemSeparate>();
+        this._contextMenuItems = new Vector.<net.wg.gui.components.controls.ContextMenuItem>();
+        this._separators = new Vector.<net.wg.gui.components.controls.ContextMenuItemSeparate>();
     }
 
     override public function toString():String {
@@ -134,9 +134,9 @@ public class ContextMenu extends UIComponentEx implements IContextMenu {
         var _loc13_:int = 0;
         var _loc14_:IClassFactory = null;
         var _loc15_:Number = NaN;
-        var _loc16_:ContextMenuItem = null;
-        var _loc17_:ContextMenuItem = null;
-        var _loc18_:ContextMenuItemSeparate = null;
+        var _loc16_:net.wg.gui.components.controls.ContextMenuItem = null;
+        var _loc17_:net.wg.gui.components.controls.ContextMenuItem = null;
+        var _loc18_:net.wg.gui.components.controls.ContextMenuItemSeparate = null;
         var _loc19_:IContextItem = null;
         this._clickPoint = param2;
         _loc3_ = param2.x;
@@ -160,7 +160,7 @@ public class ContextMenu extends UIComponentEx implements IContextMenu {
                 _loc18_ = null;
                 _loc19_ = _loc5_[_loc6_];
                 if (_loc19_.id == ContextMenuConstants.SEPARATE) {
-                    _loc18_ = _loc14_.getComponent(Linkages.CONTEXT_MENU_SEPARATE, ContextMenuItemSeparate);
+                    _loc18_ = _loc14_.getComponent(Linkages.CONTEXT_MENU_SEPARATE, net.wg.gui.components.controls.ContextMenuItemSeparate);
                     _loc18_.index = _loc6_;
                     _loc18_.id = _loc19_.id;
                     _loc18_.x = _loc10_;
@@ -170,7 +170,7 @@ public class ContextMenu extends UIComponentEx implements IContextMenu {
                     this._separators.push(_loc18_);
                 }
                 else {
-                    _loc16_ = _loc14_.getComponent(Linkages.CONTEXT_MENU_ITEM, ContextMenuItem, _loc19_.initData);
+                    _loc16_ = _loc14_.getComponent(Linkages.CONTEXT_MENU_ITEM, net.wg.gui.components.controls.ContextMenuItem, _loc19_.initData);
                     _loc16_.index = _loc6_;
                     _loc16_.items = !!_loc5_[_loc6_].submenu ? _loc5_[_loc6_].submenu.slice(0, _loc5_[_loc6_].submenu.length) : new Vector.<IContextItem>();
                     _loc16_.addEventListener(ButtonEvent.CLICK, this.onItemClickHandler);
@@ -223,8 +223,8 @@ public class ContextMenu extends UIComponentEx implements IContextMenu {
     }
 
     protected function clearItems():void {
-        var _loc2_:ContextMenuItem = null;
-        var _loc4_:ContextMenuItemSeparate = null;
+        var _loc2_:net.wg.gui.components.controls.ContextMenuItem = null;
+        var _loc4_:net.wg.gui.components.controls.ContextMenuItemSeparate = null;
         var _loc1_:int = this._contextMenuItems.length;
         var _loc3_:int = 0;
         while (_loc3_ < _loc1_) {
@@ -250,9 +250,9 @@ public class ContextMenu extends UIComponentEx implements IContextMenu {
         this.hit.height = param1 - (BG_SHADOW_BORDER.vertical + this._margin * 2) + HIT_AREA_MARGIN.vertical;
     }
 
-    private function createSubItems(param1:ContextMenuItem):Number {
+    private function createSubItems(param1:net.wg.gui.components.controls.ContextMenuItem):Number {
         var _loc7_:IContextItem = null;
-        var _loc8_:ContextMenuItem = null;
+        var _loc8_:net.wg.gui.components.controls.ContextMenuItem = null;
         var _loc2_:Number = param1.x;
         var _loc3_:Number = param1.y + param1.height + this._padding.top + this._padding.bottom;
         var _loc4_:Number = param1.items.length;
@@ -262,7 +262,7 @@ public class ContextMenu extends UIComponentEx implements IContextMenu {
         while (_loc9_ < _loc4_) {
             if (!(param1.items[_loc9_] is SeparateItem)) {
                 _loc7_ = param1.items[_loc9_];
-                _loc8_ = _loc5_.getComponent(Linkages.CONTEXT_MENU_ITEM, ContextMenuItem, _loc7_.initData);
+                _loc8_ = _loc5_.getComponent(Linkages.CONTEXT_MENU_ITEM, net.wg.gui.components.controls.ContextMenuItem, _loc7_.initData);
                 _loc8_.index = _loc9_;
                 _loc8_.type = _loc8_.CONTEXT_MENU_ITEM_SUB;
                 _loc8_.id = _loc7_.id;
@@ -284,7 +284,7 @@ public class ContextMenu extends UIComponentEx implements IContextMenu {
         return _loc6_;
     }
 
-    private function beginAnimExpand(param1:ContextMenuItem):void {
+    private function beginAnimExpand(param1:net.wg.gui.components.controls.ContextMenuItem):void {
         this._tweenManager.unregisterAll();
         if (this._groupItemSelected && this._groupItemSelected == param1) {
             if (this._groupItemSelected.isOpened) {
@@ -321,7 +321,7 @@ public class ContextMenu extends UIComponentEx implements IContextMenu {
         return FIRST_ELEM_TOP_PADDING + LAST_ELEM_BOTTOM_PADDING - this._padding.bottom - this._padding.top + this._margin * 2 + BG_SHADOW_BORDER.top + BG_SHADOW_BORDER.bottom;
     }
 
-    private function expand(param1:ContextMenuItem):void {
+    private function expand(param1:net.wg.gui.components.controls.ContextMenuItem):void {
         var _loc3_:int = 0;
         var _loc4_:uint = 0;
         var _loc5_:int = 0;
@@ -367,8 +367,8 @@ public class ContextMenu extends UIComponentEx implements IContextMenu {
         }
     }
 
-    private function showSub(param1:ContextMenuItem):void {
-        var _loc3_:ContextMenuItem = null;
+    private function showSub(param1:net.wg.gui.components.controls.ContextMenuItem):void {
+        var _loc3_:net.wg.gui.components.controls.ContextMenuItem = null;
         param1.isOpened = true;
         var _loc2_:int = param1.subItems.length;
         var _loc4_:uint = 0;
@@ -384,7 +384,7 @@ public class ContextMenu extends UIComponentEx implements IContextMenu {
         }
     }
 
-    private function hideSub(param1:ContextMenuItem):void {
+    private function hideSub(param1:net.wg.gui.components.controls.ContextMenuItem):void {
         param1.isOpened = false;
         var _loc2_:int = param1.subItems.length;
         var _loc3_:uint = 0;
@@ -406,7 +406,7 @@ public class ContextMenu extends UIComponentEx implements IContextMenu {
     }
 
     private function fSubAnimComplete(param1:Tween):void {
-        var _loc2_:ContextMenuItem = ContextMenuItem(param1.target);
+        var _loc2_:net.wg.gui.components.controls.ContextMenuItem = ContextMenuItem(param1.target);
         if (_loc2_.alpha == ITEM_HIDE_ALPHA) {
             _loc2_.visible = false;
         }
@@ -442,7 +442,7 @@ public class ContextMenu extends UIComponentEx implements IContextMenu {
     }
 
     private function onItemClickHandler(param1:ButtonEvent):void {
-        var _loc2_:ContextMenuItem = ContextMenuItem(param1.target);
+        var _loc2_:net.wg.gui.components.controls.ContextMenuItem = ContextMenuItem(param1.target);
         this.beginAnimExpand(_loc2_);
         if (_loc2_.type != _loc2_.CONTEXT_MENU_ITEM_GROUP) {
             if (this._onItemSelectCallback != null) {

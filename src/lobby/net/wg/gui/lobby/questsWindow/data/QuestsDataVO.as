@@ -1,11 +1,13 @@
 package net.wg.gui.lobby.questsWindow.data {
 import net.wg.data.daapi.base.DAAPIDataClass;
 
+import scaleform.clik.data.DataProvider;
+
 public class QuestsDataVO extends DAAPIDataClass {
 
     private static const QUESTS_FIELD_NAME:String = "quests";
 
-    public var quests:Vector.<QuestRendererVO>;
+    public var quests:DataProvider;
 
     public var totalTasks:int = -1;
 
@@ -17,10 +19,21 @@ public class QuestsDataVO extends DAAPIDataClass {
         super(param1);
     }
 
+    private static function getTypedDataProvider(param1:*, param2:Class):DataProvider {
+        var _loc3_:DataProvider = new DataProvider();
+        var _loc4_:int = param1.length;
+        var _loc5_:int = 0;
+        while (_loc5_ < _loc4_) {
+            _loc3_[_loc5_] = new param2(param1[_loc5_]);
+            _loc5_++;
+        }
+        return _loc3_;
+    }
+
     override protected function onDataWrite(param1:String, param2:Object):Boolean {
         switch (param1) {
             case QUESTS_FIELD_NAME:
-                this.quests = Vector.<QuestRendererVO>(App.utils.data.convertVOArrayToVector(param1, param2, QuestRendererVO));
+                this.quests = getTypedDataProvider(param2, QuestRendererVO);
                 return false;
             default:
                 return super.onDataWrite(param1, param2);
@@ -33,8 +46,7 @@ public class QuestsDataVO extends DAAPIDataClass {
             for each(_loc1_ in this.quests) {
                 _loc1_.dispose();
             }
-            this.quests.fixed = false;
-            this.quests.splice(0, this.quests.length);
+            this.quests.cleanUp();
             this.quests = null;
         }
         super.onDispose();
@@ -56,7 +68,7 @@ public class QuestsDataVO extends DAAPIDataClass {
         return this.totalTasks == _loc2_.totalTasks && this.isSortable == _loc2_.isSortable && this.isQuestsEquals(_loc2_.quests);
     }
 
-    private function isQuestsEquals(param1:Vector.<QuestRendererVO>):Boolean {
+    private function isQuestsEquals(param1:DataProvider):Boolean {
         var _loc2_:int = 0;
         var _loc3_:int = 0;
         if (!this.quests && !param1) {

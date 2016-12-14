@@ -110,7 +110,7 @@ public class ClanProfileSummaryBlock extends UIComponentEx implements IClanProfi
 
     private function makeDisabledBlock(param1:ClanProfileSummaryBlockVO):void {
         var _loc2_:ITextFieldFrame = this._utils.getComponent(Linkages.TEXT_FIELD_FRAME_UI, ITextFieldFrame);
-        this.addChild(_loc2_ as DisplayObject);
+        this.addChild(DisplayObject(_loc2_));
         var _loc3_:* = this.titleTF.y + this.titleTF.height + EMPTY_FIELD_PADDING ^ 0;
         this.updateItemPosition(_loc2_, _loc3_);
         _loc2_.label = param1.emptyLbl;
@@ -125,7 +125,7 @@ public class ClanProfileSummaryBlock extends UIComponentEx implements IClanProfi
         if (this._dynItems) {
             for each(_loc1_ in this._dynItems) {
                 _loc1_.dispose();
-                this.removeChild(_loc1_ as DisplayObject);
+                this.removeChild(DisplayObject(_loc1_));
             }
             this._dynItems.splice(0, this._dynItems.length);
             this._dynItems = null;

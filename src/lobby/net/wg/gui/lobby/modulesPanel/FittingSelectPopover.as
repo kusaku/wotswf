@@ -8,8 +8,8 @@ import flash.text.TextField;
 
 import net.wg.data.constants.generated.FITTING_TYPES;
 import net.wg.gui.components.controls.ScrollingListEx;
-import net.wg.gui.components.popOvers.PopOver;
-import net.wg.gui.components.popOvers.PopOverConst;
+import net.wg.gui.components.popovers.PopOver;
+import net.wg.gui.components.popovers.PopOverConst;
 import net.wg.gui.events.DeviceEvent;
 import net.wg.gui.events.ModuleInfoEvent;
 import net.wg.gui.lobby.modulesPanel.components.FittingListSelectionNavigator;

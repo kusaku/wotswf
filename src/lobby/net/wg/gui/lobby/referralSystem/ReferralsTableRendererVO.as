@@ -44,10 +44,14 @@ public class ReferralsTableRendererVO extends DAAPIDataClass {
     }
 
     override protected function onDispose():void {
-        this.referralVO.dispose();
-        this.referralVO = null;
-        this.contactDataVO.dispose();
-        this.contactDataVO = null;
+        if (this.referralVO) {
+            this.referralVO.dispose();
+            this.referralVO = null;
+        }
+        if (this.contactDataVO) {
+            this.contactDataVO.dispose();
+            this.contactDataVO = null;
+        }
         super.onDispose();
     }
 }

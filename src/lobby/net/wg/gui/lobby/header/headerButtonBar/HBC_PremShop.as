@@ -10,7 +10,13 @@ import scaleform.clik.utils.Padding;
 
 public class HBC_PremShop extends HeaderButtonContentItem {
 
-    private static const TEXT_OFFSET:int = 20;
+    private static const TEXT_OFFSET_MIN:int = 12;
+
+    private static const TEXT_OFFSET_DEF:int = 20;
+
+    private static const MAX_SCREEN_PRC_BORDER_FOR_TEXT_OFFSET:Number = 0.1;
+
+    private static const MAG_GLOW_BG_WIDTH:Number = 115;
 
     private static const ICON_WIDTH:int = 52;
 
@@ -24,8 +30,11 @@ public class HBC_PremShop extends HeaderButtonContentItem {
 
     private var _model:HBC_PremShopVO = null;
 
+    private var _curTextOffset:Number = 0;
+
     public function HBC_PremShop() {
         super();
+        this._curTextOffset = TEXT_OFFSET_DEF;
         minScreenPadding = new Padding(0, 0, 0, 0);
         wideScreenPrc = 0;
     }
@@ -44,6 +53,7 @@ public class HBC_PremShop extends HeaderButtonContentItem {
         if (data != null) {
             this.icon.source = this._model.iconSrc;
             this.premShopTF.text = this._model.premShopText;
+            this._curTextOffset = maxScreenPrc > MAX_SCREEN_PRC_BORDER_FOR_TEXT_OFFSET ? Number(TEXT_OFFSET_DEF) : Number(TEXT_OFFSET_MIN);
         }
         super.updateData();
     }
@@ -52,7 +62,7 @@ public class HBC_PremShop extends HeaderButtonContentItem {
         var _loc1_:* = screen == LobbyHeader.MAX_SCREEN;
         if (_loc1_) {
             this.premShopTF.visible = true;
-            bounds.width = Math.max(this.premShopTF.x + this.premShopTF.textWidth + TEXT_OFFSET, this.bigBg.width);
+            bounds.width = Math.max(this.premShopTF.x + this.premShopTF.textWidth + this._curTextOffset, MAG_GLOW_BG_WIDTH);
         }
         else {
             this.premShopTF.visible = false;

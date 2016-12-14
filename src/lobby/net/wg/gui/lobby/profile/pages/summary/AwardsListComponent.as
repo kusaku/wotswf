@@ -4,12 +4,12 @@ import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
 import net.wg.gui.lobby.battleResults.components.MedalsList;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.DataProvider;
 import scaleform.clik.interfaces.IDataProvider;
 
-public class AwardsListComponent extends UIComponent {
+public class AwardsListComponent extends UIComponentEx {
 
     private static const DP_INV:String = "dpInv";
 
@@ -73,8 +73,8 @@ public class AwardsListComponent extends UIComponent {
         this.textField.removeEventListener(MouseEvent.ROLL_OUT, this.onTextFieldRollOutHandler);
     }
 
-    public function set dataProvider(param1:Array):void {
-        this.medalsList.dataProvider = new DataProvider(param1);
+    public function set dataProvider(param1:DataProvider):void {
+        this.medalsList.dataProvider = param1;
         this.medalsList.invalidateData();
         this.medalsList.validateNow();
         invalidate(DP_INV);

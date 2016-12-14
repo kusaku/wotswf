@@ -4,7 +4,7 @@ import flash.events.MouseEvent;
 
 import net.wg.data.constants.SoundTypes;
 import net.wg.data.constants.Values;
-import net.wg.gui.components.advanced.interfaces.INewIndicator;
+import net.wg.gui.components.assets.interfaces.INewIndicator;
 import net.wg.gui.components.controls.SoundListItemRenderer;
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.components.controls.events.ItemSelectorRendererEvent;

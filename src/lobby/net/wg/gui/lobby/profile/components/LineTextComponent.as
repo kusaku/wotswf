@@ -3,10 +3,11 @@ import flash.display.MovieClip;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
-import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class LineTextComponent extends UIComponent {
+import scaleform.clik.constants.InvalidationType;
+
+public class LineTextComponent extends UIComponentEx {
 
     private static const TEXT_INV:String = "textInv";
 

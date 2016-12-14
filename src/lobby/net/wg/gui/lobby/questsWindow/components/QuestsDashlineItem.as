@@ -54,7 +54,7 @@ public class QuestsDashlineItem extends DashLineTextItem implements IResizableCo
     }
 
     public function setData(param1:Object):void {
-        var _loc2_:QuestDashlineItemVO = new QuestDashlineItemVO(param1);
+        var _loc2_:QuestDashlineItemVO = param1 is QuestDashlineItemVO ? param1 as QuestDashlineItemVO : new QuestDashlineItemVO(param1);
         this.label = _loc2_.label;
         this.linkID = _loc2_.linkID;
         this.isNotAvailable = _loc2_.isNotAvailable;
@@ -130,20 +130,20 @@ public class QuestsDashlineItem extends DashLineTextItem implements IResizableCo
                 valueTextField.autoSize = TextFieldAutoSize.LEFT;
                 valueTextField.htmlText = "--";
             }
-            if (isInvalid(LABEL_INV)) {
-                labelTextField.autoSize = TextFieldAutoSize.LEFT;
-                labelTextField.htmlText = label;
-                labelTextField.width = _width - this.MIN_LAST_ITEM_WIDTH - valueTextField.width;
-                labelTextField.height = labelTextField.textHeight + TEXT_PADDING;
-                invalidate(InvalidationType.SIZE);
-            }
-            if (isInvalid(INV_LINK_ID)) {
-                this.linkBtn.visible = Boolean(this._linkID);
-            }
-            if (isInvalid(INV_NOT_DONE)) {
-                this.naMc.visible = this.naTF.visible = this._isNotAvailable;
-            }
             invalidate(InvalidationType.SIZE);
+        }
+        if (isInvalid(LABEL_INV)) {
+            labelTextField.autoSize = TextFieldAutoSize.LEFT;
+            labelTextField.htmlText = label;
+            labelTextField.width = _width - this.MIN_LAST_ITEM_WIDTH - valueTextField.width;
+            labelTextField.height = labelTextField.textHeight + TEXT_PADDING;
+            invalidate(InvalidationType.SIZE);
+        }
+        if (isInvalid(INV_LINK_ID)) {
+            this.linkBtn.visible = Boolean(this._linkID);
+        }
+        if (isInvalid(INV_NOT_DONE)) {
+            this.naMc.visible = this.naTF.visible = this._isNotAvailable;
         }
         if (isInvalid(InvalidationType.SIZE)) {
             _loc1_ = Math.round(labelTextField.getLineMetrics(labelTextField.numLines - 1).width);

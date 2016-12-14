@@ -1,6 +1,5 @@
 package net.wg.gui.battle.falloutMultiteam.views.components.fullStats {
 import net.wg.data.VO.daapi.DAAPIFalloutVehicleStatsVO;
-import net.wg.data.constants.PlayerStatus;
 import net.wg.data.constants.VehicleStatus;
 import net.wg.gui.battle.views.stats.fullStats.StatsTableItemHolderBase;
 
@@ -40,15 +39,15 @@ public class FMStatsItemHolder extends StatsTableItemHolderBase {
     }
 
     public function get isInSquad():Boolean {
-        return !!getVehicleData ? Boolean(PlayerStatus.isSquadMan(getVehicleData.playerStatus)) : false;
+        return !!data ? Boolean(data.isSquadMan()) : false;
     }
 
     public function get squadIndex():int {
-        return !!this.isInSquad ? int(getVehicleData.squadIndex) : 0;
+        return !!this.isInSquad ? int(data.squadIndex) : 0;
     }
 
     public function get isSquadPersonal():Boolean {
-        return !!this.isInSquad ? Boolean(PlayerStatus.isSquadPersonal(getVehicleData.playerStatus)) : false;
+        return !!this.isInSquad ? Boolean(data.isSquadPersonal()) : false;
     }
 
     public function setTeamScoreVisible(param1:Boolean):void {
@@ -57,7 +56,7 @@ public class FMStatsItemHolder extends StatsTableItemHolderBase {
 
     override protected function applyVehicleStatus():void {
         super.applyPlayerStatus();
-        this.getStatsItem.setIsRespawnDisabled(VehicleStatus.isStopRespawn(getVehicleData.vehicleStatus));
+        this.getStatsItem.setIsRespawnDisabled(VehicleStatus.isStopRespawn(data.vehicleStatus));
     }
 
     override protected function onDispose():void {

@@ -20,12 +20,13 @@ public class TankmanOperationDialogMeta extends SimpleDialog {
         super.onDispose();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._tankmanOperationDialogVO) {
-            this._tankmanOperationDialogVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:TankmanOperationDialogVO = this._tankmanOperationDialogVO;
         this._tankmanOperationDialogVO = new TankmanOperationDialogVO(param1);
         this.setData(this._tankmanOperationDialogVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:TankmanOperationDialogVO):void {

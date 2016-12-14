@@ -3,11 +3,11 @@ import flash.events.MouseEvent;
 import flash.text.TextField;
 
 import net.wg.gui.components.controls.SoundButtonEx;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class OrderInfoBlock extends UIComponent {
+public class OrderInfoBlock extends UIComponentEx {
 
     private static const INV_PARAM:String = "invParam";
 

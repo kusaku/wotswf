@@ -4,8 +4,8 @@ import flash.text.TextField;
 
 import net.wg.data.constants.Linkages;
 import net.wg.gui.components.advanced.ClanEmblem;
+import net.wg.gui.components.assets.interfaces.ISeparatorAsset;
 import net.wg.gui.components.controls.SoundButtonEx;
-import net.wg.gui.components.interfaces.ISeparatorAsset;
 import net.wg.gui.lobby.header.events.AccountPopoverEvent;
 import net.wg.gui.lobby.header.vo.AccountPopoverBlockVO;
 import net.wg.infrastructure.base.UIComponentEx;
@@ -37,7 +37,7 @@ public class AccountPopoverBlockBase extends UIComponentEx implements IAccountCl
 
     public var doActionBtn:SoundButtonEx = null;
 
-    protected var _data:IDAAPIDataClass = null;
+    protected var data:IDAAPIDataClass = null;
 
     protected var commons:ICommons;
 
@@ -68,13 +68,13 @@ public class AccountPopoverBlockBase extends UIComponentEx implements IAccountCl
         this.doActionBtn.removeEventListener(ButtonEvent.CLICK, this.onDoActionBtnClickHandler);
         this.doActionBtn.dispose();
         this.doActionBtn = null;
-        this._data = null;
+        this.data = null;
         super.onDispose();
     }
 
     override protected function draw():void {
         super.draw();
-        if (this._data != null && isInvalid(InvalidationType.DATA)) {
+        if (this.data != null && isInvalid(InvalidationType.DATA)) {
             this.applyData();
             invalidateSize();
         }
@@ -88,7 +88,7 @@ public class AccountPopoverBlockBase extends UIComponentEx implements IAccountCl
     }
 
     public function setData(param1:IDAAPIDataClass):void {
-        this._data = param1;
+        this.data = param1;
         invalidateData();
     }
 
@@ -100,14 +100,14 @@ public class AccountPopoverBlockBase extends UIComponentEx implements IAccountCl
     }
 
     protected function applyData():void {
-        var _loc2_:Boolean = false;
-        var _loc1_:AccountPopoverBlockVO = AccountPopoverBlockVO(this._data);
-        _loc2_ = _loc1_.isDoActionBtnVisible;
+        var _loc1_:AccountPopoverBlockVO = null;
+        _loc1_ = AccountPopoverBlockVO(this.data);
+        var _loc2_:Boolean = _loc1_.isDoActionBtnVisible;
         this.doActionBtn.visible = _loc2_;
         if (_loc2_) {
             this.doActionBtn.label = _loc1_.btnLabel;
             this.doActionBtn.enabled = _loc1_.btnEnabled;
-            this.doActionBtn.tooltip = _loc1_.btnTooltip;
+            this.doActionBtn.tooltip = !!_loc1_.btnEnabled ? _loc1_.btnTooltip : _loc1_.disabledTooltip;
         }
         var _loc3_:Boolean = _loc1_.isTextFieldNameVisible;
         this.textFieldName.visible = _loc3_;

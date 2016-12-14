@@ -10,7 +10,7 @@ import net.wg.gui.components.controls.CheckBox;
 import net.wg.gui.components.controls.NumericStepper;
 import net.wg.gui.components.controls.ScrollingListEx;
 import net.wg.gui.components.controls.SoundButtonEx;
-import net.wg.gui.lobby.components.MinimapLobby;
+import net.wg.gui.components.minimap.MinimapPresentation;
 import net.wg.infrastructure.base.meta.ITrainingWindowMeta;
 import net.wg.infrastructure.base.meta.impl.TrainingWindowMeta;
 
@@ -44,9 +44,9 @@ public class TrainingWindow extends TrainingWindowMeta implements ITrainingWindo
 
     public var closeButon:SoundButtonEx;
 
-    public var minimap:MinimapLobby;
+    public var minimap:MinimapPresentation;
 
-    private var _mapsData:Array;
+    private var _mapsData:DataProvider;
 
     private var _paramsVO:TrainingWindowVO;
 
@@ -109,11 +109,7 @@ public class TrainingWindow extends TrainingWindowMeta implements ITrainingWindo
         this.createButon = null;
         this.closeButon.dispose();
         this.closeButon = null;
-        if (this._mapsData) {
-            this._mapsData.splice(0, this._mapsData.length);
-            this._mapsData = null;
-        }
-        this._paramsVO.dispose();
+        this._mapsData = null;
         this._paramsVO = null;
         this.minimap = null;
         super.onDispose();
@@ -132,7 +128,7 @@ public class TrainingWindow extends TrainingWindowMeta implements ITrainingWindo
             this.battleTime.maximum = this._paramsVO.maxBattleTime;
             this.battleTime.enabled = this.maps.mouseEnabled = this.maps.mouseChildren = this._paramsVO.canChangeArena;
             this.maps.alpha = !!this._paramsVO.canChangeArena ? Number(ACTIVE_MAP_ALPHA_VALUE) : Number(INACTIVE_MAP_ALPHA_VALUE);
-            this.maps.dataProvider = new DataProvider(this._mapsData);
+            this.maps.dataProvider = this._mapsData;
             if (this._paramsVO.create) {
                 window.title = MENU.TRAINING_CREATE_TITLE;
                 this.maps.selectedIndex = Math.floor(Math.random() * this._mapsData.length);
@@ -155,8 +151,8 @@ public class TrainingWindow extends TrainingWindowMeta implements ITrainingWindo
         }
     }
 
-    public function as_setData(param1:Object, param2:Array):void {
-        this._paramsVO = new TrainingWindowVO(param1);
+    override protected function setData(param1:TrainingWindowVO, param2:DataProvider):void {
+        this._paramsVO = param1;
         this._mapsData = param2;
         invalidateData();
     }
@@ -171,7 +167,6 @@ public class TrainingWindow extends TrainingWindowMeta implements ITrainingWindo
         var _loc4_:int = !!this.isPrivate.selected ? 1 : 0;
         var _loc5_:String = !!this.description.text ? this.description.text : "";
         updateTrainingRoomS(_loc2_, _loc3_, _loc4_, _loc5_);
-        this.onCloseButtonClickHandler(null);
     }
 
     private function onMapIndexChangeHandler(param1:ListEvent):void {

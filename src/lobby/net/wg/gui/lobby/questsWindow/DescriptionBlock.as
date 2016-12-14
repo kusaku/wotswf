@@ -2,10 +2,11 @@ package net.wg.gui.lobby.questsWindow {
 import flash.events.Event;
 import flash.text.TextField;
 
-import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class DescriptionBlock extends UIComponent {
+import scaleform.clik.constants.InvalidationType;
+
+public class DescriptionBlock extends UIComponentEx {
 
     private static const BOTTOM_PADDING:int = 18;
 

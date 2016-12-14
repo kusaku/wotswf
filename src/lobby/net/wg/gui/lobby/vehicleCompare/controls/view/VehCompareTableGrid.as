@@ -8,7 +8,7 @@ import flash.utils.Dictionary;
 
 import net.wg.data.constants.Cursors;
 import net.wg.data.constants.DragType;
-import net.wg.gui.lobby.vehicleCompare.data.VehCompareParamVO;
+import net.wg.gui.lobby.components.data.VehParamVO;
 import net.wg.gui.lobby.vehicleCompare.interfaces.ITableGridLine;
 import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.helpers.interfaces.IDragDelegate;
@@ -92,13 +92,13 @@ public class VehCompareTableGrid extends UIComponentEx implements IDragDelegate,
         var _loc1_:ITableGridLine = null;
         var _loc2_:int = 0;
         var _loc3_:int = 0;
-        var _loc4_:VehCompareParamVO = null;
+        var _loc4_:VehParamVO = null;
         var _loc5_:Point = null;
         var _loc6_:int = 0;
         super.draw();
         if (this._data && isInvalid(INV_UPDATE_SELECTED_ROWS)) {
             for each(_loc1_ in this._selectedRenderers) {
-                if (DisplayObject(_loc1_).parent) {
+                if (_loc1_.parent) {
                     removeChild(DisplayObject(_loc1_));
                 }
             }
@@ -223,7 +223,7 @@ public class VehCompareTableGrid extends UIComponentEx implements IDragDelegate,
         if (_loc2_) {
             removeChild(DisplayObject(_loc2_));
             delete this._rowsSelected[param1];
-            VehCompareParamVO(this._data[param1]).isSelected = false;
+            VehParamVO(this._data[param1]).isSelected = false;
         }
     }
 
@@ -233,7 +233,7 @@ public class VehCompareTableGrid extends UIComponentEx implements IDragDelegate,
         _loc2_.y = _loc3_;
         addChild(DisplayObject(_loc2_));
         this._rowsSelected[param1] = _loc2_;
-        VehCompareParamVO(this._data[param1]).isSelected = true;
+        VehParamVO(this._data[param1]).isSelected = true;
     }
 
     private function pullSelectedRenderer():ITableGridLine {

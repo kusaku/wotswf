@@ -27,12 +27,13 @@ public class FortFixedPlayersWindowMeta extends AbstractWindowView {
         this.assignToBuilding();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._fortFixedPlayersVO) {
-            this._fortFixedPlayersVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:FortFixedPlayersVO = this._fortFixedPlayersVO;
         this._fortFixedPlayersVO = new FortFixedPlayersVO(param1);
         this.setData(this._fortFixedPlayersVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:FortFixedPlayersVO):void {

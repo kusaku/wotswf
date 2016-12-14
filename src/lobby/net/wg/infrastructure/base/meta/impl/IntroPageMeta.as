@@ -34,12 +34,13 @@ public class IntroPageMeta extends AbstractView {
         this.handleError(param1);
     }
 
-    public function as_playVideo(param1:Object):void {
-        if (this._introInfoVO) {
-            this._introInfoVO.dispose();
-        }
+    public final function as_playVideo(param1:Object):void {
+        var _loc2_:IntroInfoVO = this._introInfoVO;
         this._introInfoVO = new IntroInfoVO(param1);
         this.playVideo(this._introInfoVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function playVideo(param1:IntroInfoVO):void {

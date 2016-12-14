@@ -5,8 +5,8 @@ import flash.events.MouseEvent;
 import flash.text.TextField;
 
 import net.wg.data.constants.Directions;
+import net.wg.gui.components.interfaces.IHangarQuestsButton;
 import net.wg.gui.components.tooltips.helpers.TankTypeIco;
-import net.wg.gui.interfaces.IButtonIconLoader;
 import net.wg.gui.lobby.hangar.data.HangarHeaderVO;
 import net.wg.infrastructure.base.meta.IHangarHeaderMeta;
 import net.wg.infrastructure.base.meta.impl.HangarHeaderMeta;
@@ -25,13 +25,17 @@ public class HangarHeader extends HangarHeaderMeta implements IHangarHeaderMeta,
 
     private static const SEPARATOR:String = "_";
 
+    private static const HELP_OFFSET_HEIGHT:int = -7;
+
+    private static const HELP_OFFSET_WIDTH:int = 5;
+
     public var tankTypeIcon:TankTypeIco;
 
     public var txtTankInfo:TextField;
 
-    public var btnCommonQuests:IButtonIconLoader;
+    public var btnCommonQuests:IHangarQuestsButton;
 
-    public var btnPersonalQuests:IButtonIconLoader;
+    public var btnPersonalQuests:IHangarQuestsButton;
 
     public var mcBackground:Sprite;
 
@@ -69,7 +73,7 @@ public class HangarHeader extends HangarHeaderMeta implements IHangarHeaderMeta,
         this.btnCommonQuests.removeEventListener(ButtonEvent.CLICK, this.onBtnCommonQuestsClickHandler);
         this.btnCommonQuests.removeEventListener(MouseEvent.ROLL_OVER, this.onBtnCommonQuestsRollOverHandler);
         this.btnCommonQuests.removeEventListener(MouseEvent.ROLL_OUT, this.onBtnCommonQuestsRollOutHandler);
-        this.btnPersonalQuests.removeEventListener(MouseEvent.CLICK, this.onBtnPersonalQuestsClickHandler);
+        this.btnPersonalQuests.removeEventListener(ButtonEvent.CLICK, this.onBtnPersonalQuestsClickHandler);
         this.btnPersonalQuests.removeEventListener(MouseEvent.ROLL_OVER, this.onBtnPersonalQuestsRollOverHandler);
         this.btnPersonalQuests.removeEventListener(MouseEvent.ROLL_OUT, this.onBtnPersonalQuestsRollOutHandler);
         this.btnCommonQuests.dispose();
@@ -97,9 +101,11 @@ public class HangarHeader extends HangarHeaderMeta implements IHangarHeaderMeta,
                 this.btnCommonQuests.label = this._data.commonQuestsLabel;
                 this.btnCommonQuests.iconSource = this._data.commonQuestsIcon;
                 this.btnCommonQuests.enabled = this._data.commonQuestsEnable;
+                this.btnCommonQuests.bgSource = this._data.commonQuestsBg;
                 this.btnPersonalQuests.label = this._data.personalQuestsLabel;
                 this.btnPersonalQuests.iconSource = this._data.personalQuestsIcon;
                 this.btnPersonalQuests.enabled = this._data.personalQuestsEnable;
+                this.btnPersonalQuests.bgSource = this._data.personalQuestsBg;
             }
         }
     }
@@ -114,7 +120,7 @@ public class HangarHeader extends HangarHeaderMeta implements IHangarHeaderMeta,
         _loc1_.x = this.btnCommonQuests.x;
         _loc1_.y = this.btnCommonQuests.y;
         _loc1_.width = this.btnPersonalQuests.x + this.btnPersonalQuests.width - this.btnCommonQuests.x;
-        _loc1_.height = this.btnCommonQuests.height;
+        _loc1_.height = this.btnCommonQuests.height + HELP_OFFSET_HEIGHT;
         _loc1_.message = LOBBY_HELP.HANGAR_HEADER_QUESTS;
         _loc1_.extensibilityDirection = Directions.RIGHT;
         _loc1_.id = name + SEPARATOR + Math.random();
@@ -122,8 +128,8 @@ public class HangarHeader extends HangarHeaderMeta implements IHangarHeaderMeta,
         var _loc2_:HelpLayoutVO = new HelpLayoutVO();
         _loc2_.x = _loc1_.x + _loc1_.width;
         _loc2_.y = this.btnCommonQuests.y;
-        _loc2_.width = this.txtTankInfo.x + this.txtTankInfo.textWidth - _loc2_.x;
-        _loc2_.height = this.btnCommonQuests.height;
+        _loc2_.width = this.txtTankInfo.x + this.txtTankInfo.textWidth - _loc2_.x + HELP_OFFSET_WIDTH;
+        _loc2_.height = this.btnCommonQuests.height + HELP_OFFSET_HEIGHT;
         _loc2_.message = LOBBY_HELP.HANGAR_HEADER_VEHICLE;
         _loc2_.extensibilityDirection = Directions.RIGHT;
         _loc2_.id = name + SEPARATOR + Math.random();

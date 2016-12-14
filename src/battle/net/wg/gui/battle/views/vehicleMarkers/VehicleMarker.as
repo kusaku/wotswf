@@ -12,7 +12,6 @@ import net.wg.gui.battle.views.vehicleMarkers.VO.HPDisplayMode;
 import net.wg.gui.battle.views.vehicleMarkers.VO.VehicleMarkerFlags;
 import net.wg.gui.battle.views.vehicleMarkers.VO.VehicleMarkerVO;
 import net.wg.gui.battle.views.vehicleMarkers.events.VehicleMarkersManagerEvent;
-import net.wg.gui.utils.RootSWFAtlasManager;
 
 import scaleform.gfx.TextFieldEx;
 
@@ -144,8 +143,6 @@ public class VehicleMarker extends BattleUIComponent implements IMarkerManagerHa
 
     private var _vmManager:VehicleMarkersManager = null;
 
-    private var _atlasManager:RootSWFAtlasManager = null;
-
     private var _maxHealthMult:Number = NaN;
 
     private var _colorSchemeName:String = "";
@@ -204,6 +201,10 @@ public class VehicleMarker extends BattleUIComponent implements IMarkerManagerHa
     }
 
     public function setVehicleInfo(param1:String, param2:String, param3:String, param4:int, param5:String, param6:String, param7:String, param8:String, param9:int, param10:String, param11:Boolean, param12:int):void {
+        var _loc13_:int = 0;
+        if (this._model) {
+            _loc13_ = this._model.currHealth;
+        }
         this._model = new VehicleMarkerVO();
         this._model.vClass = param1;
         this._model.vIconSource = param2;
@@ -217,6 +218,7 @@ public class VehicleMarker extends BattleUIComponent implements IMarkerManagerHa
         this._model.entityName = param10;
         this._model.hunt = param11;
         this._model.squadIndex = param12;
+        this._model.currHealth = _loc13_;
         this._maxHealthMult = MAX_HEALTH_PERCENT / this._model.maxHealth;
         if (this._model.entityName != "") {
             this._entityName = this._model.entityName;
@@ -229,6 +231,7 @@ public class VehicleMarker extends BattleUIComponent implements IMarkerManagerHa
                 this._entityType = VehicleMarkersConstants.ENTITY_TYPE_ALLY;
             }
         }
+        this._isPopulated = false;
         invalidateData();
     }
 

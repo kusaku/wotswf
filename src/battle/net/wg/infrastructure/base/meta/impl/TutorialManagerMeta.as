@@ -1,6 +1,7 @@
 package net.wg.infrastructure.base.meta.impl {
 import net.wg.data.constants.Errors;
 import net.wg.infrastructure.base.BaseDAAPIModule;
+import net.wg.infrastructure.exceptions.AbstractException;
 
 public class TutorialManagerMeta extends BaseDAAPIModule {
 
@@ -12,8 +13,18 @@ public class TutorialManagerMeta extends BaseDAAPIModule {
 
     public var requestCriteriaValue:Function;
 
+    private var _array:Array;
+
     public function TutorialManagerMeta() {
         super();
+    }
+
+    override protected function onDispose():void {
+        if (this._array) {
+            this._array.splice(0, this._array.length);
+            this._array = null;
+        }
+        super.onDispose();
     }
 
     public function onComponentFoundS(param1:String):Array {
@@ -34,6 +45,21 @@ public class TutorialManagerMeta extends BaseDAAPIModule {
     public function requestCriteriaValueS(param1:String):void {
         App.utils.asserter.assertNotNull(this.requestCriteriaValue, "requestCriteriaValue" + Errors.CANT_NULL);
         this.requestCriteriaValue(param1);
+    }
+
+    public final function as_setTriggers(param1:String, param2:Array):void {
+        var _loc3_:Array = this._array;
+        this._array = param2;
+        this.setTriggers(param1, this._array);
+        if (_loc3_) {
+            _loc3_.splice(0, _loc3_.length);
+        }
+    }
+
+    protected function setTriggers(param1:String, param2:Array):void {
+        var _loc3_:String = "as_setTriggers" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc3_);
+        throw new AbstractException(_loc3_);
     }
 }
 }

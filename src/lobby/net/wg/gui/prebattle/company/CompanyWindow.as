@@ -7,6 +7,7 @@ import flash.text.TextFormatAlign;
 import flash.ui.Keyboard;
 
 import net.wg.data.Aliases;
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.VehicleTypes;
 import net.wg.data.constants.generated.CONTEXT_MENU_HANDLER_TYPE;
 import net.wg.gui.components.controls.CheckBox;
@@ -20,7 +21,6 @@ import net.wg.gui.events.MessengerBarEvent;
 import net.wg.gui.interfaces.IButtonIconLoader;
 import net.wg.gui.lobby.messengerBar.WindowGeometryInBar;
 import net.wg.gui.prebattle.controls.TeamMemberRenderer;
-import net.wg.gui.prebattle.data.PlayerPrbInfoVO;
 import net.wg.gui.prebattle.meta.ICompanyWindowMeta;
 import net.wg.gui.prebattle.meta.impl.CompanyWindowMeta;
 
@@ -97,10 +97,6 @@ public class CompanyWindow extends CompanyWindowMeta implements ICompanyWindowMe
 
     public var assignedList:ScrollingListEx;
 
-    public var unassignedDataProvider:DataProvider;
-
-    public var assignedDataProvider:DataProvider;
-
     public var isOpenCheckbox:CheckBox;
 
     public var _commentDefaultTextColor:uint = 4473918;
@@ -140,8 +136,6 @@ public class CompanyWindow extends CompanyWindowMeta implements ICompanyWindowMe
     private var buttonsUpdated:Boolean = false;
 
     public function CompanyWindow() {
-        this.unassignedDataProvider = new DataProvider();
-        this.assignedDataProvider = new DataProvider();
         this.invalidVehicles = [];
         super();
     }
@@ -163,29 +157,10 @@ public class CompanyWindow extends CompanyWindowMeta implements ICompanyWindowMe
     }
 
     override public function as_setPlayerState(param1:int, param2:Boolean, param3:Object):void {
-        var _loc8_:Object = null;
-        var _loc4_:Array = [];
-        var _loc5_:DataProvider = !!param2 ? DataProvider(this.assignedList.dataProvider) : DataProvider(this.unassignedList.dataProvider);
-        var _loc6_:uint = _loc5_.length;
-        var _loc7_:int = 0;
-        while (_loc7_ < _loc6_) {
-            _loc8_ = _loc5_.requestItemAt(_loc7_);
-            if (_loc8_.dbID == param3.dbID) {
-                _loc8_.state = param3.state;
-                _loc8_.vShortName = param3.vShortName;
-                _loc8_.vLevel = param3.vLevel;
-                _loc8_.icon = param3.icon;
-                _loc8_.vType = param3.vType;
-                _loc8_.igrType = param3.igrType;
-            }
-            _loc4_.push(_loc8_);
-            _loc7_++;
-        }
-        if (param2) {
-            this.updateAssignList(_loc4_);
-        }
-        else {
-            this.updateUnassignList(_loc4_);
+        var _loc4_:ScrollingListEx = !!param2 ? this.assignedList : this.unassignedList;
+        checkStatus(_loc4_, param3);
+        if (_loc4_.selectedIndex == -1 && this._isPlayerCreator) {
+            _loc4_.selectedIndex = 0;
         }
     }
 
@@ -194,26 +169,18 @@ public class CompanyWindow extends CompanyWindowMeta implements ICompanyWindowMe
         App.utils.scheduler.scheduleTask(this.enableReadyButton, param1 * 1000, true);
     }
 
-    override public function as_setRosterList(param1:int, param2:Boolean, param3:Array):void {
+    override protected function setRosterList(param1:int, param2:Boolean, param3:DataProvider):void {
+        var _loc4_:int = param3.length;
         var _loc5_:int = 0;
-        var _loc6_:Object = null;
-        var _loc7_:int = 0;
-        var _loc4_:Array = [];
-        if (param3.length > 0) {
-            _loc5_ = param3.length;
-            _loc7_ = 0;
-            while (_loc7_ < _loc5_) {
-                _loc6_ = param3[_loc7_] as Object;
-                _loc6_["orderNumber"] = _loc7_ + 1;
-                _loc4_.push(new PlayerPrbInfoVO(_loc6_));
-                _loc7_++;
-            }
+        while (_loc5_ < _loc4_) {
+            param3[_loc5_].orderNumber = _loc5_ + 1;
+            _loc5_++;
         }
-        if (param2) {
-            this.updateAssignList(_loc4_);
-        }
-        else {
-            this.updateUnassignList(_loc4_);
+        var _loc6_:ScrollingListEx = !!param2 ? this.assignedList : this.unassignedList;
+        disposeDataProvider(_loc6_.dataProvider);
+        _loc6_.dataProvider = param3;
+        if (_loc6_.selectedIndex == -1 && this._isPlayerCreator) {
+            _loc6_.selectedIndex = 0;
         }
         this.updateMoveButtons();
     }
@@ -257,11 +224,11 @@ public class CompanyWindow extends CompanyWindowMeta implements ICompanyWindowMe
         }
     }
 
-    public function as_setDivisionsList(param1:Array, param2:uint):void {
+    override protected function setDivisionsList(param1:DataProvider, param2:uint):void {
         if (!this.division) {
             return;
         }
-        this.division.dataProvider = new DataProvider(param1);
+        this.division.dataProvider = param1;
         this.division.labelField = "label";
         this.autoSelectDivision(param2);
         this.updateDivision();
@@ -293,7 +260,7 @@ public class CompanyWindow extends CompanyWindowMeta implements ICompanyWindowMe
         }
     }
 
-    public function as_setClassesLimits(param1:Array):void {
+    override protected function setClassesLimits(param1:Array):void {
         var _loc4_:Object = null;
         var _loc2_:uint = param1.length;
         var _loc3_:int = 0;
@@ -318,7 +285,7 @@ public class CompanyWindow extends CompanyWindowMeta implements ICompanyWindowMe
         }
     }
 
-    public function as_setInvalidVehicles(param1:Array):void {
+    override protected function setInvalidVehicles(param1:Array):void {
         this.invalidVehicles = param1;
         this.refreshInvalidVehicles();
     }
@@ -352,8 +319,6 @@ public class CompanyWindow extends CompanyWindowMeta implements ICompanyWindowMe
         this.hiddenItemRenderer.visible = false;
         this.assignedList.labelField = "fullName";
         this.unassignedList.labelField = "fullName";
-        this.unassignedList.dataProvider = this.unassignedDataProvider;
-        this.unassignedList.selectedIndex = -1;
         this.unassignedList.addEventListener(ListEventEx.ITEM_CLICK, this.showAssignContextMenu);
         this.assignedList.addEventListener(ListEventEx.ITEM_CLICK, this.showAssignContextMenu);
         this.readyButton.addEventListener(ButtonEvent.CLICK, this.handleReadyClick);
@@ -398,14 +363,14 @@ public class CompanyWindow extends CompanyWindowMeta implements ICompanyWindowMe
             this.unassignedList.removeEventListener(ListEventEx.ITEM_DOUBLE_CLICK, this.handleMember17ItemDoubleClick);
             this.addToAssignBtn.removeEventListener(ButtonEvent.CLICK, this.handleUpClick);
         }
+        disposeDataProvider(this.unassignedList.dataProvider);
+        disposeDataProvider(this.assignedList.dataProvider);
         this.unassignedList.removeEventListener(ListEventEx.ITEM_CLICK, this.showAssignContextMenu);
         this.unassignedList.dispose();
-        this.unassignedDataProvider.cleanUp();
-        this.unassignedDataProvider = null;
+        this.unassignedList = null;
         this.assignedList.removeEventListener(ListEventEx.ITEM_CLICK, this.showAssignContextMenu);
         this.assignedList.dispose();
-        this.assignedDataProvider.cleanUp();
-        this.assignedDataProvider = null;
+        this.assignedList = null;
         if (this.division.hasEventListener(ListEvent.INDEX_CHANGE)) {
             this.division.removeEventListener(ListEvent.INDEX_CHANGE, this.handleDivisionChange);
         }
@@ -419,6 +384,7 @@ public class CompanyWindow extends CompanyWindowMeta implements ICompanyWindowMe
         App.utils.scheduler.cancelTask(setFocus);
         App.utils.scheduler.cancelTask(this.changeVisibleState);
         this.queueScrollBar = null;
+        this.invalidVehicles = null;
         super.onDispose();
     }
 
@@ -555,6 +521,7 @@ public class CompanyWindow extends CompanyWindowMeta implements ICompanyWindowMe
     private function updateWindowProperties():void {
         window.getIconMovie().gotoAndStop("team");
         var _loc1_:Padding = window.contentPadding as Padding;
+        App.utils.asserter.assertNotNull(_loc1_, "padding" + Errors.CANT_NULL);
         _loc1_.top = 40;
         _loc1_.left = 10;
         _loc1_.right = 10;
@@ -615,24 +582,6 @@ public class CompanyWindow extends CompanyWindowMeta implements ICompanyWindowMe
             this.addToAssignBtn.enabled = this.unassignedList.dataProvider.length > 0 && this._canAssignPlayer;
             this.removeFromAssignBtn.enabled = this.assignedList.dataProvider.length > 0 && this._canUnassignPlayer;
         }
-    }
-
-    private function updateAssignList(param1:Array):void {
-        this.assignedDataProvider = new DataProvider(param1);
-        this.assignedList.dataProvider = this.assignedDataProvider;
-        if (this.assignedList.selectedIndex == -1 && this._isPlayerCreator) {
-            this.assignedList.selectedIndex = 0;
-        }
-        this.assignedList.validateNow();
-    }
-
-    private function updateUnassignList(param1:Array):void {
-        this.unassignedDataProvider = new DataProvider(param1);
-        this.unassignedList.dataProvider = this.unassignedDataProvider;
-        if (this.unassignedList.selectedIndex == -1 && this._isPlayerCreator) {
-            this.unassignedList.selectedIndex = 0;
-        }
-        this.unassignedList.validateNow();
     }
 
     private function udpateOpenedCompany():void {

@@ -6,14 +6,14 @@ import net.wg.gui.components.controls.DropdownMenu;
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.lobby.tankman.vo.VehicleSelectionItemVO;
 import net.wg.gui.lobby.tankman.vo.VehicleSelectionVO;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.ISpriteEx;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.events.ListEvent;
 
-public class RoleChangeVehicleSelection extends UIComponent implements ISpriteEx {
+public class RoleChangeVehicleSelection extends UIComponentEx implements ISpriteEx {
 
     public var lightTankBtn:VehicleTypeButton;
 

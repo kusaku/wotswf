@@ -18,9 +18,9 @@ public class FalloutBattleSelectorWindowMeta extends PrebattleChannelCarouselIte
 
     private var _falloutBattleSelectorTooltipVO:FalloutBattleSelectorTooltipVO;
 
-    private var _selectorWindowStaticDataVO:SelectorWindowStaticDataVO;
-
     private var _selectorWindowBtnStatesVO:SelectorWindowBtnStatesVO;
+
+    private var _selectorWindowStaticDataVO:SelectorWindowStaticDataVO;
 
     public function FalloutBattleSelectorWindowMeta() {
         super();
@@ -31,13 +31,13 @@ public class FalloutBattleSelectorWindowMeta extends PrebattleChannelCarouselIte
             this._falloutBattleSelectorTooltipVO.dispose();
             this._falloutBattleSelectorTooltipVO = null;
         }
-        if (this._selectorWindowStaticDataVO) {
-            this._selectorWindowStaticDataVO.dispose();
-            this._selectorWindowStaticDataVO = null;
-        }
         if (this._selectorWindowBtnStatesVO) {
             this._selectorWindowBtnStatesVO.dispose();
             this._selectorWindowBtnStatesVO = null;
+        }
+        if (this._selectorWindowStaticDataVO) {
+            this._selectorWindowStaticDataVO.dispose();
+            this._selectorWindowStaticDataVO = null;
         }
         super.onDispose();
     }
@@ -62,28 +62,31 @@ public class FalloutBattleSelectorWindowMeta extends PrebattleChannelCarouselIte
         return this.getClientID();
     }
 
-    public function as_setInitData(param1:Object):void {
-        if (this._selectorWindowStaticDataVO) {
-            this._selectorWindowStaticDataVO.dispose();
-        }
+    public final function as_setInitData(param1:Object):void {
+        var _loc2_:SelectorWindowStaticDataVO = this._selectorWindowStaticDataVO;
         this._selectorWindowStaticDataVO = new SelectorWindowStaticDataVO(param1);
         this.setInitData(this._selectorWindowStaticDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setBtnStates(param1:Object):void {
-        if (this._selectorWindowBtnStatesVO) {
-            this._selectorWindowBtnStatesVO.dispose();
-        }
+    public final function as_setBtnStates(param1:Object):void {
+        var _loc2_:SelectorWindowBtnStatesVO = this._selectorWindowBtnStatesVO;
         this._selectorWindowBtnStatesVO = new SelectorWindowBtnStatesVO(param1);
         this.setBtnStates(this._selectorWindowBtnStatesVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setTooltips(param1:Object):void {
-        if (this._falloutBattleSelectorTooltipVO) {
-            this._falloutBattleSelectorTooltipVO.dispose();
-        }
+    public final function as_setTooltips(param1:Object):void {
+        var _loc2_:FalloutBattleSelectorTooltipVO = this._falloutBattleSelectorTooltipVO;
         this._falloutBattleSelectorTooltipVO = new FalloutBattleSelectorTooltipVO(param1);
         this.setTooltips(this._falloutBattleSelectorTooltipVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setInitData(param1:SelectorWindowStaticDataVO):void {

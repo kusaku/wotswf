@@ -34,8 +34,6 @@ public class AmmunitionPanel extends AmmunitionPanelMeta implements IAmmunitionP
 
     private static const INV_MAINTENANCE_STATE:String = "InvMaintenanceState";
 
-    private static const SHELLS_DATA_NAME:String = "_shellsData";
-
     private static const OFFSET_BTN_TO_RENT:Number = 5;
 
     private static const AMMUNITION_PANEL_BOTTOM_PADDING:int = 9;
@@ -117,7 +115,7 @@ public class AmmunitionPanel extends AmmunitionPanelMeta implements IAmmunitionP
         this.tuningBtn.removeEventListener(MouseEvent.ROLL_OVER, this.onBtnRollOverHandler);
         this.tuningBtn.removeEventListener(MouseEvent.ROLL_OUT, this.onBtnRollOutHandler);
         this.disposeSlots();
-        this.clearShellsData();
+        this._shellsData = null;
         super.onBeforeDispose();
     }
 
@@ -224,9 +222,8 @@ public class AmmunitionPanel extends AmmunitionPanelMeta implements IAmmunitionP
         return false;
     }
 
-    public function as_setAmmo(param1:Array, param2:Boolean):void {
-        this.clearShellsData();
-        this._shellsData = Vector.<ShellButtonVO>(this._utils.data.convertVOArrayToVector(SHELLS_DATA_NAME, param1, ShellButtonVO));
+    override protected function setAmmo(param1:Vector.<ShellButtonVO>, param2:Boolean):void {
+        this._shellsData = param1;
         invalidate(INV_SHELL_BUTTONS);
         this._maintenanceStateWarning = param2;
         invalidate(INV_MAINTENANCE_STATE);
@@ -359,18 +356,6 @@ public class AmmunitionPanel extends AmmunitionPanelMeta implements IAmmunitionP
         this.vehicleStateMsg.setVehicleStatus(this._msgVo);
         if (this._msgVo.rentAvailable) {
             dispatchEvent(new FocusRequestEvent(FocusRequestEvent.REQUEST_FOCUS, this));
-        }
-    }
-
-    private function clearShellsData():void {
-        var _loc1_:ShellButtonVO = null;
-        if (this._shellsData != null) {
-            for each(_loc1_ in this._shellsData) {
-                _loc1_.dispose();
-            }
-            this._shellsData.fixed = false;
-            this._shellsData.splice(0, this._shellsData.length);
-            this._shellsData = null;
         }
     }
 

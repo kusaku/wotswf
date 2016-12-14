@@ -11,6 +11,7 @@ import flash.net.URLRequest;
 import flash.system.ApplicationDomain;
 import flash.system.LoaderContext;
 
+import net.wg.data.constants.Values;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
 public class UILoaderCut extends Sprite implements IDisposable {
@@ -19,7 +20,9 @@ public class UILoaderCut extends Sprite implements IDisposable {
 
     public var background:MovieClip;
 
-    private var loader:Loader;
+    private var _loader:Loader;
+
+    private var _context:LoaderContext;
 
     private var _source:String = "";
 
@@ -29,6 +32,20 @@ public class UILoaderCut extends Sprite implements IDisposable {
         super();
         scaleX = scaleY = 1;
         this.background.visible = false;
+    }
+
+    public final function dispose():void {
+        if (this._loader) {
+            this._loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, this.onLoaderCompleteHandler);
+            this._loader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, this.onLoaderIOErrorHandler);
+            this._loader.unloadAndStop(true);
+            this._loader.close();
+            this._loader = null;
+            this._context = null;
+        }
+        this._source = null;
+        this._cutRect = null;
+        this.background = null;
     }
 
     public function get cutRect():Object {
@@ -44,44 +61,37 @@ public class UILoaderCut extends Sprite implements IDisposable {
     }
 
     public function set source(param1:String):void {
-        if (param1 == null || param1 == "" || param1 == this._source) {
+        if (param1 == null || param1 == Values.EMPTY_STR || param1 == this._source) {
             return;
         }
         this._source = param1;
-        var _loc2_:URLRequest = new URLRequest(param1);
-        var _loc3_:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain);
-        this.loader = new Loader();
-        this.loader.contentLoaderInfo.addEventListener(Event.COMPLETE, this.completeHandler);
-        this.loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, this.onIOError);
-        this.loader.load(_loc2_, _loc3_);
+        if (this._loader == null) {
+            this._loader = new Loader();
+            this._loader.contentLoaderInfo.addEventListener(Event.COMPLETE, this.onLoaderCompleteHandler);
+            this._loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, this.onLoaderIOErrorHandler);
+            this._context = new LoaderContext(false, ApplicationDomain.currentDomain);
+        }
+        else {
+            this._loader.unloadAndStop(true);
+        }
+        this._loader.load(new URLRequest(param1), this._context);
     }
 
-    private function completeHandler(param1:Event):void {
+    private function onLoaderCompleteHandler(param1:Event):void {
         graphics.clear();
         var _loc2_:Matrix = new Matrix(1, 0, 0, 1, -this._cutRect.x, -this._cutRect.y);
-        graphics.beginBitmapFill(Bitmap(this.loader.content).bitmapData, _loc2_, false);
+        graphics.beginBitmapFill(Bitmap(this._loader.content).bitmapData, _loc2_, false);
         graphics.moveTo(0, 0);
         graphics.lineTo(this._cutRect.width, 0);
         graphics.lineTo(this._cutRect.width, this._cutRect.height);
         graphics.lineTo(0, this._cutRect.height);
         graphics.lineTo(0, 0);
         graphics.endFill();
-        this.loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, this.completeHandler);
-        this.loader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, this.onIOError);
-        this.loader = null;
     }
 
-    private function onIOError(param1:IOErrorEvent):void {
-        this.loader.unloadAndStop(true);
+    private function onLoaderIOErrorHandler(param1:IOErrorEvent):void {
+        this._loader.unloadAndStop(true);
         this.source = ERROR_URL;
-    }
-
-    public function dispose():void {
-        this._source = null;
-        this._cutRect = null;
-        if (this.loader) {
-            this.loader.unloadAndStop(true);
-        }
     }
 }
 }

@@ -5,7 +5,7 @@ import net.wg.infrastructure.interfaces.entity.IDisposable;
 
 public class AnimationIcon extends Sprite implements IDisposable {
 
-    public var icon:UILoaderAlt = null;
+    public var icon:net.wg.gui.components.controls.UILoaderAlt = null;
 
     public function AnimationIcon() {
         super();

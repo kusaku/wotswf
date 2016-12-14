@@ -1,11 +1,11 @@
 package net.wg.gui.components.common.waiting {
 import net.wg.data.constants.Linkages;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.base.interfaces.IWaiting;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class Waiting extends UIComponent implements IWaiting {
+public class Waiting extends UIComponentEx implements IWaiting {
 
     private var _waitingComponent:WaitingComponent = null;
 

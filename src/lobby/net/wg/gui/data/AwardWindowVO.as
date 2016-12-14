@@ -13,13 +13,27 @@ public class AwardWindowVO extends DAAPIDataClass {
 
     private static const BACK_ANIMATION_DATA:String = "backAnimationData";
 
+    private static const HEADER_TEXT_OFFSET:int = 269;
+
+    private static const MIN_WINDOW_HEIGHT:int = 427;
+
+    private static const BOTTOM_BUTTONS_PADDING:uint = 23;
+
     public var backImage:String = "";
 
     public var awardImage:String = "";
 
+    public var packImage:String = "";
+
+    public var forceUseBackImage:Boolean = false;
+
     public var useBackAnimation:Boolean = false;
 
-    public var backAnimationData:StoppableAnimationLoaderVO;
+    public var backAnimationData:AwardWindowAnimationVO;
+
+    public var useEndedBackAnimation:Boolean = false;
+
+    public var autoControlBackAnimation:Boolean = true;
 
     public var windowTitle:String = "";
 
@@ -33,15 +47,9 @@ public class AwardWindowVO extends DAAPIDataClass {
 
     public var isOKBtnEnabled:Boolean = true;
 
-    public var isTakeNextBtnEnabled:Boolean = false;
-
     public var isCloseBtnEnabled:Boolean = false;
 
     public var isDashLineEnabled:Boolean = true;
-
-    public var takeNextBtnLabel:String = "";
-
-    public var closeBtnLabel:String = "";
 
     public var achievements:Array;
 
@@ -50,6 +58,24 @@ public class AwardWindowVO extends DAAPIDataClass {
     public var textAreaIconIsShow:Boolean = false;
 
     public var awardsBlock:TaskAwardsBlockVO = null;
+
+    public var hasCheckBox:Boolean = false;
+
+    public var isCheckBoxSelected:Boolean = false;
+
+    public var checkBoxLabel:String = "";
+
+    public var closeBtnLabel:String = "";
+
+    public var warningText:String = "";
+
+    public var warningHyperlinkText:String = "";
+
+    public var minWindowHeight:int = 427;
+
+    public var headerTextOffset:int = 269;
+
+    public var bottomButtonsPadding:int = 23;
 
     public function AwardWindowVO(param1:Object) {
         this.achievements = [];
@@ -75,7 +101,7 @@ public class AwardWindowVO extends DAAPIDataClass {
             return false;
         }
         if (param1 == BACK_ANIMATION_DATA && param2 != null) {
-            this.backAnimationData = new StoppableAnimationLoaderVO(param2);
+            this.backAnimationData = new AwardWindowAnimationVO(param2);
             return false;
         }
         return super.onDataWrite(param1, param2);
@@ -109,6 +135,13 @@ public class AwardWindowVO extends DAAPIDataClass {
 
     public function get hasAchievements():Boolean {
         return this.achievements && this.achievements.length > 0;
+    }
+
+    public function get animationData():StoppableAnimationLoaderVO {
+        if (this.backAnimationData != null) {
+            return this.backAnimationData.animationData;
+        }
+        return null;
     }
 }
 }

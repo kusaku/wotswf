@@ -2,11 +2,11 @@ package net.wg.gui.messenger.controls {
 import flash.display.MovieClip;
 
 import net.wg.gui.components.controls.SoundButtonEx;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class ContactsBtnBar extends UIComponent {
+public class ContactsBtnBar extends UIComponentEx {
 
     private static const OK_VISIBLE_INV:String = "okVisInv";
 

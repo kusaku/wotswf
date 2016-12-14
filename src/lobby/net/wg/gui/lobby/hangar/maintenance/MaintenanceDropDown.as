@@ -6,7 +6,6 @@ import flash.geom.Point;
 import net.wg.data.constants.ComponentState;
 import net.wg.gui.components.controls.DropdownMenu;
 import net.wg.gui.lobby.hangar.maintenance.events.OnEquipmentRendererOver;
-import net.wg.utils.IEventCollector;
 
 import scaleform.clik.constants.InvalidationType;
 
@@ -17,16 +16,19 @@ public class MaintenanceDropDown extends DropdownMenu {
     }
 
     override protected function showDropdown():void {
-        var _loc1_:IEventCollector = null;
         super.showDropdown();
         if (_dropdownRef) {
-            _loc1_ = App.utils.events;
-            _loc1_.disableDisposingForObj(_dropdownRef);
             parent.parent.addChild(_dropdownRef);
-            _loc1_.enableDisposingForObj(_dropdownRef);
-            _loc1_.addEvent(_dropdownRef, OnEquipmentRendererOver.ON_EQUIPMENT_RENDERER_OVER, this.handleOnEquipmentRendererOver, false, 0, true);
+            _dropdownRef.addEventListener(OnEquipmentRendererOver.ON_EQUIPMENT_RENDERER_OVER, this.handleOnEquipmentRendererOver, false, 0, true);
             this.updateDDPosition(null);
         }
+    }
+
+    override protected function onDispose():void {
+        if (_dropdownRef) {
+            _dropdownRef.removeEventListener(OnEquipmentRendererOver.ON_EQUIPMENT_RENDERER_OVER, this.handleOnEquipmentRendererOver);
+        }
+        super.onDispose();
     }
 
     private function handleOnEquipmentRendererOver(param1:OnEquipmentRendererOver):void {
@@ -55,7 +57,7 @@ public class MaintenanceDropDown extends DropdownMenu {
 
     override protected function draw():void {
         super.draw();
-        if (isInvalid(InvalidationType.DATA)) {
+        if (_dataProvider && isInvalid(InvalidationType.DATA)) {
             enabled = _dataProvider.length > 0;
         }
     }

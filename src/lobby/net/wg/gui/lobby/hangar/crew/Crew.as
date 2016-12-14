@@ -42,8 +42,6 @@ public class Crew extends CrewMeta implements ICrew {
 
     private var _stage:Stage = null;
 
-    private var _tankmenResponseVO:TankmenResponseVO;
-
     public function Crew() {
         super();
         this._stage = App.stage;
@@ -60,20 +58,20 @@ public class Crew extends CrewMeta implements ICrew {
         App.toolTipMgr.hide();
     }
 
-    override protected function onDispose():void {
+    override protected function onBeforeDispose():void {
         removeEventListener(CrewEvent.OPEN_PERSONAL_CASE, this.onOpenPersonalCaseHandler);
         this._stage.removeEventListener(CrewEvent.SHOW_RECRUIT_WINDOW, this.onStageShowRecruitWindowHandler);
         this._stage.removeEventListener(CrewEvent.EQUIP_TANKMAN, this.onStageEquipTankmanHandler);
-        this._stage = null;
         this.list.removeEventListener(ListEventEx.ITEM_ROLL_OVER, onListItemRollOverHandler);
         this.list.removeEventListener(ListEventEx.ITEM_ROLL_OUT, onListHideTooltipHandler);
         this.list.removeEventListener(ListEventEx.ITEM_PRESS, onListHideTooltipHandler);
+        super.onBeforeDispose();
+    }
+
+    override protected function onDispose():void {
+        this._stage = null;
         this.list.dispose();
         this.list = null;
-        if (this._tankmenResponseVO) {
-            this._tankmenResponseVO.dispose();
-        }
-        this._tankmenResponseVO = null;
         this.bg = null;
         this.removeDogItem();
         this.maskMC = null;
@@ -102,23 +100,14 @@ public class Crew extends CrewMeta implements ICrew {
                 this._crewDogItem.enabled = enabled;
             }
         }
+        super.draw();
     }
 
     override protected function tankmenResponse(param1:TankmenResponseVO):void {
         this.list.dataProvider = param1.listDP;
         this.list.selectedIndex = -1;
-        this.list.validateNow();
         this.updateDogItemPosition();
-        if (this._tankmenResponseVO) {
-            this._tankmenResponseVO.dispose();
-        }
-        this._tankmenResponseVO = param1;
         invalidate(INVALIDATE_ENABLE);
-    }
-
-    override protected function onPopulate():void {
-        super.onPopulate();
-        updateTankmenS();
     }
 
     public function as_dogResponse(param1:String):void {

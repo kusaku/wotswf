@@ -4,11 +4,11 @@ import flash.display.Sprite;
 
 import net.wg.gui.lobby.techtree.constants.TTInvalidationType;
 import net.wg.gui.lobby.techtree.sub.ResearchItems;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class PremiumLayout extends UIComponent {
+public class PremiumLayout extends UIComponentEx {
 
     public static const PREMIUM_LAYOUT_SOURCE:String = "PremiumLayoutSkinned";
 

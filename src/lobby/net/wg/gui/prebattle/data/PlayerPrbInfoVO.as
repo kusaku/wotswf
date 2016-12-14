@@ -140,5 +140,12 @@ public class PlayerPrbInfoVO extends ExtendedUserVO {
         }
         return !!_colors ? Number(_colors[!!this.isOffline() ? 1 : 0]) : Number(NaN);
     }
+
+    public function update(param1:Object):void {
+        var _loc2_:* = null;
+        for (_loc2_ in param1) {
+            this[_loc2_] = param1[_loc2_];
+        }
+    }
 }
 }

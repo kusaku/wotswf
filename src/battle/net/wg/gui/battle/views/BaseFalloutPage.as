@@ -177,8 +177,8 @@ public class BaseFalloutPage extends FalloutBattlePageMeta implements IFalloutBa
         }
     }
 
-    override public function as_setComponentsVisibility(param1:Array, param2:Array):void {
-        super.as_setComponentsVisibility(param1, param2);
+    override protected function setComponentsVisibility(param1:Vector.<String>, param2:Vector.<String>):void {
+        super.setComponentsVisibility(param1, param2);
         this.changeBattleMessengerPosition();
     }
 

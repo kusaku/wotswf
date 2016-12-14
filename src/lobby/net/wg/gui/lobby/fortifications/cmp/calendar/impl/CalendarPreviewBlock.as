@@ -4,12 +4,12 @@ import flash.text.TextField;
 
 import net.wg.gui.components.controls.SortableTable;
 import net.wg.gui.lobby.fortifications.data.FortCalendarPreviewBlockVO;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.DataProvider;
 
-public class CalendarPreviewBlock extends UIComponent {
+public class CalendarPreviewBlock extends UIComponentEx {
 
     public var dateTF:TextField;
 
@@ -45,21 +45,19 @@ public class CalendarPreviewBlock extends UIComponent {
 
     override protected function draw():void {
         super.draw();
-        if (isInvalid(InvalidationType.DATA)) {
-            if (this._model) {
-                this.dateTF.htmlText = this._model.dateString;
-                this.dateInfoTF.htmlText = this._model.dateInfo;
-                if (this._model.hasEvents) {
-                    this.list.listDP = new DataProvider(this._model.events);
-                    this.list.visible = true;
-                    this.noEventsTF.visible = false;
-                }
-                else {
-                    this.list.listDP = new DataProvider([]);
-                    this.noEventsTF.htmlText = this._model.noEventsText;
-                    this.noEventsTF.visible = true;
-                    this.list.visible = false;
-                }
+        if (this._model && isInvalid(InvalidationType.DATA)) {
+            this.dateTF.htmlText = this._model.dateString;
+            this.dateInfoTF.htmlText = this._model.dateInfo;
+            if (this._model.hasEvents) {
+                this.list.listDP = new DataProvider(this._model.events);
+                this.list.visible = true;
+                this.noEventsTF.visible = false;
+            }
+            else {
+                this.list.listDP = new DataProvider([]);
+                this.noEventsTF.htmlText = this._model.noEventsText;
+                this.noEventsTF.visible = true;
+                this.list.visible = false;
             }
         }
     }

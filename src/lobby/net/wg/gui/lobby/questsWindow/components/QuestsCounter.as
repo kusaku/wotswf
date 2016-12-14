@@ -2,9 +2,9 @@ package net.wg.gui.lobby.questsWindow.components {
 import flash.events.MouseEvent;
 import flash.text.TextField;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class QuestsCounter extends UIComponent {
+public class QuestsCounter extends UIComponentEx {
 
     public var textField:TextField;
 

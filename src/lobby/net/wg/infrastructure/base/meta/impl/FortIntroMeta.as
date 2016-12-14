@@ -20,12 +20,13 @@ public class FortIntroMeta extends BaseRallyIntroView {
         super.onDispose();
     }
 
-    public function as_setIntroData(param1:Object):void {
-        if (this._introViewVO) {
-            this._introViewVO.dispose();
-        }
+    public final function as_setIntroData(param1:Object):void {
+        var _loc2_:IntroViewVO = this._introViewVO;
         this._introViewVO = new IntroViewVO(param1);
         this.setIntroData(this._introViewVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setIntroData(param1:IntroViewVO):void {

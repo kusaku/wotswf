@@ -201,7 +201,7 @@ public class FortTransportConfirmationWindow extends FortTransportConfirmationWi
     }
 
     private function updateTargetData(param1:Number):void {
-        var _loc2_:BuildingBaseVO = new BuildingBaseVO(this._data.targetBaseVO.toHash());
+        var _loc2_:BuildingBaseVO = this._data.targetBaseVO.clone();
         var _loc3_:Number = Math.min(_loc2_.maxHpValue - _loc2_.hpVal, param1);
         _loc2_.hpVal = _loc2_.hpVal + _loc3_;
         param1 = param1 - _loc3_;
@@ -220,7 +220,7 @@ public class FortTransportConfirmationWindow extends FortTransportConfirmationWi
     }
 
     private function updateSourceData(param1:Number):void {
-        var _loc2_:BuildingBaseVO = new BuildingBaseVO(this._data.sourceBaseVO.toHash());
+        var _loc2_:BuildingBaseVO = this._data.sourceBaseVO.clone();
         _loc2_.defResVal = _loc2_.defResVal - param1;
         this.sourceIndicator.applyVOData(_loc2_);
         if (_loc2_.defResVal == 0) {

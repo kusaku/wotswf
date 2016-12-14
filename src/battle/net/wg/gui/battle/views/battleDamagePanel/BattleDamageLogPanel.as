@@ -8,6 +8,7 @@ import net.wg.gui.battle.views.battleDamagePanel.components.DamageLogDetailsImag
 import net.wg.gui.battle.views.battleDamagePanel.components.DamageLogDetailsText;
 import net.wg.gui.battle.views.battleDamagePanel.components.DefaultSummaryImages;
 import net.wg.gui.battle.views.battleDamagePanel.components.SummaryAnimation;
+import net.wg.gui.battle.views.battleDamagePanel.models.MessageRenderModel;
 import net.wg.infrastructure.base.meta.IBattleDamageLogPanelMeta;
 import net.wg.infrastructure.base.meta.impl.BattleDamageLogPanelMeta;
 
@@ -83,10 +84,16 @@ public class BattleDamageLogPanel extends BattleDamageLogPanelMeta implements IB
     }
 
     public function as_addDetailMessage(param1:uint, param2:String, param3:String, param4:String, param5:String):void {
-        this._damageLogDetailsController.addDetailsMessage(param1, param2, param3, param4, param5);
+        this._damageLogDetailsController.addDetailsMessage(new MessageRenderModel({
+            "valueColor": param1,
+            "value": param2,
+            "actionTypeImg": param3,
+            "vehicleTypeImg": param4,
+            "vehicleName": param5
+        }));
     }
 
-    public function as_detailStats(param1:Boolean, param2:Array):void {
+    override protected function detailStats(param1:Boolean, param2:Vector.<MessageRenderModel>):void {
         this._damageLogDetailsController.detailsStats(param1, param2);
     }
 
@@ -136,7 +143,8 @@ public class BattleDamageLogPanel extends BattleDamageLogPanelMeta implements IB
     }
 
     private function initializeSummaryElements(param1:String, param2:TextField, param3:DefaultSummaryImages, param4:SummaryAnimation):void {
-        var _loc5_:* = param1 != null;
+        var _loc5_:* = false;
+        _loc5_ = param1 != null;
         param2.visible = _loc5_;
         param3.visible = _loc5_;
         param4.visible = _loc5_;

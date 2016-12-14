@@ -55,12 +55,13 @@ public class VehicleSellDialogMeta extends AbstractWindowView {
         this.checkControlQuestion(param1);
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._sellDialogVO) {
-            this._sellDialogVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:SellDialogVO = this._sellDialogVO;
         this._sellDialogVO = new SellDialogVO(param1);
         this.setData(this._sellDialogVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:SellDialogVO):void {

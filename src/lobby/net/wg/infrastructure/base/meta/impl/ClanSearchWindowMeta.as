@@ -16,28 +16,28 @@ public class ClanSearchWindowMeta extends AbstractWindowView {
 
     public var dummyButtonPress:Function;
 
-    private var _dummyVO:DummyVO;
+    private var _clanSearchWindowInitDataVO:ClanSearchWindowInitDataVO;
 
     private var _clanSearchWindowStateDataVO:ClanSearchWindowStateDataVO;
 
-    private var _clanSearchWindowInitDataVO:ClanSearchWindowInitDataVO;
+    private var _dummyVO:DummyVO;
 
     public function ClanSearchWindowMeta() {
         super();
     }
 
     override protected function onDispose():void {
-        if (this._dummyVO) {
-            this._dummyVO.dispose();
-            this._dummyVO = null;
+        if (this._clanSearchWindowInitDataVO) {
+            this._clanSearchWindowInitDataVO.dispose();
+            this._clanSearchWindowInitDataVO = null;
         }
         if (this._clanSearchWindowStateDataVO) {
             this._clanSearchWindowStateDataVO.dispose();
             this._clanSearchWindowStateDataVO = null;
         }
-        if (this._clanSearchWindowInitDataVO) {
-            this._clanSearchWindowInitDataVO.dispose();
-            this._clanSearchWindowInitDataVO = null;
+        if (this._dummyVO) {
+            this._dummyVO.dispose();
+            this._dummyVO = null;
         }
         super.onDispose();
     }
@@ -62,28 +62,31 @@ public class ClanSearchWindowMeta extends AbstractWindowView {
         this.dummyButtonPress();
     }
 
-    public function as_setInitData(param1:Object):void {
-        if (this._clanSearchWindowInitDataVO) {
-            this._clanSearchWindowInitDataVO.dispose();
-        }
+    public final function as_setInitData(param1:Object):void {
+        var _loc2_:ClanSearchWindowInitDataVO = this._clanSearchWindowInitDataVO;
         this._clanSearchWindowInitDataVO = new ClanSearchWindowInitDataVO(param1);
         this.setInitData(this._clanSearchWindowInitDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setStateData(param1:Object):void {
-        if (this._clanSearchWindowStateDataVO) {
-            this._clanSearchWindowStateDataVO.dispose();
-        }
+    public final function as_setStateData(param1:Object):void {
+        var _loc2_:ClanSearchWindowStateDataVO = this._clanSearchWindowStateDataVO;
         this._clanSearchWindowStateDataVO = new ClanSearchWindowStateDataVO(param1);
         this.setStateData(this._clanSearchWindowStateDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setDummy(param1:Object):void {
-        if (this._dummyVO) {
-            this._dummyVO.dispose();
-        }
+    public final function as_setDummy(param1:Object):void {
+        var _loc2_:DummyVO = this._dummyVO;
         this._dummyVO = new DummyVO(param1);
         this.setDummy(this._dummyVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setInitData(param1:ClanSearchWindowInitDataVO):void {

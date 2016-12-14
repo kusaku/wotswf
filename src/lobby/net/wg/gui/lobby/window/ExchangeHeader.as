@@ -122,7 +122,6 @@ public class ExchangeHeader extends UIComponentEx implements IExchangeHeader {
         this.actionPriceBg.state = ACTION_PRICE_CONSTANTS.STATE_ALIGN_TOP;
         this.actionPriceBg.mouseChildren = false;
         this.actionPriceBg.mouseEnabled = false;
-        isInvalid(LAYOUT_INVALID);
     }
 
     override protected function draw():void {

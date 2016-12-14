@@ -15,12 +15,17 @@ import net.wg.infrastructure.managers.ITooltipMgr;
 import org.idmedia.as3commons.util.StringUtils;
 
 import scaleform.clik.constants.InvalidationType;
+import scaleform.clik.utils.Constraints;
 
 public class ShopVehicleListItemRenderer extends ShopTableItemRenderer {
 
     private static const ADD_TO_COMPARE_BTN_ORIGINAL_X:int = 593;
 
     private static const ADD_TO_COMPARE_BTN_ORIGINAL_WIDTH:int = 160;
+
+    private static const RESTORE_INFO_TF_ORIGINAL_X:int = 308;
+
+    private static const RESTORE_INFO_TF_ORIGINAL_WIDTH:int = 369;
 
     public var vehicleIcon:TankIcon = null;
 
@@ -51,6 +56,7 @@ public class ShopVehicleListItemRenderer extends ShopTableItemRenderer {
         this.addToCompareBtn.mouseEnabledOnDisabled = true;
         this.addToCompareBtn.visible = false;
         this.addToCompareBtn.validateNow();
+        constraints.addElement("vehicleIcon", this.vehicleIcon, Constraints.ALL);
     }
 
     override protected function onDispose():void {
@@ -104,6 +110,9 @@ public class ShopVehicleListItemRenderer extends ShopTableItemRenderer {
             this.addToCompareBtn.x = ADD_TO_COMPARE_BTN_ORIGINAL_X / scaleX;
             this.addToCompareBtn.scaleX = 1 / scaleX;
             this.addToCompareBtn.width = ADD_TO_COMPARE_BTN_ORIGINAL_WIDTH;
+            this.restoreInfoTf.x = RESTORE_INFO_TF_ORIGINAL_X / scaleX;
+            this.restoreInfoTf.scaleX = 1 / scaleX;
+            this.restoreInfoTf.width = RESTORE_INFO_TF_ORIGINAL_WIDTH;
         }
     }
 

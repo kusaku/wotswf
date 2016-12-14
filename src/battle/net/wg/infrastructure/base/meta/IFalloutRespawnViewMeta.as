@@ -7,7 +7,7 @@ public interface IFalloutRespawnViewMeta extends IEventDispatcher {
 
     function onPostmortemBtnClickS():void;
 
-    function as_initialize(param1:Object, param2:Array):void;
+    function as_initializeComponent(param1:Object, param2:Array):void;
 
     function as_updateTimer(param1:String, param2:Array):void;
 

@@ -5,12 +5,12 @@ import flash.events.Event;
 import net.wg.data.constants.Errors;
 import net.wg.gui.events.ResizableBlockEvent;
 import net.wg.gui.lobby.questsWindow.components.interfaces.IResizableContent;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.utils.IAssertable;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class ResizableContainer extends UIComponent {
+public class ResizableContainer extends UIComponentEx {
 
     private static const INV_AVAILABLE_HEIGHT:String = "invAvHeight";
 
@@ -150,7 +150,7 @@ public class ResizableContainer extends UIComponent {
             while (this._blocks.length > _loc1_) {
                 _loc4_ = this._blocks.pop();
                 _loc4_.dispose();
-                removeChild(_loc4_ as DisplayObject);
+                removeChild(DisplayObject(_loc4_));
             }
         }
         this.totalBlocks = this._blocks.length;

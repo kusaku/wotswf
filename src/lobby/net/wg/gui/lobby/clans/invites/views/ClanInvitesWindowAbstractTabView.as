@@ -49,8 +49,7 @@ public class ClanInvitesWindowAbstractTabView extends ClanInvitesWindowAbstractT
         this._utils = App.utils;
     }
 
-    override protected function parseData(param1:Object):ClanInvitesViewVO {
-        this.clearData();
+    override protected function getClanInvitesViewVO(param1:Object):ClanInvitesViewVO {
         this._model = new ClanInvitesWindowTabViewVO(param1);
         return this._model;
     }
@@ -65,7 +64,7 @@ public class ClanInvitesWindowAbstractTabView extends ClanInvitesWindowAbstractT
         this._filtersGroup.dispose();
         this._filtersGroup = null;
         this._utils = null;
-        this.clearData();
+        this._model = null;
         super.onDispose();
     }
 
@@ -140,13 +139,6 @@ public class ClanInvitesWindowAbstractTabView extends ClanInvitesWindowAbstractT
             _loc2_.x = _loc1_;
             _loc1_ = _loc1_ + (_loc2_.textField.textWidth + FILTERS_GAP);
             _loc2_.width = _loc2_.textField.textWidth + FILTERS_ICON_WIDTH;
-        }
-    }
-
-    private function clearData():void {
-        if (this._model != null) {
-            this._model.dispose();
-            this._model = null;
         }
     }
 

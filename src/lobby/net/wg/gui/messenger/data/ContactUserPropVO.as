@@ -6,6 +6,8 @@ public class ContactUserPropVO extends DAAPIDataClass implements IUserProps {
 
     private static const ICONS_LBL:String = "icons";
 
+    private static const TAGS_LBL:String = "tags";
+
     private var _userName:String = "";
 
     private var _clanAbbrev:String = "";
@@ -27,12 +29,12 @@ public class ContactUserPropVO extends DAAPIDataClass implements IUserProps {
     private var _icons:Vector.<String> = null;
 
     public function ContactUserPropVO(param1:Object) {
-        this._tags = [];
         super(param1);
     }
 
     override protected function onDataWrite(param1:String, param2:Object):Boolean {
         var _loc3_:String = null;
+        var _loc4_:String = null;
         if (param1 == ICONS_LBL) {
             App.utils.asserter.assert(param2 is Array, param1 + " must be an Array");
             this._icons = new Vector.<String>();
@@ -41,12 +43,22 @@ public class ContactUserPropVO extends DAAPIDataClass implements IUserProps {
             }
             return false;
         }
+        if (param1 == TAGS_LBL) {
+            App.utils.asserter.assert(param2 is Array, param1 + " must be an Array");
+            this._tags = [];
+            for each(_loc4_ in param2) {
+                this._tags.push(_loc4_);
+            }
+            return false;
+        }
         return super.onDataWrite(param1, param2);
     }
 
     override protected function onDispose():void {
-        this._icons.splice(0, this._icons.length);
-        this._icons = null;
+        if (this._icons != null) {
+            this._icons.splice(0, this._icons.length);
+            this._icons = null;
+        }
         this._tags.splice(0, this.tags.length);
         this._tags = null;
         super.onDispose();

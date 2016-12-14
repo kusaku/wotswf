@@ -41,12 +41,13 @@ public class TutorialHangarQuestDetailsMeta extends BaseDAAPIComponent {
         return this.getSortedTableData(param1);
     }
 
-    public function as_updateQuestInfo(param1:Object):void {
-        if (this._tutorialHangarQuestDetailsVO) {
-            this._tutorialHangarQuestDetailsVO.dispose();
-        }
+    public final function as_updateQuestInfo(param1:Object):void {
+        var _loc2_:TutorialHangarQuestDetailsVO = this._tutorialHangarQuestDetailsVO;
         this._tutorialHangarQuestDetailsVO = new TutorialHangarQuestDetailsVO(param1);
         this.updateQuestInfo(this._tutorialHangarQuestDetailsVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function updateQuestInfo(param1:TutorialHangarQuestDetailsVO):void {

@@ -6,12 +6,12 @@ import flash.text.TextField;
 import net.wg.gui.components.carousels.AchievementCarousel;
 import net.wg.gui.components.carousels.CarouselBase;
 import net.wg.gui.components.controls.UILoaderAlt;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.IViewStackContent;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.DataProvider;
 
-public class PersonalCaseStats extends UIComponent implements IViewStackContent {
+public class PersonalCaseStats extends UIComponentEx implements IViewStackContent {
 
     public var blocksArea:PersonalCaseBlocksArea = null;
 

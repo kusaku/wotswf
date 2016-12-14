@@ -38,19 +38,19 @@ public class CustomizationMainViewMeta extends AbstractView {
 
     public var backToSelectorGroup:Function;
 
-    private var _customizationSlotsPanelVO:CustomizationSlotsPanelVO;
-
-    private var _carouselInitVO:CarouselInitVO;
-
-    private var _customizationHeaderVO:CustomizationHeaderVO;
-
     private var _bottomPanelVO:BottomPanelVO;
 
     private var _carouselDataVO:CarouselDataVO;
 
+    private var _carouselInitVO:CarouselInitVO;
+
     private var _customizationBottomPanelInitVO:CustomizationBottomPanelInitVO;
 
     private var _customizationCarouselFilterVO:CustomizationCarouselFilterVO;
+
+    private var _customizationHeaderVO:CustomizationHeaderVO;
+
+    private var _customizationSlotsPanelVO:CustomizationSlotsPanelVO;
 
     private var _customizationTotalBonusPanelVO:CustomizationTotalBonusPanelVO;
 
@@ -59,18 +59,6 @@ public class CustomizationMainViewMeta extends AbstractView {
     }
 
     override protected function onDispose():void {
-        if (this._customizationSlotsPanelVO) {
-            this._customizationSlotsPanelVO.dispose();
-            this._customizationSlotsPanelVO = null;
-        }
-        if (this._carouselInitVO) {
-            this._carouselInitVO.dispose();
-            this._carouselInitVO = null;
-        }
-        if (this._customizationHeaderVO) {
-            this._customizationHeaderVO.dispose();
-            this._customizationHeaderVO = null;
-        }
         if (this._bottomPanelVO) {
             this._bottomPanelVO.dispose();
             this._bottomPanelVO = null;
@@ -79,6 +67,10 @@ public class CustomizationMainViewMeta extends AbstractView {
             this._carouselDataVO.dispose();
             this._carouselDataVO = null;
         }
+        if (this._carouselInitVO) {
+            this._carouselInitVO.dispose();
+            this._carouselInitVO = null;
+        }
         if (this._customizationBottomPanelInitVO) {
             this._customizationBottomPanelInitVO.dispose();
             this._customizationBottomPanelInitVO = null;
@@ -86,6 +78,14 @@ public class CustomizationMainViewMeta extends AbstractView {
         if (this._customizationCarouselFilterVO) {
             this._customizationCarouselFilterVO.dispose();
             this._customizationCarouselFilterVO = null;
+        }
+        if (this._customizationHeaderVO) {
+            this._customizationHeaderVO.dispose();
+            this._customizationHeaderVO = null;
+        }
+        if (this._customizationSlotsPanelVO) {
+            this._customizationSlotsPanelVO.dispose();
+            this._customizationSlotsPanelVO = null;
         }
         if (this._customizationTotalBonusPanelVO) {
             this._customizationTotalBonusPanelVO.dispose();
@@ -154,72 +154,80 @@ public class CustomizationMainViewMeta extends AbstractView {
         this.backToSelectorGroup();
     }
 
-    public function as_setHeaderData(param1:Object):void {
-        if (this._customizationHeaderVO) {
-            this._customizationHeaderVO.dispose();
-        }
+    public final function as_setHeaderData(param1:Object):void {
+        var _loc2_:CustomizationHeaderVO = this._customizationHeaderVO;
         this._customizationHeaderVO = new CustomizationHeaderVO(param1);
         this.setHeaderData(this._customizationHeaderVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setBonusPanelData(param1:Object):void {
-        if (this._customizationTotalBonusPanelVO) {
-            this._customizationTotalBonusPanelVO.dispose();
-        }
+    public final function as_setBonusPanelData(param1:Object):void {
+        var _loc2_:CustomizationTotalBonusPanelVO = this._customizationTotalBonusPanelVO;
         this._customizationTotalBonusPanelVO = new CustomizationTotalBonusPanelVO(param1);
         this.setBonusPanelData(this._customizationTotalBonusPanelVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setCarouselData(param1:Object):void {
-        if (this._carouselDataVO) {
-            this._carouselDataVO.dispose();
-        }
+    public final function as_setCarouselData(param1:Object):void {
+        var _loc2_:CarouselDataVO = this._carouselDataVO;
         this._carouselDataVO = new CarouselDataVO(param1);
         this.setCarouselData(this._carouselDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setCarouselInit(param1:Object):void {
-        if (this._carouselInitVO) {
-            this._carouselInitVO.dispose();
-        }
+    public final function as_setCarouselInit(param1:Object):void {
+        var _loc2_:CarouselInitVO = this._carouselInitVO;
         this._carouselInitVO = new CarouselInitVO(param1);
         this.setCarouselInit(this._carouselInitVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setCarouselFilterData(param1:Object):void {
-        if (this._customizationCarouselFilterVO) {
-            this._customizationCarouselFilterVO.dispose();
-        }
+    public final function as_setCarouselFilterData(param1:Object):void {
+        var _loc2_:CustomizationCarouselFilterVO = this._customizationCarouselFilterVO;
         this._customizationCarouselFilterVO = new CustomizationCarouselFilterVO(param1);
         this.setCarouselFilterData(this._customizationCarouselFilterVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setBottomPanelHeader(param1:Object):void {
-        if (this._bottomPanelVO) {
-            this._bottomPanelVO.dispose();
-        }
+    public final function as_setBottomPanelHeader(param1:Object):void {
+        var _loc2_:BottomPanelVO = this._bottomPanelVO;
         this._bottomPanelVO = new BottomPanelVO(param1);
         this.setBottomPanelHeader(this._bottomPanelVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setSlotsPanelData(param1:Object):void {
-        if (this._customizationSlotsPanelVO) {
-            this._customizationSlotsPanelVO.dispose();
-        }
+    public final function as_setSlotsPanelData(param1:Object):void {
+        var _loc2_:CustomizationSlotsPanelVO = this._customizationSlotsPanelVO;
         this._customizationSlotsPanelVO = new CustomizationSlotsPanelVO(param1);
         this.setSlotsPanelData(this._customizationSlotsPanelVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_updateSlot(param1:Object):void {
+    public final function as_updateSlot(param1:Object):void {
         this.updateSlot(new CustomizationSlotUpdateVO(param1));
     }
 
-    public function as_setBottomPanelInitData(param1:Object):void {
-        if (this._customizationBottomPanelInitVO) {
-            this._customizationBottomPanelInitVO.dispose();
-        }
+    public final function as_setBottomPanelInitData(param1:Object):void {
+        var _loc2_:CustomizationBottomPanelInitVO = this._customizationBottomPanelInitVO;
         this._customizationBottomPanelInitVO = new CustomizationBottomPanelInitVO(param1);
         this.setBottomPanelInitData(this._customizationBottomPanelInitVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setHeaderData(param1:CustomizationHeaderVO):void {

@@ -102,23 +102,23 @@ public class ResearchPage extends ResearchMeta implements IResearchPage {
         this.researchItems.setFreeXP(param1);
     }
 
-    public function as_setInstalledItems(param1:Array):void {
+    override protected function setInstalledItems(param1:Array):void {
         this.researchItems.setNodesStates(NODE_STATE_FLAGS.INSTALLED, param1);
     }
 
-    public function as_setInventoryItems(param1:Array):void {
+    override protected function setInventoryItems(param1:Array):void {
         this.researchItems.setNodesStates(NODE_STATE_FLAGS.IN_INVENTORY, param1);
     }
 
-    public function as_setNext2Unlock(param1:Array):void {
+    override protected function setNext2Unlock(param1:Array):void {
         this.researchItems.setNodesStates(NODE_STATE_FLAGS.NEXT_2_UNLOCK, param1, NodeData.UNLOCK_PROPS_FIELD);
     }
 
-    public function as_setNodeVehCompareData(param1:Array):void {
+    override protected function setNodeVehCompareData(param1:Array):void {
         this.researchItems.setItemsField(param1, NodeData.VEH_COMPARE_TREE_NODE_DATA);
     }
 
-    public function as_setNodesStates(param1:Number, param2:Array):void {
+    override protected function setNodesStates(param1:Number, param2:Array):void {
         this.researchItems.setNodesStates(param1, param2);
     }
 
@@ -126,7 +126,7 @@ public class ResearchPage extends ResearchMeta implements IResearchPage {
         this.researchItems.updateRootVehCompareData(param1);
     }
 
-    public function as_setVehicleTypeXP(param1:Array):void {
+    override protected function setVehicleTypeXP(param1:Array):void {
         this.researchItems.setVehicleTypeXP(param1);
     }
 

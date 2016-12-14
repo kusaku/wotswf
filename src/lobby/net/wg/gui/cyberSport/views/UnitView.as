@@ -44,7 +44,7 @@ public class UnitView extends CyberSportUnitMeta implements ICyberSportUnitMeta 
         return CYBER_SPORT_ALIASES.UNIT_VIEW_UI;
     }
 
-    override protected function getRallyVO(param1:Object):IRallyVO {
+    override protected function getIRallyVO(param1:Object):IRallyVO {
         return new RallyVO(param1);
     }
 
@@ -54,9 +54,9 @@ public class UnitView extends CyberSportUnitMeta implements ICyberSportUnitMeta 
 
     override protected function coolDownControls(param1:Boolean, param2:int):void {
         if (param2 == CHANGE_UNIT_STATE) {
-            (waitingListSection as WaitListSection).enableCloseButton(param1);
+            WaitListSection(waitingListSection).enableCloseButton(param1);
             this.unitTeamSection.enableFreezeButton(param1);
-            (chatSection as IChatSectionWithDescription).enableEditCommitButton(param1);
+            IChatSectionWithDescription(chatSection).enableEditCommitButton(param1);
         }
         else if (param2 == SET_PLAYER_STATE) {
             teamSection.enableFightButton(param1);
@@ -110,7 +110,7 @@ public class UnitView extends CyberSportUnitMeta implements ICyberSportUnitMeta 
         }
     }
 
-    public function as_lockUnit(param1:Boolean, param2:Array):void {
+    override protected function lockUnit(param1:Boolean, param2:Array):void {
         if (rallyData) {
             this.unitTeamSection.updateLockedUnit(param1, param2);
         }
@@ -138,7 +138,7 @@ public class UnitView extends CyberSportUnitMeta implements ICyberSportUnitMeta 
         }
     }
 
-    public function as_updateSlotSettings(param1:Array):void {
+    override protected function updateSlotSettings(param1:Array):void {
         this.rosterTeamSection.setSelectedSettings = param1;
     }
 
@@ -207,12 +207,12 @@ public class UnitView extends CyberSportUnitMeta implements ICyberSportUnitMeta 
         this.isRosterSettingsVisible = param1;
         this.rosterTeamSection.mouseEnabled = param1;
         this.rosterTeamSection.mouseChildren = param1;
-        (teamSection as Sprite).mouseEnabled = !param1;
-        (teamSection as Sprite).mouseChildren = !param1;
+        Sprite(teamSection).mouseEnabled = !param1;
+        Sprite(teamSection).mouseChildren = !param1;
         waitingListSection.mouseEnabled = !param1;
         waitingListSection.mouseChildren = !param1;
-        (chatSection as Sprite).mouseEnabled = !param1;
-        (chatSection as Sprite).mouseChildren = !param1;
+        Sprite(chatSection).mouseEnabled = !param1;
+        Sprite(chatSection).mouseChildren = !param1;
         this.rosterTeamContext = param1;
     }
 

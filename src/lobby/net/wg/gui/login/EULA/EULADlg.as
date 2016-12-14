@@ -61,6 +61,7 @@ public class EULADlg extends EULAMeta implements IEULAMeta {
         super.onPopulate();
         window.useBottomBtns = true;
         var _loc1_:Padding = window.contentPadding as Padding;
+        App.utils.asserter.assertNotNull(_loc1_, "wndPadding" + Errors.CANT_NULL);
         _loc1_.bottom = _loc1_.bottom - 1;
         window.contentPadding = _loc1_;
         this.applyButton.addEventListener(ButtonEvent.CLICK, this.onApplyBtnClickHandler);

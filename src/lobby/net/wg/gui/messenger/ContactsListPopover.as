@@ -8,7 +8,7 @@ import flash.text.TextField;
 import net.wg.data.constants.Linkages;
 import net.wg.data.constants.generated.CONTACTS_ALIASES;
 import net.wg.gui.components.controls.ButtonIconNormal;
-import net.wg.gui.components.popOvers.PopOver;
+import net.wg.gui.components.popovers.PopOver;
 import net.wg.gui.events.ViewStackEvent;
 import net.wg.gui.lobby.components.ResizableViewStack;
 import net.wg.gui.lobby.profile.LinkageUtils;
@@ -173,7 +173,7 @@ public class ContactsListPopover extends ContactsListPopoverMeta implements ICon
         this.lipsDown = null;
         this.borderLip = null;
         this._closeBtn = null;
-        this.clearData();
+        this._initData = null;
         super.onDispose();
     }
 
@@ -194,17 +194,9 @@ public class ContactsListPopover extends ContactsListPopoverMeta implements ICon
         _loc2_.update(param1);
     }
 
-    public function as_setInitInfo(param1:Object):void {
-        this.clearData();
-        this._initData = new ContactsWindowInitVO(param1);
+    override protected function setInitInfo(param1:ContactsWindowInitVO):void {
+        this._initData = param1;
         this.checkGroupBtn();
-    }
-
-    private function clearData():void {
-        if (this._initData) {
-            this._initData.dispose();
-            this._initData = null;
-        }
     }
 
     private function manageOperation(param1:String, param2:String, param3:Object = null):void {

@@ -2,10 +2,12 @@ package net.wg.gui.messenger.forms {
 import flash.display.InteractiveObject;
 import flash.utils.getQualifiedClassName;
 
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.generated.CONTEXT_MENU_HANDLER_TYPE;
 import net.wg.data.daapi.base.DAAPIDataProvider;
 import net.wg.gui.components.advanced.Accordion;
 import net.wg.gui.prebattle.invites.SendInvitesEvent;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.IViewStackContent;
 
 import scaleform.clik.constants.ConstrainMode;
@@ -15,7 +17,7 @@ import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.IndexEvent;
 import scaleform.clik.utils.Constraints;
 
-public class ContactsListForm extends UIComponent implements IViewStackContent {
+public class ContactsListForm extends UIComponentEx implements IViewStackContent {
 
     private static const FRIENDS_ROSTER:String = "ContactsFriendsRosterUI";
 
@@ -160,6 +162,7 @@ public class ContactsListForm extends UIComponent implements IViewStackContent {
         var _loc2_:UIComponent = null;
         for (_loc1_ in this.accordion.view.cachedViews) {
             _loc2_ = this.accordion.view.cachedViews[_loc1_] as UIComponent;
+            App.utils.asserter.assertNotNull(_loc2_, "view" + Errors.CANT_NULL);
             _loc2_.setSize(this.accordion.actualViewWidth, this.accordion.actualViewHeight);
             if (_loc2_ == this.accordion.view.currentView) {
                 _loc2_.validateNow();

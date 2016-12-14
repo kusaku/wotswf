@@ -3,9 +3,9 @@ import flash.display.InteractiveObject;
 import flash.text.TextField;
 
 import net.wg.data.constants.Linkages;
+import net.wg.gui.components.assets.interfaces.ISeparatorAsset;
 import net.wg.gui.components.controls.ScrollPane;
 import net.wg.gui.components.controls.UILoaderAlt;
-import net.wg.gui.components.interfaces.ISeparatorAsset;
 import net.wg.gui.lobby.questsWindow.QuestAwardsBlock;
 import net.wg.gui.lobby.questsWindow.components.interfaces.ITutorialHangarQuestDetails;
 import net.wg.gui.lobby.questsWindow.data.TutorialHangarQuestDetailsVO;

@@ -50,7 +50,7 @@ public class BaseSlotsPanel extends SlotsPanelMeta implements ISlotsPanel {
     override protected function onDispose():void {
         this.tryDisposeSlots();
         this.tryClearInvalidData();
-        this.tryDisposeSlotsData();
+        this._slotsData = null;
         this.tryDisposeStoreSlots();
         this._props = null;
         super.onDispose();
@@ -61,7 +61,7 @@ public class BaseSlotsPanel extends SlotsPanelMeta implements ISlotsPanel {
         super.draw();
         if (this._invalidData.length > 0 && isInvalid(INV_SLOT)) {
             for each(_loc1_ in this._invalidData) {
-                this.updateSlot(_loc1_);
+                this.internallyUpdateSlot(_loc1_);
                 this.syncNewData(_loc1_);
             }
             this._invalidData.splice(0, this._invalidData.length);
@@ -72,31 +72,21 @@ public class BaseSlotsPanel extends SlotsPanelMeta implements ISlotsPanel {
         this._props = param1;
     }
 
-    public function as_setSlots(param1:Array):void {
-        var _loc3_:SlotVO = null;
-        if (param1 == null) {
-            return;
-        }
+    override protected function setSlots(param1:Vector.<SlotVO>):void {
+        var _loc2_:SlotVO = null;
         this._inited = true;
-        this.tryDisposeSlotsData();
-        this._slotsData = new Vector.<SlotVO>();
-        var _loc2_:int = param1.length;
-        var _loc4_:int = 0;
-        while (_loc4_ < _loc2_) {
-            _loc3_ = this.parseDataItem(param1[_loc4_]);
-            this._slotsData.push(_loc3_);
-            this.updateSlot(_loc3_);
-            _loc4_++;
+        this._slotsData = param1;
+        for each(_loc2_ in this._slotsData) {
+            this.internallyUpdateSlot(_loc2_);
         }
         dispatchEvent(new SlotsPanelEvent(SlotsPanelEvent.ON_DATA_SET));
     }
 
-    public function as_updateSlot(param1:Object):void {
+    override protected function updateSlot(param1:SlotVO):void {
         if (!this._slotsData || this._slotsData.length == 0) {
             App.utils.asserter.assert(false, "Slots data" + Errors.CANT_EMPTY);
         }
-        var _loc2_:SlotVO = this.parseDataItem(param1);
-        this._invalidData.push(_loc2_);
+        this._invalidData.push(param1);
         invalidate(INV_SLOT);
     }
 
@@ -153,8 +143,12 @@ public class BaseSlotsPanel extends SlotsPanelMeta implements ISlotsPanel {
         }
     }
 
-    protected function parseDataItem(param1:Object):SlotVO {
+    override protected function getSlotVO(param1:Object):SlotVO {
         return new SlotVO(param1);
+    }
+
+    override protected function getSlotVO1(param1:Object):SlotVO {
+        return this.getSlotVO(param1);
     }
 
     protected function createSlot(param1:SlotVO):ICooldownSlot {
@@ -307,19 +301,7 @@ public class BaseSlotsPanel extends SlotsPanelMeta implements ISlotsPanel {
         this._invalidData = null;
     }
 
-    private function tryDisposeSlotsData():void {
-        var _loc1_:SlotVO = null;
-        if (this._slotsData != null) {
-            for each(_loc1_ in this._slotsData) {
-                _loc1_.dispose();
-            }
-            this._slotsData.fixed = false;
-            this._slotsData.splice(0, this._slotsData.length);
-            this._slotsData = null;
-        }
-    }
-
-    private function updateSlot(param1:SlotVO):void {
+    private function internallyUpdateSlot(param1:SlotVO):void {
         var _loc2_:ICooldownSlot = null;
         for each(_loc2_ in this._slots) {
             if (this.canUpdate(_loc2_, param1)) {

@@ -172,17 +172,25 @@ public class ResearchItem extends Renderer {
     private function applyExtraSource():void {
         var _loc1_:String = valueObject.extraInfo;
         this.typeIcon.hideExtraIcon();
-        if (_loc1_ == RES_ICONS.MAPS_ICONS_MODULES_MAGAZINEGUNICON) {
-            this.typeIcon.setExtraIcon(Linkages.MAGAZINE_GUN_ICON);
-            this.typeIcon.extraIconX = DEFAULT_EXTRA_ICON_X;
-            this.typeIcon.extraIconY = DEFAULT_EXTRA_ICON_Y;
-            if ((button && button.visible || this.xpLabel && this.xpLabel.visible) != true) {
-                this.typeIcon.showExtraIcon();
-                this.typeIcon.extraIconAlpha = stateProps.index == 0 ? Number(EXTRA_ICON_ALPHA_TRANSPARENT) : Number(EXTRA_ICON_ALPHA);
-            }
+        switch (_loc1_) {
+            case RES_ICONS.MAPS_ICONS_MODULES_MAGAZINEGUNICON:
+                this.setExtraIcon(Linkages.MAGAZINE_GUN_ICON);
+                break;
+            case RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICCHASSISICON:
+                this.setExtraIcon(Linkages.HYDRAULIC_CHASSIS_ICON);
+                break;
+            default:
+                this.applyExtraSourceLoad();
         }
-        else {
-            this.applyExtraSourceLoad();
+    }
+
+    private function setExtraIcon(param1:String):void {
+        this.typeIcon.setExtraIcon(param1);
+        this.typeIcon.extraIconX = DEFAULT_EXTRA_ICON_X;
+        this.typeIcon.extraIconY = DEFAULT_EXTRA_ICON_Y;
+        if ((button && button.visible || this.xpLabel && this.xpLabel.visible) != true) {
+            this.typeIcon.showExtraIcon();
+            this.typeIcon.extraIconAlpha = stateProps.index == 0 ? Number(EXTRA_ICON_ALPHA_TRANSPARENT) : Number(EXTRA_ICON_ALPHA);
         }
     }
 

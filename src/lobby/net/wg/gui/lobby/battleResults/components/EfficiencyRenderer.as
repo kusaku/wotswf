@@ -11,12 +11,13 @@ import net.wg.data.constants.generated.BATTLE_EFFICIENCY_TYPES;
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.components.controls.UserNameField;
 import net.wg.gui.events.FinalStatisticEvent;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.ListData;
 import scaleform.clik.interfaces.IListItemRenderer;
 
-public class EfficiencyRenderer extends UIComponent implements IListItemRenderer {
+public class EfficiencyRenderer extends UIComponentEx implements IListItemRenderer {
 
     public var fakeBg:MovieClip;
 

@@ -138,7 +138,7 @@ public class ProfileWindowFooter extends ProfileFooter {
         if (this._club) {
             if (this._clubGroupBlock == null) {
                 this._clubGroupBlock = this.createGroupBlock();
-                this._clubGroupBlock.actionBtn.addEventListener(MouseEvent.CLICK, this.onClubGroupBlockActionBtnClickHandler);
+                this._clubGroupBlock.actionBtn.addEventListener(ButtonEvent.CLICK, this.onClubGroupBlockActionBtnClickHandler);
                 this._clubGroupBlock.emblem.addEventListener(MouseEvent.ROLL_OVER, this.onClubGroupBlockEmblemRollOverHandler);
                 this._clubGroupBlock.emblem.addEventListener(MouseEvent.ROLL_OUT, onClubGroupBlockEmblemRollOutHandler);
                 App.utils.scheduler.scheduleOnNextFrame(this.updateClubData);
@@ -204,7 +204,7 @@ public class ProfileWindowFooter extends ProfileFooter {
     private function removeClubBlock():void {
         if (this._clubGroupBlock) {
             App.utils.scheduler.cancelTask(this.updateClubData);
-            this._clubGroupBlock.actionBtn.removeEventListener(MouseEvent.CLICK, this.onClubGroupBlockActionBtnClickHandler);
+            this._clubGroupBlock.actionBtn.removeEventListener(ButtonEvent.CLICK, this.onClubGroupBlockActionBtnClickHandler);
             this._clubGroupBlock.emblem.removeEventListener(MouseEvent.ROLL_OVER, this.onClubGroupBlockEmblemRollOverHandler);
             this._clubGroupBlock.emblem.removeEventListener(MouseEvent.ROLL_OUT, onClubGroupBlockEmblemRollOutHandler);
             removeChild(this._clubGroupBlock);
@@ -221,7 +221,7 @@ public class ProfileWindowFooter extends ProfileFooter {
         App.toolTipMgr.showSpecial(TOOLTIPS_CONSTANTS.LADDER, null, this._club.id);
     }
 
-    private function onClubGroupBlockActionBtnClickHandler(param1:MouseEvent):void {
+    private function onClubGroupBlockActionBtnClickHandler(param1:ButtonEvent):void {
         var _loc2_:ProfileOpenInfoEvent = new ProfileOpenInfoEvent(ProfileOpenInfoEvent.CLUB);
         _loc2_.id = this._club.id;
         dispatchEvent(_loc2_);

@@ -45,6 +45,8 @@ package
       
       public static const BONUSES_BOOSTERS_NAME:String = "#quests:bonuses/boosters/name";
       
+      public static const BONUSES_DISCOUNT_NAME:String = "#quests:bonuses/discount/name";
+      
       public static const BONUSES_CUSTOMIZATION_VALUE:String = "#quests:bonuses/customization/value";
       
       public static const BONUSES_VEHICLES_NAME:String = "#quests:bonuses/vehicles/name";
@@ -81,6 +83,10 @@ package
       
       public static const BONUSES_ITEM_TANKWOMAN:String = "#quests:bonuses/item/tankwoman";
       
+      public static const BONUSES_ITEM_TANKWOMAN_DESCRIPTION:String = "#quests:bonuses/item/tankwoman/description";
+      
+      public static const BONUSES_ITEM_TANKWOMAN_CHRISTMAS_DESCRIPTION:String = "#quests:bonuses/item/tankwoman/christmas/description";
+      
       public static const BONUSES_ITEM_ADDITIONBONUS:String = "#quests:bonuses/item/additionBonus";
       
       public static const BONUSES_ITEM_TANKMEN_NO_SKILLS:String = "#quests:bonuses/item/tankmen/no_skills";
@@ -106,6 +112,10 @@ package
       public static const QUESTS_REQUIREMENTS:String = "#quests:quests/requirements";
       
       public static const QUESTS_CURRENT_NODATA:String = "#quests:quests/current/nodata";
+      
+      public static const QUESTS_CURRENT_NOQUESTS:String = "#quests:quests/current/noQuests";
+      
+      public static const QUESTS_CURRENT_NOACTIONS:String = "#quests:quests/current/noActions";
       
       public static const QUESTS_FUTURE_NODATA:String = "#quests:quests/future/nodata";
       
@@ -1515,9 +1525,9 @@ package
       
       public static const BEGINNERQUESTS_DETAILS_NOAWARD:String = "#quests:beginnerQuests/details/noAward";
       
-      public static const QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_ENUM:Array = [QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK1,QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK2,QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK3];
-      
       public static const QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_ENUM:Array = [QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK1,QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK2,QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_BLOCK3];
+      
+      public static const QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_ENUM:Array = [QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK1,QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK2,QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_BLOCK3];
        
       
       public function QUESTS()
@@ -1525,17 +1535,17 @@ package
          super();
       }
       
-      public static function questspersonalwelcomeview_textblock_body(param1:String) : String
-      {
-         var _loc2_:String = "#quests:QuestsPersonalWelcomeView/textBlock/body/" + param1;
-         App.utils.asserter.assert(QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
-      }
-      
       public static function questspersonalwelcomeview_textblock_header(param1:String) : String
       {
          var _loc2_:String = "#quests:QuestsPersonalWelcomeView/textBlock/header/" + param1;
          App.utils.asserter.assert(QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
+      public static function questspersonalwelcomeview_textblock_body(param1:String) : String
+      {
+         var _loc2_:String = "#quests:QuestsPersonalWelcomeView/textBlock/body/" + param1;
+         App.utils.asserter.assert(QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
          return _loc2_;
       }
    }

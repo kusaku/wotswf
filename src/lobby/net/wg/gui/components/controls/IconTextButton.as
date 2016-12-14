@@ -6,9 +6,11 @@ import scaleform.clik.core.UIComponent;
 
 public class IconTextButton extends IconButton {
 
+    private static const ICO_TEXT_PADDING:Number = 5;
+
     public var alertMC:UIComponent;
 
-    protected var _caps:Boolean = true;
+    private var _caps:Boolean = true;
 
     private var _helpLayoutId:String = "";
 
@@ -33,14 +35,6 @@ public class IconTextButton extends IconButton {
         _loc3_.id = this._helpLayoutId;
         _loc3_.scope = this;
         return new <HelpLayoutVO>[_loc3_];
-    }
-
-    override protected function configUI():void {
-        if (iconSource && iconSource.indexOf(RES_ICONS.MAPS_ICONS_BUTTONS + "/") == -1) {
-            RES_ICONS.maps_icons_buttons(iconSource);
-            iconSource = RES_ICONS.MAPS_ICONS_BUTTONS + "/" + iconSource;
-        }
-        super.configUI();
     }
 
     override protected function configIcon():void {

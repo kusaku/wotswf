@@ -48,7 +48,7 @@ public class FortInfo extends Sprite implements ISpriteEx {
     }
 
     public function update(param1:Object):void {
-        this.fortLevel.htmlText = param1 as String;
+        this.fortLevel.htmlText = String(param1);
     }
 
     private function onFortLevelMouseOut(param1:MouseEvent):void {

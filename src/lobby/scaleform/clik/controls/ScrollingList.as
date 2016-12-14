@@ -359,7 +359,6 @@ public class ScrollingList extends CoreList {
             _loc1_ = this._scrollBarValue as IScrollBar;
         }
         this._scrollBar = _loc1_;
-        App.utils.events.enableDisposingForObj(DisplayObject(this._scrollBar));
         invalidateSize();
         if (this._scrollBar == null) {
             return;

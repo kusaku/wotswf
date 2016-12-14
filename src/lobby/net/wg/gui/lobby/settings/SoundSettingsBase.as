@@ -6,14 +6,15 @@ import net.wg.gui.components.advanced.ContentTabBar;
 import net.wg.gui.components.advanced.FieldSet;
 import net.wg.gui.components.controls.CheckBox;
 import net.wg.gui.components.controls.DropdownMenu;
+import net.wg.gui.components.controls.IconTextButton;
 import net.wg.gui.components.controls.LabelControl;
 import net.wg.gui.components.controls.Slider;
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.interfaces.IButtonIconLoader;
 import net.wg.gui.lobby.settings.components.KeyInput;
 import net.wg.gui.lobby.settings.components.RadioButtonBar;
+import net.wg.gui.lobby.settings.components.SoundDeviceButtonBar;
 import net.wg.gui.lobby.settings.components.SoundVoiceWaves;
-import net.wg.gui.lobby.settings.components.TabButtonBar;
 import net.wg.gui.lobby.settings.config.SettingsConfigHelper;
 
 public class SoundSettingsBase extends SettingsBaseView {
@@ -90,9 +91,11 @@ public class SoundSettingsBase extends SettingsBaseView {
 
     public var presetsFieldSet:FieldSet = null;
 
-    public var soundDeviceLabel:LabelControl = null;
+    public var soundDeviceButtonBar:SoundDeviceButtonBar = null;
 
-    public var soundDeviceButtonBar:TabButtonBar = null;
+    public var soundSpeakersDropDown:DropdownMenu = null;
+
+    public var soundSpeakersTestButton:IconTextButton = null;
 
     public var bassBoostCheckbox:CheckBox = null;
 
@@ -219,8 +222,9 @@ public class SoundSettingsBase extends SettingsBaseView {
         this.alternativeVoicesFieldSet = this.commonForm.alternativeVoicesFieldSet;
         this.testAlternativeVoicesButton = this.commonForm.testAlternativeVoicesButton;
         this.presetsFieldSet = this.commonForm.presetsFieldSet;
-        this.soundDeviceLabel = this.commonForm.soundDeviceLabel;
         this.soundDeviceButtonBar = this.commonForm.soundDeviceButtonBar;
+        this.soundSpeakersDropDown = this.commonForm.soundSpeakersDropDown;
+        this.soundSpeakersTestButton = this.commonForm.soundSpeakersTestButton;
         this.bassBoostCheckbox = this.commonForm.bassBoostCheckbox;
         this.nightModeCheckbox = this.commonForm.nightModeCheckbox;
         this.alternativeVoicesButtonBar = this.commonForm.alternativeVoicesButtonBar;
@@ -316,8 +320,9 @@ public class SoundSettingsBase extends SettingsBaseView {
         this.bulbVoicesButton = null;
         this.bulbVoicesDropDown = null;
         this.presetsFieldSet = null;
-        this.soundDeviceLabel = null;
         this.soundDeviceButtonBar = null;
+        this.soundSpeakersDropDown = null;
+        this.soundSpeakersTestButton = null;
         this.bassBoostCheckbox = null;
         this.nightModeCheckbox = null;
         this.voiceConnectFieldSet = null;

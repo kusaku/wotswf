@@ -7,11 +7,10 @@ import net.wg.data.constants.Linkages;
 import net.wg.data.constants.Values;
 import net.wg.gui.components.tooltips.VO.PersonalCaseBlockItemVO;
 import net.wg.gui.interfaces.IPersonalCaseBlockTitle;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
-import scaleform.clik.core.UIComponent;
-
-public class PersonalCaseBlocksArea extends UIComponent {
+public class PersonalCaseBlocksArea extends UIComponentEx {
 
     private static const Y_START_POSITION:uint = 17;
 
@@ -104,7 +103,7 @@ public class PersonalCaseBlocksArea extends UIComponent {
             _loc2_.setRightText(param1.secondLabel);
         }
         _loc2_.y = this.paddingY;
-        this.addChild(_loc2_ as DisplayObject);
+        this.addChild(DisplayObject(_loc2_));
         this.paddingY = this.paddingY + PADDING_BETWEEN_BLOCKS;
         this.creteRows(param1.stats, _loc3_, _loc4_);
         if (param1.hasOwnProperty("secondLabel") && param1.secondLabel != Values.EMPTY_STR) {

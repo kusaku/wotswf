@@ -1,12 +1,11 @@
 package net.wg.infrastructure.base.meta.impl {
-import flash.display.MovieClip;
-
 import net.wg.data.constants.Errors;
 import net.wg.infrastructure.base.meta.ICacheManagerMeta;
 import net.wg.infrastructure.base.meta.IGameInputManagerMeta;
 import net.wg.infrastructure.base.meta.IGlobalVarsMgrMeta;
 import net.wg.infrastructure.base.meta.ILoaderManagerMeta;
 import net.wg.infrastructure.base.meta.IUtilsManagerMeta;
+import net.wg.infrastructure.exceptions.AbstractException;
 import net.wg.infrastructure.managers.IColorSchemeManager;
 import net.wg.infrastructure.managers.IContainerManager;
 import net.wg.infrastructure.managers.IContextMenuManager;
@@ -20,7 +19,9 @@ import net.wg.infrastructure.managers.IVoiceChatManager;
 import net.wg.utils.ITextManager;
 import net.wg.utils.ITweenManager;
 
-public class ApplicationMeta extends MovieClip {
+import scaleform.clik.core.UIComponent;
+
+public class ApplicationMeta extends UIComponent {
 
     public var setLoaderMgr:Function;
 
@@ -60,8 +61,18 @@ public class ApplicationMeta extends MovieClip {
 
     public var onAsInitializationCompleted:Function;
 
+    private var _vectorString:Vector.<String>;
+
     public function ApplicationMeta() {
         super();
+    }
+
+    override protected function onDispose():void {
+        if (this._vectorString) {
+            this._vectorString.splice(0, this._vectorString.length);
+            this._vectorString = null;
+        }
+        super.onDispose();
     }
 
     public function setLoaderMgrS(param1:ILoaderManagerMeta):void {
@@ -157,6 +168,27 @@ public class ApplicationMeta extends MovieClip {
     public function onAsInitializationCompletedS():void {
         App.utils.asserter.assertNotNull(this.onAsInitializationCompleted, "onAsInitializationCompleted" + Errors.CANT_NULL);
         this.onAsInitializationCompleted();
+    }
+
+    public final function as_setLibrariesList(param1:Array):void {
+        var _loc2_:Vector.<String> = this._vectorString;
+        this._vectorString = new Vector.<String>(0);
+        var _loc3_:uint = param1.length;
+        var _loc4_:int = 0;
+        while (_loc4_ < _loc3_) {
+            this._vectorString[_loc4_] = param1[_loc4_];
+            _loc4_++;
+        }
+        this.setLibrariesList(this._vectorString);
+        if (_loc2_) {
+            _loc2_.splice(0, _loc2_.length);
+        }
+    }
+
+    protected function setLibrariesList(param1:Vector.<String>):void {
+        var _loc2_:String = "as_setLibrariesList" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
     }
 }
 }

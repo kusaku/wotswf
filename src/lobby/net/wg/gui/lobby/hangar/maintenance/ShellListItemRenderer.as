@@ -14,7 +14,6 @@ import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.components.controls.VO.ActionPriceVO;
 import net.wg.gui.events.ModuleInfoEvent;
 import net.wg.gui.lobby.hangar.maintenance.data.MaintenanceShellVO;
-import net.wg.utils.IEventCollector;
 import net.wg.utils.ILocale;
 
 import scaleform.clik.constants.InvalidationType;
@@ -46,10 +45,9 @@ public class ShellListItemRenderer extends SoundListItemRenderer {
     override protected function configUI():void {
         super.configUI();
         this.desc.text = MENU.SHELLLISTITEMRENDERER_REPLACE;
-        var _loc1_:IEventCollector = App.utils.events;
-        _loc1_.addEvent(this, MouseEvent.ROLL_OVER, this.onRollOverHandler);
-        _loc1_.addEvent(this, MouseEvent.ROLL_OUT, this.onRollOutHandler);
-        _loc1_.addEvent(this, MouseEvent.CLICK, this.onClickHandler);
+        addEventListener(MouseEvent.ROLL_OVER, this.onRollOverHandler);
+        addEventListener(MouseEvent.ROLL_OUT, this.onRollOutHandler);
+        addEventListener(MouseEvent.CLICK, this.onClickHandler);
         soundType = SoundTypes.NORMAL_BTN;
         if (this.hitMc) {
             hitArea = this.hitMc;
@@ -91,6 +89,9 @@ public class ShellListItemRenderer extends SoundListItemRenderer {
     }
 
     override protected function onDispose():void {
+        removeEventListener(MouseEvent.ROLL_OVER, this.onRollOverHandler);
+        removeEventListener(MouseEvent.ROLL_OUT, this.onRollOutHandler);
+        removeEventListener(MouseEvent.CLICK, this.onClickHandler);
         this.icon.dispose();
         this.icon = null;
         this.title = null;

@@ -9,6 +9,8 @@ public class TabDataVO extends DAAPIDataClass {
 
     public var tooltip:String = "";
 
+    public var linkage:String = "";
+
     public function TabDataVO(param1:Object) {
         super(param1);
     }

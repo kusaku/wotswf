@@ -27,12 +27,13 @@ public class PvESandboxQueueWindowMeta extends AbstractWindowView {
         this.cancel();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._waitingQueueWindowVO) {
-            this._waitingQueueWindowVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:WaitingQueueWindowVO = this._waitingQueueWindowVO;
         this._waitingQueueWindowVO = new WaitingQueueWindowVO(param1);
         this.setData(this._waitingQueueWindowVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:WaitingQueueWindowVO):void {

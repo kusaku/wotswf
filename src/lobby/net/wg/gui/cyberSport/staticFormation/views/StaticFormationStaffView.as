@@ -7,7 +7,7 @@ import flash.text.TextField;
 
 import net.wg.data.constants.Linkages;
 import net.wg.data.constants.SortingInfo;
-import net.wg.gui.components.common.SeparatorAsset;
+import net.wg.gui.components.assets.SeparatorAsset;
 import net.wg.gui.components.controls.CheckBox;
 import net.wg.gui.components.controls.SortableTable;
 import net.wg.gui.components.controls.SoundButtonEx;
@@ -28,16 +28,6 @@ import scaleform.clik.events.ButtonEvent;
 public class StaticFormationStaffView extends StaticFormationStaffViewMeta implements IStaticFormationStaffViewMeta, IViewStackContent, IPopOverCaller {
 
     private static const DEFAULT_SORT_VALUE:String = "appointmentSortValue";
-
-    private static const MIDDLE_COLUMN_WIDTH:int = 70;
-
-    private static const NAME_COLUMN_WIDTH:int = 173;
-
-    private static const POST_COLUMN_WIDTH:int = 126;
-
-    private static const JOIN_DATE_COLUMN_WIDTH:int = 122;
-
-    private static const LAST_COLUMN_WIDTH:int = 40;
 
     private static const CHECK_BOX_DEFAULT_COLOR:Number = 9868935;
 

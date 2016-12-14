@@ -6,12 +6,13 @@ import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.lobby.profile.components.LditBattles;
 import net.wg.gui.lobby.profile.components.LditMarksOfMastery;
 import net.wg.gui.lobby.profile.components.LditValued;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.core.UIComponent;
 
-public class TfContainer extends UIComponent implements IDisposable {
+public class TfContainer extends UIComponentEx implements IDisposable {
 
     public static const LAYOUT_INVALID:String = "layoutInv";
 

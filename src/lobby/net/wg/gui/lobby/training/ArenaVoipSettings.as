@@ -4,13 +4,13 @@ import flash.text.TextFieldAutoSize;
 import net.wg.gui.components.controls.DropdownMenu;
 import net.wg.gui.components.controls.TextFieldShort;
 import net.wg.gui.events.ArenaVoipSettingsEvent;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.utils.IScheduler;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.ListEvent;
 
-public class ArenaVoipSettings extends UIComponent {
+public class ArenaVoipSettings extends UIComponentEx {
 
     private static const CHANGE_ARENA_VOIP:String = "changeArenaVOIP";
 

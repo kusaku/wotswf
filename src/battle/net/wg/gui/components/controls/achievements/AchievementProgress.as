@@ -1,7 +1,7 @@
 package net.wg.gui.components.controls.achievements {
 import flash.events.Event;
 
-import net.wg.gui.lobby.profile.data.ProgressSimpleInfo;
+import net.wg.data.VO.ProgressSimpleInfo;
 
 public class AchievementProgress extends AchievementCounter {
 

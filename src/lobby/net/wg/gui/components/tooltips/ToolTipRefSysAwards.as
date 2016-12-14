@@ -83,11 +83,12 @@ public class ToolTipRefSysAwards extends ToolTipSpecial {
     }
 
     override protected function updatePositions():void {
+        var _loc1_:Separator = null;
         this._infoTitle.x = PADDING_LEFT;
         this._infoTitle.y = INFO_TITLE_PADDING;
         this._awardsType.x = PADDING_LEFT + AWARDS_TYPE_PADDING_LEFT;
         this._awardsType.y = this._infoTitle.y + this._infoTitle.height + AWARDS_TYPE_PADDING_TOP;
-        var _loc1_:Separator = Utils.instance.createSeparate(content);
+        _loc1_ = Utils.instance.createSeparate(content);
         _loc1_.y = this._infoTitle.y + this._infoTitle.height + FIRST_SEPARATOR_PADDING;
         separators.push(_loc1_);
         this._infoBody.x = PADDING_LEFT;

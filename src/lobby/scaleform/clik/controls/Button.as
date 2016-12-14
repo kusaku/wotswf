@@ -345,6 +345,9 @@ public class Button extends UIComponent {
             if (this.focusIndicator && this._newFocusIndicatorFrame) {
                 this.focusIndicator.gotoAndPlay(this._newFocusIndicatorFrame);
                 this._newFocusIndicatorFrame = null;
+                if (_baseDisposed) {
+                    return;
+                }
             }
             this.updateAfterStateChange();
             dispatchEvent(new ComponentEvent(ComponentEvent.STATE_CHANGE));

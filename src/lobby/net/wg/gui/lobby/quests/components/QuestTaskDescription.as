@@ -3,10 +3,11 @@ import flash.events.Event;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
-import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class QuestTaskDescription extends UIComponent {
+import scaleform.clik.constants.InvalidationType;
+
+public class QuestTaskDescription extends UIComponentEx {
 
     public var textField:TextField = null;
 

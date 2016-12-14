@@ -1,9 +1,9 @@
 package net.wg.gui.components.common.markers {
 import flash.text.TextField;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class DamageLabel extends UIComponent {
+public class DamageLabel extends UIComponentEx {
 
     private static const INVALIDATE_TEXT:String = "invalidateText";
 
@@ -13,7 +13,7 @@ public class DamageLabel extends UIComponent {
 
     private var _color:String;
 
-    private var _text:String;
+    private var _text:String = "";
 
     public function DamageLabel() {
         super();
@@ -21,7 +21,7 @@ public class DamageLabel extends UIComponent {
 
     override protected function draw():void {
         super.draw();
-        if (isInvalid(INVALIDATE_COLOR)) {
+        if (this._color && isInvalid(INVALIDATE_COLOR)) {
             gotoAndStop(this._color);
         }
         if (isInvalid(INVALIDATE_TEXT)) {

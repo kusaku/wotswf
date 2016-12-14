@@ -30,7 +30,7 @@ public class ProfileSummaryPage extends ProfileSummary {
 
     override protected function applyData(param1:Object):void {
         super.applyData(param1);
-        this.nearestAwards.dataProvider = App.utils.data.vectorToArray(profileSummaryVO.nearestAchievements);
+        this.nearestAwards.dataProvider = profileSummaryVO.nearestAchievements;
     }
 
     override protected function onDispose():void {

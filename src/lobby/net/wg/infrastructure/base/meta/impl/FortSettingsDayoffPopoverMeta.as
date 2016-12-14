@@ -27,12 +27,13 @@ public class FortSettingsDayoffPopoverMeta extends PopoverWithDropdown {
         this.onApply(param1);
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._dayOffPopoverVO) {
-            this._dayOffPopoverVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:DayOffPopoverVO = this._dayOffPopoverVO;
         this._dayOffPopoverVO = new DayOffPopoverVO(param1);
         this.setData(this._dayOffPopoverVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:DayOffPopoverVO):void {

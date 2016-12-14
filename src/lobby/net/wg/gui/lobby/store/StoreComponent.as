@@ -121,7 +121,7 @@ public class StoreComponent extends StoreComponentMeta implements IStoreComponen
 
     override protected function setSubFilter(param1:ShopSubFilterData):void {
         this._subFilterData = param1;
-        App.utils.asserter.assertNotNull(this.getCurrentView(), "currentView", NullPointerException);
+        App.utils.asserter.assertNotNull(this.getCurrentView(), CURRENT_VIEW + Errors.CANT_NULL, NullPointerException);
         this.getCurrentView().setSubFilterData(this.form.nationIdx, this._subFilterData);
     }
 
@@ -132,7 +132,7 @@ public class StoreComponent extends StoreComponentMeta implements IStoreComponen
         this._initializing = false;
     }
 
-    public function as_setNations(param1:Array):void {
+    override protected function setNations(param1:Array):void {
         App.utils.asserter.assert(param1.length > 0, Errors.CANT_EMPTY);
         this.form.nationDropDown.menuRowCount = param1.length;
         this.form.nationDropDown.createNationFilter(param1);

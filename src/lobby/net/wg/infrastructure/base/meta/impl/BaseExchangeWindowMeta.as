@@ -27,12 +27,13 @@ public class BaseExchangeWindowMeta extends AbstractWindowView {
         this.exchange(param1);
     }
 
-    public function as_exchangeRate(param1:Object):void {
-        if (this._baseExchangeWindowRateVO) {
-            this._baseExchangeWindowRateVO.dispose();
-        }
+    public final function as_exchangeRate(param1:Object):void {
+        var _loc2_:BaseExchangeWindowRateVO = this._baseExchangeWindowRateVO;
         this._baseExchangeWindowRateVO = new BaseExchangeWindowRateVO(param1);
         this.exchangeRate(this._baseExchangeWindowRateVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function exchangeRate(param1:BaseExchangeWindowRateVO):void {

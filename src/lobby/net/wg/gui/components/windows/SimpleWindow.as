@@ -127,7 +127,7 @@ public class SimpleWindow extends SimpleWindowMeta implements ISimpleWindowMeta 
         }
     }
 
-    public function as_setButtons(param1:Array, param2:String, param3:int):void {
+    override protected function setButtons(param1:Vector.<SimpleWindowBtnVo>, param2:String, param3:int):void {
         this._btnAlign = param2;
         this._btnWidth = param3;
         this.clearButtons();
@@ -275,39 +275,33 @@ public class SimpleWindow extends SimpleWindowMeta implements ISimpleWindowMeta 
         }
     }
 
-    private function setupButtons(param1:Array):void {
+    private function setupButtons(param1:Vector.<SimpleWindowBtnVo>):void {
+        var _loc2_:SoundButtonEx = null;
+        var _loc3_:SimpleWindowBtnVo = null;
         this._buttons = new Vector.<SoundButtonEx>(0);
-        var _loc2_:SimpleWindowBtnVo = null;
-        var _loc3_:SoundButtonEx = null;
         if (this._itemForFocus == null) {
             this._itemForFocus = this;
         }
-        var _loc4_:int = param1.length;
-        var _loc5_:int = 0;
-        while (_loc5_ < _loc4_) {
-            _loc2_ = new SimpleWindowBtnVo(param1[_loc5_]);
-            _loc3_ = App.utils.classFactory.getObject(_loc2_.btnLinkage) as SoundButtonEx;
-            App.utils.asserter.assertNotNull(_loc3_, "btn" + Errors.CANT_NULL);
-            _loc3_.label = _loc2_.label;
-            _loc3_.data = _loc2_.action;
-            _loc3_.width = this._btnWidth;
-            _loc3_.tooltip = _loc2_.tooltip;
-            _loc3_.mouseEnabledOnDisabled = _loc2_.mouseEnabledOnDisabled;
-            _loc3_.enabled = _loc2_.enabled;
-            if (_loc2_.btnName != Values.EMPTY_STR) {
-                _loc3_.name = _loc2_.btnName;
+        for each(_loc3_ in param1) {
+            _loc2_ = App.utils.classFactory.getObject(_loc3_.btnLinkage) as SoundButtonEx;
+            App.utils.asserter.assertNotNull(_loc2_, "btn" + Errors.CANT_NULL);
+            _loc2_.label = _loc3_.label;
+            _loc2_.data = _loc3_.action;
+            _loc2_.width = this._btnWidth;
+            _loc2_.tooltip = _loc3_.tooltip;
+            _loc2_.mouseEnabledOnDisabled = _loc3_.mouseEnabledOnDisabled;
+            _loc2_.enabled = _loc3_.enabled;
+            if (_loc3_.btnName != Values.EMPTY_STR) {
+                _loc2_.name = _loc3_.btnName;
             }
-            this._buttons.push(_loc3_);
-            this.addBtnListeners(_loc3_);
-            this.addChild(_loc3_);
-            if (_loc2_.isFocused) {
-                setFocus(_loc3_);
-                this._itemForFocus = _loc3_;
+            this._buttons.push(_loc2_);
+            this.addBtnListeners(_loc2_);
+            addChild(_loc2_);
+            if (_loc3_.isFocused) {
+                setFocus(_loc2_);
+                this._itemForFocus = _loc2_;
             }
-            _loc2_.dispose();
-            _loc5_++;
         }
-        _loc2_ = null;
     }
 
     private function showWindow():void {

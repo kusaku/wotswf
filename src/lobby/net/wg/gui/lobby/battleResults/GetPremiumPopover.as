@@ -5,10 +5,10 @@ import flash.text.TextFieldAutoSize;
 
 import net.wg.data.constants.Errors;
 import net.wg.data.constants.Linkages;
-import net.wg.gui.components.common.SeparatorConstants;
+import net.wg.gui.components.assets.data.SeparatorConstants;
+import net.wg.gui.components.assets.interfaces.ISeparatorAsset;
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.components.controls.UILoaderAlt;
-import net.wg.gui.components.interfaces.ISeparatorAsset;
 import net.wg.gui.events.UILoaderEvent;
 import net.wg.infrastructure.base.meta.IGetPremiumPopoverMeta;
 import net.wg.infrastructure.base.meta.impl.GetPremiumPopoverMeta;

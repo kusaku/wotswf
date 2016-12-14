@@ -59,7 +59,7 @@ public class ConsumablesOrderInfoCmp extends UIComponentEx {
             _loc7_.update(_loc4_);
             _loc7_.x = _loc2_ + (!!_loc5_ ? LAST_CMP_OFFSET : 0);
             _loc7_.y = 0;
-            this.addChild(_loc7_ as InteractiveObject);
+            this.addChild(InteractiveObject(_loc7_));
             _loc2_ = _loc2_ + _loc7_.getTFWidth();
         }
         dispatchEvent(new Event(Event.RESIZE, true));

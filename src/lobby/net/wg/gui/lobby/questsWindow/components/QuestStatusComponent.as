@@ -95,6 +95,9 @@ public class QuestStatusComponent extends UIComponentEx {
     }
 
     public function setStatus(param1:String):void {
+        if (this._status == param1) {
+            return;
+        }
         this._status = param1;
         invalidate(INV_STATUS);
     }

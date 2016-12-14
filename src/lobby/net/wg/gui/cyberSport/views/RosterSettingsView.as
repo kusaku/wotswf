@@ -7,13 +7,13 @@ import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.cyberSport.controls.RosterSettingsNumerationBlock;
 import net.wg.gui.cyberSport.controls.events.CSComponentEvent;
 import net.wg.gui.rally.vo.RallySlotVO;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.motion.Tween;
 
-public class RosterSettingsView extends UIComponent {
+public class RosterSettingsView extends UIComponentEx {
 
     public var headerText:TextField;
 
@@ -52,8 +52,6 @@ public class RosterSettingsView extends UIComponent {
     private var _innerAnmDuration:Number = 1000;
 
     private var _buttonYOffset:int = 490;
-
-    private var _setSelectedSettings:Array = null;
 
     public function RosterSettingsView() {
         this.tweens = new Vector.<Tween>();
@@ -142,11 +140,10 @@ public class RosterSettingsView extends UIComponent {
     }
 
     public function set setSelectedSettings(param1:Array):void {
-        this._setSelectedSettings = param1;
         var _loc2_:int = 0;
         while (_loc2_ < this.slotsLength) {
-            if (_loc2_ == this._setSelectedSettings[0]) {
-                this.slots[_loc2_].setSelectedSettings(this._setSelectedSettings[1], this._setSelectedSettings[2]);
+            if (_loc2_ == param1[0]) {
+                this.slots[_loc2_].setSelectedSettings(param1[1], param1[2]);
             }
             _loc2_++;
         }

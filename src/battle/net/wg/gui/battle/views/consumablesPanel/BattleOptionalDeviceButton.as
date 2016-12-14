@@ -39,7 +39,7 @@ public class BattleOptionalDeviceButton extends BattleToolTipButton implements I
     public function set quantity(param1:int):void {
     }
 
-    public function setCoolDownTime(param1:Number):void {
+    public function setCoolDownTime(param1:Number, param2:Number, param3:Number, param4:Boolean):void {
         if (param1 > 0) {
             this.clearCoolDownTime();
         }

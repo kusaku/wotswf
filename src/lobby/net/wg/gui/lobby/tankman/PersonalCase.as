@@ -7,6 +7,7 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 
 import net.wg.data.VO.TankmanCardVO;
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.Linkages;
 import net.wg.data.constants.Values;
 import net.wg.data.constants.generated.TEXT_MANAGER_STYLES;
@@ -128,20 +129,12 @@ public class PersonalCase extends PersonalCaseBase {
         return param1.firstname + " " + param1.lastname;
     }
 
-    override public function as_setCommonData(param1:Object):void {
-        super.as_setCommonData(param1);
+    override protected function setCommonData(param1:PersonalCaseModel):void {
+        super.setCommonData(param1);
         if (isFirtsRun) {
             this.tabs.selectedIndex = autoSelectTab;
             isFirtsRun = false;
         }
-    }
-
-    override public function as_setDossierData(param1:Object):void {
-        super.as_setDossierData(param1);
-    }
-
-    override public function as_setRetrainingData(param1:Object):void {
-        super.as_setRetrainingData(param1);
     }
 
     override protected function onDispose():void {
@@ -201,11 +194,6 @@ public class PersonalCase extends PersonalCaseBase {
         this._tabnames.splice(0, this._tabnames.length);
         this._tabnames = null;
         this._currentView = null;
-        data = null;
-        stats = null;
-        retrainingData = null;
-        skillsModel = null;
-        documentsData = null;
         this.roleIcon = null;
         this.role = null;
         this.levelValue = null;
@@ -228,6 +216,7 @@ public class PersonalCase extends PersonalCaseBase {
     override protected function onPopulate():void {
         super.onPopulate();
         var _loc1_:Padding = window.contentPadding as Padding;
+        App.utils.asserter.assertNotNull(_loc1_, "windowPadding" + Errors.CANT_NULL);
         _loc1_.top = WINDOW_PADDING_TOP;
         _loc1_.bottom = WINDOW_PADDING_BOTTOM;
         _loc1_.left = WINDOW_PADDING_LEFT;
@@ -265,6 +254,7 @@ public class PersonalCase extends PersonalCaseBase {
         addEventListener(PersonalCaseEvent.TRAINING_SKILL, this.onTrainingSkillHandler);
         addEventListener(PersonalCaseEvent.CHANGE_PASSPORT, this.onChangePassportHandler);
         this.alertIcon.source = RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON;
+        this.modifiersValues.text = COMMON.COMMON_DASH;
         getDossierDataS();
         getCommonDataS();
         getRetrainingDataS();

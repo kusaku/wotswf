@@ -3,6 +3,7 @@ import flash.events.Event;
 import flash.utils.Dictionary;
 
 import net.wg.data.ListDAAPIDataProvider;
+import net.wg.gui.lobby.components.data.VehParamVO;
 
 import scaleform.clik.interfaces.IDataProvider;
 
@@ -37,25 +38,29 @@ public class VehCompareDataProvider extends ListDAAPIDataProvider {
 
     private function onRequestItemRangeHandler(param1:Array):void {
         var _loc2_:Dictionary = null;
-        var _loc3_:int = 0;
+        var _loc3_:VehParamVO = null;
         var _loc4_:int = 0;
-        var _loc5_:VehCompareVehicleVO = null;
+        var _loc5_:int = 0;
+        var _loc6_:VehCompareVehicleVO = null;
         if (this._vehParamsDP && this._vehParamsDP.length > 0) {
-            _loc2_ = this.createParamsVisibilityDict();
-            _loc3_ = param1.length;
-            _loc4_ = 0;
-            while (_loc4_ < _loc3_) {
-                _loc5_ = VehCompareVehicleVO(param1[_loc4_]);
-                this.applyVisibilityToParam(_loc2_, _loc5_);
-                _loc5_.removeEventListener(Event.CHANGE, this.onVehParamVOChangeHandler);
-                _loc5_.addEventListener(Event.CHANGE, this.onVehParamVOChangeHandler, false, 0, true);
-                _loc4_++;
+            _loc2_ = new Dictionary();
+            for each(_loc3_ in this._vehParamsDP) {
+                _loc2_[_loc3_.paramID] = true;
+            }
+            _loc4_ = param1.length;
+            _loc5_ = 0;
+            while (_loc5_ < _loc4_) {
+                _loc6_ = VehCompareVehicleVO(param1[_loc5_]);
+                this.applyVisibilityToParam(_loc2_, _loc6_);
+                _loc6_.removeEventListener(Event.CHANGE, this.onVehParamVOChangeHandler);
+                _loc6_.addEventListener(Event.CHANGE, this.onVehParamVOChangeHandler, false, 0, true);
+                _loc5_++;
             }
         }
     }
 
     private function createParamsVisibilityDict():Dictionary {
-        var _loc2_:VehCompareParamVO = null;
+        var _loc2_:VehParamVO = null;
         var _loc1_:Dictionary = new Dictionary();
         for each(_loc2_ in this._vehParamsDP) {
             _loc1_[_loc2_.paramID] = true;

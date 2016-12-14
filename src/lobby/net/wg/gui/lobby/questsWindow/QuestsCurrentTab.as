@@ -2,6 +2,7 @@ package net.wg.gui.lobby.questsWindow {
 import flash.display.InteractiveObject;
 
 import net.wg.data.constants.QuestsStates;
+import net.wg.gui.lobby.questsWindow.data.QuestDataVO;
 import net.wg.gui.lobby.questsWindow.data.QuestsDataVO;
 import net.wg.infrastructure.base.meta.impl.QuestsCurrentTabMeta;
 
@@ -18,8 +19,7 @@ public class QuestsCurrentTab extends QuestsCurrentTabMeta implements IQuestsTab
     }
 
     override protected function setQuestsData(param1:QuestsDataVO):void {
-        super.setQuestsData(param1);
-        this._questContent.setQuestsListData(questsArray, param1.rendererType);
+        this._questContent.setQuestsListData(param1.quests, param1.rendererType);
         if (!param1.isSortable) {
             this._questContent.sortElementsUnVisible();
         }
@@ -28,7 +28,6 @@ public class QuestsCurrentTab extends QuestsCurrentTabMeta implements IQuestsTab
     override protected function configUI():void {
         super.configUI();
         this.questContent.daapi = this;
-        this.questContent.setNoDataLabel(QUESTS.QUESTS_CURRENT_NODATA);
         this.questContent.questsList.questsState = QuestsStates.CURRENT_STATE;
         this.questContent.validateNow();
     }
@@ -44,8 +43,8 @@ public class QuestsCurrentTab extends QuestsCurrentTabMeta implements IQuestsTab
         this.questContent.sortingFunction = getSortedTableDataS;
     }
 
-    public function as_showNoData():void {
-        this._questContent.setNoData();
+    public function as_showNoData(param1:String):void {
+        this._questContent.setNoData(param1);
     }
 
     public function as_showNoSelect():void {
@@ -56,7 +55,7 @@ public class QuestsCurrentTab extends QuestsCurrentTabMeta implements IQuestsTab
         this._questContent.showWaiting = param1;
     }
 
-    public function as_updateQuestInfo(param1:Object):void {
+    override protected function updateQuestInfo(param1:QuestDataVO):void {
         this._questContent.updateQuestInfo(param1);
     }
 

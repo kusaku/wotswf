@@ -13,9 +13,7 @@ import net.wg.data.VO.daapi.DAAPIVehiclesUserTagsVO;
 import net.wg.infrastructure.base.meta.IBattleStatisticDataControllerMeta;
 import net.wg.infrastructure.base.meta.impl.BattleStatisticDataControllerMeta;
 import net.wg.infrastructure.events.LifeCycleEvent;
-import net.wg.infrastructure.exceptions.LifecycleException;
 import net.wg.infrastructure.helpers.statisticsDataController.intarfaces.IBattleComponentDataController;
-import net.wg.infrastructure.interfaces.IDAAPIDataClass;
 import net.wg.infrastructure.interfaces.IDAAPIModule;
 
 public class BattleStatisticDataController extends BattleStatisticDataControllerMeta implements IBattleStatisticDataControllerMeta, IDAAPIModule {
@@ -23,8 +21,6 @@ public class BattleStatisticDataController extends BattleStatisticDataController
     private var _componentControllers:Vector.<IBattleComponentDataController>;
 
     private var _container:DisplayObjectContainer;
-
-    private var _isDisposed:Boolean = false;
 
     private var _isDAAPIInited:Boolean = false;
 
@@ -34,135 +30,81 @@ public class BattleStatisticDataController extends BattleStatisticDataController
         this._container = param1;
     }
 
-    public function as_setVehiclesData(param1:Object):void {
-        var _loc3_:IBattleComponentDataController = null;
-        var _loc2_:IDAAPIDataClass = this.getVehiclesDataVO(param1);
-        for each(_loc3_ in this._componentControllers) {
-            _loc3_.setVehiclesData(_loc2_);
+    override protected function setVehiclesData(param1:DAAPIVehiclesDataVO):void {
+        var _loc2_:IBattleComponentDataController = null;
+        for each(_loc2_ in this._componentControllers) {
+            _loc2_.setVehiclesData(param1);
         }
-        _loc2_.dispose();
     }
 
-    protected function getVehiclesDataVO(param1:Object):IDAAPIDataClass {
-        return new DAAPIVehiclesDataVO(param1);
-    }
-
-    public function as_addVehiclesInfo(param1:Object):void {
-        var _loc3_:IBattleComponentDataController = null;
-        var _loc2_:IDAAPIDataClass = this.getVehiclesDataVO(param1);
-        for each(_loc3_ in this._componentControllers) {
-            _loc3_.addVehiclesInfo(_loc2_);
+    override protected function addVehiclesInfo(param1:DAAPIVehiclesDataVO):void {
+        var _loc2_:IBattleComponentDataController = null;
+        for each(_loc2_ in this._componentControllers) {
+            _loc2_.addVehiclesInfo(param1);
         }
-        _loc2_.dispose();
     }
 
-    public function as_updateVehiclesInfo(param1:Object):void {
-        var _loc3_:IBattleComponentDataController = null;
-        var _loc2_:IDAAPIDataClass = this.getVehiclesDataVO(param1);
-        for each(_loc3_ in this._componentControllers) {
-            _loc3_.updateVehiclesInfo(_loc2_);
+    override protected function updateVehiclesInfo(param1:DAAPIVehiclesDataVO):void {
+        var _loc2_:IBattleComponentDataController = null;
+        for each(_loc2_ in this._componentControllers) {
+            _loc2_.updateVehiclesData(param1);
         }
-        _loc2_.dispose();
     }
 
-    public function as_updateVehicleStatus(param1:Object):void {
-        var _loc3_:IBattleComponentDataController = null;
-        var _loc2_:IDAAPIDataClass = this.getVehicleStatusVO(param1);
-        for each(_loc3_ in this._componentControllers) {
-            _loc3_.updateVehicleStatus(_loc2_);
+    override protected function updateVehicleStatus(param1:DAAPIVehicleStatusVO):void {
+        var _loc2_:IBattleComponentDataController = null;
+        for each(_loc2_ in this._componentControllers) {
+            _loc2_.updateVehicleStatus(param1);
         }
-        _loc2_.dispose();
     }
 
-    protected function getVehicleStatusVO(param1:Object):IDAAPIDataClass {
-        return new DAAPIVehicleStatusVO(param1);
-    }
-
-    public function as_setVehiclesStats(param1:Object):void {
-        var _loc3_:IBattleComponentDataController = null;
-        var _loc2_:IDAAPIDataClass = this.getVehiclesStatsVO(param1);
-        for each(_loc3_ in this._componentControllers) {
-            _loc3_.setVehicleStats(_loc2_);
+    override protected function setVehiclesStats(param1:DAAPIVehiclesStatsVO):void {
+        var _loc2_:IBattleComponentDataController = null;
+        for each(_loc2_ in this._componentControllers) {
+            _loc2_.setVehicleStats(param1);
         }
-        _loc2_.dispose();
     }
 
-    public function as_updateVehiclesStats(param1:Object):void {
-        var _loc3_:IBattleComponentDataController = null;
-        var _loc2_:IDAAPIDataClass = this.getVehiclesStatsVO(param1);
-        for each(_loc3_ in this._componentControllers) {
-            _loc3_.updateVehiclesStats(_loc2_);
+    override protected function updateVehiclesStats(param1:DAAPIVehiclesStatsVO):void {
+        var _loc2_:IBattleComponentDataController = null;
+        for each(_loc2_ in this._componentControllers) {
+            _loc2_.updateVehiclesStat(param1);
         }
-        _loc2_.dispose();
     }
 
-    protected function getVehiclesStatsVO(param1:Object):IDAAPIDataClass {
-        return new DAAPIVehiclesStatsVO(param1);
-    }
-
-    public function as_updatePlayerStatus(param1:Object):void {
-        var _loc3_:IBattleComponentDataController = null;
-        var _loc2_:IDAAPIDataClass = this.getPlayerStatusVO(param1);
-        for each(_loc3_ in this._componentControllers) {
-            _loc3_.updatePlayerStatus(_loc2_);
+    override protected function updatePlayerStatus(param1:DAAPIPlayerStatusVO):void {
+        var _loc2_:IBattleComponentDataController = null;
+        for each(_loc2_ in this._componentControllers) {
+            _loc2_.updatePlayerStatus(param1);
         }
-        _loc2_.dispose();
     }
 
-    protected function getPlayerStatusVO(param1:Object):IDAAPIDataClass {
-        return new DAAPIPlayerStatusVO(param1);
-    }
-
-    public function as_setArenaInfo(param1:Object):void {
-        var _loc3_:IBattleComponentDataController = null;
-        var _loc2_:IDAAPIDataClass = this.getArenaInfoVO(param1);
-        for each(_loc3_ in this._componentControllers) {
-            _loc3_.setArenaInfo(_loc2_);
+    override protected function setArenaInfo(param1:DAAPIArenaInfoVO):void {
+        var _loc2_:IBattleComponentDataController = null;
+        for each(_loc2_ in this._componentControllers) {
+            _loc2_.setArenaInfo(param1);
         }
-        _loc2_.dispose();
     }
 
-    protected function getArenaInfoVO(param1:Object):IDAAPIDataClass {
-        return new DAAPIArenaInfoVO(param1);
-    }
-
-    public function as_setUserTags(param1:Object):void {
-        var _loc3_:IBattleComponentDataController = null;
-        var _loc2_:IDAAPIDataClass = this.getVehiclesUserTagsVO(param1);
-        for each(_loc3_ in this._componentControllers) {
-            _loc3_.setUserTags(_loc2_);
+    override protected function setUserTags(param1:DAAPIVehiclesUserTagsVO):void {
+        var _loc2_:IBattleComponentDataController = null;
+        for each(_loc2_ in this._componentControllers) {
+            _loc2_.setUserTags(param1);
         }
-        _loc2_.dispose();
     }
 
-    public function getVehiclesUserTagsVO(param1:Object):IDAAPIDataClass {
-        return new DAAPIVehiclesUserTagsVO(param1);
-    }
-
-    public function as_updateUserTags(param1:Object):void {
-        var _loc3_:IBattleComponentDataController = null;
-        var _loc2_:IDAAPIDataClass = this.getVehicleUserTagsVO(param1);
-        for each(_loc3_ in this._componentControllers) {
-            _loc3_.updateUserTags(_loc2_);
+    override protected function updateUserTags(param1:DAAPIVehicleUserTagsVO):void {
+        var _loc2_:IBattleComponentDataController = null;
+        for each(_loc2_ in this._componentControllers) {
+            _loc2_.updateUserTags(param1);
         }
-        _loc2_.dispose();
     }
 
-    protected function getVehicleUserTagsVO(param1:Object):IDAAPIDataClass {
-        return new DAAPIVehicleUserTagsVO(param1);
-    }
-
-    public function as_updateInvitationsStatuses(param1:Object):void {
-        var _loc3_:IBattleComponentDataController = null;
-        var _loc2_:IDAAPIDataClass = this.getInvitationStatusVO(param1);
-        for each(_loc3_ in this._componentControllers) {
-            _loc3_.updateInvitationsStatuses(_loc2_);
+    override protected function updateInvitationsStatuses(param1:DAAPIVehiclesInvitationStatusVO):void {
+        var _loc2_:IBattleComponentDataController = null;
+        for each(_loc2_ in this._componentControllers) {
+            _loc2_.updateInvitationsStatuses(param1);
         }
-        _loc2_.dispose();
-    }
-
-    protected function getInvitationStatusVO(param1:Object):IDAAPIDataClass {
-        return new DAAPIVehiclesInvitationStatusVO(param1);
     }
 
     public function as_setPersonalStatus(param1:uint):void {
@@ -183,31 +125,14 @@ public class BattleStatisticDataController extends BattleStatisticDataController
         this._componentControllers.push(param1);
     }
 
-    private function throwLifeCycleException():void {
-        if (App.instance) {
-            App.utils.asserter.assert(!this._isDisposed, "invoking component \'" + this + "\' after dispose!", LifecycleException);
-        }
-    }
-
-    public final function as_dispose():void {
-        dispatchEvent(new LifeCycleEvent(LifeCycleEvent.ON_BEFORE_DISPOSE));
-        this.dispose();
-        dispatchEvent(new LifeCycleEvent(LifeCycleEvent.ON_AFTER_DISPOSE));
-    }
-
-    public final function dispose():void {
-        App.utils.asserter.assert(!this._isDisposed, "(BattleStatisticsDataController) already disposed!");
-        this.onDispose();
-        this._isDisposed = true;
-    }
-
     public function as_isDAAPIInited():Boolean {
         return this._isDAAPIInited;
     }
 
-    public final function as_populate():void {
+    override protected function onPopulate():void {
         dispatchEvent(new LifeCycleEvent(LifeCycleEvent.ON_BEFORE_POPULATE));
-        this.onPopulate();
+        this._isDAAPIInited = true;
+        super.onPopulate();
         dispatchEvent(new LifeCycleEvent(LifeCycleEvent.ON_AFTER_POPULATE));
     }
 
@@ -224,10 +149,6 @@ public class BattleStatisticDataController extends BattleStatisticDataController
         return this._container != null ? this._container.stage != null : false;
     }
 
-    private function onPopulate():void {
-        this._isDAAPIInited = true;
-    }
-
     private function onAddedToStage(param1:Event):void {
         removeEventListener(Event.ADDED_TO_STAGE, this.onAddedToStage);
         onRefreshCompleteS();
@@ -238,15 +159,16 @@ public class BattleStatisticDataController extends BattleStatisticDataController
     }
 
     public function get disposed():Boolean {
-        return this._isDisposed;
+        return _baseDisposed;
     }
 
-    private function onDispose():void {
+    override protected function onDispose():void {
         this._container = null;
         this._componentControllers.fixed = false;
         this._componentControllers.splice(0, this._componentControllers.length);
         this._componentControllers = null;
         removeEventListener(Event.ADDED_TO_STAGE, this.onAddedToStage);
+        super.onDispose();
     }
 
     public function get componentControllers():Vector.<IBattleComponentDataController> {

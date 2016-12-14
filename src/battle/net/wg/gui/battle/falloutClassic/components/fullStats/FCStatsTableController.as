@@ -6,15 +6,8 @@ import net.wg.gui.battle.falloutClassic.components.fullStats.tableItem.FCStatsIt
 import net.wg.gui.battle.falloutClassic.components.fullStats.tableItem.FCStatsItemHolder;
 import net.wg.gui.battle.views.stats.fullStats.StatsTableControllerBase;
 import net.wg.gui.battle.views.stats.fullStats.StatsTableItemHolderBase;
-import net.wg.gui.battle.views.stats.fullStats.StatsTableItemPositionController;
 
 public class FCStatsTableController extends StatsTableControllerBase {
-
-    private static const RIGHT_COLUMN:int = 1;
-
-    private static const ITEM_ALLY_X:Number = 0;
-
-    private static const ITEM_ENEMY_X:Number = 513;
 
     private static const ITEM_HEIGHT:Number = 25;
 
@@ -52,17 +45,8 @@ public class FCStatsTableController extends StatsTableControllerBase {
         return new FCStatsItemHolder(this.createStatsItem(param1, param2));
     }
 
-    override protected function createPositionController(param1:int, param2:int):StatsTableItemPositionController {
-        var _loc3_:int = param1 * NUM_ITEM_ROWS + param2;
-        var _loc4_:Number = param2 == RIGHT_COLUMN ? Number(ITEM_ENEMY_X) : Number(ITEM_ALLY_X);
-        var _loc5_:Number = param2 * ITEM_HEIGHT;
-        var _loc6_:StatsTableItemPositionController = new StatsTableItemPositionController(_loc4_, _loc5_, param1, param2, this._table.playerNameCollection[_loc3_], this._table.vehicleNameCollection[_loc3_], this._table.fragsCollection[_loc3_], this._table.deadBgCollection[_loc3_], this._table.scoreCollection[_loc3_], this._table.specialPointsCollection[_loc3_], this._table.damageCollection[_loc3_], this._table.deathsCollection[_loc3_], this._table.squadCollection[_loc3_], this._table.hitCollection[_loc3_]);
-        _loc6_.setItemHeight(ITEM_HEIGHT);
-        return _loc6_;
-    }
-
-    override protected function setSelectedItem(param1:int, param2:int):void {
-        if (param1 == RIGHT_COLUMN) {
+    override protected function setSelectedItem(param1:Boolean, param2:int):void {
+        if (param1) {
             this._table.selfBgRight.y = param2 * ITEM_HEIGHT;
             this._table.selfBgRight.visible = true;
             this._table.selfBgLeft.visible = false;
@@ -94,7 +78,7 @@ public class FCStatsTableController extends StatsTableControllerBase {
     }
 
     private function getHolder(param1:Number):FCStatsItemHolder {
-        return getItemByVehicleID(param1) as FCStatsItemHolder;
+        return null;
     }
 }
 }

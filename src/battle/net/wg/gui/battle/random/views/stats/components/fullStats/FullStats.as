@@ -3,12 +3,9 @@ import flash.display.Sprite;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
-import net.wg.data.VO.VehicleStatusLightVO;
 import net.wg.data.VO.daapi.DAAPIArenaInfoVO;
-import net.wg.data.VO.daapi.DAAPIInvitationStatusVO;
 import net.wg.data.VO.daapi.DAAPIPlayerStatusVO;
 import net.wg.data.VO.daapi.DAAPIVehicleInfoVO;
-import net.wg.data.VO.daapi.DAAPIVehicleStatsVO;
 import net.wg.data.VO.daapi.DAAPIVehicleStatusVO;
 import net.wg.data.VO.daapi.DAAPIVehicleUserTagsVO;
 import net.wg.data.VO.daapi.DAAPIVehiclesDataVO;
@@ -67,29 +64,7 @@ public class FullStats extends FullStatsMeta implements IFullStatsMeta, IBattleC
 
     private var _isInteractive:Boolean = false;
 
-    private var _leftVehiclesIDs:Vector.<Number> = null;
-
-    private var _rightVehiclesIDs:Vector.<Number> = null;
-
-    public var leftFrags:Vector.<DAAPIVehicleStatsVO>;
-
-    public var rightFrags:Vector.<DAAPIVehicleStatsVO>;
-
-    public var leftVehicleInfos:Vector.<DAAPIVehicleInfoVO>;
-
-    public var rightVehicleInfos:Vector.<DAAPIVehicleInfoVO>;
-
-    public var userTags:Vector.<DAAPIVehicleUserTagsVO>;
-
-    public var vehicleStatus:Vector.<VehicleStatusLightVO>;
-
     public function FullStats() {
-        this.leftFrags = new Vector.<DAAPIVehicleStatsVO>();
-        this.rightFrags = new Vector.<DAAPIVehicleStatsVO>();
-        this.leftVehicleInfos = new Vector.<DAAPIVehicleInfoVO>();
-        this.rightVehicleInfos = new Vector.<DAAPIVehicleInfoVO>();
-        this.userTags = new Vector.<DAAPIVehicleUserTagsVO>();
-        this.vehicleStatus = new Vector.<VehicleStatusLightVO>();
         super();
         this._battleTips = new BattleTipsController(this.titleTipTF, this.bodyTipLeftTF, this.bodyTipRightTF, this.bodyTipCenterTF);
         this._tableCtrl = new FullStatsTableCtrl(this.statsTable, this);
@@ -107,8 +82,9 @@ public class FullStats extends FullStatsMeta implements IFullStatsMeta, IBattleC
     }
 
     public function updateStageSize(param1:Number, param2:Number):void {
+        var _loc3_:Number = NaN;
         this.modalBgSpr.visible = false;
-        var _loc3_:Number = param1 - initedWidth >> 1;
+        _loc3_ = param1 - initedWidth >> 1;
         var _loc4_:Number = param2 - HEIGHT >> 1;
         this.x = _loc3_;
         this.y = _loc4_;
@@ -120,6 +96,7 @@ public class FullStats extends FullStatsMeta implements IFullStatsMeta, IBattleC
     }
 
     public function setArenaInfo(param1:IDAAPIDataClass):void {
+        var _loc4_:Number = NaN;
         var _loc2_:DAAPIArenaInfoVO = DAAPIArenaInfoVO(param1);
         this.battleIcon.showIcon(BATTLE_ICON_PREFIX + _loc2_.battleTypeFrameLabel);
         this.mapIcon.source = _loc2_.mapIcon;
@@ -128,7 +105,7 @@ public class FullStats extends FullStatsMeta implements IFullStatsMeta, IBattleC
         this.team1TF.text = _loc2_.allyTeamName;
         this.team2TF.text = _loc2_.enemyTeamName;
         var _loc3_:Number = this.winTF.y + (this.winTF.height >> 1);
-        var _loc4_:Number = this.battleTF.y + (this.winTF.height >> 1);
+        _loc4_ = this.battleTF.y + (this.winTF.height >> 1);
         this.winTF.autoSize = TextFieldAutoSize.CENTER;
         this.winTF.text = _loc2_.winText;
         this.winTF.y = _loc3_ - (this.winTF.height >> 1);
@@ -142,312 +119,67 @@ public class FullStats extends FullStatsMeta implements IFullStatsMeta, IBattleC
     }
 
     public function setVehiclesData(param1:IDAAPIDataClass):void {
+        var _loc4_:DAAPIVehicleInfoVO = null;
         var _loc2_:DAAPIVehiclesDataVO = DAAPIVehiclesDataVO(param1);
-        if (_loc2_.leftVehicleInfos) {
-            this._tableCtrl.setTeamData(_loc2_.leftVehicleInfos, false);
+        var _loc3_:Array = [];
+        for each(_loc4_ in _loc2_.leftVehicleInfos) {
+            _loc3_.push(_loc4_);
         }
-        if (_loc2_.rightVehicleInfos) {
-            this._tableCtrl.setTeamData(_loc2_.rightVehicleInfos, true);
+        this._tableCtrl.setVehiclesData(_loc3_, _loc2_.leftVehiclesIDs, false);
+        _loc3_ = [];
+        for each(_loc4_ in _loc2_.rightVehicleInfos) {
+            _loc3_.push(_loc4_);
         }
-        if (!_isCompVisible) {
-            if (_loc2_.leftVehiclesIDs) {
-                this._leftVehiclesIDs = _loc2_.leftVehiclesIDs;
-            }
-            if (_loc2_.rightVehiclesIDs) {
-                this._rightVehiclesIDs = _loc2_.rightVehiclesIDs;
-            }
-        }
-        else {
-            if (_loc2_.leftVehiclesIDs) {
-                this._tableCtrl.updateOrder(_loc2_.leftVehiclesIDs, false);
-            }
-            if (_loc2_.rightVehiclesIDs) {
-                this._tableCtrl.updateOrder(_loc2_.rightVehiclesIDs, true);
-            }
-        }
+        this._tableCtrl.setVehiclesData(_loc3_, _loc2_.rightVehiclesIDs, true);
     }
 
-    public function updateVehiclesInfo(param1:IDAAPIDataClass):void {
-        var _loc3_:DAAPIVehicleInfoVO = null;
-        var _loc4_:Boolean = false;
-        var _loc5_:int = 0;
-        var _loc6_:int = 0;
-        var _loc7_:Vector.<DAAPIVehicleInfoVO> = null;
+    public function updateVehiclesData(param1:IDAAPIDataClass):void {
         var _loc2_:DAAPIVehiclesDataVO = DAAPIVehiclesDataVO(param1);
-        if (!_isCompVisible) {
-            _loc5_ = this.leftVehicleInfos.length;
-            _loc7_ = new Vector.<DAAPIVehicleInfoVO>();
-            for each(_loc3_ in _loc2_.leftVehicleInfos) {
-                _loc4_ = false;
-                _loc6_ = 0;
-                while (_loc6_ < _loc5_) {
-                    if (this.leftVehicleInfos[_loc6_].vehicleID == _loc3_.vehicleID) {
-                        this.leftVehicleInfos[_loc6_] = _loc3_.clone();
-                        _loc4_ = true;
-                    }
-                    _loc6_++;
-                }
-                if (!_loc4_) {
-                    _loc7_.push(_loc3_);
-                }
-            }
-            _loc5_ = this.rightVehicleInfos.length;
-            for each(_loc3_ in _loc2_.rightVehicleInfos) {
-                _loc4_ = false;
-                _loc6_ = 0;
-                while (_loc6_ < _loc5_) {
-                    if (this.rightVehicleInfos[_loc6_].vehicleID == _loc3_.vehicleID) {
-                        this.rightVehicleInfos[_loc6_] = _loc3_.clone();
-                        _loc4_ = true;
-                    }
-                    _loc6_++;
-                }
-                if (!_loc4_) {
-                    _loc7_.push(_loc3_);
-                }
-            }
-            if (_loc7_.length > 0) {
-                this._tableCtrl.updateVehiclesData(_loc7_);
-            }
-        }
-        else {
-            if (_loc2_.leftVehicleInfos) {
-                this._tableCtrl.updateVehiclesData(_loc2_.leftVehicleInfos);
-            }
-            if (_loc2_.rightVehicleInfos) {
-                this._tableCtrl.updateVehiclesData(_loc2_.rightVehicleInfos);
-            }
-        }
+        this._tableCtrl.updateVehiclesData(_loc2_.leftVehicleInfos, _loc2_.leftVehiclesIDs, false);
+        this._tableCtrl.updateVehiclesData(_loc2_.rightVehicleInfos, _loc2_.rightVehiclesIDs, true);
     }
 
     public function addVehiclesInfo(param1:IDAAPIDataClass):void {
-        var _loc3_:DAAPIVehicleInfoVO = null;
-        var _loc4_:Boolean = false;
-        var _loc5_:int = 0;
-        var _loc6_:int = 0;
         var _loc2_:DAAPIVehiclesDataVO = DAAPIVehiclesDataVO(param1);
-        if (!_isCompVisible) {
-            _loc5_ = this.leftVehicleInfos.length;
-            for each(_loc3_ in _loc2_.leftVehicleInfos) {
-                _loc4_ = false;
-                _loc6_ = 0;
-                while (_loc6_ < _loc5_) {
-                    if (this.leftVehicleInfos[_loc6_].vehicleID == _loc3_.vehicleID) {
-                        this.leftVehicleInfos[_loc6_] = _loc3_.clone();
-                        _loc4_ = true;
-                    }
-                    _loc6_++;
-                }
-                if (!_loc4_) {
-                    this.leftVehicleInfos.push(_loc3_.clone());
-                }
-            }
-            _loc5_ = this.rightVehicleInfos.length;
-            for each(_loc3_ in _loc2_.rightVehicleInfos) {
-                _loc4_ = false;
-                _loc6_ = 0;
-                while (_loc6_ < _loc5_) {
-                    if (this.rightVehicleInfos[_loc6_].vehicleID == _loc3_.vehicleID) {
-                        this.rightVehicleInfos[_loc6_] = _loc3_.clone();
-                        _loc4_ = true;
-                    }
-                    _loc6_++;
-                }
-                if (!_loc4_) {
-                    this.rightVehicleInfos.push(_loc3_.clone());
-                }
-            }
-            if (_loc2_.leftVehiclesIDs) {
-                this._leftVehiclesIDs = _loc2_.leftVehiclesIDs;
-            }
-            if (_loc2_.rightVehiclesIDs) {
-                this._rightVehiclesIDs = _loc2_.rightVehiclesIDs;
-            }
-        }
-        else {
-            if (_loc2_.leftVehicleInfos) {
-                this._tableCtrl.addVehiclesData(_loc2_.leftVehicleInfos, false);
-            }
-            if (_loc2_.rightVehicleInfos) {
-                this._tableCtrl.addVehiclesData(_loc2_.rightVehicleInfos, true);
-            }
-            if (_loc2_.leftVehiclesIDs) {
-                this._tableCtrl.updateOrder(_loc2_.leftVehiclesIDs, false);
-            }
-            if (_loc2_.rightVehiclesIDs) {
-                this._tableCtrl.updateOrder(_loc2_.rightVehiclesIDs, true);
-            }
-        }
+        this._tableCtrl.addVehiclesInfo(_loc2_.leftVehicleInfos, _loc2_.leftVehiclesIDs, false);
+        this._tableCtrl.addVehiclesInfo(_loc2_.rightVehicleInfos, _loc2_.rightVehiclesIDs, true);
     }
 
-    public function updateVehiclesStats(param1:IDAAPIDataClass):void {
-        var _loc3_:DAAPIVehicleStatsVO = null;
-        var _loc4_:DAAPIVehicleStatsVO = null;
-        var _loc5_:Boolean = false;
+    public function updateVehiclesStat(param1:IDAAPIDataClass):void {
         var _loc2_:DAAPIVehiclesStatsVO = DAAPIVehiclesStatsVO(param1);
-        if (!_isCompVisible) {
-            for each(_loc3_ in _loc2_.leftFrags) {
-                _loc5_ = false;
-                for each(_loc4_ in this.leftFrags) {
-                    if (_loc4_.vehicleID == _loc3_.vehicleID) {
-                        _loc4_.frags = _loc3_.frags;
-                        _loc5_ = true;
-                    }
-                }
-                if (!_loc5_) {
-                    this.leftFrags.push(_loc3_.clone());
-                }
-            }
-            for each(_loc3_ in _loc2_.rightFrags) {
-                _loc5_ = false;
-                for each(_loc4_ in this.rightFrags) {
-                    if (_loc4_.vehicleID == _loc3_.vehicleID) {
-                        _loc4_.frags = _loc3_.frags;
-                        _loc5_ = true;
-                    }
-                }
-                if (!_loc5_) {
-                    this.rightFrags.push(_loc3_.clone());
-                }
-            }
-        }
-        else {
-            this._tableCtrl.setVehiclesStats(_loc2_.leftFrags, _loc2_.rightFrags);
-        }
+        this._tableCtrl.setVehiclesStats(_loc2_.leftFrags, _loc2_.rightFrags);
     }
 
     public function setVehicleStats(param1:IDAAPIDataClass):void {
-        var _loc3_:DAAPIVehicleStatsVO = null;
         var _loc2_:DAAPIVehiclesStatsVO = DAAPIVehiclesStatsVO(param1);
-        if (!_isCompVisible) {
-            this.leftFrags = new Vector.<DAAPIVehicleStatsVO>();
-            this.rightFrags = new Vector.<DAAPIVehicleStatsVO>();
-            for each(_loc3_ in _loc2_.leftFrags) {
-                this.leftFrags.push(_loc3_.clone());
-            }
-            for each(_loc3_ in _loc2_.rightFrags) {
-                this.rightFrags.push(_loc3_.clone());
-            }
-        }
-        else {
-            this._tableCtrl.setVehiclesStats(_loc2_.leftFrags, _loc2_.rightFrags);
-        }
+        this._tableCtrl.setVehiclesStats(_loc2_.leftFrags, _loc2_.rightFrags);
     }
 
     override public function setCompVisible(param1:Boolean):void {
-        var _loc2_:VehicleStatusLightVO = null;
-        var _loc3_:DAAPIVehicleUserTagsVO = null;
         super.setCompVisible(param1);
-        if (param1) {
-            if (this.leftVehicleInfos) {
-                this._tableCtrl.addVehiclesData(this.leftVehicleInfos, false);
-            }
-            if (this.rightVehicleInfos) {
-                this._tableCtrl.addVehiclesData(this.rightVehicleInfos, true);
-            }
-            this._tableCtrl.setVehiclesStats(this.leftFrags, this.rightFrags);
-            for each(_loc2_ in this.vehicleStatus) {
-                this._tableCtrl.setVehicleStatus(_loc2_.vehicleID, _loc2_.status);
-            }
-            for each(_loc3_ in this.userTags) {
-                this._tableCtrl.setUserTags(_loc3_.vehicleID, _loc3_.userTags);
-            }
-            this._tableCtrl.updateOrder(this._leftVehiclesIDs, false);
-            this._tableCtrl.updateOrder(this._rightVehiclesIDs, true);
-            this.leftFrags.splice(0, this.leftFrags.length);
-            this.rightFrags.splice(0, this.rightFrags.length);
-            this.leftVehicleInfos.splice(0, this.leftVehicleInfos.length);
-            this.rightVehicleInfos.splice(0, this.rightVehicleInfos.length);
-            this.vehicleStatus.splice(0, this.vehicleStatus.length);
-            this.userTags.splice(0, this.userTags.length);
-            this._leftVehiclesIDs = null;
-            this._rightVehiclesIDs = null;
-        }
+        this._tableCtrl.isRenderingAvailable = param1;
     }
 
     public function updateVehicleStatus(param1:IDAAPIDataClass):void {
-        var _loc3_:VehicleStatusLightVO = null;
-        var _loc4_:Boolean = false;
         var _loc2_:DAAPIVehicleStatusVO = DAAPIVehicleStatusVO(param1);
-        if (!_isCompVisible) {
-            _loc4_ = false;
-            for each(_loc3_ in this.vehicleStatus) {
-                if (_loc3_.vehicleID == _loc2_.vehicleID) {
-                    _loc3_.status = _loc2_.status;
-                    _loc4_ = true;
-                }
-            }
-            if (!_loc4_) {
-                this.vehicleStatus.push(new VehicleStatusLightVO(_loc2_.vehicleID, _loc2_.status));
-            }
-            if (_loc2_.leftVehiclesIDs) {
-                this._leftVehiclesIDs = _loc2_.leftVehiclesIDs;
-            }
-            if (_loc2_.rightVehiclesIDs) {
-                this._rightVehiclesIDs = _loc2_.rightVehiclesIDs;
-            }
-        }
-        else {
-            this._tableCtrl.setVehicleStatus(_loc2_.vehicleID, _loc2_.status);
-            if (_loc2_.leftVehiclesIDs) {
-                this._tableCtrl.updateOrder(_loc2_.leftVehiclesIDs, false);
-            }
-            if (_loc2_.rightVehiclesIDs) {
-                this._tableCtrl.updateOrder(_loc2_.rightVehiclesIDs, true);
-            }
-        }
+        this._tableCtrl.setVehicleStatus(false, _loc2_.vehicleID, _loc2_.status, _loc2_.leftVehiclesIDs);
+        this._tableCtrl.setVehicleStatus(true, _loc2_.vehicleID, _loc2_.status, _loc2_.rightVehiclesIDs);
     }
 
     public function setUserTags(param1:IDAAPIDataClass):void {
-        var _loc4_:DAAPIVehicleUserTagsVO = null;
         var _loc2_:DAAPIVehiclesUserTagsVO = DAAPIVehiclesUserTagsVO(param1);
-        var _loc3_:Vector.<DAAPIVehicleUserTagsVO> = _loc2_.leftUserTags;
-        for each(_loc4_ in _loc3_) {
-            this._tableCtrl.setUserTags(_loc4_.vehicleID, _loc4_.userTags);
-        }
-        _loc3_ = _loc2_.rightUserTags;
-        for each(_loc4_ in _loc3_) {
-            this._tableCtrl.setUserTags(_loc4_.vehicleID, _loc4_.userTags);
-        }
+        this._tableCtrl.setUserTags(false, _loc2_.leftUserTags);
+        this._tableCtrl.setUserTags(true, _loc2_.rightUserTags);
     }
 
     public function updateUserTags(param1:IDAAPIDataClass):void {
-        var _loc3_:DAAPIVehicleUserTagsVO = null;
-        var _loc4_:Boolean = false;
         var _loc2_:DAAPIVehicleUserTagsVO = DAAPIVehicleUserTagsVO(param1);
-        if (!_isCompVisible) {
-            _loc4_ = false;
-            for each(_loc3_ in this.userTags) {
-                if (_loc3_.vehicleID == _loc2_.vehicleID) {
-                    _loc3_.isEnemy = _loc2_.isEnemy;
-                    _loc3_.userTags = _loc2_.userTags;
-                    _loc4_ = true;
-                }
-            }
-            if (!_loc4_) {
-                this.userTags.push(_loc2_.clone());
-            }
-        }
-        else {
-            this._tableCtrl.setUserTags(_loc2_.vehicleID, _loc2_.userTags);
-        }
+        this._tableCtrl.setUserTags(_loc2_.isEnemy, new <DAAPIVehicleUserTagsVO>[_loc2_]);
     }
 
     public function updatePlayerStatus(param1:IDAAPIDataClass):void {
-        var _loc3_:Vector.<DAAPIVehicleInfoVO> = null;
-        var _loc4_:DAAPIVehicleInfoVO = null;
         var _loc2_:DAAPIPlayerStatusVO = DAAPIPlayerStatusVO(param1);
-        if (!_isCompVisible) {
-            _loc3_ = !!_loc2_.isEnemy ? this.rightVehicleInfos : this.leftVehicleInfos;
-            for each(_loc4_ in _loc3_) {
-                if (_loc4_.vehicleID == _loc2_.vehicleID) {
-                    _loc4_.playerStatus = _loc2_.status;
-                }
-            }
-        }
-        else {
-            this._tableCtrl.setPlayerStatus(_loc2_.vehicleID, _loc2_.status);
-        }
+        this._tableCtrl.setPlayerStatus(_loc2_.isEnemy, _loc2_.vehicleID, _loc2_.status);
     }
 
     public function setPersonalStatus(param1:uint):void {
@@ -466,16 +198,9 @@ public class FullStats extends FullStatsMeta implements IFullStatsMeta, IBattleC
     }
 
     public function updateInvitationsStatuses(param1:IDAAPIDataClass):void {
-        var _loc4_:DAAPIInvitationStatusVO = null;
         var _loc2_:DAAPIVehiclesInvitationStatusVO = DAAPIVehiclesInvitationStatusVO(param1);
-        var _loc3_:Vector.<DAAPIInvitationStatusVO> = _loc2_.leftItems;
-        for each(_loc4_ in _loc3_) {
-            this._tableCtrl.setInvitationStatus(_loc4_.vehicleID, _loc4_.status);
-        }
-        _loc3_ = _loc2_.rightItems;
-        for each(_loc4_ in _loc3_) {
-            this._tableCtrl.setInvitationStatus(_loc4_.vehicleID, _loc4_.status);
-        }
+        this._tableCtrl.updateInvitationsStatuses(false, _loc2_.leftItems);
+        this._tableCtrl.updateInvitationsStatuses(true, _loc2_.rightItems);
     }
 
     override protected function configUI():void {
@@ -486,9 +211,6 @@ public class FullStats extends FullStatsMeta implements IFullStatsMeta, IBattleC
     }
 
     override protected function onDispose():void {
-        var _loc1_:DAAPIVehicleStatsVO = null;
-        var _loc2_:DAAPIVehicleInfoVO = null;
-        var _loc3_:DAAPIVehicleUserTagsVO = null;
         App.voiceChatMgr.removeEventListener(VoiceChatEvent.START_SPEAKING, this.onStartSpeakingHandler);
         App.voiceChatMgr.removeEventListener(VoiceChatEvent.STOP_SPEAKING, this.onStopSpeakingHandler);
         App.colorSchemeMgr.removeEventListener(ColorSchemeEvent.SCHEMAS_UPDATED, this.onColorSchemasUpdatedHandler);
@@ -512,34 +234,6 @@ public class FullStats extends FullStatsMeta implements IFullStatsMeta, IBattleC
         this.team2TF = null;
         this._tableCtrl = null;
         this._battleTips = null;
-        while (this.leftFrags && this.leftFrags.length > 0) {
-            _loc1_ = this.leftFrags.shift();
-            _loc1_.dispose();
-        }
-        this.leftFrags = null;
-        while (this.rightFrags && this.rightFrags.length > 0) {
-            _loc1_ = this.rightFrags.shift();
-            _loc1_.dispose();
-        }
-        this.rightFrags = null;
-        this._leftVehiclesIDs = null;
-        this._rightVehiclesIDs = null;
-        while (this.leftVehicleInfos && this.leftVehicleInfos.length > 0) {
-            _loc2_ = this.leftVehicleInfos.shift();
-            _loc2_.dispose();
-        }
-        this.leftVehicleInfos = null;
-        while (this.rightVehicleInfos && this.rightVehicleInfos.length > 0) {
-            _loc2_ = this.rightVehicleInfos.shift();
-            _loc2_.dispose();
-        }
-        this.rightVehicleInfos = null;
-        while (this.userTags && this.userTags.length > 0) {
-            _loc3_ = this.userTags.shift();
-            _loc3_.dispose();
-        }
-        this.userTags = null;
-        this.vehicleStatus = null;
         super.onDispose();
     }
 
@@ -558,10 +252,6 @@ public class FullStats extends FullStatsMeta implements IFullStatsMeta, IBattleC
     private function applyPersonalStatus():void {
         this._tableCtrl.setIsInviteShown(PersonalStatus.isShowAllyInvites(this._personalStatus), PersonalStatus.isShowEnemyInvites(this._personalStatus));
         this.applyInteractivity();
-    }
-
-    private function updateOrder(param1:Vector.<Number>, param2:Boolean):void {
-        this._tableCtrl.updateOrder(param1, param2);
     }
 
     private function applyInteractivity():void {

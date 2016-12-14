@@ -3,6 +3,7 @@ import flash.display.MovieClip;
 import flash.display.Sprite;
 import flash.utils.getDefinitionByName;
 
+import net.wg.data.constants.Errors;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
 public class FlagContainer extends Sprite implements IDisposable {
@@ -52,20 +53,27 @@ public class FlagContainer extends Sprite implements IDisposable {
     }
 
     private function showFlag(param1:MovieClip, param2:String):MovieClip {
-        var _loc3_:Class = null;
-        if (this._currFlag && param1 == this._currFlag) {
-            return param1;
+        var flagClass:Class = null;
+        var flag:MovieClip = param1;
+        var linkage:String = param2;
+        if (this._currFlag && flag == this._currFlag) {
+            return flag;
         }
-        if (param1) {
-            param1.visible = true;
+        if (flag) {
+            flag.visible = true;
         }
         else {
-            _loc3_ = getDefinitionByName(param2) as Class;
-            param1 = new _loc3_();
-            addChild(param1);
+            try {
+                flagClass = getDefinitionByName(linkage) as Class;
+                flag = new flagClass();
+                addChild(flag);
+            }
+            catch (error:ReferenceError) {
+                DebugUtils.LOG_ERROR(Errors.BAD_LINKAGE + linkage);
+            }
         }
-        this._currFlag = param1;
-        return param1;
+        this._currFlag = flag;
+        return flag;
     }
 }
 }

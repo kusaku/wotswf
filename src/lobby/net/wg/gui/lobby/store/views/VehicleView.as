@@ -195,7 +195,8 @@ public class VehicleView extends BaseStoreMenuView {
     private function setExtraVisible(param1:Boolean):void {
         this.vehicleFilterExtraName.visible = param1;
         this.lockedChkBx.visible = param1;
-        this.inHangarChkBx.visible = param1;
+        this.brokenChckBx.visible = param1 && this.isBrokenChkBxEnabled;
+        this.inHangarChkBx.visible = param1 && this.isHangarChkBxEnabled;
         this.rentalsChckBx.visible = this._isRentalsEnabled && param1;
         this.premiumIGRChckBx.visible = this._isPremIGREnabled && param1;
     }
@@ -210,6 +211,14 @@ public class VehicleView extends BaseStoreMenuView {
             this.premiumIGRChckBx.enableDynamicFrameUpdating();
         }
         this.premiumIGRChckBx.visible = this._isPremIGREnabled;
+    }
+
+    protected function get isBrokenChkBxEnabled():Boolean {
+        return false;
+    }
+
+    protected function get isHangarChkBxEnabled():Boolean {
+        return false;
     }
 }
 }

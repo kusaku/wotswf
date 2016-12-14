@@ -7,21 +7,18 @@ import net.wg.data.constants.AtlasConstants;
 import net.wg.data.constants.BattleAtlasItem;
 import net.wg.data.constants.generated.TANK_TYPES;
 import net.wg.gui.battle.views.ribbonsPanel.data.BackgroundAtlasNames;
+import net.wg.gui.battle.views.ribbonsPanel.data.PaddingSettings;
 import net.wg.gui.battle.views.ribbonsPanel.data.RibbonSettings;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 import net.wg.infrastructure.managers.IAtlasManager;
 
 public class RibbonIcons extends MovieClip implements IDisposable {
 
-    private static const RIBBON_TYPE_ICON_X:int = 87;
+    private static const RIBBON_TYPE_ICON_X:int = 88;
 
     private static const RIBBON_TYPE_ICON_Y:int = -5;
 
     private static const VEH_ICON_Y:int = 11;
-
-    private static const VEH_ICON_X_PADDING_WITH_TEXT:int = 5;
-
-    private static const VEH_ICON_X_PADDING:int = -6;
 
     private static const EMPTY_STR:String = "";
 
@@ -48,7 +45,6 @@ public class RibbonIcons extends MovieClip implements IDisposable {
         this._atlasMgr = App.atlasMgr;
         this._background = new Shape();
         this._ribbonTypeIcon = new Shape();
-        this._ribbonTypeIcon.x = RIBBON_TYPE_ICON_X;
         this._ribbonTypeIcon.y = RIBBON_TYPE_ICON_Y;
         addChild(this._background);
         addChild(this._ribbonTypeIcon);
@@ -77,37 +73,40 @@ public class RibbonIcons extends MovieClip implements IDisposable {
     }
 
     public function setSettings(param1:Boolean, param2:Boolean):void {
-        var _loc3_:int = 0;
-        var _loc4_:Shape = null;
-        var _loc5_:* = null;
-        var _loc6_:String = null;
-        var _loc7_:BackgroundAtlasNames = null;
+        var _loc5_:int = 0;
+        var _loc6_:Shape = null;
+        var _loc7_:* = null;
+        var _loc8_:String = null;
+        var _loc9_:BackgroundAtlasNames = null;
+        var _loc3_:PaddingSettings = RibbonSettings.getPaddings(param1, param2);
+        var _loc4_:Dictionary = RibbonSettings.ICON_X_PADDINGS;
         this._isWithVehName = param2;
         if (this._currentTankIcon != null) {
             this._currentTankIcon.visible = this._currentTankIconStr != EMPTY_STR && this._isWithVehName;
         }
+        this._ribbonTypeIcon.x = RIBBON_TYPE_ICON_X + _loc3_.ribbonIconPaddingX;
         if (param1) {
-            _loc3_ = this._vehIconPositionWithRibbonName + VEH_ICON_X_PADDING_WITH_TEXT;
+            _loc5_ = this._vehIconPositionWithRibbonName;
         }
         else {
-            _loc3_ = RIBBON_TYPE_ICON_X + this._ribbonTypeIcon.width + VEH_ICON_X_PADDING;
+            _loc5_ = RIBBON_TYPE_ICON_X + this._ribbonTypeIcon.width;
         }
-        for (_loc5_ in this._vehiclesIconMap) {
-            _loc4_ = this._vehiclesIconMap[_loc5_];
-            _loc4_.x = _loc3_;
-            _loc4_.y = VEH_ICON_Y;
+        for (_loc7_ in this._vehiclesIconMap) {
+            _loc6_ = this._vehiclesIconMap[_loc7_];
+            _loc6_.x = _loc5_ + _loc3_.tankIconPaddingX + _loc4_[_loc7_];
+            _loc6_.y = VEH_ICON_Y;
         }
-        _loc7_ = this._ribbonSettings.backgrounds;
+        _loc9_ = this._ribbonSettings.backgrounds;
         if (param1 && param2) {
-            _loc6_ = _loc7_.large;
+            _loc8_ = _loc9_.large;
         }
         else if (!param1 && !param2) {
-            _loc6_ = _loc7_.small;
+            _loc8_ = _loc9_.small;
         }
         else {
-            _loc6_ = _loc7_.medium;
+            _loc8_ = _loc9_.medium;
         }
-        this._atlasMgr.drawGraphics(AtlasConstants.BATTLE_ATLAS, _loc6_, this._background.graphics);
+        this._atlasMgr.drawGraphics(AtlasConstants.BATTLE_ATLAS, _loc8_, this._background.graphics);
     }
 
     public function setTankIcon(param1:String):void {

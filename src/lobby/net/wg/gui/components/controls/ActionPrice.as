@@ -69,7 +69,7 @@ public class ActionPrice extends UIComponentEx implements ITextContainer {
 
     private static const COLOR_ERROR:uint = 11993088;
 
-    public var iconText:IconText = null;
+    public var iconText:net.wg.gui.components.controls.IconText = null;
 
     public var textField:TextField = null;
 

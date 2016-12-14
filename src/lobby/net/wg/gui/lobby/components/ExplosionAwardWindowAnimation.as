@@ -1,10 +1,8 @@
 package net.wg.gui.lobby.components {
-import flash.display.MovieClip;
-
 import net.wg.gui.components.controls.AnimationIcon;
-import net.wg.gui.lobby.components.interfaces.IStoppableAnimationItem;
+import net.wg.gui.lobby.components.interfaces.IStoppableAnimationVO;
 
-public class ExplosionAwardWindowAnimation extends MovieClip implements IStoppableAnimationItem {
+public class ExplosionAwardWindowAnimation extends BaseAwardWindowAnimation {
 
     public var shineIcon:AnimationIcon;
 
@@ -14,20 +12,18 @@ public class ExplosionAwardWindowAnimation extends MovieClip implements IStoppab
         super();
     }
 
-    public function dispose():void {
+    override public function setData(param1:IStoppableAnimationVO):void {
+        var _loc2_:String = param1.anmImage;
+        this.shineIcon.setImage(_loc2_);
+        this.mainIcon.setImage(_loc2_);
+    }
+
+    override protected function onDispose():void {
         this.shineIcon.dispose();
         this.shineIcon = null;
         this.mainIcon.dispose();
         this.mainIcon = null;
-    }
-
-    public function setImage(param1:String):void {
-        this.shineIcon.setImage(param1);
-        this.mainIcon.setImage(param1);
-    }
-
-    public function stopAnimation():void {
-        gotoAndStop(totalFrames);
+        super.onDispose();
     }
 }
 }

@@ -77,11 +77,9 @@ public class ScrollCarousel extends UIComponentEx {
     }
 
     protected function updateLayout(param1:Number, param2:Number = 0):void {
-        var _loc3_:Number = NaN;
-        var _loc5_:Number = NaN;
-        _loc3_ = this.leftArrow.x - this.scrollList.x >> 0;
+        var _loc3_:Number = this.leftArrow.x - this.scrollList.x >> 0;
         var _loc4_:Number = this.rightArrow.x - this.scrollList.x - this.scrollList.width >> 0;
-        _loc5_ = param1 + _loc3_ - _loc4_;
+        var _loc5_:Number = param1 + _loc3_ - _loc4_;
         var _loc6_:Number = this.scrollList.width >> 0;
         if (this._roundCountRenderer) {
             _loc5_ = (_loc5_ / this.scrollList.pageWidth >> 0) * this.scrollList.pageWidth - this.scrollList.gap;

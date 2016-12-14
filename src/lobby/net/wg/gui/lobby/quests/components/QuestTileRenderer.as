@@ -4,7 +4,7 @@ import flash.text.TextField;
 
 import net.wg.data.constants.ComponentState;
 import net.wg.data.constants.Values;
-import net.wg.gui.components.advanced.interfaces.INewIndicator;
+import net.wg.gui.components.assets.interfaces.INewIndicator;
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.lobby.quests.data.SeasonTileVO;

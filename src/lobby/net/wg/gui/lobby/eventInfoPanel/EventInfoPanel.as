@@ -47,17 +47,15 @@ public class EventInfoPanel extends UIComponentEx implements IEventInfoPanel {
         var _loc1_:int = 0;
         var _loc2_:int = 0;
         var _loc3_:EventInfoPanelItemVO = null;
-        if (isInvalid(InvalidationType.DATA)) {
-            if (this._data) {
-                this.bg.source = this._data.bgUrl;
-                _loc1_ = this._description.length;
-                _loc2_ = 0;
-                while (_loc2_ < _loc1_) {
-                    _loc3_ = this._data.items[_loc2_];
-                    this._titles[_loc2_].htmlText = _loc3_.head;
-                    this._description[_loc2_].htmlText = _loc3_.descr;
-                    _loc2_++;
-                }
+        if (this._data && isInvalid(InvalidationType.DATA)) {
+            this.bg.source = this._data.bgUrl;
+            _loc1_ = this._description.length;
+            _loc2_ = 0;
+            while (_loc2_ < _loc1_) {
+                _loc3_ = this._data.items[_loc2_];
+                this._titles[_loc2_].htmlText = _loc3_.head;
+                this._description[_loc2_].htmlText = _loc3_.descr;
+                _loc2_++;
             }
         }
     }

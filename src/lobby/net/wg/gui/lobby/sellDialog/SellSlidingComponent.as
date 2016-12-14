@@ -10,12 +10,12 @@ import net.wg.gui.lobby.sellDialog.VO.SellInInventoryModuleVo;
 import net.wg.gui.lobby.sellDialog.VO.SellInInventoryShellVo;
 import net.wg.gui.lobby.sellDialog.VO.SellOnVehicleEquipmentVo;
 import net.wg.gui.lobby.sellDialog.VO.SellOnVehicleShellVo;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.utils.ILocale;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.DataProvider;
 
-public class SellSlidingComponent extends UIComponent {
+public class SellSlidingComponent extends UIComponentEx {
 
     private static const PADDING_FOR_NEXT_ELEMENT:uint = 10;
 

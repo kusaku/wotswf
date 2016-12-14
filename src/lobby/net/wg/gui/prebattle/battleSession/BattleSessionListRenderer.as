@@ -46,19 +46,14 @@ public class BattleSessionListRenderer extends TextFieldShort {
     }
 
     override public function setData(param1:Object):void {
-        if (param1 == null) {
-            this.dataVO = null;
-            visible = false;
-            return;
-        }
-        if (!visible) {
-            visible = true;
-        }
-        this.dataVO = new BSListRendererVO(param1);
         super.setData(param1);
-        this.label = this.dataVO.descr;
-        invalidate(INVALIDATE_DATA);
-        validateNow();
+        this.dataVO = BSListRendererVO(param1);
+        visible = this.dataVO != null;
+        if (visible) {
+            label = this.dataVO.descr;
+            invalidate(INVALIDATE_DATA);
+            validateNow();
+        }
     }
 }
 }

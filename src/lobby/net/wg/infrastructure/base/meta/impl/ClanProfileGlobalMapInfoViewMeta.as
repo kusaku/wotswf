@@ -20,12 +20,13 @@ public class ClanProfileGlobalMapInfoViewMeta extends BaseDAAPIComponent {
         super.onDispose();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._clanProfileGlobalMapInfoVO) {
-            this._clanProfileGlobalMapInfoVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:ClanProfileGlobalMapInfoVO = this._clanProfileGlobalMapInfoVO;
         this._clanProfileGlobalMapInfoVO = new ClanProfileGlobalMapInfoVO(param1);
         this.setData(this._clanProfileGlobalMapInfoVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:ClanProfileGlobalMapInfoVO):void {

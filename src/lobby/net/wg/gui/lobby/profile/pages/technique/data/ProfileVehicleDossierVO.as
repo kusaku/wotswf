@@ -22,7 +22,7 @@ public class ProfileVehicleDossierVO extends ProfileCommonInfoVO {
     public function ProfileVehicleDossierVO(param1:Object) {
         this._achievementsVOs = [];
         this._detailedDataList = new DataProvider();
-        super(param1);
+        super(param1 || {});
     }
 
     override protected function onDataWrite(param1:String, param2:Object):Boolean {

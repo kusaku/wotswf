@@ -90,20 +90,22 @@ public class LobbyHeaderMeta extends BaseDAAPIComponent {
         this.fightClick(param1, param2);
     }
 
-    public function as_nameResponse(param1:Object):void {
-        if (this._accountDataVo) {
-            this._accountDataVo.dispose();
-        }
+    public final function as_nameResponse(param1:Object):void {
+        var _loc2_:AccountDataVo = this._accountDataVo;
         this._accountDataVo = new AccountDataVo(param1);
         this.nameResponse(this._accountDataVo);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setHangarMenuData(param1:Object):void {
-        if (this._hangarMenuVO) {
-            this._hangarMenuVO.dispose();
-        }
+    public final function as_setHangarMenuData(param1:Object):void {
+        var _loc2_:HangarMenuVO = this._hangarMenuVO;
         this._hangarMenuVO = new HangarMenuVO(param1);
         this.setHangarMenuData(this._hangarMenuVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function nameResponse(param1:AccountDataVo):void {

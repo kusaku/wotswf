@@ -59,13 +59,13 @@ public class SystemMessageDialog extends SystemMessageDialogMeta implements ISys
         }
     }
 
-    public function as_setMessageData(param1:Object):void {
-        this.messageData = new NotificationInfoVO(param1);
+    override protected function setMessageData(param1:NotificationInfoVO):void {
+        this.messageData = param1;
         invalidate(DATA_INVALID);
     }
 
-    public function as_setInitData(param1:Object):void {
-        this.initInfo = new NotificationDialogInitInfoVO(param1);
+    override protected function setInitData(param1:NotificationDialogInitInfoVO):void {
+        this.initInfo = param1;
         invalidate(INIT_DATA_INVALID);
     }
 
@@ -86,16 +86,14 @@ public class SystemMessageDialog extends SystemMessageDialogMeta implements ISys
     override protected function draw():void {
         var _loc1_:MessageInfoVO = null;
         super.draw();
-        if (isInvalid(DATA_INVALID)) {
-            if (this.messageData) {
-                _loc1_ = this.messageData.messageVO;
-                if (_loc1_.icon) {
-                    this.icon.source = _loc1_.icon;
-                }
-                this.textField.htmlText = _loc1_.message;
-                invalidate(DIMENSIONS_INVALID);
-                invalidate(ICON_POSITION_INV);
+        if (this.messageData && isInvalid(DATA_INVALID)) {
+            _loc1_ = this.messageData.messageVO;
+            if (_loc1_.icon) {
+                this.icon.source = _loc1_.icon;
             }
+            this.textField.htmlText = _loc1_.message;
+            invalidate(DIMENSIONS_INVALID);
+            invalidate(ICON_POSITION_INV);
         }
         if (isInvalid(DIMENSIONS_INVALID) && window) {
             this.bgMc.height = Math.round(this.textField.height + MessageMetrics.WINDOW_BOTTOM_PADDING);
@@ -122,6 +120,8 @@ public class SystemMessageDialog extends SystemMessageDialogMeta implements ISys
         this.icon.removeEventListener(UILoaderEvent.COMPLETE, this.iconLoadingCompleteHandler);
         this.icon.removeEventListener(UILoaderEvent.IOERROR, this.iconLoadingErrorHandler);
         this.closeBtn.removeEventListener(ButtonEvent.CLICK, this.closeButtonClickHandler);
+        this.messageData = null;
+        this.initInfo = null;
         super.onDispose();
     }
 

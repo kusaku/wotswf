@@ -82,15 +82,13 @@ public class ToolTipSuitableVehicle extends ToolTipSpecial {
     }
 
     override protected function redraw():void {
-        var _loc1_:ILocale = null;
         var _loc2_:SuitableVehicleVO = null;
-        var _loc4_:Separator = null;
         var _loc5_:TextField = null;
         var _loc6_:TextField = null;
-        _loc1_ = App.utils.locale;
+        var _loc1_:ILocale = App.utils.locale;
         _loc2_ = new SuitableVehicleVO(_data);
         var _loc3_:Number = 300;
-        _loc4_ = null;
+        var _loc4_:Separator = null;
         separators = new Vector.<Separator>();
         this.headerTF.autoSize = TextFieldAutoSize.LEFT;
         if (!_loc2_.isCreator) {

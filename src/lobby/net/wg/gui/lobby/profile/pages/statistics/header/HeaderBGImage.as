@@ -1,9 +1,9 @@
 package net.wg.gui.lobby.profile.pages.statistics.header {
 import flash.display.MovieClip;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class HeaderBGImage extends UIComponent {
+public class HeaderBGImage extends UIComponentEx {
 
     public var separator:MovieClip;
 

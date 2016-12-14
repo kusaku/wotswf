@@ -23,6 +23,7 @@ import net.wg.gui.battle.views.damageInfoPanel.DamageInfoPanel;
 import net.wg.gui.battle.views.debugPanel.DebugPanel;
 import net.wg.gui.battle.views.minimap.constants.MinimapSizeConst;
 import net.wg.gui.battle.views.radialMenu.RadialMenu;
+import net.wg.gui.battle.views.siegeModePanel.SiegeModePanel;
 import net.wg.gui.battle.views.sixthSense.SixthSense;
 import net.wg.gui.battle.views.ticker.BattleTicker;
 import net.wg.gui.components.common.ticker.Ticker;
@@ -41,6 +42,8 @@ public class BattlePage extends BaseBattlePage {
     private static const MINIMAP_MARGIN_HEIGHT:int = 6;
 
     private static const MINIMAP_MARGIN_WIDTH:int = 0;
+
+    private static const MESSANGER_SWAP_AREA_TOP_OFFSET:Number = -27;
 
     public var debugPanel:DebugPanel = null;
 
@@ -70,6 +73,8 @@ public class BattlePage extends BaseBattlePage {
 
     public var endWarningPanel:BattleEndWarningPanel = null;
 
+    public var siegeModePanel:SiegeModePanel = null;
+
     private var _team_bases_panel_start_y_pos:Number = 0;
 
     private var _frag_correlation_bar_start_y_pos:Number = 0;
@@ -81,9 +86,8 @@ public class BattlePage extends BaseBattlePage {
     }
 
     override public function updateStage(param1:Number, param2:Number):void {
-        var _loc3_:Number = NaN;
         super.updateStage(param1, param2);
-        _loc3_ = param1 >> 1;
+        var _loc3_:Number = param1 >> 1;
         this.teamBasesPanelUI.x = _loc3_;
         this.sixthSense.x = _loc3_;
         this.sixthSense.y = param2 >> 2;
@@ -102,21 +106,22 @@ public class BattlePage extends BaseBattlePage {
         this.battleDamageLogPanel.y = damagePanel.y + BATTLE_DAMAGE_LOG_Y_PADDING;
         this.radialMenu.updateStage(param1, param2);
         this.endWarningPanel.x = _loc3_;
+        this.battleMessenger.updateSwapAreaHeight(damagePanel.y - (this.playersPanel.y + this.playersPanel.height) + MESSANGER_SWAP_AREA_TOP_OFFSET);
         this.updateTopConstraneOffset();
     }
 
     override protected function initializeStatisticsController():void {
         battleStatisticDataController = new BattleStatisticDataController(this);
+        battleStatisticDataController.registerComponentController(battleLoading);
         battleStatisticDataController.registerComponentController(this.fragCorrelationBar);
         battleStatisticDataController.registerComponentController(this.fullStats);
         battleStatisticDataController.registerComponentController(this.playersPanel);
     }
 
     override protected function configUI():void {
-        this.battleMessenger.addEventListener(MouseEvent.ROLL_OVER, this.onElementsRollOverHandler);
+        this.battleMessenger.addEventListener(MouseEvent.ROLL_OVER, this.onBattleMessengerRollOverHandler);
         this.battleMessenger.addEventListener(MouseEvent.ROLL_OUT, this.onBattleMessengerRollOutHandler);
-        this.playersPanel.addEventListener(MouseEvent.ROLL_OVER, this.onElementsRollOverHandler);
-        this.playersPanel.addEventListener(MouseEvent.ROLL_OUT, this.onElementsRollOutHandler);
+        this.playersPanel.addEventListener(Event.CHANGE, this.onPlayersPanelChangeHandler);
         this.consumablesPanel.addEventListener(ConsumablesPanelEvent.SWITCH_POPUP, this.onConsumablesPanelSwitchPopupHandler);
         this.consumablesPanel.addEventListener(ConsumablesPanelEvent.UPDATE_POSITION, this.onConsumablesPanelUpdatePositionHandler);
         this.consumablesPanel.addEventListener(ConsumablesPanelEvent.SWITCH_POPUP, this.onConsumablesPanelSwitchPopupHandler);
@@ -143,6 +148,7 @@ public class BattlePage extends BaseBattlePage {
         registerComponent(this.radialMenu, BATTLE_VIEW_ALIASES.RADIAL_MENU);
         registerComponent(this.battleTicker, BATTLE_VIEW_ALIASES.TICKER);
         registerComponent(this.endWarningPanel, BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL);
+        registerComponent(this.siegeModePanel, BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR);
         super.onPopulate();
     }
 
@@ -151,10 +157,9 @@ public class BattlePage extends BaseBattlePage {
     }
 
     override protected function onDispose():void {
-        this.battleMessenger.removeEventListener(MouseEvent.ROLL_OVER, this.onElementsRollOverHandler);
+        this.battleMessenger.removeEventListener(MouseEvent.ROLL_OVER, this.onBattleMessengerRollOverHandler);
         this.battleMessenger.removeEventListener(MouseEvent.ROLL_OUT, this.onBattleMessengerRollOutHandler);
-        this.playersPanel.removeEventListener(MouseEvent.ROLL_OVER, this.onElementsRollOverHandler);
-        this.playersPanel.removeEventListener(MouseEvent.ROLL_OUT, this.onElementsRollOutHandler);
+        this.playersPanel.removeEventListener(Event.CHANGE, this.onPlayersPanelChangeHandler);
         this.consumablesPanel.removeEventListener(ConsumablesPanelEvent.UPDATE_POSITION, this.onConsumablesPanelUpdatePositionHandler);
         this.consumablesPanel.removeEventListener(ConsumablesPanelEvent.SWITCH_POPUP, this.onConsumablesPanelSwitchPopupHandler);
         this.battleMessenger.removeEventListener(FocusRequestEvent.REQUEST_FOCUS, this.onBattleMessengerRequestFocusHandler);
@@ -176,7 +181,15 @@ public class BattlePage extends BaseBattlePage {
         this.battleTicker = null;
         this.endWarningPanel = null;
         this.battleDamageLogPanel = null;
+        this.siegeModePanel = null;
         super.onDispose();
+    }
+
+    override protected function setComponentsVisibility(param1:Vector.<String>, param2:Vector.<String>):void {
+        super.setComponentsVisibility(param1, param2);
+        if (param1.indexOf(BATTLE_VIEW_ALIASES.MINIMAP) != -1 || param2.indexOf(BATTLE_VIEW_ALIASES.MINIMAP) != -1) {
+            this.playerMessageListPositionUpdate();
+        }
     }
 
     override protected function getAllowedMinimapSizeIndex(param1:Number):Number {
@@ -219,19 +232,8 @@ public class BattlePage extends BaseBattlePage {
         this.endWarningPanel.y = this.fragCorrelationBar.y + this.fragCorrelationBar.height + _loc1_;
     }
 
-    private function needSwapElements(param1:DisplayObject):void {
-        if (param1 == this.playersPanel) {
-            this.swapElementsByMouseInteraction(this.battleMessenger, this.playersPanel);
-        }
-        else if (param1 == this.battleMessenger) {
-            this.swapElementsByMouseInteraction(this.playersPanel, this.battleMessenger);
-        }
-    }
-
-    private function checkPositions(param1:DisplayObject, param2:DisplayObject):Boolean {
-        var _loc3_:int = this.battleMessenger.y + this.battleMessenger.hoverMC.y;
-        var _loc4_:int = this.playersPanel.y + this.playersPanel.listLeft.y + this.playersPanel.listLeft.height;
-        return _loc4_ > _loc3_ && this.getChildIndex(param1) > this.getChildIndex(param2);
+    private function checkZIndexes(param1:DisplayObject, param2:DisplayObject):Boolean {
+        return this.getChildIndex(param1) > this.getChildIndex(param2);
     }
 
     private function updateBattleDamageLogPanelPosition():void {
@@ -243,31 +245,38 @@ public class BattlePage extends BaseBattlePage {
     }
 
     private function swapElementsByMouseInteraction(param1:DisplayObject, param2:DisplayObject):void {
-        if (!App.contextMenuMgr.isShown() && this.checkPositions(param1, param2)) {
+        if (!App.contextMenuMgr.isShown() && this.checkZIndexes(param1, param2)) {
             this.swapChildren(param1, param2);
         }
     }
 
+    private function onPlayersPanelChangeHandler(param1:Event):void {
+        this.battleMessenger.updateSwapAreaHeight(damagePanel.y - (this.playersPanel.y + this.playersPanel.height) + MESSANGER_SWAP_AREA_TOP_OFFSET);
+    }
+
     private function onBattleMessengerRollOutHandler(param1:MouseEvent):void {
-        this.swapElementsByMouseInteraction(this.battleMessenger, this.playersPanel);
+        if (!this.battleMessenger.isEnterButtonPressed) {
+            this.swapElementsByMouseInteraction(this.battleMessenger, this.playersPanel);
+        }
     }
 
-    private function onElementsRollOutHandler(param1:MouseEvent):void {
-        this.needSwapElements(DisplayObject(param1.currentTarget));
-    }
-
-    private function onElementsRollOverHandler(param1:MouseEvent):void {
-        this.needSwapElements(DisplayObject(param1.currentTarget));
+    private function onBattleMessengerRollOverHandler(param1:MouseEvent):void {
+        this.swapElementsByMouseInteraction(this.playersPanel, this.battleMessenger);
     }
 
     private function onBattleMessengerRequestFocusHandler(param1:FocusRequestEvent):void {
         setFocus(param1.focusContainer.getComponentForFocus());
-        this.swapElementsByMouseInteraction(this.playersPanel, this.battleMessenger);
+        if (this.battleMessenger.isEnterButtonPressed) {
+            this.swapElementsByMouseInteraction(this.playersPanel, this.battleMessenger);
+        }
+        else {
+            this.swapElementsByMouseInteraction(this.battleMessenger, this.playersPanel);
+        }
     }
 
     private function onBattleMessengerRemoveFocusHandler(param1:Event):void {
         setFocus(this);
-        this.swapElementsByMouseInteraction(this.battleMessenger, this.playersPanel);
+        this.swapElementsByMouseInteraction(this.playersPanel, this.battleMessenger);
     }
 
     private function onBattleTickerShowHandler(param1:BattleTickerEvent):void {

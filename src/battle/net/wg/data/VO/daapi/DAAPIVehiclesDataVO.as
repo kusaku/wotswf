@@ -4,6 +4,18 @@ import net.wg.utils.IAssertable;
 
 public class DAAPIVehiclesDataVO extends DAAPIDataClass {
 
+    private static const COND_LEFT_INFO_FIELD_NAME:String = "leftItems";
+
+    private static const COND_RIGHT_INFO_FIELD_NAME:String = "rightItems";
+
+    private static const COND_LEFT_VIDS_FIELD_NAME:String = "leftItemsIDs";
+
+    private static const COND_RIGHT_VIDS_FIELD_NAME:String = "rightItemsIDs";
+
+    private static const COND_LEFT_CIDS_FIELD_NAME:String = "leftCorrelationIDs";
+
+    private static const COND_RIGHT_CIDS_FIELD_NAME:String = "rightCorrelationIDs";
+
     public var leftVehicleInfos:Vector.<DAAPIVehicleInfoVO> = null;
 
     public var rightVehicleInfos:Vector.<DAAPIVehicleInfoVO> = null;
@@ -16,18 +28,6 @@ public class DAAPIVehiclesDataVO extends DAAPIDataClass {
 
     public var rightCorrelationIDs:Vector.<Number> = null;
 
-    private const COND_LEFT_INFO_FIELD_NAME:String = "leftItems";
-
-    private const COND_RIGHT_INFO_FIELD_NAME:String = "rightItems";
-
-    private const COND_LEFT_VIDS_FIELD_NAME:String = "leftItemsIDs";
-
-    private const COND_RIGHT_VIDS_FIELD_NAME:String = "rightItemsIDs";
-
-    private const COND_LEFT_CIDS_FIELD_NAME:String = "leftCorrelationIDs";
-
-    private const COND_RIGHT_CIDS_FIELD_NAME:String = "rightCorrelationIDs";
-
     private var _asserter:IAssertable;
 
     public function DAAPIVehiclesDataVO(param1:Object) {
@@ -37,28 +37,28 @@ public class DAAPIVehiclesDataVO extends DAAPIDataClass {
 
     override protected function onDataWrite(param1:String, param2:Object):Boolean {
         switch (param1) {
-            case this.COND_LEFT_INFO_FIELD_NAME:
+            case COND_LEFT_INFO_FIELD_NAME:
                 this.leftVehicleInfos = Vector.<DAAPIVehicleInfoVO>(App.utils.data.convertVOArrayToVector(param1, param2, DAAPIVehicleInfoVO));
                 return false;
-            case this.COND_RIGHT_INFO_FIELD_NAME:
+            case COND_RIGHT_INFO_FIELD_NAME:
                 this.rightVehicleInfos = Vector.<DAAPIVehicleInfoVO>(App.utils.data.convertVOArrayToVector(param1, param2, DAAPIVehicleInfoVO));
                 return false;
-            case this.COND_LEFT_VIDS_FIELD_NAME:
+            case COND_LEFT_VIDS_FIELD_NAME:
                 if (param2) {
                     this.leftVehiclesIDs = App.utils.data.convertNumberArrayToVector(param1, param2);
                 }
                 return false;
-            case this.COND_RIGHT_VIDS_FIELD_NAME:
+            case COND_RIGHT_VIDS_FIELD_NAME:
                 if (param2) {
                     this.rightVehiclesIDs = App.utils.data.convertNumberArrayToVector(param1, param2);
                 }
                 return false;
-            case this.COND_LEFT_CIDS_FIELD_NAME:
+            case COND_LEFT_CIDS_FIELD_NAME:
                 if (param2) {
                     this.leftCorrelationIDs = App.utils.data.convertNumberArrayToVector(param1, param2);
                 }
                 return false;
-            case this.COND_RIGHT_CIDS_FIELD_NAME:
+            case COND_RIGHT_CIDS_FIELD_NAME:
                 if (param2) {
                     this.rightCorrelationIDs = App.utils.data.convertNumberArrayToVector(param1, param2);
                 }

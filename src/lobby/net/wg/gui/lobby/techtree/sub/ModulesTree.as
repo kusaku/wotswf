@@ -595,7 +595,7 @@ public class ModulesTree extends UIComponentEx implements IResearchContainer, IF
     }
 
     public function get rootRenderer():IRenderer {
-        return this.rGraphics != null ? this.rGraphics.rootRenderer : null;
+        return this.rGraphics != null ? IRenderer(this.rGraphics.rootRenderer) : null;
     }
 
     public function get dataProvider():IResearchDataProvider {

@@ -33,20 +33,22 @@ public class FortSettingsDefenceHourPopoverMeta extends SmartPopOverView {
         this.onApply(param1);
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._defenceHourPopoverVO) {
-            this._defenceHourPopoverVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:DefenceHourPopoverVO = this._defenceHourPopoverVO;
         this._defenceHourPopoverVO = new DefenceHourPopoverVO(param1);
         this.setData(this._defenceHourPopoverVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setTexts(param1:Object):void {
-        if (this._defenceHourPopoverVO1) {
-            this._defenceHourPopoverVO1.dispose();
-        }
+    public final function as_setTexts(param1:Object):void {
+        var _loc2_:DefenceHourPopoverVO = this._defenceHourPopoverVO1;
         this._defenceHourPopoverVO1 = new DefenceHourPopoverVO(param1);
         this.setTexts(this._defenceHourPopoverVO1);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:DefenceHourPopoverVO):void {

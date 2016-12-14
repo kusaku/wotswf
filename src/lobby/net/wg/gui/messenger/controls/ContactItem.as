@@ -3,8 +3,8 @@ import flash.events.Event;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
-import net.wg.data.constants.Linkages;
 import net.wg.gui.components.common.containers.HorizontalGroupLayout;
+import net.wg.gui.components.controls.Image;
 import net.wg.gui.messenger.data.ContactItemVO;
 import net.wg.gui.messenger.data.ContactUserPropVO;
 import net.wg.infrastructure.base.UIComponentEx;
@@ -19,7 +19,7 @@ public class ContactItem extends UIComponentEx implements IUpdatable {
 
     private static const GROUP_PADDING_Y:int = 6;
 
-    public var status:ContactStatusIndicator = null;
+    public var status:Image = null;
 
     public var textField:TextField = null;
 
@@ -39,8 +39,7 @@ public class ContactItem extends UIComponentEx implements IUpdatable {
         super.draw();
         if (this._data) {
             if (isInvalid(InvalidationType.SIZE, InvalidationType.DATA, InvalidationType.STATE)) {
-                this.status.update(this._data);
-                this.status.validateNow();
+                this.status.source = this._data.resource;
                 _loc1_ = this._data.userPropsVO;
                 _loc2_ = _loc1_.icons;
                 if (this._group == null && _loc2_.length > 0) {
@@ -75,11 +74,6 @@ public class ContactItem extends UIComponentEx implements IUpdatable {
         this.disposeInternalData();
         this._data = null;
         super.onDispose();
-    }
-
-    override protected function configUI():void {
-        super.configUI();
-        this.status.setLinkage(Linkages.CHAT_USER_STATUS_PREFIX);
     }
 
     public function applyLayout():void {

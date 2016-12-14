@@ -4,6 +4,7 @@ import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
 
 import net.wg.data.constants.ComponentState;
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.Linkages;
 
 import scaleform.clik.constants.InvalidationType;
@@ -45,16 +46,16 @@ public class LabelControl extends Label {
         super.onDispose();
     }
 
+    public function get textAlign():String {
+        return this._textAlign;
+    }
+
     public function set textAlign(param1:String):void {
         if (this._textAlign == param1) {
             return;
         }
         this._textAlign = param1;
         invalidateData();
-    }
-
-    public function get textAlign():String {
-        return this._textAlign;
     }
 
     override protected function updateText():void {
@@ -66,6 +67,11 @@ public class LabelControl extends Label {
             textField.setTextFormat(_loc1_);
             textField.alpha = state == ComponentState.DISABLED ? Number(0.5) : Number(1);
         }
+        invalidateSize();
+    }
+
+    public function get toolTip():String {
+        return this._tooltip;
     }
 
     public function set toolTip(param1:String):void {
@@ -75,8 +81,8 @@ public class LabelControl extends Label {
         }
     }
 
-    public function get toolTip():String {
-        return this._tooltip;
+    public function get infoIcoType():String {
+        return this._infoIcoType;
     }
 
     public function set infoIcoType(param1:String):void {
@@ -85,10 +91,6 @@ public class LabelControl extends Label {
         }
         this._infoIcoType = param1;
         invalidate(this.INFO_INV);
-    }
-
-    public function get infoIcoType():String {
-        return this._infoIcoType;
     }
 
     override protected function draw():void {
@@ -127,6 +129,7 @@ public class LabelControl extends Label {
     private function createInfoIco():void {
         if (!this.owner && parent) {
             this.owner = parent as UIComponent;
+            App.utils.asserter.assertNotNull(this.owner, "owner" + Errors.CANT_NULL);
         }
         this._infoIco = InfoIcon(App.utils.classFactory.getComponent(Linkages.INFO_ICON_UI, InfoIcon));
         this.owner.addChild(this._infoIco);

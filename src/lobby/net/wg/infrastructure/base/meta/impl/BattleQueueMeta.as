@@ -48,20 +48,22 @@ public class BattleQueueMeta extends AbstractView {
         this.onEscape();
     }
 
-    public function as_setTypeInfo(param1:Object):void {
-        if (this._battleQueueTypeInfoVO) {
-            this._battleQueueTypeInfoVO.dispose();
-        }
+    public final function as_setTypeInfo(param1:Object):void {
+        var _loc2_:BattleQueueTypeInfoVO = this._battleQueueTypeInfoVO;
         this._battleQueueTypeInfoVO = new BattleQueueTypeInfoVO(param1);
         this.setTypeInfo(this._battleQueueTypeInfoVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setListByType(param1:Object):void {
-        if (this._battleQueueListDataVO) {
-            this._battleQueueListDataVO.dispose();
-        }
+    public final function as_setListByType(param1:Object):void {
+        var _loc2_:BattleQueueListDataVO = this._battleQueueListDataVO;
         this._battleQueueListDataVO = new BattleQueueListDataVO(param1);
         this.setListByType(this._battleQueueListDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setTypeInfo(param1:BattleQueueTypeInfoVO):void {

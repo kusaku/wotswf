@@ -29,7 +29,7 @@ public class SocialItemRenderer extends ListItemRenderer {
 
     override public function setData(param1:Object):void {
         this.data = param1;
-        this._rendererData = new SocialIconVo(param1);
+        this._rendererData = SocialIconVo(param1);
         invalidateData();
     }
 

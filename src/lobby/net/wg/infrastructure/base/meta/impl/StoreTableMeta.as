@@ -27,12 +27,13 @@ public class StoreTableMeta extends BaseDAAPIComponent {
         this.refreshStoreTableDataProvider();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._storeTableVO) {
-            this._storeTableVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:StoreTableVO = this._storeTableVO;
         this._storeTableVO = new StoreTableVO(param1);
         this.setData(this._storeTableVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:StoreTableVO):void {

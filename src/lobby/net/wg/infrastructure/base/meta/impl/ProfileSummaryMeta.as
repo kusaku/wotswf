@@ -34,12 +34,13 @@ public class ProfileSummaryMeta extends ProfileAchievementsSection {
         return this.getGlobalRating(param1);
     }
 
-    public function as_setUserData(param1:Object):void {
-        if (this._profileUserVO) {
-            this._profileUserVO.dispose();
-        }
+    public final function as_setUserData(param1:Object):void {
+        var _loc2_:ProfileUserVO = this._profileUserVO;
         this._profileUserVO = new ProfileUserVO(param1);
         this.setUserData(this._profileUserVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setUserData(param1:ProfileUserVO):void {

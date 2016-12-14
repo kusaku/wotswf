@@ -26,8 +26,10 @@ public class DamagePanelItemFrameStates extends BattleUIComponent {
     }
 
     public function set state(param1:String):void {
-        this._state = param1;
-        invalidateState();
+        if (this._state != param1) {
+            this._state = param1;
+            invalidateState();
+        }
     }
 
     public function get alwaysVisible():Boolean {

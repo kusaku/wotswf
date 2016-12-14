@@ -11,6 +11,8 @@ public class TextParameterVO extends DAAPIDataClass {
 
     public var useHtmlValue:Boolean = true;
 
+    public var vertCentred:Boolean = false;
+
     public var valueWidth:int = -1;
 
     public var gap:int = -1;

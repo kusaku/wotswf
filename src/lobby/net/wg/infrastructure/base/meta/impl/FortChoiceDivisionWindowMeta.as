@@ -34,12 +34,13 @@ public class FortChoiceDivisionWindowMeta extends AbstractWindowView {
         this.changedDivision(param1);
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._fortChoiceDivisionVO) {
-            this._fortChoiceDivisionVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:FortChoiceDivisionVO = this._fortChoiceDivisionVO;
         this._fortChoiceDivisionVO = new FortChoiceDivisionVO(param1);
         this.setData(this._fortChoiceDivisionVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:FortChoiceDivisionVO):void {

@@ -10,13 +10,13 @@ import net.wg.gui.components.controls.events.RangeSliderEvent;
 import net.wg.gui.cyberSport.controls.RosterButtonGroup;
 import net.wg.gui.cyberSport.views.events.RosterSettingsEvent;
 import net.wg.gui.rally.vo.SettingRosterVO;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.IViewStackContent;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.SliderEvent;
 
-public class RangeRosterSettingsView extends UIComponent implements IViewStackContent {
+public class RangeRosterSettingsView extends UIComponentEx implements IViewStackContent {
 
     private static const NATION_TYPE_GROUP:String = "rosterGroup";
 

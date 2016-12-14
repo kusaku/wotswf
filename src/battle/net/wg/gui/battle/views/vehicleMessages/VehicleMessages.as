@@ -48,10 +48,10 @@ public class VehicleMessages extends MessageListDAAPI {
         setup(param1);
         maxMessages = param1.maxLinesCount;
         isShowUniqueOnly = param1.showUniqueOnly;
+        clearMessages();
         this.clearPools();
         this._dataQueue = new VehicleMessagesVoQueue();
         this._renderersPool = new VehicleMessagesPool(param1, param1.poolSettings[0].renderer);
-        param1.dispose();
     }
 
     override protected function onDispose():void {
@@ -87,13 +87,23 @@ public class VehicleMessages extends MessageListDAAPI {
             _loc1_.setData(_loc3_, _loc2_.text, true, _loc2_.color);
             _loc4_ = _loc1_.numLines + this.calcShowedLinesCount();
             if (_loc4_ > this._renderersPool.capacity) {
-                _loc1_.markUnused();
-                return;
+                if (this.calcShowedLinesCount() == 0) {
+                    this.startShowingMessage(_loc1_);
+                }
+                else {
+                    _loc1_.markUnused();
+                }
             }
-            this._dataQueue.shiftNextMessage();
-            pushMessage(_loc1_);
-            this.showNextMessage();
+            else {
+                this.startShowingMessage(_loc1_);
+            }
         }
+    }
+
+    private function startShowingMessage(param1:VehicleMessage):void {
+        this._dataQueue.shiftNextMessage();
+        pushMessage(param1);
+        this.showNextMessage();
     }
 
     private function calcShowedLinesCount():int {

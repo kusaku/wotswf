@@ -1,6 +1,7 @@
 package net.wg.gui.lobby.questsWindow.components {
 import flash.events.Event;
 
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.SortingInfo;
 import net.wg.gui.components.advanced.SortableHeaderButtonBar;
 import net.wg.gui.components.controls.CheckBox;
@@ -21,11 +22,11 @@ import scaleform.clik.utils.Padding;
 
 public class VehiclesSortingBlock extends AbstractResizableContent implements ISortable {
 
-    private static const FILTERS_PADDING:int = 42;
+    private static const FILTERS_PADDING:int = 54;
 
     private static const VEHICLE_RENDERER_HEIGHT:int = 35;
 
-    private static const MAX_VEHICLE_RENDERERS:int = 6;
+    private static const MAX_VEHICLE_RENDERERS:int = 5;
 
     private static const DEFAULT_WIDTH:int = 375;
 
@@ -139,6 +140,7 @@ public class VehiclesSortingBlock extends AbstractResizableContent implements IS
             _loc2_ = 0;
             while (_loc2_ < _loc1_) {
                 _loc5_ = this.buttonBar.getButtonAt(_loc2_) as ProfileSortingButton;
+                App.utils.asserter.assertNotNull(_loc5_, "button" + Errors.CANT_NULL);
                 if (_loc5_.id == this.data.selectedBtnID) {
                     this.buttonBar.selectedIndex = _loc2_;
                     _loc5_.sortDirection = this.data.sortDirection;

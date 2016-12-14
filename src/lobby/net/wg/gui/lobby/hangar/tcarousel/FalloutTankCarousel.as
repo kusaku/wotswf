@@ -41,7 +41,7 @@ public class FalloutTankCarousel extends FalloutTankCarouselMeta implements IFal
 
     override protected function getNewHelper():ITankCarouselHelper {
         var _loc1_:ITankCarouselHelper = helper;
-        if (!(_loc1_ is TankCarouselHelper)) {
+        if (!(_loc1_ is FalloutTankCarousel)) {
             _loc1_ = new TankCarouselHelper();
             invalidate(InvalidationType.SETTINGS);
         }

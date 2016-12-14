@@ -1,6 +1,6 @@
 package net.wg.gui.lobby.fortifications.popovers.impl {
 import net.wg.gui.components.controls.SortableTable;
-import net.wg.gui.components.popOvers.PopOverConst;
+import net.wg.gui.components.popovers.PopOverConst;
 import net.wg.gui.lobby.fortifications.data.OrderSelectPopoverVO;
 import net.wg.gui.lobby.fortifications.events.OrderSelectEvent;
 import net.wg.infrastructure.base.meta.IFortOrderSelectPopoverMeta;

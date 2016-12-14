@@ -19,7 +19,6 @@ import net.wg.gui.components.controls.VO.ActionPriceVO;
 import net.wg.gui.events.ModuleInfoEvent;
 import net.wg.gui.events.ShellRendererEvent;
 import net.wg.gui.lobby.hangar.maintenance.data.MaintenanceShellVO;
-import net.wg.utils.IEventCollector;
 import net.wg.utils.ILocale;
 
 import scaleform.clik.constants.InvalidationType;
@@ -83,27 +82,25 @@ public class ShellItemRenderer extends SoundListItemRenderer {
     }
 
     override public function setData(param1:Object):void {
-        var _loc2_:IEventCollector = App.utils.events;
         if (this.shell) {
-            _loc2_.removeEvent(this.shell, ShellRendererEvent.USER_COUNT_CHANGED, this.onUserCountChange, false);
+            this.shell.removeEventListener(ShellRendererEvent.USER_COUNT_CHANGED, this.onUserCountChange);
         }
         super.setData(param1);
         if (this.shell) {
-            _loc2_.addEvent(this.shell, ShellRendererEvent.USER_COUNT_CHANGED, this.onUserCountChange, false, 0, true);
+            this.shell.addEventListener(ShellRendererEvent.USER_COUNT_CHANGED, this.onUserCountChange, false, 0, true);
         }
         invalidate(InvalidationType.DATA);
     }
 
     override protected function onDispose():void {
-        var _loc1_:IEventCollector = App.utils.events;
-        _loc1_.removeEvent(this.countSlider, SliderEvent.VALUE_CHANGE, this.onSliderValueChange);
-        _loc1_.removeEvent(this.countSlider, MouseEvent.ROLL_OVER, this.onRollOutHandler);
-        _loc1_.removeEvent(this.countStepper, IndexEvent.INDEX_CHANGE, this.onStepperValueChange);
-        _loc1_.removeEvent(this.toBuyDropdown, ListEvent.INDEX_CHANGE, this.onShellCurrencyChanged);
-        _loc1_.removeEvent(this.select, ListEvent.INDEX_CHANGE, this.onShellOrderChange);
-        _loc1_.removeEvent(this, MouseEvent.ROLL_OVER, this.onRollOverHandler);
-        _loc1_.removeEvent(this, MouseEvent.ROLL_OUT, this.onRollOutHandler);
-        _loc1_.removeEvent(this, MouseEvent.CLICK, this.onClickHandler);
+        this.countSlider.removeEventListener(SliderEvent.VALUE_CHANGE, this.onSliderValueChange);
+        this.countSlider.removeEventListener(MouseEvent.ROLL_OVER, this.onRollOutHandler);
+        this.countStepper.removeEventListener(IndexEvent.INDEX_CHANGE, this.onStepperValueChange);
+        this.toBuyDropdown.removeEventListener(ListEvent.INDEX_CHANGE, this.onShellCurrencyChanged);
+        this.select.removeEventListener(ListEvent.INDEX_CHANGE, this.onShellOrderChange);
+        removeEventListener(MouseEvent.ROLL_OVER, this.onRollOverHandler);
+        removeEventListener(MouseEvent.ROLL_OUT, this.onRollOutHandler);
+        removeEventListener(MouseEvent.CLICK, this.onClickHandler);
         this.select.dispose();
         this.select = null;
         this.countLabel = null;
@@ -141,15 +138,14 @@ public class ShellItemRenderer extends SoundListItemRenderer {
         this.toBuy.mouseEnabled = this.toBuy.mouseChildren = false;
         this.toBuyTf.mouseEnabled = false;
         this.price.mouseEnabled = this.price.mouseChildren = false;
-        var _loc1_:IEventCollector = App.utils.events;
-        _loc1_.addEvent(this.countSlider, SliderEvent.VALUE_CHANGE, this.onSliderValueChange);
-        _loc1_.addEvent(this.countSlider, MouseEvent.ROLL_OVER, this.onRollOutHandler);
-        _loc1_.addEvent(this.countStepper, IndexEvent.INDEX_CHANGE, this.onStepperValueChange);
-        _loc1_.addEvent(this.toBuyDropdown, ListEvent.INDEX_CHANGE, this.onShellCurrencyChanged);
-        _loc1_.addEvent(this.select, ListEvent.INDEX_CHANGE, this.onShellOrderChange);
-        _loc1_.addEvent(this, MouseEvent.ROLL_OVER, this.onRollOverHandler);
-        _loc1_.addEvent(this, MouseEvent.ROLL_OUT, this.onRollOutHandler);
-        _loc1_.addEvent(this, MouseEvent.CLICK, this.onClickHandler);
+        this.countSlider.addEventListener(SliderEvent.VALUE_CHANGE, this.onSliderValueChange);
+        this.countSlider.addEventListener(MouseEvent.ROLL_OVER, this.onRollOutHandler);
+        this.countStepper.addEventListener(IndexEvent.INDEX_CHANGE, this.onStepperValueChange);
+        this.toBuyDropdown.addEventListener(ListEvent.INDEX_CHANGE, this.onShellCurrencyChanged);
+        this.select.addEventListener(ListEvent.INDEX_CHANGE, this.onShellOrderChange);
+        addEventListener(MouseEvent.ROLL_OVER, this.onRollOverHandler);
+        addEventListener(MouseEvent.ROLL_OUT, this.onRollOutHandler);
+        addEventListener(MouseEvent.CLICK, this.onClickHandler);
     }
 
     override protected function draw():void {
@@ -293,18 +289,17 @@ public class ShellItemRenderer extends SoundListItemRenderer {
     }
 
     private function onUserCountChange(param1:ShellRendererEvent = null):void {
-        var _loc2_:IEventCollector = App.utils.events;
-        _loc2_.removeEvent(this.countStepper, IndexEvent.INDEX_CHANGE, this.onStepperValueChange);
-        _loc2_.removeEvent(this.countSlider, SliderEvent.VALUE_CHANGE, this.onSliderValueChange);
+        this.countStepper.removeEventListener(IndexEvent.INDEX_CHANGE, this.onStepperValueChange);
+        this.countSlider.removeEventListener(SliderEvent.VALUE_CHANGE, this.onSliderValueChange);
         this.countSlider.snapInterval = this.countStepper.stepSize = this.shell.step;
         this.countSlider.maximum = this.countStepper.maximum = this.shell.maxAmmo;
-        _loc2_.addEvent(this.countStepper, IndexEvent.INDEX_CHANGE, this.onStepperValueChange);
-        _loc2_.addEvent(this.countSlider, SliderEvent.VALUE_CHANGE, this.onSliderValueChange);
+        this.countStepper.addEventListener(IndexEvent.INDEX_CHANGE, this.onStepperValueChange);
+        this.countSlider.addEventListener(SliderEvent.VALUE_CHANGE, this.onSliderValueChange);
         this.countSlider.value = this.countStepper.value = this.shell.userCount;
         this.countSliderBg.width = this.initCounterBgWidth * (this.shell.possibleMax / this.shell.maxAmmo);
-        var _loc3_:Number = data.count - this.countSlider.value + data.inventoryCount;
-        this.countLabel.text = App.utils.locale.integer(_loc3_ > 0 ? _loc3_ : 0);
-        this.countLabel.alpha = _loc3_ > 0 ? Number(CHANGED_LABEL_ALPHA) : Number(DEFAULT_ALPHA);
+        var _loc2_:Number = data.count - this.countSlider.value + data.inventoryCount;
+        this.countLabel.text = App.utils.locale.integer(_loc2_ > 0 ? _loc2_ : 0);
+        this.countLabel.alpha = _loc2_ > 0 ? Number(CHANGED_LABEL_ALPHA) : Number(DEFAULT_ALPHA);
         this.updateShellsPrice();
     }
 

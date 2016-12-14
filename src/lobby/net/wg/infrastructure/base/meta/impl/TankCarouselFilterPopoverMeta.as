@@ -41,20 +41,22 @@ public class TankCarouselFilterPopoverMeta extends SmartPopOverView {
         this.setDefaultFilter();
     }
 
-    public function as_setInitData(param1:Object):void {
-        if (this._filterCarouseInitVO) {
-            this._filterCarouseInitVO.dispose();
-        }
+    public final function as_setInitData(param1:Object):void {
+        var _loc2_:FilterCarouseInitVO = this._filterCarouseInitVO;
         this._filterCarouseInitVO = new FilterCarouseInitVO(param1);
         this.setInitData(this._filterCarouseInitVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setState(param1:Object):void {
-        if (this._filtersStateVO) {
-            this._filtersStateVO.dispose();
-        }
+    public final function as_setState(param1:Object):void {
+        var _loc2_:FiltersStateVO = this._filtersStateVO;
         this._filtersStateVO = new FiltersStateVO(param1);
         this.setState(this._filtersStateVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setInitData(param1:FilterCarouseInitVO):void {

@@ -90,36 +90,40 @@ public class AccountPopoverMeta extends SmartPopOverView {
         this.openReferralManagement();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._accountPopoverMainVO) {
-            this._accountPopoverMainVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:AccountPopoverMainVO = this._accountPopoverMainVO;
         this._accountPopoverMainVO = new AccountPopoverMainVO(param1);
         this.setData(this._accountPopoverMainVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setClanData(param1:Object):void {
-        if (this._accountClanPopoverBlockVO) {
-            this._accountClanPopoverBlockVO.dispose();
-        }
+    public final function as_setClanData(param1:Object):void {
+        var _loc2_:AccountClanPopoverBlockVO = this._accountClanPopoverBlockVO;
         this._accountClanPopoverBlockVO = new AccountClanPopoverBlockVO(param1);
         this.setClanData(this._accountClanPopoverBlockVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setCrewData(param1:Object):void {
-        if (this._accountPopoverBlockVO) {
-            this._accountPopoverBlockVO.dispose();
-        }
+    public final function as_setCrewData(param1:Object):void {
+        var _loc2_:AccountPopoverBlockVO = this._accountPopoverBlockVO;
         this._accountPopoverBlockVO = new AccountPopoverBlockVO(param1);
         this.setCrewData(this._accountPopoverBlockVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setReferralData(param1:Object):void {
-        if (this._accountPopoverReferralBlockVO) {
-            this._accountPopoverReferralBlockVO.dispose();
-        }
+    public final function as_setReferralData(param1:Object):void {
+        var _loc2_:AccountPopoverReferralBlockVO = this._accountPopoverReferralBlockVO;
         this._accountPopoverReferralBlockVO = new AccountPopoverReferralBlockVO(param1);
         this.setReferralData(this._accountPopoverReferralBlockVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:AccountPopoverMainVO):void {

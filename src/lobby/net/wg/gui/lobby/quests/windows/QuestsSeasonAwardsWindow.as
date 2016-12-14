@@ -18,6 +18,8 @@ import scaleform.clik.events.ButtonEvent;
 
 public class QuestsSeasonAwardsWindow extends QuestsSeasonAwardsWindowMeta implements IQuestsSeasonAwardsWindowMeta {
 
+    private static const SEPARATOR_WIDTH:int = 758;
+
     private static const DISABLE_TABS_OFFSET:int = -12;
 
     private static const INVALID_SCROLL_BUTTONS:String = "invalidScrollButtons";
@@ -37,6 +39,11 @@ public class QuestsSeasonAwardsWindow extends QuestsSeasonAwardsWindowMeta imple
     public function QuestsSeasonAwardsWindow() {
         this._tabItems = new Vector.<InteractiveObject>(0);
         super();
+    }
+
+    override protected function initialize():void {
+        this.tabs.tabsSeparator.width = SEPARATOR_WIDTH;
+        super.initialize();
     }
 
     override protected function configUI():void {

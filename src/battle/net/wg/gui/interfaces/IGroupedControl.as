@@ -9,6 +9,8 @@ public interface IGroupedControl extends IEventDispatcher {
 
     function get selectedRenderer():IListItemRenderer;
 
+    function get selectedButton():ISoundButtonEx;
+
     function get data():Object;
 
     function get name():String;

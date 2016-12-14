@@ -4,8 +4,11 @@ import flash.geom.Point;
 import net.wg.gui.lobby.techtree.data.vo.NodeData;
 import net.wg.gui.lobby.techtree.math.MatrixPosition;
 import net.wg.infrastructure.interfaces.IUIComponentEx;
+import net.wg.infrastructure.interfaces.entity.ISoundable;
 
-public interface IRenderer extends IUIComponentEx {
+import scaleform.clik.interfaces.IListItemRenderer;
+
+public interface IRenderer extends IListItemRenderer, ISoundable, IUIComponentEx {
 
     function setup(param1:uint, param2:NodeData, param3:uint = 0, param4:MatrixPosition = null):void;
 
@@ -80,8 +83,6 @@ public interface IRenderer extends IUIComponentEx {
     function isSelected():Boolean;
 
     function invalidateNodeState(param1:Number):void;
-
-    function get index():uint;
 
     function get matrixPosition():MatrixPosition;
 

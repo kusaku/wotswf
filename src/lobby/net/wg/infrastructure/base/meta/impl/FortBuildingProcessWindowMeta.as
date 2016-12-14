@@ -41,20 +41,22 @@ public class FortBuildingProcessWindowMeta extends AbstractWindowView {
         this.applyBuildingProcess(param1);
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._buildingProcessVO) {
-            this._buildingProcessVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:BuildingProcessVO = this._buildingProcessVO;
         this._buildingProcessVO = new BuildingProcessVO(param1);
         this.setData(this._buildingProcessVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_responseBuildingInfo(param1:Object):void {
-        if (this._buildingProcessInfoVO) {
-            this._buildingProcessInfoVO.dispose();
-        }
+    public final function as_responseBuildingInfo(param1:Object):void {
+        var _loc2_:BuildingProcessInfoVO = this._buildingProcessInfoVO;
         this._buildingProcessInfoVO = new BuildingProcessInfoVO(param1);
         this.responseBuildingInfo(this._buildingProcessInfoVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:BuildingProcessVO):void {

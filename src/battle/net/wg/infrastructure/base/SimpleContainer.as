@@ -3,7 +3,6 @@ import flash.display.MovieClip;
 import flash.events.Event;
 
 import net.wg.infrastructure.events.LifeCycleEvent;
-import net.wg.utils.IUtils;
 
 import scaleform.clik.constants.InvalidationType;
 
@@ -14,8 +13,6 @@ public class SimpleContainer extends MovieClip {
     private var _invalid:Boolean = false;
 
     private var _invalidHash:Object;
-
-    private var _listenerFlag:Boolean = true;
 
     public function SimpleContainer() {
         super();
@@ -30,9 +27,9 @@ public class SimpleContainer extends MovieClip {
     }
 
     protected function onDispose():void {
-        this.removeEventListener(Event.ENTER_FRAME, this.handleEnterFrameValidation, false);
-        this.removeEventListener(Event.ADDED_TO_STAGE, this.handleStageChange, false);
-        this.removeEventListener(Event.RENDER, this.validateNow, false);
+        removeEventListener(Event.ENTER_FRAME, this.handleEnterFrameValidation, false);
+        removeEventListener(Event.ADDED_TO_STAGE, this.handleStageChange, false);
+        removeEventListener(Event.RENDER, this.validateNow, false);
     }
 
     protected function invalidate(...rest):void {
@@ -52,11 +49,11 @@ public class SimpleContainer extends MovieClip {
         if (!this._invalid) {
             this._invalid = true;
             if (stage == null) {
-                this.addEventListener(Event.ADDED_TO_STAGE, this.handleStageChange, false, 0, true);
+                addEventListener(Event.ADDED_TO_STAGE, this.handleStageChange, false, 0, true);
             }
             else {
-                this.addEventListener(Event.ENTER_FRAME, this.handleEnterFrameValidation, false, 0, true);
-                this.addEventListener(Event.RENDER, this.validateNow, false, 0, true);
+                addEventListener(Event.ENTER_FRAME, this.handleEnterFrameValidation, false, 0, true);
+                addEventListener(Event.RENDER, this.validateNow, false, 0, true);
                 stage.invalidate();
             }
         }
@@ -70,46 +67,14 @@ public class SimpleContainer extends MovieClip {
             this.initialized = true;
             this.configUI();
         }
-        this.removeEventListener(Event.ENTER_FRAME, this.handleEnterFrameValidation, false);
-        this.removeEventListener(Event.RENDER, this.validateNow, false);
+        removeEventListener(Event.ENTER_FRAME, this.handleEnterFrameValidation, false);
+        removeEventListener(Event.RENDER, this.validateNow, false);
         if (!this._invalid) {
             return;
         }
         this.draw();
         this._invalidHash = {};
         this._invalid = false;
-    }
-
-    override public function addEventListener(param1:String, param2:Function, param3:Boolean = false, param4:int = 0, param5:Boolean = false):void {
-        var _loc6_:IUtils = !!App.instance ? App.utils : null;
-        if (_loc6_ && _loc6_.events && this._listenerFlag) {
-            this._listenerFlag = false;
-            _loc6_.events.addEvent(this, param1, param2, param3, param4, param5);
-            this._listenerFlag = true;
-        }
-        else {
-            this.addSuperEventListener(param1, param2, param3, param4, param5);
-        }
-    }
-
-    override public function removeEventListener(param1:String, param2:Function, param3:Boolean = false):void {
-        var _loc4_:IUtils = !!App.instance ? App.utils : null;
-        if (_loc4_ && _loc4_.events && this._listenerFlag) {
-            this._listenerFlag = false;
-            _loc4_.events.removeEvent(this, param1, param2, param3);
-            this._listenerFlag = true;
-        }
-        else {
-            this.removeSuperEventListener(param1, param2, param3);
-        }
-    }
-
-    public function removeSuperEventListener(param1:String, param2:Function, param3:Boolean = false):void {
-        super.removeEventListener(param1, param2, param3);
-    }
-
-    public function addSuperEventListener(param1:String, param2:Function, param3:Boolean = false, param4:int = 0, param5:Boolean = false):void {
-        super.addEventListener(param1, param2, param3, param4, param5);
     }
 
     protected function isInvalid(...rest):Boolean {
@@ -147,8 +112,8 @@ public class SimpleContainer extends MovieClip {
 
     protected function handleStageChange(param1:Event):void {
         if (param1.type == Event.ADDED_TO_STAGE) {
-            this.removeEventListener(Event.ADDED_TO_STAGE, this.handleStageChange, false);
-            this.addEventListener(Event.RENDER, this.validateNow, false, 0, true);
+            removeEventListener(Event.ADDED_TO_STAGE, this.handleStageChange, false);
+            addEventListener(Event.RENDER, this.validateNow, false, 0, true);
             if (stage != null) {
                 stage.invalidate();
             }

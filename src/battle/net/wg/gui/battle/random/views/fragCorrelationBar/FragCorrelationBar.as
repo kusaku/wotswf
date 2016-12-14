@@ -192,12 +192,8 @@ public class FragCorrelationBar extends FragCorrelationBarMeta implements IFragC
 
     public function setVehiclesData(param1:IDAAPIDataClass):void {
         var _loc2_:DAAPIVehiclesDataVO = DAAPIVehiclesDataVO(param1);
-        if (_loc2_.rightVehicleInfos) {
-            this._enemyVehicleMarkersList.updateMarkers(_loc2_.rightVehicleInfos, _loc2_.rightCorrelationIDs);
-        }
-        if (_loc2_.leftVehicleInfos) {
-            this._allyVehicleMarkersList.updateMarkers(_loc2_.leftVehicleInfos, _loc2_.leftCorrelationIDs);
-        }
+        this._enemyVehicleMarkersList.updateMarkers(_loc2_.rightVehicleInfos, _loc2_.rightCorrelationIDs);
+        this._allyVehicleMarkersList.updateMarkers(_loc2_.leftVehicleInfos, _loc2_.leftCorrelationIDs);
     }
 
     public function updateVehicleStatus(param1:IDAAPIDataClass):void {
@@ -213,7 +209,7 @@ public class FragCorrelationBar extends FragCorrelationBarMeta implements IFragC
         }
     }
 
-    public function updateVehiclesInfo(param1:IDAAPIDataClass):void {
+    public function updateVehiclesData(param1:IDAAPIDataClass):void {
         var _loc2_:DAAPIVehiclesDataVO = DAAPIVehiclesDataVO(param1);
         if (_loc2_.leftVehicleInfos) {
             this._allyVehicleMarkersList.updateVehiclesInfo(_loc2_.leftVehicleInfos, _loc2_.leftCorrelationIDs);
@@ -251,7 +247,7 @@ public class FragCorrelationBar extends FragCorrelationBarMeta implements IFragC
     public function updateUserTags(param1:IDAAPIDataClass):void {
     }
 
-    public function updateVehiclesStats(param1:IDAAPIDataClass):void {
+    public function updateVehiclesStat(param1:IDAAPIDataClass):void {
     }
 
     public function setUserTags(param1:IDAAPIDataClass):void {

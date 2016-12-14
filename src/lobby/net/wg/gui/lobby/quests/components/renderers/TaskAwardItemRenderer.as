@@ -2,7 +2,6 @@ package net.wg.gui.lobby.quests.components.renderers {
 import flash.display.MovieClip;
 import flash.events.MouseEvent;
 import flash.text.TextField;
-import flash.text.TextFieldAutoSize;
 
 import net.wg.data.VO.AwardsItemVO;
 import net.wg.gui.components.controls.UILoaderAlt;
@@ -15,9 +14,11 @@ import net.wg.infrastructure.managers.ITooltipMgr;
 
 import org.idmedia.as3commons.util.StringUtils;
 
+import scaleform.gfx.TextFieldEx;
+
 public class TaskAwardItemRenderer extends UIComponentEx implements ITaskAwardItemRenderer {
 
-    private static const DEFAULT_ICON_PADDING:int = 9;
+    private static const DEFAULT_ICON_PADDING:int = 4;
 
     private static const INVALIDATE_IMAGE_SIZE:String = "invalidateImageSize";
 
@@ -35,6 +36,8 @@ public class TaskAwardItemRenderer extends UIComponentEx implements ITaskAwardIt
 
     private var _toolTipMgr:ITooltipMgr;
 
+    private var _valueAtLeft:Boolean = true;
+
     private var _textValue:String;
 
     private var _isNotInitialized:Boolean;
@@ -48,7 +51,7 @@ public class TaskAwardItemRenderer extends UIComponentEx implements ITaskAwardIt
         super.configUI();
         this.itemLoader.x = this.itemLoader.y = 0;
         this.itemLoader.autoSize = false;
-        this.valueTF.autoSize = TextFieldAutoSize.LEFT;
+        TextFieldEx.setVerticalAlign(this.valueTF, TextFieldEx.VALIGN_CENTER);
     }
 
     override protected function onDispose():void {
@@ -71,8 +74,22 @@ public class TaskAwardItemRenderer extends UIComponentEx implements ITaskAwardIt
         super.onDispose();
     }
 
+    override protected function draw():void {
+        super.draw();
+        if (isInvalid(INVALIDATE_TEXT)) {
+            this.valueTF.htmlText = this._textValue;
+            App.utils.commons.updateTextFieldSize(this.valueTF, true, false);
+        }
+        if (this._isNotInitialized && isInvalid(INVALIDATE_IMAGE_SIZE)) {
+            this._isNotInitialized = false;
+            this.itemLoader.updateLoaderSize();
+            this.repositionTarget();
+        }
+    }
+
     public function setData(param1:AwardsItemVO):void {
         this._textValue = param1.value;
+        this._valueAtLeft = param1.valueAtLeft;
         if (param1.boosterVO == null) {
             this._targetForReposition = this.itemLoader;
             this.itemLoader.source = param1.itemSource;
@@ -94,17 +111,24 @@ public class TaskAwardItemRenderer extends UIComponentEx implements ITaskAwardIt
         invalidate(INVALIDATE_TEXT);
     }
 
+    private function repositionTarget():void {
+        if (this._valueAtLeft) {
+            this.valueTF.x = 0;
+            this._targetForReposition.x = this.valueTF.width + DEFAULT_ICON_PADDING ^ 0;
+        }
+        else {
+            this._targetForReposition.x = 0;
+            this.valueTF.x = this._targetForReposition.width + DEFAULT_ICON_PADDING ^ 0;
+        }
+        var _loc1_:Number = this._targetForReposition is BoosterSlot ? Number(this._boosterSlot.hitMc.height) : Number(this.itemLoader.height);
+        this._targetForReposition.y = !!this.valueTF.text ? Number(this.valueTF.height - _loc1_ >> 1) : Number(0);
+        dispatchEvent(new AwardWindowEvent(AwardWindowEvent.AWARD_RENDERER_READY));
+    }
+
     private function onItemLoadCompleteHandler(param1:UILoaderEvent):void {
         param1.target.removeEventListener(UILoaderEvent.COMPLETE, this.onItemLoadCompleteHandler);
         this._isNotInitialized = true;
         invalidate(INVALIDATE_IMAGE_SIZE);
-    }
-
-    private function repositionTarget():void {
-        var _loc1_:Number = this._targetForReposition is BoosterSlot ? Number(this._boosterSlot.hitMc.height) : Number(this.itemLoader.height);
-        this._targetForReposition.x = this.valueTF.textWidth + DEFAULT_ICON_PADDING ^ 0;
-        this._targetForReposition.y = !!this.valueTF.text ? Number(Math.round((this.valueTF.height - _loc1_) / 2)) : Number(0);
-        dispatchEvent(new AwardWindowEvent(AwardWindowEvent.AWARD_RENDERER_READY));
     }
 
     private function onTargetForRepositionMouseOverHandler(param1:MouseEvent):void {
@@ -120,18 +144,6 @@ public class TaskAwardItemRenderer extends UIComponentEx implements ITaskAwardIt
 
     private function onTargetForRepositionMouseOutHandler(param1:MouseEvent):void {
         this._toolTipMgr.hide();
-    }
-
-    override protected function draw():void {
-        super.draw();
-        if (isInvalid(INVALIDATE_TEXT)) {
-            this.valueTF.htmlText = this._textValue;
-        }
-        if (this._isNotInitialized && isInvalid(INVALIDATE_IMAGE_SIZE)) {
-            this._isNotInitialized = false;
-            this.itemLoader.updateLoaderSize();
-            this.repositionTarget();
-        }
     }
 }
 }

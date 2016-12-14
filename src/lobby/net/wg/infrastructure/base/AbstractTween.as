@@ -72,10 +72,6 @@ public class AbstractTween extends AbstractTweenMeta implements ITween {
         this._props = param1;
     }
 
-    public function get isOnCodeBased():Boolean {
-        return this.props.getIsOnCodeBased();
-    }
-
     override protected function onPopulate():void {
         super.onPopulate();
         initialiazeS(this._props);

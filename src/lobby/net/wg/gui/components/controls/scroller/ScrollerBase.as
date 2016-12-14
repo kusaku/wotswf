@@ -244,6 +244,9 @@ public class ScrollerBase extends UIComponentEx implements IScrollerBase {
         if (isInvalid(INVALIDATION_TYPE_INTERACTION_MODE)) {
             this.refreshInteractionMode();
         }
+        if (isInvalid(INVALIDATION_TYPE_STYLES)) {
+            this.calculateViewPortOffsets();
+        }
         var _loc1_:Boolean = isInvalid(InvalidationType.DATA);
         var _loc2_:Boolean = isInvalid(INVALIDATION_TYPE_LAYOUT);
         var _loc3_:Boolean = isInvalid(INVALIDATION_TYPE_PENDING_SCROLL);
@@ -251,9 +254,6 @@ public class ScrollerBase extends UIComponentEx implements IScrollerBase {
             this.refreshViewPortBounds();
             this._viewPort.validateNow();
             this.refreshScrollValues();
-        }
-        if (isInvalid(INVALIDATION_TYPE_STYLES)) {
-            this.calculateViewPortOffsets();
         }
         if (_loc3_) {
             this.handlePendingScroll();
@@ -437,12 +437,12 @@ public class ScrollerBase extends UIComponentEx implements IScrollerBase {
         var _loc1_:Number = this.width - this._viewPortOffsetLeft - this._viewPortOffsetRight;
         var _loc2_:Number = this.height - this._viewPortOffsetTop - this._viewPortOffsetBottom;
         this._minHorizontalScrollPosition = 0;
-        this._maxHorizontalScrollPosition = this._minHorizontalScrollPosition + this._viewPort.width - _loc1_;
+        this._maxHorizontalScrollPosition = this._minHorizontalScrollPosition + this._viewPort.validWidth - _loc1_;
         if (this._maxHorizontalScrollPosition < this._minHorizontalScrollPosition) {
             this._maxHorizontalScrollPosition = this._minHorizontalScrollPosition;
         }
         this._minVerticalScrollPosition = 0;
-        this._maxVerticalScrollPosition = this._minVerticalScrollPosition + this._viewPort.height - _loc2_;
+        this._maxVerticalScrollPosition = this._minVerticalScrollPosition + this._viewPort.validHeight - _loc2_;
         if (this._maxVerticalScrollPosition < this._minVerticalScrollPosition) {
             this._maxVerticalScrollPosition = this._minVerticalScrollPosition;
         }

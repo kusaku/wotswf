@@ -5,20 +5,20 @@ import flash.text.TextField;
 
 import net.wg.data.constants.Linkages;
 import net.wg.data.constants.Values;
-import net.wg.gui.components.common.ArrowSeparator;
-import net.wg.gui.components.common.SeparatorConstants;
+import net.wg.gui.components.assets.ArrowSeparator;
+import net.wg.gui.components.assets.data.SeparatorConstants;
+import net.wg.gui.components.assets.interfaces.ISeparatorAsset;
 import net.wg.gui.components.controls.SoundButtonEx;
-import net.wg.gui.components.interfaces.ISeparatorAsset;
 import net.wg.gui.lobby.fortifications.data.settings.FortSettingsNotActivatedViewVO;
 import net.wg.gui.lobby.fortifications.events.FortSettingsEvent;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.events.FocusRequestEvent;
 import net.wg.infrastructure.interfaces.ISpriteEx;
 import net.wg.infrastructure.interfaces.IViewStackContent;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class FortSettingsNotActivatedContainer extends UIComponent implements ISpriteEx, IViewStackContent {
+public class FortSettingsNotActivatedContainer extends UIComponentEx implements ISpriteEx, IViewStackContent {
 
     public var titleTF:TextField = null;
 

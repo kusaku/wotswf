@@ -201,7 +201,7 @@ public class MissionAwardWindow extends MissionAwardWindowMeta implements IMissi
     }
 
     private function updateVisibleComponents():void {
-        this.conditionsBlock.visible = !this._dataVO.isPersonalQuest;
+        this.conditionsBlock.visible = !this._dataVO.isPersonalQuest && this._dataVO.conditions.length;
         this.currentQuestConditionsTF.visible = this._dataVO.isPersonalQuest;
         this.additionalLinkBtn.visible = this._dataVO.isPersonalQuest;
         this.additionalStatusTF.visible = this._dataVO.isPersonalQuest;

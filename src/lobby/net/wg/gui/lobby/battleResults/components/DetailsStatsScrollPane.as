@@ -33,7 +33,7 @@ public class DetailsStatsScrollPane extends ResizableScrollPane {
 
     override protected function applyScrollBarUpdating():void {
         super.applyScrollBarUpdating();
-        if (_scrollBar && (_scrollBar as DisplayObject).visible) {
+        if (_scrollBar && DisplayObject(_scrollBar).visible) {
             this.topLip.visible = _scrollBar.position > 0;
             this.bottomLip.visible = _scrollBar.position < maxScroll;
         }

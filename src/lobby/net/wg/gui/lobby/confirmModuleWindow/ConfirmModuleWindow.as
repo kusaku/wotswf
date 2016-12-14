@@ -1,6 +1,7 @@
 package net.wg.gui.lobby.confirmModuleWindow {
 import net.wg.gui.components.advanced.ExtraModuleIcon;
 import net.wg.gui.lobby.window.ConfirmItemWindow;
+import net.wg.gui.lobby.window.ConfirmItemWindowVO;
 
 public class ConfirmModuleWindow extends ConfirmItemWindow {
 
@@ -8,12 +9,17 @@ public class ConfirmModuleWindow extends ConfirmItemWindow {
         super();
     }
 
+    override protected function getConfirmItemWindowVO(param1:Object):ConfirmItemWindowVO {
+        return new ModuleInfoVo(param1);
+    }
+
     override protected function onDispose():void {
+        data = null;
         super.onDispose();
     }
 
-    override protected function setData(param1:Object):void {
-        data = new ModuleInfoVo(param1);
+    override protected function setData(param1:ConfirmItemWindowVO):void {
+        data = param1;
         invalidateData();
     }
 

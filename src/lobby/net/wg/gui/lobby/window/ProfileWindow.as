@@ -125,7 +125,7 @@ public class ProfileWindow extends ProfileWindowMeta implements IProfileWindowMe
         this.tabNavigator.mask = null;
         this._maskObj = null;
         this.background = null;
-        this.clearInitData();
+        this._initData = null;
         this.tabNavigator = null;
         this.btnAddToFriends.removeEventListener(ButtonEvent.CLICK, this.onBtnAddToFriendsClickHandler);
         this.btnAddToClan.removeEventListener(ButtonEvent.CLICK, this.onBtnAddToClanClickHandler);
@@ -174,17 +174,9 @@ public class ProfileWindow extends ProfileWindowMeta implements IProfileWindowMe
         invalidate(SET_IGNORED_AVAILABLE);
     }
 
-    public function as_setInitData(param1:Object):void {
-        this.clearInitData();
-        this._initData = new ProfileWindowInitVO(param1);
+    override protected function setInitData(param1:ProfileWindowInitVO):void {
+        this._initData = param1;
         invalidate(INIT_DATA_INV);
-    }
-
-    private function clearInitData():void {
-        if (this._initData) {
-            this._initData.dispose();
-            this._initData = null;
-        }
     }
 
     private function layoutBottomButtons():void {

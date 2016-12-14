@@ -3,11 +3,11 @@ import flash.events.Event;
 
 import net.wg.data.constants.QuestsStates;
 import net.wg.gui.lobby.questsWindow.data.QuestDataVO;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class QuestBlock extends UIComponent {
+public class QuestBlock extends UIComponentEx {
 
     public var requirementsView:RequirementBlock;
 

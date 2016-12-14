@@ -10,9 +10,9 @@ public class ClanInvitesWindowMeta extends AbstractWindowView {
 
     public var onInvitesButtonClick:Function;
 
-    private var _clanInvitesWindowHeaderStateVO:ClanInvitesWindowHeaderStateVO;
-
     private var _clanBaseInfoVO:ClanBaseInfoVO;
+
+    private var _clanInvitesWindowHeaderStateVO:ClanInvitesWindowHeaderStateVO;
 
     private var _clanInvitesWindowVO:ClanInvitesWindowVO;
 
@@ -21,13 +21,13 @@ public class ClanInvitesWindowMeta extends AbstractWindowView {
     }
 
     override protected function onDispose():void {
-        if (this._clanInvitesWindowHeaderStateVO) {
-            this._clanInvitesWindowHeaderStateVO.dispose();
-            this._clanInvitesWindowHeaderStateVO = null;
-        }
         if (this._clanBaseInfoVO) {
             this._clanBaseInfoVO.dispose();
             this._clanBaseInfoVO = null;
+        }
+        if (this._clanInvitesWindowHeaderStateVO) {
+            this._clanInvitesWindowHeaderStateVO.dispose();
+            this._clanInvitesWindowHeaderStateVO = null;
         }
         if (this._clanInvitesWindowVO) {
             this._clanInvitesWindowVO.dispose();
@@ -41,28 +41,31 @@ public class ClanInvitesWindowMeta extends AbstractWindowView {
         this.onInvitesButtonClick();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._clanInvitesWindowVO) {
-            this._clanInvitesWindowVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:ClanInvitesWindowVO = this._clanInvitesWindowVO;
         this._clanInvitesWindowVO = new ClanInvitesWindowVO(param1);
         this.setData(this._clanInvitesWindowVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setClanInfo(param1:Object):void {
-        if (this._clanBaseInfoVO) {
-            this._clanBaseInfoVO.dispose();
-        }
+    public final function as_setClanInfo(param1:Object):void {
+        var _loc2_:ClanBaseInfoVO = this._clanBaseInfoVO;
         this._clanBaseInfoVO = new ClanBaseInfoVO(param1);
         this.setClanInfo(this._clanBaseInfoVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setHeaderState(param1:Object):void {
-        if (this._clanInvitesWindowHeaderStateVO) {
-            this._clanInvitesWindowHeaderStateVO.dispose();
-        }
+    public final function as_setHeaderState(param1:Object):void {
+        var _loc2_:ClanInvitesWindowHeaderStateVO = this._clanInvitesWindowHeaderStateVO;
         this._clanInvitesWindowHeaderStateVO = new ClanInvitesWindowHeaderStateVO(param1);
         this.setHeaderState(this._clanInvitesWindowHeaderStateVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:ClanInvitesWindowVO):void {

@@ -97,25 +97,18 @@ public class ProfileTabNavigator extends ProfileTabNavigatorMeta implements IPro
         this.viewStack.removeEventListener(ViewStackEvent.NEED_UPDATE, this.onSectionViewShowed, false);
         this.viewStack.dispose();
         this.viewStack = null;
-        this.clearData();
+        this._data = null;
         super.onDispose();
     }
 
-    public function as_setInitData(param1:Object):void {
-        this._data = new ProfileMenuInfoVO(param1);
+    override protected function setInitData(param1:ProfileMenuInfoVO):void {
+        this._data = param1;
         invalidate(INIT_DATA_INV);
     }
 
     public function setAvailableSize(param1:Number, param2:Number):void {
         this.viewStack.setAvailableSize(param1, param2 - this.viewStack.y);
         setSize(param1, param2);
-    }
-
-    private function clearData():void {
-        if (this._data) {
-            this._data.dispose();
-            this._data = null;
-        }
     }
 
     public function set centerOffset(param1:int):void {

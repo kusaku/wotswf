@@ -6,21 +6,21 @@ import flash.geom.Point;
 import net.wg.data.constants.Linkages;
 import net.wg.data.constants.generated.FORTIFICATION_ALIASES;
 import net.wg.gui.components.advanced.DashLine;
+import net.wg.gui.components.assets.interfaces.ISeparatorAsset;
 import net.wg.gui.components.controls.ButtonIconTextTransparent;
 import net.wg.gui.components.controls.InfoIcon;
 import net.wg.gui.components.controls.SoundButtonEx;
-import net.wg.gui.components.interfaces.ISeparatorAsset;
 import net.wg.gui.events.ViewStackContentEvent;
 import net.wg.gui.lobby.fortifications.data.settings.FortSettingsActivatedViewVO;
 import net.wg.gui.lobby.fortifications.events.FortSettingsEvent;
 import net.wg.gui.lobby.fortifications.settings.IFortSettingsActivatedContainer;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.ISpriteEx;
 import net.wg.infrastructure.managers.IPopoverManager;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class FortSettingsActivatedContainer extends UIComponent implements IFortSettingsActivatedContainer {
+public class FortSettingsActivatedContainer extends UIComponentEx implements IFortSettingsActivatedContainer {
 
     public var dashLine:DashLine = null;
 

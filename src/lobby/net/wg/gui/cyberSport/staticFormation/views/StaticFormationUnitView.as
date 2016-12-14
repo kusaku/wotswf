@@ -89,7 +89,7 @@ public class StaticFormationUnitView extends StaticFormationUnitMeta implements 
         super.onDispose();
     }
 
-    override protected function getRallyVO(param1:Object):IRallyVO {
+    override protected function getIRallyVO(param1:Object):IRallyVO {
         return new LegionariesSortieVO(param1);
     }
 

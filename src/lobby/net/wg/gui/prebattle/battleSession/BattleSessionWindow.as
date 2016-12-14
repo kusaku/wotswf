@@ -17,7 +17,6 @@ import net.wg.gui.prebattle.meta.impl.BattleSessionWindowMeta;
 import net.wg.utils.IScheduler;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.controls.CoreList;
 import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.interfaces.IDataProvider;
@@ -89,38 +88,13 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
 
     private var _scheduler:IScheduler = null;
 
-    private var _nationsDP:DataProvider;
-
     public function BattleSessionWindow() {
-        this._nationsDP = new DataProvider();
         super();
         this._isReady = false;
         showWindowBgForm = false;
         canMinimize = true;
         isCentered = false;
         this._scheduler = App.utils.scheduler;
-    }
-
-    private static function checkStatus(param1:CoreList, param2:Object):void {
-        var _loc7_:Object = null;
-        var _loc8_:* = null;
-        var _loc3_:PlayerPrbInfoVO = new PlayerPrbInfoVO(param2);
-        var _loc4_:int = param1.dataProvider.length;
-        var _loc5_:IDataProvider = param1.dataProvider;
-        var _loc6_:int = 0;
-        while (_loc6_ < _loc4_) {
-            _loc7_ = _loc5_.requestItemAt(_loc6_);
-            if (_loc7_.dbID == _loc3_.dbID) {
-                for (_loc8_ in param2) {
-                    if (_loc7_.hasOwnProperty(_loc8_)) {
-                        _loc7_[_loc8_] = param2[_loc8_];
-                    }
-                }
-                param1.invalidateData();
-            }
-            _loc6_++;
-        }
-        _loc3_.dispose();
     }
 
     override public function as_enableLeaveBtn(param1:Boolean):void {
@@ -150,15 +124,11 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
     }
 
     override public function as_setPlayerState(param1:int, param2:Boolean, param3:Object):void {
-        if (param2) {
-            checkStatus(this.memberList, param3);
-        }
-        else {
-            checkStatus(this.memberStackList, param3);
-        }
+        var _loc4_:ScrollingListEx = !!param2 ? this.memberList : this.memberStackList;
+        checkStatus(_loc4_, param3);
     }
 
-    override public function as_setRosterList(param1:int, param2:Boolean, param3:Array):void {
+    override protected function setRosterList(param1:int, param2:Boolean, param3:DataProvider):void {
         var _loc6_:int = 0;
         var _loc4_:int = param3.length;
         this._firstLength = !!param2 ? Number(_loc4_) : Number(this._firstLength);
@@ -168,7 +138,8 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
             _loc5_++;
         }
         if (param2) {
-            this.memberList.dataProvider = new DataProvider(param3);
+            disposeDataProvider(this.memberList.dataProvider);
+            this.memberList.dataProvider = param3;
             if (!this._numberingTFs) {
                 this.createNumbering();
             }
@@ -180,7 +151,8 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
             }
         }
         else {
-            this.memberStackList.dataProvider = new DataProvider(param3);
+            disposeDataProvider(this.memberStackList.dataProvider);
+            this.memberStackList.dataProvider = param3;
         }
         this.updateMoveButtons();
     }
@@ -227,12 +199,6 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
     }
 
     override protected function onDispose():void {
-        var _loc1_:BSFlagRendererVO = null;
-        for each(_loc1_ in this._nationsDP) {
-            _loc1_.dispose();
-        }
-        this._nationsDP.cleanUp();
-        this._nationsDP = null;
         this._scheduler.cancelTask(this.stopReadyButtonCoolDown);
         this._scheduler = null;
         while (this.numberingContainer.numChildren > 0) {
@@ -243,6 +209,8 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
             this._numberingTFs.splice(0, this._numberingTFs.length);
             this._numberingTFs = null;
         }
+        disposeDataProvider(this.memberList.dataProvider);
+        disposeDataProvider(this.memberStackList.dataProvider);
         this.memberList.removeEventListener(ListEventEx.ITEM_DOUBLE_CLICK, this.onMemberListItemDoubleClickHandler);
         this.memberList.removeEventListener(ListEventEx.ITEM_CLICK, this.onMemberListItemClickHandler);
         this.memberStackList.removeEventListener(ListEventEx.ITEM_DOUBLE_CLICK, this.onMemberListItemDoubleClickHandler);
@@ -329,22 +297,16 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
         this.commentValue.text = param7;
     }
 
-    public function as_setNationsLimits(param1:Array):void {
-        var _loc2_:Object = null;
-        var _loc3_:BSFlagRendererVO = null;
-        this._nationsDP.cleanUp();
-        for each(_loc2_ in param1) {
-            _loc3_ = new BSFlagRendererVO(_loc2_);
-            this._nationsDP.push(_loc3_);
-        }
-        this.requirementInfo.flagList.dataProvider = this._nationsDP;
-        if (param1) {
+    override protected function setNationsLimits(param1:DataProvider):void {
+        if (param1.length) {
             this.requirementInfo.flagList.visible = true;
             this.requirementInfo.requiredNationText.visible = false;
+            this.requirementInfo.flagList.dataProvider = param1;
         }
         else {
             this.requirementInfo.flagList.visible = false;
             this.requirementInfo.requiredNationText.visible = true;
+            this.requirementInfo.flagList.dataProvider = param1;
             this.requirementInfo.requiredNationText.text = MENU.NATIONS_ALL;
         }
     }
@@ -397,20 +359,16 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
         this.leaveButton.label = PREBATTLE.BUTTONS_BATTLESESSION_LEAVE;
     }
 
-    private function checkAndAssignMember(param1:Object):void {
-        var _loc2_:PlayerPrbInfoVO = new PlayerPrbInfoVO(param1);
+    private function checkAndAssignMember(param1:PlayerPrbInfoVO):void {
         if (canMoveToAssignedS()) {
-            requestToAssignMemberS(_loc2_.accID);
+            requestToAssignMemberS(param1.accID);
         }
-        _loc2_.dispose();
     }
 
-    private function checkAndUnassignMember(param1:Object):void {
-        var _loc2_:PlayerPrbInfoVO = new PlayerPrbInfoVO(param1);
+    private function checkAndUnassignMember(param1:PlayerPrbInfoVO):void {
         if (canMoveToUnassignedS()) {
-            requestToUnassignMemberS(_loc2_.accID);
+            requestToUnassignMemberS(param1.accID);
         }
-        _loc2_.dispose();
     }
 
     private function updateMoveButtons():void {
@@ -421,14 +379,13 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
     private function onMemberListItemClickHandler(param1:ListEventEx):void {
         var _loc2_:PlayerPrbInfoVO = null;
         if (param1.buttonIdx == MouseEventEx.RIGHT_BUTTON) {
-            _loc2_ = new PlayerPrbInfoVO(param1.itemData);
+            _loc2_ = PlayerPrbInfoVO(param1.itemData);
             if (_loc2_.accID > -1) {
                 App.contextMenuMgr.show(CONTEXT_MENU_HANDLER_TYPE.PREBATTLE_USER, this, _loc2_);
             }
             else {
                 App.contextMenuMgr.hide();
             }
-            _loc2_.dispose();
         }
     }
 
@@ -444,7 +401,7 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
         var _loc2_:IDataProvider = this.memberStackList.dataProvider;
         var _loc3_:int = this.memberStackList.selectedIndex;
         if (_loc2_.length > 0 && _loc3_ > -1) {
-            this.checkAndAssignMember(_loc2_.requestItemAt(_loc3_));
+            this.checkAndAssignMember(PlayerPrbInfoVO(_loc2_.requestItemAt(_loc3_)));
         }
     }
 
@@ -453,10 +410,10 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
             return;
         }
         if (param1.target == this.memberList) {
-            this.checkAndUnassignMember(param1.itemData);
+            this.checkAndUnassignMember(PlayerPrbInfoVO(param1.itemData));
         }
         else if (param1.target == this.memberStackList) {
-            this.checkAndAssignMember(param1.itemData);
+            this.checkAndAssignMember(PlayerPrbInfoVO(param1.itemData));
         }
     }
 
@@ -465,7 +422,7 @@ public class BattleSessionWindow extends BattleSessionWindowMeta implements IBat
         var _loc3_:int = this.memberList.selectedIndex;
         if (_loc2_.length > 0) {
             if (_loc3_ > -1) {
-                this.checkAndUnassignMember(_loc2_.requestItemAt(_loc3_));
+                this.checkAndUnassignMember(PlayerPrbInfoVO(_loc2_.requestItemAt(_loc3_)));
             }
         }
     }

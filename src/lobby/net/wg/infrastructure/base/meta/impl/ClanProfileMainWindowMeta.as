@@ -20,12 +20,13 @@ public class ClanProfileMainWindowMeta extends AbstractWindowView {
         super.onDispose();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._clanProfileMainWindowVO) {
-            this._clanProfileMainWindowVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:ClanProfileMainWindowVO = this._clanProfileMainWindowVO;
         this._clanProfileMainWindowVO = new ClanProfileMainWindowVO(param1);
         this.setData(this._clanProfileMainWindowVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:ClanProfileMainWindowVO):void {

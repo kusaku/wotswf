@@ -3,11 +3,13 @@ import net.wg.data.constants.Errors;
 import net.wg.data.daapi.base.DAAPIDataClass;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
+import scaleform.clik.data.DataProvider;
+
 public class NotificationMessagesListVO extends DAAPIDataClass {
 
     private static const MESSAGES_FIELD_NAME:String = "messages";
 
-    public var messages:Array = null;
+    public var messages:DataProvider;
 
     public var emptyListText:String = "";
 
@@ -23,7 +25,7 @@ public class NotificationMessagesListVO extends DAAPIDataClass {
         if (param1 == MESSAGES_FIELD_NAME) {
             _loc3_ = param2 as Array;
             App.utils.asserter.assertNotNull(_loc3_, param1 + Errors.CANT_NULL);
-            this.messages = [];
+            this.messages = new DataProvider();
             for each(_loc4_ in _loc3_) {
                 this.messages.push(new NotificationInfoVO(_loc4_));
             }
@@ -37,7 +39,7 @@ public class NotificationMessagesListVO extends DAAPIDataClass {
         for each(_loc1_ in this.messages) {
             _loc1_.dispose();
         }
-        this.messages.splice(0);
+        this.messages.cleanUp();
         this.messages = null;
         super.onDispose();
     }

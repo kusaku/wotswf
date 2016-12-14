@@ -71,25 +71,14 @@ package
       
       public static const ANSWER_17_CONTAINS_LINKS:String = "#faq:answer_17/contains_links";
       
-      public static const QUESTION_ENUM:Array = [QUESTION_1,QUESTION_2,QUESTION_3,QUESTION_4,QUESTION_5,QUESTION_6,QUESTION_7,QUESTION_8,QUESTION_9,QUESTION_10,QUESTION_11,QUESTION_12,QUESTION_13,QUESTION_14,QUESTION_15,QUESTION_16,QUESTION_17];
-      
       public static const ANSWER_ENUM:Array = [ANSWER_1,ANSWER_2,ANSWER_3,ANSWER_4,ANSWER_5,ANSWER_6,ANSWER_7,ANSWER_8,ANSWER_9,ANSWER_10,ANSWER_11,ANSWER_12,ANSWER_13,ANSWER_14,ANSWER_15,ANSWER_16,ANSWER_17_CONTAINS_LINKS];
+      
+      public static const QUESTION_ENUM:Array = [QUESTION_1,QUESTION_2,QUESTION_3,QUESTION_4,QUESTION_5,QUESTION_6,QUESTION_7,QUESTION_8,QUESTION_9,QUESTION_10,QUESTION_11,QUESTION_12,QUESTION_13,QUESTION_14,QUESTION_15,QUESTION_16,QUESTION_17];
        
       
       public function FAQ()
       {
          super();
-      }
-      
-      public static function question(param1:String) : String
-      {
-         var _loc2_:String = "#faq:question_" + param1;
-         if(QUESTION_ENUM.indexOf(_loc2_) == -1)
-         {
-            DebugUtils.LOG_WARNING("[question]:locale key \"" + _loc2_ + "\" was not found");
-            return null;
-         }
-         return _loc2_;
       }
       
       public static function answer(param1:String) : String
@@ -98,6 +87,17 @@ package
          if(ANSWER_ENUM.indexOf(_loc2_) == -1)
          {
             DebugUtils.LOG_WARNING("[answer]:locale key \"" + _loc2_ + "\" was not found");
+            return null;
+         }
+         return _loc2_;
+      }
+      
+      public static function question(param1:String) : String
+      {
+         var _loc2_:String = "#faq:question_" + param1;
+         if(QUESTION_ENUM.indexOf(_loc2_) == -1)
+         {
+            DebugUtils.LOG_WARNING("[question]:locale key \"" + _loc2_ + "\" was not found");
             return null;
          }
          return _loc2_;

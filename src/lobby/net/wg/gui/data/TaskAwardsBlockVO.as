@@ -15,6 +15,8 @@ public class TaskAwardsBlockVO extends BaseAwardsBlockVO {
 
     public var isAwardBonusStrVisible:Boolean = false;
 
+    public var useHtmlInBonusStr:Boolean = true;
+
     public function TaskAwardsBlockVO(param1:Object) {
         super(param1);
     }

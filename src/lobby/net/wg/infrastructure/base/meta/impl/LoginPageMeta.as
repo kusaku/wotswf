@@ -1,6 +1,10 @@
 package net.wg.infrastructure.base.meta.impl {
 import net.wg.data.constants.Errors;
+import net.wg.gui.login.impl.vo.SocialIconVo;
 import net.wg.infrastructure.base.AbstractView;
+import net.wg.infrastructure.exceptions.AbstractException;
+
+import scaleform.clik.data.DataProvider;
 
 public class LoginPageMeta extends AbstractView {
 
@@ -48,8 +52,22 @@ public class LoginPageMeta extends AbstractView {
 
     public var musicFadeOut:Function;
 
+    private var _dataProviderSocialIconVo:DataProvider;
+
     public function LoginPageMeta() {
         super();
+    }
+
+    override protected function onDispose():void {
+        var _loc1_:SocialIconVo = null;
+        if (this._dataProviderSocialIconVo) {
+            for each(_loc1_ in this._dataProviderSocialIconVo) {
+                _loc1_.dispose();
+            }
+            this._dataProviderSocialIconVo.cleanUp();
+            this._dataProviderSocialIconVo = null;
+        }
+        super.onDispose();
     }
 
     public function onLoginS(param1:String, param2:String, param3:String, param4:Boolean):void {
@@ -160,6 +178,35 @@ public class LoginPageMeta extends AbstractView {
     public function musicFadeOutS():void {
         App.utils.asserter.assertNotNull(this.musicFadeOut, "musicFadeOut" + Errors.CANT_NULL);
         this.musicFadeOut();
+    }
+
+    public final function as_showSimpleForm(param1:Boolean, param2:Array):void {
+        var _loc4_:uint = 0;
+        var _loc5_:int = 0;
+        var _loc6_:SocialIconVo = null;
+        var _loc3_:DataProvider = this._dataProviderSocialIconVo;
+        this._dataProviderSocialIconVo = new DataProvider();
+        if (param2) {
+            _loc4_ = param2.length;
+            _loc5_ = 0;
+            while (_loc5_ < _loc4_) {
+                this._dataProviderSocialIconVo[_loc5_] = new SocialIconVo(param2[_loc5_]);
+                _loc5_++;
+            }
+        }
+        this.showSimpleForm(param1, this._dataProviderSocialIconVo);
+        if (_loc3_) {
+            for each(_loc6_ in _loc3_) {
+                _loc6_.dispose();
+            }
+            _loc3_.cleanUp();
+        }
+    }
+
+    protected function showSimpleForm(param1:Boolean, param2:DataProvider):void {
+        var _loc3_:String = "as_showSimpleForm" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc3_);
+        throw new AbstractException(_loc3_);
     }
 }
 }

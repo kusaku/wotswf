@@ -19,7 +19,6 @@ import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.components.controls.VO.ActionPriceVO;
 import net.wg.gui.events.EquipmentEvent;
 import net.wg.gui.lobby.hangar.maintenance.data.ModuleVO;
-import net.wg.utils.IEventCollector;
 import net.wg.utils.ILocale;
 
 import scaleform.clik.data.DataProvider;
@@ -28,7 +27,7 @@ import scaleform.gfx.MouseEventEx;
 
 public class EquipmentItem extends SoundButtonEx {
 
-    private static const SLOTS_MIN_COUNT:int = 9;
+    private static const SLOTS_MAX_COUNT:int = 10;
 
     private static const MULTY_CHARS:String = " x ";
 
@@ -39,6 +38,8 @@ public class EquipmentItem extends SoundButtonEx {
     private static const INV_UPDATE:String = "invalidateUpdate";
 
     private static const INV_CLEAR:String = "invalidateClear";
+
+    private static const EMPTY_LABEL:String = "empty";
 
     public var slotBg:MovieClip;
 
@@ -83,9 +84,8 @@ public class EquipmentItem extends SoundButtonEx {
     }
 
     override protected function onDispose():void {
-        var _loc1_:IEventCollector = App.utils.events;
-        _loc1_.removeEvent(this.toBuyDropdown, ListEvent.INDEX_CHANGE, this.onModuleCurrencyChangedHandler);
-        _loc1_.removeEvent(this.select, ListEvent.INDEX_CHANGE, this.onItemRendererClickHandler);
+        this.toBuyDropdown.removeEventListener(ListEvent.INDEX_CHANGE, this.onToBuyDropdownIndexChangeHandler);
+        this.select.removeEventListener(ListEvent.INDEX_CHANGE, this.onSelectIndexChangeHandler);
         this.cleanupData();
         this.actionPrice.dispose();
         this.actionPrice = null;
@@ -119,8 +119,7 @@ public class EquipmentItem extends SoundButtonEx {
         this.countLabel.mouseEnabled = false;
         this.toBuy.mouseEnabled = this.toBuy.mouseChildren = false;
         this.price.mouseEnabled = this.price.mouseChildren = false;
-        var _loc1_:IEventCollector = App.utils.events;
-        _loc1_.addEvent(this.toBuyDropdown, ListEvent.INDEX_CHANGE, this.onModuleCurrencyChangedHandler);
+        this.toBuyDropdown.addEventListener(ListEvent.INDEX_CHANGE, this.onToBuyDropdownIndexChangeHandler);
         this.soundType = SoundTypes.ARTEFACT_RENDERER;
     }
 
@@ -166,10 +165,9 @@ public class EquipmentItem extends SoundButtonEx {
             _loc9_++;
         }
         this.select.close();
-        var _loc11_:IEventCollector = App.utils.events;
-        _loc11_.removeEvent(this.select, ListEvent.INDEX_CHANGE, this.onItemRendererClickHandler);
+        this.select.removeEventListener(ListEvent.INDEX_CHANGE, this.onSelectIndexChangeHandler);
         this.select.dataProvider = new DataProvider(param1);
-        this.select.menuRowCount = Math.min(SLOTS_MIN_COUNT, param1.length);
+        this.select.rowCount = Math.min(SLOTS_MAX_COUNT, param1.length);
         this.select.selectedIndex = this._selectedIndexOld;
         if (_loc7_ != -1 && !this._defaultInitialized) {
             this._defaultInitialized = true;
@@ -177,25 +175,24 @@ public class EquipmentItem extends SoundButtonEx {
             dispatchEvent(new EquipmentEvent(EquipmentEvent.NEED_UPDATE));
         }
         this.select.scrollBar = param1.length > this.select.menuRowCount ? Linkages.SCROLL_BAR : null;
-        _loc11_.addEvent(this.select, ListEvent.INDEX_CHANGE, this.onItemRendererClickHandler);
+        this.select.addEventListener(ListEvent.INDEX_CHANGE, this.onSelectIndexChangeHandler);
         invalidate(this.select.selectedIndex != -1 ? INV_UPDATE : INV_CLEAR);
     }
 
     public function setEmptyItem():void {
-        var _loc1_:IEventCollector = App.utils.events;
-        _loc1_.removeEvent(this.select, ListEvent.INDEX_CHANGE, this.onItemRendererClickHandler);
+        this.select.removeEventListener(ListEvent.INDEX_CHANGE, this.onSelectIndexChangeHandler);
         this._selectedIndexOld = -1;
         this.select.selectedIndex = -1;
-        _loc1_.addEvent(this.select, ListEvent.INDEX_CHANGE, this.onItemRendererClickHandler);
+        this.select.addEventListener(ListEvent.INDEX_CHANGE, this.onSelectIndexChangeHandler);
         dispatchEvent(new EquipmentEvent(EquipmentEvent.EQUIPMENT_CHANGE));
     }
 
     public function toggleSelectChange(param1:Boolean):void {
         if (param1) {
-            App.utils.events.addEvent(this.select, ListEvent.INDEX_CHANGE, this.onItemRendererClickHandler);
+            this.select.addEventListener(ListEvent.INDEX_CHANGE, this.onSelectIndexChangeHandler);
         }
         else {
-            App.utils.events.removeEvent(this.select, ListEvent.INDEX_CHANGE, this.onItemRendererClickHandler);
+            this.select.removeEventListener(ListEvent.INDEX_CHANGE, this.onSelectIndexChangeHandler);
         }
     }
 
@@ -222,7 +219,6 @@ public class EquipmentItem extends SoundButtonEx {
 
     private function update():void {
         var _loc2_:ILocale = null;
-        var _loc3_:IEventCollector = null;
         var _loc1_:ModuleVO = this.selectedItem;
         this.toBuyDropdown.visible = false;
         this.toBuyTf.visible = false;
@@ -239,12 +235,11 @@ public class EquipmentItem extends SoundButtonEx {
         if (_loc1_.prices[1] > 0 && _loc1_.prices[0] > 0 && _loc1_.goldEqsForCredits) {
             this.toBuyTf.visible = _loc1_.goldEqsForCredits;
             this.toBuy.visible = !_loc1_.goldEqsForCredits;
-            _loc3_ = App.utils.events;
             this.toBuyDropdown.visible = _loc1_.goldEqsForCredits;
-            _loc3_.removeEvent(this.toBuyDropdown, ListEvent.INDEX_CHANGE, this.onModuleCurrencyChangedHandler);
+            this.toBuyDropdown.removeEventListener(ListEvent.INDEX_CHANGE, this.onToBuyDropdownIndexChangeHandler);
             this.toBuyDropdown.dataProvider = new DataProvider([_loc2_.htmlTextWithIcon(_loc2_.integer(_loc1_.prices[0]), CURRENCIES_CONSTANTS.CREDITS), _loc2_.htmlTextWithIcon(_loc2_.gold(_loc1_.prices[1]), CURRENCIES_CONSTANTS.GOLD)]);
             this.toBuyDropdown.selectedIndex = _loc1_.currency == CURRENCIES_CONSTANTS.CREDITS ? 0 : 1;
-            _loc3_.addEvent(this.toBuyDropdown, ListEvent.INDEX_CHANGE, this.onModuleCurrencyChangedHandler);
+            this.toBuyDropdown.addEventListener(ListEvent.INDEX_CHANGE, this.onToBuyDropdownIndexChangeHandler);
         }
         else {
             this.toBuyDropdown.visible = false;
@@ -257,7 +252,7 @@ public class EquipmentItem extends SoundButtonEx {
     private function clear():void {
         this.toBuyDropdown.visible = false;
         this.toBuyTf.visible = false;
-        this.moduleType.gotoAndStop("empty");
+        this.moduleType.gotoAndStop(EMPTY_LABEL);
         this.title.text = "";
         this.descr.text = "";
         this.countLabel.visible = this.toBuy.visible = this.price.visible = this.actionPrice.visible = false;
@@ -334,7 +329,7 @@ public class EquipmentItem extends SoundButtonEx {
         }
     }
 
-    private function onModuleCurrencyChangedHandler(param1:ListEvent):void {
+    private function onToBuyDropdownIndexChangeHandler(param1:ListEvent):void {
         this.price.icon = this.toBuyDropdown.selectedIndex == 0 ? CURRENCIES_CONSTANTS.CREDITS : CURRENCIES_CONSTANTS.GOLD;
         this.actionPrice.ico = this.toBuyDropdown.selectedIndex == 0 ? IconsTypes.CREDITS : IconsTypes.GOLD;
         this.selectedItem.currency = this.toBuyDropdown.selectedIndex == 0 ? CURRENCIES_CONSTANTS.CREDITS : CURRENCIES_CONSTANTS.GOLD;
@@ -342,7 +337,7 @@ public class EquipmentItem extends SoundButtonEx {
         dispatchEvent(new EquipmentEvent(EquipmentEvent.TOTAL_PRICE_CHANGED, -1, -1, this.selectedItem.currency));
     }
 
-    private function onItemRendererClickHandler(param1:ListEvent):void {
+    private function onSelectIndexChangeHandler(param1:ListEvent):void {
         var _loc2_:EquipmentEvent = null;
         if (this.selectedItem.target == 1) {
             _loc2_ = new EquipmentEvent(EquipmentEvent.EQUIPMENT_CHANGE, !!this.selectedItem ? int(this.selectedItem.index) : -1, this._selectedIndexOld, this._selectedIndexOld > -1 ? this._artifactsData[this._selectedIndexOld].currency : Values.EMPTY_STR);

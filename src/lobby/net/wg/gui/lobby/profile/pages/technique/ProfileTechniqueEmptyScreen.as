@@ -1,10 +1,11 @@
 package net.wg.gui.lobby.profile.pages.technique {
 import flash.text.TextField;
 
-import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class ProfileTechniqueEmptyScreen extends UIComponent {
+import scaleform.clik.constants.InvalidationType;
+
+public class ProfileTechniqueEmptyScreen extends UIComponentEx {
 
     private var _text:String = "";
 

@@ -37,5 +37,7 @@ public interface ICrosshair extends IDisposable, IDisplayable {
     function setReloadingTime(param1:Number):void;
 
     function showReloadingTimeField(param1:Boolean):void;
+
+    function setVisibleNet(param1:Boolean):void;
 }
 }

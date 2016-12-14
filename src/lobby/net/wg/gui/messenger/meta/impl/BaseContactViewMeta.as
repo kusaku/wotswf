@@ -1,6 +1,8 @@
 package net.wg.gui.messenger.meta.impl {
 import net.wg.data.constants.Errors;
+import net.wg.gui.messenger.data.ContactsViewInitDataVO;
 import net.wg.infrastructure.base.BaseDAAPIComponent;
+import net.wg.infrastructure.exceptions.AbstractException;
 
 public class BaseContactViewMeta extends BaseDAAPIComponent {
 
@@ -8,8 +10,18 @@ public class BaseContactViewMeta extends BaseDAAPIComponent {
 
     public var onCancel:Function;
 
+    private var _contactsViewInitDataVO:ContactsViewInitDataVO;
+
     public function BaseContactViewMeta() {
         super();
+    }
+
+    override protected function onDispose():void {
+        if (this._contactsViewInitDataVO) {
+            this._contactsViewInitDataVO.dispose();
+            this._contactsViewInitDataVO = null;
+        }
+        super.onDispose();
     }
 
     public function onOkS(param1:Object):void {
@@ -20,6 +32,27 @@ public class BaseContactViewMeta extends BaseDAAPIComponent {
     public function onCancelS():void {
         App.utils.asserter.assertNotNull(this.onCancel, "onCancel" + Errors.CANT_NULL);
         this.onCancel();
+    }
+
+    public final function as_setInitData(param1:Object):void {
+        var _loc2_:ContactsViewInitDataVO = this._contactsViewInitDataVO;
+        this._contactsViewInitDataVO = this.getContactsViewInitDataVO(param1);
+        this.setInitData(this._contactsViewInitDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
+    }
+
+    protected function getContactsViewInitDataVO(param1:Object):ContactsViewInitDataVO {
+        var _loc2_:String = "getContactsViewInitDataVO" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
+    }
+
+    protected function setInitData(param1:ContactsViewInitDataVO):void {
+        var _loc2_:String = "as_setInitData" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
     }
 }
 }

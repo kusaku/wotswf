@@ -20,8 +20,18 @@ public class CrewMeta extends BaseDAAPIComponent {
 
     public var onCrewDogItemClick:Function;
 
+    private var _tankmenResponseVO:TankmenResponseVO;
+
     public function CrewMeta() {
         super();
+    }
+
+    override protected function onDispose():void {
+        if (this._tankmenResponseVO) {
+            this._tankmenResponseVO.dispose();
+            this._tankmenResponseVO = null;
+        }
+        super.onDispose();
     }
 
     public function onShowRecruitWindowClickS(param1:Object, param2:Boolean):void {
@@ -59,8 +69,13 @@ public class CrewMeta extends BaseDAAPIComponent {
         this.onCrewDogItemClick();
     }
 
-    public function as_tankmenResponse(param1:Object):void {
-        this.tankmenResponse(new TankmenResponseVO(param1));
+    public final function as_tankmenResponse(param1:Object):void {
+        var _loc2_:TankmenResponseVO = this._tankmenResponseVO;
+        this._tankmenResponseVO = new TankmenResponseVO(param1);
+        this.tankmenResponse(this._tankmenResponseVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function tankmenResponse(param1:TankmenResponseVO):void {

@@ -1,9 +1,9 @@
 package net.wg.gui.components.common.waiting {
 import flash.text.TextField;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class WaitingMc extends UIComponent {
+public class WaitingMc extends UIComponentEx {
 
     public static var id:int = 0;
 

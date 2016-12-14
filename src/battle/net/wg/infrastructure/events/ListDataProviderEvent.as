@@ -5,6 +5,8 @@ public class ListDataProviderEvent extends Event {
 
     public static var UPDATE_ITEM:String = "updateItem";
 
+    public static var VALIDATE_ITEMS:String = "validateItems";
+
     private var _index:int;
 
     private var _data:Object;

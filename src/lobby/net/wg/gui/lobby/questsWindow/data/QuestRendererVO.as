@@ -53,7 +53,7 @@ public class QuestRendererVO extends DAAPIDataClass {
 
     public var isAvailable:Boolean = true;
 
-    public function QuestRendererVO(param1:Object) {
+    public function QuestRendererVO(param1:Object = null) {
         super(param1);
     }
 

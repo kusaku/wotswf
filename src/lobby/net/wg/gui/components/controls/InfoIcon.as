@@ -4,6 +4,7 @@ import flash.display.MovieClip;
 import flash.events.Event;
 import flash.events.MouseEvent;
 
+import net.wg.gui.components.controls.constants.ToolTipShowType;
 import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.IInfoIcon;
 
@@ -27,7 +28,10 @@ public class InfoIcon extends UIComponentEx implements IInfoIcon {
 
     private var _tooltip:String = "";
 
+    public var tooltipType:ToolTipShowType;
+
     public function InfoIcon() {
+        this.tooltipType = ToolTipShowType.COMPLEX;
         super();
     }
 
@@ -94,7 +98,12 @@ public class InfoIcon extends UIComponentEx implements IInfoIcon {
 
     private function onHitMouseOverHandler(param1:MouseEvent):void {
         if (this._tooltip != "" && enabled) {
-            App.toolTipMgr.showComplex(this._tooltip);
+            if (this.tooltipType.value == ToolTipShowType.COMPLEX.value) {
+                App.toolTipMgr.showComplex(this._tooltip);
+            }
+            else if (this.tooltipType.value == ToolTipShowType.SPECIAL.value) {
+                App.toolTipMgr.showSpecial(this._tooltip, null);
+            }
         }
     }
 

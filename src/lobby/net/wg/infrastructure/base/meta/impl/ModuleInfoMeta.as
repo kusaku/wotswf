@@ -34,12 +34,13 @@ public class ModuleInfoMeta extends AbstractWindowView {
         this.onActionButtonClick();
     }
 
-    public function as_setActionButton(param1:Object):void {
-        if (this._moduleInfoActionVO) {
-            this._moduleInfoActionVO.dispose();
-        }
+    public final function as_setActionButton(param1:Object):void {
+        var _loc2_:ModuleInfoActionVO = this._moduleInfoActionVO;
         this._moduleInfoActionVO = new ModuleInfoActionVO(param1);
         this.setActionButton(this._moduleInfoActionVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setActionButton(param1:ModuleInfoActionVO):void {

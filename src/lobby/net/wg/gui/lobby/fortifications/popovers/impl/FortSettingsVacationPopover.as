@@ -4,14 +4,15 @@ import flash.display.MovieClip;
 import flash.geom.Point;
 import flash.text.TextField;
 
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.Time;
 import net.wg.gui.components.controls.DropdownMenu;
 import net.wg.gui.components.controls.NumericStepper;
 import net.wg.gui.components.controls.ScrollBar;
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.components.controls.events.DropdownMenuEvent;
-import net.wg.gui.components.popOvers.PopOver;
-import net.wg.gui.components.popOvers.PopOverConst;
+import net.wg.gui.components.popovers.PopOver;
+import net.wg.gui.components.popovers.PopOverConst;
 import net.wg.gui.lobby.fortifications.data.settings.VacationPopoverVO;
 import net.wg.infrastructure.base.meta.IFortSettingsVacationPopoverMeta;
 import net.wg.infrastructure.base.meta.impl.FortSettingsVacationPopoverMeta;
@@ -198,6 +199,7 @@ public class FortSettingsVacationPopover extends FortSettingsVacationPopoverMeta
 
     override protected function onShowDropdownHandler(param1:DropdownMenuEvent):void {
         var _loc2_:ScrollingList = param1.dropDownRef as ScrollingList;
+        App.utils.asserter.assertNotNull(_loc2_, "dropDownRef" + Errors.CANT_NULL);
         var _loc3_:Point = localToGlobal(new Point(this.monthDropdown.x, this.monthDropdown.y + this.monthDropdown.height));
         var _loc4_:uint = Math.floor((App.appHeight - _loc3_.y) / _loc2_.rowHeight);
         if (this.monthDropdown.rowCount != _loc4_ && this.monthDropdown.dataProvider) {

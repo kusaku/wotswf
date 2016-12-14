@@ -279,6 +279,11 @@ public class ContactsTreeComponent extends ContactsTreeComponentMeta implements 
         throw new Error("Unexpected tree component mode: " + this._currentMode);
     }
 
+    public function resetSelected():void {
+        this.list.selectedIndex = -1;
+        this._treeSelectedItemVO = null;
+    }
+
     public function setListTopBound(param1:Number):void {
         if (this._listTopBound != param1) {
             this._listTopBound = param1;
@@ -421,8 +426,8 @@ public class ContactsTreeComponent extends ContactsTreeComponentMeta implements 
     }
 
     private function onExternalSearchCancelClickHandler(param1:ButtonEvent):void {
-        this.searchInput.text = "";
-        searchLocalContactS("");
+        this.searchInput.text = Values.EMPTY_STR;
+        searchLocalContactS(Values.EMPTY_STR);
         this.onSearchInputChangeHandler();
     }
 
@@ -472,7 +477,7 @@ public class ContactsTreeComponent extends ContactsTreeComponentMeta implements 
                     _loc9_ = {
                         "dbID": _loc8_.dbID,
                         "userName": _loc8_.userProps.userName,
-                        "targetGroupName": "",
+                        "targetGroupName": Values.EMPTY_STR,
                         "noteText": _loc8_.note
                     };
                     if (_loc3_.parent && _loc3_.parent.parent && _loc3_.parent.data) {

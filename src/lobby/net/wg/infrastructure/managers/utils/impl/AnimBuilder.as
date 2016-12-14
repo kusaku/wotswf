@@ -29,22 +29,6 @@ public class AnimBuilder implements IAnimBuilder {
         return this.createTweenConstruction(param1, param2).addMoveDown(param3, param4);
     }
 
-    public function addGlowIn(param1:DisplayObject, param2:ITweenConstructionHandler, param3:int, param4:String = "global"):ITweenConstruction {
-        return this.createTweenConstruction(param1, param2).addGlowIn(param3, param4);
-    }
-
-    public function addGlowOut(param1:DisplayObject, param2:ITweenConstructionHandler, param3:int, param4:String = "global"):ITweenConstruction {
-        return this.createTweenConstruction(param1, param2).addGlowOut(param3, param4);
-    }
-
-    public function addShadowIn(param1:DisplayObject, param2:ITweenConstructionHandler, param3:int, param4:String = "global"):ITweenConstruction {
-        return this.createTweenConstruction(param1, param2).addShadowIn(param3, param4);
-    }
-
-    public function addShadowOut(param1:DisplayObject, param2:ITweenConstructionHandler, param3:int, param4:String = "global"):ITweenConstruction {
-        return this.createTweenConstruction(param1, param2).addShadowOut(param3, param4);
-    }
-
     public function addTween(param1:String, param2:int, param3:ITween, param4:DisplayObject, param5:ITweenConstructionHandler):ITweenConstruction {
         return this.createTweenConstruction(param4, param5).addTween(param3, param2, param1);
     }

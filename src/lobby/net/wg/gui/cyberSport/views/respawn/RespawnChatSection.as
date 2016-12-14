@@ -10,5 +10,10 @@ public class RespawnChatSection extends BaseChatSection {
     override protected function getHeader():String {
         return CYBERSPORT.RESPAWN_CHATHEADER;
     }
+
+    override protected function configUI():void {
+        super.configUI();
+        channelComponent.isReturnToNormalScale = true;
+    }
 }
 }

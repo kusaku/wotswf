@@ -11,6 +11,8 @@ public class HangarHeaderVO extends DAAPIDataClass {
 
     public var personalQuestsIcon:String = "";
 
+    public var personalQuestsBg:String = "";
+
     public var personalQuestsLabel:String = "";
 
     public var personalQuestsTooltip:String = "";
@@ -18,6 +20,8 @@ public class HangarHeaderVO extends DAAPIDataClass {
     public var personalQuestsEnable:Boolean = true;
 
     public var commonQuestsIcon:String = "";
+
+    public var commonQuestsBg:String = "";
 
     public var commonQuestsLabel:String = "";
 

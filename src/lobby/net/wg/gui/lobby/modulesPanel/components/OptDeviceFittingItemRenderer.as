@@ -83,12 +83,10 @@ public class OptDeviceFittingItemRenderer extends FittingListItemRenderer {
             this.destroyButton.visible = !_loc2_ && _loc1_;
             if (this.destroyButton.visible) {
                 this.destroyButton.label = MENU.MODULEFITS_DESTROYNAME;
-                this.destroyButton.validateNow();
             }
             this.removeButton.visible = _loc1_;
             if (this.removeButton.visible) {
                 this.removeButton.label = MENU.MODULEFITS_REMOVENAME;
-                this.removeButton.validateNow();
             }
             this.descField.visible = !_loc1_ && StringUtils.isNotEmpty(this._optDevData.desc);
             if (this.descField.visible) {

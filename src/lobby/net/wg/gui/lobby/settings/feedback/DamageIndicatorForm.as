@@ -93,10 +93,10 @@ public class DamageIndicatorForm extends BaseForm {
     }
 
     private function setEnableExtendedParams(param1:Boolean):void {
-        this.damageIndicatorPresetsButtonBar.enabled = param1;
-        this.damageIndicatorDamageValueCheckbox.enabled = param1;
-        this.damageIndicatorVehicleInfoCheckbox.enabled = param1;
-        this.damageIndicatorAnimationCheckbox.enabled = param1;
+        setElementEnabled(this.damageIndicatorPresetsButtonBar, param1);
+        setElementEnabled(this.damageIndicatorDamageValueCheckbox, param1);
+        setElementEnabled(this.damageIndicatorVehicleInfoCheckbox, param1);
+        setElementEnabled(this.damageIndicatorAnimationCheckbox, param1);
     }
 
     override public function get formId():String {

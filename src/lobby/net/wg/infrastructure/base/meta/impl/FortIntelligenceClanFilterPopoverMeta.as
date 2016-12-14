@@ -34,12 +34,13 @@ public class FortIntelligenceClanFilterPopoverMeta extends PopoverWithDropdown {
         return this.getAvailabilityProvider();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._intelligenceClanFilterVO) {
-            this._intelligenceClanFilterVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:IntelligenceClanFilterVO = this._intelligenceClanFilterVO;
         this._intelligenceClanFilterVO = new IntelligenceClanFilterVO(param1);
         this.setData(this._intelligenceClanFilterVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:IntelligenceClanFilterVO):void {

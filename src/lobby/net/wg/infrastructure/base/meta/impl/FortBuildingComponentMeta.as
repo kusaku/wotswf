@@ -49,15 +49,16 @@ public class FortBuildingComponentMeta extends BaseDAAPIComponent {
         this.requestBuildingToolTipData(param1, param2);
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._buildingsComponentVO) {
-            this._buildingsComponentVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:BuildingsComponentVO = this._buildingsComponentVO;
         this._buildingsComponentVO = new BuildingsComponentVO(param1);
         this.setData(this._buildingsComponentVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setBuildingData(param1:Object):void {
+    public final function as_setBuildingData(param1:Object):void {
         this.setBuildingData(new BuildingVO(param1));
     }
 

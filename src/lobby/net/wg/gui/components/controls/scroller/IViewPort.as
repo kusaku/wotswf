@@ -18,5 +18,9 @@ public interface IViewPort extends IUIComponentEx {
     function get visibleHeight():Number;
 
     function set visibleHeight(param1:Number):void;
+
+    function get validWidth():Number;
+
+    function get validHeight():Number;
 }
 }

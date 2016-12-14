@@ -18,8 +18,6 @@ public class ClanPersonalInvitesView extends ClanPersonalInvitesViewMeta impleme
 
     public var selectAllCheckBox:CompactCheckBox = null;
 
-    private var _model:ClanInvitesViewVO = null;
-
     public function ClanPersonalInvitesView() {
         super();
     }
@@ -39,14 +37,11 @@ public class ClanPersonalInvitesView extends ClanPersonalInvitesViewMeta impleme
         this.selectAllCheckBox.removeEventListener(Event.SELECT, this.onSelectAllCheckBoxSelectHandler);
         this.selectAllCheckBox.dispose();
         this.selectAllCheckBox = null;
-        this.clearData();
         super.onDispose();
     }
 
-    override protected function parseData(param1:Object):ClanInvitesViewVO {
-        this.clearData();
-        this._model = new ClanInvitesViewVO(param1);
-        return this._model;
+    override protected function getClanInvitesViewVO(param1:Object):ClanInvitesViewVO {
+        return new ClanInvitesViewVO(param1);
     }
 
     override protected function configUI():void {
@@ -87,13 +82,6 @@ public class ClanPersonalInvitesView extends ClanPersonalInvitesViewMeta impleme
         }
         else {
             this.declineSelectedButton.x = this.selectAllCheckBox.x;
-        }
-    }
-
-    private function clearData():void {
-        if (this._model != null) {
-            this._model.dispose();
-            this._model = null;
         }
     }
 

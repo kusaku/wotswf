@@ -21,7 +21,7 @@ public class PremiumBody extends UIComponentEx {
 
     public var premList:TileList = null;
 
-    private var _rates:Array = null;
+    private var _rates:DataProvider = null;
 
     private var _headerTfTooltip:String = null;
 
@@ -35,11 +35,8 @@ public class PremiumBody extends UIComponentEx {
 
     override protected function draw():void {
         super.draw();
-        if (isInvalid(InvalidationType.DATA) && this._rates != null) {
-            if (this.premList.dataProvider != null) {
-                this.premList.dataProvider.cleanUp();
-            }
-            this.premList.dataProvider = new DataProvider(this._rates);
+        if (this._rates && isInvalid(InvalidationType.DATA)) {
+            this.premList.dataProvider = this._rates;
             this.premList.selectedIndex = this.getSelectedRateIndexById(this._selectedRateId);
         }
     }

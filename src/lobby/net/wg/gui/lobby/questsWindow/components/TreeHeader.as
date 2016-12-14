@@ -26,8 +26,7 @@ public class TreeHeader extends BaseResizableContentHeader {
     }
 
     override public function setData(param1:Object):void {
-        var _loc2_:TreeContentVO = null;
-        _loc2_ = TreeContentVO(param1);
+        var _loc2_:TreeContentVO = TreeContentVO(param1);
         this.slideCheckBox.selected = _loc2_.isOpened;
         this.slideCheckBox.enabled = _loc2_.isResizable;
         this.label = _loc2_.headerTitle;

@@ -1,9 +1,9 @@
 package net.wg.gui.notification {
 import flash.text.TextField;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class NotificationTimeComponent extends UIComponent {
+public class NotificationTimeComponent extends UIComponentEx {
 
     public var textField:TextField;
 

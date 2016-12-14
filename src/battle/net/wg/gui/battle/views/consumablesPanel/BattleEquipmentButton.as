@@ -72,7 +72,7 @@ public class BattleEquipmentButton extends BattleToolTipButton implements IConsu
         invalidate(KEY_VALIDATION);
     }
 
-    public function setCoolDownTime(param1:Number):void {
+    public function setCoolDownTime(param1:Number, param2:Number, param3:Number, param4:Boolean):void {
         this._isPermanent = false;
         if (param1 > 0) {
             this.startCoolDownAnimation();

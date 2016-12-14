@@ -17,7 +17,7 @@ public class VehicleMarkerVO {
 
     public var pRegion:String = "";
 
-    public var currHealth:int = -1;
+    public var currHealth:int = 0;
 
     public var maxHealth:int = -1;
 

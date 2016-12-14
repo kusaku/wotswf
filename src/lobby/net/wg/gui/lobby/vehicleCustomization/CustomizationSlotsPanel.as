@@ -180,7 +180,7 @@ public class CustomizationSlotsPanel extends UIComponentEx {
     }
 
     public function set itemRendererName(param1:String):void {
-        if (_inspector && param1 == "" || param1 == "") {
+        if (_inspector && param1 == "" || param1 == "" || param1 == "DefaultListItemRenderer") {
             return;
         }
         this._itemRendererName = param1;

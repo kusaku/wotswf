@@ -5,7 +5,7 @@ import flash.text.TextField;
 import net.wg.data.constants.ColorSchemeNames;
 import net.wg.data.constants.IconsTypes;
 import net.wg.data.constants.generated.TEXT_MANAGER_STYLES;
-import net.wg.gui.components.common.ArrowSeparator;
+import net.wg.gui.components.assets.ArrowSeparator;
 import net.wg.infrastructure.base.meta.impl.ExchangeWindowMeta;
 import net.wg.infrastructure.interfaces.IWindow;
 

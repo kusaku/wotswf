@@ -2,12 +2,13 @@ package net.wg.gui.components.common.waiting {
 import flash.display.Sprite;
 import flash.geom.Point;
 
+import net.wg.infrastructure.base.UIComponentEx;
+
 import scaleform.clik.constants.ConstrainMode;
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.utils.Constraints;
 
-public class WaitingComponent extends UIComponent {
+public class WaitingComponent extends UIComponentEx {
 
     private static const TEXT_INVALID:String = "textInv";
 

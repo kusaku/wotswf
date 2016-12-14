@@ -104,6 +104,7 @@ public class AbstractApplication extends ApplicationMeta implements IApplication
         this.createContainers();
         this.createManagers();
         this.populateContainers();
+        this.registerAliases();
         if (stage) {
             this.initStage();
         }
@@ -127,21 +128,13 @@ public class AbstractApplication extends ApplicationMeta implements IApplication
 
     public function as_registerManagers():void {
         this.registerManagers();
-        if (this._utils.events) {
-            this.utils.events.setEnabled(false);
-        }
         if (this.utils.IME) {
             this.utils.IME.init(this.globalVarsMgr.isShowLangaugeBarS());
         }
     }
 
-    public function as_setLibrariesList(param1:Array):void {
-        var _loc2_:String = null;
-        this._librariesList = new Vector.<String>(0);
-        for each(_loc2_ in param1) {
-            this._librariesList.push(_loc2_);
-        }
-        param1.splice(0, param1.length);
+    override protected function setLibrariesList(param1:Vector.<String>):void {
+        this._librariesList = param1;
     }
 
     public function as_updateStage(param1:Number, param2:Number, param3:Number):void {
@@ -176,12 +169,13 @@ public class AbstractApplication extends ApplicationMeta implements IApplication
         throw new AbstractException("AbstractApplication.getManagedContainer by type " + param1 + " " + Errors.ABSTRACT_INVOKE);
     }
 
-    protected function onDispose():void {
+    override protected function onDispose():void {
         this.disposeManagers();
         this.disposeContainers();
         this._utils.dispose();
         this._utils = null;
         this._cursor = null;
+        super.onDispose();
     }
 
     protected function getNewUtils():IUtils {
@@ -201,7 +195,6 @@ public class AbstractApplication extends ApplicationMeta implements IApplication
         for each(_loc2_ in _loc1_) {
             removeChild(_loc2_);
         }
-        this._librariesList.splice(0, this._librariesList.length);
         this._librariesList = null;
     }
 
@@ -340,6 +333,9 @@ public class AbstractApplication extends ApplicationMeta implements IApplication
                 this.containerMgr.registerContainer(_loc2_ as IManagedContainer);
             }
         }
+    }
+
+    protected function registerAliases():void {
     }
 
     private function createManagers():void {

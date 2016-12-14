@@ -123,6 +123,8 @@ package
       
       public static const LOADINGDATA:String = "#waiting:loadingData";
       
+      public static const UPGRADINGCHRISTMASITEM:String = "#waiting:upgradingChristmasItem";
+      
       public static const TUTORIAL_REQUEST_BONUS:String = "#waiting:tutorial-request-bonus";
       
       public static const TUTORIAL_REQUEST_BATTLE_COUNT:String = "#waiting:tutorial-request-battle-count";

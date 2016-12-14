@@ -99,10 +99,7 @@ public class DamageIndicatorsContainer extends Sprite implements IDisposable {
     }
 }
 }
-
-import net.wg.gui.lobby.settings.feedback.DamageIndicatorsContainer;
-
-class IndicatorData extends DamageIndicatorsContainer {
+class IndicatorData {
 
     public var circle:String;
 

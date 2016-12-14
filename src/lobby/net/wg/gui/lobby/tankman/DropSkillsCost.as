@@ -14,17 +14,12 @@ public class DropSkillsCost implements IDisposable {
 
     public var actionPriceDataVo:ActionPriceVO;
 
-    public function DropSkillsCost() {
+    public function DropSkillsCost(param1:Object) {
         super();
-    }
-
-    public static function parseFromObject(param1:Object):DropSkillsCost {
-        var _loc2_:DropSkillsCost = new DropSkillsCost();
-        _loc2_.gold = param1.gold;
-        _loc2_.credits = param1.credits;
-        _loc2_.xpReuseFraction = param1.xpReuseFraction;
-        _loc2_.actionPriceDataVo = !!param1.action ? new ActionPriceVO(param1.action) : null;
-        return _loc2_;
+        this.gold = param1.gold;
+        this.credits = param1.credits;
+        this.xpReuseFraction = param1.xpReuseFraction;
+        this.actionPriceDataVo = !!param1.action ? new ActionPriceVO(param1.action) : null;
     }
 
     public final function dispose():void {

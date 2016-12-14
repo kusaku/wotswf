@@ -2,11 +2,11 @@ package net.wg.gui.components.tooltips.sortie {
 import flash.text.TextField;
 
 import net.wg.gui.components.controls.UILoaderAlt;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class SortieDivisionBlock extends UIComponent {
+public class SortieDivisionBlock extends UIComponentEx {
 
     public var divisionHeaderTF:TextField;
 

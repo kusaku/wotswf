@@ -3,6 +3,7 @@ import flash.display.MovieClip;
 import flash.events.Event;
 import flash.utils.getDefinitionByName;
 
+import net.wg.data.constants.Errors;
 import net.wg.gui.battle.components.BattleUIComponent;
 import net.wg.gui.battle.components.constants.InvalidationType;
 
@@ -54,26 +55,34 @@ public class HealthBar extends BattleUIComponent {
     }
 
     override protected function draw():void {
-        var _loc1_:String = null;
-        var _loc2_:Class = null;
-        var _loc3_:MovieClip = null;
-        var _loc4_:Number = NaN;
-        var _loc5_:int = 0;
+        var barColor:String = null;
+        var linkage:String = null;
+        var healthProgressBarClass:Class = null;
+        var progressBar:MovieClip = null;
+        var healthPercent:Number = NaN;
+        var frameNumber:int = 0;
         super.draw();
         if (isInvalid(INVALIDATE_COLOR)) {
             if (this.healthBar != null) {
                 removeChild(this.healthBar);
             }
-            _loc1_ = this._color != VehicleMarkersConstants.COLOR_RED && this._color != VehicleMarkersConstants.COLOR_PURPLE ? VehicleMarkersConstants.COLOR_GREEN : this._color;
-            _loc2_ = getDefinitionByName(HEALTH_PROGRESS_BAR_PREFIX + _loc1_) as Class;
-            _loc3_ = new _loc2_();
-            this.healthBar = addChildAt(_loc3_, 0) as MovieClip;
+            barColor = this._color != VehicleMarkersConstants.COLOR_RED && this._color != VehicleMarkersConstants.COLOR_PURPLE ? VehicleMarkersConstants.COLOR_GREEN : this._color;
+            linkage = HEALTH_PROGRESS_BAR_PREFIX + barColor;
+            try {
+                healthProgressBarClass = getDefinitionByName(linkage) as Class;
+                progressBar = new healthProgressBarClass();
+                addChildAt(progressBar, 0);
+            }
+            catch (error:ReferenceError) {
+                DebugUtils.LOG_ERROR(Errors.BAD_LINKAGE + linkage);
+            }
+            this.healthBar = progressBar;
         }
         if (isInvalid(INVALIDATE_BAR)) {
             if (!isNaN(this._maxHealth) && !isNaN(this._currHealth)) {
-                _loc4_ = this._currHealth * this._maxHealthMult;
-                _loc5_ = Math.ceil(_loc4_ * (this.healthBar.totalFrames - 1)) + 1;
-                this.healthBar.gotoAndStop(_loc5_);
+                healthPercent = this._currHealth * this._maxHealthMult;
+                frameNumber = Math.ceil(healthPercent * (this.healthBar.totalFrames - 1)) + 1;
+                this.healthBar.gotoAndStop(frameNumber);
             }
         }
     }
@@ -135,8 +144,7 @@ public class HealthBar extends BattleUIComponent {
     }
 
     public function set currHealth(param1:int):void {
-        this._currHealth = param1;
-        this._currHealth = this._currHealth >= 0 ? Number(this._currHealth) : Number(0);
+        this._currHealth = param1 >= 0 ? Number(param1) : Number(0);
         invalidate(INVALIDATE_BAR);
     }
 

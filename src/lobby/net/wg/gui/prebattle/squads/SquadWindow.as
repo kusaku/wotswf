@@ -3,6 +3,7 @@ import flash.display.DisplayObject;
 import flash.ui.Keyboard;
 
 import net.wg.data.Aliases;
+import net.wg.data.constants.Errors;
 import net.wg.gui.components.windows.Window;
 import net.wg.gui.components.windows.WindowEvent;
 import net.wg.gui.prebattle.squads.ev.SquadViewEvent;
@@ -103,6 +104,7 @@ public class SquadWindow extends SquadWindowMeta implements ISquadWindowMeta {
         isCentered = true;
         showWindowBgForm = false;
         var _loc1_:Padding = window.contentPadding as Padding;
+        App.utils.asserter.assertNotNull(_loc1_, "windowPadding" + Errors.CANT_NULL);
         _loc1_.bottom = WINDOW_PADDING_BOTTOM;
         _loc1_.right = WINDOW_PADDING_RIGHT;
         window.contentPadding = _loc1_;

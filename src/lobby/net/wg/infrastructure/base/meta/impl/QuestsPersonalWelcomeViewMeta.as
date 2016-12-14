@@ -27,12 +27,13 @@ public class QuestsPersonalWelcomeViewMeta extends BaseDAAPIComponent {
         this.success();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._questsPersonalWelcomeViewVO) {
-            this._questsPersonalWelcomeViewVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:QuestsPersonalWelcomeViewVO = this._questsPersonalWelcomeViewVO;
         this._questsPersonalWelcomeViewVO = new QuestsPersonalWelcomeViewVO(param1);
         this.setData(this._questsPersonalWelcomeViewVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:QuestsPersonalWelcomeViewVO):void {

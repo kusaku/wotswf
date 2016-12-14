@@ -27,10 +27,10 @@ public class IconPriceDialog extends IconPriceDialogMeta implements IIconPriceDi
         return _loc1_ + PRICE_TEXT_OFFSET + this.priceMc.height + PRICE_BOTTOM_OFFSET;
     }
 
-    public function as_setMessagePrice(param1:Number, param2:String, param3:Object):void {
+    override protected function setMessagePrice(param1:Number, param2:String, param3:ActionPriceVO):void {
         this.priceMc.currency = param2;
         this.priceMc.price = param1;
-        this.priceMc.actionPriceVo = !!param3 ? new ActionPriceVO(param3) : null;
+        this.priceMc.actionPriceVo = param3;
     }
 
     public function as_setPriceLabel(param1:String):void {

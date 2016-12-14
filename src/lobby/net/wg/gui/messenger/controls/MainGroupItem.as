@@ -2,12 +2,12 @@ package net.wg.gui.messenger.controls {
 import flash.display.Graphics;
 import flash.text.TextField;
 
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.entity.IUpdatable;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class MainGroupItem extends UIComponent implements IUpdatable {
+public class MainGroupItem extends UIComponentEx implements IUpdatable {
 
     private static const DEF_PADDING:uint = 10;
 

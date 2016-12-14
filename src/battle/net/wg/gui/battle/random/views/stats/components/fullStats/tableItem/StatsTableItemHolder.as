@@ -17,10 +17,6 @@ public class StatsTableItemHolder extends StatsTableItemHolderBase {
         this._isEnemy = param3;
     }
 
-    public function setFrags(param1:int):void {
-        this.getStatsItem.setFrags(param1);
-    }
-
     public function get squadItem():DynamicSquadCtrl {
         return this._squadItem;
     }
@@ -37,28 +33,6 @@ public class StatsTableItemHolder extends StatsTableItemHolderBase {
         this._squadItem.setIsInteractive(param1);
     }
 
-    override public function setPlayerStatus(param1:uint):void {
-        super.setPlayerStatus(param1);
-        this.updateDynamicSquadState();
-    }
-
-    public function setInvitationStatus(param1:uint):void {
-        if (!containsData) {
-            return;
-        }
-        getVehicleData.invitationStatus = param1;
-        this.updateDynamicSquadState();
-    }
-
-    override public function setUserTags(param1:Array):void {
-        super.setUserTags(param1);
-        this.updateDynamicSquadState();
-    }
-
-    public function setSpeaking(param1:Boolean):void {
-        this.getStatsItem.setIsSpeaking(param1);
-    }
-
     override protected function onDispose():void {
         this._squadItem.dispose();
         this._squadItem = null;
@@ -66,20 +40,22 @@ public class StatsTableItemHolder extends StatsTableItemHolderBase {
     }
 
     override protected function vehicleDataSync():void {
-        var _loc1_:Number = NaN;
+        var _loc1_:uint = 0;
         super.vehicleDataSync();
-        if (getVehicleData) {
-            this.getStatsItem.setVehicleLevel(getVehicleData.vehicleLevel);
-            this.getStatsItem.setVehicleIcon(getVehicleData.vehicleIconName);
-            _loc1_ = getVehicleData.vehicleAction;
-            if (isNaN(_loc1_) || !_loc1_) {
+        if (data) {
+            this.getStatsItem.setVehicleLevel(data.vehicleLevel);
+            this.getStatsItem.setVehicleIcon(data.vehicleIconName);
+            this.getStatsItem.setFrags(data.frags);
+            this.getStatsItem.setIsSpeaking(data.isSpeaking);
+            _loc1_ = data.vehicleAction;
+            if (!_loc1_) {
                 this.getStatsItem.clearVehicleAction();
             }
             else {
-                this.getStatsItem.setVehicleAction(VehicleActions.getActionName(getVehicleData.vehicleAction));
+                this.getStatsItem.setVehicleAction(VehicleActions.getActionName(data.vehicleAction));
             }
             this._squadItem.setIsEnemy(this._isEnemy);
-            this._squadItem.uid = getVehicleData.accountDBID;
+            this._squadItem.uid = data.accountDBID;
             this.updateDynamicSquadState();
         }
         else {
@@ -88,12 +64,14 @@ public class StatsTableItemHolder extends StatsTableItemHolderBase {
     }
 
     override protected function applyUserTags():void {
-        var _loc1_:Array = getVehicleData.userTags;
+        super.applyUserTags();
+        var _loc1_:Array = data.userTags;
         if (!_loc1_) {
             return;
         }
-        super.applyUserTags();
-        this.getStatsItem.setIsMute(UserTags.isMuted(_loc1_));
+        var _loc2_:StatsTableItem = this.getStatsItem;
+        _loc2_.setIsMute(UserTags.isMuted(_loc1_));
+        _loc2_.setDisableCommunication(UserTags.isIgnored(_loc1_));
         if (_isCurrPlayer) {
             this._squadItem.setState(DynamicSquadState.NONE);
         }
@@ -101,15 +79,15 @@ public class StatsTableItemHolder extends StatsTableItemHolderBase {
 
     override protected function applyPlayerStatus():void {
         super.applyPlayerStatus();
-        var _loc1_:uint = getVehicleData.playerStatus;
-        this._squadItem.setSquadIndex(getVehicleData.squadIndex, PlayerStatus.isSquadPersonal(_loc1_));
+        var _loc1_:uint = data.playerStatus;
+        this._squadItem.setSquadIndex(data.squadIndex, data.isSquadPersonal());
         this._squadItem.setNoSound(PlayerStatus.isVoipDisabled(_loc1_));
     }
 
     private function updateDynamicSquadState():void {
-        var _loc1_:Boolean = getVehicleData.userTags && UserTags.isIgnored(getVehicleData.userTags);
-        var _loc2_:Boolean = PlayerStatus.isSquadMan(getVehicleData.playerStatus);
-        var _loc3_:uint = DynamicSquadState.getState(getVehicleData.invitationStatus, _isCurrPlayer, _loc2_, _loc1_);
+        var _loc1_:Boolean = data.userTags && UserTags.isIgnored(data.userTags);
+        var _loc2_:Boolean = data.isSquadMan();
+        var _loc3_:uint = DynamicSquadState.getState(data.invitationStatus, _isCurrPlayer, _loc2_, _loc1_);
         this._squadItem.setState(_loc3_);
     }
 

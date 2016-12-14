@@ -13,11 +13,11 @@ public class ClanProfileSummaryViewMeta extends ClanProfileBaseView {
 
     public var sendRequestHandler:Function;
 
-    private var _clanProfileSummaryBlockVO2:ClanProfileSummaryBlockVO;
-
     private var _clanProfileSummaryBlockVO:ClanProfileSummaryBlockVO;
 
     private var _clanProfileSummaryBlockVO1:ClanProfileSummaryBlockVO;
+
+    private var _clanProfileSummaryBlockVO2:ClanProfileSummaryBlockVO;
 
     private var _clanProfileSummaryViewStatusVO:ClanProfileSummaryViewStatusVO;
 
@@ -26,10 +26,6 @@ public class ClanProfileSummaryViewMeta extends ClanProfileBaseView {
     }
 
     override protected function onDispose():void {
-        if (this._clanProfileSummaryBlockVO2) {
-            this._clanProfileSummaryBlockVO2.dispose();
-            this._clanProfileSummaryBlockVO2 = null;
-        }
         if (this._clanProfileSummaryBlockVO) {
             this._clanProfileSummaryBlockVO.dispose();
             this._clanProfileSummaryBlockVO = null;
@@ -37,6 +33,10 @@ public class ClanProfileSummaryViewMeta extends ClanProfileBaseView {
         if (this._clanProfileSummaryBlockVO1) {
             this._clanProfileSummaryBlockVO1.dispose();
             this._clanProfileSummaryBlockVO1 = null;
+        }
+        if (this._clanProfileSummaryBlockVO2) {
+            this._clanProfileSummaryBlockVO2.dispose();
+            this._clanProfileSummaryBlockVO2 = null;
         }
         if (this._clanProfileSummaryViewStatusVO) {
             this._clanProfileSummaryViewStatusVO.dispose();
@@ -60,36 +60,40 @@ public class ClanProfileSummaryViewMeta extends ClanProfileBaseView {
         this.sendRequestHandler();
     }
 
-    public function as_updateStatus(param1:Object):void {
-        if (this._clanProfileSummaryViewStatusVO) {
-            this._clanProfileSummaryViewStatusVO.dispose();
-        }
+    public final function as_updateStatus(param1:Object):void {
+        var _loc2_:ClanProfileSummaryViewStatusVO = this._clanProfileSummaryViewStatusVO;
         this._clanProfileSummaryViewStatusVO = new ClanProfileSummaryViewStatusVO(param1);
         this.updateStatus(this._clanProfileSummaryViewStatusVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_updateGeneralBlock(param1:Object):void {
-        if (this._clanProfileSummaryBlockVO) {
-            this._clanProfileSummaryBlockVO.dispose();
-        }
+    public final function as_updateGeneralBlock(param1:Object):void {
+        var _loc2_:ClanProfileSummaryBlockVO = this._clanProfileSummaryBlockVO;
         this._clanProfileSummaryBlockVO = new ClanProfileSummaryBlockVO(param1);
         this.updateGeneralBlock(this._clanProfileSummaryBlockVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_updateFortBlock(param1:Object):void {
-        if (this._clanProfileSummaryBlockVO1) {
-            this._clanProfileSummaryBlockVO1.dispose();
-        }
+    public final function as_updateFortBlock(param1:Object):void {
+        var _loc2_:ClanProfileSummaryBlockVO = this._clanProfileSummaryBlockVO1;
         this._clanProfileSummaryBlockVO1 = new ClanProfileSummaryBlockVO(param1);
         this.updateFortBlock(this._clanProfileSummaryBlockVO1);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_updateGlobalMapBlock(param1:Object):void {
-        if (this._clanProfileSummaryBlockVO2) {
-            this._clanProfileSummaryBlockVO2.dispose();
-        }
+    public final function as_updateGlobalMapBlock(param1:Object):void {
+        var _loc2_:ClanProfileSummaryBlockVO = this._clanProfileSummaryBlockVO2;
         this._clanProfileSummaryBlockVO2 = new ClanProfileSummaryBlockVO(param1);
         this.updateGlobalMapBlock(this._clanProfileSummaryBlockVO2);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function updateStatus(param1:ClanProfileSummaryViewStatusVO):void {

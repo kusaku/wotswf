@@ -5,13 +5,13 @@ import flash.text.TextField;
 import net.wg.data.VO.AchievementItemVO;
 import net.wg.gui.components.controls.ResizableTileList;
 import net.wg.gui.components.controls.achievements.AchievementCommon;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.DirectionMode;
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.DataProvider;
 
-public class AwardsTileListBlock extends UIComponent {
+public class AwardsTileListBlock extends UIComponentEx {
 
     protected static const DATA_PROVIDER_INV:String = "dpInv";
 

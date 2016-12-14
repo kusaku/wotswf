@@ -14,7 +14,7 @@ public interface IConsumablesButton extends IBattleToolTipButton {
 
     function set quantity(param1:int):void;
 
-    function setCoolDownTime(param1:Number):void;
+    function setCoolDownTime(param1:Number, param2:Number, param3:Number, param4:Boolean):void;
 
     function setCoolDownPosAsPercent(param1:Number):void;
 

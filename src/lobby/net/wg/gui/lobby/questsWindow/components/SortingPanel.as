@@ -3,11 +3,11 @@ import flash.text.TextField;
 
 import net.wg.gui.components.controls.CheckBox;
 import net.wg.gui.components.controls.DropdownMenu;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.DataProvider;
 
-public class SortingPanel extends UIComponent {
+public class SortingPanel extends UIComponentEx {
 
     private static const DD_PADDING:int = 3;
 

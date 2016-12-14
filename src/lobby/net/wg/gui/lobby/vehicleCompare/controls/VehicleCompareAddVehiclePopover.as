@@ -3,7 +3,7 @@ import flash.text.TextField;
 
 import net.wg.data.VO.ButtonPropertiesVO;
 import net.wg.gui.components.controls.IconTextButton;
-import net.wg.gui.components.popOvers.PopOver;
+import net.wg.gui.components.popovers.PopOver;
 import net.wg.gui.interfaces.ISoundButtonEx;
 import net.wg.gui.lobby.components.events.VehicleSelectorFilterEvent;
 import net.wg.gui.lobby.vehicleCompare.data.VehicleCompareAddVehiclePopoverVO;

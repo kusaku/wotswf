@@ -86,5 +86,9 @@ public class ShopVehicleView extends VehicleView {
     private function onObtainingTypeIndexChangeHandler(param1:ListEvent):void {
         dispatchEvent(new StoreViewsEvent(StoreViewsEvent.POPULATE_MENU_FILTER, this.fittingType));
     }
+
+    override protected function get isHangarChkBxEnabled():Boolean {
+        return true;
+    }
 }
 }

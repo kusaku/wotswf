@@ -141,8 +141,8 @@ public class SortingButton extends ScalableIconButton {
 
     override protected function draw():void {
         super.draw();
-        if (this.labelField && isInvalid(InvalidationType.DATA) && label != null && label != "") {
-            if (!iconSource && label.length > 0) {
+        if (this.labelField && isInvalid(InvalidationType.DATA)) {
+            if (!iconSource && data && data.label) {
                 this.labelField.visible = true;
                 this.labelField.text = data.label;
             }

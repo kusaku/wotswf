@@ -2,6 +2,7 @@ package net.wg.gui.login.impl {
 import flash.display.Sprite;
 import flash.geom.Rectangle;
 
+import net.wg.data.constants.Errors;
 import net.wg.gui.login.ISparksManager;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
@@ -47,6 +48,7 @@ public final class SparksManager implements ISparksManager {
         var _loc3_:Number = 0;
         while (_loc3_ < _loc2_) {
             _loc4_ = this._scope.getChildAt(_loc3_) as Spark;
+            App.utils.asserter.assertNotNull(_loc4_, "spark" + Errors.CANT_NULL);
             _loc4_.zone = this._zone;
             _loc3_++;
         }

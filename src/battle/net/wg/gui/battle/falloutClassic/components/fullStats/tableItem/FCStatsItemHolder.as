@@ -19,7 +19,7 @@ public class FCStatsItemHolder extends StatsTableItemHolderBase {
 
     override protected function applyVehicleStatus():void {
         super.applyPlayerStatus();
-        this.getStatsItem.setIsRespawnDisabled(VehicleStatus.isStopRespawn(getVehicleData.vehicleStatus));
+        this.getStatsItem.setIsRespawnDisabled(VehicleStatus.isStopRespawn(data.vehicleStatus));
     }
 
     private function get getStatsItem():FCStatsItem {

@@ -1,4 +1,7 @@
 package net.wg.data.VO.daapi {
+import net.wg.data.constants.BattleAtlasItem;
+import net.wg.data.constants.PlayerStatus;
+import net.wg.data.constants.VehicleStatus;
 import net.wg.data.daapi.base.DAAPIDataClass;
 
 public class DAAPIVehicleInfoVO extends DAAPIDataClass {
@@ -29,8 +32,6 @@ public class DAAPIVehicleInfoVO extends DAAPIDataClass {
 
     public var vehicleName:String = "";
 
-    public var vehicleGuiName:String = "";
-
     public var vehicleLevel:int = -1;
 
     public var vehicleType:String = "";
@@ -40,6 +41,8 @@ public class DAAPIVehicleInfoVO extends DAAPIDataClass {
     public var isVehiclePremiumIgr:Boolean = false;
 
     public var isObserver:Boolean = false;
+
+    public var frags:int;
 
     public var region:String = "";
 
@@ -53,43 +56,18 @@ public class DAAPIVehicleInfoVO extends DAAPIDataClass {
 
     public var clanAbbrev:String = "";
 
-    public function DAAPIVehicleInfoVO(param1:Object) {
+    public var isCurrentPlayer:Boolean = false;
+
+    public var selfBgSource:String;
+
+    public var isCurrentSquad:Boolean = false;
+
+    public function DAAPIVehicleInfoVO(param1:Object = null) {
         super(param1);
     }
 
     override public function toString():String {
-        return "[VehicleInfoVO: vehicleID = " + this.vehicleID + ", playerFullName = " + this.playerFullName + " vehicleStatus = " + this.vehicleStatus + "]" + this.playerStatus;
-    }
-
-    public function clone():DAAPIVehicleInfoVO {
-        var _loc1_:DAAPIVehicleInfoVO = new DAAPIVehicleInfoVO({});
-        _loc1_.accountDBID = this.accountDBID;
-        _loc1_.isSpeaking = this.isSpeaking;
-        _loc1_.prebattleID = this.prebattleID;
-        _loc1_.playerStatus = this.playerStatus;
-        _loc1_.playerName = this.playerName;
-        _loc1_.playerFullName = this.playerFullName;
-        if (this.userTags) {
-            _loc1_.userTags = this.userTags.concat();
-        }
-        _loc1_.vehicleID = this.vehicleID;
-        _loc1_.vehicleAction = this.vehicleAction;
-        _loc1_.vehicleIcon = this.vehicleIcon;
-        _loc1_.vehicleIconName = this.vehicleIconName;
-        _loc1_.vehicleName = this.vehicleName;
-        _loc1_.vehicleGuiName = this.vehicleGuiName;
-        _loc1_.vehicleLevel = this.vehicleLevel;
-        _loc1_.vehicleType = this.vehicleType;
-        _loc1_.vehicleStatus = this.vehicleStatus;
-        _loc1_.isVehiclePremiumIgr = this.isVehiclePremiumIgr;
-        _loc1_.isObserver = this.isObserver;
-        _loc1_.region = this.region;
-        _loc1_.isPlayerTeam = this.isPlayerTeam;
-        _loc1_.squadIndex = this.squadIndex;
-        _loc1_.invitationStatus = this.invitationStatus;
-        _loc1_.teamColor = this.teamColor;
-        _loc1_.clanAbbrev = this.clanAbbrev;
-        return _loc1_;
+        return "[DAAPIVehicleInfoVO: vehicleID = " + this.vehicleID + ", playerFullName = " + this.playerFullName + " vehicleStatus = " + this.vehicleStatus + "] " + this.playerStatus;
     }
 
     override protected function onDispose():void {
@@ -98,6 +76,34 @@ public class DAAPIVehicleInfoVO extends DAAPIDataClass {
             this.userTags = null;
         }
         super.onDispose();
+    }
+
+    public function isAlive():Boolean {
+        return (this.vehicleStatus & VehicleStatus.IS_ALIVE) > 0;
+    }
+
+    public function isNotAvailable():Boolean {
+        return (this.vehicleStatus & VehicleStatus.NOT_AVAILABLE) > 0;
+    }
+
+    public function isReady():Boolean {
+        return (this.vehicleStatus & VehicleStatus.IS_READY) > 0;
+    }
+
+    public function isSquadMan():Boolean {
+        return (this.playerStatus & PlayerStatus.IS_SQUAD_MAN) > 0;
+    }
+
+    public function isSquadPersonal():Boolean {
+        return (this.playerStatus & PlayerStatus.IS_SQUAD_PERSONAL) > 0;
+    }
+
+    public function isTeamKiller():Boolean {
+        return (this.playerStatus & PlayerStatus.IS_TEAM_KILLER) > 0;
+    }
+
+    public function get isIGR():Boolean {
+        return this.isVehiclePremiumIgr && this.vehicleType && this.vehicleType != BattleAtlasItem.VEHICLE_TYPE_UNKNOWN;
     }
 }
 }

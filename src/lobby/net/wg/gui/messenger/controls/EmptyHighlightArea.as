@@ -1,10 +1,11 @@
 package net.wg.gui.messenger.controls {
 import flash.text.TextField;
 
-import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class EmptyHighlightArea extends UIComponent {
+import scaleform.clik.constants.InvalidationType;
+
+public class EmptyHighlightArea extends UIComponentEx {
 
     private static var HIGHLIGHT_TEXT_COLOR:uint = 39168;
 

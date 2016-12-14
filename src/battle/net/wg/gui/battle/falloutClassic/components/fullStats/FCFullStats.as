@@ -5,11 +5,11 @@ import flash.text.TextFieldAutoSize;
 
 import net.wg.data.VO.daapi.DAAPIArenaInfoVO;
 import net.wg.data.VO.daapi.DAAPIPlayerStatusVO;
+import net.wg.data.VO.daapi.DAAPIVehicleInfoVO;
 import net.wg.data.VO.daapi.DAAPIVehicleStatusVO;
 import net.wg.data.VO.daapi.DAAPIVehicleUserTagsVO;
 import net.wg.data.VO.daapi.DAAPIVehiclesDataVO;
 import net.wg.data.VO.daapi.DAAPIVehiclesInteractiveStatsVO;
-import net.wg.data.VO.daapi.DAAPIVehiclesUserTagsVO;
 import net.wg.gui.battle.views.stats.BattleTipsController;
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.infrastructure.base.meta.IFCStatsMeta;
@@ -99,48 +99,41 @@ public class FCFullStats extends FCStatsMeta implements IFCStatsMeta, IBattleCom
     }
 
     public function setVehiclesData(param1:IDAAPIDataClass):void {
+        var _loc4_:DAAPIVehicleInfoVO = null;
         var _loc2_:DAAPIVehiclesDataVO = DAAPIVehiclesDataVO(param1);
-        if (_loc2_.leftVehicleInfos) {
-            this._tableCtrl.setTeamData(_loc2_.leftVehicleInfos, false);
+        var _loc3_:Array = [];
+        for each(_loc4_ in _loc2_.leftVehicleInfos) {
+            _loc3_.push(_loc4_);
         }
-        if (_loc2_.rightVehicleInfos) {
-            this._tableCtrl.setTeamData(_loc2_.rightVehicleInfos, true);
+        this._tableCtrl.setVehiclesData(_loc3_, _loc2_.leftVehiclesIDs, false);
+        _loc3_ = [];
+        for each(_loc4_ in _loc2_.rightVehicleInfos) {
+            _loc3_.push(_loc4_);
         }
-        if (_loc2_.leftVehiclesIDs) {
-            this.updateOrder(_loc2_.leftVehiclesIDs, false);
-        }
-        if (_loc2_.rightVehiclesIDs) {
-            this.updateOrder(_loc2_.rightVehiclesIDs, true);
-        }
+        this._tableCtrl.setVehiclesData(_loc3_, _loc2_.rightVehiclesIDs, true);
     }
 
-    public function updateVehiclesInfo(param1:IDAAPIDataClass):void {
+    public function updateVehiclesData(param1:IDAAPIDataClass):void {
         var _loc2_:DAAPIVehiclesDataVO = DAAPIVehiclesDataVO(param1);
         if (_loc2_.leftVehicleInfos) {
-            this._tableCtrl.updateVehiclesData(_loc2_.leftVehicleInfos);
+            this._tableCtrl.updateVehiclesData(_loc2_.leftVehicleInfos, _loc2_.leftVehiclesIDs, false);
         }
         if (_loc2_.rightVehicleInfos) {
-            this._tableCtrl.updateVehiclesData(_loc2_.rightVehicleInfos);
+            this._tableCtrl.updateVehiclesData(_loc2_.rightVehicleInfos, _loc2_.rightVehiclesIDs, false);
         }
     }
 
     public function addVehiclesInfo(param1:IDAAPIDataClass):void {
         var _loc2_:DAAPIVehiclesDataVO = DAAPIVehiclesDataVO(param1);
         if (_loc2_.leftVehicleInfos) {
-            this._tableCtrl.addVehiclesData(_loc2_.leftVehicleInfos, false);
+            this._tableCtrl.addVehiclesInfo(_loc2_.leftVehicleInfos, _loc2_.leftVehiclesIDs, false);
         }
         if (_loc2_.rightVehicleInfos) {
-            this._tableCtrl.addVehiclesData(_loc2_.rightVehicleInfos, true);
-        }
-        if (_loc2_.leftVehiclesIDs) {
-            this.updateOrder(_loc2_.leftVehiclesIDs, false);
-        }
-        if (_loc2_.rightVehiclesIDs) {
-            this.updateOrder(_loc2_.rightVehiclesIDs, true);
+            this._tableCtrl.addVehiclesInfo(_loc2_.rightVehicleInfos, _loc2_.leftVehiclesIDs, true);
         }
     }
 
-    public function updateVehiclesStats(param1:IDAAPIDataClass):void {
+    public function updateVehiclesStat(param1:IDAAPIDataClass):void {
         this._tableCtrl.setVehiclesStats(DAAPIVehiclesInteractiveStatsVO(param1));
     }
 
@@ -150,36 +143,19 @@ public class FCFullStats extends FCStatsMeta implements IFCStatsMeta, IBattleCom
 
     public function updateVehicleStatus(param1:IDAAPIDataClass):void {
         var _loc2_:DAAPIVehicleStatusVO = DAAPIVehicleStatusVO(param1);
-        this._tableCtrl.setVehicleStatus(_loc2_.vehicleID, _loc2_.status);
-        if (_loc2_.leftVehiclesIDs) {
-            this.updateOrder(_loc2_.leftVehiclesIDs, false);
-        }
-        if (_loc2_.rightVehiclesIDs) {
-            this.updateOrder(_loc2_.rightVehiclesIDs, true);
-        }
+        this._tableCtrl.setVehicleStatus(false, _loc2_.vehicleID, _loc2_.status, _loc2_.leftVehiclesIDs);
     }
 
     public function setUserTags(param1:IDAAPIDataClass):void {
-        var _loc4_:DAAPIVehicleUserTagsVO = null;
-        var _loc2_:DAAPIVehiclesUserTagsVO = DAAPIVehiclesUserTagsVO(param1);
-        var _loc3_:Vector.<DAAPIVehicleUserTagsVO> = _loc2_.leftUserTags;
-        for each(_loc4_ in _loc3_) {
-            this._tableCtrl.setUserTags(_loc4_.vehicleID, _loc4_.userTags);
-        }
-        _loc3_ = _loc2_.rightUserTags;
-        for each(_loc4_ in _loc3_) {
-            this._tableCtrl.setUserTags(_loc4_.vehicleID, _loc4_.userTags);
-        }
     }
 
     public function updateUserTags(param1:IDAAPIDataClass):void {
         var _loc2_:DAAPIVehicleUserTagsVO = DAAPIVehicleUserTagsVO(param1);
-        this._tableCtrl.setUserTags(_loc2_.vehicleID, _loc2_.userTags);
     }
 
     public function updatePlayerStatus(param1:IDAAPIDataClass):void {
         var _loc2_:DAAPIPlayerStatusVO = DAAPIPlayerStatusVO(param1);
-        this._tableCtrl.setPlayerStatus(_loc2_.vehicleID, _loc2_.status);
+        this._tableCtrl.setPlayerStatus(_loc2_.isEnemy, _loc2_.vehicleID, _loc2_.status);
     }
 
     public function setPersonalStatus(param1:uint):void {
@@ -211,10 +187,6 @@ public class FCFullStats extends FCStatsMeta implements IFCStatsMeta, IBattleCom
         this._tableCtrl = null;
         this._battleTips = null;
         super.onDispose();
-    }
-
-    private function updateOrder(param1:Vector.<Number>, param2:Boolean):void {
-        this._tableCtrl.updateOrder(param1, param2);
     }
 }
 }

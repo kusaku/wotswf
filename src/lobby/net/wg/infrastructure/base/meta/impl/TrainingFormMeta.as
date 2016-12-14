@@ -1,6 +1,8 @@
 package net.wg.infrastructure.base.meta.impl {
+import net.wg.data.VO.TrainingFormVO;
 import net.wg.data.constants.Errors;
 import net.wg.infrastructure.base.AbstractView;
+import net.wg.infrastructure.exceptions.AbstractException;
 
 public class TrainingFormMeta extends AbstractView {
 
@@ -12,8 +14,18 @@ public class TrainingFormMeta extends AbstractView {
 
     public var onLeave:Function;
 
+    private var _trainingFormVO:TrainingFormVO;
+
     public function TrainingFormMeta() {
         super();
+    }
+
+    override protected function onDispose():void {
+        if (this._trainingFormVO) {
+            this._trainingFormVO.dispose();
+            this._trainingFormVO = null;
+        }
+        super.onDispose();
     }
 
     public function joinTrainingRequestS(param1:String):void {
@@ -34,6 +46,21 @@ public class TrainingFormMeta extends AbstractView {
     public function onLeaveS():void {
         App.utils.asserter.assertNotNull(this.onLeave, "onLeave" + Errors.CANT_NULL);
         this.onLeave();
+    }
+
+    public final function as_setList(param1:Object):void {
+        var _loc2_:TrainingFormVO = this._trainingFormVO;
+        this._trainingFormVO = new TrainingFormVO(param1);
+        this.setList(this._trainingFormVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
+    }
+
+    protected function setList(param1:TrainingFormVO):void {
+        var _loc2_:String = "as_setList" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
     }
 }
 }

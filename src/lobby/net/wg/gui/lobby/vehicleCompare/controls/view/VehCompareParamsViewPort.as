@@ -78,8 +78,8 @@ public class VehCompareParamsViewPort extends HorizontalScrollerViewPort {
 
     override protected function newRenderer():IScrollerItemRenderer {
         var _loc1_:IVehParamRenderer = IVehParamRenderer(super.newRenderer());
-        _loc1_.updateBottomLineState(this._bottomLinePosition, this._bottomLineAlpha);
         _loc1_.updateHeight(this._currentHeight);
+        _loc1_.updateBottomLineState(this._bottomLinePosition, this._bottomLineAlpha);
         _loc1_.addEventListener(MouseEvent.CLICK, this.onRendClickHandler);
         _loc1_.addEventListener(MouseEvent.MOUSE_OVER, this.onRendMouseOverHandler);
         _loc1_.addEventListener(MouseEvent.MOUSE_OUT, this.onRendMouseOutHandler);
@@ -108,7 +108,7 @@ public class VehCompareParamsViewPort extends HorizontalScrollerViewPort {
             }
         }
         if (isInvalid(INV_HOR_POS)) {
-            for each(_loc1_ in _loc2_) {
+            for each(_loc1_ in activeRenderers) {
                 _loc1_.alpha = Math.min((_loc1_.x - horizontalScrollPosition + ALPHA_DIST) / ALPHA_DIST, 1);
                 _loc1_.visible = _loc1_.alpha > 0;
             }

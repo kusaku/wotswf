@@ -13,7 +13,6 @@ import net.wg.utils.ICommons;
 import net.wg.utils.ICounterManager;
 import net.wg.utils.IDataUtils;
 import net.wg.utils.IDateTime;
-import net.wg.utils.IEventCollector;
 import net.wg.utils.IFocusHandler;
 import net.wg.utils.IIME;
 import net.wg.utils.IIcons;
@@ -49,8 +48,6 @@ public class Utils extends UtilsManagerMeta implements IUtils {
 
     private var _focusHandler:IFocusHandler = null;
 
-    private var _events:IEventCollector = null;
-
     private var _ime:IIME = null;
 
     private var _voManager:IVOManager = null;
@@ -71,7 +68,7 @@ public class Utils extends UtilsManagerMeta implements IUtils {
 
     private var _counterManager:ICounterManager;
 
-    public function Utils(param1:IAssertable, param2:IScheduler, param3:ILocale, param4:ISerializable, param5:IHelpLayout, param6:IClassFactory, param7:IPopUpManager, param8:ICommons, param9:IFocusHandler, param10:IEventCollector, param11:IIME, param12:IVOManager, param13:IIcons, param14:IStyleSheetManager, param15:ITweenAnimator, param16:IAnimBuilder, param17:IDateTime, param18:IPoolManager, param19:IDataUtils, param20:ICounterManager) {
+    public function Utils(param1:IAssertable, param2:IScheduler, param3:ILocale, param4:ISerializable, param5:IHelpLayout, param6:IClassFactory, param7:IPopUpManager, param8:ICommons, param9:IFocusHandler, param10:IIME, param11:IVOManager, param12:IIcons, param13:IStyleSheetManager, param14:ITweenAnimator, param15:IAnimBuilder, param16:IDateTime, param17:IPoolManager, param18:IDataUtils, param19:ICounterManager) {
         super();
         this._asserter = param1;
         this._scheduler = param2;
@@ -82,24 +79,19 @@ public class Utils extends UtilsManagerMeta implements IUtils {
         this._popupManager = param7;
         this._commons = param8;
         this._focusHandler = param9;
-        this._events = param10;
-        this._ime = param11;
-        this._voManager = param12;
-        this._icons = param13;
-        this._styleSheetManager = param14;
-        this._tweenAnimator = param15;
-        this._animBuilder = param16;
-        this._dateTime = param17;
-        this._poolManager = param18;
-        this._dataUtils = param19;
-        this._counterManager = param20;
+        this._ime = param10;
+        this._voManager = param11;
+        this._icons = param12;
+        this._styleSheetManager = param13;
+        this._tweenAnimator = param14;
+        this._animBuilder = param15;
+        this._dateTime = param16;
+        this._poolManager = param17;
+        this._dataUtils = param18;
+        this._counterManager = param19;
     }
 
     public final function dispose():void {
-        if (this._events != null) {
-            this._events.dispose();
-            this._events = null;
-        }
         if (this._scheduler != null) {
             this._scheduler.dispose();
             this._scheduler = null;
@@ -107,6 +99,10 @@ public class Utils extends UtilsManagerMeta implements IUtils {
         if (this._helpLayout != null) {
             this._helpLayout.dispose();
             this._helpLayout = null;
+        }
+        if (this._counterManager != null) {
+            this._counterManager.dispose();
+            this._counterManager = null;
         }
         if (this._focusHandler != null) {
             this._focusHandler.dispose();
@@ -127,10 +123,6 @@ public class Utils extends UtilsManagerMeta implements IUtils {
         if (this._tweenAnimator != null) {
             this._tweenAnimator.dispose();
             this._tweenAnimator = null;
-        }
-        if (this._counterManager != null) {
-            this._counterManager.dispose();
-            this._counterManager = null;
         }
         if (this._poolManager != null) {
             this._poolManager.dispose();
@@ -203,10 +195,6 @@ public class Utils extends UtilsManagerMeta implements IUtils {
 
     public function get focusHandler():IFocusHandler {
         return this._focusHandler;
-    }
-
-    public function get events():IEventCollector {
-        return this._events;
     }
 
     public function get IME():IIME {

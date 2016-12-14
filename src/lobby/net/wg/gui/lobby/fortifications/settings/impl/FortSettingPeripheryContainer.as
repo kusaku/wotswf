@@ -9,13 +9,13 @@ import flash.text.TextFieldAutoSize;
 import net.wg.data.constants.generated.FORTIFICATION_ALIASES;
 import net.wg.gui.interfaces.IButtonIconLoader;
 import net.wg.gui.lobby.fortifications.data.settings.PeripheryContainerVO;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.IPopOverCaller;
 import net.wg.infrastructure.interfaces.ISpriteEx;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class FortSettingPeripheryContainer extends UIComponent implements ISpriteEx, IPopOverCaller {
+public class FortSettingPeripheryContainer extends UIComponentEx implements ISpriteEx, IPopOverCaller {
 
     private static const TEXT_PADDING:int = 4;
 
@@ -38,8 +38,7 @@ public class FortSettingPeripheryContainer extends UIComponent implements ISprit
     }
 
     public function update(param1:Object):void {
-        var _loc2_:PeripheryContainerVO = null;
-        _loc2_ = PeripheryContainerVO(param1);
+        var _loc2_:PeripheryContainerVO = PeripheryContainerVO(param1);
         this.peripheryTitle.htmlText = _loc2_.peripheryTitle;
         this.peripheryName.htmlText = _loc2_.peripheryName;
         this.peripheryName.x = Math.round(this.changePeriphery.x - this.peripheryName.width - TEXT_PADDING);

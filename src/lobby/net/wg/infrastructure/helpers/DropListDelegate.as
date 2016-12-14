@@ -39,7 +39,7 @@ public class DropListDelegate extends Sprite implements IDropListDelegate {
     }
 
     public function onBeforeDrop(param1:InteractiveObject, param2:InteractiveObject):Boolean {
-        if (param2 as IDropItem != null) {
+        if (param2 is IDropItem) {
             this.dispatchDropEvent(DropEvent.BEFORE_DROP, param1, null, param2);
             return true;
         }

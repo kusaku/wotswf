@@ -32,7 +32,7 @@ public class LoaderManagerMeta extends BaseDAAPIModule {
         this.viewInitializationError(param1, param2);
     }
 
-    public function as_loadView(param1:Object):void {
+    public final function as_loadView(param1:Object):void {
         this.loadView(new LoadViewVO(param1));
     }
 

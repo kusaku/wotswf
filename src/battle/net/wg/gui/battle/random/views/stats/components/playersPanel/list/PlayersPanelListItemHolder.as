@@ -3,7 +3,6 @@ import net.wg.data.VO.daapi.DAAPIVehicleInfoVO;
 import net.wg.data.constants.InvitationStatus;
 import net.wg.data.constants.PlayerStatus;
 import net.wg.data.constants.UserTags;
-import net.wg.data.constants.VehicleStatus;
 import net.wg.gui.battle.random.views.stats.components.playersPanel.interfaces.IPlayersPanelListItemHolder;
 import net.wg.gui.battle.views.stats.StatsUserProps;
 import net.wg.gui.battle.views.stats.constants.DynamicSquadState;
@@ -100,7 +99,7 @@ public class PlayersPanelListItemHolder implements IPlayersPanelListItemHolder {
     }
 
     private function applyVehicleData():void {
-        this._listItem.setIsIGR(this._vehicleData.isVehiclePremiumIgr);
+        this._listItem.setIsIGR(this._vehicleData.isIGR);
         this._listItem.setVehicleLevel(this._vehicleData.vehicleLevel);
         this._listItem.setVehicleIcon(this._vehicleData.vehicleIconName);
         this._listItem.setVehicleName(this._vehicleData.vehicleName);
@@ -114,7 +113,7 @@ public class PlayersPanelListItemHolder implements IPlayersPanelListItemHolder {
         this.updateInviteStatus();
         this.updateDynamicSquadState();
         this.updateUserProps();
-        if (this._isCurrPlayer && VehicleStatus.isAlive(this._vehicleData.vehicleStatus)) {
+        if (this._isCurrPlayer && this._vehicleData.isAlive()) {
             this._listItem.setIsSelected(true);
         }
     }
@@ -126,7 +125,7 @@ public class PlayersPanelListItemHolder implements IPlayersPanelListItemHolder {
         }
         this._listItem.setIsMute(UserTags.isMuted(_loc1_));
         this._listItem.isIgnoredTmp(UserTags.isIgnored(_loc1_));
-        this._isCurrPlayer = UserTags.isCurrentPlayer(_loc1_);
+        this._isCurrPlayer = this._vehicleData.isCurrentPlayer;
         this._listItem.setIsCurrentPlayer(this._isCurrPlayer);
     }
 
@@ -136,16 +135,15 @@ public class PlayersPanelListItemHolder implements IPlayersPanelListItemHolder {
 
     private function applyPlayerStatus():void {
         var _loc1_:uint = this._vehicleData.playerStatus;
-        this._listItem.setSquad(PlayerStatus.isSquadPersonal(_loc1_), this._vehicleData.squadIndex);
-        this._listItem.setIsTeamKiller(PlayerStatus.isTeamKiller(_loc1_));
+        this._listItem.setSquad(this._vehicleData.isSquadPersonal(), this._vehicleData.squadIndex);
+        this._listItem.setIsTeamKiller(this._vehicleData.isTeamKiller());
         this._listItem.setSquadNoSound(PlayerStatus.isVoipDisabled(_loc1_));
         this._listItem.setIsSelected(PlayerStatus.isSelected(_loc1_));
     }
 
     private function applyVehicleStatus():void {
-        var _loc1_:uint = this._vehicleData.vehicleStatus;
-        this._listItem.setIsAlive(VehicleStatus.isAlive(_loc1_));
-        this._listItem.setIsOffline(!VehicleStatus.isReady(_loc1_));
+        this._listItem.setIsAlive(this._vehicleData.isAlive());
+        this._listItem.setIsOffline(!this._vehicleData.isReady());
     }
 
     private function updateUserProps():void {
@@ -166,8 +164,8 @@ public class PlayersPanelListItemHolder implements IPlayersPanelListItemHolder {
 
     private function updateDynamicSquadState():void {
         var _loc1_:Boolean = this._vehicleData.userTags && UserTags.isIgnored(this._vehicleData.userTags);
-        var _loc2_:Boolean = PlayerStatus.isSquadMan(this._vehicleData.playerStatus);
-        var _loc3_:uint = DynamicSquadState.getState(this._vehicleData.invitationStatus, this._isCurrPlayer, _loc2_, _loc1_);
+        var _loc2_:Boolean = this._vehicleData.isSquadMan();
+        var _loc3_:uint = DynamicSquadState.getState(this._vehicleData.invitationStatus, this._vehicleData.isCurrentPlayer, _loc2_, _loc1_);
         this._listItem.setSquadState(_loc3_);
     }
 

@@ -10,17 +10,21 @@ public class FortClanBattleRoomMeta extends BaseRallyRoomViewWithOrdersPanel {
 
     public var onTimerAlert:Function;
 
+    private var _clanBattleTimerVO:ClanBattleTimerVO;
+
     private var _connectedDirectionsVO:ConnectedDirectionsVO;
 
     private var _fortClanBattleRoomVO:FortClanBattleRoomVO;
-
-    private var _clanBattleTimerVO:ClanBattleTimerVO;
 
     public function FortClanBattleRoomMeta() {
         super();
     }
 
     override protected function onDispose():void {
+        if (this._clanBattleTimerVO) {
+            this._clanBattleTimerVO.dispose();
+            this._clanBattleTimerVO = null;
+        }
         if (this._connectedDirectionsVO) {
             this._connectedDirectionsVO.dispose();
             this._connectedDirectionsVO = null;
@@ -28,10 +32,6 @@ public class FortClanBattleRoomMeta extends BaseRallyRoomViewWithOrdersPanel {
         if (this._fortClanBattleRoomVO) {
             this._fortClanBattleRoomVO.dispose();
             this._fortClanBattleRoomVO = null;
-        }
-        if (this._clanBattleTimerVO) {
-            this._clanBattleTimerVO.dispose();
-            this._clanBattleTimerVO = null;
         }
         super.onDispose();
     }
@@ -41,28 +41,31 @@ public class FortClanBattleRoomMeta extends BaseRallyRoomViewWithOrdersPanel {
         this.onTimerAlert();
     }
 
-    public function as_setBattleRoomData(param1:Object):void {
-        if (this._fortClanBattleRoomVO) {
-            this._fortClanBattleRoomVO.dispose();
-        }
+    public final function as_setBattleRoomData(param1:Object):void {
+        var _loc2_:FortClanBattleRoomVO = this._fortClanBattleRoomVO;
         this._fortClanBattleRoomVO = new FortClanBattleRoomVO(param1);
         this.setBattleRoomData(this._fortClanBattleRoomVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setTimerDelta(param1:Object):void {
-        if (this._clanBattleTimerVO) {
-            this._clanBattleTimerVO.dispose();
-        }
+    public final function as_setTimerDelta(param1:Object):void {
+        var _loc2_:ClanBattleTimerVO = this._clanBattleTimerVO;
         this._clanBattleTimerVO = new ClanBattleTimerVO(param1);
         this.setTimerDelta(this._clanBattleTimerVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_updateDirections(param1:Object):void {
-        if (this._connectedDirectionsVO) {
-            this._connectedDirectionsVO.dispose();
-        }
+    public final function as_updateDirections(param1:Object):void {
+        var _loc2_:ConnectedDirectionsVO = this._connectedDirectionsVO;
         this._connectedDirectionsVO = new ConnectedDirectionsVO(param1);
         this.updateDirections(this._connectedDirectionsVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setBattleRoomData(param1:FortClanBattleRoomVO):void {

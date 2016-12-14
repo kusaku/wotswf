@@ -34,11 +34,13 @@ public class TankmanTrainingButton extends SoundButton {
 
     public var typeSwitcher:MovieClip;
 
-    public var priceLabel:IconText = null;
+    public var priceLabel:net.wg.gui.components.controls.IconText = null;
 
     public var actionPrice:ActionPrice;
 
     public var typeLabel:TextField;
+
+    public var trainingToText:TextField;
 
     public var border:MovieClip;
 
@@ -90,6 +92,7 @@ public class TankmanTrainingButton extends SoundButton {
         this.border = null;
         this.typeSwitcher = null;
         this.typeLabel = null;
+        this.trainingToText = null;
         this.bg = null;
         this._nations = null;
         this._locale = null;
@@ -110,6 +113,7 @@ public class TankmanTrainingButton extends SoundButton {
 
     override protected function configUI():void {
         super.configUI();
+        this.trainingToText.text = MENU.TANKMANTRAININGWINDOW_TRAININGTO;
         this.hitArea = hitMc;
         this.actionPrice.setup(this);
     }

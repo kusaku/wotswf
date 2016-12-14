@@ -75,6 +75,8 @@ public class VehCompareVehicleRenderer extends ListItemRenderer implements IScro
         super.configUI();
         mouseChildren = true;
         mouseEnabled = true;
+        buttonMode = false;
+        this.noVehicleTf.mouseWheelEnabled = false;
         this.noVehicleTf.mouseEnabled = false;
         this.noVehicleTf.text = VEH_COMPARE.VEHICLECOMPAREVIEW_TOPPANEL_NOVEHICLE;
         this.premiumTF.text = VEH_COMPARE.VEHICLECOMPAREVIEW_TOPPANEL_PREMIUM;
@@ -121,6 +123,9 @@ public class VehCompareVehicleRenderer extends ListItemRenderer implements IScro
             this.premiumTF.visible = _loc1_;
             this.noVehicleTf.visible = !_loc1_ && !(this._rendererData && this._rendererData.isFirstEmptySlot);
             this.addVehicleBtn.visible = this._rendererData && this._rendererData.isFirstEmptySlot;
+            this.attentionIcon.visible = false;
+            mouseEnabled = mouseChildren = !this.noVehicleTf.visible;
+            this.vehicleIcon.hitArea = !!_loc1_ ? this.btnHover : null;
             if (_loc1_) {
                 this.vehicleIcon.nation = this._rendererData.nation;
                 this.vehicleIcon.image = this._rendererData.image;

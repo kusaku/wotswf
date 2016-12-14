@@ -1,24 +1,32 @@
 package net.wg.gui.components.tooltips {
+import flash.events.Event;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 
-import net.wg.data.constants.Linkages;
+import net.wg.gui.components.controls.Image;
 import net.wg.gui.components.tooltips.VO.ContactTooltipVO;
 import net.wg.gui.components.tooltips.helpers.Utils;
-import net.wg.gui.messenger.controls.ContactStatusIndicator;
 
 public class TooltipContact extends ToolTipSpecial {
 
     public static const STATUS_TITLE_GAP:int = 10;
 
-    private static const MIN_BACKGROUND_WDTH:int = 322;
+    private static const MIN_BACKGROUND_WIDTH:int = 322;
 
     private static const MIN_BACKGROUND_HEIGHT:int = 80;
 
     public function TooltipContact() {
         super();
+        var _loc1_:Image = content.statusIndicator;
+        _loc1_.addEventListener(Event.CHANGE, this.onStatusIndicatorChangeHandler);
+    }
+
+    override protected function onDispose():void {
+        var _loc1_:Image = content.statusIndicator;
+        _loc1_.removeEventListener(Event.CHANGE, this.onStatusIndicatorChangeHandler);
+        super.onDispose();
     }
 
     override protected function redraw():void {
@@ -28,16 +36,13 @@ public class TooltipContact extends ToolTipSpecial {
         var _loc8_:TextField = null;
         var _loc9_:TextFormat = null;
         var _loc1_:ContactTooltipVO = new ContactTooltipVO(_data);
-        var _loc2_:ContactStatusIndicator = content.statusIndicator;
+        var _loc2_:Image = content.statusIndicator;
         var _loc3_:TextField = content.title;
         var _loc4_:Number = contentMargin.left + bgShadowMargin.left;
         _loc2_.x = _loc4_;
-        _loc2_.setLinkage(Linkages.TOOLTIP_USER_STATUS_PREFIX);
-        _loc2_.showOfflineIndicator = true;
-        _loc2_.update(_loc1_);
+        _loc2_.source = _loc1_.resource;
         _loc3_.autoSize = TextFieldAutoSize.LEFT;
         _loc3_.htmlText = Utils.instance.htmlWrapper(App.utils.commons.getFullPlayerName(_loc1_.userPropsVO), Utils.instance.COLOR_HEADER, 18, "$TitleFont") + "<br/>" + Utils.instance.htmlWrapper(_loc1_.statusDescription, Utils.instance.COLOR_NORMAL, 14, "$FieldFont");
-        _loc3_.x = _loc2_.x + _loc2_.width + STATUS_TITLE_GAP;
         separators = new Vector.<Separator>(0);
         topPosition = content.y + content.height;
         topPosition = topPosition + Utils.instance.MARGIN_AFTER_BLOCK;
@@ -71,7 +76,7 @@ public class TooltipContact extends ToolTipSpecial {
 
     override protected function updateSize():void {
         super.updateSize();
-        background.width = Math.max(MIN_BACKGROUND_WDTH, background.width);
+        background.width = Math.max(MIN_BACKGROUND_WIDTH, background.width);
         background.height = Math.max(MIN_BACKGROUND_HEIGHT, background.height);
     }
 
@@ -94,6 +99,12 @@ public class TooltipContact extends ToolTipSpecial {
         separators.push(_loc1_);
         topPosition = topPosition + Utils.instance.MARGIN_AFTER_SEPARATE;
         return _loc1_;
+    }
+
+    private function onStatusIndicatorChangeHandler(param1:Event):void {
+        var _loc2_:Image = content.statusIndicator;
+        var _loc3_:TextField = content.title;
+        _loc3_.x = _loc2_.x + _loc2_.width + STATUS_TITLE_GAP;
     }
 }
 }

@@ -13,6 +13,7 @@ import net.wg.data.VO.daapi.DAAPIVehicleUserTagsVO;
 import net.wg.data.VO.daapi.DAAPIVehiclesDataVO;
 import net.wg.data.VO.daapi.DAAPIVehiclesInteractiveStatsVO;
 import net.wg.data.VO.daapi.DAAPIVehiclesUserTagsVO;
+import net.wg.data.constants.Errors;
 import net.wg.gui.battle.views.stats.BattleTipsController;
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.infrastructure.base.meta.IFMStatsMeta;
@@ -77,9 +78,11 @@ public class FMFullStats extends FMStatsMeta implements IFMStatsMeta, IBattleCom
     }
 
     public function updateStageSize(param1:Number, param2:Number):void {
+        var _loc3_:Number = NaN;
+        var _loc4_:Number = NaN;
         this.modalBgSpr.visible = false;
-        var _loc3_:Number = param1 - WIDTH >> 1;
-        var _loc4_:Number = param2 - HEIGHT >> 1;
+        _loc3_ = param1 - WIDTH >> 1;
+        _loc4_ = param2 - HEIGHT >> 1;
         this.x = _loc3_;
         this.y = _loc4_;
         this.modalBgSpr.x = -_loc3_;
@@ -109,7 +112,7 @@ public class FMFullStats extends FMStatsMeta implements IFMStatsMeta, IBattleCom
         }
     }
 
-    public function updateVehiclesInfo(param1:IDAAPIDataClass):void {
+    public function updateVehiclesData(param1:IDAAPIDataClass):void {
         var _loc2_:DAAPIVehiclesDataVO = DAAPIVehiclesDataVO(param1);
         if (_loc2_.leftVehicleInfos) {
             this._tableCtrl.updateVehiclesData(_loc2_.leftVehicleInfos);
@@ -134,7 +137,7 @@ public class FMFullStats extends FMStatsMeta implements IFMStatsMeta, IBattleCom
         this.setVehiclesStats(DAAPIVehiclesInteractiveStatsVO(param1));
     }
 
-    public function updateVehiclesStats(param1:IDAAPIDataClass):void {
+    public function updateVehiclesStat(param1:IDAAPIDataClass):void {
         this.setVehiclesStats(DAAPIVehiclesInteractiveStatsVO(param1));
     }
 
@@ -207,6 +210,7 @@ public class FMFullStats extends FMStatsMeta implements IFMStatsMeta, IBattleCom
         var _loc2_:Graphics = this.bg.graphics;
         var _loc3_:String = !!param1 ? BG_FFA_LINKAGE : BG_TEAMS_LINKAGE;
         var _loc4_:BitmapData = App.utils.classFactory.getObject(_loc3_) as BitmapData;
+        App.utils.asserter.assertNotNull(_loc4_, "bitmapData" + Errors.CANT_NULL);
         _loc2_.clear();
         _loc2_.beginBitmapFill(_loc4_, null, false, true);
         _loc2_.drawRect(0, 0, _loc4_.width, _loc4_.height);

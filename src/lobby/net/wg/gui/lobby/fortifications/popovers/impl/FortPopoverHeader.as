@@ -11,11 +11,11 @@ import net.wg.gui.interfaces.IButtonIconLoader;
 import net.wg.gui.lobby.fortifications.data.BuildingPopoverHeaderVO;
 import net.wg.gui.lobby.fortifications.events.FortBuildingCardPopoverEvent;
 import net.wg.gui.lobby.fortifications.utils.impl.FortCommonUtils;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class FortPopoverHeader extends UIComponent {
+public class FortPopoverHeader extends UIComponentEx {
 
     private static const UPGRADE_BTN_ICON_PNG:String = "level_up.png";
 

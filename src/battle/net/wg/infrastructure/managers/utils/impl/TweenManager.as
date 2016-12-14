@@ -20,12 +20,7 @@ public class TweenManager extends TweenManagerMeta implements ITweenManager, ITw
     public function createNewTween(param1:ITweenPropertiesVO):ITween {
         var _loc2_:Class = null;
         var _loc3_:IClassFactory = App.utils.classFactory;
-        if (param1.getIsOnCodeBased()) {
-            _loc2_ = _loc3_.getClass(Linkages.PYTHON_TWEEN);
-        }
-        else {
-            _loc2_ = _loc3_.getClass(Linkages.FLASH_TWEEN);
-        }
+        _loc2_ = _loc3_.getClass(Linkages.PYTHON_TWEEN);
         var _loc4_:ITween = new _loc2_(param1);
         createTweenS(_loc4_);
         return _loc4_;

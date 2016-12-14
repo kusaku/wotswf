@@ -8,5 +8,7 @@ public interface ITopPanel extends IUIComponentEx {
     function setVehiclesData(param1:IDataProvider):void;
 
     function setVehiclesCountText(param1:String):void;
+
+    function setAttentionVisible(param1:Boolean):void;
 }
 }

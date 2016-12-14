@@ -2,9 +2,9 @@ package net.wg.gui.lobby.battleResults.components {
 import flash.display.MovieClip;
 import flash.filters.ColorMatrixFilter;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class EfficiencyIconRenderer extends UIComponent {
+public class EfficiencyIconRenderer extends UIComponentEx {
 
     public var iconMc:MovieClip;
 

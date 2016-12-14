@@ -4,7 +4,7 @@ import flash.events.Event;
 import flash.text.TextField;
 
 import net.wg.data.Aliases;
-import net.wg.gui.components.common.ArrowSeparator;
+import net.wg.gui.components.assets.ArrowSeparator;
 import net.wg.gui.components.common.InputChecker;
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.lobby.fortifications.data.settings.DisableDefencePeriodVO;

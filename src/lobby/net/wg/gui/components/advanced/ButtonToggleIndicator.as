@@ -1,10 +1,12 @@
 package net.wg.gui.components.advanced {
 import flash.display.MovieClip;
 
+import net.wg.infrastructure.base.UIComponentEx;
+
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.core.UIComponent;
 
-public class ButtonToggleIndicator extends UIComponent {
+public class ButtonToggleIndicator extends UIComponentEx {
 
     public var hit:MovieClip;
 

@@ -34,12 +34,13 @@ public class HangarHeaderMeta extends BaseDAAPIComponent {
         this.showPersonalQuests();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._hangarHeaderVO) {
-            this._hangarHeaderVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:HangarHeaderVO = this._hangarHeaderVO;
         this._hangarHeaderVO = new HangarHeaderVO(param1);
         this.setData(this._hangarHeaderVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:HangarHeaderVO):void {

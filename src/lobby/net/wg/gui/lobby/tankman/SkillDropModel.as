@@ -48,56 +48,48 @@ public class SkillDropModel implements IDisposable {
 
     public var freeDropText:String = "";
 
-    public function SkillDropModel() {
-        this.dropSkillFree = new DropSkillsCost();
-        this.dropSkillCredits = new DropSkillsCost();
-        this.dropSkillGold = new DropSkillsCost();
+    public function SkillDropModel(param1:Object) {
+        var _loc3_:Object = null;
         super();
-    }
-
-    public static function parseFromObject(param1:Object):SkillDropModel {
-        var _loc4_:Object = null;
-        var _loc2_:SkillDropModel = new SkillDropModel();
-        _loc2_.credits = param1.money[0];
-        _loc2_.gold = param1.money[1];
-        _loc2_.compactDescriptor = param1.tankman.strCD;
-        _loc2_.tankmanName = param1.tankman.firstUserName + Values.SPACE_STR + param1.tankman.lastUserName;
-        _loc2_.tankmanIcon = param1.tankman.icon.big;
-        _loc2_.roleIcon = param1.tankman.iconRole.small;
-        _loc2_.roleLevel = param1.tankman.roleLevel;
-        _loc2_.nationID = param1.tankman.nationID;
-        var _loc3_:Array = param1.tankman.skills;
-        _loc2_.skillsCount = _loc3_.length;
-        if (_loc2_.skillsCount > 0) {
-            _loc4_ = _loc3_[_loc2_.skillsCount - 1];
-            _loc2_.lastSkill = _loc4_.icon.small;
-            _loc2_.lastSkillLevel = _loc4_.level;
+        this.credits = param1.money[0];
+        this.gold = param1.money[1];
+        this.compactDescriptor = param1.tankman.strCD;
+        this.tankmanName = param1.tankman.firstUserName + Values.SPACE_STR + param1.tankman.lastUserName;
+        this.tankmanIcon = param1.tankman.icon.big;
+        this.roleIcon = param1.tankman.iconRole.small;
+        this.roleLevel = param1.tankman.roleLevel;
+        this.nationID = param1.tankman.nationID;
+        var _loc2_:Array = param1.tankman.skills;
+        this.skillsCount = _loc2_.length;
+        if (this.skillsCount > 0) {
+            _loc3_ = _loc2_[this.skillsCount - 1];
+            this.lastSkill = _loc3_.icon.small;
+            this.lastSkillLevel = _loc3_.level;
         }
-        if (_loc2_.skillsCount > 1) {
-            _loc4_ = _loc3_[_loc2_.skillsCount - 2];
-            _loc2_.preLastSkill = _loc4_.icon.small;
+        if (this.skillsCount > 1) {
+            _loc3_ = _loc2_[this.skillsCount - 2];
+            this.preLastSkill = _loc3_.icon.small;
         }
-        _loc2_.hasNewSkill = param1.hasNewSkills;
-        _loc2_.newSkillsCount = param1.newSkills[0];
-        _loc2_.lastNewSkillLevel = param1.newSkills[1];
-        _loc2_.dropSkillFree = DropSkillsCost.parseFromObject(param1.dropSkillsCost[0]);
-        _loc2_.dropSkillFree.id = 0;
-        _loc2_.dropSkillCredits = DropSkillsCost.parseFromObject(param1.dropSkillsCost[1]);
-        _loc2_.dropSkillCredits.id = SAVING_MODE_CREDITS;
-        _loc2_.dropSkillGold = DropSkillsCost.parseFromObject(param1.dropSkillsCost[2]);
-        _loc2_.dropSkillGold.id = SAVING_MODE_GOLD;
-        _loc2_.defaultSavingMode = param1.defaultSavingMode;
+        this.hasNewSkill = param1.hasNewSkills;
+        this.newSkillsCount = param1.newSkills[0];
+        this.lastNewSkillLevel = param1.newSkills[1];
+        this.dropSkillFree = new DropSkillsCost(param1.dropSkillsCost[0]);
+        this.dropSkillFree.id = 0;
+        this.dropSkillCredits = new DropSkillsCost(param1.dropSkillsCost[1]);
+        this.dropSkillCredits.id = SAVING_MODE_CREDITS;
+        this.dropSkillGold = new DropSkillsCost(param1.dropSkillsCost[2]);
+        this.dropSkillGold.id = SAVING_MODE_GOLD;
+        this.defaultSavingMode = param1.defaultSavingMode;
         if (param1.texts) {
-            _loc2_.freeDropText = param1.texts.freeDrop;
+            this.freeDropText = param1.texts.freeDrop;
         }
-        return _loc2_;
     }
 
     public function get nation():String {
         return App.utils.nations.getNationName(this.nationID);
     }
 
-    public final function dispose():void {
+    public function dispose():void {
         this.dropSkillFree.dispose();
         this.dropSkillFree = null;
         this.dropSkillCredits.dispose();

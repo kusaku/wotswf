@@ -9,6 +9,12 @@ public class SettingsRibbonItem extends UIComponentEx {
 
     private static const RIBBON_TYPE_RIGHT_PADDING:int = 4;
 
+    private static const SMALL:String = "small";
+
+    private static const MEDIUM:String = "medium";
+
+    private static const LARGE:String = "large";
+
     public var ribbonTypeTF:TextField = null;
 
     public var vehNameTF:TextField = null;
@@ -42,7 +48,6 @@ public class SettingsRibbonItem extends UIComponentEx {
 
     public function setData(param1:RibbonItemData):void {
         gotoAndStop(param1.ribbonType);
-        this.bg.visible = this._isWithRibbonType || this._isWithVehInfo;
         this.ribbonTypeTF.text = param1.text;
         this._vehInfoIsEnabled = this.vehNameTF != null;
         if (this._vehInfoIsEnabled) {
@@ -50,6 +55,7 @@ public class SettingsRibbonItem extends UIComponentEx {
             this.updateVehInfoPosition();
         }
         this.valueTF.text = param1.value;
+        this.updateRibbonBg();
     }
 
     public function updateSettings(param1:Boolean, param2:Boolean):void {
@@ -64,7 +70,7 @@ public class SettingsRibbonItem extends UIComponentEx {
             this._isWithVehInfo = param2;
             this.vehNameTF.visible = this.tankType.visible = param2;
         }
-        this.bg.visible = param1 || param2 && this.vehNameTF != null;
+        this.updateRibbonBg();
     }
 
     private function updateVehInfoPosition():void {
@@ -74,6 +80,21 @@ public class SettingsRibbonItem extends UIComponentEx {
         }
         this.tankType.x = _loc1_;
         this.vehNameTF.x = this.tankType.x + this.tankType.width;
+    }
+
+    private function updateRibbonBg():void {
+        this.bg.gotoAndStop(this.getBgLabel());
+    }
+
+    private function getBgLabel():String {
+        var _loc1_:Boolean = this._isWithVehInfo && this._vehInfoIsEnabled;
+        if (this._isWithRibbonType && _loc1_) {
+            return LARGE;
+        }
+        if (this._isWithRibbonType || _loc1_) {
+            return MEDIUM;
+        }
+        return SMALL;
     }
 }
 }

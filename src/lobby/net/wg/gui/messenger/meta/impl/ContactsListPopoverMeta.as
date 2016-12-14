@@ -1,6 +1,8 @@
 package net.wg.gui.messenger.meta.impl {
 import net.wg.data.constants.Errors;
+import net.wg.gui.messenger.data.ContactsWindowInitVO;
 import net.wg.infrastructure.base.SmartPopOverView;
+import net.wg.infrastructure.exceptions.AbstractException;
 
 public class ContactsListPopoverMeta extends SmartPopOverView {
 
@@ -14,8 +16,18 @@ public class ContactsListPopoverMeta extends SmartPopOverView {
 
     public var copyIntoGroup:Function;
 
+    private var _contactsWindowInitVO:ContactsWindowInitVO;
+
     public function ContactsListPopoverMeta() {
         super();
+    }
+
+    override protected function onDispose():void {
+        if (this._contactsWindowInitVO) {
+            this._contactsWindowInitVO.dispose();
+            this._contactsWindowInitVO = null;
+        }
+        super.onDispose();
     }
 
     public function addToFriendsS(param1:Number, param2:String):void {
@@ -41,6 +53,21 @@ public class ContactsListPopoverMeta extends SmartPopOverView {
     public function copyIntoGroupS(param1:Number, param2:Object):void {
         App.utils.asserter.assertNotNull(this.copyIntoGroup, "copyIntoGroup" + Errors.CANT_NULL);
         this.copyIntoGroup(param1, param2);
+    }
+
+    public final function as_setInitInfo(param1:Object):void {
+        var _loc2_:ContactsWindowInitVO = this._contactsWindowInitVO;
+        this._contactsWindowInitVO = new ContactsWindowInitVO(param1);
+        this.setInitInfo(this._contactsWindowInitVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
+    }
+
+    protected function setInitInfo(param1:ContactsWindowInitVO):void {
+        var _loc2_:String = "as_setInitInfo" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
     }
 }
 }

@@ -133,7 +133,7 @@ public class CrosshairStrategic extends CrosshairBase {
         this._nodesTotal = this.numChildren;
         var _loc2_:int = 0;
         while (_loc2_ < this._nodesTotal) {
-            this._nodes[_loc2_] = this.getChildAt(_loc2_) as MovieClip;
+            this._nodes[_loc2_] = MovieClip(getChildAt(_loc2_));
             _loc2_++;
         }
     }

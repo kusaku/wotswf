@@ -20,12 +20,13 @@ public class QuestsTabMeta extends BaseDAAPIComponent {
         super.onDispose();
     }
 
-    public function as_setQuestsData(param1:Object):void {
-        if (this._questsDataVO) {
-            this._questsDataVO.dispose();
-        }
+    public final function as_setQuestsData(param1:Object):void {
+        var _loc2_:QuestsDataVO = this._questsDataVO;
         this._questsDataVO = new QuestsDataVO(param1);
         this.setQuestsData(this._questsDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setQuestsData(param1:QuestsDataVO):void {

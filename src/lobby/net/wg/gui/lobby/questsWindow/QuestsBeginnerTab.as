@@ -21,7 +21,6 @@ import net.wg.infrastructure.interfaces.IViewStackContent;
 
 import org.idmedia.as3commons.util.StringUtils;
 
-import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.ListEvent;
 import scaleform.clik.interfaces.IDataProvider;
 
@@ -74,6 +73,7 @@ public class QuestsBeginnerTab extends QuestsBaseTab implements IComplexViewStac
         this.noItemsSelected.text = QUESTS.QUESTS_TABS_NOSELECTED_TEXT;
         this.listHidingBG.mouseEnabled = false;
         this.listHidingBG.mouseChildren = false;
+        this.questsList.setSelectionNavigator(new QuestsTasksNavigator());
         this.questsList.addEventListener(ListEvent.INDEX_CHANGE, this.onQuestListIndexChangeHandler);
         this.questsList.addEventListener(ListEventEx.ITEM_CLICK, this.onQuestListItemClickHandler);
         this.detailsViewStack.addEventListener(ViewStackEvent.VIEW_CHANGED, this.onDetailsViewChangedHandler);
@@ -83,17 +83,10 @@ public class QuestsBeginnerTab extends QuestsBaseTab implements IComplexViewStac
 
     override protected function setQuestsData(param1:QuestsDataVO):void {
         var _loc2_:Boolean = false;
-        if (this._model && this._model.isEquals(param1)) {
-            return;
-        }
         this._model = param1;
-        super.setQuestsData(this._model);
         _loc2_ = this._model.hasQuests();
         if (_loc2_) {
-            if (this.questsList.dataProvider != null) {
-                this.questsList.dataProvider.cleanUp();
-            }
-            this.questsList.dataProvider = new DataProvider(questsArray);
+            this.questsList.dataProvider = this._model.quests;
         }
         this.questsList.visible = _loc2_;
         this.questBG.visible = _loc2_;

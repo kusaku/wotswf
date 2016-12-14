@@ -27,20 +27,22 @@ public class FortOrderInfoWindowMeta extends AbstractWindowView {
         super.onDispose();
     }
 
-    public function as_setWindowData(param1:Object):void {
-        if (this._fortOrderInfoWindowVO) {
-            this._fortOrderInfoWindowVO.dispose();
-        }
+    public final function as_setWindowData(param1:Object):void {
+        var _loc2_:FortOrderInfoWindowVO = this._fortOrderInfoWindowVO;
         this._fortOrderInfoWindowVO = new FortOrderInfoWindowVO(param1);
         this.setWindowData(this._fortOrderInfoWindowVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setDynProperties(param1:Object):void {
-        if (this._fortOrderInfoTitleVO) {
-            this._fortOrderInfoTitleVO.dispose();
-        }
+    public final function as_setDynProperties(param1:Object):void {
+        var _loc2_:FortOrderInfoTitleVO = this._fortOrderInfoTitleVO;
         this._fortOrderInfoTitleVO = new FortOrderInfoTitleVO(param1);
         this.setDynProperties(this._fortOrderInfoTitleVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setWindowData(param1:FortOrderInfoWindowVO):void {

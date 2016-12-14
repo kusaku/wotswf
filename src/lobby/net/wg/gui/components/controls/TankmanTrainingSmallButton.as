@@ -49,7 +49,7 @@ public class TankmanTrainingSmallButton extends SoundButton {
 
     public var actionPrice:ActionPrice;
 
-    public var priceLabel:IconText;
+    public var priceLabel:net.wg.gui.components.controls.IconText;
 
     public var levelLabel:TextField;
 
@@ -163,7 +163,7 @@ public class TankmanTrainingSmallButton extends SoundButton {
                 this.priceLabel.icon = this._type == TrainingType.ACADEMY ? IconsTypes.GOLD : IconsTypes.CREDITS;
                 this.priceLabel.x = PRICE_LABEL_DEFAULT_POSITION;
             }
-            if (this.priceLabel is ActionPrice || this.priceLabel is IconText) {
+            if (this.priceLabel is ActionPrice || this.priceLabel is net.wg.gui.components.controls.IconText) {
                 this.priceLabel.invalidate();
                 this.priceLabel.validateNow();
             }

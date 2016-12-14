@@ -1,7 +1,7 @@
 package net.wg.gui.components.controls {
 public class DropDownImageText extends DropdownMenu {
 
-    public var icon:UILoaderAlt;
+    public var icon:net.wg.gui.components.controls.UILoaderAlt;
 
     public function DropDownImageText() {
         super();

@@ -119,9 +119,8 @@ public class RoleChangeWindow extends RoleChangeMeta implements IRoleChangeMeta 
         invalidate(InvalidationType.DATA);
     }
 
-    public function as_setRoles(param1:Array):void {
+    override protected function setRoles(param1:Array):void {
         this.roleItems.update(param1);
-        param1.splice(0);
     }
 
     private function updateAcceptButtonState():void {

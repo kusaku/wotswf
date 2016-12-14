@@ -28,6 +28,8 @@ public class SoundSettingsDataVo extends SettingsDataVo {
 
     public var soundDevice:SettingsControlProp = null;
 
+    public var soundSpeakers:SettingsControlProp = null;
+
     public var enableVoIP:SettingsControlProp = null;
 
     public var captureDevice:SettingsControlProp = null;
@@ -77,6 +79,7 @@ public class SoundSettingsDataVo extends SettingsDataVo {
             "ambientVolume": createControl(ControlsFactory.TYPE_SLIDER).hasValue(true).build(),
             "alternativeVoices": createControl(ControlsFactory.TYPE_BUTTON_BAR).isDataAsSelectedIndex(true).build(),
             "soundDevice": createControl(ControlsFactory.TYPE_BUTTON_BAR).isDataAsSelectedIndex(true).build(),
+            "soundSpeakers": createControl(ControlsFactory.TYPE_DROPDOWN).isDataAsSelectedIndex(true).build(),
             "enableVoIP": createControl(ControlsFactory.TYPE_CHECKBOX).build(),
             "captureDevice": createControl(ControlsFactory.TYPE_DROPDOWN).build(),
             "masterVivoxVolume": createControl(ControlsFactory.TYPE_SLIDER).hasValue(true).build(),
@@ -110,6 +113,7 @@ public class SoundSettingsDataVo extends SettingsDataVo {
         this.ambientVolume = null;
         this.alternativeVoices = null;
         this.soundDevice = null;
+        this.soundSpeakers = null;
         this.enableVoIP = null;
         this.captureDevice = null;
         this.masterVivoxVolume = null;

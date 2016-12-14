@@ -5,11 +5,11 @@ import flash.text.TextField;
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.advanced.ClanEmblem;
 import net.wg.gui.lobby.fortifications.data.ClanInfoVO;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class ClanInfoCmp extends UIComponent {
+public class ClanInfoCmp extends UIComponentEx {
 
     public var nameTF:TextField;
 

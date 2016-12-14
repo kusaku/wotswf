@@ -10,7 +10,6 @@ import net.wg.mock.utils.MockAssertable;
 import net.wg.mock.utils.MockClassFactory;
 import net.wg.mock.utils.MockCommons;
 import net.wg.mock.utils.MockDateTime;
-import net.wg.mock.utils.MockEventCollector;
 import net.wg.mock.utils.MockFocusHandler;
 import net.wg.mock.utils.MockHelpLayout;
 import net.wg.mock.utils.MockIME;
@@ -30,7 +29,6 @@ import net.wg.utils.ICommons;
 import net.wg.utils.ICounterManager;
 import net.wg.utils.IDataUtils;
 import net.wg.utils.IDateTime;
-import net.wg.utils.IEventCollector;
 import net.wg.utils.IFocusHandler;
 import net.wg.utils.IIME;
 import net.wg.utils.IIcons;
@@ -66,8 +64,6 @@ public class MockUtils implements IUtils {
 
     private var _focusHandler:IFocusHandler;
 
-    private var _events:IEventCollector;
-
     private var _IME:IIME;
 
     private var _voMgr:IVOManager;
@@ -98,7 +94,6 @@ public class MockUtils implements IUtils {
         this._commons = new MockCommons();
         this._nations = new MockNations();
         this._focusHandler = new MockFocusHandler();
-        this._events = new MockEventCollector();
         this._IME = new MockIME();
         this._voMgr = new MockVOManager();
         this._icons = new MockIcons();
@@ -224,10 +219,6 @@ public class MockUtils implements IUtils {
 
     public function get focusHandler():IFocusHandler {
         return this._focusHandler;
-    }
-
-    public function get events():IEventCollector {
-        return this._events;
     }
 
     public function get IME():IIME {

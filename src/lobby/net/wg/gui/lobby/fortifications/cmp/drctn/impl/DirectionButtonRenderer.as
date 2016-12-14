@@ -7,12 +7,12 @@ import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.controls.IconTextButton;
 import net.wg.gui.lobby.fortifications.data.DirectionVO;
 import net.wg.gui.lobby.fortifications.events.FortIntelClanDescriptionEvent;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class DirectionButtonRenderer extends UIComponent {
+public class DirectionButtonRenderer extends UIComponentEx {
 
     private static const INVALID_COMMANDER_MODE:String = "invalidCommanderMode";
 

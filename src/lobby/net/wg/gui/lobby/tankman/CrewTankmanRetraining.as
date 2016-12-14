@@ -5,6 +5,7 @@ import flash.events.Event;
 import flash.events.IEventDispatcher;
 import flash.events.MouseEvent;
 
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.VehicleTypes;
 import net.wg.gui.components.controls.DropdownMenu;
 import net.wg.gui.components.controls.SoundButtonEx;
@@ -191,6 +192,7 @@ public class CrewTankmanRetraining extends UIComponentEx implements IViewStackCo
             return;
         }
         this._model = param1 as PersonalCaseRetrainingModel;
+        App.utils.asserter.assertNotNull(this._model, "_model" + Errors.CANT_NULL);
         this.btnReset.enabled = this._model.currentVehicle != null;
         this._needUpdateData = true;
         invalidate(this.UPDATE_DATA);
@@ -383,7 +385,7 @@ public class CrewTankmanRetraining extends UIComponentEx implements IViewStackCo
     }
 
     private function onRetrainingButtonDoubleClickHandler(param1:MouseEvent):void {
-        (param1.target as IEventDispatcher).dispatchEvent(new ButtonEvent(ButtonEvent.CLICK));
+        IEventDispatcher(param1.target).dispatchEvent(new ButtonEvent(ButtonEvent.CLICK));
         if (App.utils.commons.isLeftButton(param1)) {
             this.applayRetraining();
         }

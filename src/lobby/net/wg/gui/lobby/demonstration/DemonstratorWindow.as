@@ -1,6 +1,4 @@
 package net.wg.gui.lobby.demonstration {
-import flash.events.MouseEvent;
-
 import net.wg.gui.components.controls.ScrollBar;
 import net.wg.gui.components.controls.TileList;
 import net.wg.gui.lobby.demonstration.data.DemonstratorVO;
@@ -43,7 +41,7 @@ public class DemonstratorWindow extends DemonstratorWindowMeta implements IDemon
 
     override protected function draw():void {
         super.draw();
-        if (isInvalid(InvalidationType.DATA) && this.model) {
+        if (this.model && isInvalid(InvalidationType.DATA)) {
             this.listStandard.dataProvider = this.model.standard;
             this.listAssault.dataProvider = this.model.assault;
             this.listEncounter.dataProvider = this.model.encounter;
@@ -58,7 +56,6 @@ public class DemonstratorWindow extends DemonstratorWindowMeta implements IDemon
     }
 
     override protected function onDispose():void {
-        this.model.dispose();
         this.model = null;
         this.listStandard.removeEventListener(ListEvent.ITEM_CLICK, this.onMapItemClick);
         this.listAssault.removeEventListener(ListEvent.ITEM_CLICK, this.onMapItemClick);
@@ -72,8 +69,8 @@ public class DemonstratorWindow extends DemonstratorWindowMeta implements IDemon
         super.onDispose();
     }
 
-    public function as_setData(param1:Object):void {
-        this.model = new DemonstratorVO(param1);
+    override protected function setData(param1:DemonstratorVO):void {
+        this.model = param1;
         invalidateData();
     }
 
@@ -81,10 +78,6 @@ public class DemonstratorWindow extends DemonstratorWindowMeta implements IDemon
         this.scrollStandard.visible = this.scrollStandard.thumb.visible;
         this.scrollAssault.visible = this.scrollAssault.thumb.visible;
         this.scrollEncounter.visible = this.scrollEncounter.thumb.visible;
-    }
-
-    private function onStageClick(param1:MouseEvent):void {
-        this.updateScrollBars();
     }
 
     private function onMapItemClick(param1:ListEvent):void {

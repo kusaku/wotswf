@@ -1,6 +1,6 @@
 package net.wg.gui.battle.views.stats.fullStats {
-import flash.geom.Rectangle;
 import flash.text.TextField;
+import flash.text.TextFieldAutoSize;
 import flash.text.TextFormatAlign;
 
 import net.wg.data.constants.BattleAtlasItem;
@@ -15,6 +15,8 @@ import net.wg.infrastructure.interfaces.IUserProps;
 import scaleform.gfx.TextFieldEx;
 
 public class StatsTableItemBase extends BattleUIComponentsHolder {
+
+    private static const FIELD_WIDTH_COMPENSATION:int = 2;
 
     protected var deadBg:BattleAtlasSprite = null;
 
@@ -50,6 +52,10 @@ public class StatsTableItemBase extends BattleUIComponentsHolder {
 
     private var _isIGR:Boolean = false;
 
+    private var _defaultVehicleFieldXPosition:int;
+
+    private var _defaultVehicleFieldWidth:int;
+
     public function StatsTableItemBase(param1:TextField, param2:TextField, param3:TextField, param4:BattleAtlasSprite, param5:BattleAtlasSprite, param6:BattleAtlasSprite) {
         super();
         this._playerNameTF = param1;
@@ -58,7 +64,10 @@ public class StatsTableItemBase extends BattleUIComponentsHolder {
         this._vehicleTypeIcon = param4;
         this.deadBg = param5;
         this._icoIGR = param6;
+        this._defaultVehicleFieldXPosition = this._vehicleNameTF.x;
+        this._defaultVehicleFieldWidth = this._vehicleNameTF.width;
         this._playerNameTF.visible = false;
+        this._vehicleNameTF.autoSize = TextFieldAutoSize.LEFT;
         this._vehicleNameTF.visible = false;
         this._fragsTF.visible = false;
         this._vehicleTypeIcon.visible = false;
@@ -71,24 +80,23 @@ public class StatsTableItemBase extends BattleUIComponentsHolder {
 
     public function setPlayerName(param1:IUserProps):void {
         this._userProps = param1;
-        invalidate(FullStatsValidationType.USER_PROPS);
-        invalidate(FullStatsValidationType.COLORS);
+        invalidate(FullStatsValidationType.USER_PROPS | FullStatsValidationType.COLORS);
     }
 
     public function setVehicleName(param1:String):void {
-        if (this._vehicleNameTF.text == param1) {
+        if (this._vehicleName == param1) {
             return;
         }
         this._vehicleName = param1;
         invalidate(FullStatsValidationType.VEHICLE_NAME);
     }
 
-    public function setVehicleType(param1:String, param2:String):void {
-        var _loc3_:String = BattleAtlasItem.getFullStatsVehicleTypeName(param1, param2);
-        if (_loc3_ == this._vehicleType) {
+    public function setVehicleType(param1:String):void {
+        var _loc2_:String = BattleAtlasItem.getFullStatsVehicleTypeName(param1);
+        if (_loc2_ == this._vehicleType) {
             return;
         }
-        this._vehicleType = _loc3_;
+        this._vehicleType = _loc2_;
         invalidate(FullStatsValidationType.VEHICLE_TYPE);
     }
 
@@ -190,7 +198,6 @@ public class StatsTableItemBase extends BattleUIComponentsHolder {
     override protected function draw():void {
         var _loc1_:String = null;
         var _loc2_:IColorScheme = null;
-        var _loc3_:Rectangle = null;
         super.draw();
         if (isInvalid(FullStatsValidationType.COLORS)) {
             _loc1_ = PlayerStatusSchemeName.getSchemeNameForPlayer(this.isCurrentPlayer, this.isSquadPersonal, this.isTeamKiller, this.isDead, this.isOffline);
@@ -221,9 +228,13 @@ public class StatsTableItemBase extends BattleUIComponentsHolder {
             if (this._vehicleName) {
                 this._vehicleNameTF.visible = true;
                 this._vehicleNameTF.text = this._vehicleName;
-                if (this._icoIGR.visible) {
-                    if (this._vehicleNameTF.getTextFormat().align == TextFormatAlign.RIGHT) {
-                        this._icoIGR.x = this._vehicleNameTF.x - this._icoIGR.width >> 0;
+                if (this._vehicleNameTF.getTextFormat().align == TextFormatAlign.RIGHT) {
+                    if (this._isIGR) {
+                        this._icoIGR.x = this._defaultVehicleFieldXPosition + this._defaultVehicleFieldWidth - this._icoIGR.width >> 0;
+                        this._vehicleNameTF.x = this._icoIGR.x - this._vehicleNameTF.width >> 0;
+                    }
+                    else {
+                        this._vehicleNameTF.x = this._defaultVehicleFieldXPosition + this._defaultVehicleFieldWidth - this._vehicleNameTF.width >> 0;
                     }
                 }
             }
@@ -245,16 +256,19 @@ public class StatsTableItemBase extends BattleUIComponentsHolder {
             if (this._isIGR) {
                 this._icoIGR.imageName = BattleAtlasItem.ICO_IGR;
                 if (this._vehicleNameTF.getTextFormat().align == TextFormatAlign.RIGHT) {
-                    _loc3_ = this._vehicleNameTF.getCharBoundaries(0);
-                    this._icoIGR.x = this._vehicleNameTF.x + (!!_loc3_ ? _loc3_.x : 0) - this._icoIGR.width >> 0;
+                    this._icoIGR.x = this._defaultVehicleFieldXPosition + this._defaultVehicleFieldWidth - this._icoIGR.width >> 0;
+                    this._vehicleNameTF.x = this._icoIGR.x - this._vehicleNameTF.width >> 0;
                 }
                 else {
-                    this._icoIGR.x = this._vehicleNameTF.x;
-                    this._vehicleNameTF.x = this._icoIGR.x + this._icoIGR.width >> 0;
+                    this._icoIGR.x = this._defaultVehicleFieldXPosition;
+                    this._vehicleNameTF.x = this._icoIGR.x + this._icoIGR.width + FIELD_WIDTH_COMPENSATION >> 0;
                 }
             }
-            else if (this._vehicleNameTF.getTextFormat().align != TextFormatAlign.RIGHT) {
-                this._vehicleNameTF.x = this._icoIGR.x;
+            else if (this._vehicleNameTF.getTextFormat().align == TextFormatAlign.RIGHT) {
+                this._vehicleNameTF.x = this._defaultVehicleFieldXPosition + this._defaultVehicleFieldWidth - this._vehicleNameTF.width >> 0;
+            }
+            else {
+                this._vehicleNameTF.x = this._defaultVehicleFieldXPosition;
             }
         }
     }

@@ -2,9 +2,9 @@ package net.wg.gui.prebattle.battleSession {
 import flash.display.MovieClip;
 import flash.text.TextField;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class RequirementInfo extends UIComponent {
+public class RequirementInfo extends UIComponentEx {
 
     public var flagList:FlagsList;
 

@@ -3,8 +3,8 @@ import flash.events.Event;
 import flash.text.TextField;
 
 import net.wg.data.constants.Linkages;
+import net.wg.gui.components.assets.interfaces.ISeparatorAsset;
 import net.wg.gui.components.controls.SoundButtonEx;
-import net.wg.gui.components.interfaces.ISeparatorAsset;
 import net.wg.gui.lobby.header.events.AccountPopoverEvent;
 import net.wg.gui.lobby.header.vo.AccountPopoverReferralBlockVO;
 import net.wg.infrastructure.base.UIComponentEx;

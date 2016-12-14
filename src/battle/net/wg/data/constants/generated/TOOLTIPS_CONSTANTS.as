@@ -195,6 +195,12 @@ public class TOOLTIPS_CONSTANTS {
 
     public static const VEHICLE_PREVIEW_CREW_MEMBER:String = "vehiclePreviewCrewMember";
 
+    public static const XMAS_TREE:String = "xmasTree";
+
+    public static const XMAS_INSTRUCTION:String = "xmasInstruction";
+
+    public static const XMAS_SLOT:String = "xmasSlot";
+
     public static const BLOCKS_DEFAULT_UI:String = "ToolTipInblocksDefaultUI";
 
     public static const TANKMEN_UI:String = "ToolTipTankmenUI";
@@ -314,6 +320,32 @@ public class TOOLTIPS_CONSTANTS {
     public static const VEHICLE_PARAMETERS_UI:String = "ToolTipInblocksDefaultUI";
 
     public static const VEHICLE_PREVIEW_CREW_MEMBER_UI:String = "ToolTipInblocksDefaultUI";
+
+    public static const SETTINGS_KEY_FOLLOW_ME:String = "SettingsKeyFollowMe";
+
+    public static const SETTINGS_KEY_FOLLOW_ME_UI:String = "ToolTipInblocksDefaultUI";
+
+    public static const SETTINGS_KEY_TURN_BACK:String = "SettingsKeyTurnBack";
+
+    public static const SETTINGS_KEY_TURN_BACK_UI:String = "ToolTipInblocksDefaultUI";
+
+    public static const SETTINGS_KEY_NEED_HELP:String = "SettingsKeyNeedHelp";
+
+    public static const SETTINGS_KEY_NEED_HELP_UI:String = "ToolTipInblocksDefaultUI";
+
+    public static const SETTINGS_KEY_RELOAD:String = "SettingsKeyReload";
+
+    public static const SETTINGS_KEY_RELOAD_UI:String = "ToolTipInblocksDefaultUI";
+
+    public static const SETTINGS_KEY_SWITCH_MODE:String = "SettingKeySwitchMode";
+
+    public static const SETTINGS_KEY_SWITCH_MODE_UI:String = "ToolTipInblocksDefaultUI";
+
+    public static const XMAS_TREE_UI:String = "ToolTipInblocksDefaultUI";
+
+    public static const XMAS_INSTRUCTION_UI:String = "ToolTipInblocksDefaultUI";
+
+    public static const XMAS_SLOT_UI:String = "ToolTipInblocksDefaultUI";
 
     public function TOOLTIPS_CONSTANTS() {
         super();

@@ -1,5 +1,6 @@
 package net.wg.gui.lobby.techtree.helpers {
 import net.wg.gui.lobby.techtree.controls.ExperienceInformation;
+import net.wg.gui.lobby.techtree.interfaces.IRenderer;
 
 public class ResearchGraphics extends ModulesGraphics {
 
@@ -22,7 +23,7 @@ public class ResearchGraphics extends ModulesGraphics {
 
     override public function setup():void {
         super.setup();
-        this.xpInfo.setOwner(rootRenderer);
+        this.xpInfo.setOwner(IRenderer(rootRenderer));
     }
 
     override protected function onDispose():void {

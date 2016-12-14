@@ -3,6 +3,8 @@ import flash.display.Sprite;
 
 import net.wg.data.constants.KeyProps;
 import net.wg.data.constants.Values;
+import net.wg.gui.components.controls.InfoIcon;
+import net.wg.gui.components.controls.constants.ToolTipShowType;
 import net.wg.gui.lobby.settings.components.evnts.KeyInputEvents;
 
 import scaleform.clik.controls.ListItemRenderer;
@@ -29,6 +31,8 @@ public class KeysItemRenderer extends ListItemRenderer {
     public var bg:Sprite;
 
     public var underline:Sprite;
+
+    public var infoIcon:InfoIcon;
 
     private var _header:Boolean;
 
@@ -106,6 +110,7 @@ public class KeysItemRenderer extends ListItemRenderer {
         constraintsDisabled = true;
         super.configUI();
         mouseChildren = true;
+        this.infoIcon.tooltipType = ToolTipShowType.SPECIAL;
         if (this.keyInput) {
             this.keyInput.addEventListener(KeyInputEvents.CHANGE, this.onKeyChangeHandler);
             this.keyInput.mouseEnabled = true;
@@ -120,6 +125,8 @@ public class KeysItemRenderer extends ListItemRenderer {
                 this.header = data.header;
                 this.keyInput.visible = !data.header;
                 this.underline.visible = data.showUnderline;
+                this.infoIcon.visible = data.tooltipID != null && data.tooltipID.length > 0;
+                this.infoIcon.tooltip = data.tooltipID;
                 this.label = data.label;
                 if (!this.header) {
                     this.keyInput.keys = data.keysRang;
@@ -181,6 +188,9 @@ public class KeysItemRenderer extends ListItemRenderer {
             this.height = this.actualHeight | 0;
             this.keyInput.y = this.height - this.keyInput.height >> 1;
             this.underline.y = this.actualHeight - this.underline.height | 0;
+            if (this.infoIcon.visible) {
+                this.infoIcon.x = textField.x + textField.textWidth + 7;
+            }
         }
     }
 

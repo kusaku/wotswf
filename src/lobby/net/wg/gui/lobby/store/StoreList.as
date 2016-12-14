@@ -17,8 +17,7 @@ public class StoreList extends ScrollingListEx {
     }
 
     private function onRendererMouseDownHandler(param1:MouseEvent):void {
-        var _loc2_:Number = (param1.currentTarget as IListItemRenderer).index;
-        selectedIndex = _loc2_;
+        selectedIndex = IListItemRenderer(param1.currentTarget).index;
     }
 
     override protected function cleanUpRenderer(param1:IListItemRenderer):void {

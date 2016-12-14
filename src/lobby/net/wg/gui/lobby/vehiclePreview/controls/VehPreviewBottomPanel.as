@@ -2,6 +2,7 @@ package net.wg.gui.lobby.vehiclePreview.controls {
 import flash.events.Event;
 import flash.text.TextField;
 
+import net.wg.gui.lobby.components.HeaderBackground;
 import net.wg.gui.lobby.modulesPanel.interfaces.IModulesPanel;
 import net.wg.gui.lobby.vehiclePreview.data.VehPreviewBottomPanelVO;
 import net.wg.gui.lobby.vehiclePreview.data.VehPreviewPriceDataVO;
@@ -22,7 +23,7 @@ public class VehPreviewBottomPanel extends UIComponentEx implements IVehPreviewB
 
     public var statusInfoTf:TextField;
 
-    public var background:VehPreviewBackground;
+    public var background:HeaderBackground;
 
     public var buyingLabelTf:TextField;
 

@@ -33,7 +33,7 @@ public class ImageManager extends ImageManagerMeta implements IImageManager {
         this._queue = new Vector.<ImageManager>();
     }
 
-    public function as_loadImages(param1:Array):void {
+    override protected function loadImages(param1:Array):void {
         var _loc3_:String = null;
         var _loc2_:ImageData = null;
         for each(_loc3_ in param1) {
@@ -61,7 +61,7 @@ public class ImageManager extends ImageManagerMeta implements IImageManager {
         this.initCache();
     }
 
-    public function as_unloadImages(param1:Array):void {
+    override protected function unloadImages(param1:Array):void {
         var _loc3_:String = null;
         var _loc2_:ImageData = null;
         for each(_loc3_ in param1) {

@@ -36,10 +36,6 @@ public class BasePrebattleRoomView extends BasePrebattleRoomViewMeta implements 
         throw new AbstractException("This method should be overriden");
     }
 
-    public function as_setRosterList(param1:int, param2:Boolean, param3:Array):void {
-        throw new AbstractException("This method should be overriden");
-    }
-
     public function as_refreshPermissions():void {
         throw new AbstractException("This method should be overriden");
     }

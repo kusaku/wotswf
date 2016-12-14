@@ -1,5 +1,4 @@
 package net.wg.gui.messenger.data {
-import net.wg.data.constants.UserTags;
 import net.wg.data.constants.Values;
 import net.wg.data.daapi.base.DAAPIDataClass;
 
@@ -8,10 +7,6 @@ public class ContactItemVO extends DAAPIDataClass {
     public static const USER_PROPS:String = "userProps";
 
     public var dbID:Number = 0;
-
-    public var isOnline:Boolean = false;
-
-    public var isColorBlind:Boolean = false;
 
     public var note:String = "";
 
@@ -46,10 +41,6 @@ public class ContactItemVO extends DAAPIDataClass {
 
     public function get userName():String {
         return !!this._userPropsVO ? this._userPropsVO.userName : Values.EMPTY_STR;
-    }
-
-    public function get isBusy():Boolean {
-        return !!this._userPropsVO ? Boolean(UserTags.isBusy(this._userPropsVO.tags)) : false;
     }
 }
 }

@@ -34,7 +34,6 @@ import net.wg.infrastructure.events.FocusRequestEvent;
 import net.wg.infrastructure.interfaces.IViewStackContent;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.events.IndexEvent;
 
@@ -166,9 +165,7 @@ public class BattleResults extends BattleResultsMeta implements IBattleResultsMe
 
     override protected function setData(param1:BattleResultsVO):void {
         this._data = param1;
-        var _loc2_:Array = App.utils.data.vectorToArray(param1.tabInfo);
-        this.tabs_mc.dataProvider = new DataProvider(_loc2_);
-        _loc2_.splice(0);
+        this.tabs_mc.dataProvider = param1.tabInfo;
         this.tabs_mc.selectedIndex = 0;
         this.tabs_mc.validateNow();
         setFocus(this.tabs_mc);

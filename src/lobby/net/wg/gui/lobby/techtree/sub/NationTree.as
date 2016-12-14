@@ -177,7 +177,7 @@ public class NationTree extends UIComponentEx implements INodesContainer, IDragg
             return;
         }
         super.draw();
-        if (isInvalid(InvalidationType.DATA)) {
+        if (this._dataProvider && isInvalid(InvalidationType.DATA)) {
             if (this.ntGraphics != null) {
                 this.ntGraphics.mouseEnabled = false;
                 this.ntGraphics.setup();

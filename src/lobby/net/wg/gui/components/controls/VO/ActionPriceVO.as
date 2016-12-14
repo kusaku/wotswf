@@ -1,7 +1,6 @@
 package net.wg.gui.components.controls.VO {
 import net.wg.data.constants.IconsTypes;
 import net.wg.data.daapi.base.DAAPIDataClass;
-import net.wg.utils.IAssertable;
 
 public class ActionPriceVO extends DAAPIDataClass {
 
@@ -51,15 +50,8 @@ public class ActionPriceVO extends DAAPIDataClass {
 
     private var _externalSign:String = "";
 
-    private var _data:Object = null;
-
-    public function ActionPriceVO(param1:Object) {
+    public function ActionPriceVO(param1:Object = null) {
         super(param1);
-    }
-
-    override public function fromHash(param1:Object):void {
-        super.fromHash(param1);
-        this._data = param1;
     }
 
     override protected function onDataWrite(param1:String, param2:Object):Boolean {
@@ -81,7 +73,6 @@ public class ActionPriceVO extends DAAPIDataClass {
     }
 
     override protected function onDispose():void {
-        this._data = null;
         this._states = null;
         this._oldPrices = null;
         this._newPrices = null;
@@ -226,8 +217,6 @@ public class ActionPriceVO extends DAAPIDataClass {
         if (this._forCredits == param1) {
             return;
         }
-        var _loc2_:IAssertable = App.utils.asserter;
-        _loc2_.assertNotNull(this._data, "forCredits must be set after parse data for VO", ActionPriceVO);
         this._forCredits = param1;
         this._ico = !!this._forCredits ? IconsTypes.CREDITS : IconsTypes.GOLD;
         this._newPrice = !!this._forCredits ? Number(this.newPrices[0]) : Number(this.newPrices[1]);

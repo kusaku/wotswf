@@ -174,7 +174,7 @@ public class BaseTeamSection extends UIComponentEx implements IBaseTeamSection {
         }
         _loc3_ = 0;
         while (_loc3_ < _loc4_) {
-            this.setSlotModel(_loc3_, this._rallyData.slotsArray[_loc3_] as IRallySlotVO);
+            this.setSlotModel(_loc3_, IRallySlotVO(this._rallyData.slotsArray[_loc3_]));
             _loc3_++;
         }
         this.updateTeamLabel();

@@ -5,7 +5,7 @@ import flash.geom.Point;
 import flash.text.TextField;
 
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
-import net.wg.gui.components.advanced.NewIndicator;
+import net.wg.gui.components.assets.NewIndicator;
 import net.wg.gui.components.controls.ActionPrice;
 import net.wg.gui.components.controls.Image;
 import net.wg.gui.components.controls.SoundButtonEx;

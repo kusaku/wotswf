@@ -4,9 +4,9 @@ import flash.events.MouseEvent;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
-import net.wg.gui.components.common.SeparatorConstants;
+import net.wg.gui.components.assets.data.SeparatorConstants;
+import net.wg.gui.components.assets.interfaces.ISeparatorAsset;
 import net.wg.gui.components.controls.Image;
-import net.wg.gui.components.interfaces.ISeparatorAsset;
 import net.wg.gui.interfaces.ISoundButtonEx;
 import net.wg.gui.lobby.vehicleCompare.data.VehicleModulesWindowInitDataVO;
 import net.wg.gui.lobby.vehicleCompare.events.VehicleModuleItemEvent;
@@ -22,7 +22,7 @@ public class VehicleModulesWindow extends VehicleModulesWindowMeta implements IV
 
     private static const INV_STATE:String = "InvState";
 
-    private static const WINDOW_WIDTH:int = 700;
+    private static const WINDOW_WIDTH:int = 790;
 
     private static const WINDOW_HEIGHT:int = 647;
 
@@ -109,6 +109,7 @@ public class VehicleModulesWindow extends VehicleModulesWindowMeta implements IV
         this.attentionIcon.removeEventListener(MouseEvent.ROLL_OVER, this.onAttentionIconRollOverHandler);
         this.attentionIcon.removeEventListener(MouseEvent.ROLL_OUT, this.onAttentionIconRollOutHandler);
         this.attentionIcon.removeEventListener(Event.CHANGE, this.onAttentionIconChangeHandler);
+        this.attentionIcon.dispose();
         this.attentionIcon = null;
         this.descriptionTF = null;
         this.stateTF = null;
@@ -158,7 +159,7 @@ public class VehicleModulesWindow extends VehicleModulesWindowMeta implements IV
         this.tree.invalidateNodesData(param1, param2);
     }
 
-    public function as_setNodesStates(param1:Array):void {
+    override protected function setNodesStates(param1:Array):void {
         this.tree.setNodesStates(param1);
     }
 

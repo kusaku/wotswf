@@ -34,12 +34,13 @@ public class SwitchModePanelMeta extends BaseDAAPIComponent {
         this.onSelectCheckBoxAutoSquad(param1);
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._switchModePanelVO) {
-            this._switchModePanelVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:SwitchModePanelVO = this._switchModePanelVO;
         this._switchModePanelVO = new SwitchModePanelVO(param1);
         this.setData(this._switchModePanelVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:SwitchModePanelVO):void {

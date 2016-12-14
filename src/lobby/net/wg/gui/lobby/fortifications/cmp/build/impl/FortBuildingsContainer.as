@@ -4,11 +4,10 @@ import net.wg.gui.fortBase.IFortBuilding;
 import net.wg.gui.fortBase.IFortBuildingsContainer;
 import net.wg.gui.fortBase.IFortModeVO;
 import net.wg.gui.lobby.fortifications.events.FortBuildingEvent;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
-import scaleform.clik.core.UIComponent;
-
-public class FortBuildingsContainer extends UIComponent implements IFortBuildingsContainer {
+public class FortBuildingsContainer extends UIComponentEx implements IFortBuildingsContainer {
 
     public var baseBuilding:IFortBuilding = null;
 

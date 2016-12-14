@@ -2,6 +2,7 @@ package net.wg.gui.components.controls {
 import flash.events.Event;
 import flash.events.MouseEvent;
 
+import net.wg.data.constants.Errors;
 import net.wg.gui.events.ListEventEx;
 
 import scaleform.clik.controls.CoreList;
@@ -99,6 +100,7 @@ public class CoreListEx extends CoreList {
     override protected function dispatchItemEvent(param1:Event):Boolean {
         var _loc3_:String = null;
         var _loc2_:IListItemRenderer = param1.currentTarget as IListItemRenderer;
+        App.utils.asserter.assertNotNull(_loc2_, "renderer" + Errors.CANT_NULL);
         if (_loc2_.getData() == null) {
             return false;
         }
@@ -157,7 +159,7 @@ public class CoreListEx extends CoreList {
     }
 
     private function dispatchItemClick(param1:Event, param2:uint):void {
-        var _loc3_:Number = (param1.currentTarget as IListItemRenderer).index;
+        var _loc3_:Number = IListItemRenderer(param1.currentTarget).index;
         if (isNaN(_loc3_)) {
             return;
         }

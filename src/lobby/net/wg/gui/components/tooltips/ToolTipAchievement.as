@@ -46,7 +46,7 @@ public class ToolTipAchievement extends ToolTipSpecial {
 
     private var counter:ICounterComponent = null;
 
-    private var flagsBlocks:Vector.<AchievementsCustomBlockItem> = null;
+    private var flagsBlocks:Vector.<net.wg.gui.components.tooltips.AchievementsCustomBlockItem> = null;
 
     private const TYPE_CLASS:String = "class";
 
@@ -89,7 +89,7 @@ public class ToolTipAchievement extends ToolTipSpecial {
     }
 
     override protected function onDispose():void {
-        var _loc1_:AchievementsCustomBlockItem = null;
+        var _loc1_:net.wg.gui.components.tooltips.AchievementsCustomBlockItem = null;
         if (content) {
             if (this.counter) {
                 content.removeChild(DisplayObject(this.counter));
@@ -130,7 +130,7 @@ public class ToolTipAchievement extends ToolTipSpecial {
         _loc4_ = 300;
         var _loc5_:AchievementVO = new AchievementVO(_data);
         blockResults = new Vector.<ToolTipBlockResultVO>();
-        this.flagsBlocks = new Vector.<AchievementsCustomBlockItem>();
+        this.flagsBlocks = new Vector.<net.wg.gui.components.tooltips.AchievementsCustomBlockItem>();
         topPosition = bgShadowMargin.top + contentMargin.top;
         var _loc6_:Number = bgShadowMargin.left + contentMargin.left;
         var _loc7_:Separator = null;
@@ -384,7 +384,7 @@ public class ToolTipAchievement extends ToolTipSpecial {
     }
 
     private function addCustomBlock(param1:MovieClip, param2:Object, param3:Number):Number {
-        var _loc4_:AchievementsCustomBlockItem = App.utils.classFactory.getComponent("AchievementsCustomBlockItem", AchievementsCustomBlockItem);
+        var _loc4_:net.wg.gui.components.tooltips.AchievementsCustomBlockItem = App.utils.classFactory.getComponent("AchievementsCustomBlockItem", net.wg.gui.components.tooltips.AchievementsCustomBlockItem);
         _loc4_.setData(param2);
         _loc4_.x = bgShadowMargin.left + contentMargin.left;
         _loc4_.y = param3;

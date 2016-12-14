@@ -50,8 +50,7 @@ public class VehicleMarkersList implements IVehicleMarkerAnimFinishedHandler, ID
     public function updateMarkers(param1:Vector.<DAAPIVehicleInfoVO>, param2:Vector.<Number>):void {
         var _loc4_:FCVehicleMarker = null;
         var _loc5_:DAAPIVehicleInfoVO = null;
-        var _loc3_:Vector.<DAAPIVehicleInfoVO> = param1.concat();
-        this.removeObserversFromVehicleInfos(_loc3_);
+        var _loc3_:Vector.<DAAPIVehicleInfoVO> = this.removeObserversFromVehicleInfos(param1);
         for each(_loc4_ in this._vehicleMarkers) {
             this._container.removeChild(_loc4_);
             _loc4_.dispose();
@@ -204,23 +203,22 @@ public class VehicleMarkersList implements IVehicleMarkerAnimFinishedHandler, ID
         this._classFactory = null;
     }
 
-    private function removeObserversFromVehicleInfos(param1:Vector.<DAAPIVehicleInfoVO>):void {
-        var _loc4_:int = 0;
+    private function removeObserversFromVehicleInfos(param1:Vector.<DAAPIVehicleInfoVO>):Vector.<DAAPIVehicleInfoVO> {
+        var _loc4_:DAAPIVehicleInfoVO = null;
         var _loc2_:int = -1;
-        var _loc3_:DAAPIVehicleInfoVO = null;
-        _loc4_ = 0;
-        while (_loc4_ < param1.length) {
-            _loc3_ = param1[_loc4_];
-            if (_loc3_.isObserver) {
-                _loc2_ = this._observerIDs.indexOf(_loc3_.vehicleID);
+        var _loc3_:Vector.<DAAPIVehicleInfoVO> = new Vector.<DAAPIVehicleInfoVO>(0);
+        for each(_loc4_ in param1) {
+            if (_loc4_.isObserver) {
+                _loc2_ = this._observerIDs.indexOf(_loc4_.vehicleID);
                 if (_loc2_ == -1) {
-                    this._observerIDs.push(_loc3_.vehicleID);
+                    this._observerIDs.push(_loc4_.vehicleID);
                 }
-                param1.splice(_loc4_, 1);
-                _loc4_--;
             }
-            _loc4_++;
+            else {
+                _loc3_.push(_loc4_);
+            }
         }
+        return _loc3_;
     }
 
     private function removeObserverFromVehicleInfo(param1:DAAPIVehicleInfoVO):Boolean {

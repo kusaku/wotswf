@@ -7,7 +7,7 @@ public interface IBattleComponentDataController {
 
     function addVehiclesInfo(param1:IDAAPIDataClass):void;
 
-    function updateVehiclesInfo(param1:IDAAPIDataClass):void;
+    function updateVehiclesData(param1:IDAAPIDataClass):void;
 
     function updateVehicleStatus(param1:IDAAPIDataClass):void;
 
@@ -15,7 +15,7 @@ public interface IBattleComponentDataController {
 
     function setVehicleStats(param1:IDAAPIDataClass):void;
 
-    function updateVehiclesStats(param1:IDAAPIDataClass):void;
+    function updateVehiclesStat(param1:IDAAPIDataClass):void;
 
     function updatePlayerStatus(param1:IDAAPIDataClass):void;
 

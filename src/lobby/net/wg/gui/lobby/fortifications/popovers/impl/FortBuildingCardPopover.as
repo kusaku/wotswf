@@ -4,7 +4,7 @@ import flash.display.MovieClip;
 import flash.geom.Point;
 
 import net.wg.data.utilData.TwoDimensionalPadding;
-import net.wg.gui.components.popOvers.PopOver;
+import net.wg.gui.components.popovers.PopOver;
 import net.wg.gui.lobby.fortifications.cmp.build.impl.BuildingIndicatorsCmp;
 import net.wg.gui.lobby.fortifications.data.BuildingCardPopoverVO;
 import net.wg.gui.lobby.fortifications.events.FortBuildingCardPopoverEvent;

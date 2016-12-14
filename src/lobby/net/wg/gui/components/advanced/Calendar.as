@@ -13,7 +13,6 @@ import net.wg.gui.interfaces.IDate;
 import net.wg.infrastructure.base.meta.ICalendarMeta;
 import net.wg.infrastructure.base.meta.impl.CalendarMeta;
 import net.wg.infrastructure.events.FocusRequestEvent;
-import net.wg.infrastructure.interfaces.entity.IDisposable;
 import net.wg.infrastructure.interfaces.entity.IFocusContainer;
 import net.wg.utils.IDateTime;
 
@@ -85,8 +84,6 @@ public class Calendar extends CalendarMeta implements ICalendarMeta, IFocusConta
 
     private var _dayVOClass:Class;
 
-    private var _rawMonthEvents:Array;
-
     private var _monthEvents:Array;
 
     private var _outOfBoundsTTHeader:String = "";
@@ -104,7 +101,6 @@ public class Calendar extends CalendarMeta implements ICalendarMeta, IFocusConta
     private var _componentForFocus:InteractiveObject;
 
     public function Calendar() {
-        this._rawMonthEvents = [];
         this._monthEvents = [];
         super();
         this._displayDate = App.utils.dateTime.now();
@@ -156,14 +152,10 @@ public class Calendar extends CalendarMeta implements ICalendarMeta, IFocusConta
         this.monthDaysContainer = null;
         this.headerSeparator = null;
         this._dayVOClass = null;
-        if (this._rawMonthEvents) {
-            this._rawMonthEvents.splice(0);
-            this._rawMonthEvents = null;
-        }
         if (this._componentForFocus) {
             this._componentForFocus = null;
         }
-        this.disposeMonthEvents();
+        this._monthEvents = null;
         this._displayDate = null;
         this._selectedDate = null;
         this._minAvailableDate = null;
@@ -197,10 +189,6 @@ public class Calendar extends CalendarMeta implements ICalendarMeta, IFocusConta
             this.redrawMonthDays();
             this.updateFocus();
         }
-        if (isInvalid(INVALID_MONTH_EVENTS)) {
-            this.tryToParseEvents();
-            this.applyEventsToDayRenderers();
-        }
         if (isInvalid(INVALID_MONTH_EVENTS, INVALID_DISPLAY_DATE)) {
             this.applyEventsToDayRenderers();
         }
@@ -233,9 +221,13 @@ public class Calendar extends CalendarMeta implements ICalendarMeta, IFocusConta
         this.minAvailableDate = App.utils.dateTime.fromPyTimestamp(param1);
     }
 
-    public function as_updateMonthEvents(param1:Array):void {
-        this._rawMonthEvents = param1;
+    override protected function updateMonthEvents(param1:Array):void {
+        this._monthEvents = param1;
         invalidate(INVALID_MONTH_EVENTS);
+    }
+
+    override protected function getObject(param1:Object):Object {
+        return new this._dayVOClass(param1);
     }
 
     public function getComponentForFocus():InteractiveObject {
@@ -263,16 +255,14 @@ public class Calendar extends CalendarMeta implements ICalendarMeta, IFocusConta
         var _loc2_:uint = App.utils.dateTime.getMonthDaysCount(this._displayDate);
         var _loc3_:int = 0;
         while (_loc3_ < _loc2_) {
-            _loc1_ = this.monthDaysContainer.getChildAt(_loc3_) as DayRenderer;
+            _loc1_ = DayRenderer(this.monthDaysContainer.getChildAt(_loc3_));
             _loc1_.data = null;
             _loc3_++;
         }
-        if (this._monthEvents && this._monthEvents.length > 0) {
-            for each(_loc4_ in this._monthEvents) {
-                _loc1_ = this.getRendererByDate(_loc4_.date);
-                if (_loc1_) {
-                    _loc1_.data = _loc4_;
-                }
+        for each(_loc4_ in this._monthEvents) {
+            _loc1_ = this.getRendererByDate(_loc4_.date);
+            if (_loc1_) {
+                _loc1_.data = _loc4_;
             }
         }
     }
@@ -285,7 +275,7 @@ public class Calendar extends CalendarMeta implements ICalendarMeta, IFocusConta
         var _loc5_:Boolean = true;
         var _loc6_:int = 0;
         while (_loc6_ < _loc2_) {
-            _loc3_ = this.monthDaysContainer.getChildAt(_loc6_) as DayRenderer;
+            _loc3_ = DayRenderer(this.monthDaysContainer.getChildAt(_loc6_));
             _loc4_ = _loc3_.date;
             _loc5_ = true;
             if (this._minAvailableDate) {
@@ -310,7 +300,7 @@ public class Calendar extends CalendarMeta implements ICalendarMeta, IFocusConta
         var _loc2_:uint = App.utils.dateTime.now().day;
         var _loc4_:int = 0;
         while (_loc4_ < this.weekDaysContainer.numChildren) {
-            _loc3_ = this.weekDaysContainer.getChildAt(_loc4_) as WeekDayRenderer;
+            _loc3_ = WeekDayRenderer(this.weekDaysContainer.getChildAt(_loc4_));
             if (_loc1_) {
                 if (this.getDayNumByColumn(_loc4_) == _loc2_) {
                     _loc3_.state = WeekDayRenderer.STATE_HIGHLIGHTED;
@@ -344,7 +334,7 @@ public class Calendar extends CalendarMeta implements ICalendarMeta, IFocusConta
     private function clearWeekDays():void {
         var _loc1_:WeekDayRenderer = null;
         while (this.weekDaysContainer.numChildren) {
-            _loc1_ = this.weekDaysContainer.getChildAt(0) as WeekDayRenderer;
+            _loc1_ = WeekDayRenderer(this.weekDaysContainer.getChildAt(0));
             this.weekDaysContainer.removeChild(_loc1_);
         }
     }
@@ -378,38 +368,12 @@ public class Calendar extends CalendarMeta implements ICalendarMeta, IFocusConta
             this._selectedRenderer = null;
         }
         while (this.monthDaysContainer.numChildren) {
-            _loc1_ = this.monthDaysContainer.getChildAt(0) as DayRenderer;
+            _loc1_ = DayRenderer(this.monthDaysContainer.getChildAt(0));
             _loc1_.removeEventListener(ButtonEvent.CLICK, this.onDayClick);
             _loc1_.removeEventListener(MouseEvent.ROLL_OVER, this.onDayOver);
             _loc1_.removeEventListener(MouseEvent.ROLL_OUT, this.onDayOut);
             this.monthDaysContainer.removeChild(_loc1_);
             _loc1_.dispose();
-        }
-    }
-
-    private function tryToParseEvents():void {
-        var _loc1_:Object = null;
-        var _loc2_:* = undefined;
-        this.disposeMonthEvents();
-        if (this._rawMonthEvents && this._dayVOClass) {
-            this._monthEvents = [];
-            for each(_loc1_ in this._rawMonthEvents) {
-                _loc2_ = new this._dayVOClass(_loc1_);
-                this._monthEvents.push(_loc2_);
-            }
-        }
-    }
-
-    private function disposeMonthEvents():void {
-        var _loc1_:IDisposable = null;
-        if (this._monthEvents) {
-            for each(_loc1_ in this._monthEvents) {
-                if (_loc1_) {
-                    _loc1_.dispose();
-                }
-            }
-            this._monthEvents.splice(0);
-            this._monthEvents = null;
         }
     }
 
@@ -453,7 +417,7 @@ public class Calendar extends CalendarMeta implements ICalendarMeta, IFocusConta
     private function getRendererByDate(param1:Date):DayRenderer {
         var _loc2_:DayRenderer = null;
         if (param1 && App.utils.dateTime.isSameMonth(this._displayDate, param1)) {
-            _loc2_ = this.monthDaysContainer.getChildAt(int(param1.date - 1)) as DayRenderer;
+            _loc2_ = DayRenderer(this.monthDaysContainer.getChildAt(int(param1.date - 1)));
         }
         return _loc2_;
     }
@@ -494,7 +458,7 @@ public class Calendar extends CalendarMeta implements ICalendarMeta, IFocusConta
         var _loc3_:int = 0;
         var _loc4_:int = this.monthDaysContainer.numChildren;
         while (_loc3_ < _loc4_) {
-            _loc1_ = this.monthDaysContainer.getChildAt(_loc3_) as DayRenderer;
+            _loc1_ = DayRenderer(this.monthDaysContainer.getChildAt(_loc3_));
             if (_loc1_.focused) {
                 _loc2_ = _loc1_;
                 break;
@@ -507,7 +471,7 @@ public class Calendar extends CalendarMeta implements ICalendarMeta, IFocusConta
     private function getFirstMonthDayRenderer():DayRenderer {
         var _loc1_:DayRenderer = null;
         if (this.monthDaysContainer.numChildren > 0) {
-            _loc1_ = this.monthDaysContainer.getChildAt(0) as DayRenderer;
+            _loc1_ = DayRenderer(this.monthDaysContainer.getChildAt(0));
         }
         return _loc1_;
     }
@@ -515,7 +479,7 @@ public class Calendar extends CalendarMeta implements ICalendarMeta, IFocusConta
     private function getLastMonthDayRenderer():DayRenderer {
         var _loc1_:DayRenderer = null;
         if (this.monthDaysContainer.numChildren > 0) {
-            _loc1_ = this.monthDaysContainer.getChildAt(this.monthDaysContainer.numChildren - 1) as DayRenderer;
+            _loc1_ = DayRenderer(this.monthDaysContainer.getChildAt(this.monthDaysContainer.numChildren - 1));
         }
         return _loc1_;
     }
@@ -782,7 +746,7 @@ public class Calendar extends CalendarMeta implements ICalendarMeta, IFocusConta
     }
 
     private function onDayClick(param1:ButtonEvent):void {
-        var _loc2_:DayRenderer = param1.currentTarget as DayRenderer;
+        var _loc2_:DayRenderer = DayRenderer(param1.currentTarget);
         this.selectedDate = App.utils.dateTime.cloneDate(_loc2_.date);
         this.dispatchCalendarEvent(CalendarEvent.DAY_SELECTED);
         if (isDAAPIInited) {
@@ -794,7 +758,7 @@ public class Calendar extends CalendarMeta implements ICalendarMeta, IFocusConta
         if (!this._outOfBoundsTTHeader || !this._outOfBoundsTTBody) {
             return;
         }
-        var _loc2_:Date = (param1.currentTarget as DayRenderer).date;
+        var _loc2_:Date = DayRenderer(param1.currentTarget).date;
         var _loc3_:IDateTime = App.utils.dateTime;
         var _loc4_:Boolean = false;
         var _loc5_:Boolean = false;

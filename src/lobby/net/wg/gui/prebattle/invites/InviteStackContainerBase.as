@@ -4,16 +4,16 @@ import flash.display.InteractiveObject;
 import net.wg.data.daapi.base.DAAPIDataProvider;
 import net.wg.gui.components.controls.ScrollingListEx;
 import net.wg.gui.events.ListEventEx;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.IViewStackContent;
 
 import scaleform.clik.constants.ConstrainMode;
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.interfaces.IDataProvider;
 import scaleform.clik.utils.Constraints;
 import scaleform.gfx.MouseEventEx;
 
-public class InviteStackContainerBase extends UIComponent implements IViewStackContent {
+public class InviteStackContainerBase extends UIComponentEx implements IViewStackContent {
 
     public var rosterList:ScrollingListEx;
 

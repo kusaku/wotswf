@@ -4,15 +4,15 @@ import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
 import net.wg.data.constants.Directions;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.IDynamicContent;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 import net.wg.utils.helpLayout.HelpLayoutVO;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.utils.Padding;
 
-public class HelpLayoutControl extends UIComponent implements IDynamicContent, IDisposable {
+public class HelpLayoutControl extends UIComponentEx implements IDynamicContent, IDisposable {
 
     private static var _SHADOW_PADDING_OUTSIDE:Padding = new Padding(22, 22, 22, 22);
 

@@ -1233,9 +1233,41 @@ package
       
       public static const EMBLEM_GROUP24_SPECIAL_96:String = "#vehicle_customization:emblem/group24/special_96";
       
+      public static const EMBLEM_GROUP25_SPECIAL_100:String = "#vehicle_customization:emblem/group25/special_100";
+      
+      public static const EMBLEM_GROUP25_SPECIAL_101:String = "#vehicle_customization:emblem/group25/special_101";
+      
+      public static const EMBLEM_GROUP25_SPECIAL_102:String = "#vehicle_customization:emblem/group25/special_102";
+      
+      public static const EMBLEM_GROUP25_SPECIAL_103:String = "#vehicle_customization:emblem/group25/special_103";
+      
+      public static const EMBLEM_GROUP25_SPECIAL_104:String = "#vehicle_customization:emblem/group25/special_104";
+      
       public static const EMBLEM_M41_ASIA:String = "#vehicle_customization:emblem/M41_asia";
       
       public static const EMBLEM_GROUP9_ASIA_11:String = "#vehicle_customization:emblem/group9/asia_11";
+      
+      public static const EMBLEM_GROUP26_SPECIAL_110:String = "#vehicle_customization:emblem/group26/special_110";
+      
+      public static const EMBLEM_GROUP27_SPECIAL_201:String = "#vehicle_customization:emblem/group27/special_201";
+      
+      public static const EMBLEM_GROUP27_SPECIAL_202:String = "#vehicle_customization:emblem/group27/special_202";
+      
+      public static const EMBLEM_GROUP27_SPECIAL_203:String = "#vehicle_customization:emblem/group27/special_203";
+      
+      public static const EMBLEM_GROUP27_SPECIAL_204:String = "#vehicle_customization:emblem/group27/special_204";
+      
+      public static const EMBLEM_GROUP27_SPECIAL_205:String = "#vehicle_customization:emblem/group27/special_205";
+      
+      public static const EMBLEM_GROUP27_SPECIAL_206:String = "#vehicle_customization:emblem/group27/special_206";
+      
+      public static const EMBLEM_GROUP27_SPECIAL_207:String = "#vehicle_customization:emblem/group27/special_207";
+      
+      public static const EMBLEM_GROUP27_SPECIAL_208:String = "#vehicle_customization:emblem/group27/special_208";
+      
+      public static const EMBLEM_GROUP27_SPECIAL_209:String = "#vehicle_customization:emblem/group27/special_209";
+      
+      public static const EMBLEM_GROUP27_SPECIAL_210:String = "#vehicle_customization:emblem/group27/special_210";
       
       public static const INSCRIPTION:String = "#vehicle_customization:inscription";
       

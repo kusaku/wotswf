@@ -9,22 +9,22 @@ public class FortListMeta extends BaseRallyListView {
 
     public var changeDivisionIndex:Function;
 
-    private var _normalSortingTableHeaderVO:NormalSortingTableHeaderVO;
-
     private var _fortRegulationInfoVO:FortRegulationInfoVO;
+
+    private var _normalSortingTableHeaderVO:NormalSortingTableHeaderVO;
 
     public function FortListMeta() {
         super();
     }
 
     override protected function onDispose():void {
-        if (this._normalSortingTableHeaderVO) {
-            this._normalSortingTableHeaderVO.dispose();
-            this._normalSortingTableHeaderVO = null;
-        }
         if (this._fortRegulationInfoVO) {
             this._fortRegulationInfoVO.dispose();
             this._fortRegulationInfoVO = null;
+        }
+        if (this._normalSortingTableHeaderVO) {
+            this._normalSortingTableHeaderVO.dispose();
+            this._normalSortingTableHeaderVO = null;
         }
         super.onDispose();
     }
@@ -34,20 +34,22 @@ public class FortListMeta extends BaseRallyListView {
         this.changeDivisionIndex(param1);
     }
 
-    public function as_setRegulationInfo(param1:Object):void {
-        if (this._fortRegulationInfoVO) {
-            this._fortRegulationInfoVO.dispose();
-        }
+    public final function as_setRegulationInfo(param1:Object):void {
+        var _loc2_:FortRegulationInfoVO = this._fortRegulationInfoVO;
         this._fortRegulationInfoVO = new FortRegulationInfoVO(param1);
         this.setRegulationInfo(this._fortRegulationInfoVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setTableHeader(param1:Object):void {
-        if (this._normalSortingTableHeaderVO) {
-            this._normalSortingTableHeaderVO.dispose();
-        }
+    public final function as_setTableHeader(param1:Object):void {
+        var _loc2_:NormalSortingTableHeaderVO = this._normalSortingTableHeaderVO;
         this._normalSortingTableHeaderVO = new NormalSortingTableHeaderVO(param1);
         this.setTableHeader(this._normalSortingTableHeaderVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setRegulationInfo(param1:FortRegulationInfoVO):void {

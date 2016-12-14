@@ -3,11 +3,11 @@ import flash.display.DisplayObject;
 import flash.events.Event;
 
 import net.wg.gui.lobby.interfaces.ISubtaskComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class SubtasksList extends UIComponent {
+public class SubtasksList extends UIComponentEx {
 
     private static const DISABLED_QUESTS:String = "disabledQuests";
 

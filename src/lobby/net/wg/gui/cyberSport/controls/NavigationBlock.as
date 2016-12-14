@@ -6,11 +6,11 @@ import net.wg.gui.components.controls.ButtonIconTextTransparent;
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.cyberSport.controls.events.CSComponentEvent;
 import net.wg.gui.cyberSport.vo.NavigationBlockVO;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class NavigationBlock extends UIComponent {
+public class NavigationBlock extends UIComponentEx {
 
     public var previousButton:ButtonIconTextTransparent;
 

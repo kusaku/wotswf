@@ -16,7 +16,9 @@ public class ScreenSettingsForm extends UIComponentEx {
 
     public var monitorDropDown:DropdownMenu = null;
 
-    public var fullScreenCheckbox:CheckBox = null;
+    public var screenModeLabel:LabelControl = null;
+
+    public var screenModeDropDown:DropdownMenu = null;
 
     public var sizesLabel:LabelControl = null;
 
@@ -82,7 +84,7 @@ public class ScreenSettingsForm extends UIComponentEx {
 
     private function initTexts():void {
         this.monitorLabel.text = SETTINGS.MONITOR;
-        this.fullScreenCheckbox.label = SETTINGS.FULLSCREEN;
+        this.screenModeLabel.text = SETTINGS.SCREENMODE_LABEL;
         this.vertSyncCheckbox.label = SETTINGS.VERTSYNC;
         this.aspectRatioLabel.text = SETTINGS.ASPECTRATIO;
         this.interfaceScaleLabel.text = SETTINGS.INTERFACESCALE;
@@ -110,8 +112,9 @@ public class ScreenSettingsForm extends UIComponentEx {
 
     override protected function onDispose():void {
         this.monitorLabel.dispose();
+        this.screenModeLabel.dispose();
         this.monitorDropDown.dispose();
-        this.fullScreenCheckbox.dispose();
+        this.screenModeDropDown.dispose();
         this.sizesLabel.dispose();
         this.sizesDropDown.dispose();
         this.refreshRateLabel.dispose();
@@ -140,8 +143,9 @@ public class ScreenSettingsForm extends UIComponentEx {
         this.HAVOK_ENABLEDLabel.dispose();
         this.HAVOK_ENABLEDDropDown.dispose();
         this.monitorLabel = null;
+        this.screenModeLabel = null;
         this.monitorDropDown = null;
-        this.fullScreenCheckbox = null;
+        this.screenModeDropDown = null;
         this.sizesLabel = null;
         this.sizesDropDown = null;
         this.refreshRateLabel = null;

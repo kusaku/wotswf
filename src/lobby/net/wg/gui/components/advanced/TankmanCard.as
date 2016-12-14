@@ -56,10 +56,7 @@ public class TankmanCard extends UIComponentEx {
     }
 
     override protected function onDispose():void {
-        if (this._model) {
-            this._model.dispose();
-            this._model = null;
-        }
+        this._model = null;
         this.faceIcon.dispose();
         this.faceIcon = null;
         this.rankIcon.dispose();
@@ -78,28 +75,26 @@ public class TankmanCard extends UIComponentEx {
 
     override protected function draw():void {
         super.draw();
-        if (isInvalid(InvalidationType.DATA)) {
-            if (this._model) {
-                this.rankTF.htmlText = this._model.rank;
-                this.nameTF.htmlText = this._model.name;
-                if (this._model.vehicle != null && this._model.vehicle != Values.EMPTY_STR) {
-                    this.vehicleTF.htmlText = this._model.vehicle;
-                    this.vehicleLabelTF.visible = this.vehicleTF.visible = true;
-                }
-                else {
-                    this.vehicleLabelTF.visible = this.vehicleTF.visible = false;
-                }
-                this.backFlag.gotoAndPlay(this._model.nation);
-                this.faceIcon.source = this._model.faceIcon;
-                this.rankIcon.source = this._model.rankIcon;
-                if (this._model.roleIcon.length > 0) {
-                    this.roleIcon.visible = true;
-                    this.roleIcon.source = this._model.roleIcon;
-                    this.roleIcon.x = this.vehicleTF.x + this.vehicleTF.textWidth + ROLE_ICON_OFFSET;
-                }
-                else {
-                    this.roleIcon.visible = false;
-                }
+        if (this._model && isInvalid(InvalidationType.DATA)) {
+            this.rankTF.htmlText = this._model.rank;
+            this.nameTF.htmlText = this._model.name;
+            if (this._model.vehicle != null && this._model.vehicle != Values.EMPTY_STR) {
+                this.vehicleTF.htmlText = this._model.vehicle;
+                this.vehicleLabelTF.visible = this.vehicleTF.visible = true;
+            }
+            else {
+                this.vehicleLabelTF.visible = this.vehicleTF.visible = false;
+            }
+            this.backFlag.gotoAndPlay(this._model.nation);
+            this.faceIcon.source = this._model.faceIcon;
+            this.rankIcon.source = this._model.rankIcon;
+            if (this._model.roleIcon.length > 0) {
+                this.roleIcon.visible = true;
+                this.roleIcon.source = this._model.roleIcon;
+                this.roleIcon.x = this.vehicleTF.x + this.vehicleTF.textWidth + ROLE_ICON_OFFSET;
+            }
+            else {
+                this.roleIcon.visible = false;
             }
         }
     }

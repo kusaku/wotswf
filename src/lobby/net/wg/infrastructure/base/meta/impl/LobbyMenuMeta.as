@@ -69,12 +69,13 @@ public class LobbyMenuMeta extends AbstractWindowView {
         this.onCounterNeedUpdate();
     }
 
-    public function as_setVersionMessage(param1:Object):void {
-        if (this._versionMessageVO) {
-            this._versionMessageVO.dispose();
-        }
+    public final function as_setVersionMessage(param1:Object):void {
+        var _loc2_:VersionMessageVO = this._versionMessageVO;
         this._versionMessageVO = new VersionMessageVO(param1);
         this.setVersionMessage(this._versionMessageVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setVersionMessage(param1:VersionMessageVO):void {

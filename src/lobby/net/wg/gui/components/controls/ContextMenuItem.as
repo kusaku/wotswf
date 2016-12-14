@@ -53,6 +53,8 @@ public class ContextMenuItem extends SoundListItemRenderer {
 
     private var _iconType:String = "";
 
+    private var _textColor:int = -1;
+
     public const CONTEXT_MENU_ITEM_SUB:String = "sub";
 
     public const CONTEXT_MENU_ITEM_GROUP:String = "group";
@@ -84,7 +86,7 @@ public class ContextMenuItem extends SoundListItemRenderer {
                 this.circleMc.visible = false;
                 textField.visible = true;
                 this.textFieldSub.visible = false;
-                this.iconsMc.visible = this._iconType;
+                this.iconsMc.visible = Boolean(this._iconType);
                 break;
             case this.CONTEXT_MENU_ITEM_GROUP:
                 this.arrowMc.visible = true;
@@ -127,9 +129,13 @@ public class ContextMenuItem extends SoundListItemRenderer {
     }
 
     override protected function updateText():void {
-        super.updateText();
-        if (_label != null && this.textFieldSub != null) {
-            this.textFieldSub.text = _label;
+        if (_label != null) {
+            if (textField && textField.visible) {
+                this.applyText(textField, _label);
+            }
+            if (this.textFieldSub && this.textFieldSub.visible) {
+                this.applyText(this.textFieldSub, _label);
+            }
         }
     }
 
@@ -233,6 +239,25 @@ public class ContextMenuItem extends SoundListItemRenderer {
         }
         else {
             this.iconsMc.visible = false;
+        }
+    }
+
+    public function get textColor():int {
+        return this._textColor;
+    }
+
+    public function set textColor(param1:int):void {
+        if (param1 == this._textColor) {
+            return;
+        }
+        this._textColor = param1;
+        this.updateText();
+    }
+
+    private function applyText(param1:TextField, param2:String):void {
+        param1.text = param2;
+        if (this._textColor >= 0) {
+            param1.textColor = this._textColor;
         }
     }
 }

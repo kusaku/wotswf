@@ -5,12 +5,12 @@ import flash.text.TextField;
 import net.wg.gui.components.controls.TextFieldShort;
 import net.wg.gui.fortBase.events.FortInitEvent;
 import net.wg.gui.interfaces.ISoundButtonEx;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.entity.IFocusContainer;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class FortWelcomeCommanderContent extends UIComponent implements IFocusContainer {
+public class FortWelcomeCommanderContent extends UIComponentEx implements IFocusContainer {
 
     public var windowTitle:TextFieldShort = null;
 

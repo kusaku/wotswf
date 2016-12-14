@@ -1,8 +1,9 @@
 package net.wg.gui.components.advanced {
-import scaleform.clik.controls.StatusIndicator;
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class DoubleProgressBar extends UIComponent {
+import scaleform.clik.controls.StatusIndicator;
+
+public class DoubleProgressBar extends UIComponentEx {
 
     public var frontBar:StatusIndicator;
 

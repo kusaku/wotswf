@@ -7,6 +7,7 @@ import net.wg.data.constants.UserTags;
 import net.wg.gui.components.controls.SoundListItemRenderer;
 import net.wg.gui.components.controls.VoiceWave;
 import net.wg.gui.messenger.data.ChannelMemberVO;
+import net.wg.infrastructure.interfaces.IUserProps;
 
 import scaleform.clik.constants.InvalidationType;
 
@@ -83,16 +84,12 @@ public class MemberItemRenderer extends SoundListItemRenderer {
         super.draw();
     }
 
-    override protected function updateAfterStateChange():void {
-        super.updateAfterStateChange();
-        if (this.model != null) {
-            textField.textColor = this.model.color;
-        }
-    }
-
     override protected function updateText():void {
+        var _loc1_:IUserProps = null;
         if (textField != null && this.model != null && this.model.userName) {
-            App.utils.commons.formatPlayerName(textField, App.utils.commons.getUserProps(this.model.userName, "", "", 0, this.model.tags));
+            _loc1_ = App.utils.commons.getUserProps(this.model.userName, "", "", 0, this.model.tags);
+            _loc1_.rgb = this.model.color;
+            App.utils.commons.formatPlayerName(textField, _loc1_);
         }
     }
 

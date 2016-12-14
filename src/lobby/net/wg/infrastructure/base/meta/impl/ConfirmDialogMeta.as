@@ -27,12 +27,13 @@ public class ConfirmDialogMeta extends AbstractWindowView {
         this.submit(param1);
     }
 
-    public function as_setSettings(param1:Object):void {
-        if (this._confirmDialogVO) {
-            this._confirmDialogVO.dispose();
-        }
+    public final function as_setSettings(param1:Object):void {
+        var _loc2_:ConfirmDialogVO = this._confirmDialogVO;
         this._confirmDialogVO = new ConfirmDialogVO(param1);
         this.setSettings(this._confirmDialogVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setSettings(param1:ConfirmDialogVO):void {

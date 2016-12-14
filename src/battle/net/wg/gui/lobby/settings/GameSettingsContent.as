@@ -1,5 +1,4 @@
 package net.wg.gui.lobby.settings {
-import flash.events.MouseEvent;
 import flash.text.TextField;
 
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
@@ -9,6 +8,7 @@ import net.wg.gui.components.controls.DropdownMenu;
 import net.wg.gui.components.controls.InfoIcon;
 import net.wg.gui.components.controls.LabelControl;
 import net.wg.gui.components.controls.Slider;
+import net.wg.gui.components.controls.constants.ToolTipShowType;
 import net.wg.gui.lobby.settings.components.RadioButtonBar;
 import net.wg.infrastructure.base.UIComponentEx;
 
@@ -117,8 +117,8 @@ public class GameSettingsContent extends UIComponentEx {
         this.fieldSetMinimap.label = SETTINGS.GAME_MINIMAPGROUPTITLE;
         var _loc1_:TextField = this.fieldSetMinimap.textField;
         this.minimapCirclesInfo.x = this.fieldSetMinimap.x + _loc1_.x + _loc1_.textWidth + MINIMAP_CIRCLE_INFO_LEFT_PADDING;
-        this.minimapCirclesInfo.addEventListener(MouseEvent.MOUSE_OVER, this.onMinimapCirclesInfoMouseOverHandler);
-        this.minimapCirclesInfo.addEventListener(MouseEvent.MOUSE_OUT, this.onMinimapCirclesInfoMouseOutHandler);
+        this.minimapCirclesInfo.tooltipType = ToolTipShowType.SPECIAL;
+        this.minimapCirclesInfo.tooltip = TOOLTIPS_CONSTANTS.SETTINGS_MINIMAP_CIRCLES;
         this.enableOlFilterCheckbox.label = SETTINGS.CHAT_CENSORSHIPMESSAGES;
         this.enableSpamFilterCheckbox.label = SETTINGS.CHAT_REMOVESPAM;
         this.showDateMessageCheckbox.label = SETTINGS.CHAT_SHOWDATEMESSAGE;
@@ -139,6 +139,9 @@ public class GameSettingsContent extends UIComponentEx {
         this.disableBattleChatCheckbox.label = SETTINGS.CHAT_DISABLEBATTLECHAT;
         this.disableBattleChatCheckbox.toolTip = TOOLTIPS.TURNOFFCOMBATCHAT;
         this.disableBattleChatCheckbox.infoIcoType = InfoIcon.TYPE_INFO;
+        this.enablePostMortemEffectCheckbox.label = SETTINGS.GAME_ENABLEMORTALPOSTEFFECT;
+        this.enablePostMortemEffectCheckbox.toolTip = TOOLTIPS.ENABLEPOSTMORTEMEFFECT;
+        this.enablePostMortemEffectCheckbox.infoIcoType = InfoIcon.TYPE_INFO;
         this.ppShowLevelsCheckbox.label = SETTINGS.GAME_PPSHOWLEVELS;
         this.gameplay_ctfCheckbox.label = SETTINGS.GAMEPLAY_CTF;
         this.gameplay_dominationCheckbox.label = SETTINGS.GAMEPLAY_DOMINATION;
@@ -148,7 +151,6 @@ public class GameSettingsContent extends UIComponentEx {
         this.battleLoadingInfoLabelControl.infoIcoType = InfoIcon.TYPE_INFO;
         this.minimapAlphaSliderLabel.text = SETTINGS.MINIMAP_LABELS_ALPHA;
         this.enableOpticalSnpEffectCheckbox.label = SETTINGS.GAME_ENABLEOPTICALSNPEFFECT;
-        this.enablePostMortemEffectCheckbox.label = SETTINGS.GAME_ENABLEMORTALPOSTEFFECT;
         this.enablePostMortemDelayCheckbox.label = SETTINGS.GAME_ENABLEDELAYPOSTEFFECT;
         this.dynamicCameraCheckbox.label = SETTINGS.GAME_DYNAMICCAMERA;
         this.horStabilizationSnpCheckbox.label = SETTINGS.GAME_HORSTABILIZATIONSNP;
@@ -188,8 +190,6 @@ public class GameSettingsContent extends UIComponentEx {
         this.fieldSetBattleTypes = null;
         this.fieldSetMinimap.dispose();
         this.fieldSetMinimap = null;
-        this.minimapCirclesInfo.removeEventListener(MouseEvent.MOUSE_OVER, this.onMinimapCirclesInfoMouseOverHandler);
-        this.minimapCirclesInfo.removeEventListener(MouseEvent.MOUSE_OUT, this.onMinimapCirclesInfoMouseOutHandler);
         this.minimapCirclesInfo.dispose();
         this.minimapCirclesInfo = null;
         this.enableOlFilterCheckbox.dispose();
@@ -271,14 +271,6 @@ public class GameSettingsContent extends UIComponentEx {
         this.carouselTypeButtonBar.dispose();
         this.carouselTypeButtonBar = null;
         super.onDispose();
-    }
-
-    private function onMinimapCirclesInfoMouseOutHandler(param1:MouseEvent):void {
-        App.toolTipMgr.hide();
-    }
-
-    private function onMinimapCirclesInfoMouseOverHandler(param1:MouseEvent):void {
-        App.toolTipMgr.showSpecial(TOOLTIPS_CONSTANTS.SETTINGS_MINIMAP_CIRCLES, null);
     }
 }
 }

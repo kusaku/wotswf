@@ -104,7 +104,6 @@ public class MessageListDAAPI extends BattleMessageListMeta implements IBattleMe
                                 break loop0;
                         }
                     }
-            param1.dispose();
             return;
         }
         throw new Exception(POOL_COLOR_ERROR + _loc2_);

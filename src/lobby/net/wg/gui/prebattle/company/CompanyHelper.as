@@ -30,7 +30,6 @@ public class CompanyHelper {
     }
 }
 }
-
 class PrivateClass {
 
     function PrivateClass() {

@@ -5,16 +5,16 @@ import flash.events.MouseEvent;
 
 import net.wg.gui.components.controls.ScrollingListEx;
 import net.wg.gui.components.controls.TextInput;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InputValue;
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.InputEvent;
 import scaleform.clik.events.ListEvent;
 import scaleform.clik.interfaces.IDataProvider;
 
-public class PersonalCaseInputList extends UIComponent {
+public class PersonalCaseInputList extends UIComponentEx {
 
     public static const NAME_SELECTED:String = "nameSelected";
 

@@ -122,8 +122,8 @@ public class ReferralManagementWindow extends ReferralManagementWindowMeta imple
         this.awardReceivedBlock.visible = false;
     }
 
-    public function as_setTableData(param1:Array):void {
-        this.referralsTable.listDP = new DataProvider(param1);
+    override protected function setTableData(param1:DataProvider):void {
+        this.referralsTable.listDP = param1;
     }
 
     public function as_showAlert(param1:String):void {

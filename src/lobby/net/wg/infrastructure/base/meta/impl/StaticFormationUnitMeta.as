@@ -41,12 +41,13 @@ public class StaticFormationUnitMeta extends BaseRallyRoomViewWithWaiting {
         this.showTeamCard();
     }
 
-    public function as_setHeaderData(param1:Object):void {
-        if (this._staticFormationUnitViewHeaderVO) {
-            this._staticFormationUnitViewHeaderVO.dispose();
-        }
+    public final function as_setHeaderData(param1:Object):void {
+        var _loc2_:StaticFormationUnitViewHeaderVO = this._staticFormationUnitViewHeaderVO;
         this._staticFormationUnitViewHeaderVO = new StaticFormationUnitViewHeaderVO(param1);
         this.setHeaderData(this._staticFormationUnitViewHeaderVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setHeaderData(param1:StaticFormationUnitViewHeaderVO):void {

@@ -37,6 +37,15 @@ public class TextParameterBlock extends AbstractTextParameterBlock {
             this.nameTF.x = valueTF.width + _data.gap;
         }
         updateTextFieldHeight(this.nameTF);
+        updateTextFieldHeight(valueTF);
+        if (_data.vertCentred) {
+            if (valueTF.height > this.nameTF.height) {
+                this.nameTF.y = valueTF.height - this.nameTF.height >> 1;
+            }
+            else {
+                valueTF.y = this.nameTF.y - valueTF.height >> 1;
+            }
+        }
     }
 }
 }

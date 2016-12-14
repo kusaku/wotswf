@@ -8,12 +8,12 @@ import net.wg.gui.components.advanced.ContentTabBar;
 import net.wg.gui.lobby.components.ProgressIndicator;
 import net.wg.gui.lobby.questsWindow.components.QuestsCounter;
 import net.wg.gui.lobby.questsWindow.data.HeaderDataVO;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.DataProvider;
 
-public class HeaderBlock extends UIComponent {
+public class HeaderBlock extends UIComponentEx {
 
     public static const CONTENT_TABS_PADDING:int = 30;
 
@@ -33,7 +33,7 @@ public class HeaderBlock extends UIComponent {
 
     private static const TIME_TF_PADDING:int = 6;
 
-    private static const COUNTER_PADDING:int = 5;
+    private static const COUNTER_PADDING:int = 6;
 
     public var labelTF:TextField;
 
@@ -123,13 +123,14 @@ public class HeaderBlock extends UIComponent {
     }
 
     private function layoutComponents():void {
+        var _loc3_:Number = NaN;
         this.labelTF.height = this.labelTF.textHeight + TEXT_MARGIN;
         this.timeTF.height = this.timeTF.textHeight + TEXT_MARGIN;
         var _loc1_:Number = this.labelTF.textHeight + this.labelTF.y;
         this.timeTF.y = Math.round(_loc1_ + MIDDLE_PADDING);
         var _loc2_:Number = this.timeTF.textHeight + this.timeTF.y;
         this.statusMC.y = Math.round(!!this.timeTF.text ? Number(_loc2_ + TIME_TF_PADDING) : Number(this.timeTF.y));
-        var _loc3_:Number = Math.round(TextField(this.statusMC.textField).textHeight + this.statusMC.y);
+        _loc3_ = Math.round(TextField(this.statusMC.textField).textHeight + this.statusMC.y);
         var _loc4_:Boolean = true;
         if (this._headerData.eventType == QuestsStates.ACTION || !this._headerData.hasRequirements) {
             _loc4_ = false;
@@ -159,7 +160,7 @@ public class HeaderBlock extends UIComponent {
         this.counter.textField.text = this._headerData.tasksCount.toString();
         if (this._headerData.tasksCount > COUNTER_NO_DATA && !this._noProgress) {
             this.counter.visible = true;
-            this.progressIndicator.y = Math.round(this.counter.y + this.counter.height - COUNTER_PADDING);
+            this.progressIndicator.y = Math.round(this.counter.y + this.counter.height + COUNTER_PADDING);
         }
         else {
             this.counter.visible = false;

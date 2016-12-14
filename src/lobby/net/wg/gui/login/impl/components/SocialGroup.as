@@ -43,11 +43,11 @@ public class SocialGroup extends UIComponentEx {
         super.onDispose();
     }
 
-    public function updateList(param1:Array):void {
+    public function updateList(param1:DataProvider):void {
         if (!param1) {
             return;
         }
-        this.socialList.dataProvider = new DataProvider(param1);
+        this.socialList.dataProvider = param1;
         this.updateBg();
     }
 

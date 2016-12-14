@@ -1,8 +1,9 @@
 package net.wg.gui.lobby.techtree.controls {
-import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class XPIcon extends UIComponent {
+import scaleform.clik.constants.InvalidationType;
+
+public class XPIcon extends UIComponentEx {
 
     private var _type:String = null;
 

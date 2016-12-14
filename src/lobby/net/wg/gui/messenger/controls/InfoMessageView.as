@@ -1,9 +1,9 @@
 package net.wg.gui.messenger.controls {
 import flash.text.TextField;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class InfoMessageView extends UIComponent {
+public class InfoMessageView extends UIComponentEx {
 
     public static const STATE_NORMAL:String = "normal";
 

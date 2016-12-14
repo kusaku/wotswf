@@ -6,6 +6,8 @@ import flash.display.Graphics;
 import flash.display.SpreadMethod;
 import flash.geom.Matrix;
 
+import net.wg.data.constants.Errors;
+
 public class GradientLineButtonBar extends LineButtonBar {
 
     private static var color:uint = 3749680;
@@ -17,6 +19,7 @@ public class GradientLineButtonBar extends LineButtonBar {
     override protected function drawLine():void {
         var _loc1_:Number = 1;
         var _loc2_:DisplayObject = _renderers[selectedIndex] as DisplayObject;
+        App.utils.asserter.assertNotNull(_loc2_, "selItem" + Errors.CANT_NULL);
         var _loc3_:Graphics = line.graphics;
         var _loc4_:uint = _loc2_.x;
         _loc3_.clear();

@@ -236,7 +236,7 @@ public class SlidingScrollingList extends ScrollingList {
                         _loc3_.offsetBottom = thumbOffset.bottom;
                     }
                     _loc1_.addEventListener(MouseEvent.MOUSE_WHEEL, blockMouseWheel, false, 0, true);
-                    this.upperContainer.addChild(_loc1_ as DisplayObject);
+                    this.upperContainer.addChild(DisplayObject(_loc1_));
                 }
             }
         }
@@ -245,9 +245,9 @@ public class SlidingScrollingList extends ScrollingList {
             _loc1_.addEventListener(MouseEvent.MOUSE_WHEEL, blockMouseWheel, false, 0, true);
             if (_loc1_ != null) {
                 _autoScrollBar = true;
-                (_loc1_ as Object).offsetTop = thumbOffset.top;
-                (_loc1_ as Object).offsetBottom = thumbOffset.bottom;
-                this.upperContainer.addChild(_loc1_ as DisplayObject);
+                Object(_loc1_).offsetTop = thumbOffset.top;
+                Object(_loc1_).offsetBottom = thumbOffset.bottom;
+                this.upperContainer.addChild(DisplayObject(_loc1_));
             }
         }
         else {
@@ -255,13 +255,12 @@ public class SlidingScrollingList extends ScrollingList {
         }
         _scrollBar = _loc1_;
         invalidateSize();
-        if (_scrollBar == null) {
-            return;
+        if (_loc1_ != null) {
+            _loc1_.addEventListener(Event.SCROLL, handleScroll, false, 0, true);
+            _loc1_.addEventListener(Event.CHANGE, handleScroll, false, 0, true);
+            _loc1_.focusTarget = this;
+            _loc1_.tabEnabled = false;
         }
-        _scrollBar.addEventListener(Event.SCROLL, handleScroll, false, 0, true);
-        _scrollBar.addEventListener(Event.CHANGE, handleScroll, false, 0, true);
-        _scrollBar.focusTarget = this;
-        _scrollBar.tabEnabled = false;
     }
 
     override protected function drawScrollBar():void {

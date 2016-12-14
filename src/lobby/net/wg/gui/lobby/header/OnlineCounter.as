@@ -31,7 +31,6 @@ public class OnlineCounter extends UIComponentEx {
         this.clusterOnlineCounter.visible = param1;
         this.clusterWaiting.visible = param1;
         this.regionOnlineCounter.visible = param1;
-        this.animationWaiting(param1);
     }
 
     override protected function initialize():void {
@@ -66,7 +65,6 @@ public class OnlineCounter extends UIComponentEx {
         this.clusterOnlineCounter.htmlText = param1;
         this.clusterWaiting.visible = !param4;
         this.regionOnlineCounter.htmlText = param2;
-        this.animationWaiting(!param4);
         if (!param4) {
             this.clusterWaiting.x = this.clusterOnlineCounter.textWidth + WAITING_OFFSET;
         }
@@ -74,15 +72,6 @@ public class OnlineCounter extends UIComponentEx {
         var _loc6_:Number = _loc5_ + this.clusterWaiting.width + WAITING_OFFSET | 0;
         if (_loc6_ != this.hitMc.width) {
             this.hitMc.width = _loc6_;
-        }
-    }
-
-    private function animationWaiting(param1:Boolean):void {
-        if (param1) {
-            this.clusterWaiting.play();
-        }
-        else {
-            this.clusterWaiting.stop();
         }
     }
 

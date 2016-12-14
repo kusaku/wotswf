@@ -155,7 +155,7 @@ public class FakeNode extends Renderer {
         while (_loc3_ < _loc2_) {
             _loc1_ = this.children[_loc3_];
             if (_loc1_.isFake()) {
-                if ((_loc1_ as FakeNode).hasUnlockedChild()) {
+                if (FakeNode(_loc1_).hasUnlockedChild()) {
                     return true;
                 }
             }
@@ -174,7 +174,7 @@ public class FakeNode extends Renderer {
         while (_loc3_ < _loc2_) {
             _loc1_ = this.children[_loc3_];
             if (_loc1_.isFake()) {
-                if ((_loc1_ as FakeNode).hasNext2UnlockChild()) {
+                if (FakeNode(_loc1_).hasNext2UnlockChild()) {
                     return true;
                 }
             }

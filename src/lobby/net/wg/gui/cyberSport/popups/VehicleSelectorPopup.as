@@ -16,6 +16,7 @@ import net.wg.infrastructure.base.meta.IVehicleSelectorPopupMeta;
 import net.wg.infrastructure.base.meta.impl.VehicleSelectorPopupMeta;
 import net.wg.infrastructure.interfaces.IWindow;
 
+import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.utils.Padding;
 
@@ -127,8 +128,8 @@ public class VehicleSelectorPopup extends VehicleSelectorPopupMeta implements IV
         setFocus(this.selector.list);
     }
 
-    public function as_setFiltersData(param1:Object):void {
-        this.selector.setFiltersData(new VehicleSelectorFilterVO(param1));
+    override protected function setFiltersData(param1:VehicleSelectorFilterVO):void {
+        this.selector.setFiltersData(param1);
     }
 
     public function as_setInfoText(param1:String, param2:int):void {
@@ -138,18 +139,14 @@ public class VehicleSelectorPopup extends VehicleSelectorPopupMeta implements IV
         invalidate(INVALID_LAYOUT);
     }
 
-    public function as_setListData(param1:Array, param2:Array):void {
-        var _loc4_:Object = null;
-        var _loc5_:VehicleSelectorItemVO = null;
-        var _loc3_:Array = [];
-        var _loc6_:Array = App.utils.getGUINationsS();
+    override protected function setListData(param1:DataProvider, param2:Array):void {
+        var _loc4_:VehicleSelectorItemVO = null;
+        var _loc3_:Array = App.utils.getGUINationsS();
         for each(_loc4_ in param1) {
-            _loc5_ = new VehicleSelectorItemVO(_loc4_, true);
-            _loc5_.nationOrderIdx = _loc6_.indexOf(App.utils.nations.getNationName(_loc5_.nationID));
-            _loc3_.push(_loc5_);
+            _loc4_.nationOrderIdx = _loc3_.indexOf(App.utils.nations.getNationName(_loc4_.nationID));
         }
         this.selector.setupSelectionOverrides(param2);
-        this.selector.setListItems(_loc3_);
+        this.selector.setListItems(param1);
     }
 
     public function as_setListMode(param1:Boolean):void {

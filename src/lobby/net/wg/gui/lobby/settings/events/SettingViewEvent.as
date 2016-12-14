@@ -7,11 +7,17 @@ public class SettingViewEvent extends Event {
 
     public static var ON_AUTO_DETECT_QUALITY:String = "on_auto_detect_quality";
 
+    public static var ON_AUTO_DETECT_ACOUSTIC:String = "on_auto_detect_acoustic";
+
+    public static var ON_SOUND_SPEAKER_CHANGE:String = "on_sound_speaker_change";
+
     public static var ON_VIVOX_TEST:String = "on_vivox_test";
 
     public static var ON_UPDATE_CAPTURE_DEVICE:String = "on_update_capture_device";
 
     public static var ON_PTT_CONTROL_CHANGED:String = "on_relate_control_changed";
+
+    public static var ON_PTT_SOUND_CONTROL_CHANGED:String = "on_ptt_sound_control_changed";
 
     public var viewId:String;
 

@@ -160,21 +160,14 @@ public class BattleEventsInfoForm extends BaseForm {
     }
 
     private function setEventsCheckboxesEnabled():void {
+        var _loc2_:* = null;
         var _loc1_:Boolean = this.battleEventsShowInBattleCheckbox.selected;
-        this.battleEventsEnemyHpDamageCheckbox.enabled = _loc1_;
-        this.battleEventsEnemyBurningCheckbox.enabled = _loc1_;
-        this.battleEventsEnemyRamAttackCheckbox.enabled = _loc1_;
-        this.battleEventsBlockedDamageCheckbox.enabled = _loc1_;
-        this.battleEventsEnemyDetectionDamageCheckbox.enabled = _loc1_;
-        this.battleEventsEnemyTrackDamageCheckbox.enabled = _loc1_;
-        this.battleEventsEnemyDetectionCheckbox.enabled = _loc1_;
-        this.battleEventsEnemyKillCheckbox.enabled = _loc1_;
-        this.battleEventsBaseCaptureDropCheckbox.enabled = _loc1_;
-        this.battleEventsBaseCaptureCheckbox.enabled = _loc1_;
-        this.battleEventsEnemyCriticalHitCheckbox.enabled = _loc1_;
-        this.battleEventsEventNameCheckbox.enabled = _loc1_;
-        this.battleEventsVehicleInfoCheckbox.enabled = _loc1_;
-        this.ribbonsContainer.visible = _loc1_;
+        for (_loc2_ in this._itemsMap) {
+            setElementEnabled(this[_loc2_], _loc1_);
+        }
+        setElementEnabled(this.battleEventsEventNameCheckbox, _loc1_);
+        setElementEnabled(this.battleEventsVehicleInfoCheckbox, _loc1_);
+        setElementEnabled(this.ribbonsContainer, _loc1_);
     }
 
     override public function get formId():String {

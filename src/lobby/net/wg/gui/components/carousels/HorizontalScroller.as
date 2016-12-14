@@ -165,7 +165,7 @@ public class HorizontalScroller extends ScrollerBase {
         var _loc1_:* = false;
         this.refreshDataViewPortProperties();
         super.draw();
-        if (isInvalid(InvalidationType.SIZE)) {
+        if (isInvalid(InvalidationType.SIZE) || isInvalid(InvalidationType.DATA) || isInvalid(INVALIDATION_TYPE_LAYOUT) || isInvalid(INVALIDATION_TYPE_PENDING_SCROLL)) {
             _loc1_ = maxHorizontalScrollPosition != minHorizontalScrollPosition;
             this._cursorManager.enable = _loc1_;
             if (this._scrollbarRef != null) {

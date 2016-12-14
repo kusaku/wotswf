@@ -10,7 +10,6 @@ import net.wg.gui.lobby.fortifications.data.ClanInfoVO;
 import net.wg.gui.lobby.fortifications.data.ConnectedDirectionsVO;
 import net.wg.infrastructure.base.meta.IFortDeclarationOfWarWindowMeta;
 import net.wg.infrastructure.base.meta.impl.FortDeclarationOfWarWindowMeta;
-import net.wg.infrastructure.interfaces.entity.IDisposable;
 
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.utils.Padding;
@@ -42,12 +41,6 @@ public class FortDeclarationOfWarWindow extends FortDeclarationOfWarWindowMeta i
     private var _allRenderers:Vector.<DirectionRadioRenderer>;
 
     private var _selectedRenderer:DirectionRadioRenderer;
-
-    private var _connectedDirections:Vector.<ConnectedDirectionsVO>;
-
-    private var _myClan:ClanInfoVO;
-
-    private var _enemyClan:ClanInfoVO;
 
     public function FortDeclarationOfWarWindow() {
         super();
@@ -91,8 +84,6 @@ public class FortDeclarationOfWarWindow extends FortDeclarationOfWarWindowMeta i
         this.descriptionTF = null;
         this._selectedRenderer = null;
         this.disposeRenderers();
-        this.clearClansData();
-        this.clearConnectedDirectionsData();
         super.onDispose();
     }
 
@@ -112,58 +103,28 @@ public class FortDeclarationOfWarWindow extends FortDeclarationOfWarWindowMeta i
         }
     }
 
-    public function as_setDirections(param1:Array):void {
-        var _loc2_:ConnectedDirectionsVO = null;
-        this.clearConnectedDirectionsData();
-        var _loc3_:uint = param1.length;
-        this._connectedDirections = new Vector.<ConnectedDirectionsVO>(_loc3_);
-        var _loc4_:int = 0;
-        while (_loc4_ < _loc3_) {
-            _loc2_ = new ConnectedDirectionsVO(param1[_loc4_]);
-            this._connectedDirections[_loc4_] = _loc2_;
-            this._allRenderers[_loc4_].setData(_loc2_);
-            _loc4_++;
+    override protected function setDirections(param1:Vector.<ConnectedDirectionsVO>):void {
+        var _loc2_:uint = param1.length;
+        var _loc3_:int = 0;
+        while (_loc3_ < _loc2_) {
+            this._allRenderers[_loc3_].setData(param1[_loc3_]);
+            _loc3_++;
         }
-        var _loc5_:uint = this._allRenderers.length;
-        while (_loc4_ < _loc5_) {
-            this._allRenderers[_loc4_].setData(null);
-            _loc4_++;
+        var _loc4_:uint = this._allRenderers.length;
+        while (_loc3_ < _loc4_) {
+            this._allRenderers[_loc3_].setData(null);
+            _loc3_++;
         }
     }
 
-    public function as_setupClans(param1:Object, param2:Object):void {
-        this.clearClansData();
-        this._myClan = new ClanInfoVO(param1);
-        this._enemyClan = new ClanInfoVO(param2);
-        this.myClanInfo.model = this._myClan;
-        this.enemyClanInfo.model = this._enemyClan;
+    override protected function setupClans(param1:ClanInfoVO, param2:ClanInfoVO):void {
+        this.myClanInfo.model = param1;
+        this.enemyClanInfo.model = param2;
     }
 
     public function as_setupHeader(param1:String, param2:String):void {
         this.titleTF.htmlText = param1;
         this.descriptionTF.htmlText = param2;
-    }
-
-    private function clearConnectedDirectionsData():void {
-        var _loc1_:IDisposable = null;
-        if (this._connectedDirections) {
-            for each(_loc1_ in this._connectedDirections) {
-                _loc1_.dispose();
-            }
-            this._connectedDirections.splice(0, this._connectedDirections.length);
-            this._connectedDirections = null;
-        }
-    }
-
-    private function clearClansData():void {
-        if (this._myClan) {
-            this._myClan.dispose();
-            this._myClan = null;
-        }
-        if (this._enemyClan) {
-            this._enemyClan.dispose();
-            this._enemyClan = null;
-        }
     }
 
     private function selectDirection(param1:DirectionRadioRenderer):void {

@@ -3,10 +3,11 @@ import flash.display.Sprite;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
-import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class LoginIgrWarning extends UIComponent {
+import scaleform.clik.constants.InvalidationType;
+
+public class LoginIgrWarning extends UIComponentEx {
 
     private static const DEF_BG_HEIGHT:uint = 60;
 

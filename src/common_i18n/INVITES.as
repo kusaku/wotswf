@@ -151,6 +151,14 @@ package
       
       public static const INVITES_NOTE_CHANGE_AND_LEAVE_SORTIE:String = "#invites:invites/note/change_and_leave/SORTIE";
       
+      public static const INVITES_NOTE_LEAVE_FORT_COMMON:String = "#invites:invites/note/leave/FORT_COMMON";
+      
+      public static const INVITES_NOTE_CHANGE_AND_LEAVE_FORT_COMMON:String = "#invites:invites/note/change_and_leave/FORT_COMMON";
+      
+      public static const INVITES_NOTE_LEAVE_E_SPORT_COMMON:String = "#invites:invites/note/leave/E_SPORT_COMMON";
+      
+      public static const INVITES_NOTE_CHANGE_AND_LEAVE_E_SPORT_COMMON:String = "#invites:invites/note/change_and_leave/E_SPORT_COMMON";
+      
       public static const INVITES_NOTE_LEAVE_FORT_BATTLE:String = "#invites:invites/note/leave/FORT_BATTLE";
       
       public static const INVITES_NOTE_CHANGE_AND_LEAVE_FORT_BATTLE:String = "#invites:invites/note/change_and_leave/FORT_BATTLE";
@@ -158,6 +166,10 @@ package
       public static const INVITES_NOTE_LEAVE_CLUBS:String = "#invites:invites/note/leave/CLUBS";
       
       public static const INVITES_NOTE_CHANGE_AND_LEAVE_CLUBS:String = "#invites:invites/note/change_and_leave/CLUBS";
+      
+      public static const INVITES_NOTE_LEAVE_EXTERNAL:String = "#invites:invites/note/leave/EXTERNAL";
+      
+      public static const INVITES_NOTE_CHANGE_AND_LEAVE_EXTERNAL:String = "#invites:invites/note/change_and_leave/EXTERNAL";
       
       public static const INVITES_NOTE_LEAVE_RANDOMS:String = "#invites:invites/note/leave/RANDOMS";
       
@@ -219,6 +231,8 @@ package
       
       public static const CLANS_STATE_APP_DECLINED:String = "#invites:clans/state/app/declined";
       
+      public static const CLANS_STATE_APP_ERROR_INCLANENTERCOOLDOWN:String = "#invites:clans/state/app/error/inClanEnterCooldown";
+      
       public static const CLANS_STATE_INVITE_ACTIVE:String = "#invites:clans/state/invite/active";
       
       public static const CLANS_STATE_INVITE_ACCEPTED:String = "#invites:clans/state/invite/accepted";
@@ -227,33 +241,22 @@ package
       
       public static const CLANS_STATE_INVITE_ERROR_INCLANENTERCOOLDOWN:String = "#invites:clans/state/invite/error/inClanEnterCooldown";
       
-      public static const INVITES_STATE_ENUM:Array = [INVITES_STATE_PENDING,INVITES_STATE_ACCEPTED,INVITES_STATE_DECLINED,INVITES_STATE_REVOKED,INVITES_STATE_EXPIRED,INVITES_STATE_ERROR];
-      
       public static const INVITES_PREBATTLE_ALREADYJOINED_ENUM:Array = [INVITES_PREBATTLE_ALREADYJOINED_SQUAD,INVITES_PREBATTLE_ALREADYJOINED_FALLOUT,INVITES_PREBATTLE_ALREADYJOINED_COMPANY,INVITES_PREBATTLE_ALREADYJOINED_TRAINING,INVITES_PREBATTLE_ALREADYJOINED_CLAN,INVITES_PREBATTLE_ALREADYJOINED_TOURNAMENT,INVITES_PREBATTLE_ALREADYJOINED_UNIT,INVITES_PREBATTLE_ALREADYJOINED_SORTIE];
+      
+      public static const INVITES_NOTE_CHANGE_AND_LEAVE_ENUM:Array = [INVITES_NOTE_CHANGE_AND_LEAVE_COMPANY,INVITES_NOTE_CHANGE_AND_LEAVE_EVENT,INVITES_NOTE_CHANGE_AND_LEAVE_SQUAD,INVITES_NOTE_CHANGE_AND_LEAVE_FALLOUT,INVITES_NOTE_CHANGE_AND_LEAVE_TRAINING,INVITES_NOTE_CHANGE_AND_LEAVE_UNIT,INVITES_NOTE_CHANGE_AND_LEAVE_CLAN,INVITES_NOTE_CHANGE_AND_LEAVE_TOURNAMENT,INVITES_NOTE_CHANGE_AND_LEAVE_SORTIE,INVITES_NOTE_CHANGE_AND_LEAVE_FORT_COMMON,INVITES_NOTE_CHANGE_AND_LEAVE_E_SPORT_COMMON,INVITES_NOTE_CHANGE_AND_LEAVE_FORT_BATTLE,INVITES_NOTE_CHANGE_AND_LEAVE_CLUBS,INVITES_NOTE_CHANGE_AND_LEAVE_EXTERNAL,INVITES_NOTE_CHANGE_AND_LEAVE_RANDOMS,INVITES_NOTE_CHANGE_AND_LEAVE_EVENT_BATTLES,INVITES_NOTE_CHANGE_AND_LEAVE_SANDBOX];
       
       public static const INVITES_PREBATTLE_ACCEPTNOTALLOWED_ENUM:Array = [INVITES_PREBATTLE_ACCEPTNOTALLOWED_UNDEFINEDPERIPHERY,INVITES_PREBATTLE_ACCEPTNOTALLOWED_OTHERPERIPHERY];
       
       public static const INVITES_TEXT_ENUM:Array = [INVITES_TEXT_CREATORNAME,INVITES_TEXT_SQUAD,INVITES_TEXT_EVENT,INVITES_TEXT_FALLOUT,INVITES_TEXT_FALLOUT_FALLOUT_CLASSIC,INVITES_TEXT_FALLOUT_FALLOUT_MULTITEAM,INVITES_TEXT_COMPANY,INVITES_TEXT_TRAINING,INVITES_TEXT_UNIT,INVITES_TEXT_SORTIE,INVITES_TEXT_FORT_BATTLE,INVITES_TEXT_CLUBS,INVITES_TEXT_FORT_OFFENCE,INVITES_TEXT_FORT_DEFENCE,INVITES_TEXT_FORT_DIRECTION,INVITES_TEXT_CLUB];
       
-      public static const INVITES_NOTE_CHANGE_AND_LEAVE_ENUM:Array = [INVITES_NOTE_CHANGE_AND_LEAVE_COMPANY,INVITES_NOTE_CHANGE_AND_LEAVE_EVENT,INVITES_NOTE_CHANGE_AND_LEAVE_SQUAD,INVITES_NOTE_CHANGE_AND_LEAVE_FALLOUT,INVITES_NOTE_CHANGE_AND_LEAVE_TRAINING,INVITES_NOTE_CHANGE_AND_LEAVE_UNIT,INVITES_NOTE_CHANGE_AND_LEAVE_CLAN,INVITES_NOTE_CHANGE_AND_LEAVE_TOURNAMENT,INVITES_NOTE_CHANGE_AND_LEAVE_SORTIE,INVITES_NOTE_CHANGE_AND_LEAVE_FORT_BATTLE,INVITES_NOTE_CHANGE_AND_LEAVE_CLUBS,INVITES_NOTE_CHANGE_AND_LEAVE_RANDOMS,INVITES_NOTE_CHANGE_AND_LEAVE_EVENT_BATTLES,INVITES_NOTE_CHANGE_AND_LEAVE_SANDBOX];
+      public static const INVITES_NOTE_LEAVE_ENUM:Array = [INVITES_NOTE_LEAVE_COMPANY,INVITES_NOTE_LEAVE_SQUAD,INVITES_NOTE_LEAVE_FALLOUT,INVITES_NOTE_LEAVE_TRAINING,INVITES_NOTE_LEAVE_UNIT,INVITES_NOTE_LEAVE_CLAN,INVITES_NOTE_LEAVE_TOURNAMENT,INVITES_NOTE_LEAVE_SORTIE,INVITES_NOTE_LEAVE_FORT_COMMON,INVITES_NOTE_LEAVE_E_SPORT_COMMON,INVITES_NOTE_LEAVE_FORT_BATTLE,INVITES_NOTE_LEAVE_CLUBS,INVITES_NOTE_LEAVE_EXTERNAL,INVITES_NOTE_LEAVE_RANDOMS,INVITES_NOTE_LEAVE_EVENT,INVITES_NOTE_LEAVE_SANDBOX];
       
-      public static const INVITES_NOTE_LEAVE_ENUM:Array = [INVITES_NOTE_LEAVE_COMPANY,INVITES_NOTE_LEAVE_SQUAD,INVITES_NOTE_LEAVE_FALLOUT,INVITES_NOTE_LEAVE_TRAINING,INVITES_NOTE_LEAVE_UNIT,INVITES_NOTE_LEAVE_CLAN,INVITES_NOTE_LEAVE_TOURNAMENT,INVITES_NOTE_LEAVE_SORTIE,INVITES_NOTE_LEAVE_FORT_BATTLE,INVITES_NOTE_LEAVE_CLUBS,INVITES_NOTE_LEAVE_RANDOMS,INVITES_NOTE_LEAVE_EVENT,INVITES_NOTE_LEAVE_SANDBOX];
+      public static const INVITES_STATE_ENUM:Array = [INVITES_STATE_PENDING,INVITES_STATE_ACCEPTED,INVITES_STATE_DECLINED,INVITES_STATE_REVOKED,INVITES_STATE_EXPIRED,INVITES_STATE_ERROR];
        
       
       public function INVITES()
       {
          super();
-      }
-      
-      public static function invites_state(param1:String) : String
-      {
-         var _loc2_:String = "#invites:invites/state/" + param1;
-         if(INVITES_STATE_ENUM.indexOf(_loc2_) == -1)
-         {
-            DebugUtils.LOG_WARNING("[invites_state]:locale key \"" + _loc2_ + "\" was not found");
-            return null;
-         }
-         return _loc2_;
       }
       
       public static function invites_prebattle_alreadyjoined(param1:String) : String
@@ -262,6 +265,17 @@ package
          if(INVITES_PREBATTLE_ALREADYJOINED_ENUM.indexOf(_loc2_) == -1)
          {
             DebugUtils.LOG_WARNING("[invites_prebattle_alreadyjoined]:locale key \"" + _loc2_ + "\" was not found");
+            return null;
+         }
+         return _loc2_;
+      }
+      
+      public static function invites_note_change_and_leave(param1:String) : String
+      {
+         var _loc2_:String = "#invites:invites/note/change_and_leave/" + param1;
+         if(INVITES_NOTE_CHANGE_AND_LEAVE_ENUM.indexOf(_loc2_) == -1)
+         {
+            DebugUtils.LOG_WARNING("[invites_note_change_and_leave]:locale key \"" + _loc2_ + "\" was not found");
             return null;
          }
          return _loc2_;
@@ -289,23 +303,23 @@ package
          return _loc2_;
       }
       
-      public static function invites_note_change_and_leave(param1:String) : String
-      {
-         var _loc2_:String = "#invites:invites/note/change_and_leave/" + param1;
-         if(INVITES_NOTE_CHANGE_AND_LEAVE_ENUM.indexOf(_loc2_) == -1)
-         {
-            DebugUtils.LOG_WARNING("[invites_note_change_and_leave]:locale key \"" + _loc2_ + "\" was not found");
-            return null;
-         }
-         return _loc2_;
-      }
-      
       public static function invites_note_leave(param1:String) : String
       {
          var _loc2_:String = "#invites:invites/note/leave/" + param1;
          if(INVITES_NOTE_LEAVE_ENUM.indexOf(_loc2_) == -1)
          {
             DebugUtils.LOG_WARNING("[invites_note_leave]:locale key \"" + _loc2_ + "\" was not found");
+            return null;
+         }
+         return _loc2_;
+      }
+      
+      public static function invites_state(param1:String) : String
+      {
+         var _loc2_:String = "#invites:invites/state/" + param1;
+         if(INVITES_STATE_ENUM.indexOf(_loc2_) == -1)
+         {
+            DebugUtils.LOG_WARNING("[invites_state]:locale key \"" + _loc2_ + "\" was not found");
             return null;
          }
          return _loc2_;

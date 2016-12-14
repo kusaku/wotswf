@@ -1,4 +1,5 @@
 package net.wg.gui.battle.views.consumablesPanel {
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.Linkages;
 import net.wg.data.constants.Values;
 import net.wg.data.constants.generated.BATTLE_ITEM_STATES;
@@ -68,6 +69,7 @@ public class EntitiesStatePopup extends BattleUIComponent {
             _loc3_ = this._data[_loc6_];
             _loc2_ = !!_loc3_.entityState ? _loc3_.entityState : Values.EMPTY_STR;
             _loc4_ = this._renderers[_loc6_] as IEntityStateButton;
+            App.utils.asserter.assertNotNull(_loc4_, "renderer" + Errors.CANT_NULL);
             if (_loc2_ == BATTLE_ITEM_STATES.DESTROYED) {
                 _loc2_ = BATTLE_ITEM_STATES.CRITICAL;
             }

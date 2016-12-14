@@ -66,7 +66,7 @@ public class ContentTabBar extends ButtonBarEx {
             this.lineMC.width = _originalWidth;
             this.selectionArrow.scaleX = 1 / scaleX;
         }
-        if (_loc1_ || INVALID_LAYOUT) {
+        if (_loc1_ || isInvalid(INVALID_LAYOUT)) {
             if (this._centerTabs) {
                 this.doCenterTabs();
             }
@@ -141,14 +141,15 @@ public class ContentTabBar extends ButtonBarEx {
     private function calculateRendererWidth():void {
         var _loc1_:Button = null;
         var _loc2_:Number = 0;
-        var _loc3_:int = 0;
-        while (_loc3_ < _dataProvider.length) {
+        var _loc3_:uint = _dataProvider.length;
+        var _loc4_:int = 0;
+        while (_loc4_ < _loc3_) {
             _loc1_ = Button(App.utils.classFactory.getComponent(_itemRenderer, Button));
-            this.populateRendererData(_loc1_, _loc3_);
+            this.populateRendererData(_loc1_, _loc4_);
             _loc1_.validateNow();
             _loc2_ = Math.max(_loc2_, _loc1_.textField.textWidth);
             _loc1_ = null;
-            _loc3_++;
+            _loc4_++;
         }
         _buttonWidth = _loc2_ + this._textPadding * 2 ^ 0;
         _buttonWidth = Math.max(_buttonWidth, this._minRendererWidth);

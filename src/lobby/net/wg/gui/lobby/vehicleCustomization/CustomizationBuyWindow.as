@@ -181,7 +181,7 @@ public class CustomizationBuyWindow extends CustomizationBuyWindowMeta implement
         this._focusChain.splice(0, this._focusChain.length);
         this._focusChain = this.getFocusChain();
         App.utils.commons.initTabIndex(this._focusChain);
-        setFocus(this.btnBuy as InteractiveObject);
+        setFocus(InteractiveObject(this.btnBuy));
     }
 
     private function showNotEnoughCreditsTooltip():void {

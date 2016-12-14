@@ -6,12 +6,12 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextLineMetrics;
 
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.utils.IClassFactory;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.motion.Tween;
 
-public class CounterEx extends UIComponent {
+public class CounterEx extends UIComponentEx {
 
     private static const ANIMATE_STEP_FRAMES:Number = 40;
 

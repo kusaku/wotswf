@@ -14,8 +14,6 @@ public class SettingsKeyProp implements IDisposable {
 
     private static const LABEL_STR:String = "label";
 
-    private static const DEFAULT_RANGE_STR:String = "defaultRange";
-
     public var id:String = null;
 
     public var header:Boolean = false;
@@ -34,35 +32,37 @@ public class SettingsKeyProp implements IDisposable {
 
     public var rendererYOffset:Number = 0;
 
-    public function SettingsKeyProp(param1:String, param2:Boolean, param3:String, param4:String = null, param5:Number = NaN, param6:Number = NaN, param7:Array = null, param8:Boolean = false, param9:Number = 0) {
-        var _loc11_:int = 0;
-        var _loc12_:ILocale = null;
-        var _loc13_:uint = 0;
-        var _loc14_:String = null;
+    public var tooltipID:String;
+
+    public function SettingsKeyProp(param1:String = null, param2:Boolean = false, param3:String = null, param4:String = null, param5:Number = NaN, param6:Number = NaN, param7:Array = null, param8:Boolean = false, param9:Number = 0, param10:String = "") {
+        var _loc12_:int = 0;
+        var _loc13_:ILocale = null;
+        var _loc14_:uint = 0;
         var _loc15_:String = null;
+        var _loc16_:String = null;
         super();
         this.id = param1;
         this.header = param2;
-        this.keysRang = !!SettingsConfigHelper.KEY_RANGE.hasOwnProperty(param1) ? SettingsConfigHelper.KEY_RANGE[param1] : SettingsConfigHelper.KEY_RANGE[DEFAULT_RANGE_STR];
-        var _loc10_:String = null;
+        this.keysRang = !!SettingsConfigHelper.KEY_RANGE.hasOwnProperty(param1) ? SettingsConfigHelper.KEY_RANGE[param1] : SettingsConfigHelper.defaultKeyRange;
+        var _loc11_:String = null;
         if (param7) {
-            _loc11_ = param7.length;
-            if (_loc11_) {
-                _loc10_ = Values.EMPTY_STR;
-                _loc12_ = App.utils.locale;
-                _loc13_ = 0;
-                while (_loc13_ < _loc11_) {
-                    _loc14_ = _loc12_.makeString(param7[_loc13_].hasOwnProperty(HEADER_STR) && param7[_loc13_][HEADER_STR] != undefined ? param7[_loc13_][HEADER_STR] : Values.EMPTY_STR);
-                    _loc15_ = _loc12_.makeString(param7[_loc13_].hasOwnProperty(LABEL_STR) && param7[_loc13_][LABEL_STR] != undefined ? param7[_loc13_][LABEL_STR] : Values.EMPTY_STR);
-                    _loc10_ = _loc10_ + (_loc14_ + XML_ADD_DISCR_FIRTS_PART + _loc15_ + XML_ADD_DISCR_SECOND_PART);
-                    _loc13_++;
+            _loc12_ = param7.length;
+            if (_loc12_) {
+                _loc11_ = Values.EMPTY_STR;
+                _loc13_ = App.utils.locale;
+                _loc14_ = 0;
+                while (_loc14_ < _loc12_) {
+                    _loc15_ = _loc13_.makeString(param7[_loc14_].hasOwnProperty(HEADER_STR) && param7[_loc14_][HEADER_STR] != undefined ? param7[_loc14_][HEADER_STR] : Values.EMPTY_STR);
+                    _loc16_ = _loc13_.makeString(param7[_loc14_].hasOwnProperty(LABEL_STR) && param7[_loc14_][LABEL_STR] != undefined ? param7[_loc14_][LABEL_STR] : Values.EMPTY_STR);
+                    _loc11_ = _loc11_ + (_loc15_ + XML_ADD_DISCR_FIRTS_PART + _loc16_ + XML_ADD_DISCR_SECOND_PART);
+                    _loc14_++;
                 }
             }
         }
-        if (_loc10_) {
-            this.label = _loc10_;
+        if (_loc11_) {
+            this.label = _loc11_;
         }
-        else {
+        else if (param3 != null) {
             this.label = App.utils.locale.makeString(!!this.header ? SETTINGS.keyboard_keysblocks_group(param3) : SETTINGS.keyboard_keysblocks_command(param3));
         }
         this.command = param4;
@@ -70,6 +70,11 @@ public class SettingsKeyProp implements IDisposable {
         this.keyDefault = param6;
         this.showUnderline = param8;
         this.rendererYOffset = param9;
+        this.tooltipID = param10;
+    }
+
+    public final function dispose():void {
+        this.keysRang = null;
     }
 
     public function getObject():Object {
@@ -82,12 +87,9 @@ public class SettingsKeyProp implements IDisposable {
             "keyDefault": this.keyDefault,
             "keysRang": this.keysRang,
             "showUnderline": this.showUnderline,
-            "rendererYOffset": this.rendererYOffset
+            "rendererYOffset": this.rendererYOffset,
+            "tooltipID": this.tooltipID
         };
-    }
-
-    public final function dispose():void {
-        this.keysRang = null;
     }
 }
 }

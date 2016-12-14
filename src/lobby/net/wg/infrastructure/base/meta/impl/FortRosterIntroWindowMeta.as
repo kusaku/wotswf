@@ -20,12 +20,13 @@ public class FortRosterIntroWindowMeta extends AbstractWindowView {
         super.onDispose();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._rosterIntroVO) {
-            this._rosterIntroVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:RosterIntroVO = this._rosterIntroVO;
         this._rosterIntroVO = new RosterIntroVO(param1);
         this.setData(this._rosterIntroVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:RosterIntroVO):void {

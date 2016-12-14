@@ -83,20 +83,22 @@ public class BattleResultsMeta extends AbstractWindowView {
         this.showUnlockWindow(param1, param2);
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._battleResultsVO) {
-            this._battleResultsVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:BattleResultsVO = this._battleResultsVO;
         this._battleResultsVO = new BattleResultsVO(param1);
         this.setData(this._battleResultsVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setAnimation(param1:Object):void {
-        if (this._cSAnimationVO) {
-            this._cSAnimationVO.dispose();
-        }
+    public final function as_setAnimation(param1:Object):void {
+        var _loc2_:CSAnimationVO = this._cSAnimationVO;
         this._cSAnimationVO = new CSAnimationVO(param1);
         this.setAnimation(this._cSAnimationVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:BattleResultsVO):void {

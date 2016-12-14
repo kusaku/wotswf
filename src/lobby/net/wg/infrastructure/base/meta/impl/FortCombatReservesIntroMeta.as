@@ -20,12 +20,13 @@ public class FortCombatReservesIntroMeta extends AbstractWindowView {
         super.onDispose();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._combatReservesIntroVO) {
-            this._combatReservesIntroVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:CombatReservesIntroVO = this._combatReservesIntroVO;
         this._combatReservesIntroVO = new CombatReservesIntroVO(param1);
         this.setData(this._combatReservesIntroVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:CombatReservesIntroVO):void {

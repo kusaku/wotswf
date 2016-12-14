@@ -5,6 +5,7 @@ import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
 import net.wg.data.constants.Currencies;
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.Values;
 import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
@@ -163,7 +164,7 @@ public class TechnicalMaintenance extends TechnicalMaintenanceMeta implements IT
 
     override protected function draw():void {
         super.draw();
-        if (isInvalid(InvalidationType.DATA)) {
+        if (this._maintenanceData && isInvalid(InvalidationType.DATA)) {
             this.updateRepairBlock();
             this.updateShellsBlock();
             this.updateTotalPrice();
@@ -190,6 +191,7 @@ public class TechnicalMaintenance extends TechnicalMaintenanceMeta implements IT
         window.title = MENU.HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_TITLE;
         window.useBottomBtns = true;
         var _loc1_:Padding = window.contentPadding as Padding;
+        App.utils.asserter.assertNotNull(_loc1_, "padding" + Errors.CANT_NULL);
         _loc1_.top = _loc1_.top + 1;
         window.contentPadding = _loc1_;
         _loc1_ = window.formBgPadding;
@@ -201,9 +203,6 @@ public class TechnicalMaintenance extends TechnicalMaintenanceMeta implements IT
     }
 
     override protected function onDispose():void {
-        var _loc1_:int = 0;
-        var _loc2_:int = 0;
-        var _loc3_:ModuleVO = null;
         this.subscribeModules(false);
         this.repairTextfield = null;
         this.repairIndicator.dispose();
@@ -245,10 +244,7 @@ public class TechnicalMaintenance extends TechnicalMaintenanceMeta implements IT
         this.eqItem2 = null;
         this.eqItem3.dispose();
         this.eqItem3 = null;
-        if (this._maintenanceData) {
-            this._maintenanceData.dispose();
-            this._maintenanceData = null;
-        }
+        this._maintenanceData = null;
         App.stage.removeEventListener(ModuleInfoEvent.SHOW_INFO, this.onShowModuleInfo);
         App.stage.removeEventListener(ShellRendererEvent.CHANGE_ORDER, this.onChangeOrder);
         this.shells.removeEventListener(ShellRendererEvent.TOTAL_PRICE_CHANGED, this.onAmmoPriceChanged);
@@ -260,25 +256,9 @@ public class TechnicalMaintenance extends TechnicalMaintenanceMeta implements IT
             this._btnGroup.dispose();
             this._btnGroup = null;
         }
-        if (this._equipmentList != null) {
-            _loc1_ = this._equipmentList.length;
-            _loc2_ = 0;
-            while (_loc2_ < _loc1_) {
-                _loc3_ = this._equipmentList[_loc2_];
-                _loc3_.dispose();
-                _loc2_++;
-            }
-            this._equipmentList.splice(0, this._equipmentList.length);
-            this._equipmentList = null;
-        }
-        if (this._equipmentSetup) {
-            this._equipmentSetup.splice(0, this._equipmentSetup.length);
-            this._equipmentSetup = null;
-        }
-        if (this._equipmentInstalled) {
-            this._equipmentInstalled.splice(0, this._equipmentInstalled.length);
-            this._equipmentInstalled = null;
-        }
+        this._equipmentList = null;
+        this._equipmentSetup = null;
+        this._equipmentInstalled = null;
         this._totalPrice = null;
         this.autoChBListeners(false);
         this.repairAuto.dispose();
@@ -319,31 +299,14 @@ public class TechnicalMaintenance extends TechnicalMaintenanceMeta implements IT
         }
     }
 
-    public function as_setData(param1:Object):void {
+    override protected function setData(param1:MaintenanceVO):void {
         this.updateOldData();
-        this._maintenanceData = new MaintenanceVO(param1);
+        this._maintenanceData = param1;
         invalidateData();
     }
 
-    public function as_setEquipment(param1:Array, param2:Array, param3:Array):void {
-        var _loc4_:Object = null;
-        var _loc5_:ModuleVO = null;
-        if (this._equipmentList != null) {
-            for each(_loc5_ in this._equipmentList) {
-                _loc5_.dispose();
-            }
-            this._equipmentList.splice(0, this._equipmentList.length);
-        }
-        if (this._equipmentSetup) {
-            this._equipmentSetup.splice(0, this._equipmentList.length);
-        }
-        if (this._equipmentInstalled) {
-            this._equipmentInstalled.splice(0, this._equipmentInstalled.length);
-        }
-        this._equipmentList = [];
-        for each(_loc4_ in param3) {
-            this._equipmentList.push(new ModuleVO(_loc4_));
-        }
+    override protected function setEquipment(param1:Array, param2:Array, param3:Array):void {
+        this._equipmentList = param3;
         this._equipmentSetup = param2;
         this._equipmentInstalled = param1;
         invalidate(EQUIPMENT);
@@ -500,11 +463,13 @@ public class TechnicalMaintenance extends TechnicalMaintenanceMeta implements IT
         while (_loc4_ < _loc8_) {
             _loc9_ = [];
             _loc7_ = _loc6_[_loc4_] as EquipmentItem;
+            App.utils.asserter.assertNotNull(_loc7_, "slot" + Errors.CANT_NULL);
             if (_loc4_ > 0) {
                 _loc5_ = 0;
                 while (_loc5_ < _loc11_) {
-                    _loc10_ = param3[_loc5_];
-                    _loc9_.push(_loc10_.clone(_loc4_));
+                    _loc10_ = param3[_loc5_].clone();
+                    _loc10_.slotIndex = _loc4_;
+                    _loc9_.push(_loc10_);
                     _loc5_++;
                 }
             }
@@ -644,7 +609,9 @@ public class TechnicalMaintenance extends TechnicalMaintenanceMeta implements IT
         if (param1.changeIndex != -1) {
             _loc2_ = [this.eqItem1, this.eqItem2, this.eqItem3];
             _loc3_ = param1.target as EquipmentItem;
+            App.utils.asserter.assertNotNull(_loc3_, "itemChangeFrom" + Errors.CANT_NULL);
             _loc4_ = _loc2_[param1.changeIndex] as EquipmentItem;
+            App.utils.asserter.assertNotNull(_loc4_, "itemChangeTo" + Errors.CANT_NULL);
             _loc4_.removeEventListener(EquipmentEvent.EQUIPMENT_CHANGE, this.onEquipmentChange);
             _loc3_.removeEventListener(EquipmentEvent.EQUIPMENT_CHANGE, this.onEquipmentChange);
             _loc4_.toggleSelectChange(false);
@@ -661,7 +628,7 @@ public class TechnicalMaintenance extends TechnicalMaintenanceMeta implements IT
             this._eqOrderChanged = true;
         }
         this.doApplyEnable();
-        getEquipmentS(!!this.eqItem1.selectedItem ? this.eqItem1.selectedItem.id : undefined, !!this.eqItem1.selectedItem ? this.eqItem1.selectedItem.currency : undefined, !!this.eqItem2.selectedItem ? this.eqItem2.selectedItem.id : undefined, !!this.eqItem2.selectedItem ? this.eqItem2.selectedItem.currency : undefined, !!this.eqItem3.selectedItem ? this.eqItem3.selectedItem.id : undefined, !!this.eqItem3.selectedItem ? this.eqItem3.selectedItem.currency : undefined, (param1.target as EquipmentItem).index);
+        getEquipmentS(!!this.eqItem1.selectedItem ? this.eqItem1.selectedItem.id : undefined, !!this.eqItem1.selectedItem ? this.eqItem1.selectedItem.currency : undefined, !!this.eqItem2.selectedItem ? this.eqItem2.selectedItem.id : undefined, !!this.eqItem2.selectedItem ? this.eqItem2.selectedItem.currency : undefined, !!this.eqItem3.selectedItem ? this.eqItem3.selectedItem.id : undefined, !!this.eqItem3.selectedItem ? this.eqItem3.selectedItem.currency : undefined, EquipmentItem(param1.target).index);
     }
 
     private function onShowModuleInfo(param1:ModuleInfoEvent):void {
@@ -716,6 +683,7 @@ public class TechnicalMaintenance extends TechnicalMaintenanceMeta implements IT
     private function onEquipmentPriceChanged(param1:EquipmentEvent):void {
         this.doApplyEnable();
         var _loc2_:EquipmentItem = param1.currentTarget as EquipmentItem;
+        App.utils.asserter.assertNotNull(_loc2_, "equipmentItem" + Errors.CANT_NULL);
         updateEquipmentCurrencyS(_loc2_.index, param1.changeCurrency);
         invalidate(ShellRendererEvent.TOTAL_PRICE_CHANGED);
     }
@@ -758,7 +726,6 @@ public class TechnicalMaintenance extends TechnicalMaintenanceMeta implements IT
     }
 }
 }
-
 class Prices {
 
     public var credits:Number = 0;

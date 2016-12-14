@@ -3,10 +3,9 @@ import flash.display.InteractiveObject;
 import flash.geom.Point;
 
 import net.wg.gui.lobby.components.IResizableContent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
-
-public class ResizableContent extends UIComponent implements IResizableContent {
+public class ResizableContent extends UIComponentEx implements IResizableContent {
 
     protected var currentDimension:Point = null;
 

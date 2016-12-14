@@ -19,12 +19,8 @@ public class IntelligenceClanFilterVO extends DAAPIDataClass {
 
     public var skipValues:Array = null;
 
-    public function IntelligenceClanFilterVO(param1:Object) {
+    public function IntelligenceClanFilterVO(param1:Object = null) {
         super(param1);
-    }
-
-    override protected function onDispose():void {
-        super.onDispose();
     }
 
     override public function isEquals(param1:DAAPIDataClass):Boolean {

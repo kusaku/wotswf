@@ -1,9 +1,9 @@
 package net.wg.gui.components.controls {
 import flash.display.MovieClip;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class GlowArrowAsset extends UIComponent {
+public class GlowArrowAsset extends UIComponentEx {
 
     public var hit:MovieClip;
 

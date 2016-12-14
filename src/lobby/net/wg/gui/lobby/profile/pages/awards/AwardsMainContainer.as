@@ -3,12 +3,12 @@ import flash.events.Event;
 
 import net.wg.data.VO.AchievementProfileVO;
 import net.wg.gui.lobby.profile.components.AwardsTileListBlock;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.utils.ILocale;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class AwardsMainContainer extends UIComponent {
+public class AwardsMainContainer extends UIComponentEx {
 
     private var _gapBetweenBlocks:uint = 20;
 

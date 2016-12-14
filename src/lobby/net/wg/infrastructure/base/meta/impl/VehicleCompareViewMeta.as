@@ -25,6 +25,8 @@ public class VehicleCompareViewMeta extends AbstractView {
 
     public var onRemoveAllVehicles:Function;
 
+    private var _array:Array;
+
     private var _vehCompareParamsDeltaVO:VehCompareParamsDeltaVO;
 
     private var _vehCompareStaticDataVO:VehCompareStaticDataVO;
@@ -34,6 +36,10 @@ public class VehicleCompareViewMeta extends AbstractView {
     }
 
     override protected function onDispose():void {
+        if (this._array) {
+            this._array.splice(0, this._array.length);
+            this._array = null;
+        }
         if (this._vehCompareParamsDeltaVO) {
             this._vehCompareParamsDeltaVO.dispose();
             this._vehCompareParamsDeltaVO = null;
@@ -90,20 +96,31 @@ public class VehicleCompareViewMeta extends AbstractView {
         this.onRemoveAllVehicles();
     }
 
-    public function as_setStaticData(param1:Object):void {
-        if (this._vehCompareStaticDataVO) {
-            this._vehCompareStaticDataVO.dispose();
-        }
+    public final function as_setStaticData(param1:Object):void {
+        var _loc2_:VehCompareStaticDataVO = this._vehCompareStaticDataVO;
         this._vehCompareStaticDataVO = new VehCompareStaticDataVO(param1);
         this.setStaticData(this._vehCompareStaticDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setParamsDelta(param1:Object):void {
-        if (this._vehCompareParamsDeltaVO) {
-            this._vehCompareParamsDeltaVO.dispose();
-        }
+    public final function as_setParamsDelta(param1:Object):void {
+        var _loc2_:VehCompareParamsDeltaVO = this._vehCompareParamsDeltaVO;
         this._vehCompareParamsDeltaVO = new VehCompareParamsDeltaVO(param1);
         this.setParamsDelta(this._vehCompareParamsDeltaVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
+    }
+
+    public final function as_setVehicleParamsData(param1:Array):void {
+        var _loc2_:Array = this._array;
+        this._array = param1;
+        this.setVehicleParamsData(this._array);
+        if (_loc2_) {
+            _loc2_.splice(0, _loc2_.length);
+        }
     }
 
     protected function setStaticData(param1:VehCompareStaticDataVO):void {
@@ -114,6 +131,12 @@ public class VehicleCompareViewMeta extends AbstractView {
 
     protected function setParamsDelta(param1:VehCompareParamsDeltaVO):void {
         var _loc2_:String = "as_setParamsDelta" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
+    }
+
+    protected function setVehicleParamsData(param1:Array):void {
+        var _loc2_:String = "as_setVehicleParamsData" + Errors.ABSTRACT_INVOKE;
         DebugUtils.LOG_ERROR(_loc2_);
         throw new AbstractException(_loc2_);
     }

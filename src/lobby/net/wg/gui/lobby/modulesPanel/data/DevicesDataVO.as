@@ -14,7 +14,7 @@ public class DevicesDataVO extends DAAPIDataClass {
 
     override protected function onDataWrite(param1:String, param2:Object):Boolean {
         if (param1 == DEVICES_FIELD_NAME) {
-            this.devices = Vector.<DeviceSlotVO>(App.utils.data.convertVOArrayToVector("fieldName", param2, DeviceSlotVO));
+            this.devices = Vector.<DeviceSlotVO>(App.utils.data.convertVOArrayToVector(param1, param2, DeviceSlotVO));
             return false;
         }
         return super.onDataWrite(param1, param2);

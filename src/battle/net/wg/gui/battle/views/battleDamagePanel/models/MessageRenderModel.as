@@ -3,7 +3,9 @@ import flash.display.Shape;
 import flash.display.Sprite;
 import flash.text.TextField;
 
-public class MessageRenderModel {
+import net.wg.data.daapi.base.DAAPIDataClass;
+
+public class MessageRenderModel extends DAAPIDataClass {
 
     public var value:String = "";
 
@@ -35,11 +37,11 @@ public class MessageRenderModel {
 
     public var valueColor:uint = 16777215;
 
-    public function MessageRenderModel() {
-        super();
+    public function MessageRenderModel(param1:Object = null) {
+        super(param1);
     }
 
-    public function dispose():void {
+    override protected function onDispose():void {
         this.imageRenderInstance = null;
         this.actionTypeInstance = null;
         this.vehicleIconInstance = null;
@@ -47,6 +49,7 @@ public class MessageRenderModel {
         this.textRendererInstance = null;
         this.valueTFInstance = null;
         this.vehicleNameTFInstance = null;
+        super.onDispose();
     }
 }
 }

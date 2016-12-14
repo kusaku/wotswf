@@ -10,6 +10,7 @@ import net.wg.data.constants.Values;
 import net.wg.data.constants.generated.CONTEXT_MENU_HANDLER_TYPE;
 import net.wg.gui.components.advanced.IndicationOfStatus;
 import net.wg.gui.components.advanced.InviteIndicator;
+import net.wg.gui.cyberSport.controls.CSVehicleButton;
 import net.wg.gui.cyberSport.controls.interfaces.IVehicleButton;
 import net.wg.gui.rally.controls.VoiceRallySlotRenderer;
 import net.wg.gui.rally.events.RallyViewsEvent;
@@ -30,9 +31,9 @@ public class FalloutSlotRenderer extends VoiceRallySlotRenderer {
 
     public var vehicleNotify3:TextField = null;
 
-    public var vehicleBtn2:IVehicleButton = null;
+    public var vehicleBtn2:CSVehicleButton = null;
 
-    public var vehicleBtn3:IVehicleButton = null;
+    public var vehicleBtn3:CSVehicleButton = null;
 
     private var _vehiclesNotify:Vector.<TextField> = null;
 

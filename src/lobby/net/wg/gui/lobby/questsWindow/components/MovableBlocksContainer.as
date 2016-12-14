@@ -22,10 +22,6 @@ public class MovableBlocksContainer extends ResizableContainer implements ISorta
         super();
     }
 
-    override protected function configUI():void {
-        super.configUI();
-    }
-
     override protected function onDispose():void {
         var _loc1_:Tween = null;
         for each(_loc1_ in this.tweens) {

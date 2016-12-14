@@ -46,6 +46,8 @@ public class KeyInput extends SoundButton {
 
     private var _keyDefault:Number;
 
+    private var _alertMessageAlias:String = "#tooltips:setting_window/controls/key_input/warning";
+
     public function KeyInput() {
         super();
     }
@@ -70,10 +72,6 @@ public class KeyInput extends SoundButton {
         this.clearEventListeners();
         removeEventListener(Event.SELECT, this.onSelectHandler);
         super.onDispose();
-    }
-
-    private function onTimerCompleteHandler(param1:TimerEvent):void {
-        beginRepeat(param1);
     }
 
     override protected function configUI():void {
@@ -132,7 +130,7 @@ public class KeyInput extends SoundButton {
         else {
             _loc3_ = parent.localToGlobal(new Point(x + width, y - height - 7));
             _loc4_ = new TooltipProps(BaseTooltips.TYPE_WARNING, _loc3_.x, _loc3_.y, 0, 0, SHOW_DELAY);
-            _loc5_ = App.utils.locale.makeString(TOOLTIPS.SETTING_WINDOW_CONTROLS_KEY_INPUT_WARNING, {"keyName": _loc2_.keyCommand});
+            _loc5_ = App.utils.locale.makeString(this._alertMessageAlias, {"keyName": _loc2_.keyCommand});
             _loc6_ = App.textMgr.getTextStyleById(TEXT_MANAGER_STYLES.ALERT_TEXT, _loc5_);
             App.toolTipMgr.show(_loc6_, _loc4_);
             this.__inputClose();
@@ -189,6 +187,14 @@ public class KeyInput extends SoundButton {
         this.__keysToUpperCase();
     }
 
+    public function get alertMessageAlias():String {
+        return this._alertMessageAlias;
+    }
+
+    public function set alertMessageAlias(param1:String):void {
+        this._alertMessageAlias = param1;
+    }
+
     override public function handleInput(param1:InputEvent):void {
         var _loc2_:InputDetails = null;
         if (selected) {
@@ -206,10 +212,9 @@ public class KeyInput extends SoundButton {
     }
 
     override protected function handleMousePress(param1:MouseEvent):void {
-        var _loc3_:uint = 0;
         var _loc5_:ButtonEvent = null;
         var _loc2_:MouseEventEx = param1 as MouseEventEx;
-        _loc3_ = _loc2_ == null ? uint(0) : uint(_loc2_.mouseIdx);
+        var _loc3_:uint = _loc2_ == null ? uint(0) : uint(_loc2_.mouseIdx);
         var _loc4_:uint = _loc2_ == null ? uint(0) : uint(_loc2_.buttonIdx);
         _mouseDown = _mouseDown | 1 << _loc3_;
         if (enabled) {
@@ -227,6 +232,24 @@ public class KeyInput extends SoundButton {
         else {
             dispatchEvent(new KeyInputEvents(KeyInputEvents.DISABLE_PRESS, NaN, true, false));
         }
+    }
+
+    override protected function handleMouseRollOver(param1:MouseEvent):void {
+        if (!enabled) {
+            dispatchEvent(new KeyInputEvents(KeyInputEvents.DISABLE_OVER, NaN, true, false));
+        }
+        super.handleMouseRollOver(param1);
+    }
+
+    override protected function handleMouseRollOut(param1:MouseEvent):void {
+        if (!enabled) {
+            dispatchEvent(new KeyInputEvents(KeyInputEvents.DISABLE_OUT, NaN, true, false));
+        }
+        super.handleMouseRollOut(param1);
+    }
+
+    private function onTimerCompleteHandler(param1:TimerEvent):void {
+        beginRepeat(param1);
     }
 
     private function onStageMouseDownHandler(param1:MouseEvent):void {
@@ -256,20 +279,6 @@ public class KeyInput extends SoundButton {
             }
         }
         callLogEvent(param1);
-    }
-
-    override protected function handleMouseRollOver(param1:MouseEvent):void {
-        if (!enabled) {
-            dispatchEvent(new KeyInputEvents(KeyInputEvents.DISABLE_OVER, NaN, true, false));
-        }
-        super.handleMouseRollOver(param1);
-    }
-
-    override protected function handleMouseRollOut(param1:MouseEvent):void {
-        if (!enabled) {
-            dispatchEvent(new KeyInputEvents(KeyInputEvents.DISABLE_OUT, NaN, true, false));
-        }
-        super.handleMouseRollOut(param1);
     }
 
     private function onSelectHandler(param1:Event):void {

@@ -27,12 +27,13 @@ public class BattleMessageListMeta extends MessageList {
         this.onRefreshComplete();
     }
 
-    public function as_setupList(param1:Object):void {
-        if (this._fadingMessageListSettingsVO) {
-            this._fadingMessageListSettingsVO.dispose();
-        }
+    public final function as_setupList(param1:Object):void {
+        var _loc2_:FadingMessageListSettingsVO = this._fadingMessageListSettingsVO;
         this._fadingMessageListSettingsVO = new FadingMessageListSettingsVO(param1);
         this.setupList(this._fadingMessageListSettingsVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setupList(param1:FadingMessageListSettingsVO):void {

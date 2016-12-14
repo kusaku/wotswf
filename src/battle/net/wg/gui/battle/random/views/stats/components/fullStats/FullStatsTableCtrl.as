@@ -1,14 +1,14 @@
 package net.wg.gui.battle.random.views.stats.components.fullStats {
+import net.wg.data.VO.daapi.DAAPIInvitationStatusVO;
 import net.wg.data.VO.daapi.DAAPIVehicleStatsVO;
 import net.wg.data.constants.BattleAtlasItem;
+import net.wg.gui.battle.battleloading.data.EnemyVehiclesDataProvider;
 import net.wg.gui.battle.random.views.stats.components.fullStats.interfaces.ISquadHandler;
 import net.wg.gui.battle.random.views.stats.components.fullStats.tableItem.DynamicSquadCtrl;
 import net.wg.gui.battle.random.views.stats.components.fullStats.tableItem.StatsTableItem;
 import net.wg.gui.battle.random.views.stats.components.fullStats.tableItem.StatsTableItemHolder;
 import net.wg.gui.battle.views.stats.fullStats.StatsTableControllerBase;
 import net.wg.gui.battle.views.stats.fullStats.StatsTableItemHolderBase;
-import net.wg.gui.battle.views.stats.fullStats.StatsTableItemPositionController;
-import net.wg.gui.battle.views.stats.fullStats.interfaces.IStatsTableItemHolderBase;
 import net.wg.infrastructure.base.meta.impl.FullStatsMeta;
 
 public class FullStatsTableCtrl extends StatsTableControllerBase implements ISquadHandler {
@@ -18,10 +18,6 @@ public class FullStatsTableCtrl extends StatsTableControllerBase implements ISqu
     private static const SQUAD_BT_LEFT_X:Number = 2;
 
     private static const SQUAD_BT_RIGHT_X:Number = 987;
-
-    private static const ITEM_ALLY_X:Number = 0;
-
-    private static const ITEM_ENEMY_X:Number = 511;
 
     private static const ITEM_HEIGHT:Number = 25;
 
@@ -47,40 +43,30 @@ public class FullStatsTableCtrl extends StatsTableControllerBase implements ISqu
     }
 
     public function setVehiclesStats(param1:Vector.<DAAPIVehicleStatsVO>, param2:Vector.<DAAPIVehicleStatsVO>):void {
-        var _loc3_:DAAPIVehicleStatsVO = null;
-        var _loc4_:StatsTableItemHolder = null;
-        var _loc5_:Vector.<DAAPIVehicleStatsVO> = param1;
-        for each(_loc3_ in _loc5_) {
-            _loc4_ = this.getHolderByID(_loc3_.vehicleID);
-            if (_loc4_) {
-                _loc4_.setFrags(_loc3_.frags);
-            }
+        var _loc3_:EnemyVehiclesDataProvider = _teamDP;
+        if (_loc3_.updateFrags(param1)) {
+            _loc3_.invalidate();
         }
-        _loc5_ = param2;
-        for each(_loc3_ in _loc5_) {
-            _loc4_ = this.getHolderByID(_loc3_.vehicleID);
-            if (_loc4_) {
-                _loc4_.setFrags(_loc3_.frags);
-            }
+        _loc3_ = _enemyDP;
+        if (_loc3_.updateFrags(param2)) {
+            _loc3_.invalidate();
         }
     }
 
     public function setIsInviteShown(param1:Boolean, param2:Boolean):void {
         var _loc3_:int = 0;
-        var _loc4_:int = 0;
         if (this._isAllyInviteShown != param1) {
             _loc3_ = 0;
             while (_loc3_ < NUM_ITEM_ROWS) {
-                this.setItemInviteShown(_loc3_, param1);
+                this.setItemInviteShown(false, _loc3_, param1);
                 _loc3_++;
             }
             this._isAllyInviteShown = param1;
         }
         if (this._isEnemyInviteShown != param2) {
-            _loc3_ = NUM_ITEM_ROWS;
-            _loc4_ = _loc3_ + NUM_ITEM_ROWS;
-            while (_loc3_ < _loc4_) {
-                this.setItemInviteShown(_loc3_, param2);
+            _loc3_ = 0;
+            while (_loc3_ < NUM_ITEM_ROWS) {
+                this.setItemInviteShown(true, _loc3_, param2);
                 _loc3_++;
             }
             this._isEnemyInviteShown = param2;
@@ -89,40 +75,37 @@ public class FullStatsTableCtrl extends StatsTableControllerBase implements ISqu
 
     public function setInteractive(param1:Boolean, param2:Boolean):void {
         var _loc3_:int = 0;
-        var _loc4_:int = 0;
         if (this._isAllyInteractive != param1) {
             _loc3_ = 0;
             while (_loc3_ < NUM_ITEM_ROWS) {
-                this.setItemInteractive(_loc3_, param1);
+                this.setItemInteractive(false, _loc3_, param1);
                 _loc3_++;
             }
             this._isAllyInteractive = param1;
         }
         if (this._isEnemyInteractive != param2) {
-            _loc3_ = NUM_ITEM_ROWS;
-            _loc4_ = _loc3_ + NUM_ITEM_ROWS;
-            while (_loc3_ < _loc4_) {
-                this.setItemInteractive(_loc3_, param2);
+            _loc3_ = 0;
+            while (_loc3_ < NUM_ITEM_ROWS) {
+                this.setItemInteractive(true, _loc3_, param2);
                 _loc3_++;
             }
             this._isEnemyInteractive = param2;
         }
     }
 
-    public function setInvitationStatus(param1:Number, param2:uint):void {
-        var _loc3_:StatsTableItemHolder = this.getHolderByID(param1);
-        if (_loc3_) {
-            _loc3_.setInvitationStatus(param2);
+    public function updateInvitationsStatuses(param1:Boolean, param2:Vector.<DAAPIInvitationStatusVO>):void {
+        var _loc3_:EnemyVehiclesDataProvider = !!param1 ? _enemyDP : _teamDP;
+        if (_loc3_.updateInvitationsStatuses(param2)) {
+            _loc3_.invalidate();
         }
     }
 
     public function setSpeaking(param1:Number, param2:Boolean):void {
-        var _loc3_:IStatsTableItemHolderBase = null;
-        for each(_loc3_ in items) {
-            if (_loc3_.accountID == param1) {
-                StatsTableItemHolder(_loc3_).setSpeaking(param2);
-                break;
-            }
+        if (_teamDP.setSpeaking(param1, param2)) {
+            _teamDP.invalidate();
+        }
+        else if (_enemyDP.setSpeaking(param1, param2)) {
+            _enemyDP.invalidate();
         }
     }
 
@@ -135,33 +118,38 @@ public class FullStatsTableCtrl extends StatsTableControllerBase implements ISqu
     }
 
     public function onSquadBtVisibleChange(param1:DynamicSquadCtrl):void {
-        var _loc3_:DynamicSquadCtrl = null;
-        var _loc5_:StatsTableItemPositionController = null;
-        var _loc2_:int = items.length;
+        var _loc3_:Boolean = false;
+        var _loc2_:int = -1;
         var _loc4_:int = 0;
-        while (_loc4_ < _loc2_) {
-            _loc3_ = this.getHolderByIndex(_loc4_).squadItem;
-            if (_loc3_ && _loc3_ == param1) {
-                _loc5_ = positionControllers[_loc4_];
-                if (_loc3_.isAcceptBtAvailable) {
-                    this._table.squadAcceptBt.x = _loc5_.colunm == RIGHT_COLUMN ? Number(SQUAD_BT_RIGHT_X) : Number(SQUAD_BT_LEFT_X);
-                    this._table.squadAcceptBt.y = _loc5_.row * ITEM_HEIGHT;
-                    this._table.squadAcceptBt.visible = true;
-                }
-                else {
-                    this._table.squadAcceptBt.visible = false;
-                }
-                if (_loc3_.isAddBtAvailable) {
-                    this._table.squadAddBt.x = _loc5_.colunm == RIGHT_COLUMN ? Number(SQUAD_BT_RIGHT_X) : Number(SQUAD_BT_LEFT_X);
-                    this._table.squadAddBt.y = _loc5_.row * ITEM_HEIGHT;
-                    this._table.squadAddBt.visible = true;
-                }
-                else {
-                    this._table.squadAddBt.visible = false;
-                }
+        while (_loc4_ < NUM_ITEM_ROWS) {
+            if (this.getHolderByIndex(false, _loc4_).squadItem == param1) {
+                _loc2_ = _loc4_;
+                break;
+            }
+            if (this.getHolderByIndex(true, _loc4_).squadItem == param1) {
+                _loc2_ = _loc4_;
+                _loc3_ = true;
                 break;
             }
             _loc4_++;
+        }
+        if (_loc2_ != -1) {
+            if (param1.isAcceptBtAvailable) {
+                this._table.squadAcceptBt.x = !!_loc3_ ? Number(SQUAD_BT_RIGHT_X) : Number(SQUAD_BT_LEFT_X);
+                this._table.squadAcceptBt.y = _loc2_ * ITEM_HEIGHT;
+                this._table.squadAcceptBt.visible = true;
+            }
+            else {
+                this._table.squadAcceptBt.visible = false;
+            }
+            if (param1.isAddBtAvailable) {
+                this._table.squadAddBt.x = !!_loc3_ ? Number(SQUAD_BT_RIGHT_X) : Number(SQUAD_BT_LEFT_X);
+                this._table.squadAddBt.y = _loc2_ * ITEM_HEIGHT;
+                this._table.squadAddBt.visible = true;
+            }
+            else {
+                this._table.squadAddBt.visible = false;
+            }
         }
     }
 
@@ -172,17 +160,8 @@ public class FullStatsTableCtrl extends StatsTableControllerBase implements ISqu
         return new StatsTableItemHolder(_loc3_, _loc4_, param1 == RIGHT_COLUMN);
     }
 
-    override protected function createPositionController(param1:int, param2:int):StatsTableItemPositionController {
-        var _loc3_:int = param1 * NUM_ITEM_ROWS + param2;
-        var _loc4_:Number = param2 == RIGHT_COLUMN ? Number(ITEM_ENEMY_X) : Number(ITEM_ALLY_X);
-        var _loc5_:Number = param2 * ITEM_HEIGHT;
-        var _loc6_:StatsTableItemPositionController = new StatsTableItemPositionController(_loc4_, _loc5_, param1, param2, this._table.playerNameCollection[_loc3_], this._table.vehicleNameCollection[_loc3_], this._table.fragsCollection[_loc3_], this._table.deadBgCollection[_loc3_], this._table.vehicleIconCollection[_loc3_], this._table.vehicleLevelCollection[_loc3_], this._table.vehicleTypeCollection[_loc3_], this._table.vehicleActionMarkerCollection[_loc3_], this._table.icoIGRCollection[_loc3_], this._table.playerStatusCollection[_loc3_], this._table.squadStatusCollection[_loc3_], this._table.squadCollection[_loc3_], this._table.squadAcceptBt, this._table.squadAddBt, this._table.hitCollection[_loc3_], this._table.noSoundCollection[_loc3_]);
-        _loc6_.setItemHeight(ITEM_HEIGHT);
-        return _loc6_;
-    }
-
-    override protected function setSelectedItem(param1:int, param2:int):void {
-        if (param1 == RIGHT_COLUMN) {
+    override protected function setSelectedItem(param1:Boolean, param2:int):void {
+        if (param1) {
             this._table.selfBgRight.y = param2 * ITEM_HEIGHT;
             this._table.selfBgRight.visible = true;
             this._table.selfBgLeft.visible = false;
@@ -210,7 +189,7 @@ public class FullStatsTableCtrl extends StatsTableControllerBase implements ISqu
 
     private function createPlayerStatsItem(param1:int, param2:int):StatsTableItem {
         var _loc3_:int = param1 * NUM_ITEM_ROWS + param2;
-        return new StatsTableItem(this._table.playerNameCollection[_loc3_], this._table.vehicleNameCollection[_loc3_], this._table.fragsCollection[_loc3_], this._table.deadBgCollection[_loc3_], this._table.vehicleTypeCollection[_loc3_], this._table.icoIGRCollection[_loc3_], this._table.vehicleIconCollection[_loc3_], this._table.vehicleLevelCollection[_loc3_], this._table.muteCollection[_loc3_], this._table.speakAnimationCollection[_loc3_], this._table.vehicleActionMarkerCollection[_loc3_], this._table.playerStatusCollection[_loc3_]);
+        return new StatsTableItem(this._table.playerNameCollection[_loc3_], this._table.vehicleNameCollection[_loc3_], this._table.fragsCollection[_loc3_], this._table.deadBgCollection[_loc3_], this._table.vehicleTypeCollection[_loc3_], this._table.icoIGRCollection[_loc3_], this._table.vehicleIconCollection[_loc3_], this._table.vehicleLevelCollection[_loc3_], this._table.muteCollection[_loc3_], this._table.disableCommunicationCollection[_loc3_], this._table.speakAnimationCollection[_loc3_], this._table.vehicleActionMarkerCollection[_loc3_], this._table.playerStatusCollection[_loc3_]);
     }
 
     private function createSquadItem(param1:int, param2:int):DynamicSquadCtrl {
@@ -231,25 +210,21 @@ public class FullStatsTableCtrl extends StatsTableControllerBase implements ISqu
         setNoTranslateForCollection(this._table.fragsCollection);
     }
 
-    private function getHolderByID(param1:Number):StatsTableItemHolder {
-        return getItemByVehicleID(param1) as StatsTableItemHolder;
+    private function getHolderByIndex(param1:Boolean, param2:int):StatsTableItemHolder {
+        return (!!param1 ? _enemyRenderers[param2] : _allyRenderers[param2]) as StatsTableItemHolder;
     }
 
-    private function getHolderByIndex(param1:int):StatsTableItemHolder {
-        return items[param1] as StatsTableItemHolder;
-    }
-
-    private function setItemInviteShown(param1:int, param2:Boolean):void {
-        var _loc3_:StatsTableItemHolder = this.getHolderByIndex(param1);
-        if (_loc3_.containsData) {
-            _loc3_.setIsInviteShown(param2);
+    private function setItemInviteShown(param1:Boolean, param2:int, param3:Boolean):void {
+        var _loc4_:StatsTableItemHolder = this.getHolderByIndex(param1, param2);
+        if (_loc4_.containsData) {
+            _loc4_.setIsInviteShown(param3);
         }
     }
 
-    private function setItemInteractive(param1:int, param2:Boolean):void {
-        var _loc3_:StatsTableItemHolder = this.getHolderByIndex(param1);
-        if (_loc3_.containsData) {
-            _loc3_.setIsInteractive(param2);
+    private function setItemInteractive(param1:Boolean, param2:int, param3:Boolean):void {
+        var _loc4_:StatsTableItemHolder = this.getHolderByIndex(param1, param2);
+        if (_loc4_.containsData) {
+            _loc4_.setIsInteractive(param3);
         }
     }
 }

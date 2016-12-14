@@ -1,9 +1,9 @@
 package net.wg.gui.cyberSport.controls {
 import flash.text.TextField;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class RosterSettingsNumerationBlock extends UIComponent {
+public class RosterSettingsNumerationBlock extends UIComponentEx {
 
     public var tf2:TextField;
 

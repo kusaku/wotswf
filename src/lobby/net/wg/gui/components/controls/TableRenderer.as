@@ -21,9 +21,9 @@ public class TableRenderer extends SoundListItemRenderer implements ITableRender
 
     public var rendererBg:MovieClip = null;
 
-    public var disableMc:BitmapFill = null;
+    public var disableMc:net.wg.gui.components.controls.BitmapFill = null;
 
-    public var disabledOverlayMc:BitmapFill = null;
+    public var disabledOverlayMc:net.wg.gui.components.controls.BitmapFill = null;
 
     private var _statesPassive:Vector.<String>;
 
@@ -175,7 +175,7 @@ public class TableRenderer extends SoundListItemRenderer implements ITableRender
         }
     }
 
-    private function updateDisableFillSize(param1:BitmapFill):void {
+    private function updateDisableFillSize(param1:net.wg.gui.components.controls.BitmapFill):void {
         var _loc2_:Number = Math.max(scaleX, scaleY);
         param1.scaleX = 1 / _loc2_;
         param1.scaleY = 1 / _loc2_;

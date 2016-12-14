@@ -6,7 +6,6 @@ import flash.text.TextFieldAutoSize;
 
 import net.wg.infrastructure.interfaces.ITutorialCustomComponent;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
-import net.wg.utils.IEventCollector;
 
 import scaleform.clik.constants.InputValue;
 import scaleform.clik.constants.InvalidationType;
@@ -337,23 +336,19 @@ public class ButtonBar extends UIComponent implements ITutorialCustomComponent {
     }
 
     override protected function draw():void {
-        var _loc1_:IEventCollector = null;
         if (isInvalid(InvalidationType.RENDERERS) || isInvalid(InvalidationType.DATA) || isInvalid(InvalidationType.SETTINGS) || isInvalid(InvalidationType.SIZE)) {
-            _loc1_ = App.utils.events;
-            _loc1_.disableDisposingForObj(this.container);
             removeChild(this.container);
             setActualSize(_width, _height);
             this.container.scaleX = 1 / scaleX;
             this.container.scaleY = 1 / scaleY;
             addChild(this.container);
-            _loc1_.enableDisposingForObj(this.container);
             this.updateRenderers();
         }
     }
 
     protected function refreshData():void {
-        this.selectedIndex = Math.min(this._dataProvider.length - 1, this._selectedIndex);
         if (this._dataProvider) {
+            this.selectedIndex = Math.min(this._dataProvider.length - 1, this._selectedIndex);
             this._dataProvider.requestItemRange(0, this._dataProvider.length - 1, this.populateData);
         }
     }

@@ -16,8 +16,6 @@ import scaleform.clik.ui.InputDetails;
 
 public class IntroPage extends IntroPageMeta implements IIntroPageMeta {
 
-    private static const INTRO_INFO_CHANGED:String = "infoChanged";
-
     private static const STAGE_RESIZED:String = "stageResized";
 
     public var videoPlayer:SimpleVideoPlayer;
@@ -63,23 +61,15 @@ public class IntroPage extends IntroPageMeta implements IIntroPageMeta {
     }
 
     override protected function playVideo(param1:IntroInfoVO):void {
-        this._introInfo = param1;
-        invalidate(INTRO_INFO_CHANGED);
+        this.videoPlayer.volume = param1.volume;
+        this.videoPlayer.bufferTime = param1.bufferTime;
+        this.videoPlayer.source = param1.source;
     }
 
     override protected function draw():void {
         super.draw();
-        if (isInvalid(INTRO_INFO_CHANGED)) {
-            if (this._introInfo) {
-                this.videoPlayer.volume = this._introInfo.volume;
-                this.videoPlayer.bufferTime = this._introInfo.bufferTime;
-                this.videoPlayer.source = this._introInfo.source;
-            }
-        }
-        if (isInvalid(STAGE_RESIZED)) {
-            if (this._stageDimensions) {
-                IntroPage.imitateNoBorderScaleMode(this, this._stageDimensions.x, this._stageDimensions.y, this._playerOriginalWidth, this._playerOriginalHeight);
-            }
+        if (this._stageDimensions && isInvalid(STAGE_RESIZED)) {
+            IntroPage.imitateNoBorderScaleMode(this, this._stageDimensions.x, this._stageDimensions.y, this._playerOriginalWidth, this._playerOriginalHeight);
         }
     }
 

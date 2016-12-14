@@ -78,8 +78,8 @@ public class BattleSessionList extends BattleSessionListMeta implements IBattleS
         super.draw();
     }
 
-    public function as_refreshList(param1:Array):void {
-        this.groupsList.dataProvider = new DataProvider(param1);
+    override protected function refreshList(param1:DataProvider):void {
+        this.groupsList.dataProvider = param1;
     }
 
     private function setConstraints():void {
@@ -94,7 +94,7 @@ public class BattleSessionList extends BattleSessionListMeta implements IBattleS
     }
 
     private function handleTeamItemClick(param1:ListEventEx):void {
-        var _loc2_:BSListRendererVO = new BSListRendererVO(param1.itemData);
+        var _loc2_:BSListRendererVO = BSListRendererVO(param1.itemData);
         requestToJoinTeamS(_loc2_.prbID, _loc2_.prbType);
     }
 }

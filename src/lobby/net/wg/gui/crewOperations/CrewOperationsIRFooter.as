@@ -6,11 +6,11 @@ import flash.text.TextField;
 import net.wg.data.constants.Values;
 import net.wg.data.managers.IToolTipParams;
 import net.wg.gui.components.controls.SoundButtonEx;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class CrewOperationsIRFooter extends UIComponent {
+public class CrewOperationsIRFooter extends UIComponentEx {
 
     public var button:SoundButtonEx;
 

@@ -8,7 +8,7 @@ import net.wg.data.constants.Linkages;
 import net.wg.data.constants.Values;
 import net.wg.gui.components.controls.events.ItemSelectorRendererEvent;
 import net.wg.gui.components.miniclient.BattleTypeMiniClientComponent;
-import net.wg.gui.components.popOvers.PopOverConst;
+import net.wg.gui.components.popovers.PopOverConst;
 import net.wg.gui.lobby.header.events.BattleTypeSelectorEvent;
 import net.wg.infrastructure.base.meta.IBattleTypeSelectPopoverMeta;
 import net.wg.infrastructure.base.meta.impl.BattleTypeSelectPopoverMeta;
@@ -38,7 +38,7 @@ public class ItemSelectorPopover extends BattleTypeSelectPopoverMeta implements 
 
     private var _demonstrationItem:BattleTypeSelectPopoverDemonstrator = null;
 
-    private var _items:Array = null;
+    private var _items:DataProvider = null;
 
     private var _isShowDemonstrator:Boolean = false;
 
@@ -80,11 +80,8 @@ public class ItemSelectorPopover extends BattleTypeSelectPopoverMeta implements 
                 this._demonstrationItem.visible = this._isShowDemonstrator;
             }
             this.list.y = !!this._isShowDemonstrator ? Number(this._demonstrationItem.y + this._demonstrationItem.height + LIST_TOP_PADDING ^ 0) : Number(LIPS_PADDING + LIST_TOP_PADDING);
-            if (this.list.dataProvider != null) {
-                this.list.dataProvider.cleanUp();
-            }
             this.list.rowCount = this._items.length;
-            this.list.dataProvider = new DataProvider(this._items);
+            this.list.dataProvider = this._items;
             this.updateSelectedItem();
             this.list.validateNow();
             this.topLip.y = !!this._isShowDemonstrator ? Number(this._demonstrationItem.y - this.topLip.height) : Number(this.list.y - this.topLip.height - LIST_TOP_PADDING);
@@ -116,7 +113,7 @@ public class ItemSelectorPopover extends BattleTypeSelectPopoverMeta implements 
         this.bottomLip = null;
         hitArea = null;
         this._hitSprite = null;
-        this.clearData();
+        this._items = null;
         this._miniClientComponent = null;
         super.onDispose();
     }
@@ -134,15 +131,8 @@ public class ItemSelectorPopover extends BattleTypeSelectPopoverMeta implements 
         }
     }
 
-    public function as_update(param1:Array, param2:Boolean, param3:Boolean):void {
-        this.clearData();
-        this._items = [];
-        var _loc4_:int = param1.length;
-        var _loc5_:int = 0;
-        while (_loc5_ < _loc4_) {
-            this._items.push(new ItemSelectorRendererVO(param1[_loc5_]));
-            _loc5_++;
-        }
+    override protected function update(param1:DataProvider, param2:Boolean, param3:Boolean):void {
+        this._items = param1;
         this._isShowDemonstrator = param2;
         if (this._isShowDemonstrator) {
             this.createDemonstrator();
@@ -179,21 +169,6 @@ public class ItemSelectorPopover extends BattleTypeSelectPopoverMeta implements 
         }
         this._miniClientComponent.height = _loc1_;
         this._miniClientComponent.width = width;
-    }
-
-    private function clearData():void {
-        var _loc1_:int = 0;
-        var _loc2_:int = 0;
-        if (this._items) {
-            _loc1_ = this._items.length;
-            _loc2_ = 0;
-            while (_loc2_ < _loc1_) {
-                ItemSelectorRendererVO(this._items[_loc2_]).dispose();
-                _loc2_++;
-            }
-            this._items.splice(0, this._items.length);
-            this._items = null;
-        }
     }
 
     private function updateSelectedItem():void {

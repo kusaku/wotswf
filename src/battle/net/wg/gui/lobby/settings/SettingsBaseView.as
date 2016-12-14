@@ -13,6 +13,7 @@ import net.wg.gui.components.controls.CheckBox;
 import net.wg.gui.components.controls.LabelControl;
 import net.wg.gui.interfaces.ISettingsBase;
 import net.wg.gui.lobby.settings.config.SettingsConfigHelper;
+import net.wg.gui.lobby.settings.vo.SettingsViewData;
 import net.wg.gui.lobby.settings.vo.base.SettingsDataVo;
 import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.IViewStackContent;
@@ -23,11 +24,11 @@ public class SettingsBaseView extends UIComponentEx implements IViewStackContent
 
     private static const OPTION_DATA_KEY:String = "data";
 
-    protected var data:SettingsDataVo = null;
+    private var _data:SettingsDataVo = null;
 
-    protected var viewId:String = "";
+    private var _viewId:String = "";
 
-    protected var headDependedControls:Vector.<String> = null;
+    private var _headDependedControls:Vector.<String> = null;
 
     private var _toolTipMapping:Dictionary = null;
 
@@ -37,8 +38,8 @@ public class SettingsBaseView extends UIComponentEx implements IViewStackContent
 
     override protected function configUI():void {
         super.configUI();
-        if (this.data) {
-            this.setData(this.data);
+        if (this._data) {
+            this.setData(this._data);
         }
         this._toolTipMapping = new Dictionary(true);
     }
@@ -50,13 +51,14 @@ public class SettingsBaseView extends UIComponentEx implements IViewStackContent
             _loc2_ = DisplayObject(_loc1_);
             _loc2_.removeEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
             _loc2_.removeEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
+            _loc2_.removeEventListener(MouseEvent.CLICK, this.onControlClickHandler);
             delete this._toolTipMapping[_loc1_];
         }
         this._toolTipMapping = null;
-        this.headDependedControls.splice(0, this.headDependedControls.length);
-        this.headDependedControls = null;
-        this.data = null;
-        this.viewId = null;
+        this._headDependedControls.splice(0, this._headDependedControls.length);
+        this._headDependedControls = null;
+        this._data = null;
+        this._viewId = null;
         super.onDispose();
     }
 
@@ -68,12 +70,18 @@ public class SettingsBaseView extends UIComponentEx implements IViewStackContent
         return null;
     }
 
+    public function needDataWithChanges():Boolean {
+        return false;
+    }
+
     public function update(param1:Object):void {
-        this.viewId = param1.id;
-        this.data = param1.data;
+        var _loc2_:SettingsViewData = SettingsViewData(param1);
+        this._viewId = _loc2_.id;
+        this._data = _loc2_.data;
+        _loc2_.dispose();
         if (this.initialized) {
-            this.headDependedControls = new Vector.<String>();
-            this.setData(this.data);
+            this._headDependedControls = new Vector.<String>();
+            this.setData(this._data);
         }
     }
 
@@ -84,6 +92,7 @@ public class SettingsBaseView extends UIComponentEx implements IViewStackContent
         if (this._toolTipMapping[param1] == undefined) {
             param1.addEventListener(MouseEvent.ROLL_OVER, this.onControlRollOverHandler);
             param1.addEventListener(MouseEvent.ROLL_OUT, this.onControlRollOutHandler);
+            param1.addEventListener(MouseEvent.CLICK, this.onControlClickHandler);
         }
         this._toolTipMapping[param1] = this.getTooltipID(param2);
     }
@@ -101,12 +110,12 @@ public class SettingsBaseView extends UIComponentEx implements IViewStackContent
         var _loc5_:LabelControl = null;
         var _loc6_:TextField = null;
         var _loc7_:CheckBox = null;
-        if (this.data[param1]) {
+        if (this._data[param1]) {
             _loc4_ = Values.EMPTY_STR;
-            if (this.data[param1].current != null) {
+            if (this._data[param1].current != null) {
                 _loc4_ = SettingsConfigHelper.LOCALIZATION + param2 + param1 + param3;
             }
-            if (this.data[param1].hasLabel && this[param1 + SettingsConfigHelper.TYPE_LABEL]) {
+            if (this._data[param1].hasLabel && this[param1 + SettingsConfigHelper.TYPE_LABEL]) {
                 if (this[param1 + SettingsConfigHelper.TYPE_LABEL] is LabelControl) {
                     _loc5_ = this[param1 + SettingsConfigHelper.TYPE_LABEL];
                     _loc5_.text = _loc4_;
@@ -144,7 +153,23 @@ public class SettingsBaseView extends UIComponentEx implements IViewStackContent
         return _loc3_;
     }
 
+    public function get data():SettingsDataVo {
+        return this._data;
+    }
+
+    public function get viewId():String {
+        return this._viewId;
+    }
+
+    public function get headDependedControls():Vector.<String> {
+        return this._headDependedControls;
+    }
+
     private function onControlRollOutHandler(param1:MouseEvent):void {
+        App.toolTipMgr.hide();
+    }
+
+    private function onControlClickHandler(param1:MouseEvent):void {
         App.toolTipMgr.hide();
     }
 

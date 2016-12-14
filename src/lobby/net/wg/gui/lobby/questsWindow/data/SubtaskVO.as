@@ -14,7 +14,7 @@ public class SubtaskVO extends DAAPIDataClass {
     override protected function onDataWrite(param1:String, param2:Object):Boolean {
         switch (param1) {
             case "questInfo":
-                this._questInfo = new QuestRendererVO(!!param2 ? param2 : {});
+                this._questInfo = new QuestRendererVO(param2);
                 return false;
             default:
                 return true;

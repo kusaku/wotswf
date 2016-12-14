@@ -3,6 +3,8 @@ import net.wg.data.constants.Errors;
 import net.wg.data.daapi.base.DAAPIDataClass;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
+import scaleform.clik.data.DataProvider;
+
 public class PremiumWindowRatesVO extends DAAPIDataClass {
 
     private static const RATES_FIELD_NAME:String = "rates";
@@ -11,7 +13,7 @@ public class PremiumWindowRatesVO extends DAAPIDataClass {
 
     public var headerTooltip:String = "";
 
-    public var rates:Array = null;
+    public var rates:DataProvider = null;
 
     public var selectedRateId:String = "";
 
@@ -25,7 +27,7 @@ public class PremiumWindowRatesVO extends DAAPIDataClass {
         if (param1 == RATES_FIELD_NAME) {
             _loc3_ = param2 as Array;
             App.utils.asserter.assertNotNull(_loc3_, param1 + Errors.CANT_NULL);
-            this.rates = [];
+            this.rates = new DataProvider();
             for each(_loc4_ in _loc3_) {
                 this.rates.push(new PremiumItemRendererVo(_loc4_));
             }

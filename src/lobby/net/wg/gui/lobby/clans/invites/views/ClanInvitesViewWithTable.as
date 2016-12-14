@@ -98,8 +98,8 @@ public class ClanInvitesViewWithTable extends ClanInvitesViewWithTableMeta imple
         this.table.listVisible = true;
     }
 
-    public function as_setData(param1:Object):void {
-        this._model = this.parseData(param1);
+    override protected function setData(param1:ClanInvitesViewVO):void {
+        this._model = param1;
         invalidateData();
     }
 
@@ -113,12 +113,6 @@ public class ClanInvitesViewWithTable extends ClanInvitesViewWithTableMeta imple
         this._defaultSortField = param1;
         this._defaultSortDirection = param2;
         invalidate(INV_DEFAULT_SORT_FIELD);
-    }
-
-    protected function parseData(param1:Object):ClanInvitesViewVO {
-        var _loc2_:String = "parseData" + Errors.ABSTRACT_INVOKE;
-        DebugUtils.LOG_ERROR(_loc2_);
-        throw new AbstractException(_loc2_);
     }
 
     protected function getDataProviderVOClass():Class {

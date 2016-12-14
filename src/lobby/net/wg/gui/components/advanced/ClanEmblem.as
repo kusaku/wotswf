@@ -1,11 +1,10 @@
 package net.wg.gui.components.advanced {
 import net.wg.gui.components.controls.UILoaderAlt;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import org.idmedia.as3commons.util.StringUtils;
 
-import scaleform.clik.core.UIComponent;
-
-public class ClanEmblem extends UIComponent {
+public class ClanEmblem extends UIComponentEx {
 
     public var loader:UILoaderAlt = null;
 

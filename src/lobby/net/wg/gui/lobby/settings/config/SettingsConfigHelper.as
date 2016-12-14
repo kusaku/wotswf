@@ -1,17 +1,26 @@
 package net.wg.gui.lobby.settings.config {
+import flash.net.registerClassAlias;
+import flash.utils.Dictionary;
+import flash.utils.getQualifiedClassName;
+
 import net.wg.data.constants.Linkages;
 import net.wg.data.constants.Values;
+import net.wg.gui.lobby.settings.SettingsChangesMap;
 import net.wg.gui.lobby.settings.vo.CursorTabsDataVo;
 import net.wg.gui.lobby.settings.vo.MarkerTabsDataVo;
 import net.wg.gui.lobby.settings.vo.SettingsControlProp;
+import net.wg.gui.lobby.settings.vo.SettingsKeyProp;
 import net.wg.gui.lobby.settings.vo.TabsDataVo;
 import net.wg.gui.lobby.settings.vo.base.SettingsDataVo;
+import net.wg.gui.lobby.settings.vo.config.ControlsSettingsDataVo;
 import net.wg.gui.lobby.settings.vo.config.SettingConfigDataVo;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
 import scaleform.clik.data.DataProvider;
 
 public class SettingsConfigHelper implements IDisposable {
+
+    public static var FEEDBACK_SETTINGS:String = "FeedbackSettings";
 
     private static var _instance:SettingsConfigHelper = null;
 
@@ -28,8 +37,6 @@ public class SettingsConfigHelper implements IDisposable {
     public static const MARKER_SETTINGS:String = "MarkerSettings";
 
     public static const OTHER_SETTINGS:String = "OtherSettings";
-
-    public static var FEEDBACK_SETTINGS:String = "FeedbackSettings";
 
     public static const TYPE_CHECKBOX:String = "Checkbox";
 
@@ -57,6 +64,8 @@ public class SettingsConfigHelper implements IDisposable {
 
     public static const KEYS_LAYOUT:String = "keysLayout";
 
+    public static const KEYS_TOOLTIPS:String = "keysTooltips";
+
     public static const KEYBOARD_IMPORTANT_BINDS:String = "keyboardImportantBinds";
 
     public static const KEYBOARD:String = "keyboard";
@@ -77,6 +86,20 @@ public class SettingsConfigHelper implements IDisposable {
 
     public static const BULB_VOICES:String = "bulbVoices";
 
+    public static const SOUND_SPEAKERS:String = "soundSpeakers";
+
+    public static const SOUND_SPEAKERS_ID_FIELD:String = "id";
+
+    public static const SOUND_SPEAKERS_TOOLTIP_FIELD:String = "tooltip";
+
+    public static const SOUND_SPEAKERS_IS_AUTODETECT_FIELD:String = "isAutodetect";
+
+    public static const SOUND_DEVICE_ID_FIELD:String = "id";
+
+    public static const SOUND_DEVICE_SPEAKER_ID:String = "speakerId";
+
+    public static const SOUND_DEVICE:String = "soundDevice";
+
     public static const DEF_ALTERNATIVE_VOICE:String = "default";
 
     public static const AUTODETECT_BUTTON:String = "autodetectButton";
@@ -95,7 +118,7 @@ public class SettingsConfigHelper implements IDisposable {
 
     public static const SOUND_QUALITY_VISIBLE:String = "soundQualityVisible";
 
-    public static const SIZE:String = "sizes";
+    public static const SIZES:String = "sizes";
 
     public static const REFRESH_RATE:String = "refreshRate";
 
@@ -117,11 +140,15 @@ public class SettingsConfigHelper implements IDisposable {
 
     public static const HAVOK_ENABLED:String = "HAVOK_ENABLED";
 
-    public static const FULL_SCREEN:String = "fullScreen";
+    public static const SCREEN_MODE:String = "screenMode";
 
     public static const RESOLUTION:String = "resolution";
 
     public static const WINDOW_SIZE:String = "windowSize";
+
+    public static const BORDERLESS_SIZE:String = "borderlessSize";
+
+    public static const SIZES_ORDER_ID:Vector.<String> = Vector.<String>([WINDOW_SIZE, RESOLUTION, BORDERLESS_SIZE]);
 
     public static const MONITOR:String = "monitor";
 
@@ -131,7 +158,7 @@ public class SettingsConfigHelper implements IDisposable {
 
     public static const MULTISAMPLING:String = "multisampling";
 
-    public static const reservedImaginaryControls:Array = [QUALITY_ORDER, WINDOW_SIZE, RESOLUTION, MULTISAMPLING, CUSTOM_AA];
+    public static const reservedImaginaryControls:Array = [QUALITY_ORDER, WINDOW_SIZE, RESOLUTION, BORDERLESS_SIZE, MULTISAMPLING, CUSTOM_AA];
 
     public static const COLOR_GRADING_TECHNIQUE:String = "COLOR_GRADING_TECHNIQUE";
 
@@ -193,13 +220,13 @@ public class SettingsConfigHelper implements IDisposable {
 
     public static const ENABLE_OL_FILTER:String = "enableOlFilter";
 
-    public static const DYNAMIC_CAMERA:String = "dynamicCamera";
-
-    public static const HOR_STABILIZATION_SNP:String = "horStabilizationSnp";
-
     public static const RECEIVE_CLAN_INVITES_NOTIFICATIONS:String = "receiveClanInvitesNotifications";
 
     public static const INTERFACE_SCALE_DISABLED:String = "interfaceScaleDisabled";
+
+    private static const DEFAULT_KEY_RANGE:String = "defaultRange";
+
+    private static const PTT_KEY_RANGE:String = "pushToTalk";
 
     public static const KEY_RANGE:Object = {
         "defaultRange": ["APOSTROPHE", "SEMICOLON", "LBRACKET", "STOP", "COMMA", "SLASH", "BACKSLASH", "RBRACKET", "SPACE", "LSHIFT", "LALT", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "W", "V", "X", "Y", "Z", "UPARROW", "DOWNARROW", "LEFTARROW", "RIGHTARROW", "MOUSE0", "MOUSE1", "MOUSE2", "MOUSE3", "MOUSE4", "MOUSE5", "MOUSE6", "MOUSE7", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "INSERT", "DELETE", "HOME", "END", "NUMPAD0", "NUMPAD1", "NUMPAD2", "NUMPAD3", "NUMPAD4", "NUMPAD5", "NUMPAD6", "NUMPAD7", "NUMPAD8", "NUMPAD9", "NAMPADSLASH", "NAMPADSTAR", "NUMPADMINUS", "ADD", "NUMPADPERIOD"],
@@ -242,6 +269,10 @@ public class SettingsConfigHelper implements IDisposable {
 
     private var _settingsData:SettingsDataVo;
 
+    private var _changesData:SettingsChangesMap;
+
+    private var _settingsDataWithChanges:Dictionary;
+
     private var _markerTabsDataProvider:Array;
 
     private var _cursorTabsDataProvider:Array;
@@ -256,6 +287,8 @@ public class SettingsConfigHelper implements IDisposable {
 
     public function SettingsConfigHelper() {
         this._settingsData = new SettingConfigDataVo();
+        this._changesData = new SettingsChangesMap();
+        this._settingsDataWithChanges = new Dictionary();
         this._markerTabsDataProvider = [new MarkerTabsDataVo({
             "label": SETTINGS.MARKER_ENEMYTITLE,
             "linkage": null,
@@ -291,12 +324,13 @@ public class SettingsConfigHelper implements IDisposable {
             "formID": SNIPER_FORM_STR,
             "crosshairID": SNIPER_CURSOR_STR
         })];
-        this._liveUpdateVideoSettingsOrderData = Vector.<String>([MONITOR, FULL_SCREEN, WINDOW_SIZE, RESOLUTION, SIZE, REFRESH_RATE, DYNAMIC_RENDERER, INTERFACE_SCALE]);
+        this._liveUpdateVideoSettingsOrderData = Vector.<String>([MONITOR, SCREEN_MODE, WINDOW_SIZE, RESOLUTION, BORDERLESS_SIZE, SIZES, REFRESH_RATE, DYNAMIC_RENDERER, INTERFACE_SCALE]);
         this._liveUpdateVideoSettingsData = {
             "monitor": null,
-            "fullScreen": null,
+            "screenMode": null,
             "windowSize": null,
             "resolution": null,
+            "borderlessSize": null,
             "refreshRate": null,
             "dynamicRenderer": null,
             "interfaceScale": null
@@ -336,6 +370,62 @@ public class SettingsConfigHelper implements IDisposable {
             "label": SETTINGS.FEEDBACK_TAB_EVENTSINFO,
             "linkage": Linkages.FEEDBACK_BATTLE_EVENTS
         });
+        registerClassAlias(getQualifiedClassName(SettingsDataVo), SettingsDataVo);
+        registerClassAlias(getQualifiedClassName(ControlsSettingsDataVo), ControlsSettingsDataVo);
+        registerClassAlias(getQualifiedClassName(SettingsControlProp), SettingsControlProp);
+        registerClassAlias(getQualifiedClassName(SettingsKeyProp), SettingsKeyProp);
+    }
+
+    private static function applyChangesData(param1:SettingsDataVo, param2:Object):void {
+        var _loc5_:SettingsDataVo = null;
+        var _loc6_:* = null;
+        var _loc3_:Object = {};
+        var _loc4_:Object = null;
+        for (_loc6_ in param2) {
+            _loc4_ = param2[_loc6_];
+            _loc3_ = getControlInLayer(param1, _loc6_);
+            if (_loc4_ is Boolean || _loc4_ is Number || _loc4_ is String) {
+                if (_loc3_ != null && _loc4_ != null) {
+                    if (_loc3_ is SettingsControlProp) {
+                        SettingsControlProp(_loc3_).current = _loc4_;
+                    }
+                    else if (_loc3_ is SettingsKeyProp) {
+                        SettingsKeyProp(_loc3_).key = Number(_loc4_);
+                    }
+                }
+            }
+            else if (_loc3_ is SettingsControlProp) {
+                SettingsControlProp(_loc3_).current = _loc4_;
+            }
+            else {
+                _loc5_ = SettingsDataVo(_loc3_);
+                if (_loc5_ != null) {
+                    applyChangesData(_loc5_, _loc4_);
+                }
+            }
+        }
+    }
+
+    private static function getControlInLayer(param1:SettingsDataVo, param2:String):Object {
+        var _loc7_:int = 0;
+        var _loc3_:Vector.<Object> = param1.values;
+        var _loc4_:int = param1.keys.length;
+        var _loc5_:Object = param1.getByKey(param2);
+        var _loc6_:SettingsDataVo = null;
+        if (_loc5_ == null) {
+            _loc7_ = 0;
+            while (_loc7_ < _loc4_) {
+                _loc6_ = _loc3_[_loc7_] as SettingsDataVo;
+                if (_loc6_) {
+                    _loc5_ = _loc6_.getByKey(param2);
+                }
+                if (_loc5_ != null) {
+                    return _loc5_;
+                }
+                _loc7_++;
+            }
+        }
+        return _loc5_;
     }
 
     public static function get instance():SettingsConfigHelper {
@@ -345,10 +435,33 @@ public class SettingsConfigHelper implements IDisposable {
         return _instance;
     }
 
+    public static function get defaultKeyRange():Array {
+        return KEY_RANGE[DEFAULT_KEY_RANGE];
+    }
+
+    public static function get pttKeyRange():Array {
+        return KEY_RANGE[PTT_KEY_RANGE];
+    }
+
+    public function applyChangesToCurrentData():void {
+        if (this._changesData.length > 0) {
+            applyChangesData(this._settingsData, this._changesData.getChanges());
+            this._changesData.clear();
+        }
+    }
+
     public final function dispose():void {
-        var _loc1_:SettingsControlProp = null;
+        var _loc1_:SettingsDataVo = null;
+        var _loc2_:SettingsControlProp = null;
         this._settingsData.dispose();
         this._settingsData = null;
+        this._changesData.dispose();
+        this._changesData = null;
+        for each(_loc1_ in this._settingsDataWithChanges) {
+            _loc1_.dispose();
+        }
+        App.utils.data.cleanupDynamicObject(this._settingsDataWithChanges);
+        this._settingsDataWithChanges = null;
         this._markerTabsDataProvider.splice(0);
         this._markerTabsDataProvider = null;
         this._cursorTabsDataProvider.splice(0);
@@ -357,9 +470,9 @@ public class SettingsConfigHelper implements IDisposable {
         this._feedbackDataProvider = null;
         this._liveUpdateVideoSettingsOrderData.splice(0, this._liveUpdateVideoSettingsOrderData.length);
         this._liveUpdateVideoSettingsOrderData = null;
-        for each(_loc1_ in this._liveUpdateVideoSettingsData) {
-            if (_loc1_) {
-                _loc1_.dispose();
+        for each(_loc2_ in this._liveUpdateVideoSettingsData) {
+            if (_loc2_) {
+                _loc2_.dispose();
             }
         }
         this._liveUpdateVideoSettingsData = null;
@@ -370,6 +483,32 @@ public class SettingsConfigHelper implements IDisposable {
 
     public function getControlId(param1:String, param2:String):String {
         return param1.replace(param2, Values.EMPTY_STR);
+    }
+
+    public function getDataItem(param1:String, param2:Boolean = false):SettingsDataVo {
+        var _loc3_:SettingsDataVo = SettingsDataVo(this._settingsData[param1]);
+        if (param2 && this._changesData.length > 0) {
+            if (param1 in this._settingsDataWithChanges) {
+                SettingsDataVo(this._settingsDataWithChanges[param1]).dispose();
+            }
+            _loc3_ = SettingsDataVo(App.utils.data.cloneObject(_loc3_));
+            applyChangesData(_loc3_, this._changesData.getChanges());
+            this._settingsDataWithChanges[param1] = _loc3_;
+        }
+        return _loc3_;
+    }
+
+    public function getScreenSizeDataIndexById(param1:String):Number {
+        var _loc2_:Number = SIZES_ORDER_ID.length;
+        var _loc3_:Number = 0;
+        _loc3_ = 0;
+        while (_loc3_ < _loc2_) {
+            if (SIZES_ORDER_ID[_loc3_] == param1) {
+                return _loc3_;
+            }
+            _loc3_++;
+        }
+        return -1;
     }
 
     public function get tabsDataProviderWithOther():Array {
@@ -407,6 +546,10 @@ public class SettingsConfigHelper implements IDisposable {
 
     public function get tabsDataProvider():Array {
         return this._tabsDataProvider;
+    }
+
+    public function get changesData():SettingsChangesMap {
+        return this._changesData;
     }
 }
 }

@@ -6,8 +6,8 @@ import flash.text.TextField;
 
 import net.wg.gui.components.controls.DropdownMenu;
 import net.wg.gui.components.controls.ScrollingListEx;
-import net.wg.gui.components.popOvers.PopOver;
-import net.wg.gui.components.popOvers.PopOverConst;
+import net.wg.gui.components.popovers.PopOver;
+import net.wg.gui.components.popovers.PopOverConst;
 import net.wg.gui.interfaces.ISoundButtonEx;
 import net.wg.gui.lobby.vehicleCustomization.controls.RadioButtonListSelectionNavigator;
 import net.wg.gui.lobby.vehicleCustomization.data.FiltersPopoverVO;

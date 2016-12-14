@@ -237,7 +237,6 @@ public class MainMenuButtonBar extends ButtonBar {
     }
 }
 }
-
 class FindData {
 
     private var _index:int = -1;

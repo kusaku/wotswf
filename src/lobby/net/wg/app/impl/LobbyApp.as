@@ -4,6 +4,7 @@ import flash.display.DisplayObjectContainer;
 import flash.display.MovieClip;
 import flash.display.Sprite;
 import flash.events.Event;
+import flash.net.registerClassAlias;
 
 import net.wg.app.iml.base.AbstractApplication;
 import net.wg.data.constants.ContainerTypes;
@@ -11,6 +12,13 @@ import net.wg.gui.components.containers.CursorManagedContainer;
 import net.wg.gui.components.containers.MainViewContainer;
 import net.wg.gui.components.containers.ManagedContainer;
 import net.wg.gui.components.containers.WaitingManagedContainer;
+import net.wg.gui.components.controls.VO.ActionPriceVO;
+import net.wg.gui.lobby.components.data.SkillsVO;
+import net.wg.gui.lobby.fortifications.data.IntelligenceClanFilterVO;
+import net.wg.gui.lobby.fortifications.data.base.BuildingBaseVO;
+import net.wg.gui.lobby.hangar.crew.TankmanRoleVO;
+import net.wg.gui.lobby.hangar.crew.TankmanVO;
+import net.wg.gui.lobby.hangar.maintenance.data.ModuleVO;
 import net.wg.infrastructure.interfaces.IManagedContainer;
 import net.wg.infrastructure.managers.GlobalVarsManager;
 import net.wg.infrastructure.managers.IAtlasManager;
@@ -39,7 +47,7 @@ import net.wg.infrastructure.managers.impl.EventLogManager;
 import net.wg.infrastructure.managers.impl.GameInputManager;
 import net.wg.infrastructure.managers.impl.ImageManager;
 import net.wg.infrastructure.managers.impl.LoaderManagerLobby;
-import net.wg.infrastructure.managers.impl.PopoverManager;
+import net.wg.infrastructure.managers.impl.PopoverManagerLobby;
 import net.wg.infrastructure.managers.impl.SoundManager;
 import net.wg.infrastructure.managers.impl.TextManager;
 import net.wg.infrastructure.managers.impl.ToolTipManagerLobby;
@@ -52,7 +60,6 @@ import net.wg.infrastructure.managers.utils.impl.ClassFactory;
 import net.wg.infrastructure.managers.utils.impl.CommonsLobby;
 import net.wg.infrastructure.managers.utils.impl.DataUtils;
 import net.wg.infrastructure.managers.utils.impl.DateTimeLobby;
-import net.wg.infrastructure.managers.utils.impl.EventCollector;
 import net.wg.infrastructure.managers.utils.impl.FocusHandlerEx;
 import net.wg.infrastructure.managers.utils.impl.HelpLayoutManager;
 import net.wg.infrastructure.managers.utils.impl.IME;
@@ -113,6 +120,17 @@ public final class LobbyApp extends AbstractApplication {
         CLIK.disableNullFocusMoves = true;
     }
 
+    override protected function registerAliases():void {
+        super.registerAliases();
+        registerClassAlias("net.wg.gui.components.controls.VO.ActionPriceVO", ActionPriceVO);
+        registerClassAlias("net.wg.gui.lobby.hangar.maintenance.data.ModuleVO", ModuleVO);
+        registerClassAlias("net.wg.gui.lobby.hangar.crew.TankmanVO", TankmanVO);
+        registerClassAlias("net.wg.gui.lobby.hangar.crew.TankmanRoleVO", TankmanRoleVO);
+        registerClassAlias("net.wg.gui.lobby.components.data.SkillsVO", SkillsVO);
+        registerClassAlias("net.wg.gui.lobby.fortifications.data.IntelligenceClanFilterVO", IntelligenceClanFilterVO);
+        registerClassAlias("net.wg.gui.lobby.fortifications.data.base.BuildingBaseVO", BuildingBaseVO);
+    }
+
     override public function getManagedContainer(param1:String):IManagedContainer {
         var _loc2_:ManagedContainer = new ManagedContainer();
         _loc2_.type = param1;
@@ -120,7 +138,7 @@ public final class LobbyApp extends AbstractApplication {
     }
 
     override protected function getNewUtils():IUtils {
-        var _loc1_:IUtils = new Utils(new Asserter(), new Scheduler(), new LocaleLobby(), new WGJSON(), new HelpLayoutManager(), new ClassFactory(), new PopupManager(), new CommonsLobby(), new FocusHandlerEx(), new EventCollector(), new IME(), new VOManager(), new Icons(), new StyleSheetManager(), new TweenAnimator(), new AnimBuilder(), new DateTimeLobby(), new PoolManager(), new DataUtils(), new CounterManager());
+        var _loc1_:IUtils = new Utils(new Asserter(), new Scheduler(), new LocaleLobby(), new WGJSON(), new HelpLayoutManager(), new ClassFactory(), new PopupManager(), new CommonsLobby(), new FocusHandlerEx(), new IME(), new VOManager(), new Icons(), new StyleSheetManager(), new TweenAnimator(), new AnimBuilder(), new DateTimeLobby(), new PoolManager(), new DataUtils(), new CounterManager());
         _loc1_.setNations(new Nations(_loc1_));
         return _loc1_;
     }
@@ -207,7 +225,7 @@ public final class LobbyApp extends AbstractApplication {
     }
 
     override protected function getNewPopoverManager():IPopoverManager {
-        return new PopoverManager(stage);
+        return new PopoverManagerLobby(stage);
     }
 
     override protected function getNewClassManager():Object {

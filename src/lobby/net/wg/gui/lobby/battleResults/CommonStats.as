@@ -501,14 +501,14 @@ public class CommonStats extends UIComponentEx implements IViewStackContent, IEm
                     _loc4_.setBaseValues(_loc2_.armorVals, _loc2_.armorNames, _loc2_.armorTotalItems);
                     break;
                 case BATTLE_EFFICIENCY_TYPES.CAPTURE:
-                    _loc4_.setBaseValues(String(_loc2_.captureVals), _loc2_.captureNames, _loc2_.captureTotalItems);
+                    _loc4_.setBaseValues(_loc2_.captureVals, _loc2_.captureNames, _loc2_.captureTotalItems);
                     break;
                 case BATTLE_EFFICIENCY_TYPES.DEFENCE:
-                    _loc4_.setBaseValues(String(_loc2_.defenceVals), _loc2_.defenceNames, _loc2_.defenceTotalItems);
+                    _loc4_.setBaseValues(_loc2_.defenceVals, _loc2_.defenceNames, _loc2_.defenceTotalItems);
                     break;
                 case BATTLE_EFFICIENCY_TYPES.ASSIST:
                     _loc4_.totalAssistedDamage = _loc2_.damageAssisted;
-                    _loc4_.setBaseValues(String(_loc2_.damageAssistedVals), _loc2_.damageAssistedNames, _loc2_.assistTotalItems);
+                    _loc4_.setBaseValues(_loc2_.damageAssistedVals, _loc2_.damageAssistedNames, _loc2_.assistTotalItems);
                     break;
                 case BATTLE_EFFICIENCY_TYPES.CRITS:
                     _loc4_.setCritValues(_loc2_.criticalDevices, _loc2_.destroyedTankmen, _loc2_.destroyedDevices, _loc2_.critsCount);

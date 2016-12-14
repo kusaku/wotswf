@@ -57,7 +57,7 @@ public class ContactsSettingsView extends ContactsSettingsViewMeta implements IC
         }
     }
 
-    override protected function getCastedInitData(param1:Object):ContactsViewInitDataVO {
+    override protected function getContactsViewInitDataVO(param1:Object):ContactsViewInitDataVO {
         return new ContactsSettingsViewInitDataVO(param1);
     }
 

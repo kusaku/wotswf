@@ -27,12 +27,13 @@ public class FortDisableDefencePeriodWindowMeta extends AbstractWindowView {
         this.onClickApplyButton();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._disableDefencePeriodVO) {
-            this._disableDefencePeriodVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:DisableDefencePeriodVO = this._disableDefencePeriodVO;
         this._disableDefencePeriodVO = new DisableDefencePeriodVO(param1);
         this.setData(this._disableDefencePeriodVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:DisableDefencePeriodVO):void {

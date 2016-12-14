@@ -17,7 +17,6 @@ import net.wg.utils.ILocale;
 
 import org.idmedia.as3commons.util.StringUtils;
 
-import scaleform.clik.constants.ConstrainMode;
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.ButtonEvent;
@@ -97,7 +96,6 @@ public class VehicleBuyWindow extends VehicleBuyWindowMeta implements IVehicleBu
         _loc2_.right = _loc2_.right + RIGHT_OFFSET;
         _loc2_.bottom = _loc2_.bottom + LEFT_OFFSET;
         window.contentPadding = _loc2_;
-        window.getConstraints().scaleMode = ConstrainMode.COUNTER_SCALE;
     }
 
     override protected function onInitModalFocus(param1:InteractiveObject):void {

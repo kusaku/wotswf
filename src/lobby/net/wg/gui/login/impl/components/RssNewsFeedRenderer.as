@@ -9,14 +9,14 @@ import net.wg.gui.components.controls.HyperLink;
 import net.wg.gui.login.IRssNewsFeedRenderer;
 import net.wg.gui.login.impl.vo.RssItemVo;
 import net.wg.gui.utils.ExcludeTweenManager;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.motion.Tween;
 import scaleform.gfx.TextFieldEx;
 
-public class RssNewsFeedRenderer extends UIComponent implements IRssNewsFeedRenderer {
+public class RssNewsFeedRenderer extends UIComponentEx implements IRssNewsFeedRenderer {
 
     public static const MOOVING_ANIMATION_SPEED:Number = 1000;
 

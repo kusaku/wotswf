@@ -55,12 +55,13 @@ public class FortBuildingCardPopoverMeta extends SmartPopOverView {
         this.openBuyOrderWindow();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._buildingCardPopoverVO) {
-            this._buildingCardPopoverVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:BuildingCardPopoverVO = this._buildingCardPopoverVO;
         this._buildingCardPopoverVO = new BuildingCardPopoverVO(param1);
         this.setData(this._buildingCardPopoverVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:BuildingCardPopoverVO):void {

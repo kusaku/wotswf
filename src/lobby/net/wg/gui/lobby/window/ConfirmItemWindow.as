@@ -1,7 +1,6 @@
 package net.wg.gui.lobby.window {
 import net.wg.data.VO.DialogSettingsVO;
 import net.wg.data.constants.Currencies;
-import net.wg.data.constants.Errors;
 import net.wg.data.constants.Values;
 import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 import net.wg.gui.components.controls.ActionPrice;
@@ -9,7 +8,6 @@ import net.wg.gui.components.controls.DropdownMenu;
 import net.wg.gui.components.controls.VO.ActionPriceVO;
 import net.wg.infrastructure.base.meta.IConfirmItemWindowMeta;
 import net.wg.infrastructure.base.meta.impl.ConfirmItemWindowMeta;
-import net.wg.infrastructure.exceptions.AbstractException;
 import net.wg.infrastructure.interfaces.IWindow;
 import net.wg.utils.ILocale;
 
@@ -90,7 +88,7 @@ public class ConfirmItemWindow extends ConfirmItemWindowMeta implements IConfirm
     }
 
     override protected function onDispose():void {
-        this.clearData();
+        this.data = null;
         this._settingsVO = null;
         if (content != null) {
             content.dropdownMenu.removeEventListener(ListEvent.INDEX_CHANGE, this.onDropDownMenuIndexChangeHandler);
@@ -99,20 +97,9 @@ public class ConfirmItemWindow extends ConfirmItemWindowMeta implements IConfirm
         super.onDispose();
     }
 
-    public function as_setData(param1:Object):void {
-        this.clearData();
-        this.setData(param1);
-    }
-
-    protected function setData(param1:Object):void {
-        throw new AbstractException("setData" + Errors.ABSTRACT_INVOKE);
-    }
-
     override protected function setSettings(param1:DialogSettingsVO):void {
-        if (param1 != null && param1 != this._settingsVO) {
-            this._settingsVO = param1;
-            invalidate(SETTINGS_INVALID);
-        }
+        this._settingsVO = param1;
+        invalidate(SETTINGS_INVALID);
     }
 
     protected function applyData():void {
@@ -224,11 +211,11 @@ public class ConfirmItemWindow extends ConfirmItemWindowMeta implements IConfirm
             _loc6_ = this.data.actionPriceData;
             if (this._currency == CURRENCIES_CONSTANTS.CREDITS) {
                 _loc6_.newPrices = [_loc2_, _loc6_.newPrices[CURRENCIES_CONSTANTS.GOLD_INDEX]];
-                _loc6_.oldPrices = [_loc6_.oldPrices[CURRENCIES_CONSTANTS.CREDITS_INDEX] * content.nsCount.value, _loc6_.oldPrices[CURRENCIES_CONSTANTS.GOLD_INDEX]];
+                _loc6_.oldPrices = [_loc6_.oldPriceBases[CURRENCIES_CONSTANTS.CREDITS_INDEX] * content.nsCount.value, _loc6_.oldPrices[CURRENCIES_CONSTANTS.GOLD_INDEX]];
             }
             else {
                 _loc6_.newPrices = [_loc6_.newPrices[CURRENCIES_CONSTANTS.CREDITS_INDEX], _loc1_];
-                _loc6_.oldPrices = [_loc6_.oldPrices[CURRENCIES_CONSTANTS.CREDITS_INDEX], _loc6_.oldPrices[CURRENCIES_CONSTANTS.GOLD_INDEX] * content.nsCount.value];
+                _loc6_.oldPrices = [_loc6_.oldPrices[CURRENCIES_CONSTANTS.CREDITS_INDEX], _loc6_.oldPriceBases[CURRENCIES_CONSTANTS.GOLD_INDEX] * content.nsCount.value];
             }
             _loc6_.forCredits = this._currency == CURRENCIES_CONSTANTS.CREDITS;
         }

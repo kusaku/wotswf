@@ -2,6 +2,7 @@ package net.wg.gui.lobby.fortifications.cmp.buildingProcess.impl {
 import flash.display.MovieClip;
 import flash.text.TextField;
 
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.SoundTypes;
 import net.wg.gui.components.controls.TableRenderer;
 import net.wg.gui.lobby.fortifications.data.buildingProcess.BuildingProcessListItemVO;
@@ -34,6 +35,7 @@ public class BuildingProcessItemRenderer extends TableRenderer {
         }
         super.setData(param1);
         this._model = param1 as BuildingProcessListItemVO;
+        App.utils.asserter.assertNotNull(this._model, "_model" + Errors.CANT_NULL);
         this.smallBuildingsIcon.setState(this._model.buildingIcon);
         this.buildingName.htmlText = this._model.buildingName;
         this.shortDescr.htmlText = this._model.shortDescr;

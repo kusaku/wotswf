@@ -1,4 +1,4 @@
-package net.wg.gui.components.popOvers {
+package net.wg.gui.components.popovers {
 import flash.display.DisplayObject;
 import flash.geom.Point;
 import flash.geom.Rectangle;
@@ -76,14 +76,14 @@ public class SmartPopOverExternalLayout extends PopoverInternalLayout {
     }
 
     override public function invokeLayout():Object {
+        var _loc2_:SmartPopOver = null;
         var _loc4_:DisplayObject = null;
-        var _loc10_:SmartPopOverLayoutInfo = null;
         super.invokeLayout();
         if (this._positionKeyPoint == null || this._stageDimensions == null) {
             return null;
         }
         var _loc1_:Point = new Point();
-        var _loc2_:SmartPopOver = SmartPopOver(target);
+        _loc2_ = SmartPopOver(target);
         _loc1_.x = _loc2_.width;
         _loc1_.y = _loc2_.height;
         var _loc3_:Vector.<Point> = new Vector.<Point>(4);
@@ -97,7 +97,7 @@ public class SmartPopOverExternalLayout extends PopoverInternalLayout {
         }
         var _loc8_:IAbstractWrapperView = _loc2_.wrapperContent;
         var _loc9_:Rectangle = new Rectangle(0, 0, _loc2_.hitMc.width, _loc2_.hitMc.height);
-        _loc10_ = getLayoutOptions(_loc1_, _loc3_, this._stageDimensions, this._positionKeyPoint, _loc9_, this._positionKeyPointPadding, this._preferredLayout);
+        var _loc10_:SmartPopOverLayoutInfo = getLayoutOptions(_loc1_, _loc3_, this._stageDimensions, this._positionKeyPoint, _loc9_, this._positionKeyPointPadding, this._preferredLayout);
         _loc2_.arrowDirection = _loc10_.arrowDirection;
         _loc2_.arrowPosition = _loc10_.arrowPosition;
         _loc2_.x = Math.round(this.positionKeyPoint.x - _loc10_.popupPaddingLeft - _bgInternalPadding.left);

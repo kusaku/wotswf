@@ -1,4 +1,5 @@
 package net.wg.gui.battle.random.views.stats.components.playersPanel {
+import flash.events.Event;
 import flash.events.MouseEvent;
 
 import net.wg.data.VO.daapi.DAAPIInvitationStatusVO;
@@ -83,12 +84,13 @@ public class PlayersPanel extends PlayersPanelMeta implements IBattleComponentDa
         this.applyVehicleData(DAAPIVehiclesDataVO(param1));
     }
 
-    public function updateVehiclesInfo(param1:IDAAPIDataClass):void {
+    public function updateVehiclesData(param1:IDAAPIDataClass):void {
         this.applyVehicleData(DAAPIVehiclesDataVO(param1));
     }
 
     public function addVehiclesInfo(param1:IDAAPIDataClass):void {
         this.applyVehicleData(DAAPIVehiclesDataVO(param1));
+        dispatchEvent(new Event(Event.CHANGE));
     }
 
     public function setArenaInfo(param1:IDAAPIDataClass):void {
@@ -125,7 +127,7 @@ public class PlayersPanel extends PlayersPanelMeta implements IBattleComponentDa
         }
     }
 
-    public function updateVehiclesStats(param1:IDAAPIDataClass):void {
+    public function updateVehiclesStat(param1:IDAAPIDataClass):void {
         var _loc4_:DAAPIVehicleStatsVO = null;
         var _loc2_:DAAPIVehiclesStatsVO = DAAPIVehiclesStatsVO(param1);
         var _loc3_:Vector.<DAAPIVehicleStatsVO> = _loc2_.leftFrags;
@@ -295,14 +297,10 @@ public class PlayersPanel extends PlayersPanelMeta implements IBattleComponentDa
     }
 
     private function applyVehicleData(param1:DAAPIVehiclesDataVO):void {
-        if (param1.leftVehicleInfos) {
-            this.listLeft.setVehicleData(param1.leftVehicleInfos);
-            this.listLeft.updateOrder(param1.leftVehiclesIDs);
-        }
-        if (param1.rightVehicleInfos) {
-            this.listRight.setVehicleData(param1.rightVehicleInfos);
-            this.listRight.updateOrder(param1.rightVehiclesIDs);
-        }
+        this.listLeft.setVehicleData(param1.leftVehicleInfos);
+        this.listLeft.updateOrder(param1.leftVehiclesIDs);
+        this.listRight.setVehicleData(param1.rightVehicleInfos);
+        this.listRight.updateOrder(param1.rightVehiclesIDs);
     }
 
     private function setListsState(param1:int):void {

@@ -116,23 +116,23 @@ public class TechTreePage extends TechTreeMeta implements ITechTreePage {
         this.nationTree.invalidateNodesData(param1, _loc2_);
     }
 
-    public function as_setAvailableNations(param1:Array):void {
-        this.nationsBar.dataProvider = new DataProvider(param1);
+    override protected function setAvailableNations(param1:DataProvider):void {
+        this.nationsBar.dataProvider = param1;
     }
 
-    public function as_setInventoryItems(param1:Array):void {
+    override protected function setInventoryItems(param1:Array):void {
         this.nationTree.setNodesStates(NODE_STATE_FLAGS.IN_INVENTORY, param1);
     }
 
-    public function as_setNext2Unlock(param1:Array):void {
+    override protected function setNext2Unlock(param1:Array):void {
         this.nationTree.setNodesStates(NODE_STATE_FLAGS.NEXT_2_UNLOCK, param1, NodeData.UNLOCK_PROPS_FIELD);
     }
 
-    public function as_setNodeVehCompareData(param1:Array):void {
+    override protected function setNodeVehCompareData(param1:Array):void {
         this.nationTree.setItemsField(param1, NodeData.VEH_COMPARE_TREE_NODE_DATA);
     }
 
-    public function as_setNodesStates(param1:Number, param2:Array):void {
+    override protected function setNodesStates(param1:Number, param2:Array):void {
         this.nationTree.setNodesStates(param1, param2);
     }
 
@@ -143,11 +143,11 @@ public class TechTreePage extends TechTreeMeta implements ITechTreePage {
         }
     }
 
-    public function as_setUnlockProps(param1:Array):void {
+    override protected function setUnlockProps(param1:Array):void {
         this.nationTree.setItemsField(param1, NodeData.UNLOCK_PROPS_FIELD);
     }
 
-    public function as_setVehicleTypeXP(param1:Array):void {
+    override protected function setVehicleTypeXP(param1:Array):void {
         this.nationTree.setVehicleTypeXP(param1);
     }
 

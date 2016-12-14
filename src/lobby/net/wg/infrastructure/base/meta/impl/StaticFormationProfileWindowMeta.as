@@ -14,9 +14,9 @@ public class StaticFormationProfileWindowMeta extends AbstractWindowView {
 
     private var _staticFormationProfileButtonInfoVO:StaticFormationProfileButtonInfoVO;
 
-    private var _staticFormationProfileWindowVO:StaticFormationProfileWindowVO;
-
     private var _staticFormationProfileEmblemVO:StaticFormationProfileEmblemVO;
+
+    private var _staticFormationProfileWindowVO:StaticFormationProfileWindowVO;
 
     public function StaticFormationProfileWindowMeta() {
         super();
@@ -27,13 +27,13 @@ public class StaticFormationProfileWindowMeta extends AbstractWindowView {
             this._staticFormationProfileButtonInfoVO.dispose();
             this._staticFormationProfileButtonInfoVO = null;
         }
-        if (this._staticFormationProfileWindowVO) {
-            this._staticFormationProfileWindowVO.dispose();
-            this._staticFormationProfileWindowVO = null;
-        }
         if (this._staticFormationProfileEmblemVO) {
             this._staticFormationProfileEmblemVO.dispose();
             this._staticFormationProfileEmblemVO = null;
+        }
+        if (this._staticFormationProfileWindowVO) {
+            this._staticFormationProfileWindowVO.dispose();
+            this._staticFormationProfileWindowVO = null;
         }
         super.onDispose();
     }
@@ -48,28 +48,31 @@ public class StaticFormationProfileWindowMeta extends AbstractWindowView {
         this.onClickHyperLink(param1);
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._staticFormationProfileWindowVO) {
-            this._staticFormationProfileWindowVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:StaticFormationProfileWindowVO = this._staticFormationProfileWindowVO;
         this._staticFormationProfileWindowVO = new StaticFormationProfileWindowVO(param1);
         this.setData(this._staticFormationProfileWindowVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_updateFormationInfo(param1:Object):void {
-        if (this._staticFormationProfileEmblemVO) {
-            this._staticFormationProfileEmblemVO.dispose();
-        }
+    public final function as_updateFormationInfo(param1:Object):void {
+        var _loc2_:StaticFormationProfileEmblemVO = this._staticFormationProfileEmblemVO;
         this._staticFormationProfileEmblemVO = new StaticFormationProfileEmblemVO(param1);
         this.updateFormationInfo(this._staticFormationProfileEmblemVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_updateActionButton(param1:Object):void {
-        if (this._staticFormationProfileButtonInfoVO) {
-            this._staticFormationProfileButtonInfoVO.dispose();
-        }
+    public final function as_updateActionButton(param1:Object):void {
+        var _loc2_:StaticFormationProfileButtonInfoVO = this._staticFormationProfileButtonInfoVO;
         this._staticFormationProfileButtonInfoVO = new StaticFormationProfileButtonInfoVO(param1);
         this.updateActionButton(this._staticFormationProfileButtonInfoVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:StaticFormationProfileWindowVO):void {

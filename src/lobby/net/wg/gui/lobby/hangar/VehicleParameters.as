@@ -9,8 +9,8 @@ import net.wg.data.constants.Linkages;
 import net.wg.data.constants.generated.HANGAR_ALIASES;
 import net.wg.gui.components.controls.ScrollingListEx;
 import net.wg.gui.events.ListEventEx;
+import net.wg.gui.lobby.components.data.VehParamVO;
 import net.wg.gui.lobby.hangar.interfaces.IVehicleParameters;
-import net.wg.gui.lobby.hangar.vehicleParameters.data.VehParamVO;
 import net.wg.infrastructure.base.meta.impl.VehicleParametersMeta;
 import net.wg.utils.helpLayout.HelpLayoutVO;
 

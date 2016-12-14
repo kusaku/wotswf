@@ -6,14 +6,17 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 
+import net.wg.data.constants.ContainerTypes;
 import net.wg.data.constants.Values;
+import net.wg.gui.notification.events.NotificationLayoutEvent;
 import net.wg.gui.notification.events.ServiceMessageEvent;
-import net.wg.gui.notification.vo.LayoutInfoVO;
 import net.wg.gui.notification.vo.PopUpNotificationInfoVO;
 import net.wg.gui.utils.ExcludeTweenManager;
 import net.wg.infrastructure.base.meta.INotificationPopUpViewerMeta;
 import net.wg.infrastructure.base.meta.impl.NotificationPopUpViewerMeta;
+import net.wg.infrastructure.events.LoaderEvent;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
+import net.wg.infrastructure.managers.ILoaderManager;
 
 import scaleform.clik.motion.Tween;
 
@@ -21,7 +24,9 @@ public class NotificationPopUpViewer extends NotificationPopUpViewerMeta impleme
 
     private static const TWEEN_DURATION:uint = 500;
 
-    private var _layoutInfo:LayoutInfoVO;
+    private static const DELAY:Number = 50;
+
+    private static const DEFAULT_PADDING:Point = new Point(4, 40);
 
     private var _pendingForDisplay:Vector.<PopUpNotificationInfoVO>;
 
@@ -43,23 +48,27 @@ public class NotificationPopUpViewer extends NotificationPopUpViewerMeta impleme
 
     private var _maxAvailableMessagesCount:uint = 5;
 
+    private var _padding:Point = null;
+
+    private var _loaderMgr:ILoaderManager = null;
+
     public function NotificationPopUpViewer(param1:Class) {
-        this._layoutInfo = new LayoutInfoVO({
-            "paddingRight": 0,
-            "paddingBottom": 0
-        });
         this._pendingForDisplay = new Vector.<PopUpNotificationInfoVO>();
         this._displayingNowPopUps = new Vector.<ServiceMessagePopUp>();
         this._animationManager = new ExcludeTweenManager();
         super();
-        this._smContainer = App.instance.systemMessages;
+        this._padding = DEFAULT_PADDING;
+        this._smContainer = App.systemMessages;
+        this._loaderMgr = App.instance.loaderMgr;
         this._popupClass = param1;
     }
 
     override protected function configUI():void {
         super.configUI();
-        this._smContainer.addEventListener(MouseEvent.MOUSE_OVER, this.onSMContainerMouseOverHandler, false, 0, true);
-        this._smContainer.addEventListener(MouseEvent.MOUSE_OUT, this.onSMContainerMouseOutHandler, false, 0, true);
+        this._smContainer.addEventListener(MouseEvent.MOUSE_OVER, this.onSMContainerMouseOverHandler);
+        this._smContainer.addEventListener(MouseEvent.MOUSE_OUT, this.onSMContainerMouseOutHandler);
+        this._smContainer.addEventListener(NotificationLayoutEvent.UPDATE_LAYOUT, this.onSmContainerUpdateLayoutHandler);
+        this._loaderMgr.addEventListener(LoaderEvent.VIEW_LOADING, this.onLoaderMgrViewLoadingHandler);
     }
 
     override protected function draw():void {
@@ -89,7 +98,7 @@ public class NotificationPopUpViewer extends NotificationPopUpViewerMeta impleme
                 }
                 _loc1_.validateNow();
                 _loc2_ = _loc1_.height;
-                _loc3_ = this._stageDimensions.y - _loc4_ - this._popupPadding * _loc7_ - this._layoutInfo.paddingBottom - _loc2_ >> 0;
+                _loc3_ = this._stageDimensions.y - _loc4_ - this._popupPadding * _loc7_ - this._padding.y - _loc2_ >> 0;
                 if (_loc3_ > 0) {
                     this._smContainer.addChild(_loc1_);
                     this.setupPopUpPosition(_loc1_, _loc3_);
@@ -113,7 +122,7 @@ public class NotificationPopUpViewer extends NotificationPopUpViewerMeta impleme
                 while (_loc10_ < _loc9_ && _loc6_) {
                     _loc1_ = this._displayingNowPopUps[_loc10_];
                     _loc2_ = _loc1_.height;
-                    _loc3_ = this._stageDimensions.y - _loc4_ - this._popupPadding * _loc7_ - this._layoutInfo.paddingBottom - _loc2_ >> 0;
+                    _loc3_ = this._stageDimensions.y - _loc4_ - this._popupPadding * _loc7_ - this._padding.y - _loc2_ >> 0;
                     if (_loc3_ > 0) {
                         this.setupPopUpPosition(_loc1_, _loc3_);
                         _loc4_ = _loc4_ + _loc2_;
@@ -159,13 +168,6 @@ public class NotificationPopUpViewer extends NotificationPopUpViewerMeta impleme
         _loc2_.dispose();
     }
 
-    override protected function layoutInfo(param1:LayoutInfoVO):void {
-        this.clearLayoutInfo();
-        this._layoutInfo = param1;
-        this._arrangeLayout = true;
-        invalidate();
-    }
-
     override protected function onDispose():void {
         App.utils.scheduler.cancelTask(this.postponedPopupRemoving);
         while (this._displayingNowPopUps.length > 0) {
@@ -174,10 +176,13 @@ public class NotificationPopUpViewer extends NotificationPopUpViewerMeta impleme
         this._displayingNowPopUps = null;
         this._smContainer.removeEventListener(MouseEvent.MOUSE_OVER, this.onSMContainerMouseOverHandler);
         this._smContainer.removeEventListener(MouseEvent.MOUSE_OUT, this.onSMContainerMouseOutHandler);
+        this._smContainer.removeEventListener(NotificationLayoutEvent.UPDATE_LAYOUT, this.onSmContainerUpdateLayoutHandler);
         this._smContainer = null;
+        this._loaderMgr.removeEventListener(LoaderEvent.VIEW_LOADING, this.onLoaderMgrViewLoadingHandler);
+        this._loaderMgr = null;
         this._animationManager.dispose();
         this._animationManager = null;
-        this.clearLayoutInfo();
+        this._padding = null;
         this._stageDimensions = null;
         this._popupClass = null;
         this.clearPendingList();
@@ -241,7 +246,7 @@ public class NotificationPopUpViewer extends NotificationPopUpViewerMeta impleme
         this._animationManager.registerAndLaunch(TWEEN_DURATION, param1, {
             "y": param2,
             "alpha": 1,
-            "x": this._stageDimensions.x - param1.width - this._layoutInfo.paddingRight >> 0
+            "x": this._stageDimensions.x - param1.width - this._padding.x >> 0
         }, this.getDefaultTweenSet());
     }
 
@@ -318,19 +323,20 @@ public class NotificationPopUpViewer extends NotificationPopUpViewerMeta impleme
         return -1;
     }
 
-    private function clearLayoutInfo():void {
-        if (this._layoutInfo) {
-            this._layoutInfo.dispose();
-            this._layoutInfo = null;
-        }
-    }
-
     private function clearPendingList():void {
         var _loc1_:IDisposable = null;
         for each(_loc1_ in this._pendingForDisplay) {
             _loc1_.dispose();
         }
         this._pendingForDisplay.splice(0, this._pendingForDisplay.length);
+    }
+
+    private function setPadding(param1:Point):void {
+        if (!this._padding.equals(param1)) {
+            this._padding = param1;
+            this._arrangeLayout = true;
+            invalidate();
+        }
     }
 
     private function onSMContainerMouseOverHandler(param1:MouseEvent):void {
@@ -343,7 +349,7 @@ public class NotificationPopUpViewer extends NotificationPopUpViewerMeta impleme
 
     private function onPopUpMessageAreaClickedHandler(param1:Event):void {
         param1.stopImmediatePropagation();
-        App.utils.scheduler.scheduleTask(this.postponedPopupRemoving, 50, param1.target, false, true);
+        App.utils.scheduler.scheduleTask(this.postponedPopupRemoving, DELAY, param1.target, false, true);
     }
 
     private function onPopUpMessageButtonClickedHandler(param1:ServiceMessageEvent):void {
@@ -360,6 +366,16 @@ public class NotificationPopUpViewer extends NotificationPopUpViewerMeta impleme
     private function onPopUpHidedHandler(param1:Event):void {
         var _loc2_:ServiceMessagePopUp = ServiceMessagePopUp(param1.target);
         this.removePopupAt(this._displayingNowPopUps.indexOf(_loc2_), true);
+    }
+
+    private function onSmContainerUpdateLayoutHandler(param1:NotificationLayoutEvent):void {
+        this.setPadding(param1.padding);
+    }
+
+    private function onLoaderMgrViewLoadingHandler(param1:LoaderEvent):void {
+        if (param1.config.type == ContainerTypes.SUBVIEW) {
+            this.setPadding(DEFAULT_PADDING);
+        }
     }
 }
 }

@@ -42,12 +42,13 @@ public class TweenManagerMeta extends BaseDAAPIModule {
         this.disposeAll();
     }
 
-    public function as_setDataFromXml(param1:Object):void {
-        if (this._tweenConstraintsVO) {
-            this._tweenConstraintsVO.dispose();
-        }
+    public final function as_setDataFromXml(param1:Object):void {
+        var _loc2_:TweenConstraintsVO = this._tweenConstraintsVO;
         this._tweenConstraintsVO = new TweenConstraintsVO(param1);
         this.setDataFromXml(this._tweenConstraintsVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setDataFromXml(param1:TweenConstraintsVO):void {

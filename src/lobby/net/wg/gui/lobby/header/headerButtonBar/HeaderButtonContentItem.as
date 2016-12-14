@@ -8,12 +8,12 @@ import flash.text.TextFormat;
 import net.wg.gui.interfaces.IHeaderButtonContentItem;
 import net.wg.gui.lobby.header.LobbyHeader;
 import net.wg.gui.lobby.header.events.HeaderEvents;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.utils.Padding;
 
-public class HeaderButtonContentItem extends UIComponent implements IHeaderButtonContentItem {
+public class HeaderButtonContentItem extends UIComponentEx implements IHeaderButtonContentItem {
 
     private static const NARROW_FONT_SIZE:int = 13;
 

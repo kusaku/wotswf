@@ -8,6 +8,7 @@ import net.wg.gui.components.controls.DropdownMenu;
 import net.wg.gui.components.controls.LabelControl;
 import net.wg.gui.components.controls.RangeSlider;
 import net.wg.gui.components.controls.Slider;
+import net.wg.gui.lobby.settings.components.RadioButtonBar;
 import net.wg.gui.lobby.settings.components.SettingsStepSlider;
 import net.wg.gui.lobby.settings.config.SettingsConfigHelper;
 import net.wg.gui.lobby.settings.events.SettingViewEvent;
@@ -67,7 +68,7 @@ public class GraphicSettings extends GraphicSettingsBase {
 
     private var _initialFOVValues:Array = null;
 
-    private const _imaginaryIdList:Vector.<String> = Vector.<String>([SettingsConfigHelper.CUSTOM_AA, SettingsConfigHelper.MULTISAMPLING, SettingsConfigHelper.WINDOW_SIZE, SettingsConfigHelper.RESOLUTION, SettingsConfigHelper.PRESETS, SettingsConfigHelper.QUALITY_ORDER]);
+    private const _imaginaryIdList:Vector.<String> = Vector.<String>([SettingsConfigHelper.CUSTOM_AA, SettingsConfigHelper.MULTISAMPLING, SettingsConfigHelper.WINDOW_SIZE, SettingsConfigHelper.RESOLUTION, SettingsConfigHelper.BORDERLESS_SIZE, SettingsConfigHelper.PRESETS, SettingsConfigHelper.QUALITY_ORDER]);
 
     public function GraphicSettings() {
         this._onlyPresetsDP = [];
@@ -159,7 +160,7 @@ public class GraphicSettings extends GraphicSettingsBase {
         _loc6_.removeEventListener(ListEvent.INDEX_CHANGE, this.onGraphicsQualityIndexChangeHandler);
         _loc9_ = SettingsConfigHelper.RENDER_PIPELINE;
         _loc7_ = SettingsControlProp(data[_loc9_]);
-        var _loc2_:ButtonBarEx = this[_loc9_ + _loc7_.type];
+        var _loc2_:RadioButtonBar = this[_loc9_ + _loc7_.type];
         _loc2_.removeEventListener(IndexEvent.INDEX_CHANGE, this.onGraphicsQualityRenderPipelineIndexChangeHandler);
         for (_loc9_ in this._graphicsQualityDataProv) {
             if (_loc9_ == SettingsConfigHelper.RENDER_PIPELINE) {
@@ -344,7 +345,7 @@ public class GraphicSettings extends GraphicSettingsBase {
         var _loc14_:DropdownMenu = null;
         this._skipIdList = new Vector.<String>();
         this._extendAdvancedControls = {};
-        var _loc2_:Vector.<String> = Vector.<String>([SettingsConfigHelper.SMOOTHING, SettingsConfigHelper.SIZE]);
+        var _loc2_:Vector.<String> = Vector.<String>([SettingsConfigHelper.SMOOTHING, SettingsConfigHelper.SIZES]);
         this._skipIdList = this._qualityOrderIdList.slice(0);
         this._skipIdList = this._skipIdList.concat(this._imaginaryIdList);
         this._skipIdList = this._skipIdList.concat(_loc2_);
@@ -400,10 +401,7 @@ public class GraphicSettings extends GraphicSettingsBase {
                             if (this._skipSetEnableIdList.indexOf(_loc6_) == -1) {
                                 _loc11_.enabled = _loc10_;
                             }
-                            if (_loc6_ == SettingsConfigHelper.FULL_SCREEN) {
-                                isFullScreen = _loc11_.selected;
-                            }
-                            else if (_loc6_ == SettingsConfigHelper.DYNAMIC_FOV) {
+                            if (_loc6_ == SettingsConfigHelper.DYNAMIC_FOV) {
                                 fovRangeSlider.rangeMode = _loc11_.selected;
                             }
                             break;
@@ -437,6 +435,9 @@ public class GraphicSettings extends GraphicSettingsBase {
                             if (this._skipSetEnableIdList.indexOf(_loc6_) == -1) {
                                 this.updateDropDownEnabled(_loc6_);
                             }
+                            if (_loc6_ == SettingsConfigHelper.SCREEN_MODE) {
+                                _currentScreenModeId = SettingsConfigHelper.SIZES_ORDER_ID[_loc7_.current];
+                            }
                     }
                 }
             }
@@ -446,7 +447,7 @@ public class GraphicSettings extends GraphicSettingsBase {
             }
         }
         this.initMonitors();
-        this.updateFullScreenDependentControls();
+        this.updateScreenModeDependentControls();
         this.setSizeControl(false);
         this.initRefreshRateControl();
         this.updateRefreshRate();
@@ -457,6 +458,7 @@ public class GraphicSettings extends GraphicSettingsBase {
         this.updateAdvancedDependedControls();
         this._allowCheckPreset = true;
         this._isInited = true;
+        this.tryFindPreset();
     }
 
     private function initMonitors():void {
@@ -465,17 +467,20 @@ public class GraphicSettings extends GraphicSettingsBase {
         var _loc3_:uint = _loc1_.options is Array ? uint(_loc1_.options.length) : uint(0);
         var _loc4_:SettingsControlProp = SettingsControlProp(data[SettingsConfigHelper.RESOLUTION]);
         var _loc5_:SettingsControlProp = SettingsControlProp(data[SettingsConfigHelper.WINDOW_SIZE]);
+        var _loc6_:SettingsControlProp = SettingsControlProp(data[SettingsConfigHelper.BORDERLESS_SIZE]);
         _loc4_.prevVal = [];
         _loc5_.prevVal = [];
-        var _loc6_:Number = 0;
-        while (_loc6_ < _loc3_) {
-            _loc4_.prevVal[_loc6_] = _loc6_ == _loc2_ ? _loc4_.changedVal : 0;
-            _loc5_.prevVal[_loc6_] = _loc6_ == _loc2_ ? _loc5_.changedVal : 0;
-            _loc6_++;
+        _loc6_.prevVal = [];
+        var _loc7_:Number = 0;
+        while (_loc7_ < _loc3_) {
+            _loc4_.prevVal[_loc7_] = _loc7_ == _loc2_ ? _loc4_.changedVal : 0;
+            _loc5_.prevVal[_loc7_] = _loc7_ == _loc2_ ? _loc5_.changedVal : 0;
+            _loc6_.prevVal[_loc7_] = _loc7_ == _loc2_ ? _loc6_.changedVal : 0;
+            _loc7_++;
         }
     }
 
-    private function updateFullScreenDependentControls():void {
+    private function updateScreenModeDependentControls():void {
         var _loc2_:String = null;
         var _loc3_:SettingsControlProp = null;
         var _loc4_:UIComponent = null;
@@ -486,40 +491,39 @@ public class GraphicSettings extends GraphicSettingsBase {
             _loc4_ = this[_loc2_ + _loc3_.type];
             if (_loc3_.type == SettingsConfigHelper.TYPE_DROPDOWN) {
                 _loc5_ = this[_loc2_ + _loc3_.type];
-                _loc4_.enabled = isFullScreen && !(_loc3_.changedVal == null || _loc3_.readOnly) && _loc5_.dataProvider.length > 1;
+                _loc4_.enabled = _currentScreenModeId == SettingsConfigHelper.RESOLUTION && !(_loc3_.changedVal == null || _loc3_.readOnly) && _loc5_.dataProvider.length > 1;
             }
             else {
-                _loc4_.enabled = isFullScreen && !(_loc3_.changedVal == null || _loc3_.readOnly);
+                _loc4_.enabled = _currentScreenModeId == SettingsConfigHelper.RESOLUTION && !(_loc3_.changedVal == null || _loc3_.readOnly);
             }
         }
     }
 
     private function setSizeControl(param1:Boolean = true):void {
-        var _loc2_:String = SettingsConfigHelper.SIZE;
+        var _loc2_:String = SettingsConfigHelper.SIZES;
         var _loc3_:SettingsControlProp = SettingsControlProp(data[_loc2_]);
         var _loc4_:DropdownMenu = this[_loc2_ + _loc3_.type];
-        var _loc5_:String = !!isFullScreen ? SettingsConfigHelper.RESOLUTION : SettingsConfigHelper.WINDOW_SIZE;
-        var _loc6_:SettingsControlProp = SettingsControlProp(data[_loc5_]);
-        sizesLabel.text = SettingsConfigHelper.LOCALIZATION + _loc5_;
-        var _loc7_:SettingsControlProp = SettingsControlProp(data[SettingsConfigHelper.MONITOR]);
-        var _loc8_:Number = Number(_loc7_.changedVal);
-        _loc3_.options = _loc6_.options[_loc8_];
-        var _loc9_:Number = Number(_loc6_.changedVal);
+        var _loc5_:SettingsControlProp = SettingsControlProp(data[_currentScreenModeId]);
+        sizesLabel.text = SettingsConfigHelper.LOCALIZATION + _currentScreenModeId;
+        var _loc6_:SettingsControlProp = SettingsControlProp(data[SettingsConfigHelper.MONITOR]);
+        var _loc7_:Number = Number(_loc6_.changedVal);
+        _loc3_.options = _loc5_.options[_loc7_];
+        var _loc8_:Number = Number(_loc5_.changedVal);
         if (param1) {
-            _loc9_ = _loc3_.options.length - 1;
+            _loc8_ = _loc3_.options.length - 1;
             if (_loc4_.selectedIndex >= 0 && _loc4_.selectedIndex <= _loc4_.dataProvider.length) {
-                _loc9_ = this.trySearchSameSizeForAnotherMonitor(_loc4_.dataProvider.requestItemAt(_loc4_.selectedIndex).toString(), _loc3_.options);
+                _loc8_ = this.trySearchSameSizeForAnotherMonitor(_loc4_.dataProvider.requestItemAt(_loc4_.selectedIndex).toString(), _loc3_.options);
             }
         }
         _loc4_.dataProvider = new DataProvider(_loc3_.options);
-        var _loc10_:Number = _loc4_.selectedIndex;
-        _loc4_.selectedIndex = _loc9_;
+        var _loc9_:Number = _loc4_.selectedIndex;
+        _loc4_.selectedIndex = _loc8_;
         this.updateDropDownEnabled(_loc2_);
         if (!this._isInited) {
-            _loc3_.current = _loc9_;
+            _loc3_.current = _loc8_;
             _loc4_.addEventListener(ListEvent.INDEX_CHANGE, this.onDropDownIndexChangeHandler);
         }
-        else if (_loc10_ == _loc9_) {
+        else if (_loc9_ == _loc8_) {
             this.updateInterfaceScale();
         }
     }
@@ -527,7 +531,12 @@ public class GraphicSettings extends GraphicSettingsBase {
     private function updateDropDownEnabled(param1:String):void {
         var _loc2_:SettingsControlProp = SettingsControlProp(data.getByKey(param1));
         var _loc3_:DropdownMenu = this[param1 + _loc2_.type];
-        _loc3_.enabled = _loc3_.dataProvider.length > 1 && !_loc2_.readOnly;
+        if (param1 == SettingsConfigHelper.SIZES) {
+            _loc3_.enabled = _loc3_.dataProvider.length > 1 && !_loc2_.readOnly && _currentScreenModeId != SettingsConfigHelper.BORDERLESS_SIZE;
+        }
+        else {
+            _loc3_.enabled = _loc3_.dataProvider.length > 1 && !_loc2_.readOnly;
+        }
     }
 
     private function setInitialFOVValues():void {
@@ -555,7 +564,7 @@ public class GraphicSettings extends GraphicSettingsBase {
             _loc3_.current = _loc7_.current;
         }
         var _loc5_:Object = _loc3_.changedVal;
-        if (isFullScreen) {
+        if (_currentScreenModeId == SettingsConfigHelper.RESOLUTION) {
             _loc8_ = monitorDropDown.selectedIndex;
             _loc9_ = sizesDropDown.selectedIndex;
             _loc10_ = _loc3_.options[_loc8_][_loc9_];
@@ -600,7 +609,7 @@ public class GraphicSettings extends GraphicSettingsBase {
         if (!_loc3_.visible) {
             return;
         }
-        var _loc4_:Number = Number(isFullScreen);
+        var _loc4_:Number = SettingsConfigHelper.instance.getScreenSizeDataIndexById(_currentScreenModeId);
         var _loc5_:int = monitorDropDown.selectedIndex;
         var _loc6_:int = sizesDropDown.selectedIndex;
         var _loc7_:Array = _loc2_.options[_loc4_][_loc5_][_loc6_];
@@ -946,9 +955,8 @@ public class GraphicSettings extends GraphicSettingsBase {
         var _loc6_:String = null;
         var _loc7_:SettingsControlProp = null;
         var _loc10_:SettingsControlProp = null;
-        var _loc11_:String = null;
-        var _loc12_:SettingsControlProp = null;
-        var _loc13_:Number = NaN;
+        var _loc11_:SettingsControlProp = null;
+        var _loc12_:Number = NaN;
         var _loc1_:CheckBox = null;
         var _loc2_:DropdownMenu = null;
         var _loc3_:Slider = null;
@@ -984,14 +992,13 @@ public class GraphicSettings extends GraphicSettingsBase {
                         break;
                     case SettingsConfigHelper.TYPE_DROPDOWN:
                         _loc2_ = DropdownMenu(this[_loc6_ + _loc7_.type]);
-                        if (_loc6_ == SettingsConfigHelper.SIZE) {
-                            _loc11_ = !!isFullScreen ? SettingsConfigHelper.RESOLUTION : SettingsConfigHelper.WINDOW_SIZE;
-                            _loc12_ = SettingsControlProp(SettingsConfigHelper.instance.liveUpdateVideoSettingsData[_loc11_]);
-                            if (_loc12_ && _loc12_.options is Array) {
-                                _loc13_ = monitorDropDown.selectedIndex;
-                                SettingsControlProp(data[_loc11_]).prevVal[_loc13_] = _loc12_.changedVal;
-                                _loc2_.dataProvider = new DataProvider(_loc12_.options[_loc13_]);
-                                _loc2_.selectedIndex = int(_loc12_.changedVal);
+                        if (_loc6_ == SettingsConfigHelper.SIZES) {
+                            _loc11_ = SettingsControlProp(SettingsConfigHelper.instance.liveUpdateVideoSettingsData[_currentScreenModeId]);
+                            if (_loc11_ && _loc11_.options is Array) {
+                                _loc12_ = monitorDropDown.selectedIndex;
+                                SettingsControlProp(data[_currentScreenModeId]).prevVal[_loc12_] = _loc11_.changedVal;
+                                _loc2_.dataProvider = new DataProvider(_loc11_.options[_loc12_]);
+                                _loc2_.selectedIndex = int(_loc11_.changedVal);
                                 _loc2_.enabled = _loc2_.dataProvider.length > 1;
                             }
                         }
@@ -1031,7 +1038,13 @@ public class GraphicSettings extends GraphicSettingsBase {
     }
 
     private function updateColorFilterPreview(param1:int):void {
-        colorFilterOverlayImg.source = this._colorFilterPreviews[param1];
+        var _loc2_:String = this._colorFilterPreviews[param1];
+        if (_loc2_) {
+            colorFilterOverlayImg.source = _loc2_;
+        }
+        else {
+            colorFilterOverlayImg.unload();
+        }
         colorFilterIntensitySlider.enabled = param1 != SettingsConfigHelper.NO_COLOR_FILTER_DATA;
         colorFilterIntensityValue.visible = param1 != SettingsConfigHelper.NO_COLOR_FILTER_DATA;
     }
@@ -1077,7 +1090,7 @@ public class GraphicSettings extends GraphicSettingsBase {
         var _loc4_:DropdownMenu = null;
         var _loc5_:int = 0;
         var _loc6_:int = 0;
-        if (isFullScreen) {
+        if (_currentScreenModeId == SettingsConfigHelper.RESOLUTION) {
             _loc2_ = SettingsConfigHelper.REFRESH_RATE;
             _loc3_ = SettingsControlProp(data[_loc2_]);
             _loc4_ = this[_loc2_ + _loc3_.type];
@@ -1169,9 +1182,9 @@ public class GraphicSettings extends GraphicSettingsBase {
             _loc4_.changedVal = _loc5_;
             _loc4_.prevVal = _loc5_;
         }
-        else if (_loc3_ == SettingsConfigHelper.SIZE) {
-            _loc3_ = !!isFullScreen ? SettingsConfigHelper.RESOLUTION : SettingsConfigHelper.WINDOW_SIZE;
-            _loc4_ = SettingsControlProp(data[_loc3_]);
+        else if (_loc3_ == SettingsConfigHelper.SIZES) {
+            _loc3_ = _currentScreenModeId;
+            _loc4_ = SettingsControlProp(data[_currentScreenModeId]);
             _loc4_.changedVal = _loc5_;
             _loc7_ = monitorDropDown.selectedIndex;
             _loc4_.prevVal[_loc7_] = _loc5_;
@@ -1182,7 +1195,13 @@ public class GraphicSettings extends GraphicSettingsBase {
             _loc4_.prevVal = _loc5_;
         }
         if (_loc3_ == SettingsConfigHelper.MONITOR) {
-            this.setSizeControl();
+            this.setSizeControl(true);
+            this.updateRefreshRate();
+        }
+        else if (_loc3_ == SettingsConfigHelper.SCREEN_MODE) {
+            _currentScreenModeId = SettingsConfigHelper.SIZES_ORDER_ID[_loc4_.changedVal];
+            this.updateScreenModeDependentControls();
+            this.setSizeControl(false);
             this.updateRefreshRate();
         }
         dispatchEvent(new SettingViewEvent(SettingViewEvent.ON_CONTROL_CHANGED, viewId, _loc3_, _loc5_));
@@ -1212,13 +1231,7 @@ public class GraphicSettings extends GraphicSettingsBase {
         var _loc3_:String = SettingsConfigHelper.instance.getControlId(_loc2_.name, SettingsConfigHelper.TYPE_CHECKBOX);
         var _loc4_:SettingsControlProp = SettingsControlProp(data[_loc3_]);
         _loc4_.changedVal = _loc2_.selected;
-        if (_loc3_ == SettingsConfigHelper.FULL_SCREEN) {
-            isFullScreen = _loc2_.selected;
-            this.updateFullScreenDependentControls();
-            this.setSizeControl();
-            this.updateRefreshRate();
-        }
-        else if (_loc3_ == SettingsConfigHelper.DYNAMIC_FOV) {
+        if (_loc3_ == SettingsConfigHelper.DYNAMIC_FOV) {
             fovRangeSlider.rangeMode = _loc2_.selected;
             this.setInitialFOVValues();
         }

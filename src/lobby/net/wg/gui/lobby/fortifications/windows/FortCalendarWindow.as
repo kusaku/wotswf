@@ -21,12 +21,16 @@ public class FortCalendarWindow extends FortCalendarWindowMeta implements IFortC
         super();
     }
 
+    override protected function initialize():void {
+        super.initialize();
+        this.calendar.dayVOClass = FortCalendarDayVO;
+        this.calendar.defaultFocusToSelected = true;
+    }
+
     override protected function configUI():void {
         super.configUI();
-        this.calendar.defaultFocusToSelected = true;
-        this.calendar.addEventListener(FocusRequestEvent.REQUEST_FOCUS, this.onCalendarRequestFocusHandler);
-        this.calendar.dayVOClass = FortCalendarDayVO;
         var _loc1_:ILocale = App.utils.locale;
+        this.calendar.addEventListener(FocusRequestEvent.REQUEST_FOCUS, this.onCalendarRequestFocusHandler);
         this.calendar.setOutOfBoundsTooltip(_loc1_.makeString(FORTIFICATIONS.FORTCALENDARWINDOW_CALENDAR_DAYTOOLTIP_NOTAVAILABLE_HEADER), _loc1_.makeString(FORTIFICATIONS.FORTCALENDARWINDOW_CALENDAR_DAYTOOLTIP_NOTAVAILABLE_BODY));
     }
 

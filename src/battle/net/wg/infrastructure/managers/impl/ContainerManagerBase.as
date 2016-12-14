@@ -163,14 +163,6 @@ public class ContainerManagerBase extends ContainerManagerMeta implements IConta
         throw new InfrastructureException("net.wg.infrastructure.base.AbstractView is not found using name = " + param1);
     }
 
-    public function as_showContainers(param1:Array):void {
-        throw new AbstractException("ContainerManager.as_showContainers" + Errors.ABSTRACT_INVOKE);
-    }
-
-    public function as_hideContainers(param1:Array):void {
-        throw new AbstractException("ContainerManager.as_hideContainers" + Errors.ABSTRACT_INVOKE);
-    }
-
     public function as_isContainerShown(param1:String):Boolean {
         throw new AbstractException("ContainerManager.as_isContainerShown" + Errors.ABSTRACT_INVOKE);
     }
@@ -210,6 +202,11 @@ public class ContainerManagerBase extends ContainerManagerMeta implements IConta
             _loc6_ = _loc5_.view;
             _loc6_.x = param2;
             _loc6_.y = param3;
+            if (App.popoverMgr.isPopover(_loc5_.view)) {
+                if (!App.popoverMgr.popoverCaller || !App.popoverMgr.popoverCaller.getTargetButton()) {
+                    return false;
+                }
+            }
             _loc5_.addView();
             _loc7_ = _loc6_.as_config;
             this.callLogEvent(_loc6_, EVENT_LOG_CONSTANTS.EVENT_TYPE_VIEW_LOADED, ContainerTypes.CONTAINER_TYPES.indexOf(_loc7_.configVO.type));
@@ -224,12 +221,6 @@ public class ContainerManagerBase extends ContainerManagerMeta implements IConta
             return _loc4_;
         }
         throw new InfrastructureException("net.wg.infrastructure.base.BaseView is not found using name = " + param1);
-    }
-
-    private function callLogEvent(param1:IView, param2:String, param3:Number):void {
-        var _loc4_:DisplayObject = param1 as DisplayObject;
-        App.utils.asserter.assertNotNull(_loc4_, Errors.CANT_NULL);
-        App.eventLogManager.logUIElementTooltip(_loc4_, param2, param3);
     }
 
     public function as_unregisterContainer(param1:String):void {
@@ -294,6 +285,12 @@ public class ContainerManagerBase extends ContainerManagerMeta implements IConta
         return _loc2_.view;
     }
 
+    private function callLogEvent(param1:IView, param2:String, param3:Number):void {
+        var _loc4_:DisplayObject = param1 as DisplayObject;
+        App.utils.asserter.assertNotNull(_loc4_, Errors.CANT_NULL);
+        App.eventLogManager.logUIElementTooltip(_loc4_, param2, param3);
+    }
+
     private function cancelLoadingsForContainer(param1:String):void {
         var _loc3_:Array = null;
         var _loc4_:AliasVO = null;
@@ -318,6 +315,10 @@ public class ContainerManagerBase extends ContainerManagerMeta implements IConta
             _loc2_.length = 0;
             delete this._containersForLoadingViews[_loc1_];
         }
+    }
+
+    private function getContainer(param1:String):IManagedContainer {
+        return this.containersMap[param1] as IManagedContainer;
     }
 
     public function get containersMap():Dictionary {
@@ -389,10 +390,6 @@ public class ContainerManagerBase extends ContainerManagerMeta implements IConta
             DebugUtils.LOG_ERROR("ContainerManager.onLoaded", err.getStackTrace());
             return;
         }
-    }
-
-    private function getContainer(param1:String):IManagedContainer {
-        return this.containersMap[param1] as IManagedContainer;
     }
 
     private function onStartLoadViewHandler(param1:LoaderEvent):void {

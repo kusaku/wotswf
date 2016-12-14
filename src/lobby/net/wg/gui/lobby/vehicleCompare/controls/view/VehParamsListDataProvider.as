@@ -3,7 +3,7 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 
 import net.wg.data.constants.generated.HANGAR_ALIASES;
-import net.wg.gui.lobby.vehicleCompare.data.VehCompareParamVO;
+import net.wg.gui.lobby.components.data.VehParamVO;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
 import scaleform.clik.data.DataProvider;
@@ -14,11 +14,11 @@ public class VehParamsListDataProvider extends DataProvider {
 
     public function VehParamsListDataProvider(param1:Array = null) {
         var _loc2_:Object = null;
-        var _loc3_:VehCompareParamVO = null;
+        var _loc3_:VehParamVO = null;
         this._source = [];
         super();
         for each(_loc2_ in param1) {
-            _loc3_ = new VehCompareParamVO(_loc2_);
+            _loc3_ = new VehParamVO(_loc2_);
             this._source.push(_loc3_);
         }
         dispatcher = new EventDispatcher(this);
@@ -42,7 +42,7 @@ public class VehParamsListDataProvider extends DataProvider {
     }
 
     override protected function parseSource(param1:Array):void {
-        var _loc2_:VehCompareParamVO = null;
+        var _loc2_:VehParamVO = null;
         if (param1 == null) {
             return;
         }
@@ -51,7 +51,7 @@ public class VehParamsListDataProvider extends DataProvider {
         var _loc5_:uint = param1.length;
         var _loc6_:uint = 0;
         while (_loc6_ < _loc5_) {
-            _loc2_ = VehCompareParamVO(param1[_loc6_]);
+            _loc2_ = VehParamVO(param1[_loc6_]);
             if (isParentElement(_loc2_.state)) {
                 _loc4_ = _loc2_.isOpen;
                 this[_loc6_ - _loc3_] = param1[_loc6_];
@@ -64,6 +64,10 @@ public class VehParamsListDataProvider extends DataProvider {
             }
             _loc6_++;
         }
+    }
+
+    public function getItemAt(param1:int):VehParamVO {
+        return this[param1];
     }
 
     public function update():void {

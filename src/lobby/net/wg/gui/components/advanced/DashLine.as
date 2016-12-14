@@ -3,10 +3,11 @@ import flash.display.Graphics;
 import flash.display.MovieClip;
 import flash.display.Sprite;
 
-import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class DashLine extends UIComponent {
+import scaleform.clik.constants.InvalidationType;
+
+public class DashLine extends UIComponentEx {
 
     private static const REDRAW_INV:String = "redrawInv";
 

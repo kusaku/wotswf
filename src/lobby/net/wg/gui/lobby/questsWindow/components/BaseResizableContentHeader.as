@@ -1,7 +1,7 @@
 package net.wg.gui.lobby.questsWindow.components {
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class BaseResizableContentHeader extends UIComponent {
+public class BaseResizableContentHeader extends UIComponentEx {
 
     private var _selected:Boolean;
 

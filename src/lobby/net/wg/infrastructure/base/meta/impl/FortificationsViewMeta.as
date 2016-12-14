@@ -13,22 +13,22 @@ public class FortificationsViewMeta extends AbstractView {
 
     public var onEscapePress:Function;
 
-    private var _fortificationVO:FortificationVO;
-
     private var _fortWaitingVO:FortWaitingVO;
+
+    private var _fortificationVO:FortificationVO;
 
     public function FortificationsViewMeta() {
         super();
     }
 
     override protected function onDispose():void {
-        if (this._fortificationVO) {
-            this._fortificationVO.dispose();
-            this._fortificationVO = null;
-        }
         if (this._fortWaitingVO) {
             this._fortWaitingVO.dispose();
             this._fortWaitingVO = null;
+        }
+        if (this._fortificationVO) {
+            this._fortificationVO.dispose();
+            this._fortificationVO = null;
         }
         super.onDispose();
     }
@@ -48,20 +48,22 @@ public class FortificationsViewMeta extends AbstractView {
         this.onEscapePress();
     }
 
-    public function as_setCommonData(param1:Object):void {
-        if (this._fortificationVO) {
-            this._fortificationVO.dispose();
-        }
+    public final function as_setCommonData(param1:Object):void {
+        var _loc2_:FortificationVO = this._fortificationVO;
         this._fortificationVO = new FortificationVO(param1);
         this.setCommonData(this._fortificationVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_waitingData(param1:Object):void {
-        if (this._fortWaitingVO) {
-            this._fortWaitingVO.dispose();
-        }
+    public final function as_waitingData(param1:Object):void {
+        var _loc2_:FortWaitingVO = this._fortWaitingVO;
         this._fortWaitingVO = new FortWaitingVO(param1);
         this.waitingData(this._fortWaitingVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setCommonData(param1:FortificationVO):void {

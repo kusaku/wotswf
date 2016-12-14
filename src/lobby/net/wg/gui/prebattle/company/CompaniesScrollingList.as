@@ -2,6 +2,7 @@ package net.wg.gui.prebattle.company {
 import flash.events.FocusEvent;
 import flash.events.MouseEvent;
 
+import net.wg.data.constants.Errors;
 import net.wg.gui.components.controls.ScrollBar;
 import net.wg.gui.components.controls.ScrollingListEx;
 import net.wg.gui.events.ListEventEx;
@@ -50,6 +51,7 @@ public class CompaniesScrollingList extends ScrollingListEx {
         var _loc2_:int = 0;
         while (_loc2_ < _loc1_) {
             _loc3_ = getRendererAt(_loc2_) as CompanyListItemRenderer;
+            App.utils.asserter.assertNotNull(_loc3_, "renderer" + Errors.CANT_NULL);
             if (_loc3_.selected) {
                 return true;
             }
@@ -92,6 +94,7 @@ public class CompaniesScrollingList extends ScrollingListEx {
         var _loc2_:int = 0;
         while (_loc2_ < _loc1_) {
             _loc3_ = getRendererAt(_loc2_) as CompanyListItemRenderer;
+            App.utils.asserter.assertNotNull(_loc3_, "renderer" + Errors.CANT_NULL);
             _loc3_.selected = false;
             _loc2_++;
         }

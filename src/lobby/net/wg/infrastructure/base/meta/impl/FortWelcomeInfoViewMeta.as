@@ -41,12 +41,13 @@ public class FortWelcomeInfoViewMeta extends BaseDAAPIComponent {
         this.openClanResearch();
     }
 
-    public function as_setCommonData(param1:Object):void {
-        if (this._fortWelcomeViewVO) {
-            this._fortWelcomeViewVO.dispose();
-        }
+    public final function as_setCommonData(param1:Object):void {
+        var _loc2_:FortWelcomeViewVO = this._fortWelcomeViewVO;
         this._fortWelcomeViewVO = new FortWelcomeViewVO(param1);
         this.setCommonData(this._fortWelcomeViewVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setCommonData(param1:FortWelcomeViewVO):void {

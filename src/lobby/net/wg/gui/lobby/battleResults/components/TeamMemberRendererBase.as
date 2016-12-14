@@ -51,7 +51,7 @@ public class TeamMemberRendererBase extends SoundListItemRenderer {
     }
 
     protected function showData(param1:TeamMemberItemVO):void {
-        throw new AbstractException("TeamMemberRendererBase::showData() " + Errors.ABSTRACT_INVOKE);
+        throw new AbstractException(Errors.ABSTRACT_INVOKE);
     }
 
     protected function getColorForAlias(param1:String, param2:Number):Number {
@@ -89,7 +89,9 @@ public class TeamMemberRendererBase extends SoundListItemRenderer {
                 "showClanProfile": true,
                 "clanAbbrev": this._vo.userVO.clanAbbrev,
                 "vehicleCD": this._vo.vehicleCD,
-                "clientArenaIdx": this._commonStatsVO.clientArenaIdx
+                "clientArenaIdx": this._commonStatsVO.clientArenaIdx,
+                "arenaType": this._commonStatsVO.arenaType,
+                "isAlly": this._vo.isAlly
             };
             App.contextMenuMgr.show(CONTEXT_MENU_HANDLER_TYPE.BATTLE_RESULTS_USER, this, _loc2_);
         }

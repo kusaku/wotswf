@@ -13,14 +13,14 @@ import net.wg.gui.lobby.fortifications.cmp.tankIcon.impl.FortTankIcon;
 import net.wg.gui.lobby.fortifications.data.ClanDescriptionVO;
 import net.wg.gui.lobby.fortifications.data.DirectionVO;
 import net.wg.gui.lobby.fortifications.events.FortIntelClanDescriptionEvent;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.entity.IFocusContainer;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.events.InputEvent;
 
-public class FortIntelClanDescriptionFooter extends UIComponent implements IFocusContainer {
+public class FortIntelClanDescriptionFooter extends UIComponentEx implements IFocusContainer {
 
     private static const LINKBTN_OFFSET_X:int = 7;
 

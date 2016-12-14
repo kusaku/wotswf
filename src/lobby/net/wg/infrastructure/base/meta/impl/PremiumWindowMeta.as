@@ -27,12 +27,13 @@ public class PremiumWindowMeta extends SimpleWindow {
         this.onRateClick(param1);
     }
 
-    public function as_setRates(param1:Object):void {
-        if (this._premiumWindowRatesVO) {
-            this._premiumWindowRatesVO.dispose();
-        }
+    public final function as_setRates(param1:Object):void {
+        var _loc2_:PremiumWindowRatesVO = this._premiumWindowRatesVO;
         this._premiumWindowRatesVO = new PremiumWindowRatesVO(param1);
         this.setRates(this._premiumWindowRatesVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setRates(param1:PremiumWindowRatesVO):void {

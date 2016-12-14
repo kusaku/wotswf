@@ -75,7 +75,7 @@ public class ManagedContainer extends UIComponentEx implements IManagedContainer
                 _loc6_ = DisplayObject(_loc2_.containerContent);
                 super.addChild(_loc6_);
                 _loc2_.playShowTween(_loc6_);
-                if (ContainerTypes.WINDOW || this.type == ContainerTypes.TOP_WINDOW) {
+                if (this.type == ContainerTypes.WINDOW || this.type == ContainerTypes.TOP_WINDOW) {
                     _loc7_ = _loc5_.group;
                     if (_loc5_.isGrouped && StringUtils.isNotEmpty(_loc7_)) {
                         this.addGroupCounter(_loc7_, _loc2_.as_config.name);

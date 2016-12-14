@@ -103,8 +103,8 @@ public class RespawnView extends CyberSportRespawnViewMeta implements ICyberSpor
         setFocus(this._focusTo);
     }
 
-    public function as_changeAutoSearchState(param1:Object):void {
-        this.autoSearch.setData(new AutoSearchVO(param1));
+    override protected function changeAutoSearchState(param1:AutoSearchVO):void {
+        this.autoSearch.setData(param1);
         this.autoSearch.visible = true;
     }
 

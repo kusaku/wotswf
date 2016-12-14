@@ -44,16 +44,16 @@ public class BaseTankmanVO extends DAAPIDataClass {
 
     public var lastSkillLevel:int = -1;
 
-    private var _skills:Array;
+    public var skills:Array;
 
-    private var _buySkillLevel:int = 0;
+    public var buySkillLevel:int = 0;
 
-    private var _canBuySkill:Boolean = false;
+    public var canBuySkill:Boolean = false;
 
-    private var _buySkillCount:int = 0;
+    public var buySkillCount:int = 0;
 
     public function BaseTankmanVO(param1:Object) {
-        this._skills = [];
+        this.skills = [];
         super(param1);
     }
 
@@ -71,16 +71,16 @@ public class BaseTankmanVO extends DAAPIDataClass {
                 while (_loc5_ < _loc4_) {
                     _loc6_ = new SkillsVO(_loc3_[_loc5_]);
                     if (_loc6_.buy) {
-                        this._canBuySkill = true;
-                        this._buySkillCount = _loc6_.buyCount;
-                        this._buySkillLevel = _loc6_.level;
+                        this.canBuySkill = true;
+                        this.buySkillCount = _loc6_.buyCount;
+                        this.buySkillLevel = _loc6_.level;
                         _loc6_.dispose();
                     }
                     else {
                         if (_loc6_.icon) {
                             _loc6_.icon = RES_ICONS.maps_icons_tankmen_skills_small(_loc6_.icon);
                         }
-                        this._skills.push(_loc6_);
+                        this.skills.push(_loc6_);
                     }
                     _loc5_++;
                 }
@@ -91,47 +91,19 @@ public class BaseTankmanVO extends DAAPIDataClass {
     }
 
     override protected function onDispose():void {
-        var _loc1_:uint = this._skills.length;
+        var _loc1_:uint = this.skills.length;
         var _loc2_:int = 0;
         while (_loc2_ < _loc1_) {
-            this._skills[_loc2_].dispose();
+            this.skills[_loc2_].dispose();
             _loc2_++;
         }
-        this._skills.splice(0, _loc1_);
-        this._skills = null;
+        this.skills.splice(0, _loc1_);
+        this.skills = null;
         super.onDispose();
     }
 
-    public function get buySkillCount():int {
-        return this._buySkillCount;
-    }
-
-    public function set buySkillCount(param1:int):void {
-        this._buySkillCount = param1;
-    }
-
-    public function get skills():Array {
-        return this._skills;
-    }
-
     public function get lastSkillInProgress():Boolean {
-        return this._skills.length > 0 && this.lastSkillLevel != MAX_SKILL_LEVEL;
-    }
-
-    public function get buySkillLevel():int {
-        return this._buySkillLevel;
-    }
-
-    public function set buySkillLevel(param1:int):void {
-        this._buySkillLevel = param1;
-    }
-
-    public function get canBuySkill():Boolean {
-        return this._canBuySkill;
-    }
-
-    public function set canBuySkill(param1:Boolean):void {
-        this._canBuySkill = param1;
+        return this.skills.length > 0 && this.lastSkillLevel != MAX_SKILL_LEVEL;
     }
 }
 }

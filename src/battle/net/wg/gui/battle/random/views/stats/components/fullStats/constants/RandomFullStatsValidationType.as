@@ -15,6 +15,8 @@ public class RandomFullStatsValidationType {
 
     public static const SPEAKING:uint = FullStatsValidationType.SYSTEM_FLAGS_BORDER << 6;
 
+    public static const DISABLE_COMMUNICATION:uint = FullStatsValidationType.SYSTEM_FLAGS_BORDER << 7;
+
     public function RandomFullStatsValidationType() {
         super();
     }

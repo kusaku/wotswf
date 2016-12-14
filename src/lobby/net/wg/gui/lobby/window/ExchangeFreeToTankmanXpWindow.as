@@ -4,6 +4,7 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.text.TextField;
 
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.IconsTypes;
 import net.wg.gui.components.advanced.SkillsItemRenderer;
 import net.wg.gui.components.controls.ActionPrice;
@@ -62,6 +63,8 @@ public class ExchangeFreeToTankmanXpWindow extends ExchangeFreeToTankmanXpWindow
 
     public var afterTeachingHeader:TextField;
 
+    public var percentTF:TextField;
+
     public var blockMc:MovieClip;
 
     private var _initData:ExchangeFreeToTankmanInitVO;
@@ -76,7 +79,7 @@ public class ExchangeFreeToTankmanXpWindow extends ExchangeFreeToTankmanXpWindow
 
     private var _price:Number = 0;
 
-    private var _actionPriceData:Object = null;
+    private var _actionPriceVo:ActionPriceVO;
 
     private var _initMax:Boolean = false;
 
@@ -96,20 +99,24 @@ public class ExchangeFreeToTankmanXpWindow extends ExchangeFreeToTankmanXpWindow
         if (param1) {
             window.title = MENU.TEACHINGSKILL_TITLE;
             _loc2_ = window.contentPadding as Padding;
+            App.utils.asserter.assertNotNull(_loc2_, "padding" + Errors.CANT_NULL);
             _loc2_.right = _loc2_.right - WINDOW_RIGHT_ADDITIONAL_PADDING;
             window.contentPadding = _loc2_;
             addEventListener(Event.ENTER_FRAME, this.onEnterFrameHandler, false, 0, true);
         }
     }
 
-    public function as_setInitData(param1:Object):void {
-        this._initData = new ExchangeFreeToTankmanInitVO(param1);
+    override protected function setInitData(param1:ExchangeFreeToTankmanInitVO):void {
+        this._initData = param1;
         invalidate(INIT_DATA_INVALID);
     }
 
-    public function as_setCalcValueResponse(param1:Number, param2:Object):void {
+    override protected function setCalcValueResponse(param1:Number, param2:ActionPriceVO):void {
         this._price = param1;
-        this._actionPriceData = param2;
+        this._actionPriceVo = param2;
+        if (this._actionPriceVo) {
+            this._actionPriceVo.ico = IconsTypes.FREE_XP;
+        }
         invalidate(RECALC_VALUE_INVALID);
     }
 
@@ -145,11 +152,11 @@ public class ExchangeFreeToTankmanXpWindow extends ExchangeFreeToTankmanXpWindow
         constraints.addElement(this.background.name, this.background, Constraints.ALL);
         constraints.addElement(this.form_bg.name, this.form_bg, Constraints.ALL);
         constraints.addElement(MOVINGCONTAINER_NAME, _loc2_, Constraints.BOTTOM);
+        this.percentTF.text = COMMON.COMMON_PERCENT;
     }
 
     override protected function draw():void {
         var _loc1_:Boolean = false;
-        var _loc2_:ActionPriceVO = null;
         super.draw();
         if (this._initData) {
             if (isInvalid(INIT_DATA_INVALID)) {
@@ -202,12 +209,7 @@ public class ExchangeFreeToTankmanXpWindow extends ExchangeFreeToTankmanXpWindow
                 this.nsLevel.enabled = !this._alertWalletVisible;
             }
             if (!this._alertWalletVisible) {
-                _loc2_ = null;
-                if (this._actionPriceData) {
-                    _loc2_ = new ActionPriceVO(this._actionPriceData);
-                    _loc2_.ico = IconsTypes.FREE_XP;
-                }
-                this.actionPrice.setData(_loc2_);
+                this.actionPrice.setData(this._actionPriceVo);
                 this.itToPay.visible = !this.actionPrice.visible;
                 this.itToPay.text = App.utils.locale.integer(this._price);
                 this.submitBtn.enabled = this._price > 0;
@@ -235,9 +237,6 @@ public class ExchangeFreeToTankmanXpWindow extends ExchangeFreeToTankmanXpWindow
         this.itToPay = null;
         this.actionPrice.dispose();
         this.actionPrice = null;
-        this._actionPriceData = App.utils.data.cleanupDynamicObject(this._actionPriceData);
-        this._initData.dispose();
-        this._initData = null;
         this.submitBtn.dispose();
         this.submitBtn = null;
         this.cancelBtn.dispose();
@@ -252,6 +251,8 @@ public class ExchangeFreeToTankmanXpWindow extends ExchangeFreeToTankmanXpWindow
             this.walletStatus.dispose();
             this.walletStatus = null;
         }
+        this._initData = null;
+        this._actionPriceVo = null;
         super.onDispose();
     }
 

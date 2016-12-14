@@ -3,11 +3,12 @@ import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
 import net.wg.gui.components.tooltips.VO.ModuleVO;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.core.UIComponent;
 
-public class ModuleItem extends UIComponent {
+public class ModuleItem extends UIComponentEx {
 
     public var icon:UIComponent;
 

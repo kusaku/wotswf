@@ -3,58 +3,18 @@ import net.wg.data.daapi.base.DAAPIDataClass;
 
 public class QuestDashlineItemVO extends DAAPIDataClass {
 
-    private var _label:String = "";
+    public var label:String = "";
 
-    private var _linkID:String = "";
+    public var linkID:String = "";
 
-    private var _isNotAvailable:Boolean = false;
+    public var isNotAvailable:Boolean;
 
-    private var _value:String = "";
+    public var value:String = "";
 
-    private var _linkage:String = "";
+    public var linkage:String = "";
 
     public function QuestDashlineItemVO(param1:Object) {
         super(param1);
-    }
-
-    public function get label():String {
-        return this._label;
-    }
-
-    public function set label(param1:String):void {
-        this._label = param1;
-    }
-
-    public function get linkID():String {
-        return this._linkID;
-    }
-
-    public function set linkID(param1:String):void {
-        this._linkID = param1;
-    }
-
-    public function get isNotAvailable():Boolean {
-        return this._isNotAvailable;
-    }
-
-    public function set isNotAvailable(param1:Boolean):void {
-        this._isNotAvailable = param1;
-    }
-
-    public function get value():String {
-        return this._value;
-    }
-
-    public function set value(param1:String):void {
-        this._value = param1;
-    }
-
-    public function get linkage():String {
-        return this._linkage;
-    }
-
-    public function set linkage(param1:String):void {
-        this._linkage = param1;
     }
 }
 }

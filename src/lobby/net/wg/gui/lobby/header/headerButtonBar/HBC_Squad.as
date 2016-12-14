@@ -15,6 +15,8 @@ public class HBC_Squad extends HeaderButtonContentItem {
 
     private static const ARROW_RIGHT_PADDING:int = 4;
 
+    private static const SQUAD_ICON_MARGIN:int = 0;
+
     public var arrow:HBC_ArrowDown = null;
 
     public var textField:TextField = null;
@@ -71,7 +73,7 @@ public class HBC_Squad extends HeaderButtonContentItem {
         this.icon.source = this._squadDataVo.icon;
         this.textField.width = this.textField.textWidth + TEXT_FIELD_MARGIN;
         if (this.icon.visible) {
-            this.icon.x = this.textField.width + ICON_MARGIN ^ 0;
+            this.icon.x = this.textField.width + SQUAD_ICON_MARGIN ^ 0;
             this.arrow.x = this.icon.x + this.icon.width + ICON_ARROW_GAP ^ 0;
         }
         else {

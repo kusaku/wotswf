@@ -105,8 +105,6 @@ package
       
       public static const BATTLE_TOOLTIPS_DEFAULT:String = "#messenger:battle/toolTips/default";
       
-      public static const BATTLE_TOOLTIPS_WITHALL:String = "#messenger:battle/toolTips/withAll";
-      
       public static const BATTLE_TOOLTIPS_WITHSQUAD:String = "#messenger:battle/toolTips/withSquad";
       
       public static const BATTLE_TOOLTIPS_DURINGCHAT:String = "#messenger:battle/toolTips/duringChat";
@@ -667,6 +665,8 @@ package
       
       public static const SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS:String = "#messenger:serviceChannelMessages/battleResults/quests";
       
+      public static const SERVICECHANNELMESSAGES_BATTLERESULTS_CHRISTMASQUESTS:String = "#messenger:serviceChannelMessages/battleResults/christmasQuests";
+      
       public static const SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_VEHICLESLOTS:String = "#messenger:serviceChannelMessages/battleResults/quests/vehicleSlots";
       
       public static const SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_FREEXP:String = "#messenger:serviceChannelMessages/battleResults/quests/freeXP";
@@ -784,6 +784,12 @@ package
       public static const SERVICECHANNELMESSAGES_INVOICERECEIVED_TANKMEN:String = "#messenger:serviceChannelMessages/invoiceReceived/tankmen";
       
       public static const SERVICECHANNELMESSAGES_INVOICERECEIVED_BOOSTERS:String = "#messenger:serviceChannelMessages/invoiceReceived/boosters";
+      
+      public static const SERVICECHANNELMESSAGES_INVOICERECEIVED_DISCOUNTS:String = "#messenger:serviceChannelMessages/invoiceReceived/discounts";
+      
+      public static const SERVICECHANNELMESSAGES_INVOICERECEIVED_TOYS:String = "#messenger:serviceChannelMessages/invoiceReceived/toys";
+      
+      public static const SERVICECHANNELMESSAGES_INVOICERECEIVED_DEBITEDTOYS:String = "#messenger:serviceChannelMessages/invoiceReceived/debitedToys";
       
       public static const SERVICECHANNELMESSAGES_INVOICERECEIVED_PIECES:String = "#messenger:serviceChannelMessages/invoiceReceived/pieces";
       
@@ -1463,25 +1469,25 @@ package
       
       public static const BATTLE_TOOLTIPS_TOXICMESSAGE:String = "#messenger:battle/toolTips/toxicMessage";
       
-      public static const CLIENT_ERROR_LIMIT_ENUM:Array = [CLIENT_ERROR_LIMIT_MAX_ROSTER_ITEMS,CLIENT_ERROR_LIMIT_MAX_GROUP,CLIENT_ERROR_LIMIT_MAX_BLOCK_ITEMS,CLIENT_ERROR_LIMIT_GROUP_INVALID_LENGTH,CLIENT_ERROR_LIMIT_NOTE_INVALID_LENGTH,CLIENT_ERROR_LIMIT_CHANNEL_INVALID_LENGTH,CLIENT_ERROR_LIMIT_PWD_INVALID_LENGTH];
-      
-      public static const SERVER_ERROR_USER_ROOM_CREATION_ENUM:Array = [SERVER_ERROR_USER_ROOM_CREATION_NAME_EXISTS,SERVER_ERROR_USER_ROOM_CREATION_LIMIT_COUNT,SERVER_ERROR_USER_ROOM_CREATION_LIMIT_PASS,SERVER_ERROR_USER_ROOM_CREATION_LIMIT_NAME,SERVER_ERROR_USER_ROOM_CREATION_WRONG_SYMBOL,SERVER_ERROR_USER_ROOM_CREATION_WRONG_WORD];
-      
-      public static const CLIENT_ERROR_CHANNEL_ENUM:Array = [CLIENT_ERROR_CHANNEL_NAME_EMPTY,CLIENT_ERROR_CHANNEL_NAME_INVALID,CLIENT_ERROR_CHANNEL_PASSWORD_EMPTY,CLIENT_ERROR_CHANNEL_PASSWORD_INVALID,CLIENT_ERROR_CHANNEL_RETYPE_EMPTY,CLIENT_ERROR_CHANNEL_RETYPE_INVALID,CLIENT_ERROR_CHANNEL_PASSWORDS_NOT_EQUALS,CLIENT_ERROR_CHANNEL_LIMIT_REACHED,CLIENT_ERROR_CHANNEL_NAME_ALREADY_EXISTS];
-      
-      public static const CLIENT_ERROR_SHARED_ENUM:Array = [CLIENT_ERROR_SHARED_GENERIC,CLIENT_ERROR_SHARED_LOCKED,CLIENT_ERROR_SHARED_NOT_CONNECTED,CLIENT_ERROR_SHARED_WRONG_ARGS,CLIENT_ERROR_SHARED_NOT_SUPPORTED,CLIENT_ERROR_SHARED_DBID_INVALID,CLIENT_ERROR_SHARED_NAME_EMPTY,CLIENT_ERROR_SHARED_NAME_INVALID,CLIENT_ERROR_SHARED_WAITING_BEFORE_START];
-      
-      public static const LISTVIEW_EMPTYLIST_ENUM:Array = [LISTVIEW_EMPTYLIST_TEMPLATE,LISTVIEW_EMPTYLIST_INFO,LISTVIEW_EMPTYLIST_INVITE,LISTVIEW_EMPTYLIST_OFFER];
+      public static const CLIENT_ACTION_ENUM:Array = [CLIENT_ACTION_ADD_FRIEND,CLIENT_ACTION_REMOVE_FRIEND,CLIENT_ACTION_ADD_IGNORED,CLIENT_ACTION_REMOVE_IGNORED,CLIENT_ACTION_SET_MUTE,CLIENT_ACTION_UNSET_MUTE,CLIENT_ACTION_ADD_GROUP,CLIENT_ACTION_CHANGE_GROUP,CLIENT_ACTION_RQ_FRIENDSHIP,CLIENT_ACTION_APPROVE_FRIENDSHIP,CLIENT_ACTION_CANCEL_FRIENDSHIP,CLIENT_ACTION_SEND_MESSAGE,CLIENT_ACTION_SET_NOTE,CLIENT_ACTION_REMOVE_NOTE,CLIENT_ACTION_RQ_HISTORY,CLIENT_ACTION_CREATE_USER_ROOM,CLIENT_ACTION_JOIN_USER_ROOM,CLIENT_ACTION_LEAVE_USER_ROOM,CLIENT_ACTION_SEARCH_USER_ROOM,CLIENT_ACTION_FIND_USERS_BY_PREFIX];
       
       public static const CLIENT_ERROR_CONTACT_ENUM:Array = [CLIENT_ERROR_CONTACT_CONTACT_ITEM_NOT_FOUND,CLIENT_ERROR_CONTACT_ROSTER_ITEM_EXISTS,CLIENT_ERROR_CONTACT_ROSTER_ITEM_NOT_FOUND,CLIENT_ERROR_CONTACT_FRIENDSHIP_APPROVED,CLIENT_ERROR_CONTACT_FRIENDSHIP_CANCELED,CLIENT_ERROR_CONTACT_FRIENDSHIP_RQ_PROCESS,CLIENT_ERROR_CONTACT_BLOCK_ITEM_EXISTS,CLIENT_ERROR_CONTACT_BLOCK_ITEM_NOT_FOUND,CLIENT_ERROR_CONTACT_MUTED_ITEM_NOT_FOUND,CLIENT_ERROR_CONTACT_GROUP_EMPTY,CLIENT_ERROR_CONTACT_GROUP_EXISTS,CLIENT_ERROR_CONTACT_GROUP_NOT_FOUND,CLIENT_ERROR_CONTACT_GROUP_INVALID_NAME,CLIENT_ERROR_CONTACT_NOTE_EMPTY,CLIENT_ERROR_CONTACT_NOTE_NOT_FOUND];
       
+      public static const CLIENT_ERROR_LIMIT_ENUM:Array = [CLIENT_ERROR_LIMIT_MAX_ROSTER_ITEMS,CLIENT_ERROR_LIMIT_MAX_GROUP,CLIENT_ERROR_LIMIT_MAX_BLOCK_ITEMS,CLIENT_ERROR_LIMIT_GROUP_INVALID_LENGTH,CLIENT_ERROR_LIMIT_NOTE_INVALID_LENGTH,CLIENT_ERROR_LIMIT_CHANNEL_INVALID_LENGTH,CLIENT_ERROR_LIMIT_PWD_INVALID_LENGTH];
+      
+      public static const CLIENT_ERROR_SHARED_ENUM:Array = [CLIENT_ERROR_SHARED_GENERIC,CLIENT_ERROR_SHARED_LOCKED,CLIENT_ERROR_SHARED_NOT_CONNECTED,CLIENT_ERROR_SHARED_WRONG_ARGS,CLIENT_ERROR_SHARED_NOT_SUPPORTED,CLIENT_ERROR_SHARED_DBID_INVALID,CLIENT_ERROR_SHARED_NAME_EMPTY,CLIENT_ERROR_SHARED_NAME_INVALID,CLIENT_ERROR_SHARED_WAITING_BEFORE_START];
+      
       public static const COMMAND_SUCCESS_ENUM:Array = [COMMAND_SUCCESS_USERBAN,COMMAND_SUCCESS_USERUNBAN];
       
-      public static const CHAT_ERROR_ENUM:Array = [CHAT_ERROR_NOT_ALLOWED,CHAT_ERROR_USER_NOT_FOUND,CHAT_ERROR_CANNOT_BAN_ONESELF,CHAT_ERROR_WRONG_ARGS,CHAT_ERROR_NOT_READY,CHAT_ERROR_IS_BUSY,CHAT_ERROR_GENERIC_ERROR];
-      
-      public static const CLIENT_ACTION_ENUM:Array = [CLIENT_ACTION_ADD_FRIEND,CLIENT_ACTION_REMOVE_FRIEND,CLIENT_ACTION_ADD_IGNORED,CLIENT_ACTION_REMOVE_IGNORED,CLIENT_ACTION_SET_MUTE,CLIENT_ACTION_UNSET_MUTE,CLIENT_ACTION_ADD_GROUP,CLIENT_ACTION_CHANGE_GROUP,CLIENT_ACTION_RQ_FRIENDSHIP,CLIENT_ACTION_APPROVE_FRIENDSHIP,CLIENT_ACTION_CANCEL_FRIENDSHIP,CLIENT_ACTION_SEND_MESSAGE,CLIENT_ACTION_SET_NOTE,CLIENT_ACTION_REMOVE_NOTE,CLIENT_ACTION_RQ_HISTORY,CLIENT_ACTION_CREATE_USER_ROOM,CLIENT_ACTION_JOIN_USER_ROOM,CLIENT_ACTION_LEAVE_USER_ROOM,CLIENT_ACTION_SEARCH_USER_ROOM,CLIENT_ACTION_FIND_USERS_BY_PREFIX];
-      
       public static const CHAT_ACTION_ENUM:Array = [CHAT_ACTION_BROADCAST_UNIT_MESSAGE,CHAT_ACTION_BROADCAST_BATTLE_MESSAGE,CHAT_ACTION_BROADCAST_CLUB_MESSAGE,CHAT_ACTION_FIND_USERS_BY_NAME,CHAT_ACTION_GET_VOIP_CREDENTIALS];
+      
+      public static const SERVER_ERROR_USER_ROOM_CREATION_ENUM:Array = [SERVER_ERROR_USER_ROOM_CREATION_NAME_EXISTS,SERVER_ERROR_USER_ROOM_CREATION_LIMIT_COUNT,SERVER_ERROR_USER_ROOM_CREATION_LIMIT_PASS,SERVER_ERROR_USER_ROOM_CREATION_LIMIT_NAME,SERVER_ERROR_USER_ROOM_CREATION_WRONG_SYMBOL,SERVER_ERROR_USER_ROOM_CREATION_WRONG_WORD];
+      
+      public static const LISTVIEW_EMPTYLIST_ENUM:Array = [LISTVIEW_EMPTYLIST_TEMPLATE,LISTVIEW_EMPTYLIST_INFO,LISTVIEW_EMPTYLIST_INVITE,LISTVIEW_EMPTYLIST_OFFER];
+      
+      public static const CLIENT_ERROR_CHANNEL_ENUM:Array = [CLIENT_ERROR_CHANNEL_NAME_EMPTY,CLIENT_ERROR_CHANNEL_NAME_INVALID,CLIENT_ERROR_CHANNEL_PASSWORD_EMPTY,CLIENT_ERROR_CHANNEL_PASSWORD_INVALID,CLIENT_ERROR_CHANNEL_RETYPE_EMPTY,CLIENT_ERROR_CHANNEL_RETYPE_INVALID,CLIENT_ERROR_CHANNEL_PASSWORDS_NOT_EQUALS,CLIENT_ERROR_CHANNEL_LIMIT_REACHED,CLIENT_ERROR_CHANNEL_NAME_ALREADY_EXISTS];
+      
+      public static const CHAT_ERROR_ENUM:Array = [CHAT_ERROR_NOT_ALLOWED,CHAT_ERROR_USER_NOT_FOUND,CHAT_ERROR_CANNOT_BAN_ONESELF,CHAT_ERROR_WRONG_ARGS,CHAT_ERROR_NOT_READY,CHAT_ERROR_IS_BUSY,CHAT_ERROR_GENERIC_ERROR];
       
       public static const DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_ENUM:Array = [DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_OFFLINE,DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_NOTREADY,DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_READY,DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_INBATTLE,DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_AFK];
        
@@ -1491,56 +1497,12 @@ package
          super();
       }
       
-      public static function client_error_limit(param1:String) : String
+      public static function client_action(param1:String) : String
       {
-         var _loc2_:String = "#messenger:client_error/limit/" + param1;
-         if(CLIENT_ERROR_LIMIT_ENUM.indexOf(_loc2_) == -1)
+         var _loc2_:String = "#messenger:client_action/" + param1;
+         if(CLIENT_ACTION_ENUM.indexOf(_loc2_) == -1)
          {
-            DebugUtils.LOG_WARNING("[client_error_limit]:locale key \"" + _loc2_ + "\" was not found");
-            return null;
-         }
-         return _loc2_;
-      }
-      
-      public static function server_error_user_room_creation(param1:String) : String
-      {
-         var _loc2_:String = "#messenger:server_error/user_room_creation/" + param1;
-         if(SERVER_ERROR_USER_ROOM_CREATION_ENUM.indexOf(_loc2_) == -1)
-         {
-            DebugUtils.LOG_WARNING("[server_error_user_room_creation]:locale key \"" + _loc2_ + "\" was not found");
-            return null;
-         }
-         return _loc2_;
-      }
-      
-      public static function client_error_channel(param1:String) : String
-      {
-         var _loc2_:String = "#messenger:client_error/channel/" + param1;
-         if(CLIENT_ERROR_CHANNEL_ENUM.indexOf(_loc2_) == -1)
-         {
-            DebugUtils.LOG_WARNING("[client_error_channel]:locale key \"" + _loc2_ + "\" was not found");
-            return null;
-         }
-         return _loc2_;
-      }
-      
-      public static function client_error_shared(param1:String) : String
-      {
-         var _loc2_:String = "#messenger:client_error/shared/" + param1;
-         if(CLIENT_ERROR_SHARED_ENUM.indexOf(_loc2_) == -1)
-         {
-            DebugUtils.LOG_WARNING("[client_error_shared]:locale key \"" + _loc2_ + "\" was not found");
-            return null;
-         }
-         return _loc2_;
-      }
-      
-      public static function listview_emptylist(param1:String) : String
-      {
-         var _loc2_:String = "#messenger:listView/emptyList/" + param1;
-         if(LISTVIEW_EMPTYLIST_ENUM.indexOf(_loc2_) == -1)
-         {
-            DebugUtils.LOG_WARNING("[listview_emptylist]:locale key \"" + _loc2_ + "\" was not found");
+            DebugUtils.LOG_WARNING("[client_action]:locale key \"" + _loc2_ + "\" was not found");
             return null;
          }
          return _loc2_;
@@ -1557,6 +1519,28 @@ package
          return _loc2_;
       }
       
+      public static function client_error_limit(param1:String) : String
+      {
+         var _loc2_:String = "#messenger:client_error/limit/" + param1;
+         if(CLIENT_ERROR_LIMIT_ENUM.indexOf(_loc2_) == -1)
+         {
+            DebugUtils.LOG_WARNING("[client_error_limit]:locale key \"" + _loc2_ + "\" was not found");
+            return null;
+         }
+         return _loc2_;
+      }
+      
+      public static function client_error_shared(param1:String) : String
+      {
+         var _loc2_:String = "#messenger:client_error/shared/" + param1;
+         if(CLIENT_ERROR_SHARED_ENUM.indexOf(_loc2_) == -1)
+         {
+            DebugUtils.LOG_WARNING("[client_error_shared]:locale key \"" + _loc2_ + "\" was not found");
+            return null;
+         }
+         return _loc2_;
+      }
+      
       public static function command_success(param1:String) : String
       {
          var _loc2_:String = "#messenger:command/success/" + param1;
@@ -1568,34 +1552,56 @@ package
          return _loc2_;
       }
       
-      public static function chat_error(param1:String) : String
-      {
-         var _loc2_:String = "#messenger:chat_error/" + param1;
-         if(CHAT_ERROR_ENUM.indexOf(_loc2_) == -1)
-         {
-            DebugUtils.LOG_WARNING("[chat_error]:locale key \"" + _loc2_ + "\" was not found");
-            return null;
-         }
-         return _loc2_;
-      }
-      
-      public static function client_action(param1:String) : String
-      {
-         var _loc2_:String = "#messenger:client_action/" + param1;
-         if(CLIENT_ACTION_ENUM.indexOf(_loc2_) == -1)
-         {
-            DebugUtils.LOG_WARNING("[client_action]:locale key \"" + _loc2_ + "\" was not found");
-            return null;
-         }
-         return _loc2_;
-      }
-      
       public static function chat_action(param1:String) : String
       {
          var _loc2_:String = "#messenger:chat_action/" + param1;
          if(CHAT_ACTION_ENUM.indexOf(_loc2_) == -1)
          {
             DebugUtils.LOG_WARNING("[chat_action]:locale key \"" + _loc2_ + "\" was not found");
+            return null;
+         }
+         return _loc2_;
+      }
+      
+      public static function server_error_user_room_creation(param1:String) : String
+      {
+         var _loc2_:String = "#messenger:server_error/user_room_creation/" + param1;
+         if(SERVER_ERROR_USER_ROOM_CREATION_ENUM.indexOf(_loc2_) == -1)
+         {
+            DebugUtils.LOG_WARNING("[server_error_user_room_creation]:locale key \"" + _loc2_ + "\" was not found");
+            return null;
+         }
+         return _loc2_;
+      }
+      
+      public static function listview_emptylist(param1:String) : String
+      {
+         var _loc2_:String = "#messenger:listView/emptyList/" + param1;
+         if(LISTVIEW_EMPTYLIST_ENUM.indexOf(_loc2_) == -1)
+         {
+            DebugUtils.LOG_WARNING("[listview_emptylist]:locale key \"" + _loc2_ + "\" was not found");
+            return null;
+         }
+         return _loc2_;
+      }
+      
+      public static function client_error_channel(param1:String) : String
+      {
+         var _loc2_:String = "#messenger:client_error/channel/" + param1;
+         if(CLIENT_ERROR_CHANNEL_ENUM.indexOf(_loc2_) == -1)
+         {
+            DebugUtils.LOG_WARNING("[client_error_channel]:locale key \"" + _loc2_ + "\" was not found");
+            return null;
+         }
+         return _loc2_;
+      }
+      
+      public static function chat_error(param1:String) : String
+      {
+         var _loc2_:String = "#messenger:chat_error/" + param1;
+         if(CHAT_ERROR_ENUM.indexOf(_loc2_) == -1)
+         {
+            DebugUtils.LOG_WARNING("[chat_error]:locale key \"" + _loc2_ + "\" was not found");
             return null;
          }
          return _loc2_;

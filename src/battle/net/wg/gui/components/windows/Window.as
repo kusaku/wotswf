@@ -126,8 +126,10 @@ public class Window extends scaleform.clik.controls.Window implements IWindow {
         this.minimizeBtn = null;
         this._formBgPadding = null;
         this.bgForm = null;
-        this._topButtonOffsets.splice(0, this._topButtonOffsets.length);
-        this._topButtonOffsets = null;
+        if (this._topButtonOffsets != null) {
+            this._topButtonOffsets.splice(0, this._topButtonOffsets.length);
+            this._topButtonOffsets = null;
+        }
         super.onDispose();
     }
 

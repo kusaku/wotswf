@@ -4,7 +4,6 @@ import flash.text.TextField;
 import net.wg.data.constants.UserTags;
 import net.wg.data.constants.Values;
 import net.wg.gui.prebattle.constants.PrebattleStateString;
-import net.wg.gui.prebattle.data.PlayerPrbInfoVO;
 
 import scaleform.clik.core.UIComponent;
 import scaleform.clik.utils.Constraints;
@@ -32,9 +31,6 @@ public class TeamMemberRenderer extends TeamMemberRendererBase {
     }
 
     override public function setData(param1:Object):void {
-        if (param1 != null && !(param1 is PlayerPrbInfoVO)) {
-            param1 = new PlayerPrbInfoVO(param1);
-        }
         super.setData(param1);
         if (model) {
             setSpeakers(model.isPlayerSpeaking, true);

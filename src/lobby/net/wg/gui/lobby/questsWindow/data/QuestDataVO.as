@@ -11,6 +11,8 @@ public class QuestDataVO extends DAAPIDataClass {
 
     private static const HEADER_FIELD:String = "header";
 
+    private static const TASK_TO_UNLOCK:String = "taskToUnlock";
+
     public var awardsDataProvider:DataProvider;
 
     public var header:HeaderDataVO = null;
@@ -21,8 +23,9 @@ public class QuestDataVO extends DAAPIDataClass {
 
     public var conditions:Object = null;
 
+    public var taskToUnlock:QuestDashlineItemVO = null;
+
     public function QuestDataVO(param1:Object) {
-        this.awardsDataProvider = new DataProvider();
         this.award = [];
         super(param1);
     }
@@ -34,9 +37,13 @@ public class QuestDataVO extends DAAPIDataClass {
             case HEADER_FIELD:
                 this.header = !!param2 ? new HeaderDataVO(param2) : null;
                 return false;
+            case TASK_TO_UNLOCK:
+                this.taskToUnlock = new QuestDashlineItemVO(param2);
+                return false;
             case AWARDS_DATA_PROVIDER_FIELD:
                 _loc3_ = param2 as Array;
                 App.utils.asserter.assertNotNull(_loc3_, Errors.CANT_NULL);
+                this.awardsDataProvider = new DataProvider();
                 for each(_loc4_ in _loc3_) {
                     this.awardsDataProvider.push(new AwardCarouselItemRendererVO(_loc4_));
                 }
@@ -56,15 +63,19 @@ public class QuestDataVO extends DAAPIDataClass {
             this.award.splice(0, this.award.length);
             this.award = null;
         }
-        for each(_loc1_ in this.awardsDataProvider) {
-            _loc1_.dispose();
+        if (this.awardsDataProvider) {
+            for each(_loc1_ in this.awardsDataProvider) {
+                _loc1_.dispose();
+            }
+            this.awardsDataProvider.cleanUp();
+            this.awardsDataProvider = null;
         }
-        this.awardsDataProvider.splice(0, this.awardsDataProvider.length);
-        this.awardsDataProvider = null;
         App.utils.data.cleanupDynamicObject(this.requirements);
         this.requirements = null;
         App.utils.data.cleanupDynamicObject(this.conditions);
         this.conditions = null;
+        this.taskToUnlock.dispose();
+        this.taskToUnlock = null;
         super.onDispose();
     }
 }

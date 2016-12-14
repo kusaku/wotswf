@@ -56,7 +56,7 @@ public class FortRoomView extends FortRoomMeta implements IFortRoomMeta {
         ordersBg.visible = false;
     }
 
-    override protected function getRallyVO(param1:Object):IRallyVO {
+    override protected function getIRallyVO(param1:Object):IRallyVO {
         return new LegionariesSortieVO(param1);
     }
 

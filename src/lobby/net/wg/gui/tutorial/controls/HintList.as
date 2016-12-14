@@ -1,13 +1,14 @@
 package net.wg.gui.tutorial.controls {
 import flash.events.MouseEvent;
 
+import net.wg.data.constants.Errors;
 import net.wg.gui.tutorial.constants.HintItemType;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ListEvent;
 
-public class HintList extends UIComponent {
+public class HintList extends UIComponentEx {
 
     public var textItemRenderer:String;
 
@@ -76,6 +77,7 @@ public class HintList extends UIComponent {
 
     private function onItemClick(param1:MouseEvent):void {
         var _loc2_:HintBaseItemRenderer = param1.currentTarget as HintBaseItemRenderer;
+        App.utils.asserter.assertNotNull(_loc2_, "item" + Errors.CANT_NULL);
         var _loc3_:ListEvent = new ListEvent(ListEvent.ITEM_CLICK);
         _loc3_.itemData = _loc2_.data;
         dispatchEvent(_loc3_);

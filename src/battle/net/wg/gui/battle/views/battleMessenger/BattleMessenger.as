@@ -40,6 +40,14 @@ public class BattleMessenger extends BattleMessengerMeta implements IBattleMesse
 
     private static const EMPTY_STR:String = "";
 
+    private static const HOVER_SIZE:Number = 10;
+
+    private static const BOTTOM_SIDE_Y_POSITION:Number = 48;
+
+    private static const BOTTOM_SIDE_WIDTH:Number = 230;
+
+    private static const MESSAGE_RENDERER_WIDTH:Number = 350;
+
     public var receiverField:TextField = null;
 
     public var messageInputField:TextField = null;
@@ -63,6 +71,8 @@ public class BattleMessenger extends BattleMessengerMeta implements IBattleMesse
     public var backgroundLayer:Sprite = null;
 
     public var hoverMC:Sprite;
+
+    public var swapArea:Sprite = null;
 
     private var _receiverIdx:int = 0;
 
@@ -154,12 +164,17 @@ public class BattleMessenger extends BattleMessengerMeta implements IBattleMesse
         this._battleSmileyMap = new BattleSmileyMap();
         super();
         this._defaultWidth = this.hit.width;
-        this.hoverMC.graphics.beginFill(16711680);
-        this.hoverMC.graphics.drawRect(0, 0, 10, 10);
-        this.hoverMC.graphics.endFill();
+        this.drawRect(this.hoverMC, 0, 0, HOVER_SIZE, HOVER_SIZE);
         this.hoverMC.x = 0;
         this.hoverMC.alpha = 0;
+        this.swapArea = new Sprite();
+        this.swapArea.alpha = 0;
+        addChild(this.swapArea);
         this.addChildAt(this.hoverMC, this.getChildIndex(this.backgroundLayer) - 1);
+        addEventListener(MouseEvent.ROLL_OUT, this.onBattleMessengerRollOutHandler);
+        addEventListener(MouseEvent.ROLL_OVER, this.onBattleMessengerRollOverHandler);
+        hitArea = this.swapArea;
+        mouseChildren = false;
         TextFieldEx.setNoTranslate(this.receiverField, true);
         TextFieldEx.setNoTranslate(this.messageInputField, true);
         TextFieldEx.setNoTranslate(this.hintField, true);
@@ -171,29 +186,59 @@ public class BattleMessenger extends BattleMessengerMeta implements IBattleMesse
         return param1.orderIndex - param2.orderIndex;
     }
 
-    override public function as_setupList(param1:Object):void {
-        var _loc2_:BattleMessengerSettingsVO = new BattleMessengerSettingsVO(param1);
-        this._maxMessages = _loc2_.maxLinesCount;
+    private function onBattleMessengerRollOverHandler(param1:MouseEvent):void {
+        this.switchSwapArea(false);
+    }
+
+    private function onBattleMessengerRollOutHandler(param1:MouseEvent):void {
+        this.switchSwapArea(true);
+    }
+
+    public function updateSwapAreaHeight(param1:Number):void {
+        this.swapArea.graphics.clear();
+        this.drawRect(this.swapArea, 0, param1 - BOTTOM_SIDE_Y_POSITION, BOTTOM_SIDE_WIDTH, BOTTOM_SIDE_Y_POSITION);
+        this.drawRect(this.swapArea, 0, 0, MESSAGE_RENDERER_WIDTH, param1 - BOTTOM_SIDE_Y_POSITION);
+        this.swapArea.y = -param1 + BOTTOM_SIDE_Y_POSITION;
+    }
+
+    private function switchSwapArea(param1:Boolean):void {
+        if (param1) {
+            hitArea = this.swapArea;
+        }
+        else {
+            hitArea = null;
+        }
+        this.swapArea.mouseEnabled = param1;
+        mouseChildren = !param1;
+    }
+
+    private function drawRect(param1:Sprite, param2:Number, param3:Number, param4:Number, param5:Number):void {
+        param1.graphics.beginFill(0);
+        param1.graphics.drawRect(param2, param3, param4, param5);
+        param1.graphics.endFill();
+    }
+
+    override protected function setupList(param1:BattleMessengerSettingsVO):void {
+        this._maxMessages = param1.maxLinesCount;
         this._isUnlimitedMessageStack = this._maxMessages == -1;
-        this._maxVisibleMessages = _loc2_.numberOfMessagesInHistory;
-        this._inactiveStateAlpha = _loc2_.inactiveStateAlpha;
+        this._maxVisibleMessages = param1.numberOfMessagesInHistory;
+        this._inactiveStateAlpha = param1.inactiveStateAlpha;
         if (!this._isCtrlButtonPressed && !this._isEnterButtonPressed) {
             this.setAlpha(this._inactiveStateAlpha);
         }
-        this.messageInputField.maxChars = _loc2_.maxMessageLength;
-        this.hintField.htmlText = _loc2_.hintStr;
-        this._tooltipStr = _loc2_.toolTipStr;
-        this._isHistoryEnabled = _loc2_.isHistoryEnabled;
-        var _loc3_:int = _loc2_.lifeTime;
-        var _loc4_:int = _loc2_.alphaSpeed;
-        var _loc5_:Number = _loc2_.lastMessageAlpha;
-        var _loc6_:Number = _loc2_.recoveredLatestMessagesAlpha;
-        var _loc7_:int = _loc2_.recoveredMessagesLifeTime;
-        this._redMessagesPool = new BattleMessengerPool(this._maxMessages, _loc3_, _loc4_, _loc5_, _loc6_, _loc7_, BATTLE_MESSAGES_CONSTS.RED_MESSAGE_RENDERER, this._battleSmileyMap, this.userInteraction);
-        this._greenMessagesPool = new BattleMessengerPool(this._maxMessages, _loc3_, _loc4_, _loc5_, _loc6_, _loc7_, BATTLE_MESSAGES_CONSTS.GREEN_MESSAGE_RENDERER, this._battleSmileyMap, this.userInteraction);
-        this._blackMessagesPool = new BattleMessengerPool(this._maxMessages, _loc3_, _loc4_, _loc5_, _loc6_, _loc7_, BATTLE_MESSAGES_CONSTS.BLACK_MESSAGE_RENDERER, this._battleSmileyMap, this.userInteraction);
-        this._selfMessagesPool = new BattleMessengerPool(this._maxMessages, _loc3_, _loc4_, _loc5_, _loc6_, _loc7_, BATTLE_MESSAGES_CONSTS.SELF_MESSAGE_RENDERER, this._battleSmileyMap, this.userInteraction);
-        _loc2_.dispose();
+        this.messageInputField.maxChars = param1.maxMessageLength;
+        this.hintField.htmlText = param1.hintStr;
+        this._tooltipStr = param1.toolTipStr;
+        this._isHistoryEnabled = param1.isHistoryEnabled;
+        var _loc2_:int = param1.lifeTime;
+        var _loc3_:int = param1.alphaSpeed;
+        var _loc4_:Number = param1.lastMessageAlpha;
+        var _loc5_:Number = param1.recoveredLatestMessagesAlpha;
+        var _loc6_:int = param1.recoveredMessagesLifeTime;
+        this._redMessagesPool = new BattleMessengerPool(this._maxMessages, _loc2_, _loc3_, _loc4_, _loc5_, _loc6_, BATTLE_MESSAGES_CONSTS.RED_MESSAGE_RENDERER, this._battleSmileyMap, this.userInteraction);
+        this._greenMessagesPool = new BattleMessengerPool(this._maxMessages, _loc2_, _loc3_, _loc4_, _loc5_, _loc6_, BATTLE_MESSAGES_CONSTS.GREEN_MESSAGE_RENDERER, this._battleSmileyMap, this.userInteraction);
+        this._blackMessagesPool = new BattleMessengerPool(this._maxMessages, _loc2_, _loc3_, _loc4_, _loc5_, _loc6_, BATTLE_MESSAGES_CONSTS.BLACK_MESSAGE_RENDERER, this._battleSmileyMap, this.userInteraction);
+        this._selfMessagesPool = new BattleMessengerPool(this._maxMessages, _loc2_, _loc3_, _loc4_, _loc5_, _loc6_, BATTLE_MESSAGES_CONSTS.SELF_MESSAGE_RENDERER, this._battleSmileyMap, this.userInteraction);
     }
 
     override protected function configUI():void {
@@ -219,6 +264,9 @@ public class BattleMessenger extends BattleMessengerMeta implements IBattleMesse
             this._userInteractionCmp.dispose();
             this._userInteractionCmp = null;
         }
+        removeEventListener(MouseEvent.ROLL_OUT, this.onBattleMessengerRollOutHandler);
+        removeEventListener(MouseEvent.ROLL_OVER, this.onBattleMessengerRollOverHandler);
+        this.swapArea = null;
         this._scheduler.cancelTask(this.showHintText);
         this._scheduler = null;
         this._battleSmileyMap.dispose();
@@ -245,7 +293,6 @@ public class BattleMessenger extends BattleMessengerMeta implements IBattleMesse
         this._messages.fixed = false;
         this._messages.splice(0, this._messages.length);
         this._messages = null;
-        this.clearReceivers();
         this._receivers = null;
         this._selectedTargetOnMouseDown = null;
         this._redMessagesPool.dispose();
@@ -319,6 +366,7 @@ public class BattleMessenger extends BattleMessengerMeta implements IBattleMesse
             this.receiverIdx = param1;
             this.showViewElements(true);
         }
+        this.switchSwapArea(!this._isEnterButtonPressed);
     }
 
     public function as_restoreMessages(param1:Number):void {
@@ -347,22 +395,16 @@ public class BattleMessenger extends BattleMessengerMeta implements IBattleMesse
         this.showViewElements(true);
     }
 
-    public function as_setReceiver(param1:Object, param2:Boolean):void {
+    override protected function setReceiver(param1:BattleMessengerReceiverVO, param2:Boolean):void {
         if (param2) {
             this.clearReceivers();
         }
-        this._receivers.push(new BattleMessengerReceiverVO(param1));
+        this._receivers.push(param1);
         this.updateReceivers();
     }
 
-    public function as_setReceivers(param1:Array):void {
-        this.clearReceivers();
-        var _loc2_:int = param1.length;
-        var _loc3_:int = 0;
-        while (_loc3_ < _loc2_) {
-            this._receivers.push(new BattleMessengerReceiverVO(param1[_loc3_]));
-            _loc3_++;
-        }
+    override protected function setReceivers(param1:Vector.<BattleMessengerReceiverVO>):void {
+        this._receivers = param1;
         this.updateReceivers();
     }
 
@@ -1017,6 +1059,10 @@ public class BattleMessenger extends BattleMessengerMeta implements IBattleMesse
             }
         }
         this._selectedTargetOnMouseDown = null;
+    }
+
+    public function get isEnterButtonPressed():Boolean {
+        return this._isEnterButtonPressed;
     }
 }
 }

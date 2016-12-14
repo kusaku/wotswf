@@ -3,12 +3,11 @@ import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.DisplayObject;
 
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.entity.IDropItem;
 import net.wg.infrastructure.interfaces.entity.IUpdatable;
 
-import scaleform.clik.core.UIComponent;
-
-public class ImgDropListDelegate extends UIComponent implements IDropItem, IUpdatable {
+public class ImgDropListDelegate extends UIComponentEx implements IDropItem, IUpdatable {
 
     private var _data:Object;
 

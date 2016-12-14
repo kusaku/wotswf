@@ -43,7 +43,7 @@ public class GraphicSettingsBase extends SettingsBaseView {
 
     public var monitorDropDown:DropdownMenu = null;
 
-    public var fullScreenCheckbox:CheckBox = null;
+    public var screenModeDropDown:DropdownMenu = null;
 
     public var sizesLabel:LabelControl = null;
 
@@ -199,7 +199,7 @@ public class GraphicSettingsBase extends SettingsBaseView {
 
     public var DRR_AUTOSCALER_ENABLEDCheckbox:CheckBox = null;
 
-    protected var isFullScreen:Boolean = false;
+    protected var _currentScreenModeId:String = "";
 
     public function GraphicSettingsBase() {
         super();
@@ -215,8 +215,8 @@ public class GraphicSettingsBase extends SettingsBaseView {
 
     override protected function getControlId(param1:DisplayObject):String {
         var _loc2_:String = super.getControlId(param1);
-        if (_loc2_ == SettingsConfigHelper.SIZE) {
-            return !!this.isFullScreen ? SettingsConfigHelper.RESOLUTION : SettingsConfigHelper.WINDOW_SIZE;
+        if (_loc2_ == SettingsConfigHelper.SIZES) {
+            return this._currentScreenModeId;
         }
         return _loc2_;
     }
@@ -224,7 +224,7 @@ public class GraphicSettingsBase extends SettingsBaseView {
     override protected function onDispose():void {
         this.monitorLabel = null;
         this.monitorDropDown = null;
-        this.fullScreenCheckbox = null;
+        this.screenModeDropDown = null;
         this.sizesLabel = null;
         this.sizesDropDown = null;
         this.refreshRateLabel = null;
@@ -336,8 +336,8 @@ public class GraphicSettingsBase extends SettingsBaseView {
         registerToolTip(this.autodetectQuality, SettingsConfigHelper.AUTODETECT_BUTTON);
         registerToolTip(this.monitorDropDown, SettingsConfigHelper.MONITOR);
         registerToolTip(this.monitorLabel, SettingsConfigHelper.MONITOR);
-        registerToolTip(this.sizesDropDown, SettingsConfigHelper.SIZE);
-        registerToolTip(this.sizesLabel, SettingsConfigHelper.SIZE);
+        registerToolTip(this.sizesDropDown, SettingsConfigHelper.SIZES);
+        registerToolTip(this.sizesLabel, SettingsConfigHelper.SIZES);
         registerToolTip(this.refreshRateDropDown, SettingsConfigHelper.REFRESH_RATE);
         registerToolTip(this.refreshRateLabel, SettingsConfigHelper.REFRESH_RATE);
         registerToolTip(this.aspectRatioDropDown, SettingsConfigHelper.ASPECTRATIO);
@@ -346,7 +346,7 @@ public class GraphicSettingsBase extends SettingsBaseView {
         registerToolTip(this.interfaceScaleLabel, SettingsConfigHelper.INTERFACE_SCALE);
         registerToolTip(this.smoothingDropDown, SettingsConfigHelper.SMOOTHING);
         registerToolTip(this.smoothingLabel, SettingsConfigHelper.SMOOTHING);
-        registerToolTip(this.fullScreenCheckbox, SettingsConfigHelper.FULL_SCREEN);
+        registerToolTip(this.screenModeDropDown, SettingsConfigHelper.SCREEN_MODE);
         registerToolTip(this.vertSyncCheckbox, SettingsConfigHelper.VERTICAL_SYNC);
         registerToolTip(this.tripleBufferedCheckbox, SettingsConfigHelper.TRIPLE_BUFFERED);
         registerToolTip(this.isColorBlindCheckbox, SettingsConfigHelper.IS_COLOR_BLIND);
@@ -403,7 +403,7 @@ public class GraphicSettingsBase extends SettingsBaseView {
     private function initControls():void {
         this.monitorLabel = this.screenForm.monitorLabel;
         this.monitorDropDown = this.screenForm.monitorDropDown;
-        this.fullScreenCheckbox = this.screenForm.fullScreenCheckbox;
+        this.screenModeDropDown = this.screenForm.screenModeDropDown;
         this.sizesLabel = this.screenForm.sizesLabel;
         this.sizesDropDown = this.screenForm.sizesDropDown;
         this.refreshRateLabel = this.screenForm.refreshRateLabel;

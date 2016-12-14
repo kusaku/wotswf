@@ -140,7 +140,7 @@ public class ScrollPane extends UIComponentEx {
                 _loc1_ = parent.getChildByName(this._scrollBarValue.toString()) as IScrollBar;
             }
             if (_loc1_ == null) {
-                _loc2_ = App.utils.classFactory.getClass(this._scrollBarValue.toString()) as Class;
+                _loc2_ = App.utils.classFactory.getClass(this._scrollBarValue.toString());
                 if (_loc2_) {
                     _loc1_ = IScrollBar(App.utils.classFactory.getComponent(this._scrollBarValue.toString(), IScrollBar));
                 }
@@ -151,7 +151,7 @@ public class ScrollPane extends UIComponentEx {
                         _loc3_.offsetTop = this.thumbOffset.top;
                         _loc3_.offsetBottom = this.thumbOffset.bottom;
                     }
-                    this.addChild(_loc1_ as DisplayObject);
+                    this.addChild(DisplayObject(_loc1_));
                 }
             }
         }
@@ -161,7 +161,7 @@ public class ScrollPane extends UIComponentEx {
                 this._autoScrollBar = true;
                 Object(_loc1_).offsetTop = this.thumbOffset.top;
                 Object(_loc1_).offsetBottom = this.thumbOffset.bottom;
-                this.addChild(_loc1_ as DisplayObject);
+                this.addChild(DisplayObject(_loc1_));
             }
         }
         else {
@@ -169,13 +169,12 @@ public class ScrollPane extends UIComponentEx {
         }
         this._scrollBar = _loc1_;
         invalidateSize();
-        if (this._scrollBar == null) {
-            return;
+        if (_loc1_ != null) {
+            _loc1_.addEventListener(Event.SCROLL, this.onScrollBarChangeHandler, false, 0, true);
+            _loc1_.addEventListener(Event.CHANGE, this.onScrollBarChangeHandler, false, 0, true);
+            _loc1_.focusTarget = this;
+            _loc1_.tabEnabled = false;
         }
-        this._scrollBar.addEventListener(Event.SCROLL, this.onScrollBarChangeHandler, false, 0, true);
-        this._scrollBar.addEventListener(Event.CHANGE, this.onScrollBarChangeHandler, false, 0, true);
-        this._scrollBar.focusTarget = this;
-        this._scrollBar.tabEnabled = false;
     }
 
     protected function applyTargetChanges():void {

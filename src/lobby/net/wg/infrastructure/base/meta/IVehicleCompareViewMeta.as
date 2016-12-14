@@ -30,5 +30,7 @@ public interface IVehicleCompareViewMeta extends IEventDispatcher {
     function as_getVehiclesDP():Object;
 
     function as_setVehiclesCountText(param1:String):void;
+
+    function as_setAttentionVisible(param1:Boolean):void;
 }
 }

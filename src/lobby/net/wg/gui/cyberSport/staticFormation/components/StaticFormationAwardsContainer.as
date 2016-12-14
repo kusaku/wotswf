@@ -2,13 +2,13 @@ package net.wg.gui.cyberSport.staticFormation.components {
 import flash.events.Event;
 
 import net.wg.gui.components.controls.ResizableTileList;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.DirectionMode;
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.DataProvider;
 
-public class StaticFormationAwardsContainer extends UIComponent {
+public class StaticFormationAwardsContainer extends UIComponentEx {
 
     private static const COLUMN_WIDTH:int = 108;
 

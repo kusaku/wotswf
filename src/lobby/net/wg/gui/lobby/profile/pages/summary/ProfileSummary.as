@@ -129,7 +129,7 @@ public class ProfileSummary extends ProfileSummaryMeta implements IProfileSummar
         this.tfMarksOfMastery.text = this.profileSummaryVO.getMarksOfMasteryCountStr();
         this.tfMarksOfMastery.totalCount = this.profileSummaryVO.totalUserVehiclesCount;
         this.tfPersonalScore.text = this.profileSummaryVO.getGlobalRatingStr();
-        this.significantAwards.dataProvider = App.utils.data.vectorToArray(this.profileSummaryVO.significantAchievements);
+        this.significantAwards.dataProvider = this.profileSummaryVO.significantAchievements;
     }
 
     override protected function onDispose():void {

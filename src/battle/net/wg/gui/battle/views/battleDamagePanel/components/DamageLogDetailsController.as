@@ -110,19 +110,12 @@ public class DamageLogDetailsController implements IDisposable {
         this._lastAdditionalRowsCount = param1;
     }
 
-    public function addDetailsMessage(param1:uint, param2:String, param3:String, param4:String, param5:String):void {
-        var _loc6_:MessageRenderModel = new MessageRenderModel();
-        _loc6_.valueColor = param1;
-        _loc6_.value = param2;
-        _loc6_.actionTypeImg = param3;
-        _loc6_.vehicleTypeImg = param4;
-        _loc6_.vehicleName = param5;
-        this.fillNextData(_loc6_);
+    public function addDetailsMessage(param1:MessageRenderModel):void {
+        this.fillNextData(param1);
     }
 
-    public function detailsStats(param1:Boolean, param2:Array):void {
-        var _loc4_:Object = null;
-        var _loc5_:MessageRenderModel = null;
+    public function detailsStats(param1:Boolean, param2:Vector.<MessageRenderModel>):void {
+        var _loc4_:MessageRenderModel = null;
         this.clearData();
         var _loc3_:int = this._lastAdditionalRowsCount;
         this._lastAdditionalRowsCount = 0;
@@ -130,16 +123,8 @@ public class DamageLogDetailsController implements IDisposable {
         this._isDetailsInited = true;
         this._poolData = new Vector.<MessageRenderModel>();
         this.makeEmptyPoolObjects();
-        if (param2 && param2.length > 0) {
-            for each(_loc4_ in param2) {
-                _loc5_ = new MessageRenderModel();
-                _loc5_.valueColor = _loc4_.valueColor;
-                _loc5_.value = _loc4_.value;
-                _loc5_.actionTypeImg = _loc4_.actionTypeImg;
-                _loc5_.vehicleTypeImg = _loc4_.vehicleTypeImg;
-                _loc5_.vehicleName = _loc4_.vehicleName;
-                this.fillNextData(_loc5_);
-            }
+        for each(_loc4_ in param2) {
+            this.fillNextData(_loc4_);
         }
         this.changeContainerVisibility(param1);
     }

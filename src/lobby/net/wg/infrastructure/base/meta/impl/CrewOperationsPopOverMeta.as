@@ -27,12 +27,13 @@ public class CrewOperationsPopOverMeta extends SmartPopOverView {
         this.invokeOperation(param1);
     }
 
-    public function as_update(param1:Object):void {
-        if (this._crewOperationsInitVO) {
-            this._crewOperationsInitVO.dispose();
-        }
+    public final function as_update(param1:Object):void {
+        var _loc2_:CrewOperationsInitVO = this._crewOperationsInitVO;
         this._crewOperationsInitVO = new CrewOperationsInitVO(param1);
         this.update(this._crewOperationsInitVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function update(param1:CrewOperationsInitVO):void {

@@ -4,13 +4,13 @@ import net.wg.data.daapi.base.DAAPIDataClass;
 
 public class TeamMemberItemVO extends DAAPIDataClass {
 
-    private static var STAT_VALUES:String = "statValues";
+    private static const STAT_VALUES:String = "statValues";
 
-    private static var VEHICLES:String = "vehicles";
+    private static const VEHICLES:String = "vehicles";
 
-    private static var USER_VO:String = "userVO";
+    private static const USER_VO:String = "userVO";
 
-    private static var ACHIEVEMENTS:String = "achievements";
+    private static const ACHIEVEMENTS:String = "achievements";
 
     public var isSelf:Boolean;
 
@@ -106,6 +106,8 @@ public class TeamMemberItemVO extends DAAPIDataClass {
 
     public var achievements:Array;
 
+    public var isAlly:Boolean;
+
     public function TeamMemberItemVO(param1:Object) {
         super(param1);
     }
@@ -133,26 +135,26 @@ public class TeamMemberItemVO extends DAAPIDataClass {
     }
 
     override protected function onDispose():void {
-        var _loc1_:int = 0;
+        var _loc1_:Vector.<StatItemVO> = null;
         var _loc2_:int = 0;
-        var _loc3_:Vector.<StatItemVO> = null;
+        var _loc3_:int = 0;
         var _loc4_:int = 0;
         var _loc5_:int = 0;
         if (this.statValues != null) {
-            _loc1_ = this.statValues.length;
-            _loc2_ = 0;
-            while (_loc2_ < this.statValues.length) {
-                _loc3_ = this.statValues[_loc2_];
-                _loc4_ = _loc3_.length;
+            _loc2_ = this.statValues.length;
+            _loc4_ = 0;
+            while (_loc4_ < _loc2_) {
+                _loc1_ = this.statValues[_loc4_];
+                _loc3_ = _loc1_.length;
                 _loc5_ = 0;
-                while (_loc5_ < _loc4_) {
-                    _loc3_[_loc5_].dispose();
+                while (_loc5_ < _loc3_) {
+                    _loc1_[_loc5_].dispose();
                     _loc5_++;
                 }
-                _loc3_.splice(0, _loc4_);
-                _loc2_++;
+                _loc1_.splice(0, _loc3_);
+                _loc4_++;
             }
-            this.statValues.splice(0, _loc1_);
+            this.statValues.splice(0, _loc2_);
             this.statValues = null;
         }
         if (this.vehicles != null) {

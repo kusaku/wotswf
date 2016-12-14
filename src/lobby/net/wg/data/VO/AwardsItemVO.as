@@ -8,6 +8,8 @@ public class AwardsItemVO extends DAAPIDataClass {
 
     public var value:String = "";
 
+    public var valueAtLeft:Boolean = true;
+
     public var itemSource:String = "";
 
     public var tooltip:String = "";

@@ -1,8 +1,9 @@
 package net.wg.gui.tutorial.controls {
-import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class HintBaseItemRenderer extends UIComponent {
+import scaleform.clik.constants.InvalidationType;
+
+public class HintBaseItemRenderer extends UIComponentEx {
 
     protected var _data:Object;
 

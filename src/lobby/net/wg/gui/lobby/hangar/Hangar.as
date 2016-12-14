@@ -19,11 +19,10 @@ import net.wg.gui.lobby.hangar.crew.Crew;
 import net.wg.gui.lobby.hangar.interfaces.IHangar;
 import net.wg.gui.lobby.hangar.interfaces.IVehicleParameters;
 import net.wg.gui.lobby.hangar.tcarousel.TankCarousel;
-import net.wg.infrastructure.base.meta.IGlobalVarsMgrMeta;
+import net.wg.gui.notification.events.NotificationLayoutEvent;
 import net.wg.infrastructure.base.meta.impl.HangarMeta;
 import net.wg.infrastructure.events.FocusRequestEvent;
 import net.wg.infrastructure.managers.ITooltipMgr;
-import net.wg.utils.IEventCollector;
 import net.wg.utils.IGameInputManager;
 import net.wg.utils.IUtils;
 import net.wg.utils.helpLayout.IHelpLayout;
@@ -50,6 +49,14 @@ public class Hangar extends HangarMeta implements IHangar {
     private static const TOP_MARGIN:Number = 34;
 
     private static const MINI_CLIENT_GAP:Number = 1;
+
+    private static const SM_CAROUSEL_PADDING:Number = 30;
+
+    private static const SM_AMMUNITION_PANEL_PADDING:Number = 86;
+
+    private static const SM_THRESHOLD:Number = 1360;
+
+    private static const SM_PADDING_X:Number = 4;
 
     public var vehResearchPanel:ResearchPanel;
 
@@ -81,8 +88,6 @@ public class Hangar extends HangarMeta implements IHangar {
 
     private var _gameInputMgr:IGameInputManager;
 
-    private var _globalVarsMgr:IGlobalVarsMgrMeta;
-
     private var _toolTipMgr:ITooltipMgr;
 
     private var _utils:IUtils;
@@ -95,7 +100,6 @@ public class Hangar extends HangarMeta implements IHangar {
 
     public function Hangar() {
         this._gameInputMgr = App.gameInputMgr;
-        this._globalVarsMgr = App.globalVarsMgr;
         this._toolTipMgr = App.toolTipMgr;
         this._utils = App.utils;
         this._helpLayout = App.utils.helpLayout;
@@ -154,9 +158,6 @@ public class Hangar extends HangarMeta implements IHangar {
         this._gameInputMgr.clearKeyHandler(Keyboard.F1, KeyboardEvent.KEY_DOWN);
         this._gameInputMgr.clearKeyHandler(Keyboard.F1, KeyboardEvent.KEY_UP);
         this.crewOperationBtn.removeEventListener(ButtonEvent.CLICK, this.onCrewOperationBtnClickHandler);
-        if (this._globalVarsMgr.isDevelopmentS()) {
-            this._gameInputMgr.clearKeyHandler(Keyboard.F2, KeyboardEvent.KEY_UP);
-        }
         this.ammunitionPanel.removeEventListener(FocusRequestEvent.REQUEST_FOCUS, this.onAmmunitionPanelRequestFocusHandler);
         this.vehResearchPanel.removeEventListener(Event.RESIZE, this.onVehResearchPanelResizeHandler);
         this.switchModePanel.removeEventListener(ComponentEvent.SHOW, this.onSwitchModePanelShowHandler);
@@ -180,7 +181,6 @@ public class Hangar extends HangarMeta implements IHangar {
         this.questsControl = null;
         this.header = null;
         this._gameInputMgr = null;
-        this._globalVarsMgr = null;
         this._toolTipMgr = null;
         this._utils = null;
         this._helpLayout = null;
@@ -197,9 +197,6 @@ public class Hangar extends HangarMeta implements IHangar {
         this._gameInputMgr.setKeyHandler(Keyboard.F1, KeyboardEvent.KEY_DOWN, this.showLayoutHandler, true);
         this._gameInputMgr.setKeyHandler(Keyboard.F1, KeyboardEvent.KEY_UP, this.closeLayoutHandler, true);
         this._gameInputMgr.setKeyHandler(Keyboard.ESCAPE, KeyboardEvent.KEY_DOWN, this.handleEscapeHandler, true);
-        if (this._globalVarsMgr.isDevelopmentS()) {
-            this._gameInputMgr.setKeyHandler(Keyboard.F2, KeyboardEvent.KEY_UP, this.toggleGUIEditorHandler, true);
-        }
         this.crewOperationBtn.tooltip = CREW_OPERATIONS.CREWOPERATIONS_BTN_TOOLTIP;
         this.crewOperationBtn.helpText = LOBBY_HELP.HANGAR_CREWOPERATIONBTN;
         this.crewOperationBtn.addEventListener(ButtonEvent.CLICK, this.onCrewOperationBtnClickHandler, false, 0, true);
@@ -212,6 +209,7 @@ public class Hangar extends HangarMeta implements IHangar {
     }
 
     override protected function draw():void {
+        var _loc1_:Number = NaN;
         super.draw();
         if (isInvalid(INVALIDATE_ENABLED_CREW)) {
             this.crew.enabled = this._crewEnabled;
@@ -224,6 +222,11 @@ public class Hangar extends HangarMeta implements IHangar {
             if (hasEventListener(Event.RESIZE)) {
                 dispatchEvent(new Event(Event.RESIZE));
             }
+            _loc1_ = SM_CAROUSEL_PADDING;
+            if (width > SM_THRESHOLD) {
+                _loc1_ = SM_AMMUNITION_PANEL_PADDING;
+            }
+            App.systemMessages.dispatchEvent(new NotificationLayoutEvent(NotificationLayoutEvent.UPDATE_LAYOUT, new Point(SM_PADDING_X, height - this.ammunitionPanel.y - _loc1_)));
         }
     }
 
@@ -284,7 +287,7 @@ public class Hangar extends HangarMeta implements IHangar {
         this.ammunitionPanel.updateTuningButton(param3, param4);
     }
 
-    public function as_show3DSceneTooltip(param1:String, param2:Array):void {
+    override protected function show3DSceneTooltip(param1:String, param2:Array):void {
         this._toolTipMgr.showSpecial.apply(this._toolTipMgr, [param1, null].concat(param2));
     }
 
@@ -386,10 +389,6 @@ public class Hangar extends HangarMeta implements IHangar {
         App.popoverMgr.show(this, Aliases.CREW_OPERATIONS_POPOVER);
     }
 
-    private function toggleGUIEditorHandler(param1:InputEvent):void {
-        toggleGUIEditorS();
-    }
-
     private function handleEscapeHandler(param1:InputEvent):void {
         if (!this._helpLayout.isShown()) {
             onEscapeS();
@@ -399,10 +398,7 @@ public class Hangar extends HangarMeta implements IHangar {
     private function onHangarShowDropDownHandler(param1:CrewDropDownEvent):void {
         var _loc2_:MovieClip = param1.dropDownref;
         var _loc3_:Point = globalToLocal(new Point(_loc2_.x, _loc2_.y));
-        var _loc4_:IEventCollector = this._utils.events;
-        _loc4_.disableDisposingForObj(_loc2_);
         addChild(_loc2_);
-        _loc4_.enableDisposingForObj(_loc2_);
         _loc2_.x = _loc3_.x;
         _loc2_.y = _loc3_.y;
     }

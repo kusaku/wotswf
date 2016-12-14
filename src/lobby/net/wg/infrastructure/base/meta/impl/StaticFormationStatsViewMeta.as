@@ -34,20 +34,22 @@ public class StaticFormationStatsViewMeta extends BaseDAAPIComponent {
         this.selectSeason(param1);
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._staticFormationStatsViewVO) {
-            this._staticFormationStatsViewVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:StaticFormationStatsViewVO = this._staticFormationStatsViewVO;
         this._staticFormationStatsViewVO = new StaticFormationStatsViewVO(param1);
         this.setData(this._staticFormationStatsViewVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setStats(param1:Object):void {
-        if (this._staticFormationStatsVO) {
-            this._staticFormationStatsVO.dispose();
-        }
+    public final function as_setStats(param1:Object):void {
+        var _loc2_:StaticFormationStatsVO = this._staticFormationStatsVO;
         this._staticFormationStatsVO = new StaticFormationStatsVO(param1);
         this.setStats(this._staticFormationStatsVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:StaticFormationStatsViewVO):void {

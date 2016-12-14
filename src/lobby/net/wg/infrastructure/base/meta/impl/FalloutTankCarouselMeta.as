@@ -41,12 +41,13 @@ public class FalloutTankCarouselMeta extends TankCarousel {
         this.shiftSlot(param1);
     }
 
-    public function as_setMultiselectionInfo(param1:Object):void {
-        if (this._multiselectionInfoVO) {
-            this._multiselectionInfoVO.dispose();
-        }
+    public final function as_setMultiselectionInfo(param1:Object):void {
+        var _loc2_:MultiselectionInfoVO = this._multiselectionInfoVO;
         this._multiselectionInfoVO = new MultiselectionInfoVO(param1);
         this.setMultiselectionInfo(this._multiselectionInfoVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setMultiselectionInfo(param1:MultiselectionInfoVO):void {

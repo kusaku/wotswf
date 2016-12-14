@@ -83,5 +83,8 @@ public class CrosshairPostmortem extends SimpleContainer implements ICrosshair {
 
     public function updatePlayerInfo(param1:String):void {
     }
+
+    public function setVisibleNet(param1:Boolean):void {
+    }
 }
 }

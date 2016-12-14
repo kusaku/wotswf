@@ -7,9 +7,10 @@ import flash.net.URLRequest;
 import flash.system.ApplicationDomain;
 import flash.system.LoaderContext;
 
-import net.wg.gui.lobby.components.data.StoppableAnimationLoaderVO;
+import net.wg.gui.lobby.components.events.StoppableAnimationLoaderEvent;
 import net.wg.gui.lobby.components.interfaces.IStoppableAnimationItem;
 import net.wg.gui.lobby.components.interfaces.IStoppableAnimationLoader;
+import net.wg.gui.lobby.components.interfaces.IStoppableAnimationLoaderVO;
 import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
@@ -20,9 +21,11 @@ public class StoppableAnimationLoader extends UIComponentEx implements IStoppabl
 
     private var _animationLoader:Loader;
 
-    private var _playAnimation:Boolean = true;
+    private var _playAnimation:Boolean = false;
 
-    private var _data:StoppableAnimationLoaderVO;
+    private var _endAnimation:Boolean = false;
+
+    private var _data:IStoppableAnimationLoaderVO;
 
     public function StoppableAnimationLoader() {
         super();
@@ -42,21 +45,30 @@ public class StoppableAnimationLoader extends UIComponentEx implements IStoppabl
 
     override protected function draw():void {
         super.draw();
-        if (isInvalid(InvalidationType.DATA) && this._playAnimation) {
+        if (isInvalid(InvalidationType.DATA)) {
             this.loadBackAnimation();
         }
     }
 
-    public function setData(param1:StoppableAnimationLoaderVO):void {
-        this._data = param1;
-        invalidateData();
+    public function endAnimation():void {
+        this._endAnimation = true;
+        if (this._backAnimation != null) {
+            this._backAnimation.endAnimation();
+            dispatchEvent(new StoppableAnimationLoaderEvent(StoppableAnimationLoaderEvent.ANIMATION_END));
+        }
     }
 
-    public function stopAnimation():void {
-        this._playAnimation = false;
+    public function playAnimation():void {
+        this._playAnimation = true;
         if (this._backAnimation != null) {
-            this._backAnimation.stopAnimation();
+            this._backAnimation.playAnimation();
+            dispatchEvent(new StoppableAnimationLoaderEvent(StoppableAnimationLoaderEvent.ANIMATION_START));
         }
+    }
+
+    public function setData(param1:IStoppableAnimationLoaderVO):void {
+        this._data = param1;
+        invalidateData();
     }
 
     private function loadBackAnimation():void {
@@ -68,18 +80,23 @@ public class StoppableAnimationLoader extends UIComponentEx implements IStoppabl
         else {
             this._animationLoader.unloadAndStop(true);
         }
-        var _loc1_:URLRequest = new URLRequest(this._data.animationPath);
+        var _loc1_:URLRequest = new URLRequest(this._data.anmPath);
         var _loc2_:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain);
         this._animationLoader.load(_loc1_, _loc2_);
     }
 
     private function createBackAnimation():void {
         this.tryClearBackAnimation();
-        this._backAnimation = App.utils.classFactory.getComponent(this._data.animationLinkage, IStoppableAnimationItem);
-        this._backAnimation.setImage(this._data.image);
+        this._backAnimation = App.utils.classFactory.getComponent(this._data.anmLinkage, IStoppableAnimationItem);
+        this._backAnimation.setData(this._data);
         addChild(DisplayObject(this._backAnimation));
-        if (!this._playAnimation) {
-            this._backAnimation.stopAnimation();
+        if (this._endAnimation) {
+            this._backAnimation.endAnimation();
+            dispatchEvent(new StoppableAnimationLoaderEvent(StoppableAnimationLoaderEvent.ANIMATION_END));
+        }
+        else if (this._playAnimation) {
+            this._backAnimation.playAnimation();
+            dispatchEvent(new StoppableAnimationLoaderEvent(StoppableAnimationLoaderEvent.ANIMATION_START));
         }
     }
 
@@ -96,7 +113,7 @@ public class StoppableAnimationLoader extends UIComponentEx implements IStoppabl
     }
 
     private function onAnimationLoaderContentLoaderInfoIoErrorHandler(param1:IOErrorEvent):void {
-        DebugUtils.LOG_WARNING("Can\'t load animation swf: ", this._data.animationPath);
+        DebugUtils.LOG_WARNING("Can\'t load animation swf: ", this._data.anmPath);
     }
 }
 }

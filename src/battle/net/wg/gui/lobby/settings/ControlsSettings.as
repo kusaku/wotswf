@@ -23,6 +23,10 @@ public class ControlsSettings extends ControlsSettingsBase {
         super();
     }
 
+    override public function needDataWithChanges():Boolean {
+        return true;
+    }
+
     override public function toString():String {
         return "[WG ControlsSettings " + name + "]";
     }

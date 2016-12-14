@@ -4,11 +4,10 @@ import flash.display.Sprite;
 
 import net.wg.data.constants.Linkages;
 import net.wg.gui.rally.vo.SettingRosterVO;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.utils.IUtils;
 
-import scaleform.clik.core.UIComponent;
-
-public class DynamicRangeVehicles extends UIComponent {
+public class DynamicRangeVehicles extends UIComponentEx {
 
     private var model:SettingRosterVO;
 

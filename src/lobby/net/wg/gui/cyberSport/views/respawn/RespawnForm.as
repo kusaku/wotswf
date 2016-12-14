@@ -6,8 +6,8 @@ import net.wg.data.constants.Values;
 import net.wg.gui.components.advanced.ClanEmblem;
 import net.wg.gui.components.advanced.IndicationOfStatus;
 import net.wg.gui.components.controls.InfoIcon;
+import net.wg.gui.components.minimap.MinimapPresentation;
 import net.wg.gui.events.UILoaderEvent;
-import net.wg.gui.lobby.components.MinimapLobby;
 import net.wg.gui.lobby.fortifications.data.battleRoom.LegionariesSortieVO;
 import net.wg.gui.rally.interfaces.IRallyVO;
 import net.wg.infrastructure.base.meta.ICyberSportRespawnFormMeta;
@@ -27,7 +27,7 @@ public class RespawnForm extends CyberSportRespawnFormMeta implements ICyberSpor
 
     private static var INVALID_STATUS:String = "invalidStatus";
 
-    public var minimap:MinimapLobby = null;
+    public var minimap:MinimapPresentation = null;
 
     public var mapHeader:TextField = null;
 
@@ -151,7 +151,7 @@ public class RespawnForm extends CyberSportRespawnFormMeta implements ICyberSpor
         }
     }
 
-    override protected function getRallyVO(param1:Object):IRallyVO {
+    override protected function getIRallyVO(param1:Object):IRallyVO {
         return new LegionariesSortieVO(param1);
     }
 

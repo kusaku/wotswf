@@ -4,8 +4,8 @@ import flash.text.TextFieldAutoSize;
 
 import net.wg.data.constants.Linkages;
 import net.wg.data.constants.generated.CLANS_ALIASES;
-import net.wg.gui.components.common.SeparatorAsset;
-import net.wg.gui.components.common.SeparatorConstants;
+import net.wg.gui.components.assets.SeparatorAsset;
+import net.wg.gui.components.assets.data.SeparatorConstants;
 import net.wg.gui.components.common.containers.HorizontalGroupLayout;
 import net.wg.gui.components.common.containers.IGroupEx;
 import net.wg.gui.events.ViewStackEvent;

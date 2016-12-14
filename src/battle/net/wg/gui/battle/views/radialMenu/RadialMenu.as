@@ -6,6 +6,7 @@ import flash.utils.Dictionary;
 
 import net.wg.data.constants.InteractiveStates;
 import net.wg.data.constants.InvalidationType;
+import net.wg.data.constants.KeyProps;
 import net.wg.gui.battle.views.radialMenu.components.BackGround;
 import net.wg.infrastructure.base.meta.IRadialMenuMeta;
 import net.wg.infrastructure.base.meta.impl.RadialMenuMeta;
@@ -84,7 +85,7 @@ public class RadialMenu extends RadialMenuMeta implements IRadialMenuMeta {
         this.updateButtons();
     }
 
-    public function as_buildData(param1:Array):void {
+    override protected function buildData(param1:Array):void {
         var _loc3_:String = null;
         var _loc2_:int = param1.length;
         var _loc4_:uint = 0;
@@ -105,7 +106,7 @@ public class RadialMenu extends RadialMenuMeta implements IRadialMenuMeta {
                 _loc2_.title = _loc1_[_loc3_].title;
                 _loc2_.action = _loc1_[_loc3_].action;
                 _loc2_.icon = _loc1_[_loc3_].icon;
-                if (_loc1_[_loc3_].key) {
+                if (!isNaN(_loc1_[_loc3_].key) && _loc1_[_loc3_].key != KeyProps.KEY_NONE) {
                     _loc2_.hotKey = App.utils.commons.keyToString(_loc1_[_loc3_].key).keyName;
                 }
                 else {
@@ -118,7 +119,7 @@ public class RadialMenu extends RadialMenuMeta implements IRadialMenuMeta {
         }
     }
 
-    public function as_show(param1:String, param2:Array, param3:Array):void {
+    override protected function show(param1:String, param2:Array, param3:Array):void {
         this._isAction = false;
         this._state = param1;
         this._aspectRatioWidth = param3[0];

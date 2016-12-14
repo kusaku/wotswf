@@ -2,12 +2,12 @@ package net.wg.gui.tutorial.controls {
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.utils.ILocale;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.gfx.TextFieldEx;
 
-public class BattleBonusItem extends UIComponent {
+public class BattleBonusItem extends UIComponentEx {
 
     private static const STATE_HAS_BONUSES:String = "has_bonuses";
 

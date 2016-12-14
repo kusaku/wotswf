@@ -2,8 +2,8 @@ package net.wg.gui.lobby.battleResults.data {
 import net.wg.data.constants.Errors;
 import net.wg.data.daapi.base.DAAPIDataClass;
 import net.wg.utils.IAssertable;
-import net.wg.utils.ICommons;
-import net.wg.utils.IDataUtils;
+
+import scaleform.clik.data.DataProvider;
 
 public class BattleResultsVO extends DAAPIDataClass {
 
@@ -49,17 +49,29 @@ public class BattleResultsVO extends DAAPIDataClass {
 
     public var selectedIdxInGarageDropdown:int = 0;
 
-    public var team1:Vector.<TeamMemberItemVO> = null;
+    public var team1:DataProvider;
 
-    public var team2:Vector.<TeamMemberItemVO> = null;
+    public var team2:DataProvider;
 
-    public var tabInfo:Vector.<TabInfoVO> = null;
+    public var tabInfo:DataProvider;
 
     public function BattleResultsVO(param1:Object) {
         super(param1);
     }
 
+    private static function getTypedDataProvider(param1:*, param2:Class):DataProvider {
+        var _loc3_:DataProvider = new DataProvider();
+        var _loc4_:int = param1.length;
+        var _loc5_:int = 0;
+        while (_loc5_ < _loc4_) {
+            _loc3_[_loc5_] = new param2(param1[_loc5_]);
+            _loc5_++;
+        }
+        return _loc3_;
+    }
+
     override protected function onDataWrite(param1:String, param2:Object):Boolean {
+        var _loc4_:TeamMemberItemVO = null;
         var _loc3_:IAssertable = App.utils.asserter;
         if (MANDATORY_FIELDS.indexOf(param1) != -1) {
             _loc3_.assertNotNull(param2, ERROR_STRING_DATA_WITH_KEY + param1 + Errors.CANT_NULL);
@@ -67,7 +79,6 @@ public class BattleResultsVO extends DAAPIDataClass {
         if (ARRAY_FIELDS.indexOf(param1) != -1) {
             _loc3_.assert(param2 is Array, ERROR_STRING_DATA_WITH_KEY + param1 + ERROR_STRING_EXPECTED_TO_BE_ARRAY);
         }
-        var _loc4_:IDataUtils = App.utils.data;
         switch (param1) {
             case COMMON:
                 this.common = new CommonStatsVO(param2);
@@ -79,13 +90,16 @@ public class BattleResultsVO extends DAAPIDataClass {
                 this.textData = new BattleResultsTextData(param2);
                 return false;
             case TEAM1:
-                this.team1 = Vector.<TeamMemberItemVO>(_loc4_.convertVOArrayToVector(param1, param2, TeamMemberItemVO));
+                this.team1 = getTypedDataProvider(param2, TeamMemberItemVO);
+                for each(_loc4_ in this.team1) {
+                    _loc4_.isAlly = true;
+                }
                 return false;
             case TEAM2:
-                this.team2 = Vector.<TeamMemberItemVO>(_loc4_.convertVOArrayToVector(param1, param2, TeamMemberItemVO));
+                this.team2 = getTypedDataProvider(param2, TeamMemberItemVO);
                 return false;
             case TAB_INFO:
-                this.tabInfo = Vector.<TabInfoVO>(_loc4_.convertVOArrayToVector(param1, param2, TabInfoVO));
+                this.tabInfo = getTypedDataProvider(param2, TabInfoVO);
                 return false;
             default:
                 return super.onDataWrite(param1, param2);
@@ -93,9 +107,9 @@ public class BattleResultsVO extends DAAPIDataClass {
     }
 
     override protected function onDispose():void {
+        var _loc1_:TeamMemberItemVO = null;
+        var _loc2_:TabInfoVO = null;
         this.cyberSport = App.utils.data.cleanupDynamicObject(this.cyberSport);
-        var _loc1_:ICommons = App.utils.commons;
-        var _loc2_:IDataUtils = App.utils.data;
         if (this.quests != null) {
             this.quests.splice(0);
             this.quests = null;
@@ -105,18 +119,24 @@ public class BattleResultsVO extends DAAPIDataClass {
             this.unlocks = null;
         }
         if (this.team1 != null) {
-            _loc1_.releaseReferences(_loc2_.vectorToArray(this.team1));
-            this.team1.splice(0, this.team1.length);
+            for each(_loc1_ in this.team1) {
+                _loc1_.dispose();
+            }
+            this.team1.cleanUp();
             this.team1 = null;
         }
         if (this.team2 != null) {
-            _loc1_.releaseReferences(_loc2_.vectorToArray(this.team2));
-            this.team2.splice(0, this.team2.length);
+            for each(_loc1_ in this.team2) {
+                _loc1_.dispose();
+            }
+            this.team2.cleanUp();
             this.team2 = null;
         }
         if (this.tabInfo != null) {
-            _loc1_.releaseReferences(_loc2_.vectorToArray(this.tabInfo));
-            this.tabInfo.splice(0, this.tabInfo.length);
+            for each(_loc2_ in this.tabInfo) {
+                _loc2_.dispose();
+            }
+            this.tabInfo.cleanUp();
             this.tabInfo = null;
         }
         if (this.vehicles != null) {

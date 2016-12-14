@@ -41,6 +41,7 @@ import net.wg.infrastructure.base.meta.impl.LoginPageMeta;
 import org.idmedia.as3commons.util.Map;
 
 import scaleform.clik.constants.InputValue;
+import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.events.InputEvent;
 import scaleform.clik.interfaces.IDataProvider;
@@ -393,7 +394,7 @@ public class LoginPage extends LoginPageMeta implements ILoginPageMeta {
         this.updateButtonsTooltips();
     }
 
-    public function as_showSimpleForm(param1:Boolean, param2:Array):void {
+    override protected function showSimpleForm(param1:Boolean, param2:DataProvider):void {
         this._simpleFormDataVo.invalidType = LoginFormView.INV_ALL_DATA;
         this._simpleFormDataVo.isShowSocial = param1 && param2;
         if (this._simpleFormDataVo.isShowSocial) {

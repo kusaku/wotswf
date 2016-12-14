@@ -3,6 +3,7 @@ import flash.display.InteractiveObject;
 import flash.events.Event;
 
 import net.wg.data.constants.Currencies;
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.generated.CURRENCIES_CONSTANTS;
 import net.wg.gui.components.carousels.CarouselBase;
 import net.wg.gui.components.carousels.PortraitsCarousel;
@@ -83,6 +84,7 @@ public class PersonalCaseDocs extends UIComponentEx implements IViewStackContent
             return;
         }
         this.model = param1 as PersonalCaseDocsModel;
+        App.utils.asserter.assertNotNull(this.model, "model" + Errors.CANT_NULL);
         this.firstnames.updateData(this.model.firstNames, this.model.currentTankmanFirstName);
         this.firstnames.searchText.maxChars = this.model.fistNameMaxChars;
         this.lastnames.updateData(this.model.lastNames, this.model.currentTankmanLastName);

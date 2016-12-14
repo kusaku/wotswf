@@ -219,7 +219,7 @@ public class PlayersPanelListItem extends BattleUIComponent {
             this.updateColors();
         }
         if (isInvalid(PlayersPanelInvalidationType.IGR_CHANGED)) {
-            this.icoIGR.visible = this._isIGR && this.vehicleTF.visible;
+            this.icoIGR.visible = this._isIGR;
         }
         if (isInvalid(InvalidationType.STATE)) {
             this.applyState();
@@ -383,6 +383,7 @@ public class PlayersPanelListItem extends BattleUIComponent {
             return;
         }
         this._vehicleLevel = param1;
+        this.vehicleLevel.isCetralize = true;
         this.vehicleLevel.imageName = BattleAtlasItem.getVehicleLevelName(this._vehicleLevel);
     }
 
@@ -488,7 +489,6 @@ public class PlayersPanelListItem extends BattleUIComponent {
             if (this.playerNameCutTF.visible) {
                 this.playerNameCutTF.visible = false;
             }
-            this.icoIGR.visible = this._isIGR;
         }
         else if (this._state == PLAYERS_PANEL_STATE.LONG) {
             if (!this.vehicleTF.visible) {
@@ -500,7 +500,6 @@ public class PlayersPanelListItem extends BattleUIComponent {
             if (this.playerNameCutTF.visible) {
                 this.playerNameCutTF.visible = false;
             }
-            this.icoIGR.visible = this._isIGR;
         }
         else if (this._state == PLAYERS_PANEL_STATE.MEDIUM) {
             if (this.vehicleTF.visible) {
@@ -512,7 +511,6 @@ public class PlayersPanelListItem extends BattleUIComponent {
             if (!this.playerNameCutTF.visible) {
                 this.playerNameCutTF.visible = true;
             }
-            this.icoIGR.visible = false;
         }
         else if (this._state == PLAYERS_PANEL_STATE.SHORT) {
             if (this.vehicleTF.visible) {
@@ -524,7 +522,6 @@ public class PlayersPanelListItem extends BattleUIComponent {
             if (this.playerNameCutTF.visible) {
                 this.playerNameCutTF.visible = false;
             }
-            this.icoIGR.visible = false;
         }
         if (this._state == PLAYERS_PANEL_STATE.HIDEN) {
             visible = false;

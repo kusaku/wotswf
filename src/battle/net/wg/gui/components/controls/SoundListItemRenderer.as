@@ -193,7 +193,7 @@ public class SoundListItemRenderer extends ListItemRenderer implements ISoundabl
 
     protected function handleReleaseOutsideEx(param1:MouseEvent):void {
         _autoRepeatEvent = null;
-        if (contains(param1.target as DisplayObject)) {
+        if (contains(DisplayObject(param1.target))) {
             return;
         }
         var _loc2_:MouseEventEx = param1 as MouseEventEx;

@@ -312,6 +312,66 @@ public class FullStatsTable extends Sprite implements IDisposable {
 
     public var mute_c2r15:BattleAtlasSprite = null;
 
+    public var disableCommunication_c1r1:BattleAtlasSprite = null;
+
+    public var disableCommunication_c1r2:BattleAtlasSprite = null;
+
+    public var disableCommunication_c1r3:BattleAtlasSprite = null;
+
+    public var disableCommunication_c1r4:BattleAtlasSprite = null;
+
+    public var disableCommunication_c1r5:BattleAtlasSprite = null;
+
+    public var disableCommunication_c1r6:BattleAtlasSprite = null;
+
+    public var disableCommunication_c1r7:BattleAtlasSprite = null;
+
+    public var disableCommunication_c1r8:BattleAtlasSprite = null;
+
+    public var disableCommunication_c1r9:BattleAtlasSprite = null;
+
+    public var disableCommunication_c1r10:BattleAtlasSprite = null;
+
+    public var disableCommunication_c1r11:BattleAtlasSprite = null;
+
+    public var disableCommunication_c1r12:BattleAtlasSprite = null;
+
+    public var disableCommunication_c1r13:BattleAtlasSprite = null;
+
+    public var disableCommunication_c1r14:BattleAtlasSprite = null;
+
+    public var disableCommunication_c1r15:BattleAtlasSprite = null;
+
+    public var disableCommunication_c2r1:BattleAtlasSprite = null;
+
+    public var disableCommunication_c2r2:BattleAtlasSprite = null;
+
+    public var disableCommunication_c2r3:BattleAtlasSprite = null;
+
+    public var disableCommunication_c2r4:BattleAtlasSprite = null;
+
+    public var disableCommunication_c2r5:BattleAtlasSprite = null;
+
+    public var disableCommunication_c2r6:BattleAtlasSprite = null;
+
+    public var disableCommunication_c2r7:BattleAtlasSprite = null;
+
+    public var disableCommunication_c2r8:BattleAtlasSprite = null;
+
+    public var disableCommunication_c2r9:BattleAtlasSprite = null;
+
+    public var disableCommunication_c2r10:BattleAtlasSprite = null;
+
+    public var disableCommunication_c2r11:BattleAtlasSprite = null;
+
+    public var disableCommunication_c2r12:BattleAtlasSprite = null;
+
+    public var disableCommunication_c2r13:BattleAtlasSprite = null;
+
+    public var disableCommunication_c2r14:BattleAtlasSprite = null;
+
+    public var disableCommunication_c2r15:BattleAtlasSprite = null;
+
     public var noSound_c1r1:BattleAtlasSprite = null;
 
     public var noSound_c1r2:BattleAtlasSprite = null;
@@ -990,6 +1050,8 @@ public class FullStatsTable extends Sprite implements IDisposable {
 
     public var muteCollection:Vector.<BattleAtlasSprite> = null;
 
+    public var disableCommunicationCollection:Vector.<BattleAtlasSprite> = null;
+
     public var noSoundCollection:Vector.<BattleAtlasSprite> = null;
 
     public var playerNameCollection:Vector.<TextField> = null;
@@ -1019,6 +1081,7 @@ public class FullStatsTable extends Sprite implements IDisposable {
         this.hitCollection = new <MovieClip>[this.hit_c1r1, this.hit_c1r2, this.hit_c1r3, this.hit_c1r4, this.hit_c1r5, this.hit_c1r6, this.hit_c1r7, this.hit_c1r8, this.hit_c1r9, this.hit_c1r10, this.hit_c1r11, this.hit_c1r12, this.hit_c1r13, this.hit_c1r14, this.hit_c1r15, this.hit_c2r1, this.hit_c2r2, this.hit_c2r3, this.hit_c2r4, this.hit_c2r5, this.hit_c2r6, this.hit_c2r7, this.hit_c2r8, this.hit_c2r9, this.hit_c2r10, this.hit_c2r11, this.hit_c2r12, this.hit_c2r13, this.hit_c2r14, this.hit_c2r15];
         this.icoIGRCollection = new <BattleAtlasSprite>[this.icoIGR_c1r1, this.icoIGR_c1r2, this.icoIGR_c1r3, this.icoIGR_c1r4, this.icoIGR_c1r5, this.icoIGR_c1r6, this.icoIGR_c1r7, this.icoIGR_c1r8, this.icoIGR_c1r9, this.icoIGR_c1r10, this.icoIGR_c1r11, this.icoIGR_c1r12, this.icoIGR_c1r13, this.icoIGR_c1r14, this.icoIGR_c1r15, this.icoIGR_c2r1, this.icoIGR_c2r2, this.icoIGR_c2r3, this.icoIGR_c2r4, this.icoIGR_c2r5, this.icoIGR_c2r6, this.icoIGR_c2r7, this.icoIGR_c2r8, this.icoIGR_c2r9, this.icoIGR_c2r10, this.icoIGR_c2r11, this.icoIGR_c2r12, this.icoIGR_c2r13, this.icoIGR_c2r14, this.icoIGR_c2r15];
         this.muteCollection = new <BattleAtlasSprite>[this.mute_c1r1, this.mute_c1r2, this.mute_c1r3, this.mute_c1r4, this.mute_c1r5, this.mute_c1r6, this.mute_c1r7, this.mute_c1r8, this.mute_c1r9, this.mute_c1r10, this.mute_c1r11, this.mute_c1r12, this.mute_c1r13, this.mute_c1r14, this.mute_c1r15, this.mute_c2r1, this.mute_c2r2, this.mute_c2r3, this.mute_c2r4, this.mute_c2r5, this.mute_c2r6, this.mute_c2r7, this.mute_c2r8, this.mute_c2r9, this.mute_c2r10, this.mute_c2r11, this.mute_c2r12, this.mute_c2r13, this.mute_c2r14, this.mute_c2r15];
+        this.disableCommunicationCollection = new <BattleAtlasSprite>[this.disableCommunication_c1r1, this.disableCommunication_c1r2, this.disableCommunication_c1r3, this.disableCommunication_c1r4, this.disableCommunication_c1r5, this.disableCommunication_c1r6, this.disableCommunication_c1r7, this.disableCommunication_c1r8, this.disableCommunication_c1r9, this.disableCommunication_c1r10, this.disableCommunication_c1r11, this.disableCommunication_c1r12, this.disableCommunication_c1r13, this.disableCommunication_c1r14, this.disableCommunication_c1r15, this.disableCommunication_c2r1, this.disableCommunication_c2r2, this.disableCommunication_c2r3, this.disableCommunication_c2r4, this.disableCommunication_c2r5, this.disableCommunication_c2r6, this.disableCommunication_c2r7, this.disableCommunication_c2r8, this.disableCommunication_c2r9, this.disableCommunication_c2r10, this.disableCommunication_c2r11, this.disableCommunication_c2r12, this.disableCommunication_c2r13, this.disableCommunication_c2r14, this.disableCommunication_c2r15];
         this.noSoundCollection = new <BattleAtlasSprite>[this.noSound_c1r1, this.noSound_c1r2, this.noSound_c1r3, this.noSound_c1r4, this.noSound_c1r5, this.noSound_c1r6, this.noSound_c1r7, this.noSound_c1r8, this.noSound_c1r9, this.noSound_c1r10, this.noSound_c1r11, this.noSound_c1r12, this.noSound_c1r13, this.noSound_c1r14, this.noSound_c1r15, this.noSound_c2r1, this.noSound_c2r2, this.noSound_c2r3, this.noSound_c2r4, this.noSound_c2r5, this.noSound_c2r6, this.noSound_c2r7, this.noSound_c2r8, this.noSound_c2r9, this.noSound_c2r10, this.noSound_c2r11, this.noSound_c2r12, this.noSound_c2r13, this.noSound_c2r14, this.noSound_c2r15];
         this.playerNameCollection = new <TextField>[this.playerName_c1r1, this.playerName_c1r2, this.playerName_c1r3, this.playerName_c1r4, this.playerName_c1r5, this.playerName_c1r6, this.playerName_c1r7, this.playerName_c1r8, this.playerName_c1r9, this.playerName_c1r10, this.playerName_c1r11, this.playerName_c1r12, this.playerName_c1r13, this.playerName_c1r14, this.playerName_c1r15, this.playerName_c2r1, this.playerName_c2r2, this.playerName_c2r3, this.playerName_c2r4, this.playerName_c2r5, this.playerName_c2r6, this.playerName_c2r7, this.playerName_c2r8, this.playerName_c2r9, this.playerName_c2r10, this.playerName_c2r11, this.playerName_c2r12, this.playerName_c2r13, this.playerName_c2r14, this.playerName_c2r15];
         this.playerStatusCollection = new <PlayerStatusView>[this.playerStatus_c1r1, this.playerStatus_c1r2, this.playerStatus_c1r3, this.playerStatus_c1r4, this.playerStatus_c1r5, this.playerStatus_c1r6, this.playerStatus_c1r7, this.playerStatus_c1r8, this.playerStatus_c1r9, this.playerStatus_c1r10, this.playerStatus_c1r11, this.playerStatus_c1r12, this.playerStatus_c1r13, this.playerStatus_c1r14, this.playerStatus_c1r15, this.playerStatus_c2r1, this.playerStatus_c2r2, this.playerStatus_c2r3, this.playerStatus_c2r4, this.playerStatus_c2r5, this.playerStatus_c2r6, this.playerStatus_c2r7, this.playerStatus_c2r8, this.playerStatus_c2r9, this.playerStatus_c2r10, this.playerStatus_c2r11, this.playerStatus_c2r12, this.playerStatus_c2r13, this.playerStatus_c2r14, this.playerStatus_c2r15];
@@ -1033,68 +1096,18 @@ public class FullStatsTable extends Sprite implements IDisposable {
     }
 
     public final function dispose():void {
-        this.playerStatus_c1r1.dispose();
-        this.playerStatus_c1r2.dispose();
-        this.playerStatus_c1r3.dispose();
-        this.playerStatus_c1r4.dispose();
-        this.playerStatus_c1r5.dispose();
-        this.playerStatus_c1r6.dispose();
-        this.playerStatus_c1r7.dispose();
-        this.playerStatus_c1r8.dispose();
-        this.playerStatus_c1r9.dispose();
-        this.playerStatus_c1r10.dispose();
-        this.playerStatus_c1r11.dispose();
-        this.playerStatus_c1r12.dispose();
-        this.playerStatus_c1r13.dispose();
-        this.playerStatus_c1r14.dispose();
-        this.playerStatus_c1r15.dispose();
-        this.playerStatus_c2r1.dispose();
-        this.playerStatus_c2r2.dispose();
-        this.playerStatus_c2r3.dispose();
-        this.playerStatus_c2r4.dispose();
-        this.playerStatus_c2r5.dispose();
-        this.playerStatus_c2r6.dispose();
-        this.playerStatus_c2r7.dispose();
-        this.playerStatus_c2r8.dispose();
-        this.playerStatus_c2r9.dispose();
-        this.playerStatus_c2r10.dispose();
-        this.playerStatus_c2r11.dispose();
-        this.playerStatus_c2r12.dispose();
-        this.playerStatus_c2r13.dispose();
-        this.playerStatus_c2r14.dispose();
-        this.playerStatus_c2r15.dispose();
+        var _loc1_:IDisposable = null;
+        for each(_loc1_ in this.playerStatusCollection) {
+            _loc1_.dispose();
+        }
+        for each(_loc1_ in this.squadStatusCollection) {
+            _loc1_.dispose();
+        }
+        for each(_loc1_ in this.speakAnimationCollection) {
+            _loc1_.dispose();
+        }
         this.squadAcceptBt.dispose();
         this.squadAddBt.dispose();
-        this.squadStatus_c1r1.dispose();
-        this.squadStatus_c1r2.dispose();
-        this.squadStatus_c1r3.dispose();
-        this.squadStatus_c1r4.dispose();
-        this.squadStatus_c1r5.dispose();
-        this.squadStatus_c1r6.dispose();
-        this.squadStatus_c1r7.dispose();
-        this.squadStatus_c1r8.dispose();
-        this.squadStatus_c1r9.dispose();
-        this.squadStatus_c1r10.dispose();
-        this.squadStatus_c1r11.dispose();
-        this.squadStatus_c1r12.dispose();
-        this.squadStatus_c1r13.dispose();
-        this.squadStatus_c1r14.dispose();
-        this.squadStatus_c1r15.dispose();
-        this.squadStatus_c2r1.dispose();
-        this.squadStatus_c2r2.dispose();
-        this.squadStatus_c2r3.dispose();
-        this.squadStatus_c2r4.dispose();
-        this.squadStatus_c2r5.dispose();
-        this.squadStatus_c2r6.dispose();
-        this.squadStatus_c2r7.dispose();
-        this.squadStatus_c2r8.dispose();
-        this.squadStatus_c2r9.dispose();
-        this.squadStatus_c2r10.dispose();
-        this.squadStatus_c2r11.dispose();
-        this.squadStatus_c2r12.dispose();
-        this.squadStatus_c2r13.dispose();
-        this.squadStatus_c2r14.dispose();
-        this.squadStatus_c2r15.dispose();
         this.deadBg_c1r1 = null;
         this.deadBg_c1r2 = null;
         this.deadBg_c1r3 = null;
@@ -1245,6 +1258,37 @@ public class FullStatsTable extends Sprite implements IDisposable {
         this.mute_c2r13 = null;
         this.mute_c2r14 = null;
         this.mute_c2r15 = null;
+        this.disableCommunication_c2r15 = null;
+        this.disableCommunication_c1r1 = null;
+        this.disableCommunication_c1r2 = null;
+        this.disableCommunication_c1r3 = null;
+        this.disableCommunication_c1r4 = null;
+        this.disableCommunication_c1r5 = null;
+        this.disableCommunication_c1r6 = null;
+        this.disableCommunication_c1r7 = null;
+        this.disableCommunication_c1r8 = null;
+        this.disableCommunication_c1r9 = null;
+        this.disableCommunication_c1r10 = null;
+        this.disableCommunication_c1r11 = null;
+        this.disableCommunication_c1r12 = null;
+        this.disableCommunication_c1r13 = null;
+        this.disableCommunication_c1r14 = null;
+        this.disableCommunication_c1r15 = null;
+        this.disableCommunication_c2r1 = null;
+        this.disableCommunication_c2r2 = null;
+        this.disableCommunication_c2r3 = null;
+        this.disableCommunication_c2r4 = null;
+        this.disableCommunication_c2r5 = null;
+        this.disableCommunication_c2r6 = null;
+        this.disableCommunication_c2r7 = null;
+        this.disableCommunication_c2r8 = null;
+        this.disableCommunication_c2r9 = null;
+        this.disableCommunication_c2r10 = null;
+        this.disableCommunication_c2r11 = null;
+        this.disableCommunication_c2r12 = null;
+        this.disableCommunication_c2r13 = null;
+        this.disableCommunication_c2r14 = null;
+        this.disableCommunication_c2r15 = null;
         this.noSound_c1r1 = null;
         this.noSound_c1r2 = null;
         this.noSound_c1r3 = null;
@@ -1584,6 +1628,7 @@ public class FullStatsTable extends Sprite implements IDisposable {
         this.hitCollection.length = 0;
         this.icoIGRCollection.length = 0;
         this.muteCollection.length = 0;
+        this.disableCommunicationCollection.length = 0;
         this.noSoundCollection.length = 0;
         this.playerNameCollection.length = 0;
         this.playerStatusCollection.length = 0;
@@ -1600,6 +1645,7 @@ public class FullStatsTable extends Sprite implements IDisposable {
         this.hitCollection = null;
         this.icoIGRCollection = null;
         this.muteCollection = null;
+        this.disableCommunicationCollection = null;
         this.noSoundCollection = null;
         this.playerNameCollection = null;
         this.playerStatusCollection = null;

@@ -1,4 +1,6 @@
 package net.wg.gui.login.impl.vo {
+import scaleform.clik.data.DataProvider;
+
 public class SimpleFormVo extends FormBaseVo {
 
     public var memberMe:Boolean = false;
@@ -21,15 +23,10 @@ public class SimpleFormVo extends FormBaseVo {
 
     public var isShowSocial:Boolean = false;
 
-    public var socialList:Array = null;
+    public var socialList:DataProvider = null;
 
     public function SimpleFormVo() {
         super();
-    }
-
-    override public function dispose():void {
-        App.utils.data.cleanupDynamicObject(this.socialList);
-        super.dispose();
     }
 }
 }

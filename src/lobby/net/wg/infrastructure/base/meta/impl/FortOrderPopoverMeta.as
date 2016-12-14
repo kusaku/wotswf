@@ -69,12 +69,13 @@ public class FortOrderPopoverMeta extends SmartPopOverView {
         this.openOrderDetailsWindow();
     }
 
-    public function as_setInitData(param1:Object):void {
-        if (this._orderPopoverVO) {
-            this._orderPopoverVO.dispose();
-        }
+    public final function as_setInitData(param1:Object):void {
+        var _loc2_:OrderPopoverVO = this._orderPopoverVO;
         this._orderPopoverVO = new OrderPopoverVO(param1);
         this.setInitData(this._orderPopoverVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setInitData(param1:OrderPopoverVO):void {

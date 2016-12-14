@@ -36,8 +36,8 @@ public class ContactNoteManageView extends ContactNoteManageViewMeta implements 
     override public function as_setLabel(param1:String):void {
     }
 
-    public function as_setUserProps(param1:Object):void {
-        App.utils.commons.formatPlayerName(txtLabel, new ContactUserPropVO(param1));
+    override protected function setUserProps(param1:ContactUserPropVO):void {
+        App.utils.commons.formatPlayerName(txtLabel, param1);
         txtLabel.htmlText = App.utils.locale.makeString(MESSENGER.MESSENGER_CONTACTS_VIEW_EDITNOTE_USERNAME) + txtLabel.htmlText;
     }
 }

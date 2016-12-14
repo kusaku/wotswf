@@ -9,8 +9,6 @@ public interface IHangarMeta extends IEventDispatcher {
 
     function closeHelpLayoutS():void;
 
-    function toggleGUIEditorS():void;
-
     function as_setCrewEnabled(param1:Boolean):void;
 
     function as_setCarouselEnabled(param1:Boolean):void;

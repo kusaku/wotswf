@@ -4,6 +4,7 @@ import net.wg.gui.lobby.boosters.data.ConfirmBoostersWindowVO;
 import net.wg.gui.lobby.components.BoosterSlot;
 import net.wg.gui.lobby.components.data.BoosterSlotVO;
 import net.wg.gui.lobby.window.ConfirmItemWindow;
+import net.wg.gui.lobby.window.ConfirmItemWindowVO;
 
 public class ConfirmBoostersWindow extends ConfirmItemWindow {
 
@@ -11,12 +12,17 @@ public class ConfirmBoostersWindow extends ConfirmItemWindow {
         super();
     }
 
+    override protected function getConfirmItemWindowVO(param1:Object):ConfirmItemWindowVO {
+        return new ConfirmBoostersWindowVO(param1);
+    }
+
     override protected function onDispose():void {
+        data = null;
         super.onDispose();
     }
 
-    override protected function setData(param1:Object):void {
-        data = new ConfirmBoostersWindowVO(param1);
+    override protected function setData(param1:ConfirmItemWindowVO):void {
+        data = param1;
         invalidateData();
     }
 

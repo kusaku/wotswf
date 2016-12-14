@@ -9,8 +9,12 @@ public class DAAPIVehicleUserTagsVO extends DAAPIDataClass {
 
     public var vehicleID:Number = -1;
 
-    public function DAAPIVehicleUserTagsVO(param1:Object) {
+    public function DAAPIVehicleUserTagsVO(param1:Object = null) {
         super(param1);
+    }
+
+    override public function toString():String {
+        return "[DAAPIVehicleUserTagsVO: vehicleID = " + this.vehicleID + " userTags = " + this.userTags + "]";
     }
 
     override protected function onDispose():void {
@@ -19,14 +23,6 @@ public class DAAPIVehicleUserTagsVO extends DAAPIDataClass {
             this.userTags = null;
         }
         super.onDispose();
-    }
-
-    public function clone():DAAPIVehicleUserTagsVO {
-        var _loc1_:DAAPIVehicleUserTagsVO = new DAAPIVehicleUserTagsVO({});
-        _loc1_.isEnemy = this.isEnemy;
-        _loc1_.userTags = this.userTags;
-        _loc1_.vehicleID = this.vehicleID;
-        return _loc1_;
     }
 }
 }

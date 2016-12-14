@@ -2,9 +2,9 @@ package net.wg.gui.lobby.questsWindow.components {
 import flash.display.MovieClip;
 import flash.text.TextField;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class AlertMessage extends UIComponent {
+public class AlertMessage extends UIComponentEx {
 
     private static const ICON_PADDING:int = 5;
 

@@ -76,13 +76,6 @@ public class CSAutoSearchMainView extends UIComponentEx implements ICSAutoSearch
     }
 
     public function setData(param1:AutoSearchVO):void {
-        if (param1 == null) {
-            return;
-        }
-        if (this._model) {
-            this._model.dispose();
-            this._model = null;
-        }
         this.waitingCmp.visible = false;
         this.formBg.visible = false;
         this._model = param1;
@@ -105,9 +98,6 @@ public class CSAutoSearchMainView extends UIComponentEx implements ICSAutoSearch
         this.waitingCmp = null;
         this.searchBg = null;
         this.formBg = null;
-        if (this._model) {
-            this._model.dispose();
-        }
         this._model = null;
         super.onDispose();
     }

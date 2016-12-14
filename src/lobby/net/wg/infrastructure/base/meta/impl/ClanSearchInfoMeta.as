@@ -15,9 +15,9 @@ public class ClanSearchInfoMeta extends BaseDAAPIComponent {
 
     public var requestData:Function;
 
-    private var _clanSearchInfoInitDataVO:ClanSearchInfoInitDataVO;
-
     private var _clanSearchInfoDataVO:ClanSearchInfoDataVO;
+
+    private var _clanSearchInfoInitDataVO:ClanSearchInfoInitDataVO;
 
     private var _clanSearchInfoStateDataVO:ClanSearchInfoStateDataVO;
 
@@ -28,13 +28,13 @@ public class ClanSearchInfoMeta extends BaseDAAPIComponent {
     }
 
     override protected function onDispose():void {
-        if (this._clanSearchInfoInitDataVO) {
-            this._clanSearchInfoInitDataVO.dispose();
-            this._clanSearchInfoInitDataVO = null;
-        }
         if (this._clanSearchInfoDataVO) {
             this._clanSearchInfoDataVO.dispose();
             this._clanSearchInfoDataVO = null;
+        }
+        if (this._clanSearchInfoInitDataVO) {
+            this._clanSearchInfoInitDataVO.dispose();
+            this._clanSearchInfoInitDataVO = null;
         }
         if (this._clanSearchInfoStateDataVO) {
             this._clanSearchInfoStateDataVO.dispose();
@@ -62,36 +62,40 @@ public class ClanSearchInfoMeta extends BaseDAAPIComponent {
         this.requestData(param1);
     }
 
-    public function as_setInitData(param1:Object):void {
-        if (this._clanSearchInfoInitDataVO) {
-            this._clanSearchInfoInitDataVO.dispose();
-        }
+    public final function as_setInitData(param1:Object):void {
+        var _loc2_:ClanSearchInfoInitDataVO = this._clanSearchInfoInitDataVO;
         this._clanSearchInfoInitDataVO = new ClanSearchInfoInitDataVO(param1);
         this.setInitData(this._clanSearchInfoInitDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._clanSearchInfoDataVO) {
-            this._clanSearchInfoDataVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:ClanSearchInfoDataVO = this._clanSearchInfoDataVO;
         this._clanSearchInfoDataVO = new ClanSearchInfoDataVO(param1);
         this.setData(this._clanSearchInfoDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setStateData(param1:Object):void {
-        if (this._clanSearchInfoStateDataVO) {
-            this._clanSearchInfoStateDataVO.dispose();
-        }
+    public final function as_setStateData(param1:Object):void {
+        var _loc2_:ClanSearchInfoStateDataVO = this._clanSearchInfoStateDataVO;
         this._clanSearchInfoStateDataVO = new ClanSearchInfoStateDataVO(param1);
         this.setStateData(this._clanSearchInfoStateDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setDummy(param1:Object):void {
-        if (this._dummyVO) {
-            this._dummyVO.dispose();
-        }
+    public final function as_setDummy(param1:Object):void {
+        var _loc2_:DummyVO = this._dummyVO;
         this._dummyVO = new DummyVO(param1);
         this.setDummy(this._dummyVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setInitData(param1:ClanSearchInfoInitDataVO):void {

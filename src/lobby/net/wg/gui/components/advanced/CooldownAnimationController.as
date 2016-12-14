@@ -2,10 +2,9 @@ package net.wg.gui.components.advanced {
 import flash.display.MovieClip;
 
 import net.wg.gui.events.CooldownEvent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
-
-public class CooldownAnimationController extends UIComponent {
+public class CooldownAnimationController extends UIComponentEx {
 
     private static const DELTA_OF_PIXELS_FOR_ANIMATION:int = 47;
 

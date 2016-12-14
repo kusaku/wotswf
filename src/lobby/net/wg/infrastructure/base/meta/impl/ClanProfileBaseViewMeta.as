@@ -10,21 +10,17 @@ public class ClanProfileBaseViewMeta extends BaseDAAPIComponent {
 
     public var onHeaderButtonClick:Function;
 
-    private var _dummyVO:DummyVO;
-
     private var _clanBaseInfoVO:ClanBaseInfoVO;
 
     private var _clanProfileHeaderStateVO:ClanProfileHeaderStateVO;
+
+    private var _dummyVO:DummyVO;
 
     public function ClanProfileBaseViewMeta() {
         super();
     }
 
     override protected function onDispose():void {
-        if (this._dummyVO) {
-            this._dummyVO.dispose();
-            this._dummyVO = null;
-        }
         if (this._clanBaseInfoVO) {
             this._clanBaseInfoVO.dispose();
             this._clanBaseInfoVO = null;
@@ -32,6 +28,10 @@ public class ClanProfileBaseViewMeta extends BaseDAAPIComponent {
         if (this._clanProfileHeaderStateVO) {
             this._clanProfileHeaderStateVO.dispose();
             this._clanProfileHeaderStateVO = null;
+        }
+        if (this._dummyVO) {
+            this._dummyVO.dispose();
+            this._dummyVO = null;
         }
         super.onDispose();
     }
@@ -41,28 +41,31 @@ public class ClanProfileBaseViewMeta extends BaseDAAPIComponent {
         this.onHeaderButtonClick(param1);
     }
 
-    public function as_setClanInfo(param1:Object):void {
-        if (this._clanBaseInfoVO) {
-            this._clanBaseInfoVO.dispose();
-        }
+    public final function as_setClanInfo(param1:Object):void {
+        var _loc2_:ClanBaseInfoVO = this._clanBaseInfoVO;
         this._clanBaseInfoVO = new ClanBaseInfoVO(param1);
         this.setClanInfo(this._clanBaseInfoVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setHeaderState(param1:Object):void {
-        if (this._clanProfileHeaderStateVO) {
-            this._clanProfileHeaderStateVO.dispose();
-        }
+    public final function as_setHeaderState(param1:Object):void {
+        var _loc2_:ClanProfileHeaderStateVO = this._clanProfileHeaderStateVO;
         this._clanProfileHeaderStateVO = new ClanProfileHeaderStateVO(param1);
         this.setHeaderState(this._clanProfileHeaderStateVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_showDummy(param1:Object):void {
-        if (this._dummyVO) {
-            this._dummyVO.dispose();
-        }
+    public final function as_showDummy(param1:Object):void {
+        var _loc2_:DummyVO = this._dummyVO;
         this._dummyVO = new DummyVO(param1);
         this.showDummy(this._dummyVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setClanInfo(param1:ClanBaseInfoVO):void {

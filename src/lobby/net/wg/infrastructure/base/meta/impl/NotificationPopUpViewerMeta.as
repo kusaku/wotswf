@@ -1,6 +1,5 @@
 package net.wg.infrastructure.base.meta.impl {
 import net.wg.data.constants.Errors;
-import net.wg.gui.notification.vo.LayoutInfoVO;
 import net.wg.gui.notification.vo.PopUpNotificationInfoVO;
 import net.wg.infrastructure.base.BaseDAAPIComponent;
 import net.wg.infrastructure.exceptions.AbstractException;
@@ -15,18 +14,8 @@ public class NotificationPopUpViewerMeta extends BaseDAAPIComponent {
 
     public var getMessageActualTime:Function;
 
-    private var _layoutInfoVO:LayoutInfoVO;
-
     public function NotificationPopUpViewerMeta() {
         super();
-    }
-
-    override protected function onDispose():void {
-        if (this._layoutInfoVO) {
-            this._layoutInfoVO.dispose();
-            this._layoutInfoVO = null;
-        }
-        super.onDispose();
     }
 
     public function setListClearS():void {
@@ -49,20 +38,12 @@ public class NotificationPopUpViewerMeta extends BaseDAAPIComponent {
         return this.getMessageActualTime(param1);
     }
 
-    public function as_appendMessage(param1:Object):void {
+    public final function as_appendMessage(param1:Object):void {
         this.appendMessage(new PopUpNotificationInfoVO(param1));
     }
 
-    public function as_updateMessage(param1:Object):void {
+    public final function as_updateMessage(param1:Object):void {
         this.updateMessage(new PopUpNotificationInfoVO(param1));
-    }
-
-    public function as_layoutInfo(param1:Object):void {
-        if (this._layoutInfoVO) {
-            this._layoutInfoVO.dispose();
-        }
-        this._layoutInfoVO = new LayoutInfoVO(param1);
-        this.layoutInfo(this._layoutInfoVO);
     }
 
     protected function appendMessage(param1:PopUpNotificationInfoVO):void {
@@ -73,12 +54,6 @@ public class NotificationPopUpViewerMeta extends BaseDAAPIComponent {
 
     protected function updateMessage(param1:PopUpNotificationInfoVO):void {
         var _loc2_:String = "as_updateMessage" + Errors.ABSTRACT_INVOKE;
-        DebugUtils.LOG_ERROR(_loc2_);
-        throw new AbstractException(_loc2_);
-    }
-
-    protected function layoutInfo(param1:LayoutInfoVO):void {
-        var _loc2_:String = "as_layoutInfo" + Errors.ABSTRACT_INVOKE;
         DebugUtils.LOG_ERROR(_loc2_);
         throw new AbstractException(_loc2_);
     }

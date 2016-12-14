@@ -97,7 +97,7 @@ public class ConsumablesPanel extends ConsumablesPanelMeta implements IConsumabl
         _loc9_.quantity = param5;
         _loc9_.key = param3;
         _loc9_.addClickCallBack(this);
-        _loc9_.setCoolDownTime(param6);
+        _loc9_.setCoolDownTime(param6, param6, 0, false);
         var _loc11_:int = this.renderers.length;
         this.renderers.push(_loc9_);
         this.slotIdxMap[param1] = _loc11_;
@@ -109,7 +109,7 @@ public class ConsumablesPanel extends ConsumablesPanelMeta implements IConsumabl
         addChild(_loc5_);
         _loc5_.icon = param3;
         _loc5_.tooltipStr = param4;
-        _loc5_.setCoolDownTime(param2);
+        _loc5_.setCoolDownTime(param2, param2, 0, false);
         var _loc6_:int = this.renderers.length;
         this.renderers.push(_loc5_);
         this.slotIdxMap[param1] = _loc6_;
@@ -126,7 +126,7 @@ public class ConsumablesPanel extends ConsumablesPanelMeta implements IConsumabl
         _loc11_.quantity = param4;
         _loc11_.key = param3;
         _loc11_.quantityVisible = param8;
-        _loc11_.setCoolDownTime(param9);
+        _loc11_.setCoolDownTime(param9, param9, 0, false);
         _loc11_.addClickCallBack(this);
         var _loc13_:int = this.renderers.length;
         this.renderers.push(_loc11_);
@@ -157,7 +157,7 @@ public class ConsumablesPanel extends ConsumablesPanelMeta implements IConsumabl
         this.collapsePopup();
     }
 
-    public function as_expandEquipmentSlot(param1:int, param2:Array):void {
+    override protected function expandEquipmentSlot(param1:int, param2:Array):void {
         this.collapsePopup();
         this.expandPopup(param1, param2);
     }
@@ -187,17 +187,15 @@ public class ConsumablesPanel extends ConsumablesPanelMeta implements IConsumabl
         }
     }
 
-    public function as_setCoolDownTime(param1:int, param2:Number):void {
-        var _loc3_:IConsumablesButton = this.getRendererBySlotIdx(param1);
-        if (_loc3_) {
-            _loc3_.setCoolDownTime(param2);
+    public function as_setCoolDownTime(param1:int, param2:Number, param3:Number, param4:Number, param5:Boolean):void {
+        var _loc6_:IConsumablesButton = this.getRendererBySlotIdx(param1);
+        if (_loc6_) {
+            _loc6_.setCoolDownTime(param2, param3, param4, param5);
         }
     }
 
     public function as_setCurrentShell(param1:int):void {
         var _loc2_:IBattleShellButton = null;
-        var _loc3_:Boolean = false;
-        var _loc4_:int = 0;
         if (this._shellNextIdx == param1) {
             _loc2_ = this.getRendererBySlotIdx(this._shellNextIdx) as BattleShellButton;
             if (_loc2_) {
@@ -208,10 +206,6 @@ public class ConsumablesPanel extends ConsumablesPanelMeta implements IConsumabl
         if (this._shellCurrentIdx >= 0) {
             _loc2_ = this.getRendererBySlotIdx(this._shellCurrentIdx) as BattleShellButton;
             if (_loc2_) {
-                if (_loc2_.reloading) {
-                    _loc4_ = _loc2_.coolDownCurrentFrame;
-                    _loc3_ = true;
-                }
                 _loc2_.clearCoolDownTime();
                 _loc2_.setCurrent(false, true);
             }
@@ -220,9 +214,6 @@ public class ConsumablesPanel extends ConsumablesPanelMeta implements IConsumabl
         if (_loc2_ && _loc2_.enabled && !_loc2_.empty) {
             this._shellCurrentIdx = param1;
             _loc2_.setCurrent(true);
-            if (_loc3_) {
-                _loc2_.consumablesVO.customCoolDownFrame = _loc4_;
-            }
         }
     }
 
@@ -236,12 +227,12 @@ public class ConsumablesPanel extends ConsumablesPanelMeta implements IConsumabl
     public function as_setItemTimeQuantityInSlot(param1:int, param2:int, param3:Number, param4:Number):void {
         var _loc5_:IConsumablesButton = this.getRendererBySlotIdx(param1);
         if (_loc5_) {
-            _loc5_.setCoolDownTime(param3);
+            _loc5_.setCoolDownTime(param3, param3, 0, false);
             _loc5_.quantity = param2;
         }
     }
 
-    public function as_setKeysToSlots(param1:Array):void {
+    override protected function setKeysToSlots(param1:Array):void {
         var _loc2_:IConsumablesButton = null;
         var _loc3_:Array = null;
         for each(_loc3_ in param1) {
@@ -323,7 +314,7 @@ public class ConsumablesPanel extends ConsumablesPanelMeta implements IConsumabl
     public function as_switchToPosmortem():void {
         var _loc1_:IConsumablesButton = this.getRendererBySlotIdx(this._shellCurrentIdx);
         if (_loc1_) {
-            _loc1_.setCoolDownTime(0);
+            _loc1_.setCoolDownTime(0, 0, 0, false);
         }
         this._shellCurrentIdx = -1;
         this._shellNextIdx = -1;

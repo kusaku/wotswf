@@ -119,7 +119,6 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
             "top": 0,
             "bottom": 0
         };
-        this.visible = false;
     }
 
     override protected function showDropdown():void {
@@ -196,9 +195,11 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
         if (this.data) {
             _loc1_ = TankmanRoleVO(this.data);
             _loc2_ = _loc1_.tankman;
-            this.tankmenName.label = _loc2_.rank + SPACE_DELIMITER + _loc2_.firstName + SPACE_DELIMITER + _loc2_.lastName;
-            if (_state == ComponentState.UP || _state == ComponentState.DISABLED || [ComponentState.OUT, ComponentState.TOGGLE, ComponentState.KB_RELEASE].indexOf(_state) > -1 && !selected) {
-                this.tankmenName.label = _loc2_.rank + SPACE_DELIMITER + _loc2_.lastName;
+            if (_loc2_) {
+                this.tankmenName.label = _loc2_.rank + SPACE_DELIMITER + _loc2_.firstName + SPACE_DELIMITER + _loc2_.lastName;
+                if (_state == ComponentState.UP || _state == ComponentState.DISABLED || [ComponentState.OUT, ComponentState.TOGGLE, ComponentState.KB_RELEASE].indexOf(_state) > -1 && !selected) {
+                    this.tankmenName.label = _loc2_.rank + SPACE_DELIMITER + _loc2_.lastName;
+                }
             }
         }
     }
@@ -314,7 +315,6 @@ public class CrewItemRenderer extends DropdownMenu implements IListItemRenderer 
             this.visible = false;
             return;
         }
-        this.visible = true;
         var _loc2_:TankmanRoleVO = TankmanRoleVO(param1);
         if (dataProvider != null) {
             dataProvider.cleanUp();

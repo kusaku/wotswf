@@ -26,15 +26,15 @@ public class TankmanRoleVO extends DAAPIDataClass {
 
     public var vehicleElite:Boolean = false;
 
-    private var _roles:Vector.<String>;
+    public var roles:Vector.<String>;
 
-    private var _tankman:TankmanVO = null;
+    public var tankman:TankmanVO = null;
 
-    private var _recruitList:Array;
+    public var recruitList:Array;
 
-    public function TankmanRoleVO(param1:Object) {
-        this._roles = new Vector.<String>(0);
-        this._recruitList = [];
+    public function TankmanRoleVO(param1:Object = null) {
+        this.roles = new Vector.<String>(0);
+        this.recruitList = [];
         super(param1);
     }
 
@@ -74,7 +74,7 @@ public class TankmanRoleVO extends DAAPIDataClass {
             _loc4_ = param2 as Array;
             App.utils.asserter.assertNotNull(_loc4_, Errors.INVALID_TYPE + Array);
             for each(_loc5_ in _loc4_) {
-                this._roles.push(_loc5_);
+                this.roles.push(_loc5_);
             }
             _loc3_ = false;
         }
@@ -82,49 +82,29 @@ public class TankmanRoleVO extends DAAPIDataClass {
     }
 
     override protected function onDispose():void {
-        this._roles.splice(0, this._roles.length);
-        this._roles = null;
-        if (this._tankman) {
-            this._tankman.dispose();
-            this._tankman = null;
+        this.roles.splice(0, this.roles.length);
+        this.roles = null;
+        if (this.tankman) {
+            this.tankman.dispose();
+            this.tankman = null;
         }
-        var _loc1_:int = this._recruitList.length;
+        var _loc1_:int = this.recruitList.length;
         var _loc2_:int = 0;
         while (_loc2_ < _loc1_) {
-            this._recruitList[_loc2_].dispose();
+            this.recruitList[_loc2_].dispose();
             _loc2_++;
         }
-        this._recruitList.splice(0, _loc1_);
-        this._recruitList = null;
+        this.recruitList.splice(0, _loc1_);
+        this.recruitList = null;
         super.onDispose();
     }
 
     public function addRecruit(param1:TankmanVO):void {
-        this._recruitList.push(param1);
-    }
-
-    public function clone():TankmanRoleVO {
-        return new TankmanRoleVO(toHash());
+        this.recruitList.push(param1);
     }
 
     public function sortRecruits():void {
-        this._recruitList.sort(sortRecruitsFunc);
-    }
-
-    public function get roles():Vector.<String> {
-        return this._roles;
-    }
-
-    public function get tankman():TankmanVO {
-        return this._tankman;
-    }
-
-    public function set tankman(param1:TankmanVO):void {
-        this._tankman = param1;
-    }
-
-    public function get recruitList():Array {
-        return this._recruitList;
+        this.recruitList.sort(sortRecruitsFunc);
     }
 }
 }

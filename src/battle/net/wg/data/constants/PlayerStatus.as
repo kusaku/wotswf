@@ -19,20 +19,8 @@ public class PlayerStatus {
         super();
     }
 
-    public static function isSquadMan(param1:uint):Boolean {
-        return (param1 & IS_SQUAD_MAN) > 0;
-    }
-
-    public static function isTeamKiller(param1:uint):Boolean {
-        return (param1 & IS_TEAM_KILLER) > 0;
-    }
-
     public static function isVoipDisabled(param1:uint):Boolean {
         return (param1 & IS_VOIP_DISABLED) > 0;
-    }
-
-    public static function isSquadPersonal(param1:uint):Boolean {
-        return (param1 & IS_SQUAD_PERSONAL) > 0;
     }
 
     public static function isActionDisabled(param1:uint):Boolean {

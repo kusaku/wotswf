@@ -1,6 +1,7 @@
 package net.wg.gui.lobby.components {
 import flash.text.TextField;
 
+import net.wg.data.constants.Values;
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.lobby.components.data.InfoMessageVO;
 import net.wg.gui.lobby.components.events.FiltersEvent;
@@ -23,6 +24,8 @@ public class InfoMessageComponent extends UIComponentEx {
     public var messageTF:TextField;
 
     public var returnBtn:SoundButtonEx;
+
+    private var _textWidthMax:int = -1;
 
     public function InfoMessageComponent() {
         super();
@@ -58,7 +61,7 @@ public class InfoMessageComponent extends UIComponentEx {
     public function setData(param1:InfoMessageVO):void {
         this.titleTF.visible = !StringUtils.isEmpty(param1.title);
         if (this.titleTF.visible) {
-            this.titleTF.width = TEXT_WIDTH_MAX;
+            this.titleTF.width = this._textWidthMax != Values.DEFAULT_INT ? Number(this._textWidthMax) : Number(TEXT_WIDTH_MAX);
             this.titleTF.htmlText = param1.title;
         }
         if (this.returnBtn != null) {
@@ -67,10 +70,14 @@ public class InfoMessageComponent extends UIComponentEx {
                 this.returnBtn.label = param1.returnBtnLabel;
             }
         }
-        this.messageTF.width = TEXT_WIDTH_MAX;
+        this.messageTF.width = this._textWidthMax != Values.DEFAULT_INT ? Number(this._textWidthMax) : Number(TEXT_WIDTH_MAX);
         this.messageTF.htmlText = param1.message;
         this.messageTF.visible = true;
         this.doLayout();
+    }
+
+    public function setTextWidthMax(param1:int):void {
+        this._textWidthMax = param1;
     }
 
     protected function doLayout():void {

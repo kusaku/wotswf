@@ -4,7 +4,7 @@ import flash.events.MouseEvent;
 import flash.text.TextField;
 
 import net.wg.data.constants.generated.SQUADTYPES;
-import net.wg.gui.components.advanced.NewIndicator;
+import net.wg.gui.components.assets.NewIndicator;
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.prebattle.squads.ev.SquadViewEvent;
 import net.wg.gui.prebattle.squads.fallout.vo.FalloutRallyVO;
@@ -52,8 +52,8 @@ public class SquadView extends SquadViewMeta implements ISquadViewMeta {
         this.newIndicator.visible = false;
     }
 
-    override public function as_updateRally(param1:Object):void {
-        super.as_updateRally(param1);
+    override protected function updateRally(param1:IRallyVO):void {
+        super.updateRally(param1);
         this.inviteBtn.visible = rallyData.isCommander;
         if (rallyData.isCommander) {
             this.inviteBtn.label = MESSENGER.DIALOGS_SQUADCHANNEL_BUTTONS_INVITE;
@@ -112,7 +112,7 @@ public class SquadView extends SquadViewMeta implements ISquadViewMeta {
         }
     }
 
-    override protected function getRallyVO(param1:Object):IRallyVO {
+    override protected function getIRallyVO(param1:Object):IRallyVO {
         if (this._isFallout) {
             return new FalloutRallyVO(param1);
         }

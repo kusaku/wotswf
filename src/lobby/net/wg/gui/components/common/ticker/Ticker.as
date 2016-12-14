@@ -67,9 +67,7 @@ public class Ticker extends TickerMeta implements ITickerMeta {
         while (this._renderers.length) {
             this.removeRenderer();
         }
-        if (this._rssItems) {
-            this._rssItems.splice(0, this._rssItems.length);
-        }
+        this._rssItems = null;
         if (this._renderers) {
             this._renderers.splice(0, this._renderers.length);
         }
@@ -100,11 +98,8 @@ public class Ticker extends TickerMeta implements ITickerMeta {
         }
     }
 
-    public function as_setItems(param1:Array):void {
-        var _loc2_:Object = null;
-        for each(_loc2_ in param1) {
-            this._rssItems.push(new RSSEntryVO(_loc2_));
-        }
+    override protected function setItems(param1:Vector.<RSSEntryVO>):void {
+        this._rssItems = param1;
         invalidate(INVALID_ITEMS);
     }
 

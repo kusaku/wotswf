@@ -5,11 +5,11 @@ import flash.text.TextFieldAutoSize;
 
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.events.UILoaderEvent;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class LegalContent extends UIComponent {
+public class LegalContent extends UIComponentEx {
 
     private static var LOGOS_TOP_MARGIN:Number = 15;
 

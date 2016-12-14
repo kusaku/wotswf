@@ -2,6 +2,7 @@ package net.wg.gui.login.impl.views {
 import flash.display.InteractiveObject;
 import flash.text.TextField;
 
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.Values;
 import net.wg.data.managers.impl.ToolTipParams;
 import net.wg.gui.components.controls.IconTextBigButton;
@@ -45,6 +46,7 @@ public class SocialForm extends LoginFormView {
 
     override public function updateVo(param1:IFormBaseVo):void {
         this._dataVo = param1 as SocialFormVo;
+        App.utils.asserter.assertNotNull(this._dataVo, "_dataVo" + Errors.CANT_NULL);
         this.socialSubmit.tooltip = TOOLTIPS.LOGIN_SOCIAL_ENTER;
         var _loc2_:String = App.utils.locale.makeString(TOOLTIPS.login_social(this._dataVo.socialId));
         this.socialSubmit.tooltipParams = new ToolTipParams({}, {"social": _loc2_});

@@ -94,7 +94,7 @@ public class BaseManageContactView extends BaseManageContactViewMeta implements 
         this.inputToolTip = _loc2_.inputTooltip;
     }
 
-    override protected function getCastedInitData(param1:Object):ContactsViewInitDataVO {
+    override protected function getContactsViewInitDataVO(param1:Object):ContactsViewInitDataVO {
         return new ExtContactsViewInitVO(param1);
     }
 

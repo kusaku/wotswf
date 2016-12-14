@@ -7,6 +7,7 @@ import flash.text.TextField;
 
 import net.wg.data.constants.AtlasConstants;
 import net.wg.data.constants.BattleAtlasItem;
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.InvalidationType;
 import net.wg.data.constants.Linkages;
 import net.wg.data.constants.RolesState;
@@ -168,10 +169,11 @@ public class DamagePanel extends DamagePanelMeta implements IDamagePanelMeta {
         }
         this._cruiseVector.splice(0, this._cruiseVector.length);
         this._cruiseVector = null;
-        if (this._lockChassis != null) {
+        if (this._lockChassis) {
             this._lockChassis.bitmapData.dispose();
+            this._lockChassis.bitmapData = null;
+            this._lockChassis = null;
         }
-        this._lockChassis = null;
         this.tankIndicator.dispose();
         this.tankIndicator = null;
         if (this._tankmenCtrl != null) {
@@ -194,7 +196,6 @@ public class DamagePanel extends DamagePanelMeta implements IDamagePanelMeta {
                 this._tankmenCtrl.showDestroyed();
                 this.tankIndicator.showDestroyed();
                 this.fireIndicator.state = BATTLE_ITEM_STATES.NORMAL;
-                this.setAutoRotation(true);
             }
             if (this._healthIsInvalid) {
                 this.healthTF.text = this._healthInfo;
@@ -225,9 +226,7 @@ public class DamagePanel extends DamagePanelMeta implements IDamagePanelMeta {
             this._modulesCtrl.reset();
             this._tankmenCtrl.reset();
             this.tachometer.reset();
-            if (this._lockChassis != null) {
-                this._lockChassis.visible = false;
-            }
+            this.setAutoRotation(true);
             this._isReseted = true;
         }
         this._isDestroyed = false;
@@ -238,8 +237,7 @@ public class DamagePanel extends DamagePanelMeta implements IDamagePanelMeta {
     }
 
     public function as_setCrewDeactivated():void {
-        this._tankmenCtrl.showDestroyed();
-        this.tachometer.reset();
+        this.setVehicleDestroyed();
     }
 
     public function as_setCruiseMode(param1:int):void {
@@ -270,12 +268,10 @@ public class DamagePanel extends DamagePanelMeta implements IDamagePanelMeta {
     }
 
     public function as_setVehicleDestroyed():void {
-        this._isDestroyed = true;
-        invalidateData();
-        this.tachometer.reset();
+        this.setVehicleDestroyed();
     }
 
-    public function as_setup(param1:String, param2:int, param3:String, param4:Array, param5:Array, param6:Boolean, param7:Boolean):void {
+    override protected function setup(param1:String, param2:int, param3:String, param4:Array, param5:Array, param6:Boolean, param7:Boolean):void {
         this.updateHealth(param1, param2);
         if (this._tankmenCtrl != null) {
             this.toggleClickableAreas(this._tankmenCtrl.getItems(), false);
@@ -311,7 +307,7 @@ public class DamagePanel extends DamagePanelMeta implements IDamagePanelMeta {
             this._tankmenCtrl.setState(param1, param2);
         }
         else {
-            DebugUtils.LOG_ERROR("No such device with name = " + param1);
+            DebugUtils.LOG_ERROR(param1 + Errors.CANT_NULL);
         }
     }
 
@@ -556,6 +552,12 @@ public class DamagePanel extends DamagePanelMeta implements IDamagePanelMeta {
 
     private function onFireIndicatorClickHandler(param1:MouseEvent):void {
         clickToFireIconS();
+    }
+
+    private function setVehicleDestroyed():void {
+        this._isDestroyed = true;
+        invalidateData();
+        this.tachometer.reset();
     }
 }
 }

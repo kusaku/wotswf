@@ -5,13 +5,13 @@ import flash.events.Event;
 import flash.text.TextField;
 
 import net.wg.gui.components.controls.UILoaderAlt;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.entity.IUpdatable;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class CrewOperationsIRenderer extends UIComponent implements IUpdatable {
+public class CrewOperationsIRenderer extends UIComponentEx implements IUpdatable {
 
     private static const OFFSET_BETWEEN_TEXT_AND_BUTTON:uint = 16;
 

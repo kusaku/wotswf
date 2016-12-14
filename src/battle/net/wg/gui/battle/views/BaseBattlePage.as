@@ -4,6 +4,7 @@ import flash.geom.Point;
 
 import net.wg.data.constants.Linkages;
 import net.wg.data.constants.generated.BATTLE_VIEW_ALIASES;
+import net.wg.gui.battle.battleloading.BaseBattleLoading;
 import net.wg.gui.battle.components.interfaces.IBattleDisplayable;
 import net.wg.gui.battle.views.damagePanel.DamagePanel;
 import net.wg.gui.battle.views.messages.MessageListDAAPI;
@@ -39,6 +40,8 @@ public class BaseBattlePage extends BattlePageMeta implements IBattlePageMeta {
     private static const RIBBONS_CENTER_SCREEN_OFFSET_Y:int = 150;
 
     private static const RIBBONS_MIN_BOTTOM_PADDING_Y:int = 116;
+
+    public var battleLoading:BaseBattleLoading = null;
 
     public var prebattleTimer:PrebattleTimer = null;
 
@@ -102,6 +105,7 @@ public class BaseBattlePage extends BattlePageMeta implements IBattlePageMeta {
         this.playerMessageListPositionUpdate();
         this.vehicleMessageList.updateStage();
         this.vehicleMessageListPositionUpdate();
+        this.battleLoading.updateStage(param1, param2);
     }
 
     override protected function configUI():void {
@@ -113,6 +117,7 @@ public class BaseBattlePage extends BattlePageMeta implements IBattlePageMeta {
     }
 
     override protected function onPopulate():void {
+        this.registerComponent(this.battleLoading, BATTLE_VIEW_ALIASES.BATTLE_LOADING);
         this.registerComponent(this.minimap, BATTLE_VIEW_ALIASES.MINIMAP);
         this.registerComponent(this.prebattleTimer, BATTLE_VIEW_ALIASES.PREBATTLE_TIMER);
         this.registerComponent(this.damagePanel, BATTLE_VIEW_ALIASES.DAMAGE_PANEL);
@@ -131,11 +136,8 @@ public class BaseBattlePage extends BattlePageMeta implements IBattlePageMeta {
         super.onPopulate();
     }
 
-    private function onRibbonsPanelChangeHandler(param1:Event):void {
-        this.ribbonsPanel.x = (_originalWidth >> 1) + this.ribbonsPanel.offsetX;
-    }
-
     override protected function onDispose():void {
+        this.battleLoading = null;
         this.prebattleTimer = null;
         this.damagePanel = null;
         this.battleTimer = null;
@@ -155,6 +157,16 @@ public class BaseBattlePage extends BattlePageMeta implements IBattlePageMeta {
         App.utils.data.cleanupDynamicObject(this._componentsStorage);
         this._componentsStorage = null;
         super.onDispose();
+    }
+
+    override protected function setComponentsVisibility(param1:Vector.<String>, param2:Vector.<String>):void {
+        var _loc3_:String = null;
+        for each(_loc3_ in param1) {
+            this.showComponent(_loc3_, true);
+        }
+        for each(_loc3_ in param2) {
+            this.showComponent(_loc3_, false);
+        }
     }
 
     public function as_checkDAAPI():void {
@@ -178,20 +190,6 @@ public class BaseBattlePage extends BattlePageMeta implements IBattlePageMeta {
         _loc2_ = this._componentsStorage[param1];
         App.utils.asserter.assertNotNull(_loc2_, "can\'t find component " + param1 + " in Battle Page");
         return _loc2_.visible;
-    }
-
-    public function as_setComponentsVisibility(param1:Array, param2:Array):void {
-        var _loc3_:String = null;
-        if (param1) {
-            for each(_loc3_ in param1) {
-                this.showComponent(_loc3_, true);
-            }
-        }
-        if (param2) {
-            for each(_loc3_ in param2) {
-                this.showComponent(_loc3_, false);
-            }
-        }
     }
 
     public function as_setPostmortemTipsVisible(param1:Boolean):void {
@@ -259,6 +257,10 @@ public class BaseBattlePage extends BattlePageMeta implements IBattlePageMeta {
         this.postmortemTips.x = width >> 1;
         this.postmortemTips.y = height;
         this.postmortemTips.updateElementsPosition();
+    }
+
+    private function onRibbonsPanelChangeHandler(param1:Event):void {
+        this.ribbonsPanel.x = (_originalWidth >> 1) + this.ribbonsPanel.offsetX;
     }
 
     private function onMiniMapTrySizeChangeHandler(param1:MinimapEvent):void {

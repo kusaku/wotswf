@@ -17,9 +17,11 @@ public class DAAPIDataClass extends EventDispatcher implements IDAAPIDataClass {
 
     private var _hash:Object = null;
 
-    public function DAAPIDataClass(param1:Object) {
+    public function DAAPIDataClass(param1:Object = null) {
         super();
-        this.fromHash(param1);
+        if (param1) {
+            this.fromHash(param1);
+        }
     }
 
     public static function compare(param1:Object, param2:Object):Boolean {
@@ -69,16 +71,12 @@ public class DAAPIDataClass extends EventDispatcher implements IDAAPIDataClass {
     }
 
     public final function dispose():void {
-        var _loc1_:* = null;
-        var _loc2_:* = undefined;
-        var _loc3_:String = null;
         this.onDispose();
-        for (_loc1_ in this._hash) {
-            _loc2_ = this._hash[_loc1_];
-            _loc3_ = _loc1_;
-            delete this[_loc1_];
-        }
         this._hash = null;
+    }
+
+    public function clone():* {
+        return App.utils.data.cloneObject(this);
     }
 
     public function fromHash(param1:Object):void {
@@ -87,9 +85,6 @@ public class DAAPIDataClass extends EventDispatcher implements IDAAPIDataClass {
         var _loc4_:String = null;
         var _loc5_:* = null;
         var _loc6_:* = null;
-        if (param1 == null) {
-            this.assertNotNull(false, HASH_CANT_NULL_ASSERT_MESSAGE);
-        }
         this._hash = param1;
         for (_loc2_ in param1) {
             _loc3_ = param1[_loc2_];

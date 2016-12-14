@@ -4,6 +4,8 @@ import net.wg.gui.lobby.barracks.data.BarracksTankmenVO;
 import net.wg.infrastructure.base.AbstractView;
 import net.wg.infrastructure.exceptions.AbstractException;
 
+import scaleform.clik.data.DataProvider;
+
 public class BarracksMeta extends AbstractView {
 
     public var invalidateTanksList:Function;
@@ -24,6 +26,8 @@ public class BarracksMeta extends AbstractView {
 
     private var _barracksTankmenVO:BarracksTankmenVO;
 
+    private var _dataProvider:DataProvider;
+
     public function BarracksMeta() {
         super();
     }
@@ -32,6 +36,10 @@ public class BarracksMeta extends AbstractView {
         if (this._barracksTankmenVO) {
             this._barracksTankmenVO.dispose();
             this._barracksTankmenVO = null;
+        }
+        if (this._dataProvider) {
+            this._dataProvider.cleanUp();
+            this._dataProvider = null;
         }
         super.onDispose();
     }
@@ -76,16 +84,32 @@ public class BarracksMeta extends AbstractView {
         this.openPersonalCase(param1, param2);
     }
 
-    public function as_setTankmen(param1:Object):void {
-        if (this._barracksTankmenVO) {
-            this._barracksTankmenVO.dispose();
-        }
+    public final function as_setTankmen(param1:Object):void {
+        var _loc2_:BarracksTankmenVO = this._barracksTankmenVO;
         this._barracksTankmenVO = new BarracksTankmenVO(param1);
         this.setTankmen(this._barracksTankmenVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
+    }
+
+    public final function as_updateTanksList(param1:Array):void {
+        var _loc2_:DataProvider = this._dataProvider;
+        this._dataProvider = new DataProvider(param1);
+        this.updateTanksList(this._dataProvider);
+        if (_loc2_) {
+            _loc2_.cleanUp();
+        }
     }
 
     protected function setTankmen(param1:BarracksTankmenVO):void {
         var _loc2_:String = "as_setTankmen" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
+    }
+
+    protected function updateTanksList(param1:DataProvider):void {
+        var _loc2_:String = "as_updateTanksList" + Errors.ABSTRACT_INVOKE;
         DebugUtils.LOG_ERROR(_loc2_);
         throw new AbstractException(_loc2_);
     }

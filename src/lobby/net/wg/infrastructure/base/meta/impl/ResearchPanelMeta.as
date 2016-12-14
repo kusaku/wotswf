@@ -34,12 +34,13 @@ public class ResearchPanelMeta extends BaseDAAPIComponent {
         this.addVehToCompare();
     }
 
-    public function as_updateCurrentVehicle(param1:Object):void {
-        if (this._researchPanelVO) {
-            this._researchPanelVO.dispose();
-        }
+    public final function as_updateCurrentVehicle(param1:Object):void {
+        var _loc2_:ResearchPanelVO = this._researchPanelVO;
         this._researchPanelVO = new ResearchPanelVO(param1);
         this.updateCurrentVehicle(this._researchPanelVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function updateCurrentVehicle(param1:ResearchPanelVO):void {

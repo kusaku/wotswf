@@ -19,6 +19,14 @@ public class CrosshairSettingsVO {
 
     public var zoomIndicatorAlphaValue:Number = -1;
 
+    public var gunTagType:Number = 1;
+
+    public var gunTagAlpha:Number = 1;
+
+    public var mixingType:Number = 1;
+
+    public var mixingAlpha:Number = 1;
+
     public function CrosshairSettingsVO(param1:Object) {
         var _loc2_:* = null;
         var _loc3_:Number = NaN;

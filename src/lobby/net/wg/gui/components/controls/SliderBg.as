@@ -3,9 +3,9 @@ import flash.display.Sprite;
 
 public class SliderBg extends Sprite {
 
-    public var patternMc:BitmapFill = null;
+    public var patternMc:net.wg.gui.components.controls.BitmapFill = null;
 
-    public var disablePatternMc:BitmapFill = null;
+    public var disablePatternMc:net.wg.gui.components.controls.BitmapFill = null;
 
     public function SliderBg() {
         super();

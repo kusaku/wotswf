@@ -27,12 +27,13 @@ public class QuestsContentTabsMeta extends BaseDAAPIComponent {
         this.onSelectTab(param1);
     }
 
-    public function as_setTabs(param1:Object):void {
-        if (this._tabsVO) {
-            this._tabsVO.dispose();
-        }
+    public final function as_setTabs(param1:Object):void {
+        var _loc2_:TabsVO = this._tabsVO;
         this._tabsVO = new TabsVO(param1);
         this.setTabs(this._tabsVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setTabs(param1:TabsVO):void {

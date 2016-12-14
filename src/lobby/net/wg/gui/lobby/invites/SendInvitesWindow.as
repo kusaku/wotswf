@@ -7,6 +7,7 @@ import flash.ui.Keyboard;
 
 import net.wg.data.constants.Linkages;
 import net.wg.data.constants.UserTags;
+import net.wg.data.constants.Values;
 import net.wg.data.constants.generated.CONTACTS_ALIASES;
 import net.wg.data.constants.generated.CONTEXT_MENU_HANDLER_TYPE;
 import net.wg.gui.components.advanced.SearchInput;
@@ -133,7 +134,7 @@ public class SendInvitesWindow extends SendInvitesWindowMeta implements ISendInv
     override protected function onPopulate():void {
         this.updateWindowProperties(false);
         super.onPopulate();
-        window.title = "";
+        window.title = Values.EMPTY_STR;
         this.addAllUsersButton.tooltip = MESSENGER.PREBATTLE_ADDALLBTN_TOOLTIP;
     }
 
@@ -149,6 +150,7 @@ public class SendInvitesWindow extends SendInvitesWindowMeta implements ISendInv
         var _loc11_:Vector.<InteractiveObject> = null;
         var _loc12_:int = 0;
         var _loc13_:int = 0;
+        var _loc14_:int = 0;
         super.draw();
         if (isInvalid(UPDATE_DEFAULT_POSITION)) {
             window.x = 0;
@@ -207,18 +209,19 @@ public class SendInvitesWindow extends SendInvitesWindowMeta implements ISendInv
         if (isInvalid(FOCUS_CHAIN_INVALID) || _loc2_ || _loc1_) {
             _loc11_ = this.treeComponent.getFocusChain();
             if (this.treeComponent.getMode() != ContactsTreeComponent.EXTERNAL_SEARCH_MODE) {
-                _loc12_ = 0;
-                while (_loc12_ < _loc11_.length) {
-                    if (_loc11_[_loc12_] is SearchInput) {
+                _loc12_ = _loc11_.length;
+                _loc13_ = 0;
+                while (_loc13_ < _loc12_) {
+                    if (_loc11_[_loc13_] is SearchInput) {
                         break;
                     }
-                    _loc12_++;
+                    _loc13_++;
                 }
-                _loc11_.splice(_loc12_ + 1, 0, this.onlineCheckBox);
+                _loc11_.splice(_loc13_ + 1, 0, this.onlineCheckBox);
                 if (this.treeComponent.getMode() == ContactsTreeComponent.NORMAL_MODE) {
-                    _loc13_ = _loc11_.indexOf(this.treeComponent.list);
-                    if (_loc13_ != -1) {
-                        _loc11_.splice(_loc13_ + 1, 0, this.externalSearchButton);
+                    _loc14_ = _loc11_.indexOf(this.treeComponent.list);
+                    if (_loc14_ != -1) {
+                        _loc11_.splice(_loc14_ + 1, 0, this.externalSearchButton);
                     }
                 }
             }
@@ -309,7 +312,7 @@ public class SendInvitesWindow extends SendInvitesWindowMeta implements ISendInv
 
     override protected function onDispose():void {
         App.utils.scheduler.cancelTask(this.onEndSendInvitesCooldown);
-        this.cleanInvalidUserTags();
+        this._invalidUserTags = null;
         this.disposeDragController();
         this.externalSearchButton.removeEventListener(ButtonEvent.CLICK, this.onExternalSearchButtonClickHandler);
         this.treeComponent.removeEventListener(FocusRequestEvent.REQUEST_FOCUS, this.onTreeComponentRequestFocusHandler);
@@ -368,6 +371,10 @@ public class SendInvitesWindow extends SendInvitesWindowMeta implements ISendInv
         super.onDispose();
     }
 
+    override protected function setInvalidUserTags(param1:Vector.<String>):void {
+        this._invalidUserTags = param1;
+    }
+
     public function as_enableDescription(param1:Boolean):void {
         this.messageTextInput.enabled = param1;
     }
@@ -380,7 +387,7 @@ public class SendInvitesWindow extends SendInvitesWindowMeta implements ISendInv
     }
 
     public function as_onContactUpdated(param1:Object):void {
-        var _loc2_:Number = param1.dbId;
+        var _loc2_:Number = param1.dbID;
         this._pendingUpdatingContacts[_loc2_] = param1;
         invalidate(CHECK_CANDIDATES_LIST_INV);
     }
@@ -403,15 +410,6 @@ public class SendInvitesWindow extends SendInvitesWindowMeta implements ISendInv
         this.onlineCheckBox.selected = param1;
     }
 
-    public function as_setInvalidUserTags(param1:Array):void {
-        var _loc2_:String = null;
-        this.cleanInvalidUserTags();
-        this._invalidUserTags = new Vector.<String>();
-        for each(_loc2_ in param1) {
-            this._invalidUserTags.push(_loc2_);
-        }
-    }
-
     public function as_setWindowTitle(param1:String):void {
         window.title = param1;
     }
@@ -424,13 +422,6 @@ public class SendInvitesWindow extends SendInvitesWindowMeta implements ISendInv
             }
             this._createdContactItems.splice(0, this._createdContactItems.length);
             this._createdContactItems = null;
-        }
-    }
-
-    private function cleanInvalidUserTags():void {
-        if (this._invalidUserTags != null) {
-            this._invalidUserTags.splice(0, this._invalidUserTags.length);
-            this._invalidUserTags = null;
         }
     }
 
@@ -641,7 +632,7 @@ public class SendInvitesWindow extends SendInvitesWindowMeta implements ISendInv
     }
 
     private function onExternalSearchButtonClickHandler(param1:ButtonEvent):void {
-        this.treeComponent.switchExternalSearchMode("");
+        this.treeComponent.switchExternalSearchMode(Values.EMPTY_STR);
     }
 
     private function onTreeComponentModeChangedHandler(param1:ContactsTreeEvent):void {
@@ -699,7 +690,7 @@ public class SendInvitesWindow extends SendInvitesWindowMeta implements ISendInv
         var _loc2_:uint = this.messageTextInput.textField.getTextFormat()[COLOR];
         if (_loc2_ == ContactsShared.INVITE_PROMPT_DEFAULT_TEXT_COLOR) {
             this.messageTextInput.textField.textColor = ContactsShared.INVITE_INPUT_TEXT_COLOR;
-            this.messageTextInput.text = "";
+            this.messageTextInput.text = Values.EMPTY_STR;
         }
     }
 
@@ -715,7 +706,7 @@ public class SendInvitesWindow extends SendInvitesWindowMeta implements ISendInv
             _loc3_ = {
                 "dbID": _loc2_.dbID,
                 "userName": _loc2_.userName,
-                "clanAbbrev": (!!_loc2_.userPropsVO ? _loc2_.userPropsVO.clanAbbrev : "")
+                "clanAbbrev": (!!_loc2_.userPropsVO ? _loc2_.userPropsVO.clanAbbrev : Values.EMPTY_STR)
             };
             App.contextMenuMgr.show(CONTEXT_MENU_HANDLER_TYPE.BASE_USER, this, _loc3_);
         }
@@ -788,12 +779,12 @@ public class SendInvitesWindow extends SendInvitesWindowMeta implements ISendInv
 
     private function onOnlineCheckBoxClickHandler(param1:ButtonEvent):void {
         setOnlineFlagS(this.onlineCheckBox.selected);
-        this.treeComponent.list.selectedIndex = -1;
+        this.treeComponent.resetSelected();
     }
 
     private function onSendButtonClickHandler(param1:ButtonEvent = null):void {
         var _loc2_:Array = [];
-        var _loc3_:String = "";
+        var _loc3_:String = Values.EMPTY_STR;
         if (this.messageTextInput.textField.getTextFormat()[COLOR] != ContactsShared.INVITE_PROMPT_DEFAULT_TEXT_COLOR) {
             _loc3_ = StringUtils.trim(this.messageTextInput.text);
         }

@@ -3,11 +3,11 @@ import flash.text.TextField;
 
 import net.wg.gui.components.advanced.vo.StatisticItemVo;
 import net.wg.gui.components.controls.UILoaderAlt;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class StatisticItem extends UIComponent {
+public class StatisticItem extends UIComponentEx {
 
     public var statValue:TextField = null;
 
@@ -26,12 +26,10 @@ public class StatisticItem extends UIComponent {
     }
 
     override protected function draw():void {
-        if (isInvalid(InvalidationType.DATA)) {
-            if (this._data) {
-                this.icon.source = this._data.icon;
-                this.statValue.text = this._data.value;
-                this.statName.text = this._data.name;
-            }
+        if (this._data && isInvalid(InvalidationType.DATA)) {
+            this.icon.source = this._data.icon;
+            this.statValue.text = this._data.value;
+            this.statName.text = this._data.name;
         }
         super.draw();
     }

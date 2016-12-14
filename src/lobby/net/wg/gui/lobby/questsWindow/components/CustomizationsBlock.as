@@ -23,7 +23,9 @@ public class CustomizationsBlock extends AbstractResizableContent {
         super.draw();
         if (isInvalid(InvalidationType.DATA)) {
             this.destroyRenderers();
-            this.createRenderers();
+            if (this._data) {
+                this.createRenderers();
+            }
         }
     }
 

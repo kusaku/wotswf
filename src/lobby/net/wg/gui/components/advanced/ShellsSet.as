@@ -1,11 +1,11 @@
 package net.wg.gui.components.advanced {
 import net.wg.data.constants.Linkages;
 import net.wg.gui.lobby.hangar.maintenance.data.MaintenanceShellVO;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class ShellsSet extends UIComponent {
+public class ShellsSet extends UIComponentEx {
 
     private static const ITEMS_GAP:Number = -7;
 

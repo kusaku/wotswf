@@ -15,6 +15,8 @@ public interface ITankCarouselMeta extends IEventDispatcher {
 
     function updateHotFiltersS():void;
 
+    function onChristmasBtnClickS():void;
+
     function as_getDataProvider():Object;
 
     function as_setCarouselFilter(param1:Object):void;
@@ -28,5 +30,7 @@ public interface ITankCarouselMeta extends IEventDispatcher {
     function as_hideCounter():void;
 
     function as_blinkCounter():void;
+
+    function as_setChristmasBtnData(param1:Object):void;
 }
 }

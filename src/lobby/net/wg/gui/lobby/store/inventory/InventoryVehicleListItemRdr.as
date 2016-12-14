@@ -11,6 +11,7 @@ import net.wg.gui.lobby.store.inventory.base.InventoryListItemRenderer;
 import net.wg.infrastructure.managers.ITooltipMgr;
 
 import scaleform.clik.constants.InvalidationType;
+import scaleform.clik.utils.Constraints;
 
 public class InventoryVehicleListItemRdr extends InventoryListItemRenderer {
 
@@ -39,6 +40,7 @@ public class InventoryVehicleListItemRdr extends InventoryListItemRenderer {
         this.addToCompareBtn.mouseEnabledOnDisabled = true;
         this.addToCompareBtn.visible = false;
         this.addToCompareBtn.validateNow();
+        constraints.addElement("vehicleIcon", this.vehicleIcon, Constraints.ALL);
     }
 
     override protected function onDispose():void {

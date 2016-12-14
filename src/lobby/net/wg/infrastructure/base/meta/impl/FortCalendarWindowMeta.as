@@ -20,12 +20,13 @@ public class FortCalendarWindowMeta extends AbstractWindowView {
         super.onDispose();
     }
 
-    public function as_updatePreviewData(param1:Object):void {
-        if (this._fortCalendarPreviewBlockVO) {
-            this._fortCalendarPreviewBlockVO.dispose();
-        }
+    public final function as_updatePreviewData(param1:Object):void {
+        var _loc2_:FortCalendarPreviewBlockVO = this._fortCalendarPreviewBlockVO;
         this._fortCalendarPreviewBlockVO = new FortCalendarPreviewBlockVO(param1);
         this.updatePreviewData(this._fortCalendarPreviewBlockVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function updatePreviewData(param1:FortCalendarPreviewBlockVO):void {

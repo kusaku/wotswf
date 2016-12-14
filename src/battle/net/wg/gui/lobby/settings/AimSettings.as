@@ -191,14 +191,8 @@ public class AimSettings extends AimSettingsBase {
                     _loc5_ = 0;
             }
             _loc16_.cassette.y = _loc5_;
-            if (!_loc4_ && _loc16_.currentFrame == 1) {
-                _loc16_.cassette.x = -29;
-                _loc16_.center.x = 10;
-            }
-            else {
-                _loc16_.cassette.x = -39;
-                _loc16_.center.x = 0;
-            }
+            _loc16_.cassette.x = -39;
+            _loc16_.center.x = 0;
             _loc16_.targetMC.gotoAndStop(60);
             _loc16_.universalBarMC.gotoAndStop(60);
             _loc16_.reloadingBarMC.gotoAndStop(60);

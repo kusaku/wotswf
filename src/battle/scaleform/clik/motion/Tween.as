@@ -152,9 +152,6 @@ public class Tween implements IDisposable {
             this.firstProp.prev = null;
             this.firstProp = null;
         }
-        for (_loc1_ in this.props) {
-            delete this.props[_loc1_];
-        }
         this.props = null;
     }
 

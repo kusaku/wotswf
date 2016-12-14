@@ -11,13 +11,13 @@ import net.wg.gui.events.ListEventEx;
 import net.wg.gui.rally.controls.CandidatesScrollingList;
 import net.wg.gui.rally.events.RallyViewsEvent;
 import net.wg.gui.rally.interfaces.IRallyVO;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.gfx.MouseEventEx;
 
-public class BaseWaitListSection extends UIComponent {
+public class BaseWaitListSection extends UIComponentEx {
 
     public var lblCandidatesHeader:TextField;
 
@@ -121,7 +121,7 @@ public class BaseWaitListSection extends UIComponent {
 
     protected function onListItemClick(param1:ListEventEx):void {
         var _loc2_:ExtendedUserVO = param1.itemData as ExtendedUserVO;
-        if (param1.buttonIdx == MouseEventEx.RIGHT_BUTTON && _loc2_ && !UserTags.isCurrentPlayer(_loc2_.tags)) {
+        if (_loc2_ && param1.buttonIdx == MouseEventEx.RIGHT_BUTTON && !UserTags.isCurrentPlayer(_loc2_.tags)) {
             App.contextMenuMgr.show(CONTEXT_MENU_HANDLER_TYPE.UNIT_USER, this, _loc2_);
         }
     }

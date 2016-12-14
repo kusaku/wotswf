@@ -6,6 +6,7 @@ import flash.geom.Point;
 import flash.text.TextField;
 import flash.utils.getDefinitionByName;
 
+import net.wg.data.constants.Errors;
 import net.wg.gui.battle.components.BattleUIComponent;
 
 import scaleform.clik.motion.Tween;
@@ -122,16 +123,24 @@ public class StaticObjectMarker extends BattleUIComponent {
     }
 
     private function setShape():void {
+        var shapeBitmapClass:Class = null;
         if (this._shapeBitmap != null) {
             this.marker.removeChild(this._shapeBitmap);
             this._shapeBitmap.bitmapData.dispose();
             this._shapeBitmap.bitmapData = null;
         }
-        var _loc1_:Class = getDefinitionByName(this._shapeName) as Class;
-        this._shapeBitmap = new Bitmap(new _loc1_());
-        this._shapeBitmap.x = SHAPE_XY.x;
-        this._shapeBitmap.y = SHAPE_XY.y;
-        this.marker.addChild(this._shapeBitmap);
+        try {
+            shapeBitmapClass = getDefinitionByName(this._shapeName) as Class;
+            this._shapeBitmap = new Bitmap(new shapeBitmapClass());
+            this._shapeBitmap.x = SHAPE_XY.x;
+            this._shapeBitmap.y = SHAPE_XY.y;
+            this.marker.addChild(this._shapeBitmap);
+            return;
+        }
+        catch (error:ReferenceError) {
+            DebugUtils.LOG_ERROR(Errors.BAD_LINKAGE + _shapeName);
+            return;
+        }
     }
 }
 }

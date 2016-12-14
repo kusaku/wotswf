@@ -13,22 +13,22 @@ public class VehicleInfoMeta extends AbstractWindowView {
 
     public var addToCompare:Function;
 
-    private var _vehicleInfoDataVO:VehicleInfoDataVO;
-
     private var _vehCompareButtonDataVO:VehCompareButtonDataVO;
+
+    private var _vehicleInfoDataVO:VehicleInfoDataVO;
 
     public function VehicleInfoMeta() {
         super();
     }
 
     override protected function onDispose():void {
-        if (this._vehicleInfoDataVO) {
-            this._vehicleInfoDataVO.dispose();
-            this._vehicleInfoDataVO = null;
-        }
         if (this._vehCompareButtonDataVO) {
             this._vehCompareButtonDataVO.dispose();
             this._vehCompareButtonDataVO = null;
+        }
+        if (this._vehicleInfoDataVO) {
+            this._vehicleInfoDataVO.dispose();
+            this._vehicleInfoDataVO = null;
         }
         super.onDispose();
     }
@@ -48,20 +48,22 @@ public class VehicleInfoMeta extends AbstractWindowView {
         this.addToCompare();
     }
 
-    public function as_setVehicleInfo(param1:Object):void {
-        if (this._vehicleInfoDataVO) {
-            this._vehicleInfoDataVO.dispose();
-        }
+    public final function as_setVehicleInfo(param1:Object):void {
+        var _loc2_:VehicleInfoDataVO = this._vehicleInfoDataVO;
         this._vehicleInfoDataVO = new VehicleInfoDataVO(param1);
         this.setVehicleInfo(this._vehicleInfoDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setCompareButtonData(param1:Object):void {
-        if (this._vehCompareButtonDataVO) {
-            this._vehCompareButtonDataVO.dispose();
-        }
+    public final function as_setCompareButtonData(param1:Object):void {
+        var _loc2_:VehCompareButtonDataVO = this._vehCompareButtonDataVO;
         this._vehCompareButtonDataVO = new VehCompareButtonDataVO(param1);
         this.setCompareButtonData(this._vehCompareButtonDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setVehicleInfo(param1:VehicleInfoDataVO):void {

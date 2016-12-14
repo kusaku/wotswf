@@ -36,41 +36,40 @@ public class RecruitParametersComponent extends RecruitParametersMeta implements
 
     public var specializationTF:TextField = null;
 
-    private var _nationsData:Object;
+    private var _nationsData:RecruitParametersVO;
 
-    private var _vehicleClassData:Object;
+    private var _vehicleClassData:RecruitParametersVO;
 
-    private var _vehicleData:Object;
+    private var _vehicleData:RecruitParametersVO;
 
-    private var _tankmanRoleData:Object;
+    private var _tankmanRoleData:RecruitParametersVO;
 
     public function RecruitParametersComponent() {
         super();
     }
 
-    private static function applyData(param1:DropdownMenu, param2:Object):void {
-        var _loc3_:RecruitParametersVO = new RecruitParametersVO(param2);
-        param1.dataProvider = new DataProvider(_loc3_.data);
-        param1.selectedIndex = _loc3_.selectedIndex;
-        param1.enabled = _loc3_.enabled;
+    private static function applyData(param1:DropdownMenu, param2:RecruitParametersVO):void {
+        param1.dataProvider = new DataProvider(param2.data);
+        param1.selectedIndex = param2.selectedIndex;
+        param1.enabled = param2.enabled;
     }
 
-    public function as_setVehicleClassData(param1:Object):void {
+    override protected function setVehicleClassData(param1:RecruitParametersVO):void {
         this._vehicleClassData = param1;
         invalidate(VEHICLE_CLASS_INV);
     }
 
-    public function as_setVehicleData(param1:Object):void {
+    override protected function setVehicleData(param1:RecruitParametersVO):void {
         this._vehicleData = param1;
         invalidate(VEHICLE_INV);
     }
 
-    public function as_setTankmanRoleData(param1:Object):void {
+    override protected function setTankmanRoleData(param1:RecruitParametersVO):void {
         this._tankmanRoleData = param1;
         invalidate(TANKMAN_ROLE_INV);
     }
 
-    public function as_setNationsData(param1:Object):void {
+    override protected function setNationsData(param1:RecruitParametersVO):void {
         this._nationsData = param1;
         invalidate(NATIONS_INV);
     }

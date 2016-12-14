@@ -31,7 +31,7 @@ public class WalletResourcesStatus extends UIComponent implements IDisposable {
 
     public static const AVAILABLE:uint = 2;
 
-    public var ico:IconText = null;
+    public var ico:net.wg.gui.components.controls.IconText = null;
 
     public var hit:Sprite = null;
 

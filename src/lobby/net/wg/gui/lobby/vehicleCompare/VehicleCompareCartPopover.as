@@ -5,7 +5,7 @@ import net.wg.data.ListDAAPIDataProvider;
 import net.wg.data.VO.ButtonPropertiesVO;
 import net.wg.gui.components.controls.IconTextButton;
 import net.wg.gui.components.controls.interfaces.ISortableTable;
-import net.wg.gui.components.popOvers.PopOver;
+import net.wg.gui.components.popovers.PopOver;
 import net.wg.gui.interfaces.ISoundButtonEx;
 import net.wg.gui.lobby.vehicleCompare.data.VehicleCompareCartItemVO;
 import net.wg.gui.lobby.vehicleCompare.data.VehicleCompareCartPopoverInitDataVO;

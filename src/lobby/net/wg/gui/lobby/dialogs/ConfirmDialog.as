@@ -7,6 +7,7 @@ import net.wg.infrastructure.base.meta.IConfirmDialogMeta;
 import net.wg.infrastructure.base.meta.impl.ConfirmDialogMeta;
 import net.wg.infrastructure.interfaces.IWindow;
 
+import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.utils.Padding;
 
@@ -53,12 +54,17 @@ public class ConfirmDialog extends ConfirmDialogMeta implements IConfirmDialogMe
         this.moveFocusToButton();
     }
 
-    override protected function setSettings(param1:ConfirmDialogVO):void {
-        this._data = param1;
-        if (this._data != null) {
+    override protected function draw():void {
+        super.draw();
+        if (this._data && isInvalid(InvalidationType.DATA)) {
             window.title = this._data.title;
             this.content.update(this._data);
         }
+    }
+
+    override protected function setSettings(param1:ConfirmDialogVO):void {
+        this._data = ConfirmDialogVO(param1);
+        invalidateData();
     }
 
     override protected function onInitModalFocus(param1:InteractiveObject):void {

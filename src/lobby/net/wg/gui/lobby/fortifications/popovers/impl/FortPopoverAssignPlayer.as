@@ -5,14 +5,14 @@ import flash.text.TextField;
 import net.wg.data.constants.ColorSchemeNames;
 import net.wg.gui.components.controls.IconTextButton;
 import net.wg.gui.lobby.fortifications.events.FortBuildingCardPopoverEvent;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.IColorScheme;
 import net.wg.infrastructure.interfaces.IUserProps;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class FortPopoverAssignPlayer extends UIComponent {
+public class FortPopoverAssignPlayer extends UIComponentEx {
 
     private static const TEXT_PADDING:uint = 6;
 

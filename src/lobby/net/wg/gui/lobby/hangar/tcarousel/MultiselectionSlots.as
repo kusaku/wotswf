@@ -68,7 +68,8 @@ public class MultiselectionSlots extends UIComponentEx {
     }
 
     public function setData(param1:MultiselectionInfoVO):void {
-        var _loc2_:Boolean = param1.showSlots;
+        var _loc2_:Boolean = false;
+        _loc2_ = param1.showSlots;
         this.list.visible = _loc2_;
         this.fullStatusTxt.visible = !_loc2_;
         this.infoBlock.visible = _loc2_;

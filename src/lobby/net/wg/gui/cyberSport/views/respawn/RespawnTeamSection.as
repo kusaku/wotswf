@@ -4,6 +4,7 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.text.TextField;
 
+import net.wg.data.constants.Errors;
 import net.wg.data.constants.Values;
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.lobby.fortifications.data.battleRoom.LegionariesSlotsVO;
@@ -127,6 +128,7 @@ public class RespawnTeamSection extends BaseTeamSection implements IFocusContain
             _loc2_ = 0;
             while (_loc2_ < _slotsUi.length) {
                 _loc1_ = _slotsUi[_loc2_] as RespawnTeamSlot;
+                App.utils.asserter.assertNotNull(_loc1_, "respawnSlot" + Errors.CANT_NULL);
                 if (_loc1_.isHimSelf) {
                     break;
                 }

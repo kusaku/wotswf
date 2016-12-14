@@ -1,8 +1,6 @@
 package net.wg.gui.battle.views.consumablesPanel.VO {
 public class ConsumablesVO {
 
-    public var customCoolDownFrame:int;
-
     public var keyCode:Number;
 
     public var tag:String;

@@ -69,7 +69,7 @@ public class ComplexProgressIndicator extends UIComponentEx {
     private function clearSteps():void {
         var _loc1_:IComplexProgressStepRenderer = null;
         while (this.container.numChildren) {
-            _loc1_ = this.container.getChildAt(0) as IComplexProgressStepRenderer;
+            _loc1_ = IComplexProgressStepRenderer(this.container.getChildAt(0));
             this.container.removeChild(DisplayObject(_loc1_));
             _loc1_.dispose();
         }

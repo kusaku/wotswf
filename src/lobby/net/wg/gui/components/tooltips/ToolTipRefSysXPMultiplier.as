@@ -122,7 +122,7 @@ public class ToolTipRefSysXPMultiplier extends ToolTipSpecial {
 
     private function createXPBlock(param1:MovieClip):IToolTipRefSysXPMultiplierBlock {
         var _loc2_:IToolTipRefSysXPMultiplierBlock = App.utils.classFactory.getComponent(XP_BLOCK_UI, ToolTipRefSysXPMultiplierBlock);
-        param1.addChild(_loc2_ as MovieClip);
+        param1.addChild(MovieClip(_loc2_));
         return _loc2_;
     }
 

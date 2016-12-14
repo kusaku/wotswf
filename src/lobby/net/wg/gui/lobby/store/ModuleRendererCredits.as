@@ -1,9 +1,9 @@
 package net.wg.gui.lobby.store {
 import flash.text.TextField;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class ModuleRendererCredits extends UIComponent {
+public class ModuleRendererCredits extends UIComponentEx {
 
     public var price:TextField = null;
 

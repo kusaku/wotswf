@@ -1,19 +1,16 @@
 package net.wg.gui.battle.views.stats.fullStats {
 import net.wg.data.VO.daapi.DAAPIVehicleInfoVO;
 import net.wg.data.constants.PlayerStatus;
-import net.wg.data.constants.UserTags;
-import net.wg.data.constants.VehicleStatus;
+import net.wg.gui.battle.battleloading.BattleLoadingHelper;
 import net.wg.gui.battle.views.stats.StatsUserProps;
 import net.wg.gui.battle.views.stats.fullStats.interfaces.IStatsTableItemHolderBase;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
 public class StatsTableItemHolderBase implements IStatsTableItemHolderBase, IDisposable {
 
-    private static const VEHICLE_TYPE_UNKNOWN:String = "unknown";
-
     protected var statsItem:StatsTableItemBase = null;
 
-    protected var getVehicleData:DAAPIVehicleInfoVO = null;
+    protected var data:DAAPIVehicleInfoVO = null;
 
     protected var _isCurrPlayer:Boolean = false;
 
@@ -21,70 +18,42 @@ public class StatsTableItemHolderBase implements IStatsTableItemHolderBase, IDis
 
     private var _isDisposed:Boolean = false;
 
+    private var _isRenderingAvailable:Boolean;
+
+    protected var _isRenderingRequired:Boolean;
+
     public function StatsTableItemHolderBase(param1:StatsTableItemBase) {
         super();
         this.statsItem = param1;
     }
 
     public function setDAAPIVehicleData(param1:DAAPIVehicleInfoVO):void {
-        this.getVehicleData = param1.clone();
-        this.vehicleDataSync();
-    }
-
-    public function get vehicleID():Number {
-        return !!this.getVehicleData ? Number(this.getVehicleData.vehicleID) : Number(NaN);
-    }
-
-    public function get accountID():Number {
-        return !!this.getVehicleData ? Number(this.getVehicleData.accountDBID) : Number(NaN);
+        this.data = param1;
+        if (this._isRenderingAvailable) {
+            this.vehicleDataSync();
+        }
+        else {
+            this._isRenderingRequired = true;
+        }
     }
 
     public function get containsData():Boolean {
-        return this.getVehicleData != null;
-    }
-
-    public function get isCurrentPlayer():Boolean {
-        return this._isCurrPlayer;
+        return this.data != null;
     }
 
     public function get isSelected():Boolean {
-        return !!this.getVehicleData ? Boolean(PlayerStatus.isSelected(this.getVehicleData.playerStatus)) : false;
-    }
-
-    public function setVehicleStatus(param1:uint):void {
-        if (!this.containsData) {
-            return;
-        }
-        this.getVehicleData.vehicleStatus = param1;
-        this.applyVehicleStatus();
-    }
-
-    public function setPlayerStatus(param1:uint):void {
-        if (!this.containsData) {
-            return;
-        }
-        this.getVehicleData.playerStatus = param1;
-        this.applyPlayerStatus();
-    }
-
-    public function setUserTags(param1:Array):void {
-        if (!this.containsData) {
-            return;
-        }
-        this.getVehicleData.userTags = param1;
-        this.applyUserTags();
-        this.updateUserProps();
+        return !!this.data ? Boolean(PlayerStatus.isSelected(this.data.playerStatus)) : false;
     }
 
     public function updateColorBlind():void {
-        if (this.containsData) {
+        if (this.containsData && this._isRenderingAvailable) {
             this.statsItem.updateColorBlind();
             this.updateVehicleType();
         }
     }
 
     public final function dispose():void {
-        if (App.instance) {
+        if (this._isDisposed && App.instance) {
             App.utils.asserter.assert(!this._isDisposed, "StatsItemHolder already disposed!");
         }
         this._isDisposed = true;
@@ -92,9 +61,9 @@ public class StatsTableItemHolderBase implements IStatsTableItemHolderBase, IDis
     }
 
     protected function vehicleDataSync():void {
-        if (this.getVehicleData) {
-            this.statsItem.setVehicleName(this.getVehicleData.vehicleName);
-            this.statsItem.setIsIGR(this.getVehicleData.isVehiclePremiumIgr && this.getVehicleData.vehicleType && this.getVehicleData.vehicleType != VEHICLE_TYPE_UNKNOWN);
+        if (this.data) {
+            this.statsItem.setVehicleName(this.data.vehicleName);
+            this.statsItem.setIsIGR(this.data.isIGR);
             this.updateVehicleType();
             this.applyVehicleStatus();
             this.applyPlayerStatus();
@@ -107,49 +76,39 @@ public class StatsTableItemHolderBase implements IStatsTableItemHolderBase, IDis
     }
 
     protected function applyVehicleStatus():void {
-        var _loc1_:uint = this.getVehicleData.vehicleStatus;
-        this.statsItem.setIsDead(!VehicleStatus.isAlive(_loc1_));
-        this.statsItem.setIsOffline(!VehicleStatus.isReady(_loc1_));
+        this.statsItem.setIsDead(!this.data.isAlive());
+        this.statsItem.setIsOffline(!this.data.isReady());
     }
 
     protected function applyPlayerStatus():void {
-        var _loc1_:uint = this.getVehicleData.playerStatus;
-        this.statsItem.setIsTeamKiller(PlayerStatus.isTeamKiller(_loc1_));
-        this.statsItem.setIsSquadPersonal(PlayerStatus.isSquadPersonal(_loc1_));
+        var _loc1_:uint = this.data.playerStatus;
+        this.statsItem.setIsTeamKiller(this.data.isTeamKiller());
+        this.statsItem.setIsSquadPersonal(this.data.isSquadPersonal());
         this.statsItem.setIsSelected(PlayerStatus.isSelected(_loc1_));
     }
 
     protected function applyUserTags():void {
-        var _loc1_:Array = this.getVehicleData.userTags;
-        if (_loc1_) {
-            this._isCurrPlayer = UserTags.isCurrentPlayer(_loc1_);
-            this.statsItem.setIsCurrentPlayer(this._isCurrPlayer);
-        }
-        else {
-            this._isCurrPlayer = false;
-        }
+        this._isCurrPlayer = this.data.isCurrentPlayer;
+        this.statsItem.setIsCurrentPlayer(this._isCurrPlayer);
     }
 
     protected final function updateUserProps():void {
         if (!this._userProps) {
-            this._userProps = new StatsUserProps(this.getVehicleData.playerName, this.getVehicleData.clanAbbrev, this.getVehicleData.region, 0, this.getVehicleData.userTags);
+            this._userProps = new StatsUserProps(this.data.playerName, this.data.clanAbbrev, this.data.region, 0, this.data.userTags);
         }
         else {
-            this._userProps.userName = this.getVehicleData.playerName;
-            this._userProps.clanAbbrev = this.getVehicleData.clanAbbrev;
-            this._userProps.region = this.getVehicleData.region;
-            this._userProps.tags = this.getVehicleData.userTags;
+            this._userProps.userName = this.data.playerName;
+            this._userProps.clanAbbrev = this.data.clanAbbrev;
+            this._userProps.region = this.data.region;
+            this._userProps.tags = this.data.userTags;
         }
-        if (this._userProps.isChanged) {
-            this._userProps.applyChanges();
-            this.statsItem.setPlayerName(this._userProps);
-        }
+        this.statsItem.setPlayerName(this._userProps);
     }
 
     protected function updateVehicleType():void {
-        var _loc1_:String = App.colorSchemeMgr.getAliasColor(this.getVehicleData.teamColor);
-        if (_loc1_ && this.getVehicleData.vehicleType && this.getVehicleData.vehicleType != VEHICLE_TYPE_UNKNOWN) {
-            this.statsItem.setVehicleType(_loc1_, this.getVehicleData.vehicleType);
+        var _loc1_:String = BattleLoadingHelper.instance.getVehicleTypeIconId(this.data);
+        if (_loc1_) {
+            this.statsItem.setVehicleType(_loc1_);
         }
     }
 
@@ -157,13 +116,22 @@ public class StatsTableItemHolderBase implements IStatsTableItemHolderBase, IDis
         this.statsItem.dispose();
         if (this._userProps) {
             this._userProps.dispose();
-        }
-        if (this.getVehicleData) {
-            this.getVehicleData.dispose();
+            this._userProps = null;
         }
         this.statsItem = null;
-        this._userProps = null;
-        this.getVehicleData = null;
+        this.data = null;
+    }
+
+    public function get isRenderingAvailable():Boolean {
+        return this._isRenderingAvailable;
+    }
+
+    public function set isRenderingAvailable(param1:Boolean):void {
+        this._isRenderingAvailable = param1;
+        if (param1 && this._isRenderingRequired) {
+            this._isRenderingRequired = false;
+            this.vehicleDataSync();
+        }
     }
 }
 }

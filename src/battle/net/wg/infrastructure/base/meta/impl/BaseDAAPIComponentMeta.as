@@ -1,10 +1,9 @@
 package net.wg.infrastructure.base.meta.impl {
 import net.wg.data.constants.Errors;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.IDAAPIModule;
 
-import scaleform.clik.core.UIComponent;
-
-public class BaseDAAPIComponentMeta extends UIComponent {
+public class BaseDAAPIComponentMeta extends UIComponentEx {
 
     public var registerFlashComponent:Function;
 

@@ -7,11 +7,11 @@ import net.wg.gui.components.controls.ButtonIconTransparent;
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.cyberSport.staticFormation.data.FormationAppointmentVO;
 import net.wg.gui.cyberSport.staticFormation.events.FormationAppointmentEvent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 
-public class FormationAppointmentComponent extends UIComponent {
+public class FormationAppointmentComponent extends UIComponentEx {
 
     public var promoteBtn:ButtonIconBlack;
 

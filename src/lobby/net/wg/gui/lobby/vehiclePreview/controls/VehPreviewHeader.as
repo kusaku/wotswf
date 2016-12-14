@@ -5,6 +5,7 @@ import flash.text.TextField;
 import net.wg.gui.components.advanced.interfaces.IBackButton;
 import net.wg.gui.components.tooltips.helpers.TankTypeIco;
 import net.wg.gui.interfaces.ISoundButtonEx;
+import net.wg.gui.lobby.components.HeaderBackground;
 import net.wg.gui.lobby.vehiclePreview.data.VehPreviewHeaderVO;
 import net.wg.gui.lobby.vehiclePreview.events.VehPreviewEvent;
 import net.wg.gui.lobby.vehiclePreview.interfaces.IVehPreviewHeader;
@@ -23,7 +24,7 @@ public class VehPreviewHeader extends UIComponentEx implements IVehPreviewHeader
 
     public var txtTankInfo:TextField;
 
-    public var background:VehPreviewBackground = null;
+    public var background:HeaderBackground = null;
 
     public var titleTf:TextField;
 

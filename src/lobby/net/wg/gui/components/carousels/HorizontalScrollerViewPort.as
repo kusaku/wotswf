@@ -97,6 +97,19 @@ public class HorizontalScrollerViewPort extends UIComponentEx implements IListVi
         }
     }
 
+    public function get validWidth():Number {
+        var _loc1_:uint = 0;
+        if (this._dataProvider && this._dataProvider.length > 0) {
+            _loc1_ = Math.ceil(this._dataProvider.length / this.rowCount);
+            return this.rendererWidth * _loc1_ + this.gap * (_loc1_ - 1);
+        }
+        return width;
+    }
+
+    public function get validHeight():Number {
+        return height;
+    }
+
     public function setSelectedIndex(param1:int):void {
         if (this._selectedIndex != param1) {
             this.switchSelectedIndex(param1, this.getRendererByIndex(param1));

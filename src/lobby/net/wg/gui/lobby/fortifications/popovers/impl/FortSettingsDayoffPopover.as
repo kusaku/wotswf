@@ -5,7 +5,7 @@ import flash.text.TextField;
 
 import net.wg.gui.components.controls.DropdownMenu;
 import net.wg.gui.components.controls.SoundButtonEx;
-import net.wg.gui.components.popOvers.PopOver;
+import net.wg.gui.components.popovers.PopOver;
 import net.wg.gui.lobby.fortifications.data.FortInvalidationType;
 import net.wg.gui.lobby.fortifications.data.settings.DayOffPopoverVO;
 import net.wg.infrastructure.base.meta.IFortSettingsDayoffPopoverMeta;

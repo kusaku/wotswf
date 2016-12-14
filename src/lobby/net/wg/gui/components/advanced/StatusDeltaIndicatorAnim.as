@@ -77,8 +77,7 @@ public class StatusDeltaIndicatorAnim extends StatusIndicatorAnim implements ISt
     }
 
     override protected function updatePosition():void {
-        this._onePercent = (_maximum - _minimum) / HUNDRED_PERCENT;
-        this._onePercentWidth = (width - (PADDING << 1)) / HUNDRED_PERCENT / scaleX;
+        this._onePercentWidth = (width / scaleX - (PADDING << 1)) / HUNDRED_PERCENT;
         this.commonBar.width = _value / this._onePercent * this._onePercentWidth ^ 0;
         this.marker.visible = this._markerValue > 0;
         if (this._markerValue > 0) {
@@ -139,6 +138,7 @@ public class StatusDeltaIndicatorAnim extends StatusIndicatorAnim implements ISt
         value = param1.value;
         this.delta = param1.delta;
         this.markerValue = param1.markerValue;
+        this._onePercent = (_maximum - _minimum) / HUNDRED_PERCENT;
         this.updatePosition();
     }
 

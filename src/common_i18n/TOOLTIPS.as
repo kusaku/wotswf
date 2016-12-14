@@ -349,6 +349,8 @@ package
       
       public static const TURNOFFCOMBATCHAT:String = "#tooltips:turnOffCombatChat";
       
+      public static const ENABLEPOSTMORTEMEFFECT:String = "#tooltips:enablePostMortemEffect";
+      
       public static const SHOWMARKSONGUN:String = "#tooltips:showMarksOnGun";
       
       public static const SHOWSIMPLIFIEDVEHPARAMS:String = "#tooltips:showSimplifiedVehParams";
@@ -819,6 +821,8 @@ package
       
       public static const DISMISSTANKMANDIALOG_CANTRESTORALERT:String = "#tooltips:dismissTankmanDialog/cantRestorAlert";
       
+      public static const XMAS_PROGRESSBAR_RULESBUTTON:String = "#tooltips:xmas/progressBar/rulesButton";
+      
       public static const TEMPLATE_DAYS_SHORT:String = "#tooltips:template/days/short";
       
       public static const TEMPLATE_HOURS_SHORT:String = "#tooltips:template/hours/short";
@@ -1179,6 +1183,8 @@ package
       
       public static const ACTIONPRICE_RENTCOMPENSATION:String = "#tooltips:actionPrice/rentCompensation";
       
+      public static const ACTIONPRICE_FORPERSONALDISCOUNT:String = "#tooltips:actionPrice/forPersonalDiscount";
+      
       public static const ACTIONPRICE_SELL_HEADER:String = "#tooltips:actionPrice/sell/header";
       
       public static const ACTIONPRICE_SELL_BODY:String = "#tooltips:actionPrice/sell/body";
@@ -1216,6 +1222,10 @@ package
       public static const TURNOFFCOMBATCHAT_HEADER:String = TURNOFFCOMBATCHAT + "/header";
       
       public static const TURNOFFCOMBATCHAT_BODY:String = TURNOFFCOMBATCHAT + "/body";
+      
+      public static const ENABLEPOSTMORTEMEFFECT_HEADER:String = ENABLEPOSTMORTEMEFFECT + "/header";
+      
+      public static const ENABLEPOSTMORTEMEFFECT_BODY:String = ENABLEPOSTMORTEMEFFECT + "/body";
       
       public static const SHOWMARKSONGUN_HEADER:String = SHOWMARKSONGUN + "/header";
       
@@ -2053,6 +2063,8 @@ package
       
       public static const SETTING_WINDOW_CONTROLS_KEY_INPUT_WARNING:String = "#tooltips:setting_window/controls/key_input/warning";
       
+      public static const SETTING_WINDOW_CONTROLS_KEY_INPUT_PTT_WARNING:String = "#tooltips:setting_window/controls/key_input/ptt/warning";
+      
       public static const HEADER_BUTTONS_HANGAR_HEADER:String = HEADER_BUTTONS_HANGAR + "/header";
       
       public static const HEADER_BUTTONS_HANGAR_BODY:String = HEADER_BUTTONS_HANGAR + "/body";
@@ -2800,52 +2812,6 @@ package
       public static const CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE_HEADER:String = CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE + "/header";
       
       public static const CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE_BODY:String = CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE + "/body";
-      
-      public static const HISTORICALBATTLES_SHOWBATTLEHISTORY_HEADER:String = "#tooltips:historicalBattles/showBattleHistory/header";
-      
-      public static const HISTORICALBATTLES_SHOWBATTLEHISTORY_BODY:String = "#tooltips:historicalBattles/showBattleHistory/body";
-      
-      public static const HISTORICALBATTLES_DATESTATUS_STARTDATE:String = "#tooltips:historicalBattles/dateStatus/startDate";
-      
-      public static const HISTORICALBATTLES_DATESTATUS_ENDDATE:String = "#tooltips:historicalBattles/dateStatus/endDate";
-      
-      public static const HISTORICALBATTLES_DATESTATUS_ACTIVE:String = "#tooltips:historicalBattles/dateStatus/active";
-      
-      public static const HISTORICALBATTLES_DATESTATUS_FUTURE:String = "#tooltips:historicalBattles/dateStatus/future";
-      
-      public static const HISTORICALBATTLES_VEHICLE_NOTREADY_HEADER:String = "#tooltips:historicalBattles/vehicle/notReady/header";
-      
-      public static const HISTORICALBATTLES_VEHICLE_NOTREADY_CREW:String = "#tooltips:historicalBattles/vehicle/notReady/crew";
-      
-      public static const HISTORICALBATTLES_VEHICLE_NOTREADY_INBATTLE:String = "#tooltips:historicalBattles/vehicle/notReady/inBattle";
-      
-      public static const HISTORICALBATTLES_VEHICLE_NOTREADY_BROKEN:String = "#tooltips:historicalBattles/vehicle/notReady/broken";
-      
-      public static const HISTORICALBATTLES_VEHICLE_NOTAVAILABLE_HEADER:String = "#tooltips:historicalBattles/vehicle/notAvailable/header";
-      
-      public static const HISTORICALBATTLES_VEHICLE_NOTAVAILABLE_BODY:String = "#tooltips:historicalBattles/vehicle/notAvailable/body";
-      
-      public static const HISTORICALBATTLES_FIGHTBUTTON_ENABLED:String = "#tooltips:historicalBattles/fightButton/enabled";
-      
-      public static const HISTORICALBATTLES_FIGHTBUTTON_ENABLED_DESCRIPTION:String = "#tooltips:historicalBattles/fightButton/enabled/description";
-      
-      public static const HISTORICALBATTLES_FIGHTBUTTON_DISABLED:String = "#tooltips:historicalBattles/fightButton/disabled";
-      
-      public static const HISTORICALBATTLES_FIGHTBUTTON_DISABLED_FUTURE:String = "#tooltips:historicalBattles/fightButton/disabled/future";
-      
-      public static const HISTORICALBATTLES_FIGHTBUTTON_DISABLED_NOVEHICLE:String = "#tooltips:historicalBattles/fightButton/disabled/noVehicle";
-      
-      public static const HISTORICALBATTLES_FIGHTBUTTON_DISABLED_CREW:String = "#tooltips:historicalBattles/fightButton/disabled/crew";
-      
-      public static const HISTORICALBATTLES_FIGHTBUTTON_DISABLED_INBATTLE:String = "#tooltips:historicalBattles/fightButton/disabled/inBattle";
-      
-      public static const HISTORICALBATTLES_FIGHTBUTTON_DISABLED_BROKEN:String = "#tooltips:historicalBattles/fightButton/disabled/broken";
-      
-      public static const HISTORICALBATTLES_FIGHTBUTTON_DISABLED_MONEY:String = "#tooltips:historicalBattles/fightButton/disabled/money";
-      
-      public static const HISTORICALBATTLES_MODULES_TITLE:String = "#tooltips:historicalBattles/modules/title";
-      
-      public static const HISTORICALBATTLES_MODULES_SUBTITLE:String = "#tooltips:historicalBattles/modules/subTitle";
       
       public static const FORTIFICATION_BATTLEROOMLEGIONARIES_HEADER:String = FORTIFICATION_BATTLEROOMLEGIONARIES + "/header";
       
@@ -4379,6 +4345,18 @@ package
       
       public static const AWARDITEM_PREMIUM_BODY:String = AWARDITEM_PREMIUM + "/body";
       
+      public static const AWARDITEM_BATTLETOKEN_ONE_HEADER:String = "#tooltips:awardItem/battleToken/one/header";
+      
+      public static const AWARDITEM_BATTLETOKEN_ONE_BODY:String = "#tooltips:awardItem/battleToken/one/body";
+      
+      public static const AWARDITEM_BATTLETOKEN_SEVERAL_HEADER:String = "#tooltips:awardItem/battleToken/several/header";
+      
+      public static const AWARDITEM_BATTLETOKEN_SEVERAL_BODY:String = "#tooltips:awardItem/battleToken/several/body";
+      
+      public static const AWARDITEM_BATTLETOKEN_SEVERAL_LINE:String = "#tooltips:awardItem/battleToken/several/line";
+      
+      public static const AWARDITEM_BATTLETOKEN_DESCRIPTION:String = "#tooltips:awardItem/battleToken/description";
+      
       public static const AWARDITEM_BERTHS_HEADER:String = "#tooltips:awardItem/berths/header";
       
       public static const AWARDITEM_BERTHS_BODY:String = "#tooltips:awardItem/berths/body";
@@ -4575,6 +4553,10 @@ package
       
       public static const TANK_PARAMS_DESC_INVISIBILITYMOVINGFACTOR:String = "#tooltips:tank_params/desc/invisibilityMovingFactor";
       
+      public static const TANK_PARAMS_DESC_SWITCHONTIME:String = "#tooltips:tank_params/desc/switchOnTime";
+      
+      public static const TANK_PARAMS_DESC_SWITCHOFFTIME:String = "#tooltips:tank_params/desc/switchOffTime";
+      
       public static const VEHICLEPARAMS_TITLE_VALUETEMPLATE:String = "#tooltips:vehicleParams/title/valueTemplate";
       
       public static const VEHICLEPARAMS_POSSIBLEBONUSES_DESC:String = "#tooltips:vehicleParams/possibleBonuses/desc";
@@ -4693,68 +4675,128 @@ package
       
       public static const HANGAR_HEADER_PERSONALQUESTS_AWARD_BODY:String = "#tooltips:hangar/header/personalQuests/award/body";
       
-      public static const TANK_PARAMS_DESC_ENUM:Array = [TANK_PARAMS_DESC_MAXHEALTH,TANK_PARAMS_DESC_VEHICLEWEIGHT,TANK_PARAMS_DESC_ENGINEPOWER,TANK_PARAMS_DESC_ENGINEPOWERPERTON,TANK_PARAMS_DESC_SPEEDLIMITS,TANK_PARAMS_DESC_CHASSISROTATIONSPEED,TANK_PARAMS_DESC_HULLARMOR,TANK_PARAMS_DESC_TURRETARMOR,TANK_PARAMS_DESC_RELOADTIME,TANK_PARAMS_DESC_RELOADTIMESECS,TANK_PARAMS_DESC_PIERCINGPOWER,TANK_PARAMS_DESC_DAMAGE,TANK_PARAMS_DESC_DAMAGEAVG,TANK_PARAMS_DESC_DAMAGEAVGPERMINUTE,TANK_PARAMS_DESC_TURRETROTATIONSPEED,TANK_PARAMS_DESC_GUNROTATIONSPEED,TANK_PARAMS_DESC_CIRCULARVISIONRADIUS,TANK_PARAMS_DESC_RADIODISTANCE,TANK_PARAMS_DESC_TURRETYAWLIMITS,TANK_PARAMS_DESC_PITCHLIMITS,TANK_PARAMS_DESC_GUNYAWLIMITS,TANK_PARAMS_DESC_CLIPFIRERATE,TANK_PARAMS_DESC_RELATIVEPOWER,TANK_PARAMS_DESC_RELATIVEARMOR,TANK_PARAMS_DESC_RELATIVEMOBILITY,TANK_PARAMS_DESC_RELATIVEVISIBILITY,TANK_PARAMS_DESC_RELATIVECAMOUFLAGE,TANK_PARAMS_DESC_SHOTDISPERSIONANGLE,TANK_PARAMS_DESC_AIMINGTIME,TANK_PARAMS_DESC_EXPLOSIONRADIUS,TANK_PARAMS_DESC_INVISIBILITYSTILLFACTOR,TANK_PARAMS_DESC_INVISIBILITYMOVINGFACTOR];
+      public static const SETTINGS_KEY_ENEMY_BODY:String = "#tooltips:settings/key/enemy/body";
       
-      public static const CONTACT_STATUS_INBATTLE_ENUM:Array = [CONTACT_STATUS_INBATTLE_UNKNOWN,CONTACT_STATUS_INBATTLE_RANDOM,CONTACT_STATUS_INBATTLE_TRAINING,CONTACT_STATUS_INBATTLE_TEAM,CONTACT_STATUS_INBATTLE_TUTORIAL,CONTACT_STATUS_INBATTLE_TEAM7X7,CONTACT_STATUS_INBATTLE_HISTORICAL,CONTACT_STATUS_INBATTLE_FORTIFICATIONS,CONTACT_STATUS_INBATTLE_SPECIAL];
+      public static const SETTINGS_KEY_ALLY_BODY:String = "#tooltips:settings/key/ally/body";
+      
+      public static const SETTINGS_KEY_TARGET_ENEMY:String = "#tooltips:settings/key/target/enemy";
+      
+      public static const SETTINGS_KEY_TARGET_ALLY:String = "#tooltips:settings/key/target/ally";
+      
+      public static const SETTINGS_KEYFOLLOWME_TITLE:String = "#tooltips:settings/keyFollowMe/title";
+      
+      public static const SETTINGS_KEYMOVEMENT_TITLE:String = "#tooltips:settings/keyMovement/title";
+      
+      public static const SETTINGS_SUPPORT_SUBTITLE:String = "#tooltips:settings/support/subtitle";
+      
+      public static const SETTINGS_FOLLOWME_SUBTITLE:String = "#tooltips:settings/followMe/subtitle";
+      
+      public static const SETTINGS_DEFENDBASE_SUBTITLE:String = "#tooltips:settings/defendBase/subtitle";
+      
+      public static const SETTINGS_TURNBACK_SUBTITLE:String = "#tooltips:settings/turnBack/subtitle";
+      
+      public static const SETTINGS_NEEDHELP_SUBTITLE:String = "#tooltips:settings/needHelp/subtitle";
+      
+      public static const SETTINGS_HELPME_SUBTITLE:String = "#tooltips:settings/helpMe/subtitle";
+      
+      public static const SETTINGS_RELOAD_SUBTITLE:String = "#tooltips:settings/reload/subtitle";
+      
+      public static const SETTINGS_STOP_SUBTITLE:String = "#tooltips:settings/stop/subtitle";
+      
+      public static const SETTINGS_DEFENDBASE_ENEMY_BODY:String = "#tooltips:settings/defendBase/enemy/body";
+      
+      public static const SETTINGS_NEEDHELP_ENEMY_BODY:String = "#tooltips:settings/needHelp/enemy/body";
+      
+      public static const SETTINGS_RELOAD_ENEMY_BODY:String = "#tooltips:settings/reload/enemy/body";
+      
+      public static const SETTINGS_SWITCHMODE_BODY:String = "#tooltips:settings/switchMode/body";
+      
+      public static const XMAS_XMASTREE_TITLE:String = "#tooltips:xmas/xmasTree/title";
+      
+      public static const XMAS_XMASTREE_DESCRIPTION_NOTOYS:String = "#tooltips:xmas/xmasTree/description/noToys";
+      
+      public static const XMAS_XMASTREE_DESCRIPTION:String = "#tooltips:xmas/xmasTree/description";
+      
+      public static const XMAS_XMASTREE_PROGRESS:String = "#tooltips:xmas/xmasTree/progress";
+      
+      public static const XMAS_XMASTREE_AWARD:String = "#tooltips:xmas/xmasTree/award";
+      
+      public static const XMAS_XMASTREE_NOTE:String = "#tooltips:xmas/xmasTree/note";
+      
+      public static const XMAS_CONDITIONS:String = "#tooltips:xmas/conditions";
+      
+      public static const XMAS_EMPTYTOYPLACE_HEADER:String = "#tooltips:xmas/emptyToyPlace/header";
+      
+      public static const XMAS_EMPTYTOYPLACE_BODY:String = "#tooltips:xmas/emptyToyPlace/body";
+      
+      public static const XMAS_INSTRUCTION_TITLE:String = "#tooltips:xmas/instruction/title";
+      
+      public static const XMAS_INSTRUCTION_DESCRIPTION:String = "#tooltips:xmas/instruction/description";
+      
+      public static const XMAS_APPLYBTN_DISABLED_HEADER:String = "#tooltips:xmas/applyBtn/disabled/header";
+      
+      public static const XMAS_SLOT_TITLE:String = "#tooltips:xmas/slot/title";
+      
+      public static const XMAS_SLOT_DESCRIPTION:String = "#tooltips:xmas/slot/description";
+      
+      public static const XMAS_SLOT_POINTS:String = "#tooltips:xmas/slot/points";
+      
+      public static const CHRISTMAS_QUESTS_BOXAWARD_HEADER:String = "#tooltips:christmas/quests/boxAward/header";
+      
+      public static const CHRISTMAS_QUESTS_BOXAWARD_BODY:String = "#tooltips:christmas/quests/boxAward/body";
+      
+      public static const XMAS_PROGRESSBAR_RULESBUTTON_BODY:String = XMAS_PROGRESSBAR_RULESBUTTON + "/body";
+      
+      public static const XMAS_BTN_CONVERSION_BTN_HEADER:String = "#tooltips:xmas/btn/conversion/btn/header";
+      
+      public static const XMAS_BTN_CONVERSION_BTN_BODY:String = "#tooltips:xmas/btn/conversion/btn/body";
+      
+      public static const XMAS_AWARD_ALREADYRECEIVED:String = "#tooltips:xmas/award/alreadyReceived";
+      
+      public static const XMAS_AWARD_ALLRECEIVED:String = "#tooltips:xmas/award/allReceived";
+      
+      public static const XMAS_CUSTOMIZATION_TAB_TREE_BODY:String = "#tooltips:xmas/customization/tab/tree/body";
+      
+      public static const XMAS_CUSTOMIZATION_TAB_TANK_BODY:String = "#tooltips:xmas/customization/tab/tank/body";
       
       public static const TECHTREEPAGE_NATIONS_ENUM:Array = [TECHTREEPAGE_NATIONS_USSR,TECHTREEPAGE_NATIONS_GERMANY,TECHTREEPAGE_NATIONS_USA,TECHTREEPAGE_NATIONS_CHINA,TECHTREEPAGE_NATIONS_FRANCE,TECHTREEPAGE_NATIONS_UK,TECHTREEPAGE_NATIONS_JAPAN,TECHTREEPAGE_NATIONS_CZECH,TECHTREEPAGE_NATIONS_SWEDEN];
       
       public static const VEHICLE_RENTLEFT_ENUM:Array = [VEHICLE_RENTLEFT_DAYS,VEHICLE_RENTLEFT_HOURS,VEHICLE_RENTLEFTFUTURE_DAYS,VEHICLE_RENTLEFTFUTURE_HOURS,VEHICLE_RENTLEFT_BATTLES];
       
+      public static const TANK_PARAMS_DESC_ENUM:Array = [TANK_PARAMS_DESC_MAXHEALTH,TANK_PARAMS_DESC_VEHICLEWEIGHT,TANK_PARAMS_DESC_ENGINEPOWER,TANK_PARAMS_DESC_ENGINEPOWERPERTON,TANK_PARAMS_DESC_SPEEDLIMITS,TANK_PARAMS_DESC_CHASSISROTATIONSPEED,TANK_PARAMS_DESC_HULLARMOR,TANK_PARAMS_DESC_TURRETARMOR,TANK_PARAMS_DESC_RELOADTIME,TANK_PARAMS_DESC_RELOADTIMESECS,TANK_PARAMS_DESC_PIERCINGPOWER,TANK_PARAMS_DESC_DAMAGE,TANK_PARAMS_DESC_DAMAGEAVG,TANK_PARAMS_DESC_DAMAGEAVGPERMINUTE,TANK_PARAMS_DESC_TURRETROTATIONSPEED,TANK_PARAMS_DESC_GUNROTATIONSPEED,TANK_PARAMS_DESC_CIRCULARVISIONRADIUS,TANK_PARAMS_DESC_RADIODISTANCE,TANK_PARAMS_DESC_TURRETYAWLIMITS,TANK_PARAMS_DESC_PITCHLIMITS,TANK_PARAMS_DESC_GUNYAWLIMITS,TANK_PARAMS_DESC_CLIPFIRERATE,TANK_PARAMS_DESC_RELATIVEPOWER,TANK_PARAMS_DESC_RELATIVEARMOR,TANK_PARAMS_DESC_RELATIVEMOBILITY,TANK_PARAMS_DESC_RELATIVEVISIBILITY,TANK_PARAMS_DESC_RELATIVECAMOUFLAGE,TANK_PARAMS_DESC_SHOTDISPERSIONANGLE,TANK_PARAMS_DESC_AIMINGTIME,TANK_PARAMS_DESC_EXPLOSIONRADIUS,TANK_PARAMS_DESC_INVISIBILITYSTILLFACTOR,TANK_PARAMS_DESC_INVISIBILITYMOVINGFACTOR,TANK_PARAMS_DESC_SWITCHONTIME,TANK_PARAMS_DESC_SWITCHOFFTIME];
+      
       public static const BATTLERESULTS_EFFICIENCYHEADER_ENUM:Array = [BATTLERESULTS_EFFICIENCYHEADER_SUMMSPOTTED,BATTLERESULTS_EFFICIENCYHEADER_SUMMASSIST,BATTLERESULTS_EFFICIENCYHEADER_SUMMARMOR,BATTLERESULTS_EFFICIENCYHEADER_SUMMCRITS,BATTLERESULTS_EFFICIENCYHEADER_SUMMDAMAGE,BATTLERESULTS_EFFICIENCYHEADER_SUMMKILL,BATTLERESULTS_EFFICIENCYHEADER_VALUE];
       
-      public static const FORTIFICATION_TRANSPORTING_ENUM:Array = [FORTIFICATION_TRANSPORTING_EMPTYSTORAGE_HEADER,FORTIFICATION_TRANSPORTING_EMPTYSTORAGE_BODY,FORTIFICATION_TRANSPORTING_COOLDOWN_HEADER,FORTIFICATION_TRANSPORTING_COOLDOWN_BODY,FORTIFICATION_TRANSPORTING_FOUNDATION_HEADER,FORTIFICATION_TRANSPORTING_FOUNDATION_BODY,FORTIFICATION_TRANSPORTING_NOTEMPTYSPACE_HEADER,FORTIFICATION_TRANSPORTING_NOTEMPTYSPACE_BODY];
-      
-      public static const PRIVATEQUESTS_PARAMS_ENUM:Array = [PRIVATEQUESTS_PARAMS_SHEETS,PRIVATEQUESTS_PARAMS_RECRUITTANKMANFEMALE,PRIVATEQUESTS_PARAMS_COLLECTEDSHEETS,PRIVATEQUESTS_PARAMS_COMPETEDTASKS,PRIVATEQUESTS_PARAMS_RECRUITEDTANKMANFEMALE];
-      
-      public static const TANKCARUSEL_LOCK_ENUM:Array = [TANKCARUSEL_LOCK_HEADER,TANKCARUSEL_LOCK_TO,TANKCARUSEL_LOCK_CLAN,TANKCARUSEL_LOCK_TOURNAMENT,TANKCARUSEL_LOCK_ROAMING];
-      
-      public static const ACTIONPRICE_SELL_TYPE_ENUM:Array = [ACTIONPRICE_SELL_TYPE_VEHICLE,ACTIONPRICE_SELL_TYPE_MODULE,ACTIONPRICE_SELL_TYPE_EQUIPMENT,ACTIONPRICE_SELL_TYPE_SHELL,ACTIONPRICE_SELL_TYPE_OPTIONALDEVICE];
-      
-      public static const SQUADWINDOW_STATUS_ENUM:Array = [SQUADWINDOW_STATUS_COMMANDER,SQUADWINDOW_STATUS_NORMAL,SQUADWINDOW_STATUS_CANCELED,SQUADWINDOW_STATUS_READY,SQUADWINDOW_STATUS_INBATTLE,SQUADWINDOW_STATUS_LOCKED];
-      
-      public static const TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_ENUM:Array = [TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_LIGHTTANK,TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_MEDIUMTANK,TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_HEAVYTANK,TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_AT_SPG,TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_SPG];
-      
-      public static const TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_ENUM:Array = [TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_CREDITS,TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_TANKMAN,TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_VEHICLEWITHTANKMEN];
-      
-      public static const LEVEL_ENUM:Array = [LEVEL_1,LEVEL_2,LEVEL_3,LEVEL_4,LEVEL_5,LEVEL_6,LEVEL_7,LEVEL_8,LEVEL_9,LEVEL_10];
+      public static const CONTACT_STATUS_INBATTLE_ENUM:Array = [CONTACT_STATUS_INBATTLE_UNKNOWN,CONTACT_STATUS_INBATTLE_RANDOM,CONTACT_STATUS_INBATTLE_TRAINING,CONTACT_STATUS_INBATTLE_TEAM,CONTACT_STATUS_INBATTLE_TUTORIAL,CONTACT_STATUS_INBATTLE_TEAM7X7,CONTACT_STATUS_INBATTLE_HISTORICAL,CONTACT_STATUS_INBATTLE_FORTIFICATIONS,CONTACT_STATUS_INBATTLE_SPECIAL];
       
       public static const ACHIEVEMENT_PARAMS_LEFT_ENUM:Array = [ACHIEVEMENT_PARAMS_LEFT4,ACHIEVEMENT_PARAMS_LEFT3,ACHIEVEMENT_PARAMS_LEFT2,ACHIEVEMENT_PARAMS_LEFT1];
       
+      public static const ACTIONPRICE_SELL_TYPE_ENUM:Array = [ACTIONPRICE_SELL_TYPE_VEHICLE,ACTIONPRICE_SELL_TYPE_MODULE,ACTIONPRICE_SELL_TYPE_EQUIPMENT,ACTIONPRICE_SELL_TYPE_SHELL,ACTIONPRICE_SELL_TYPE_OPTIONALDEVICE];
+      
       public static const VEHICLE_ENUM:Array = [VEHICLE_GRAPH_NOTES_SHOWCONTEXTMENU,VEHICLE_GRAPH_NOTES_SHOWINFOWINDOW,VEHICLE_GRAPH_NOTES_VEHICLEUNLOCK,VEHICLE_GRAPH_NOTES_MODULEUNLOCK,VEHICLE_GRAPH_NOTES_EQUIP,VEHICLE_GRAPH_NOTES_BUYANDEQUIP,VEHICLE_GRAPH_NOTES_GOTONATIONTREE,VEHICLE_GRAPH_NOTES_GOTONEXTVEHICLE,VEHICLE_GRAPH_BODY_MODULEINSTALLED,VEHICLE_GRAPH_BODY_NOTENOUGH,VEHICLEPARAMS_SPEEDLIMITS,VEHICLEPARAMS_ENGINEPOWER,VEHICLEPARAMS_CHASSISROTATIONSPEED,VEHICLEPARAMS_DAMAGE,VEHICLEPARAMS_HULLARMOR,VEHICLEPARAMS_TURRETARMOR,VEHICLEPARAMS_PIERCINGPOWER,VEHICLE_INVENTORYCOUNT,VEHICLE_VEHICLECOUNT,VEHICLE_LEVEL,VEHICLE_MASTERING,VEHICLE_MASTERING_VERYSIMPLE,VEHICLE_STATS_FOOTNOTE,VEHICLE_ELITE,VEHICLE_CREW,VEHICLE_CREW_AWARD,VEHICLE_AMMO,VEHICLE_XP,VEHICLE_MULTIPLIED_XP,VEHICLE_UNLOCK_PRICE,VEHICLE_BUY_PRICE,VEHICLE_RESTORE_PRICE,VEHICLE_ACTION_PRC,VEHICLE_MINRENTALSPRICE,VEHICLE_BUY_PRICE_ACTION,VEHICLE_SELL_PRICE,VEHICLE_EQUIPMENTS,VEHICLE_DEVICES,VEHICLE_FAVORITE,VEHICLE_DAILYXPFACTOR,VEHICLE_SPEEDLIMITS,VEHICLE_DAMAGE,VEHICLE_TURRETROTATIONSPEED,VEHICLE_RADIODISTANCE,VEHICLE_TEXTDELIMITER_OR,VEHICLE_RENTLEFT_DAYS,VEHICLE_RENTLEFT_HOURS,VEHICLE_RENTLEFTFUTURE_DAYS,VEHICLE_RENTLEFTFUTURE_HOURS,VEHICLE_RENTAVAILABLE,VEHICLE_RESTORELEFT_DAYS,VEHICLE_RESTORELEFT_HOURS,VEHICLE_RENTLEFT_BATTLES,VEHICLEIGR_SPECIALABILITY,VEHICLEIGR_DAYS,VEHICLEIGR_HOURS,VEHICLE_DEAL_TELECOM_MAIN,VEHICLESTATUS_BODY,VEHICLESTATUS_BATTLE_HEADER,VEHICLESTATUS_LOCKED_HEADER,VEHICLESTATUS_RENTALISOVER_HEADER,VEHICLESTATUS_IGRRENTALISOVER_HEADER,VEHICLESTATUS_INPREMIUMIGRONLY_HEADER,VEHICLESTATUS_INPREBATTLE_HEADER,VEHICLESTATUS_CLANLOCKED_HEADER,VEHICLESTATUS_AMMONOTFULL_HEADER,VEHICLESTATUS_AMMONOTFULLEVENTS_HEADER,VEHICLESTATUS_DAMAGED_HEADER,VEHICLESTATUS_DESTROYED_HEADER,VEHICLESTATUS_EXPLODED_HEADER,VEHICLESTATUS_NOTPRESENT_HEADER,VEHICLESTATUS_UNDAMAGED_HEADER,VEHICLESTATUS_CREWNOTFULL_HEADER,VEHICLESTATUS_NOTUNLOCKED_HEADER,VEHICLESTATUS_INHANGAR_HEADER,VEHICLESTATUS_RESTORECOOLDOWN_DAYS,VEHICLESTATUS_RESTORECOOLDOWN_HOURS,VEHICLESTATUS_SERVERRESTRICTION_HEADER,VEHICLESTATUS_DEALISOVER_HEADER,VEHICLESTATUS_DEALISOVER_TEXT,VEHICLESTATUS_NOTENOUGHCREDITS_HEADER,VEHICLESTATUS_NOTENOUGHCREDITS_TEXT,VEHICLESTATUS_NOTENOUGHGOLD_HEADER,VEHICLESTATUS_NOTENOUGHGOLD_TEXT,VEHICLESTATUS_OPERATIONERROR_HEADER,VEHICLESTATUS_NOTSUITABLE_HEADER,VEHICLESTATUS_GROUP_IS_NOT_READY_HEADER,VEHICLESTATUS_GROUPAMMONOTFULL_HEADER,VEHICLESTATUS_FALLOUT_ONLY_HEADER,VEHICLESTATUS_NOT_SUITABLE_HEADER,VEHICLESTATUS_UNSUITABLETOQUEUE_HEADER,VEHICLESELLDIALOG_RENDERER_ALERTICON_HEADER,VEHICLESELLDIALOG_RENDERER_ALERTICON_BODY,VEHICLESELLDIALOG_CREW_ALERTICON_RECOVERY_HEADER,VEHICLESELLDIALOG_CREW_ALERTICON_RECOVERY_BODY,VEHICLESELECTOR_FILTER_NATION,VEHICLESELECTOR_FILTER_VEHTYPE,VEHICLESELECTOR_FILTER_VEHLVL,VEHICLESELECTOR_FILTER_MAINVEHICLE,VEHICLESELECTOR_SORTING_NATION_HEADER,VEHICLESELECTOR_SORTING_NATION_BODY,VEHICLESELECTOR_SORTING_VEHTYPE_HEADER,VEHICLESELECTOR_SORTING_VEHTYPE_BODY,VEHICLESELECTOR_SORTING_VEHLVL_HEADER,VEHICLESELECTOR_SORTING_VEHLVL_BODY,VEHICLESELECTOR_SORTING_VEHNAME_HEADER,VEHICLESELECTOR_SORTING_VEHNAME_BODY,VEHICLESELECTOR_OVERFLOWLEVEL_HEADER,VEHICLESELECTOR_OVERFLOWLEVEL_BODY,VEHICLESELECTOR_INCOMPATIBLETYPE_HEADER,VEHICLESELECTOR_INCOMPATIBLETYPE_BODY,VEHICLEPARAMS_TITLE_VALUETEMPLATE,VEHICLEPARAMS_POSSIBLEBONUSES_DESC,VEHICLEPARAMS_BONUSES_TITLE,VEHICLEPARAMS_PENALTIES_TITLE,VEHICLEPARAMS_BONUS_ARTEFACT_TEMPLATE,VEHICLEPARAMS_BONUS_SKILL_TEMPLATE,VEHICLEPARAMS_BONUS_ROLE_TEMPLATE,VEHICLEPARAMS_BONUS_EXTRA_CAMOUFLAGE,VEHICLEPARAMS_SKILL_NAME,VEHICLEPARAMS_BONUS_TANKMANLEVEL_COMMANDER,VEHICLEPARAMS_BONUS_TANKMANLEVEL_GUNNER,VEHICLEPARAMS_BONUS_TANKMANLEVEL_LOADER,VEHICLEPARAMS_BONUS_TANKMANLEVEL_DRIVER,VEHICLEPARAMS_BONUS_TANKMANLEVEL_RADIOMAN,VEHICLEPARAMS_PENALTY_TANKMANLEVEL_TEMPLATE,VEHICLEPARAMS_PENALTY_TANKMANDIFFERENTVEHICLE_TEMPLATE,VEHICLEPARAMS_PENALTY_TANKMANLEVEL_VALUE,VEHICLEPARAMS_WARNING_TANKMANISOUT,VEHICLEPARAMS_COMMON_TITLE,VEHICLEPARAMS_SIMPLIFIED_TITLE,VEHICLEPREVIEW_CREW_COMMANDER,VEHICLEPREVIEW_CREW_DRIVER,VEHICLEPREVIEW_CREW_RADIOMAN,VEHICLEPREVIEW_CREW_GUNNER,VEHICLEPREVIEW_CREW_LOADER,VEHICLEPREVIEW_CREW_INFLUENCE_RECONNAISSANCE,VEHICLEPREVIEW_CREW_INFLUENCE_VISIONRADIUS,VEHICLEPREVIEW_CREW_INFLUENCE_FIREPOWER,VEHICLEPREVIEW_CREW_INFLUENCE_AIMINGTIME,VEHICLEPREVIEW_CREW_INFLUENCE_MOBILITY,VEHICLEPREVIEW_CREW_INFLUENCE_CHASSISROTATIONSPEED,VEHICLEPREVIEW_CREW_INFLUENCE_ENGINEPOWER,VEHICLEPREVIEW_CREW_INFLUENCE_RADIODISTANCE,VEHICLEPREVIEW_CREW_ADDITIONALROLES,VEHICLEPREVIEW_VEHICLEPANEL_INFO_HEADER,VEHICLEPREVIEW_VEHICLEPANEL_INFO_BODY];
+      
+      public static const TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_ENUM:Array = [TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_LIGHTTANK,TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_MEDIUMTANK,TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_HEAVYTANK,TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_AT_SPG,TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_SPG];
+      
+      public static const TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_ENUM:Array = [TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_CREDITS,TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_TANKMAN,TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_VEHICLEWITHTANKMEN];
+      
+      public static const PRIVATEQUESTS_PARAMS_ENUM:Array = [PRIVATEQUESTS_PARAMS_SHEETS,PRIVATEQUESTS_PARAMS_RECRUITTANKMANFEMALE,PRIVATEQUESTS_PARAMS_COLLECTEDSHEETS,PRIVATEQUESTS_PARAMS_COMPETEDTASKS,PRIVATEQUESTS_PARAMS_RECRUITEDTANKMANFEMALE];
+      
+      public static const SQUADWINDOW_STATUS_ENUM:Array = [SQUADWINDOW_STATUS_COMMANDER,SQUADWINDOW_STATUS_NORMAL,SQUADWINDOW_STATUS_CANCELED,SQUADWINDOW_STATUS_READY,SQUADWINDOW_STATUS_INBATTLE,SQUADWINDOW_STATUS_LOCKED];
       
       public static const LOGIN_SOCIAL_ENUM:Array = [LOGIN_SOCIAL_ENTER_HEADER,LOGIN_SOCIAL_ENTER_BODY,LOGIN_SOCIAL_FACEBOOK,LOGIN_SOCIAL_GOOGLE,LOGIN_SOCIAL_YAHOO,LOGIN_SOCIAL_TWITTER,LOGIN_SOCIAL_VKONTAKTE,LOGIN_SOCIAL_ODNOKLASSNIKI,LOGIN_SOCIAL_WGNI,LOGIN_SOCIAL_NAVER];
       
-      public static const TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_ENUM:Array = [TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_LIGHTTANK,TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_MEDIUMTANK,TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_HEAVYTANK,TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_AT_SPG,TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_SPG];
+      public static const LEVEL_ENUM:Array = [LEVEL_1,LEVEL_2,LEVEL_3,LEVEL_4,LEVEL_5,LEVEL_6,LEVEL_7,LEVEL_8,LEVEL_9,LEVEL_10];
+      
+      public static const TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_ENUM:Array = [TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_LIGHTTANK,TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_MEDIUMTANK,TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_HEAVYTANK,TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_AT_SPG,TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_SPG];
+      
+      public static const FORTIFICATION_TRANSPORTING_ENUM:Array = [FORTIFICATION_TRANSPORTING_EMPTYSTORAGE_HEADER,FORTIFICATION_TRANSPORTING_EMPTYSTORAGE_BODY,FORTIFICATION_TRANSPORTING_COOLDOWN_HEADER,FORTIFICATION_TRANSPORTING_COOLDOWN_BODY,FORTIFICATION_TRANSPORTING_FOUNDATION_HEADER,FORTIFICATION_TRANSPORTING_FOUNDATION_BODY,FORTIFICATION_TRANSPORTING_NOTEMPTYSPACE_HEADER,FORTIFICATION_TRANSPORTING_NOTEMPTYSPACE_BODY];
+      
+      public static const TANKCARUSEL_LOCK_ENUM:Array = [TANKCARUSEL_LOCK_HEADER,TANKCARUSEL_LOCK_TO,TANKCARUSEL_LOCK_CLAN,TANKCARUSEL_LOCK_TOURNAMENT,TANKCARUSEL_LOCK_ROAMING];
        
       
       public function TOOLTIPS()
       {
          super();
-      }
-      
-      public static function tank_params_desc(param1:String) : String
-      {
-         var _loc2_:String = null;
-         _loc2_ = "#tooltips:tank_params/desc/" + param1;
-         if(TANK_PARAMS_DESC_ENUM.indexOf(_loc2_) == -1)
-         {
-            DebugUtils.LOG_WARNING("[tank_params_desc]:locale key \"" + _loc2_ + "\" was not found");
-            return null;
-         }
-         return _loc2_;
-      }
-      
-      public static function contact_status_inbattle(param1:String) : String
-      {
-         var _loc2_:String = null;
-         _loc2_ = "#tooltips:Contact/status/inBattle/" + param1;
-         if(CONTACT_STATUS_INBATTLE_ENUM.indexOf(_loc2_) == -1)
-         {
-            DebugUtils.LOG_WARNING("[contact_status_inbattle]:locale key \"" + _loc2_ + "\" was not found");
-            return null;
-         }
-         return _loc2_;
       }
       
       public static function techtreepage_nations(param1:String) : String
@@ -4781,6 +4823,18 @@ package
          return _loc2_;
       }
       
+      public static function tank_params_desc(param1:String) : String
+      {
+         var _loc2_:String = null;
+         _loc2_ = "#tooltips:tank_params/desc/" + param1;
+         if(TANK_PARAMS_DESC_ENUM.indexOf(_loc2_) == -1)
+         {
+            DebugUtils.LOG_WARNING("[tank_params_desc]:locale key \"" + _loc2_ + "\" was not found");
+            return null;
+         }
+         return _loc2_;
+      }
+      
       public static function battleresults_efficiencyheader(param1:String) : String
       {
          var _loc2_:String = null;
@@ -4793,67 +4847,15 @@ package
          return _loc2_;
       }
       
-      public static function fortification_transporting(param1:String) : String
+      public static function contact_status_inbattle(param1:String) : String
       {
          var _loc2_:String = null;
-         _loc2_ = "#tooltips:fortification/transporting/" + param1;
-         App.utils.asserter.assert(FORTIFICATION_TRANSPORTING_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
-      }
-      
-      public static function privatequests_params(param1:String) : String
-      {
-         var _loc2_:String = null;
-         _loc2_ = "#tooltips:privateQuests/params/" + param1;
-         App.utils.asserter.assert(PRIVATEQUESTS_PARAMS_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
-      }
-      
-      public static function tankcarusel_lock(param1:String) : String
-      {
-         var _loc2_:String = null;
-         _loc2_ = "#tooltips:tankCarusel/lock/" + param1;
-         App.utils.asserter.assert(TANKCARUSEL_LOCK_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
-      }
-      
-      public static function actionprice_sell_type(param1:String) : String
-      {
-         var _loc2_:String = null;
-         _loc2_ = "#tooltips:actionPrice/sell/type/" + param1;
-         App.utils.asserter.assert(ACTIONPRICE_SELL_TYPE_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
-      }
-      
-      public static function squadwindow_status(param1:String) : String
-      {
-         var _loc2_:String = null;
-         _loc2_ = "#tooltips:squadWindow/status/" + param1;
-         App.utils.asserter.assert(SQUADWINDOW_STATUS_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
-      }
-      
-      public static function tankcaruseltooltip_vehicletype_normal(param1:String) : String
-      {
-         var _loc2_:String = null;
-         _loc2_ = "#tooltips:tankCaruselTooltip/vehicleType/normal/" + param1;
-         App.utils.asserter.assert(TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
-      }
-      
-      public static function tooltiprefsysdescription_awards_descr(param1:String) : String
-      {
-         var _loc2_:String = null;
-         _loc2_ = "#tooltips:ToolTipRefSysDescription/awards/descr/" + param1;
-         App.utils.asserter.assert(TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
-         return _loc2_;
-      }
-      
-      public static function level(param1:String) : String
-      {
-         var _loc2_:String = null;
-         _loc2_ = "#tooltips:level/" + param1;
-         App.utils.asserter.assert(LEVEL_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         _loc2_ = "#tooltips:Contact/status/inBattle/" + param1;
+         if(CONTACT_STATUS_INBATTLE_ENUM.indexOf(_loc2_) == -1)
+         {
+            DebugUtils.LOG_WARNING("[contact_status_inbattle]:locale key \"" + _loc2_ + "\" was not found");
+            return null;
+         }
          return _loc2_;
       }
       
@@ -4865,11 +4867,51 @@ package
          return _loc2_;
       }
       
+      public static function actionprice_sell_type(param1:String) : String
+      {
+         var _loc2_:String = null;
+         _loc2_ = "#tooltips:actionPrice/sell/type/" + param1;
+         App.utils.asserter.assert(ACTIONPRICE_SELL_TYPE_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
       public static function vehicle(param1:String) : String
       {
          var _loc2_:String = null;
          _loc2_ = "#tooltips:vehicle/" + param1;
          App.utils.asserter.assert(VEHICLE_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
+      public static function tankcaruseltooltip_vehicletype_elite(param1:String) : String
+      {
+         var _loc2_:String = null;
+         _loc2_ = "#tooltips:tankCaruselTooltip/vehicleType/elite/" + param1;
+         App.utils.asserter.assert(TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
+      public static function tooltiprefsysdescription_awards_descr(param1:String) : String
+      {
+         var _loc2_:String = null;
+         _loc2_ = "#tooltips:ToolTipRefSysDescription/awards/descr/" + param1;
+         App.utils.asserter.assert(TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
+      public static function privatequests_params(param1:String) : String
+      {
+         var _loc2_:String = null;
+         _loc2_ = "#tooltips:privateQuests/params/" + param1;
+         App.utils.asserter.assert(PRIVATEQUESTS_PARAMS_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
+      public static function squadwindow_status(param1:String) : String
+      {
+         var _loc2_:String = null;
+         _loc2_ = "#tooltips:squadWindow/status/" + param1;
+         App.utils.asserter.assert(SQUADWINDOW_STATUS_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
          return _loc2_;
       }
       
@@ -4881,11 +4923,35 @@ package
          return _loc2_;
       }
       
-      public static function tankcaruseltooltip_vehicletype_elite(param1:String) : String
+      public static function level(param1:String) : String
       {
          var _loc2_:String = null;
-         _loc2_ = "#tooltips:tankCaruselTooltip/vehicleType/elite/" + param1;
-         App.utils.asserter.assert(TANKCARUSELTOOLTIP_VEHICLETYPE_ELITE_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         _loc2_ = "#tooltips:level/" + param1;
+         App.utils.asserter.assert(LEVEL_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
+      public static function tankcaruseltooltip_vehicletype_normal(param1:String) : String
+      {
+         var _loc2_:String = null;
+         _loc2_ = "#tooltips:tankCaruselTooltip/vehicleType/normal/" + param1;
+         App.utils.asserter.assert(TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
+      public static function fortification_transporting(param1:String) : String
+      {
+         var _loc2_:String = null;
+         _loc2_ = "#tooltips:fortification/transporting/" + param1;
+         App.utils.asserter.assert(FORTIFICATION_TRANSPORTING_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
+         return _loc2_;
+      }
+      
+      public static function tankcarusel_lock(param1:String) : String
+      {
+         var _loc2_:String = null;
+         _loc2_ = "#tooltips:tankCarusel/lock/" + param1;
+         App.utils.asserter.assert(TANKCARUSEL_LOCK_ENUM.indexOf(_loc2_) != -1,"locale key \"" + _loc2_ + "\" was not found");
          return _loc2_;
       }
    }

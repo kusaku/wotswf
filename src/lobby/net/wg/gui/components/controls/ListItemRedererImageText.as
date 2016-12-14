@@ -5,7 +5,7 @@ import net.wg.gui.events.UILoaderEvent;
 
 public class ListItemRedererImageText extends DropDownListItemRendererSound {
 
-    public var icon:UILoaderAlt;
+    public var icon:net.wg.gui.components.controls.UILoaderAlt;
 
     public var ico_border:MovieClip;
 

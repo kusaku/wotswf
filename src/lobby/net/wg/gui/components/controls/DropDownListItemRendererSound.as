@@ -9,7 +9,11 @@ import scaleform.clik.constants.InvalidationType;
 
 public class DropDownListItemRendererSound extends SoundListItemRenderer {
 
+    private static const TOOLTIP_FIELD:String = "tooltip";
+
     public var focusElement:MovieClip;
+
+    private var _tooltip:String = null;
 
     public function DropDownListItemRendererSound() {
         super();
@@ -47,6 +51,36 @@ public class DropDownListItemRendererSound extends SoundListItemRenderer {
         }
         buttonMode = true;
         super.configUI();
+    }
+
+    override public function setData(param1:Object):void {
+        if (_data == param1) {
+            return;
+        }
+        App.toolTipMgr.hide();
+        this._tooltip = !!param1.hasOwnProperty(TOOLTIP_FIELD) ? param1[TOOLTIP_FIELD] : null;
+        this.data = param1;
+    }
+
+    override protected function handleMousePress(param1:MouseEvent):void {
+        if (this._tooltip) {
+            App.toolTipMgr.hide();
+        }
+        super.handleMousePress(param1);
+    }
+
+    override protected function handleMouseRollOver(param1:MouseEvent):void {
+        if (this._tooltip) {
+            App.toolTipMgr.showComplex(this._tooltip);
+        }
+        super.handleMouseRollOver(param1);
+    }
+
+    override protected function handleMouseRollOut(param1:MouseEvent):void {
+        if (this._tooltip) {
+            App.toolTipMgr.hide();
+        }
+        super.handleMouseRollOut(param1);
     }
 }
 }

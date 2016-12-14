@@ -8,8 +8,8 @@ import flash.text.TextField;
 
 import net.wg.data.utilData.TwoDimensionalPadding;
 import net.wg.gui.components.controls.UILoaderAlt;
-import net.wg.gui.components.popOvers.PopOver;
-import net.wg.gui.components.popOvers.PopOverConst;
+import net.wg.gui.components.popovers.PopOver;
+import net.wg.gui.components.popovers.PopOverConst;
 import net.wg.gui.interfaces.ISoundButtonEx;
 import net.wg.gui.lobby.fortifications.data.OrderPopoverVO;
 import net.wg.gui.lobby.fortifications.popovers.orderPopover.OrderInfoBlock;

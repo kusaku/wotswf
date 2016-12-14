@@ -3,11 +3,11 @@ import flash.display.MovieClip;
 
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.lobby.questsWindow.components.QuestsDashlineItem;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class VehicleBlock extends UIComponent {
+public class VehicleBlock extends UIComponentEx {
 
     private static const DEFAULT_WIDTH:int = 205;
 

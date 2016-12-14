@@ -1,6 +1,8 @@
 package net.wg.data.constants.generated {
 public class BATTLE_VIEW_ALIASES {
 
+    public static const BATTLE_LOADING:String = "battleLoading";
+
     public static const TEAM_BASES_PANEL:String = "teamBasesPanel";
 
     public static const VEHICLE_MESSAGES:String = "battleVehicleMessages";
@@ -67,11 +69,17 @@ public class BATTLE_VIEW_ALIASES {
 
     public static const BATTLE_END_WARNING_PANEL:String = "battleEndWarningPanel";
 
-    public static const CROSSHAIR_PANEL:String = "crosshairPanel";
-
     public static const POSTMORTEM_PANEL:String = "postmortemPanel";
 
     public static const BATTLE_DAMAGE_LOG_PANEL:String = "battleDamageLogPanel";
+
+    public static const CROSSHAIR_PANEL:String = "crosshairPanel";
+
+    public static const MARKERS_2D:String = "markers2D";
+
+    public static const HIT_DIRECTION:String = "hitDirection";
+
+    public static const SIEGE_MODE_INDICATOR:String = "siegeModeIndicator";
 
     public function BATTLE_VIEW_ALIASES() {
         super();

@@ -5,6 +5,7 @@ import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
 import net.wg.data.Aliases;
+import net.wg.data.constants.Values;
 import net.wg.gui.components.common.bugreport.ReportBugPanel;
 import net.wg.gui.components.common.serverStats.ServerStats;
 import net.wg.gui.components.controls.SoundButtonEx;
@@ -102,6 +103,14 @@ public class LobbyMenu extends LobbyMenuMeta implements ILobbyMenuMeta {
         registerFlashComponentS(this.reportBugPanel, Aliases.REPORT_BUG);
         super.onPopulate();
         updateStage(App.appWidth, App.appHeight);
+        _loc1_ = !!App.globalVarsMgr.isChinaS() ? STATE_SHOW_SERVER_NAME : Values.EMPTY_STR;
+        if (_loc1_ == Values.EMPTY_STR) {
+            _loc1_ = !App.globalVarsMgr.isShowServerStatsS() ? STATE_HIDE_SERVER_STATS_ITEM : Values.EMPTY_STR;
+        }
+        if (_loc1_ == Values.EMPTY_STR) {
+            _loc1_ = STATE_SHOW_ALL;
+        }
+        this.gotoAndPlay(_loc1_);
     }
 
     override protected function onDispose():void {
@@ -167,6 +176,13 @@ public class LobbyMenu extends LobbyMenuMeta implements ILobbyMenuMeta {
     public function as_setSettingsBtnCounter(param1:String):void {
         this._isSettingsCounterAdded = true;
         App.utils.counterManager.setCounter(this.settingsBtn, param1);
+    }
+
+    public function as_removeSettingsBtnCounter():void {
+        if (this._isSettingsCounterAdded) {
+            App.utils.counterManager.removeCounter(this.settingsBtn);
+            this._isSettingsCounterAdded = false;
+        }
     }
 
     override protected function onSetModalFocus(param1:InteractiveObject):void {

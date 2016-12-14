@@ -5,12 +5,12 @@ import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 
 import net.wg.data.constants.Values;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.gfx.TextFieldEx;
 
-public class CandidateHeaderItemRender extends UIComponent {
+public class CandidateHeaderItemRender extends UIComponentEx {
 
     private static const LINE_PADDING:uint = 5;
 

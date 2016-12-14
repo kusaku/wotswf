@@ -2,7 +2,11 @@ package net.wg.gui.battle.views.stats.fullStats {
 import flash.text.TextField;
 
 import net.wg.data.VO.daapi.DAAPIVehicleInfoVO;
+import net.wg.data.VO.daapi.DAAPIVehicleUserTagsVO;
 import net.wg.data.constants.Errors;
+import net.wg.gui.battle.battleloading.data.EnemyVehiclesDataProvider;
+import net.wg.gui.battle.battleloading.data.TeamVehiclesDataProvider;
+import net.wg.infrastructure.events.ListDataProviderEvent;
 import net.wg.infrastructure.exceptions.AbstractException;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
@@ -12,153 +16,113 @@ public class StatsTableControllerBase implements IDisposable {
 
     protected static const NUM_ITEM_ROWS:int = 15;
 
-    protected static const NUM_ITEM_COLUMNS:int = 2;
+    private var _isRenderingAvailable:Boolean;
 
-    protected var items:Vector.<StatsTableItemHolderBase> = null;
+    protected var _teamDP:TeamVehiclesDataProvider;
 
-    protected var positionControllers:Vector.<StatsTableItemPositionController> = null;
+    protected var _enemyDP:EnemyVehiclesDataProvider;
 
-    protected var leftOrder:Vector.<Number> = null;
+    protected var _allyRenderers:Vector.<StatsTableItemHolderBase>;
 
-    protected var rightOrder:Vector.<Number> = null;
+    protected var _enemyRenderers:Vector.<StatsTableItemHolderBase>;
 
     public function StatsTableControllerBase() {
         super();
-        this.items = new Vector.<StatsTableItemHolderBase>(NUM_ITEM_ROWS * NUM_ITEM_COLUMNS);
-        this.positionControllers = new Vector.<StatsTableItemPositionController>();
-        this.leftOrder = new Vector.<Number>();
-        this.rightOrder = new Vector.<Number>();
+        this._teamDP = new TeamVehiclesDataProvider();
+        this._teamDP.addEventListener(ListDataProviderEvent.VALIDATE_ITEMS, this.onAllyDataProviderUpdateItemHandler);
+        this._enemyDP = new EnemyVehiclesDataProvider();
+        this._enemyDP.addEventListener(ListDataProviderEvent.VALIDATE_ITEMS, this.onEnemyDataProviderUpdateItemHandler);
+        this._allyRenderers = new Vector.<StatsTableItemHolderBase>(0);
+        this._enemyRenderers = new Vector.<StatsTableItemHolderBase>(0);
     }
 
-    public function setTeamData(param1:Vector.<DAAPIVehicleInfoVO>, param2:Boolean):void {
-        var _loc5_:int = 0;
-        var _loc6_:StatsTableItemHolderBase = null;
-        var _loc9_:StatsTableItemPositionController = null;
-        var _loc3_:int = param1.length;
-        if (_loc3_ > NUM_ITEM_ROWS) {
-            _loc3_ = NUM_ITEM_ROWS;
-        }
-        var _loc4_:Vector.<Number> = !!param2 ? this.rightOrder : this.leftOrder;
-        var _loc7_:DAAPIVehicleInfoVO = null;
-        var _loc8_:int = 0;
-        while (_loc8_ < _loc3_) {
-            _loc5_ = !!param2 ? int(NUM_ITEM_ROWS + _loc8_) : int(_loc8_);
-            _loc6_ = this.items[_loc5_];
-            _loc7_ = param1[_loc8_];
-            _loc6_.setDAAPIVehicleData(_loc7_);
-            _loc4_[_loc8_] = _loc7_.vehicleID;
-            if (_loc6_.isSelected) {
-                _loc9_ = this.positionControllers[_loc5_];
-                this.setSelectedItem(_loc9_.colunm, _loc9_.row);
-            }
-            this.onItemDataSet(_loc6_, param2);
-            _loc8_++;
-        }
-    }
-
-    public function addVehiclesData(param1:Vector.<DAAPIVehicleInfoVO>, param2:Boolean):void {
-        var _loc3_:StatsTableItemHolderBase = null;
-        var _loc4_:StatsTableItemPositionController = null;
-        var _loc5_:DAAPIVehicleInfoVO = null;
-        var _loc6_:Vector.<Number> = null;
-        for each(_loc5_ in param1) {
-            _loc3_ = this.getNextEmptyItem(param2);
-            if (!(!_loc3_ || !_loc5_)) {
-                _loc3_.setDAAPIVehicleData(_loc5_);
-                _loc6_ = !!param2 ? this.rightOrder : this.leftOrder;
-                _loc6_.push(_loc5_.vehicleID);
-                if (_loc3_.isSelected) {
-                    _loc4_ = this.positionControllers[_loc6_.length - 1];
-                    this.setSelectedItem(_loc4_.colunm, _loc4_.row);
-                }
-                this.onItemDataSet(_loc3_, param2);
-            }
-        }
-    }
-
-    public function updateVehiclesData(param1:Vector.<DAAPIVehicleInfoVO>):void {
-        var _loc2_:StatsTableItemHolderBase = null;
-        var _loc3_:DAAPIVehicleInfoVO = null;
-        for each(_loc3_ in param1) {
-            _loc2_ = this.getItemByVehicleID(_loc3_.vehicleID);
-            if (_loc2_ && _loc3_) {
-                _loc2_.setDAAPIVehicleData(_loc3_);
-            }
-        }
-    }
-
-    public function setVehicleStatus(param1:Number, param2:uint):void {
-        var _loc3_:StatsTableItemHolderBase = this.getItemByVehicleID(param1);
-        if (_loc3_) {
-            _loc3_.setVehicleStatus(param2);
-        }
-    }
-
-    public function setPlayerStatus(param1:Number, param2:uint):void {
-        var _loc4_:StatsTableItemPositionController = null;
+    private function onAllyDataProviderUpdateItemHandler(param1:ListDataProviderEvent):void {
+        var _loc4_:int = 0;
         var _loc5_:StatsTableItemHolderBase = null;
-        var _loc3_:int = this.items.length;
-        var _loc6_:int = 0;
-        while (_loc6_ < _loc3_) {
-            _loc5_ = this.items[_loc6_];
-            if (_loc5_.vehicleID == param1) {
-                _loc5_.setPlayerStatus(param2);
+        var _loc2_:uint = this._allyRenderers.length - 1;
+        var _loc3_:Vector.<int> = Vector.<int>(param1.data);
+        for each(_loc4_ in _loc3_) {
+            if (_loc4_ <= _loc2_) {
+                _loc5_ = this._allyRenderers[_loc4_];
+                _loc5_.setDAAPIVehicleData(this._teamDP.requestItemAt(_loc4_) as DAAPIVehicleInfoVO);
                 if (_loc5_.isSelected) {
-                    _loc4_ = this.positionControllers[_loc6_];
-                    this.setSelectedItem(_loc4_.colunm, _loc4_.row);
+                    this.setSelectedItem(false, _loc4_);
                 }
-                break;
+                this.onItemDataSet(_loc5_, false);
             }
-            _loc6_++;
         }
     }
 
-    public function setUserTags(param1:Number, param2:Array):void {
-        var _loc3_:StatsTableItemHolderBase = this.getItemByVehicleID(param1);
-        if (_loc3_) {
-            _loc3_.setUserTags(param2);
+    private function onEnemyDataProviderUpdateItemHandler(param1:ListDataProviderEvent):void {
+        var _loc4_:int = 0;
+        var _loc5_:StatsTableItemHolderBase = null;
+        var _loc2_:uint = this._enemyRenderers.length - 1;
+        var _loc3_:Vector.<int> = Vector.<int>(param1.data);
+        for each(_loc4_ in _loc3_) {
+            if (_loc4_ <= _loc2_) {
+                _loc5_ = this._enemyRenderers[_loc4_];
+                _loc5_.setDAAPIVehicleData(this._enemyDP.requestItemAt(_loc4_) as DAAPIVehicleInfoVO);
+                if (_loc5_.isSelected) {
+                    this.setSelectedItem(true, _loc4_);
+                }
+                this.onItemDataSet(_loc5_, true);
+            }
         }
     }
 
-    public function updateOrder(param1:Vector.<Number>, param2:Boolean):void {
-        var _loc6_:StatsTableItemPositionController = null;
-        var _loc7_:StatsTableItemHolderBase = null;
-        var _loc9_:Number = NaN;
-        var _loc3_:Vector.<Number> = !!param2 ? this.rightOrder : this.leftOrder;
-        if (!param1 || !this.checkIfOrderIsValid(_loc3_, param1)) {
-            return;
+    public function setVehiclesData(param1:Array, param2:Vector.<Number>, param3:Boolean):void {
+        var _loc4_:EnemyVehiclesDataProvider = !!param3 ? this._enemyDP : this._teamDP;
+        _loc4_.setSource(param1);
+        _loc4_.setSorting(param2);
+        _loc4_.invalidate();
+    }
+
+    public function addVehiclesInfo(param1:Vector.<DAAPIVehicleInfoVO>, param2:Vector.<Number>, param3:Boolean):void {
+        var _loc4_:EnemyVehiclesDataProvider = !!param3 ? this._enemyDP : this._teamDP;
+        if (_loc4_.addVehiclesInfo(param1, param2)) {
+            _loc4_.invalidate();
         }
-        var _loc4_:int = param1.length;
-        var _loc5_:int = 0;
-        var _loc8_:int = -1;
-        var _loc10_:int = 0;
-        while (_loc10_ < _loc4_) {
-            _loc9_ = param1[_loc10_];
-            if (_loc9_ != _loc3_[_loc10_]) {
-                _loc5_ = !!param2 ? int(NUM_ITEM_ROWS + _loc10_) : int(_loc10_);
-                _loc8_ = this.getItemIndexByVehicleID(_loc9_);
-                if (_loc8_ != -1) {
-                    _loc7_ = this.items[_loc8_];
-                    if (_loc7_.containsData) {
-                        _loc6_ = this.positionControllers[_loc8_];
-                        _loc6_.row = _loc10_;
-                        if (_loc7_.isSelected) {
-                            this.setSelectedItem(_loc6_.colunm, _loc6_.row);
-                        }
-                    }
-                }
-                _loc3_[_loc10_] = _loc9_;
-            }
-            _loc10_++;
+    }
+
+    public function updateVehiclesData(param1:Vector.<DAAPIVehicleInfoVO>, param2:Vector.<Number>, param3:Boolean):void {
+        var _loc4_:EnemyVehiclesDataProvider = !!param3 ? this._enemyDP : this._teamDP;
+        var _loc5_:Boolean = _loc4_.updateVehiclesInfo(param1);
+        _loc5_ = _loc4_.setSorting(param2) || _loc5_;
+        if (_loc5_) {
+            _loc4_.invalidate();
+        }
+    }
+
+    public function setVehicleStatus(param1:Boolean, param2:Number, param3:uint, param4:Vector.<Number>):void {
+        var _loc5_:EnemyVehiclesDataProvider = !!param1 ? this._enemyDP : this._teamDP;
+        var _loc6_:Boolean = _loc5_.setVehicleStatus(param2, param3);
+        _loc6_ = _loc5_.setSorting(param4) || _loc6_;
+        if (_loc6_) {
+            _loc5_.invalidate();
+        }
+    }
+
+    public function setPlayerStatus(param1:Boolean, param2:Number, param3:uint):void {
+        var _loc4_:EnemyVehiclesDataProvider = !!param1 ? this._enemyDP : this._teamDP;
+        if (_loc4_.setPlayerStatus(param2, param3)) {
+            _loc4_.invalidate();
+        }
+    }
+
+    public function setUserTags(param1:Boolean, param2:Vector.<DAAPIVehicleUserTagsVO>):void {
+        var _loc3_:EnemyVehiclesDataProvider = !!param1 ? this._enemyDP : this._teamDP;
+        if (_loc3_.setUserTags(param2)) {
+            _loc3_.invalidate();
         }
     }
 
     public function updateColorBlind():void {
         var _loc1_:StatsTableItemHolderBase = null;
-        for each(_loc1_ in this.items) {
-            if (_loc1_.containsData) {
-                _loc1_.updateColorBlind();
-            }
+        for each(_loc1_ in this._allyRenderers) {
+            _loc1_.updateColorBlind();
+        }
+        for each(_loc1_ in this._enemyRenderers) {
+            _loc1_.updateColorBlind();
         }
     }
 
@@ -170,48 +134,30 @@ public class StatsTableControllerBase implements IDisposable {
         throw new AbstractException(Errors.ABSTRACT_INVOKE);
     }
 
-    protected function createPositionController(param1:int, param2:int):StatsTableItemPositionController {
-        throw new AbstractException(Errors.ABSTRACT_INVOKE);
-    }
-
-    protected function setSelectedItem(param1:int, param2:int):void {
+    protected function setSelectedItem(param1:Boolean, param2:int):void {
     }
 
     protected function onDispose():void {
-        var _loc2_:int = 0;
-        var _loc1_:int = this.items.length;
-        _loc2_ = 0;
-        while (_loc2_ < _loc1_) {
-            this.items[_loc2_].dispose();
-            this.items[_loc2_] = null;
-            _loc2_++;
+        var _loc1_:StatsTableItemHolderBase = null;
+        this._teamDP.removeEventListener(ListDataProviderEvent.VALIDATE_ITEMS, this.onAllyDataProviderUpdateItemHandler);
+        this._teamDP.cleanUp();
+        this._teamDP = null;
+        this._enemyDP.removeEventListener(ListDataProviderEvent.VALIDATE_ITEMS, this.onEnemyDataProviderUpdateItemHandler);
+        this._enemyDP.cleanUp();
+        this._enemyDP = null;
+        for each(_loc1_ in this._allyRenderers) {
+            _loc1_.dispose();
         }
-        _loc1_ = this.positionControllers.length;
-        _loc2_ = 0;
-        while (_loc2_ < _loc1_) {
-            this.positionControllers[_loc2_].dispose();
-            this.positionControllers[_loc2_] = null;
-            _loc2_++;
+        this._allyRenderers.splice(0, this._allyRenderers.length);
+        this._allyRenderers = null;
+        for each(_loc1_ in this._enemyRenderers) {
+            _loc1_.dispose();
         }
-        this.leftOrder.splice(0, this.leftOrder.length);
-        this.rightOrder.splice(0, this.rightOrder.length);
-        this.items = null;
-        this.leftOrder = null;
-        this.rightOrder = null;
-        this.positionControllers = null;
+        this._enemyRenderers.splice(0, this._enemyRenderers.length);
+        this._enemyRenderers = null;
     }
 
     protected function onItemDataSet(param1:StatsTableItemHolderBase, param2:Boolean):void {
-    }
-
-    protected final function getItemByVehicleID(param1:Number):StatsTableItemHolderBase {
-        var _loc2_:StatsTableItemHolderBase = null;
-        for each(_loc2_ in this.items) {
-            if (_loc2_.vehicleID == param1) {
-                return _loc2_;
-            }
-        }
-        return null;
     }
 
     protected final function setNoTranslateForCollection(param1:Vector.<TextField>):void {
@@ -222,60 +168,36 @@ public class StatsTableControllerBase implements IDisposable {
     }
 
     protected function init():void {
-        var _loc2_:StatsTableItemHolderBase = null;
-        var _loc4_:int = 0;
         var _loc1_:int = 0;
-        var _loc3_:int = 0;
-        while (_loc3_ < NUM_ITEM_COLUMNS) {
-            _loc4_ = 0;
-            while (_loc4_ < NUM_ITEM_ROWS) {
-                _loc2_ = this.createItemHolder(_loc3_, _loc4_);
-                this.items[_loc1_] = _loc2_;
-                this.positionControllers[_loc1_] = this.createPositionController(_loc3_, _loc4_);
-                _loc1_++;
-                _loc4_++;
-            }
-            _loc3_++;
+        while (_loc1_ < NUM_ITEM_ROWS) {
+            this._allyRenderers[_loc1_] = this.createItemHolder(0, _loc1_);
+            this._enemyRenderers[_loc1_] = this.createItemHolder(1, _loc1_);
+            _loc1_++;
         }
     }
 
-    private function getNextEmptyItem(param1:Boolean):StatsTableItemHolderBase {
-        var _loc2_:int = !!param1 ? int(NUM_ITEM_ROWS) : 0;
-        var _loc3_:int = _loc2_ + NUM_ITEM_ROWS;
-        while (_loc2_ < _loc3_) {
-            if (!this.items[_loc2_].containsData) {
-                return this.items[_loc2_];
-            }
-            _loc2_++;
-        }
-        return null;
+    public function get isRenderingAvailable():Boolean {
+        return this._isRenderingAvailable;
     }
 
-    private function checkIfOrderIsValid(param1:Vector.<Number>, param2:Vector.<Number>):Boolean {
-        var _loc3_:int = param2.length;
-        if (_loc3_ != param1.length) {
-            return false;
+    public function set isRenderingAvailable(param1:Boolean):void {
+        var _loc2_:StatsTableItemHolderBase = null;
+        if (this._isRenderingAvailable == param1) {
+            return;
         }
-        var _loc4_:int = 0;
-        while (_loc4_ < _loc3_) {
-            if (param1.indexOf(param2[_loc4_]) == -1) {
-                return false;
+        this._isRenderingAvailable = param1;
+        for each(_loc2_ in this._allyRenderers) {
+            _loc2_.isRenderingAvailable = param1;
+            if (_loc2_.isSelected) {
+                this.setSelectedItem(false, this._allyRenderers.indexOf(_loc2_));
             }
-            _loc4_++;
         }
-        return true;
-    }
-
-    private function getItemIndexByVehicleID(param1:Number):int {
-        var _loc2_:int = this.items.length;
-        var _loc3_:int = 0;
-        while (_loc3_ < _loc2_) {
-            if (param1 == this.items[_loc3_].vehicleID) {
-                return _loc3_;
+        for each(_loc2_ in this._enemyRenderers) {
+            _loc2_.isRenderingAvailable = param1;
+            if (_loc2_.isSelected) {
+                this.setSelectedItem(true, this._enemyRenderers.indexOf(_loc2_));
             }
-            _loc3_++;
         }
-        return -1;
     }
 }
 }

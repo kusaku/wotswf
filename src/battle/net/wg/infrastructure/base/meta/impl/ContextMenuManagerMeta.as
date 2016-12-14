@@ -41,12 +41,13 @@ public class ContextMenuManagerMeta extends BaseDAAPIModule {
         this.onHide();
     }
 
-    public function as_setOptions(param1:Object):void {
-        if (this._contextMenuOptionsVO) {
-            this._contextMenuOptionsVO.dispose();
-        }
+    public final function as_setOptions(param1:Object):void {
+        var _loc2_:ContextMenuOptionsVO = this._contextMenuOptionsVO;
         this._contextMenuOptionsVO = new ContextMenuOptionsVO(param1);
         this.setOptions(this._contextMenuOptionsVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setOptions(param1:ContextMenuOptionsVO):void {

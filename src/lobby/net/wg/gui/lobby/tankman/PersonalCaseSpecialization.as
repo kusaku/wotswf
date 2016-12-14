@@ -2,11 +2,11 @@ package net.wg.gui.lobby.tankman {
 import flash.text.TextField;
 
 import net.wg.gui.components.controls.UILoaderAlt;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class PersonalCaseSpecialization extends UIComponent {
+public class PersonalCaseSpecialization extends UIComponentEx {
 
     private static const TEXT_RIGHT_MARGIN:Number = 5;
 

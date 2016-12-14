@@ -4,7 +4,7 @@ import flash.events.MouseEvent;
 import flash.text.TextField;
 
 import net.wg.data.constants.QuestsStates;
-import net.wg.gui.components.advanced.interfaces.INewIndicator;
+import net.wg.gui.components.assets.interfaces.INewIndicator;
 import net.wg.gui.components.controls.SoundListItemRenderer;
 import net.wg.gui.components.controls.TextFieldShort;
 import net.wg.gui.components.controls.UILoaderAlt;
@@ -19,6 +19,10 @@ import org.idmedia.as3commons.util.StringUtils;
 public class QuestBattleTaskRenderer extends SoundListItemRenderer implements IQuestRenderer {
 
     private static const COMPLEX_COUNTER_Y:int = 13;
+
+    private static const PROGRESS_INDICATOR_Y:int = 45;
+
+    private static const DEF_PROGRESS_INDICATOR_Y:int = 34;
 
     private static const DEF_COUNTER_Y:int = 27;
 
@@ -79,8 +83,6 @@ public class QuestBattleTaskRenderer extends SoundListItemRenderer implements IQ
     public var hirAreaMc:MovieClip = null;
 
     private var _questData:QuestRendererVO = null;
-
-    private var _status:String = "";
 
     public function QuestBattleTaskRenderer() {
         super();
@@ -222,7 +224,7 @@ public class QuestBattleTaskRenderer extends SoundListItemRenderer implements IQ
         this.counter.visible = false;
         this.backgroundGroup.visible = true;
         this.description.visible = false;
-        this.questStatus.visible = false;
+        this.questStatus.setStatus(null);
         this.newIndicator.visible = false;
         this.indicatorIGR.visible = false;
         this.progressIndicator.visible = false;
@@ -261,12 +263,14 @@ public class QuestBattleTaskRenderer extends SoundListItemRenderer implements IQ
             this.progressIndicator.visible = true;
             this.progressIndicator.setValues(this._questData.progrBarType, this._questData.currentProgrVal, this._questData.maxProgrVal);
             this.progressIndicator.setTooltip(this._questData.progrTooltip);
+            this.progressIndicator.y = DEF_PROGRESS_INDICATOR_Y;
         }
         else {
             this.progressIndicator.visible = false;
         }
         if (this.counter.visible && this.progressIndicator.visible) {
             this.counter.y = COMPLEX_COUNTER_Y;
+            this.progressIndicator.y = PROGRESS_INDICATOR_Y;
         }
     }
 
@@ -282,10 +286,7 @@ public class QuestBattleTaskRenderer extends SoundListItemRenderer implements IQ
     }
 
     private function checkStatus():void {
-        if (this._status != this._questData.status) {
-            this._status = this._questData.status;
-            this.questStatus.setStatus(this._questData.status);
-        }
+        this.questStatus.setStatus(this._questData.status);
     }
 
     private function addListeners():void {

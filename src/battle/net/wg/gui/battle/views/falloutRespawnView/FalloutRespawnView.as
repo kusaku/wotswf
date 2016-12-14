@@ -30,6 +30,8 @@ public class FalloutRespawnView extends FalloutRespawnViewMeta implements IFallo
 
     private var _selectedVehicleStr:String = "";
 
+    private var _data:FalloutRespawnViewVO;
+
     public var bgImg:Sprite = null;
 
     public var slot0:RespawnVehicleSlot = null;
@@ -58,46 +60,7 @@ public class FalloutRespawnView extends FalloutRespawnViewMeta implements IFallo
         visible = false;
     }
 
-    public function as_initialize(param1:Object, param2:Array):void {
-        var _loc7_:VehicleSlotVO = null;
-        var _loc3_:FalloutRespawnViewVO = new FalloutRespawnViewVO(param1);
-        var _loc4_:Vector.<VehicleSlotVO> = new Vector.<VehicleSlotVO>();
-        var _loc5_:int = param2.length;
-        var _loc6_:uint = 0;
-        while (_loc6_ < _loc5_) {
-            _loc7_ = new VehicleSlotVO(param2[_loc6_]);
-            _loc4_.push(_loc7_);
-            _loc6_++;
-        }
-        this.init(_loc3_, _loc4_);
-    }
-
-    public function as_updateTimer(param1:String, param2:Array):void {
-        this.updateTimer(param1, param2);
-    }
-
-    public function as_update(param1:String, param2:Array):void {
-        var _loc6_:VehicleStateVO = null;
-        var _loc3_:Vector.<VehicleStateVO> = new Vector.<VehicleStateVO>();
-        var _loc4_:int = param2.length;
-        var _loc5_:uint = 0;
-        while (_loc5_ < _loc4_) {
-            _loc6_ = new VehicleStateVO(param2[_loc5_]);
-            _loc3_.push(_loc6_);
-            _loc5_++;
-        }
-        if (param1) {
-            this._selectedVehicleStr = param1;
-            invalidate(INVALIDATE_SELECTED_VEHICLE);
-        }
-        this.setStateData(_loc3_);
-    }
-
-    public function as_showGasAttackMode():void {
-        this.showGasAttackMode();
-    }
-
-    public function init(param1:FalloutRespawnViewVO, param2:Vector.<VehicleSlotVO>):void {
+    override protected function initializeComponent(param1:FalloutRespawnViewVO, param2:Vector.<VehicleSlotVO>):void {
         var _loc3_:int = this._slots.length;
         var _loc4_:RespawnVehicleSlot = null;
         var _loc5_:int = param2.length;
@@ -113,13 +76,20 @@ public class FalloutRespawnView extends FalloutRespawnViewMeta implements IFallo
             _loc4_.addClickCallBack(this);
             _loc6_++;
         }
-        this.titleTextTF.htmlText = param1.titleMsg;
-        this.selectedVehicleTF.htmlText = param1.selectedVehicle;
-        this.helpTextTF.htmlText = param1.helpTextStr;
-        this.postmortemBtn.visible = param1.isPostmortemViewBtnEnabled;
-        this.postmortemBtn.label = param1.postmortemBtnLbl;
-        this.postmortemBtn.validateNow();
-        this.postmortemBtn.addEventListener(ButtonEvent.CLICK, this.onPosmortemBtnClickHandler);
+        this._data = param1;
+        invalidate(InvalidationType.DATA);
+    }
+
+    override protected function update(param1:String, param2:Vector.<VehicleStateVO>):void {
+        if (param1) {
+            this._selectedVehicleStr = param1;
+            invalidate(INVALIDATE_SELECTED_VEHICLE);
+        }
+        this.setStateData(param2);
+    }
+
+    public function as_showGasAttackMode():void {
+        this.showGasAttackMode();
     }
 
     private function setStateData(param1:Vector.<VehicleStateVO>):void {
@@ -131,19 +101,10 @@ public class FalloutRespawnView extends FalloutRespawnViewMeta implements IFallo
         }
     }
 
-    private function updateTimer(param1:String, param2:Array):void {
-        var _loc6_:VehicleStateVO = null;
+    override protected function updateTimer(param1:String, param2:Vector.<VehicleStateVO>):void {
         this._timeStr = param1;
         invalidate(INVALIDATE_TIMER_TEXT);
-        var _loc3_:Vector.<VehicleStateVO> = new Vector.<VehicleStateVO>();
-        var _loc4_:int = param2.length;
-        var _loc5_:uint = 0;
-        while (_loc5_ < _loc4_) {
-            _loc6_ = new VehicleStateVO(param2[_loc5_]);
-            _loc3_.push(_loc6_);
-            _loc5_++;
-        }
-        this.setStateData(_loc3_);
+        this.setStateData(param2);
     }
 
     public function updateStage(param1:Number, param2:Number):void {
@@ -190,10 +151,20 @@ public class FalloutRespawnView extends FalloutRespawnViewMeta implements IFallo
         if (isInvalid(INVALIDATE_SELECTED_VEHICLE)) {
             this.selectedVehicleTF.htmlText = this._selectedVehicleStr;
         }
+        if (this._data && isInvalid(InvalidationType.DATA)) {
+            this.titleTextTF.htmlText = this._data.titleMsg;
+            this.selectedVehicleTF.htmlText = this._data.selectedVehicle;
+            this.helpTextTF.htmlText = this._data.helpTextStr;
+            this.postmortemBtn.visible = this._data.isPostmortemViewBtnEnabled;
+            this.postmortemBtn.label = this._data.postmortemBtnLbl;
+            this.postmortemBtn.validateNow();
+            this.postmortemBtn.addEventListener(ButtonEvent.CLICK, this.onPosmortemBtnClickHandler);
+        }
     }
 
     override protected function onDispose():void {
         this.bgImg = null;
+        this._data = null;
         var _loc1_:RespawnVehicleSlot = null;
         while (this._slots.length) {
             _loc1_ = this._slots.pop();

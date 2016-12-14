@@ -2,6 +2,7 @@ package net.wg.gui.lobby.techtree.helpers {
 import flash.display.DisplayObject;
 import flash.geom.Point;
 
+import net.wg.gui.components.controls.SoundListItemRenderer;
 import net.wg.gui.lobby.techtree.TechTreeEvent;
 import net.wg.gui.lobby.techtree.constants.ColorIndex;
 import net.wg.gui.lobby.techtree.data.state.NodeStateCollection;
@@ -16,7 +17,7 @@ public class ModulesGraphics extends LinesGraphics {
 
     public var xRatio:Number = 0;
 
-    public var rootRenderer:IRenderer;
+    public var rootRenderer:SoundListItemRenderer;
 
     public function ModulesGraphics() {
         super();
@@ -279,7 +280,7 @@ public class ModulesGraphics extends LinesGraphics {
 
     private function onTopLevelRendererStateChangedHandler(param1:TechTreeEvent):void {
         if (NodeStateCollection.isRedrawResearchLines(param1.primary)) {
-            this.drawTopLevelLines(this.rootRenderer, this.containerEx.getTopLevel(), true);
+            this.drawTopLevelLines(IRenderer(this.rootRenderer), this.containerEx.getTopLevel(), true);
         }
     }
 

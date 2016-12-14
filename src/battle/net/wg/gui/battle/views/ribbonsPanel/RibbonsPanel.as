@@ -14,14 +14,6 @@ public class RibbonsPanel extends RibbonsPanelMeta implements IRibbonsPanelMeta 
 
     private static const MAX_COUNT_RIBBONS:int = 3;
 
-    private static const WITH_NAME_WITH_TANKNAME_OFFSET_X:int = -155;
-
-    private static const WITH_NAME_WITHOUT_TANKNAME_OFFSET_X:int = -142;
-
-    private static const WITHOUT_NAME_WITH_TANKNAME_OFFSET_X:int = -119;
-
-    private static const WITHOUT_NAME_WITHOUT_TANKNAME_OFFSET_X:int = -102;
-
     private static const RIBBON_TYPE_PARAM_IDX:int = 0;
 
     private static const RIBBON_TEXT_PARAM_IDX:int = 1;
@@ -116,26 +108,26 @@ public class RibbonsPanel extends RibbonsPanelMeta implements IRibbonsPanelMeta 
         this.setSettings(param1, param2, param3, param4);
     }
 
-    public function as_setup(param1:Array, param2:Boolean, param3:Boolean, param4:Boolean, param5:Boolean):void {
+    override protected function setup(param1:Array, param2:Boolean, param3:Boolean, param4:Boolean, param5:Boolean):void {
         var _loc7_:RibbonCtrl = null;
         var _loc8_:Array = null;
         var _loc9_:String = null;
         var _loc10_:String = null;
-        var _loc11_:RibbonSettings = null;
+        var _loc12_:RibbonSettings = null;
         var _loc6_:int = param1.length;
-        var _loc12_:int = 0;
-        while (_loc12_ < _loc6_) {
-            _loc8_ = param1[_loc12_];
+        var _loc11_:int = 0;
+        while (_loc11_ < _loc6_) {
+            _loc8_ = param1[_loc11_];
             _loc9_ = _loc8_[RIBBON_TYPE_PARAM_IDX];
             App.utils.asserter.assert(RibbonSettings.isAvailableRibbonType(_loc9_), "Not such ribbonTypeIcon = " + _loc9_);
             _loc10_ = _loc8_[RIBBON_TEXT_PARAM_IDX];
-            _loc11_ = new RibbonSettings(_loc9_, _loc10_);
-            this._ribbonsSettings[_loc9_] = _loc11_;
-            _loc7_ = new RibbonCtrl(_loc11_, this.animationCallback, param2);
+            _loc12_ = new RibbonSettings(_loc9_, _loc10_);
+            this._ribbonsSettings[_loc9_] = _loc12_;
+            _loc7_ = new RibbonCtrl(_loc12_, this.animationCallback, param2);
             this._storageMap[_loc9_] = _loc7_;
             addChildAt(_loc7_.iconsAnim, 0);
             this._textsSprite.addChild(_loc7_.textsAnim);
-            _loc12_++;
+            _loc11_++;
         }
         this.setSettings(param3, param2, param4, param5);
     }
@@ -151,25 +143,8 @@ public class RibbonsPanel extends RibbonsPanelMeta implements IRibbonsPanelMeta 
             _loc5_ = this._storageMap[_loc6_];
             _loc5_.setSettings(param2, param3, param4);
         }
-        this.calculateOffset(param3, param4);
+        this._offsetX = RibbonSettings.getPaddings(param3, param4).ribbonOffset;
         dispatchEvent(new Event(Event.CHANGE));
-    }
-
-    private function calculateOffset(param1:Boolean, param2:Boolean):void {
-        if (param1) {
-            if (param2) {
-                this._offsetX = WITH_NAME_WITH_TANKNAME_OFFSET_X;
-            }
-            else {
-                this._offsetX = WITH_NAME_WITHOUT_TANKNAME_OFFSET_X;
-            }
-        }
-        else if (param2) {
-            this._offsetX = WITHOUT_NAME_WITH_TANKNAME_OFFSET_X;
-        }
-        else {
-            this._offsetX = WITHOUT_NAME_WITHOUT_TANKNAME_OFFSET_X;
-        }
     }
 
     public function shiftItems():void {

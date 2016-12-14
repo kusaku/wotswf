@@ -7,7 +7,7 @@ import flash.text.TextField;
 import net.wg.data.constants.Errors;
 import net.wg.data.constants.QuestsStates;
 import net.wg.data.constants.generated.QUESTS_ALIASES;
-import net.wg.gui.components.advanced.interfaces.INewIndicator;
+import net.wg.gui.components.assets.interfaces.INewIndicator;
 import net.wg.gui.components.controls.TableRenderer;
 import net.wg.gui.components.controls.TextFieldShort;
 import net.wg.gui.components.controls.UILoaderAlt;
@@ -23,9 +23,13 @@ import scaleform.clik.constants.InvalidationType;
 
 public class QuestRenderer extends TableRenderer implements IQuestRenderer {
 
-    private static const DEF_COUNTER_Y:int = 27;
+    private static const DEF_COUNTER_Y:int = 29;
 
-    private static const COMPLEX_COUNTER_Y:int = 18;
+    private static const COMPLEX_COUNTER_Y:int = 13;
+
+    private static const PROGRESS_INDICATOR_Y:int = 45;
+
+    private static const DEF_PROGRESS_INDICATOR_Y:int = 34;
 
     private static const TEXT_FIELD_PADDING:int = 5;
 
@@ -180,6 +184,7 @@ public class QuestRenderer extends TableRenderer implements IQuestRenderer {
     }
 
     private function checkData(param1:QuestRendererVO):void {
+        var _loc3_:Boolean = false;
         var _loc2_:int = param1.rendererType;
         if (_loc2_ == QUESTS_ALIASES.RENDERER_TYPE_QUEST) {
             if (_loc2_ != this._type) {
@@ -192,8 +197,8 @@ public class QuestRenderer extends TableRenderer implements IQuestRenderer {
             this.checkProgress(param1);
             this.checkIGR(param1);
             this.checkAction(param1);
-            this.mouseChildren = true;
-            this.mouseEnabled = true;
+            mouseChildren = true;
+            mouseEnabled = true;
         }
         else if (_loc2_ == QUESTS_ALIASES.RENDERER_TYPE_BLOCK_TITLE) {
             if (_loc2_ != this._type) {
@@ -202,15 +207,15 @@ public class QuestRenderer extends TableRenderer implements IQuestRenderer {
                 this._type = _loc2_;
             }
             this.blockTitleTF.htmlText = this._questData.description;
-            this.mouseChildren = false;
-            this.mouseEnabled = false;
+            mouseChildren = false;
+            mouseEnabled = false;
         }
         else {
             App.utils.asserter.assert(false, "Quest renderer type \'" + param1.rendererType + "\'" + Errors.WASNT_FOUND);
         }
         this.checkStatus(param1);
-        var _loc3_:Boolean = param1.isSelectable;
-        this.enabled = _loc3_;
+        _loc3_ = param1.isSelectable;
+        enabled = _loc3_;
         buttonMode = _loc3_;
         this.hitTooltipMc.buttonMode = _loc3_;
         var _loc4_:Boolean = param1.showBckgrImage;
@@ -235,12 +240,14 @@ public class QuestRenderer extends TableRenderer implements IQuestRenderer {
             this.progressIndicator.visible = true;
             this.progressIndicator.setValues(param1.progrBarType, param1.currentProgrVal, param1.maxProgrVal);
             this.progressIndicator.setTooltip(param1.progrTooltip);
+            this.progressIndicator.y = DEF_PROGRESS_INDICATOR_Y;
         }
         else {
             this.progressIndicator.visible = false;
         }
         if (this.counter.visible && this.progressIndicator.visible) {
             this.counter.y = COMPLEX_COUNTER_Y;
+            this.progressIndicator.y = PROGRESS_INDICATOR_Y;
         }
     }
 
@@ -288,10 +295,6 @@ public class QuestRenderer extends TableRenderer implements IQuestRenderer {
 
     private function hideTooltip():void {
         App.toolTipMgr.hide();
-    }
-
-    override public function set enabled(param1:Boolean):void {
-        super.enabled = param1;
     }
 
     private function onNewIndicatorRollOverHandler(param1:MouseEvent):void {

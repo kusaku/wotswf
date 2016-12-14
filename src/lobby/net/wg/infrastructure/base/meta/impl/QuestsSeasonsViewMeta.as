@@ -16,9 +16,9 @@ public class QuestsSeasonsViewMeta extends BaseDAAPIComponent {
 
     private var _questSlotsDataVO:QuestSlotsDataVO;
 
-    private var _seasonsDataVO:SeasonsDataVO;
-
     private var _questsSeasonsViewVO:QuestsSeasonsViewVO;
+
+    private var _seasonsDataVO:SeasonsDataVO;
 
     public function QuestsSeasonsViewMeta() {
         super();
@@ -29,13 +29,13 @@ public class QuestsSeasonsViewMeta extends BaseDAAPIComponent {
             this._questSlotsDataVO.dispose();
             this._questSlotsDataVO = null;
         }
-        if (this._seasonsDataVO) {
-            this._seasonsDataVO.dispose();
-            this._seasonsDataVO = null;
-        }
         if (this._questsSeasonsViewVO) {
             this._questsSeasonsViewVO.dispose();
             this._questsSeasonsViewVO = null;
+        }
+        if (this._seasonsDataVO) {
+            this._seasonsDataVO.dispose();
+            this._seasonsDataVO = null;
         }
         super.onDispose();
     }
@@ -55,28 +55,31 @@ public class QuestsSeasonsViewMeta extends BaseDAAPIComponent {
         this.onSlotClick(param1);
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._questsSeasonsViewVO) {
-            this._questsSeasonsViewVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:QuestsSeasonsViewVO = this._questsSeasonsViewVO;
         this._questsSeasonsViewVO = new QuestsSeasonsViewVO(param1);
         this.setData(this._questsSeasonsViewVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setSeasonsData(param1:Object):void {
-        if (this._seasonsDataVO) {
-            this._seasonsDataVO.dispose();
-        }
+    public final function as_setSeasonsData(param1:Object):void {
+        var _loc2_:SeasonsDataVO = this._seasonsDataVO;
         this._seasonsDataVO = new SeasonsDataVO(param1);
         this.setSeasonsData(this._seasonsDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setSlotsData(param1:Object):void {
-        if (this._questSlotsDataVO) {
-            this._questSlotsDataVO.dispose();
-        }
+    public final function as_setSlotsData(param1:Object):void {
+        var _loc2_:QuestSlotsDataVO = this._questSlotsDataVO;
         this._questSlotsDataVO = new QuestSlotsDataVO(param1);
         this.setSlotsData(this._questSlotsDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:QuestsSeasonsViewVO):void {

@@ -62,11 +62,8 @@ public class BoostersTableRenderer extends TableRenderer {
     }
 
     override public function setData(param1:Object):void {
-        this.tryToClearModel();
-        if (param1 != null) {
-            this._model = new BoostersTableRendererVO(param1);
-            this._toolTipMgr.hide();
-        }
+        this._model = BoostersTableRendererVO(param1);
+        this._toolTipMgr.hide();
         invalidateData();
     }
 
@@ -98,7 +95,7 @@ public class BoostersTableRenderer extends TableRenderer {
         this.creditsPrice = null;
         this.goldPrice.dispose();
         this.goldPrice = null;
-        this.tryToClearModel();
+        this._model = null;
         this._toolTipMgr = null;
         super.onDispose();
     }
@@ -200,13 +197,6 @@ public class BoostersTableRenderer extends TableRenderer {
             this.goldPrice.x = param1;
         }
         return param1;
-    }
-
-    private function tryToClearModel():void {
-        if (this._model != null) {
-            this._model.dispose();
-            this._model = null;
-        }
     }
 
     private function setSlotData(param1:BoosterSlotVO):void {

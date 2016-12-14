@@ -27,12 +27,13 @@ public class ClanInvitesWindowAbstractTabViewMeta extends ClanInvitesViewWithTab
         this.filterBy(param1);
     }
 
-    public function as_updateFilterState(param1:Object):void {
-        if (this._clanInvitesWindowTableFilterVO) {
-            this._clanInvitesWindowTableFilterVO.dispose();
-        }
+    public final function as_updateFilterState(param1:Object):void {
+        var _loc2_:ClanInvitesWindowTableFilterVO = this._clanInvitesWindowTableFilterVO;
         this._clanInvitesWindowTableFilterVO = new ClanInvitesWindowTableFilterVO(param1);
         this.updateFilterState(this._clanInvitesWindowTableFilterVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function updateFilterState(param1:ClanInvitesWindowTableFilterVO):void {

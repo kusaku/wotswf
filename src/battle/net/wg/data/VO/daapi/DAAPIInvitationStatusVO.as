@@ -12,5 +12,9 @@ public class DAAPIInvitationStatusVO extends DAAPIDataClass {
     public function DAAPIInvitationStatusVO(param1:Object) {
         super(param1);
     }
+
+    override public function toString():String {
+        return "[DAAPIInvitationStatusVO id: " + this.vehicleID + ", status: " + this.status + "]";
+    }
 }
 }

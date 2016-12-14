@@ -65,8 +65,6 @@ package
       
       public static const KEYBOARD_KEY_PRINT_SCREEN:String = "#controls:keyboard/key_print_screen";
       
-      public static const KEYBOARD_SEQUENCE_CTRL_ENTER:String = "#controls:keyboard/sequence_ctrl_enter";
-      
       public static const KEYBOARD_SEQUENCE_SHIFT_ENTER:String = "#controls:keyboard/sequence_shift_enter";
        
       

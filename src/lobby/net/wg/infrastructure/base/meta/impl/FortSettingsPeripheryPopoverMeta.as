@@ -8,22 +8,22 @@ public class FortSettingsPeripheryPopoverMeta extends PopoverWithDropdown {
 
     public var onApply:Function;
 
-    private var _peripheryPopoverVO1:PeripheryPopoverVO;
-
     private var _peripheryPopoverVO:PeripheryPopoverVO;
+
+    private var _peripheryPopoverVO1:PeripheryPopoverVO;
 
     public function FortSettingsPeripheryPopoverMeta() {
         super();
     }
 
     override protected function onDispose():void {
-        if (this._peripheryPopoverVO1) {
-            this._peripheryPopoverVO1.dispose();
-            this._peripheryPopoverVO1 = null;
-        }
         if (this._peripheryPopoverVO) {
             this._peripheryPopoverVO.dispose();
             this._peripheryPopoverVO = null;
+        }
+        if (this._peripheryPopoverVO1) {
+            this._peripheryPopoverVO1.dispose();
+            this._peripheryPopoverVO1 = null;
         }
         super.onDispose();
     }
@@ -33,20 +33,22 @@ public class FortSettingsPeripheryPopoverMeta extends PopoverWithDropdown {
         this.onApply(param1);
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._peripheryPopoverVO) {
-            this._peripheryPopoverVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:PeripheryPopoverVO = this._peripheryPopoverVO;
         this._peripheryPopoverVO = new PeripheryPopoverVO(param1);
         this.setData(this._peripheryPopoverVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setTexts(param1:Object):void {
-        if (this._peripheryPopoverVO1) {
-            this._peripheryPopoverVO1.dispose();
-        }
+    public final function as_setTexts(param1:Object):void {
+        var _loc2_:PeripheryPopoverVO = this._peripheryPopoverVO1;
         this._peripheryPopoverVO1 = new PeripheryPopoverVO(param1);
         this.setTexts(this._peripheryPopoverVO1);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:PeripheryPopoverVO):void {

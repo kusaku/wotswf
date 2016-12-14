@@ -49,7 +49,7 @@ public class BattleUIComponentsHolder implements IDisposable {
     }
 
     protected function isInvalid(param1:uint):Boolean {
-        return this._invalid && (this._invalidMask & param1) > 0;
+        return this._invalid && uint(this._invalidMask & param1) > 0;
     }
 
     protected function draw():void {

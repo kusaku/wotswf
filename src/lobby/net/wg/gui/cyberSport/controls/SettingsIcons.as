@@ -2,11 +2,11 @@ package net.wg.gui.cyberSport.controls {
 import flash.events.MouseEvent;
 
 import net.wg.gui.components.controls.UILoaderAlt;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class SettingsIcons extends UIComponent {
+public class SettingsIcons extends UIComponentEx {
 
     public var flake:UILoaderAlt;
 

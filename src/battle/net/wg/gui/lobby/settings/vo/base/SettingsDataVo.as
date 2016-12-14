@@ -9,7 +9,7 @@ public class SettingsDataVo extends DAAPIDataClass {
 
     public var values:Vector.<Object> = null;
 
-    public function SettingsDataVo(param1:Object) {
+    public function SettingsDataVo(param1:Object = null) {
         this.keys = new Vector.<String>();
         this.values = new Vector.<Object>();
         super(param1);
@@ -53,6 +53,14 @@ public class SettingsDataVo extends DAAPIDataClass {
         return hasOwnProperty(param1);
     }
 
+    public function createControl(param1:String):ControlsFactory {
+        return ControlsFactory.instance.createControl(param1);
+    }
+
+    public function createSliderWithLabelAndValue():ControlsFactory {
+        return this.createControl(ControlsFactory.TYPE_SLIDER).hasLabel(true).hasValue(true);
+    }
+
     public function getByKey(param1:String):Object {
         return this.values[this.keys.indexOf(param1)];
     }
@@ -61,14 +69,6 @@ public class SettingsDataVo extends DAAPIDataClass {
         var _loc3_:int = this.keys.indexOf(param1);
         App.utils.asserter.assert(_loc3_ != -1, this + ":setByKey - cant find \'" + param1 + "\' field.");
         this.values[_loc3_] = param2;
-    }
-
-    public function createControl(param1:String):ControlsFactory {
-        return ControlsFactory.instance.createControl(param1);
-    }
-
-    public function createSliderWithLabelAndValue():ControlsFactory {
-        return this.createControl(ControlsFactory.TYPE_SLIDER).hasLabel(true).hasValue(true);
     }
 }
 }

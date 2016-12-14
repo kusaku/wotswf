@@ -83,28 +83,31 @@ public class StaticFormationStaffViewMeta extends BaseDAAPIComponent {
         this.assignPrivate(param1, param2);
     }
 
-    public function as_setStaticHeaderData(param1:Object):void {
-        if (this._staticFormationStaffViewStaticHeaderVO) {
-            this._staticFormationStaffViewStaticHeaderVO.dispose();
-        }
+    public final function as_setStaticHeaderData(param1:Object):void {
+        var _loc2_:StaticFormationStaffViewStaticHeaderVO = this._staticFormationStaffViewStaticHeaderVO;
         this._staticFormationStaffViewStaticHeaderVO = new StaticFormationStaffViewStaticHeaderVO(param1);
         this.setStaticHeaderData(this._staticFormationStaffViewStaticHeaderVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_updateHeaderData(param1:Object):void {
-        if (this._staticFormationStaffViewHeaderVO) {
-            this._staticFormationStaffViewHeaderVO.dispose();
-        }
+    public final function as_updateHeaderData(param1:Object):void {
+        var _loc2_:StaticFormationStaffViewHeaderVO = this._staticFormationStaffViewHeaderVO;
         this._staticFormationStaffViewHeaderVO = new StaticFormationStaffViewHeaderVO(param1);
         this.updateHeaderData(this._staticFormationStaffViewHeaderVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_updateStaffData(param1:Object):void {
-        if (this._staticFormationStaffViewStaffVO) {
-            this._staticFormationStaffViewStaffVO.dispose();
-        }
+    public final function as_updateStaffData(param1:Object):void {
+        var _loc2_:StaticFormationStaffViewStaffVO = this._staticFormationStaffViewStaffVO;
         this._staticFormationStaffViewStaffVO = new StaticFormationStaffViewStaffVO(param1);
         this.updateStaffData(this._staticFormationStaffViewStaffVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setStaticHeaderData(param1:StaticFormationStaffViewStaticHeaderVO):void {

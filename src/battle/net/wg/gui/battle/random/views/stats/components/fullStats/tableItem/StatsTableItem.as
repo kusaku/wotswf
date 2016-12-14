@@ -23,6 +23,8 @@ public class StatsTableItem extends StatsTableItemBase {
 
     private var _muteIcon:BattleAtlasSprite = null;
 
+    private var _disableCommunicationIcon:BattleAtlasSprite = null;
+
     private var _speakAnimation:SpeakAnimation = null;
 
     private var _vehicleLevel:int = 0;
@@ -35,18 +37,22 @@ public class StatsTableItem extends StatsTableItemBase {
 
     private var _isMute:Boolean = false;
 
+    private var _disableCommunication:Boolean = false;
+
     private var _isSpeaking:Boolean = false;
 
-    public function StatsTableItem(param1:TextField, param2:TextField, param3:TextField, param4:BattleAtlasSprite, param5:BattleAtlasSprite, param6:BattleAtlasSprite, param7:BattleAtlasSprite, param8:BattleAtlasSprite, param9:BattleAtlasSprite, param10:SpeakAnimation, param11:BattleAtlasSprite, param12:PlayerStatusView) {
+    public function StatsTableItem(param1:TextField, param2:TextField, param3:TextField, param4:BattleAtlasSprite, param5:BattleAtlasSprite, param6:BattleAtlasSprite, param7:BattleAtlasSprite, param8:BattleAtlasSprite, param9:BattleAtlasSprite, param10:BattleAtlasSprite, param11:SpeakAnimation, param12:BattleAtlasSprite, param13:PlayerStatusView) {
         super(param1, param2, param3, param5, param4, param6);
         this._vehicleIcon = param7;
         this._vehicleLevelIcon = param8;
-        this._vehicleActionIcon = param11;
-        this._playerStatus = param12;
+        this._vehicleActionIcon = param12;
+        this._playerStatus = param13;
         this._muteIcon = param9;
-        this._speakAnimation = param10;
+        this._disableCommunicationIcon = param10;
+        this._speakAnimation = param11;
         invalidate(RandomFullStatsValidationType.VEHICLE_LEVEL | RandomFullStatsValidationType.VEHICLE_ICON | RandomFullStatsValidationType.VEHICLE_ACTION);
         deadBg.imageName = BattleAtlasItem.FULL_STATS_DEAD_BG;
+        this._vehicleLevelIcon.isCetralize = true;
     }
 
     public function setVehicleLevel(param1:int):void {
@@ -109,6 +115,14 @@ public class StatsTableItem extends StatsTableItemBase {
         }
         this._isMute = param1;
         invalidate(RandomFullStatsValidationType.MUTE);
+    }
+
+    public function setDisableCommunication(param1:Boolean):void {
+        if (this._disableCommunication == param1) {
+            return;
+        }
+        this._disableCommunication = param1;
+        invalidate(RandomFullStatsValidationType.DISABLE_COMMUNICATION);
     }
 
     public function setIsSpeaking(param1:Boolean):void {
@@ -185,6 +199,12 @@ public class StatsTableItem extends StatsTableItemBase {
                 }
             }
         }
+        if (isInvalid(RandomFullStatsValidationType.DISABLE_COMMUNICATION)) {
+            this._disableCommunicationIcon.visible = this._disableCommunication;
+            if (this._disableCommunication) {
+                this._disableCommunicationIcon.imageName = BattleAtlasItem.ICON_TOXIC_CHAT_OFF;
+            }
+        }
         if (isInvalid(RandomFullStatsValidationType.SPEAKING)) {
             if (!this._isMute) {
                 this._speakAnimation.speaking = this._isSpeaking;
@@ -197,6 +217,9 @@ public class StatsTableItem extends StatsTableItemBase {
         this._vehicleLevelIcon = null;
         this._vehicleActionIcon = null;
         this._playerStatus = null;
+        this._disableCommunicationIcon = null;
+        this._muteIcon = null;
+        this._speakAnimation = null;
         super.onDispose();
     }
 
@@ -205,6 +228,9 @@ public class StatsTableItem extends StatsTableItemBase {
         this._vehicleIconName = null;
         this._vehicleAction = null;
         this._inBattle = false;
+        this._disableCommunication = false;
+        this._isMute = false;
+        this._isSpeaking = false;
         super.reset();
     }
 }

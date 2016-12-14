@@ -24,6 +24,8 @@ public class GraphicSettingsDataVo extends SettingsDataVo {
 
     public var resolution:SettingsControlProp = null;
 
+    public var borderlessSize:SettingsControlProp = null;
+
     public var refreshRate:SettingsControlProp = null;
 
     public var interfaceScale:SettingsControlProp = null;
@@ -38,7 +40,7 @@ public class GraphicSettingsDataVo extends SettingsDataVo {
 
     public var colorFilterIntensity:SettingsControlProp = null;
 
-    public var fullScreen:SettingsControlProp = null;
+    public var screenMode:SettingsControlProp = null;
 
     public var vertSync:SettingsControlProp = null;
 
@@ -111,6 +113,7 @@ public class GraphicSettingsDataVo extends SettingsDataVo {
             "sizes": createControl(ControlsFactory.TYPE_DROPDOWN).build(),
             "windowSize": createControl(ControlsFactory.TYPE_DROPDOWN).readOnly(true).build(),
             "resolution": createControl(ControlsFactory.TYPE_DROPDOWN).readOnly(true).build(),
+            "borderlessSize": createControl(ControlsFactory.TYPE_DROPDOWN).readOnly(true).build(),
             "refreshRate": createControl(ControlsFactory.TYPE_DROPDOWN).build(),
             "interfaceScale": createControl(ControlsFactory.TYPE_DROPDOWN).build(),
             "dynamicRenderer": createControl(ControlsFactory.TYPE_SLIDER).hasValue(true).build(),
@@ -119,7 +122,7 @@ public class GraphicSettingsDataVo extends SettingsDataVo {
             "HAVOK_ENABLED": createControl(ControlsFactory.TYPE_DROPDOWN).hasLabel(true).isDataAsSelectedIndex(true).build(),
             "colorFilterIntensity": createControl(ControlsFactory.TYPE_SLIDER).hasValue(true).build(),
             "colorFilterImages": new Vector.<String>(),
-            "fullScreen": createControl(ControlsFactory.TYPE_CHECKBOX).build(),
+            "screenMode": createControl(ControlsFactory.TYPE_DROPDOWN).build(),
             "vertSync": createControl(ControlsFactory.TYPE_CHECKBOX).isDependOn(SettingsConfigHelper.TRIPLE_BUFFERED).build(),
             "tripleBuffered": createControl(ControlsFactory.TYPE_CHECKBOX).build(),
             "isColorBlind": createControl(ControlsFactory.TYPE_CHECKBOX).build(),
@@ -160,6 +163,8 @@ public class GraphicSettingsDataVo extends SettingsDataVo {
         this.multisampling = null;
         this.gamma = null;
         this.sizes = null;
+        this.borderlessSize = null;
+        this.screenMode = null;
         this.windowSize = null;
         this.resolution = null;
         this.refreshRate = null;
@@ -170,7 +175,6 @@ public class GraphicSettingsDataVo extends SettingsDataVo {
         this.HAVOK_ENABLED = null;
         this.colorFilterIntensity = null;
         this.colorFilterImages = null;
-        this.fullScreen = null;
         this.vertSync = null;
         this.tripleBuffered = null;
         this.isColorBlind = null;

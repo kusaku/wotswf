@@ -5,14 +5,14 @@ import net.wg.data.constants.SoundTypes;
 import net.wg.gui.components.controls.TankmanTrainigButtonVO;
 import net.wg.gui.components.controls.TankmanTrainingSmallButton;
 import net.wg.gui.interfaces.ISoundButton;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.controls.ButtonGroup;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.IndexEvent;
 import scaleform.clik.interfaces.IDataProvider;
 
-public class RetrainCrewMainButtons extends UIComponent {
+public class RetrainCrewMainButtons extends UIComponentEx {
 
     private static const GROUP_NAME:String = "crewRetrainingGroup";
 

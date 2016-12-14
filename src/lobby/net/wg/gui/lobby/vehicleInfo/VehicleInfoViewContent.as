@@ -12,7 +12,7 @@ public class VehicleInfoViewContent extends UIComponentEx implements IViewStackC
 
     private static const OFFSET_Y:Number = 19;
 
-    private static const START_Y:Number = 10;
+    private static const START_Y:Number = 6;
 
     private static const START_X:Number = 10;
 

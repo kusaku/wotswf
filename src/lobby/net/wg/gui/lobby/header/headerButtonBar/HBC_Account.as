@@ -1,7 +1,7 @@
 package net.wg.gui.lobby.header.headerButtonBar {
 import net.wg.data.constants.ColorSchemeNames;
 import net.wg.gui.components.advanced.ClanEmblem;
-import net.wg.gui.components.advanced.interfaces.INewIndicator;
+import net.wg.gui.components.assets.interfaces.INewIndicator;
 import net.wg.gui.components.controls.UserNameField;
 import net.wg.gui.lobby.header.vo.HBC_AccountDataVo;
 

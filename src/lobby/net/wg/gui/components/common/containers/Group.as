@@ -3,12 +3,13 @@ import flash.display.DisplayObject;
 import flash.events.Event;
 import flash.geom.Point;
 
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.IBaseLayout;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
 import scaleform.clik.core.UIComponent;
 
-public class Group extends UIComponent {
+public class Group extends UIComponentEx {
 
     public static const LAYOUT_INVALID:String = "layoutInv";
 

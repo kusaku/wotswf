@@ -1,9 +1,9 @@
 package net.wg.gui.cyberSport.controls {
 import flash.display.MovieClip;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class CSVehicleButtonLevels extends UIComponent {
+public class CSVehicleButtonLevels extends UIComponentEx {
 
     private static const UPDATE_LEVELS:String = "updateLevels";
 

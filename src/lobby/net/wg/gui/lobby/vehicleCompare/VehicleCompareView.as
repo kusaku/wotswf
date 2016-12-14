@@ -169,7 +169,11 @@ public class VehicleCompareView extends VehicleCompareViewMeta implements IVehic
         return this._vehiclesDP;
     }
 
-    public function as_setVehicleParamsData(param1:Array):void {
+    public function as_setAttentionVisible(param1:Boolean):void {
+        this.topPanel.setAttentionVisible(param1);
+    }
+
+    override protected function setVehicleParamsData(param1:Array):void {
         if (this._vehicleParamsData) {
             this._vehicleParamsData.cleanUp();
         }

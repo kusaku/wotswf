@@ -20,7 +20,7 @@ public class BuildingBaseVO extends DAAPIDataClass implements IBuildingBaseVO {
 
     private var _animationType:int = -1;
 
-    public function BuildingBaseVO(param1:Object) {
+    public function BuildingBaseVO(param1:Object = null) {
         super(param1);
     }
 

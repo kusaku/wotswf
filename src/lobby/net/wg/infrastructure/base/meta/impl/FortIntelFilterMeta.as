@@ -34,12 +34,13 @@ public class FortIntelFilterMeta extends BaseDAAPIComponent {
         this.onClearClanTagSearch();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._fortIntelFilterVO) {
-            this._fortIntelFilterVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:FortIntelFilterVO = this._fortIntelFilterVO;
         this._fortIntelFilterVO = new FortIntelFilterVO(param1);
         this.setData(this._fortIntelFilterVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:FortIntelFilterVO):void {

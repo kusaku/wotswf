@@ -13,22 +13,22 @@ public class VehicleCompareAddVehiclePopoverMeta extends SmartPopOverView {
 
     public var addButtonClicked:Function;
 
-    private var _vehicleCompareAddVehiclePopoverVO:VehicleCompareAddVehiclePopoverVO;
-
     private var _buttonPropertiesVO:ButtonPropertiesVO;
+
+    private var _vehicleCompareAddVehiclePopoverVO:VehicleCompareAddVehiclePopoverVO;
 
     public function VehicleCompareAddVehiclePopoverMeta() {
         super();
     }
 
     override protected function onDispose():void {
-        if (this._vehicleCompareAddVehiclePopoverVO) {
-            this._vehicleCompareAddVehiclePopoverVO.dispose();
-            this._vehicleCompareAddVehiclePopoverVO = null;
-        }
         if (this._buttonPropertiesVO) {
             this._buttonPropertiesVO.dispose();
             this._buttonPropertiesVO = null;
+        }
+        if (this._vehicleCompareAddVehiclePopoverVO) {
+            this._vehicleCompareAddVehiclePopoverVO.dispose();
+            this._vehicleCompareAddVehiclePopoverVO = null;
         }
         super.onDispose();
     }
@@ -48,20 +48,22 @@ public class VehicleCompareAddVehiclePopoverMeta extends SmartPopOverView {
         this.addButtonClicked();
     }
 
-    public function as_setInitData(param1:Object):void {
-        if (this._vehicleCompareAddVehiclePopoverVO) {
-            this._vehicleCompareAddVehiclePopoverVO.dispose();
-        }
+    public final function as_setInitData(param1:Object):void {
+        var _loc2_:VehicleCompareAddVehiclePopoverVO = this._vehicleCompareAddVehiclePopoverVO;
         this._vehicleCompareAddVehiclePopoverVO = new VehicleCompareAddVehiclePopoverVO(param1);
         this.setInitData(this._vehicleCompareAddVehiclePopoverVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setAddButtonState(param1:Object):void {
-        if (this._buttonPropertiesVO) {
-            this._buttonPropertiesVO.dispose();
-        }
+    public final function as_setAddButtonState(param1:Object):void {
+        var _loc2_:ButtonPropertiesVO = this._buttonPropertiesVO;
         this._buttonPropertiesVO = new ButtonPropertiesVO(param1);
         this.setAddButtonState(this._buttonPropertiesVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setInitData(param1:VehicleCompareAddVehiclePopoverVO):void {

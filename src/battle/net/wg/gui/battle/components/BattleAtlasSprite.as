@@ -17,7 +17,7 @@ public class BattleAtlasSprite extends Sprite {
 
     private var _isCentralize:Boolean = false;
 
-    public function BattleAtlasSprite() {
+    public function BattleAtlasSprite(param1:Boolean = false) {
         super();
     }
 

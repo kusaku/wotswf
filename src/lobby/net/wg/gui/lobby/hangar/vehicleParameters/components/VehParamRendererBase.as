@@ -4,7 +4,7 @@ import flash.text.TextField;
 
 import net.wg.data.constants.generated.HANGAR_ALIASES;
 import net.wg.gui.components.controls.SoundListItemRenderer;
-import net.wg.gui.lobby.hangar.vehicleParameters.data.VehParamVO;
+import net.wg.gui.lobby.components.data.VehParamVO;
 
 import org.idmedia.as3commons.util.StringUtils;
 

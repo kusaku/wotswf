@@ -166,9 +166,6 @@ public class LobbyHeader extends LobbyHeaderMeta implements ILobbyHeaderMeta {
     }
 
     override protected function setHangarMenuData(param1:HangarMenuVO):void {
-        if (this.mainMenuButtonBar.dataProvider != null) {
-            this.mainMenuButtonBar.dataProvider.cleanUp();
-        }
         this.mainMenuButtonBar.dataProvider = param1.tabDataProvider;
     }
 

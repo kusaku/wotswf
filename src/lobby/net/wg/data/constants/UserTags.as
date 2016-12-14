@@ -32,31 +32,31 @@ public class UserTags {
     }
 
     public static function isFriend(param1:Array):Boolean {
-        return param1.indexOf(FRIEND) != -1;
+        return param1 && param1.indexOf(FRIEND) != -1;
     }
 
     public static function isIgnored(param1:Array):Boolean {
-        return param1.indexOf(IGNORED) != -1 || param1.indexOf(IGNORED_TMP) != -1;
+        return param1 && param1.indexOf(IGNORED) != -1 || param1.indexOf(IGNORED_TMP) != -1;
     }
 
     public static function isIgnoredTmp(param1:Array):Boolean {
-        return param1.indexOf(IGNORED_TMP) != -1;
+        return param1 && param1.indexOf(IGNORED_TMP) != -1;
     }
 
     public static function isMuted(param1:Array):Boolean {
-        return param1.indexOf(MUTED) != -1;
+        return param1 && param1.indexOf(MUTED) != -1;
     }
 
     public static function isCurrentPlayer(param1:Array):Boolean {
-        return param1.indexOf(CURRENT) != -1;
+        return param1 && param1.indexOf(CURRENT) != -1;
     }
 
     public static function isReferrer(param1:Array):Boolean {
-        return param1.indexOf(REFERRER) != -1;
+        return param1 && param1.indexOf(REFERRER) != -1;
     }
 
     public static function isReferral(param1:Array):Boolean {
-        return param1.indexOf(REFERRAL) != -1;
+        return param1 && param1.indexOf(REFERRAL) != -1;
     }
 
     public static function isInRefSystem(param1:Array):Boolean {
@@ -64,15 +64,15 @@ public class UserTags {
     }
 
     public static function isBusy(param1:Array):Boolean {
-        return param1.indexOf(PRESENCE_DND) != -1;
+        return param1 && param1.indexOf(PRESENCE_DND) != -1;
     }
 
     public static function isBaseIGR(param1:Array):Boolean {
-        return param1.indexOf(IGR_BASE) != -1;
+        return param1 && param1.indexOf(IGR_BASE) != -1;
     }
 
     public static function isPremiumIGR(param1:Array):Boolean {
-        return param1.indexOf(IGR_PREMIUM) != -1;
+        return param1 && param1.indexOf(IGR_PREMIUM) != -1;
     }
 
     public static function isInIGR(param1:Array):Boolean {
@@ -80,7 +80,7 @@ public class UserTags {
     }
 
     public static function isChatBan(param1:Array):Boolean {
-        return param1.indexOf(BAN_CHAT) != -1;
+        return param1 && param1.indexOf(BAN_CHAT) != -1;
     }
 }
 }

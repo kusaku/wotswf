@@ -2,10 +2,11 @@ package net.wg.gui.lobby.moduleInfo {
 import flash.text.TextField;
 import flash.text.TextLineMetrics;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.infrastructure.base.UIComponentEx;
+
 import scaleform.gfx.TextFieldEx;
 
-public class ModuleParameters extends UIComponent {
+public class ModuleParameters extends UIComponentEx {
 
     private static const LINE_SPACING_CORRECTION:int = 1;
 

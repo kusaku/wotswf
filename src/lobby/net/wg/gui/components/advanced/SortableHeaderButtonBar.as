@@ -80,7 +80,6 @@ public class SortableHeaderButtonBar extends ButtonBarEx {
     }
 }
 }
-
 class BtnEnablingData {
 
     public var index:int;

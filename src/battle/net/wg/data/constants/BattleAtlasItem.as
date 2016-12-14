@@ -3,6 +3,10 @@ public class BattleAtlasItem {
 
     public static const ICO_IGR:String = "icoIGR";
 
+    public static const BATTLE_LOADING_TABLE_SELF_BACKGROUND:String = "battleLoadingSelfTableBackground";
+
+    public static const BATTLE_LOADING_TIPS_SELF_BACKGROUND:String = "battleLoadingSelfTipsBackground";
+
     public static const SQUAD_INVITE_SENT:String = "squad_inviteSent";
 
     public static const SQUAD_INVITE_RECEIVED_FROM_SQUAD:String = "squad_inviteReceivedFromSquad";
@@ -151,7 +155,7 @@ public class BattleAtlasItem {
 
     public static const WHITE_ICON_SPG_16X16:String = "whiteIconSPG16x16";
 
-    private static const DASH:String = "_";
+    public static const SWITCH_SIEGE_DAMAGED:String = "switch_siege_damaged";
 
     public function BattleAtlasItem() {
         super();
@@ -173,8 +177,8 @@ public class BattleAtlasItem {
         return param1;
     }
 
-    public static function getFullStatsVehicleTypeName(param1:String, param2:String):String {
-        return FULL_STATS_VEHICLE_TYPE_PREFIX + param1 + DASH + param2;
+    public static function getFullStatsVehicleTypeName(param1:String):String {
+        return FULL_STATS_VEHICLE_TYPE_PREFIX + param1;
     }
 }
 }

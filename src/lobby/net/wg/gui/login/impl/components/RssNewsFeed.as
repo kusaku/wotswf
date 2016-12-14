@@ -4,6 +4,7 @@ import fl.transitions.easing.Strong;
 import flash.display.DisplayObject;
 import flash.display.Sprite;
 
+import net.wg.data.constants.Errors;
 import net.wg.gui.login.IRssNewsFeedRenderer;
 import net.wg.gui.login.impl.vo.RssItemVo;
 import net.wg.gui.utils.ExcludeTweenManager;
@@ -121,6 +122,7 @@ public class RssNewsFeed extends RssNewsFeedMeta implements IRssNewsFeedMeta {
             _loc4_ = this.rssItems[_loc2_];
             if (_loc4_.isUsed) {
                 _loc5_ = _loc4_ as DisplayObject;
+                App.utils.asserter.assertNotNull(_loc5_, "displayObj" + Errors.CANT_NULL);
                 this.container.setChildIndex(_loc5_, _loc3_);
                 _loc6_ = _loc6_ + _loc4_.itemHeight;
                 _loc4_.moveToY(-_loc6_);
@@ -153,6 +155,7 @@ public class RssNewsFeed extends RssNewsFeedMeta implements IRssNewsFeedMeta {
             _loc6_ = 0;
             while (_loc5_ < _loc4_) {
                 _loc7_ = this.container.getChildAt(_loc5_) as IRssNewsFeedRenderer;
+                App.utils.asserter.assertNotNull(_loc7_, "renderer" + Errors.CANT_NULL);
                 if (_loc7_.isUsed) {
                     _loc1_ = true;
                     _loc2_ = _loc2_ + (_loc7_.itemHeight + this.MARGIN_BETWEEN_ITEMS);
@@ -184,9 +187,11 @@ public class RssNewsFeed extends RssNewsFeedMeta implements IRssNewsFeedMeta {
     }
 
     private function addRenderer(param1:RssItemVo):IRssNewsFeedRenderer {
-        var _loc2_:Class = App.utils.classFactory.getClass(this.RENDERER_CLASS_REFERENCE) as Class;
+        var _loc2_:Class = App.utils.classFactory.getClass(this.RENDERER_CLASS_REFERENCE);
         var _loc3_:IRssNewsFeedRenderer = new _loc2_() as IRssNewsFeedRenderer;
+        App.utils.asserter.assertNotNull(_loc3_, "renderer" + Errors.CANT_NULL);
         var _loc4_:DisplayObject = _loc3_ as DisplayObject;
+        App.utils.asserter.assertNotNull(_loc4_, "displayObj" + Errors.CANT_NULL);
         _loc3_.y = 0;
         _loc3_.alpha = 0;
         this.container.addChild(_loc4_);
@@ -214,7 +219,7 @@ public class RssNewsFeed extends RssNewsFeedMeta implements IRssNewsFeedMeta {
     }
 
     private function onRendererHided(param1:RssItemEvent):void {
-        this.removeRenderer(param1.currentTarget as IRssNewsFeedRenderer);
+        this.removeRenderer(IRssNewsFeedRenderer(param1.currentTarget));
     }
 
     private function toBrowser(param1:RssItemEvent):void {
@@ -226,8 +231,7 @@ public class RssNewsFeed extends RssNewsFeedMeta implements IRssNewsFeedMeta {
     }
 
     private function removeRenderer(param1:IRssNewsFeedRenderer):void {
-        var _loc2_:DisplayObject = param1 as DisplayObject;
-        this.container.removeChild(_loc2_);
+        this.container.removeChild(DisplayObject(param1));
         this.cleanRenderer(param1);
         param1.dispose();
         param1 = null;
@@ -241,7 +245,7 @@ public class RssNewsFeed extends RssNewsFeedMeta implements IRssNewsFeedMeta {
         if (this.moveTween) {
             this.moveTween = null;
         }
-        this.clearData();
+        this.rssItemsVo = null;
         var _loc1_:RssNewsFeedRenderer = null;
         while (this.rssItems.length > 0) {
             _loc1_ = this.rssItems.pop();
@@ -250,25 +254,9 @@ public class RssNewsFeed extends RssNewsFeedMeta implements IRssNewsFeedMeta {
         super.onDispose();
     }
 
-    public function as_updateFeed(param1:Array):void {
-        var _loc3_:RssItemVo = null;
-        this.clearData();
-        var _loc2_:Number = 0;
-        while (_loc2_ < param1.length) {
-            _loc3_ = new RssItemVo(param1[_loc2_]);
-            this.rssItemsVo.push(_loc3_);
-            _loc2_++;
-        }
+    override protected function updateFeed(param1:Vector.<RssItemVo>):void {
+        this.rssItemsVo = param1;
         invalidateData();
-    }
-
-    private function clearData():void {
-        var _loc1_:RssItemVo = null;
-        while (this.rssItemsVo.length > 0) {
-            _loc1_ = this.rssItemsVo.pop();
-            _loc1_.dispose();
-            _loc1_ = null;
-        }
     }
 }
 }

@@ -17,7 +17,6 @@ import net.wg.utils.IGameInputManager;
 
 import scaleform.clik.constants.ConstrainMode;
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.events.InputEvent;
 import scaleform.clik.utils.Constraints;
@@ -96,7 +95,9 @@ public class TrainingForm extends TrainingFormMeta implements ITrainingFormMeta 
             x = this._myWidth - _originalWidth >> 1;
             y = -SUB_VIEW_MARGIN;
         }
-        if (isInvalid(InvalidationType.DATA) && this._data != null) {
+        if (this._data && isInvalid(InvalidationType.DATA)) {
+            this._roomsLabelText = this._data.roomsLabel;
+            this._playersLabelText = this._data.playersLabel;
             this.roomsLabel.htmlText = this._roomsLabelText;
             this.playersLabel.htmlText = this._playersLabelText;
         }
@@ -107,7 +108,6 @@ public class TrainingForm extends TrainingFormMeta implements ITrainingFormMeta 
         this.leaveButton.removeEventListener(ButtonEvent.CLICK, this.leaveTraining);
         this._gameInputMgr.clearKeyHandler(Keyboard.ESCAPE, KeyboardEvent.KEY_DOWN);
         removeEventListener(TrainingEvent.OPEN_TRAINING_ROOM, this.onOpenRoom);
-        this._data.dispose();
         this._data = null;
         this.sb.dispose();
         this.sb = null;
@@ -139,20 +139,11 @@ public class TrainingForm extends TrainingFormMeta implements ITrainingFormMeta 
         setFocus(this.createButon);
     }
 
-    public function as_setList(param1:Object):void {
-        assertNotNull(param1, "data" + Errors.CANT_NULL);
-        if (this._data != null) {
-            this._data.dispose();
-        }
-        this._data = new TrainingFormVO(param1);
+    override protected function setList(param1:TrainingFormVO):void {
+        this._data = param1;
         assertNotNull(this._data.listData, "_data.listData" + Errors.CANT_NULL);
-        if (this.list.dataProvider != null) {
-            this.list.dataProvider.cleanUp();
-        }
-        this.list.dataProvider = new DataProvider(this._data.listData);
-        this._roomsLabelText = this._data.roomsLabel;
-        this._playersLabelText = this._data.playersLabel;
-        invalidate(InvalidationType.DATA);
+        this.list.dataProvider = this._data.listData;
+        invalidateData();
     }
 
     private function onOpenRoom(param1:TrainingEvent):void {

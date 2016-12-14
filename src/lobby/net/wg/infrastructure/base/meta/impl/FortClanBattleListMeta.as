@@ -20,12 +20,13 @@ public class FortClanBattleListMeta extends BaseRallyListView {
         super.onDispose();
     }
 
-    public function as_setClanBattleData(param1:Object):void {
-        if (this._clanBattleListVO) {
-            this._clanBattleListVO.dispose();
-        }
+    public final function as_setClanBattleData(param1:Object):void {
+        var _loc2_:ClanBattleListVO = this._clanBattleListVO;
         this._clanBattleListVO = new ClanBattleListVO(param1);
         this.setClanBattleData(this._clanBattleListVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setClanBattleData(param1:ClanBattleListVO):void {

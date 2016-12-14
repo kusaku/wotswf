@@ -17,7 +17,6 @@ import net.wg.infrastructure.interfaces.IFocusChainContainer;
 import net.wg.infrastructure.interfaces.IViewStackContent;
 import net.wg.infrastructure.interfaces.entity.IFocusContainer;
 
-import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.IndexEvent;
 
 public class QuestsWindow extends QuestsWindowMeta implements IQuestsWindow {
@@ -100,10 +99,7 @@ public class QuestsWindow extends QuestsWindowMeta implements IQuestsWindow {
     }
 
     override protected function init(param1:TabsVO):void {
-        if (this.tabs_mc.dataProvider != null) {
-            this.tabs_mc.dataProvider.cleanUp();
-        }
-        this.tabs_mc.dataProvider = new DataProvider(param1.tabs);
+        this.tabs_mc.dataProvider = param1.tabs;
     }
 
     public function as_loadView(param1:String, param2:String):void {

@@ -5,7 +5,6 @@ import flash.events.MouseEvent;
 import flash.geom.Point;
 
 import net.wg.gui.components.controls.ScrollingListEx;
-import net.wg.gui.lobby.vehicleCompare.data.VehCompareParamVO;
 import net.wg.gui.lobby.vehicleCompare.data.VehCompareParamsDeltaVO;
 import net.wg.gui.lobby.vehicleCompare.events.VehCompareParamsListEvent;
 import net.wg.gui.lobby.vehicleCompare.events.VehCompareScrollEvent;
@@ -35,7 +34,7 @@ public class VehCompareTableContent extends UIComponentEx {
 
     public var scrollList:VehParamsScroller = null;
 
-    private var _vehParamsInfoDataProvider:IDataProvider = null;
+    private var _vehParamsInfoDataProvider:VehParamsListDataProvider = null;
 
     private var _carouselDataProvider:IDataProvider = null;
 
@@ -54,6 +53,7 @@ public class VehCompareTableContent extends UIComponentEx {
         this.scrollList.snapToPages = true;
         this.scrollList.cropContent = true;
         this.scrollList.mouseWheelDirection = null;
+        this.scrollList.pageWidth = VehCompareVehParamRenderer.LINE_WIDTH;
         this.scrollList.addEventListener(Event.SCROLL, this.onScrollListScrollHandler);
         this.scrollList.mouseEnabled = false;
         this.paramsList.rowHeight = VehCompareVehParamRenderer.LINE_HEIGHT;
@@ -82,14 +82,14 @@ public class VehCompareTableContent extends UIComponentEx {
         if (this._vehParamsInfoDataProvider && isInvalid(VEH_PARAMS_INFO_INV)) {
             this.paramsList.dataProvider = this._vehParamsInfoDataProvider;
             this.tableGrid.setRenderersCount(this._vehParamsInfoDataProvider.length);
-            this.tableGrid.setDataProvider(VehParamsListDataProvider(this._vehParamsInfoDataProvider));
+            this.tableGrid.setDataProvider(this._vehParamsInfoDataProvider);
         }
         if (this._paramsDeltaData && isInvalid(VEH_PARAMS_DELTA_DATA_INV)) {
             this._paramsDeltaData.paramIndex = -1;
             _loc1_ = this._vehParamsInfoDataProvider.length;
             _loc2_ = 0;
             while (_loc2_ != _loc1_) {
-                _loc3_ = VehCompareParamVO(this._vehParamsInfoDataProvider[_loc2_]).paramID;
+                _loc3_ = this._vehParamsInfoDataProvider.getItemAt(_loc2_).paramID;
                 if (_loc3_ == this._paramsDeltaData.paramID) {
                     this._paramsDeltaData.paramIndex = _loc2_;
                     break;
@@ -100,7 +100,7 @@ public class VehCompareTableContent extends UIComponentEx {
         }
         if (isInvalid(InvalidationType.SIZE)) {
             if (this._vehParamsInfoDataProvider) {
-                _loc4_ = VehCompareVehParamRenderer.LINE_HEIGHT * VehParamsListDataProvider(this._vehParamsInfoDataProvider).originalLength + VehCompareVehParamRenderer.BOTTOM_LINE_HEIGHT;
+                _loc4_ = VehCompareVehParamRenderer.LINE_HEIGHT * this._vehParamsInfoDataProvider.originalLength + VehCompareVehParamRenderer.BOTTOM_LINE_HEIGHT;
                 this.paramsList.height = _loc4_;
                 this.separator.height = _loc4_;
                 this.tableGrid.width = width;
@@ -155,7 +155,7 @@ public class VehCompareTableContent extends UIComponentEx {
     }
 
     public function setVehParamsInfo(param1:IDataProvider):void {
-        this._vehParamsInfoDataProvider = param1;
+        this._vehParamsInfoDataProvider = VehParamsListDataProvider(param1);
         invalidate(VEH_PARAMS_INFO_INV, VEH_PARAMS_DELTA_DATA_INV, InvalidationType.SIZE);
     }
 
@@ -205,8 +205,7 @@ public class VehCompareTableContent extends UIComponentEx {
     }
 
     private function onParamsListRenderClickHandler(param1:VehCompareParamsListEvent):void {
-        var _loc2_:VehParamsListDataProvider = VehParamsListDataProvider(this._vehParamsInfoDataProvider);
-        _loc2_.update();
+        this._vehParamsInfoDataProvider.update();
         this.paramsList.invalidateData();
         this.paramsList.invalidateRenderers();
         this.tableGrid.setRenderersCount(this._vehParamsInfoDataProvider.length);

@@ -58,6 +58,8 @@ public class TankRotator extends ItemWithModules {
             _loc3_ = param1[RIGHT_PARAM_IDX];
             this.leftGunConstraint.rotation = -_loc2_;
             this.rightGunConstraint.rotation = _loc3_;
+            this.leftGunConstraint.visible = true;
+            this.rightGunConstraint.visible = true;
         }
         else {
             this.leftGunConstraint.visible = false;

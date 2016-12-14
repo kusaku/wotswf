@@ -143,9 +143,12 @@ public class ScrollingListEx extends CoreListEx {
 
     override protected function refreshData():void {
         this._scrollPosition = Math.min(Math.max(0, _dataProvider.length - _totalRenderers), this._scrollPosition);
+        _dataProvider.requestItemRange(this._scrollPosition, Math.min(_dataProvider.length - 1, this._scrollPosition + _totalRenderers - 1), this.populateData);
+        if (_baseDisposed) {
+            return;
+        }
         this.selectedIndex = Math.min(_dataProvider.length - 1, _selectedIndex);
         this.updateSelectedIndex();
-        _dataProvider.requestItemRange(this._scrollPosition, Math.min(_dataProvider.length - 1, this._scrollPosition + _totalRenderers - 1), this.populateData);
     }
 
     override protected function updateSelectedIndex():void {

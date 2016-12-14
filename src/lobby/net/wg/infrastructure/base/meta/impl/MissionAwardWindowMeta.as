@@ -34,12 +34,13 @@ public class MissionAwardWindowMeta extends AbstractWindowView {
         this.onNextQuestClick();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._missionAwardWindowVO) {
-            this._missionAwardWindowVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:MissionAwardWindowVO = this._missionAwardWindowVO;
         this._missionAwardWindowVO = new MissionAwardWindowVO(param1);
         this.setData(this._missionAwardWindowVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:MissionAwardWindowVO):void {

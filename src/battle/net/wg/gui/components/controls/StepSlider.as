@@ -3,6 +3,7 @@ import flash.display.DisplayObject;
 import flash.display.Sprite;
 import flash.events.MouseEvent;
 
+import net.wg.data.constants.Errors;
 import net.wg.gui.components.controls.interfaces.ISliderKeyPoint;
 
 import scaleform.clik.constants.InvalidationType;
@@ -188,7 +189,9 @@ public class StepSlider extends Slider {
     }
 
     private function onKeyPointClick(param1:MouseEvent):void {
-        value = (param1.currentTarget as SliderKeyPoint).index;
+        var _loc2_:SliderKeyPoint = param1.currentTarget as SliderKeyPoint;
+        App.utils.asserter.assertNotNull(_loc2_, "sliderKeyPoint" + Errors.CANT_NULL);
+        value = _loc2_.index;
     }
 
     private function onThumbOut(param1:MouseEvent):void {

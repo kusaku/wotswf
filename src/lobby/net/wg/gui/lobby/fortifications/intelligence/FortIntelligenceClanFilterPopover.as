@@ -12,8 +12,8 @@ import net.wg.data.constants.Values;
 import net.wg.gui.components.controls.NumericStepper;
 import net.wg.gui.components.controls.RangeSlider;
 import net.wg.gui.components.controls.SoundButtonEx;
-import net.wg.gui.components.popOvers.PopOver;
-import net.wg.gui.components.popOvers.PopOverConst;
+import net.wg.gui.components.popovers.PopOver;
+import net.wg.gui.components.popovers.PopOverConst;
 import net.wg.gui.events.NumericStepperEvent;
 import net.wg.gui.lobby.fortifications.data.FortInvalidationType;
 import net.wg.gui.lobby.fortifications.data.IntelligenceClanFilterVO;
@@ -142,7 +142,7 @@ public class FortIntelligenceClanFilterPopover extends FortIntelligenceClanFilte
             }
             else if (this.dataWasChangedByControls()) {
                 this.disposeCurrentData();
-                this._currentData = new IntelligenceClanFilterVO(this.filterData.toHash());
+                this._currentData = this.filterData.clone();
                 this.setValues(this._currentData);
             }
         }
@@ -204,7 +204,7 @@ public class FortIntelligenceClanFilterPopover extends FortIntelligenceClanFilte
         assert(param1.maxClanLevel <= this._defaultFilterData.maxClanLevel && param1.maxClanLevel >= param1.minClanLevel, "FortIntelligenceClanFilterPopover | setData | incorrect maxClanLevel");
         assert(param1.minClanLevel <= this._defaultFilterData.maxClanLevel && param1.minClanLevel >= param1.minClanLevel, "FortIntelligenceClanFilterPopover | setData | incorrect minClanLevel");
         assert(param1.minClanLevel <= param1.maxClanLevel, "FortIntelligenceClanFilterPopover | setData | incorrect minClanLevel should be less or equal to maxClanLevel");
-        this._currentData = new IntelligenceClanFilterVO(param1.toHash());
+        this._currentData = param1.clone();
         this._isGlobalDataSet = true;
         if (param1.isTwelveHoursFormat) {
             this.defenseStartNumericStepper.labelFunction = App.utils.dateTime.convertToTwelveHourFormat;
@@ -218,7 +218,7 @@ public class FortIntelligenceClanFilterPopover extends FortIntelligenceClanFilte
         }
         this.defenseStartNumericStepper.skipValues = _loc2_;
         if (!this._lastSentData) {
-            this._lastSentData = new IntelligenceClanFilterVO(param1.toHash());
+            this._lastSentData = param1.clone();
         }
         invalidateData();
         invalidate(FortInvalidationType.INVALID_ENABLING);

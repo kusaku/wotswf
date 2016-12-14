@@ -4,8 +4,11 @@ import flash.events.Event;
 
 import net.wg.data.FilterDAAPIDataProvider;
 import net.wg.data.constants.Directions;
+import net.wg.data.constants.Values;
 import net.wg.gui.components.controls.events.RendererEvent;
 import net.wg.gui.components.controls.scroller.data.ScrollConfig;
+import net.wg.gui.lobby.christmas.data.ChristmasButtonVO;
+import net.wg.gui.lobby.christmas.interfaces.IChristmasButton;
 import net.wg.gui.lobby.hangar.tcarousel.data.TankCarouselFilterInitVO;
 import net.wg.gui.lobby.hangar.tcarousel.data.TankCarouselFilterSelectedVO;
 import net.wg.gui.lobby.hangar.tcarousel.data.VehicleCarouselVO;
@@ -18,6 +21,7 @@ import net.wg.utils.helpLayout.HelpLayoutVO;
 import org.idmedia.as3commons.util.StringUtils;
 
 import scaleform.clik.constants.InvalidationType;
+import scaleform.clik.events.ButtonEvent;
 
 public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
 
@@ -41,6 +45,8 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
 
     private static const INV_ROW_COUNT:String = "invRowCount";
 
+    private static const EVENT_BTN_WIDTH:int = 175;
+
     public var vehicleFilters:TankCarouselFilters = null;
 
     public var background:MovieClip = null;
@@ -50,6 +56,8 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
     public var leftFadeEndItem:MovieClip = null;
 
     public var filterCounter:TankFilterCounter = null;
+
+    public var christmasBtn:IChristmasButton = null;
 
     private var _dataProvider:FilterDAAPIDataProvider = null;
 
@@ -71,10 +79,28 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
 
     override protected function updateLayout(param1:Number, param2:Number = 0):void {
         var _loc3_:Number = param2 + FILTERS_WIDTH + OFFSET_FILTERS + OFFSET_ARROW;
-        var _loc4_:Number = param1 - _loc3_ - OFFSET_ARROW;
+        var _loc4_:Number = param1 - _loc3_ - OFFSET_ARROW - (!!this.christmasBtn.visible ? EVENT_BTN_WIDTH : 0);
         this.background.width = param1;
         super.updateLayout(_loc4_, _loc3_);
         this.rightFadeEndItem.x = rightArrow.x - rightArrow.width - this.rightFadeEndItem.width;
+        if (this.christmasBtn.visible) {
+            this.christmasBtn.x = param1 - EVENT_BTN_WIDTH;
+            this.christmasBtn.y = 0;
+            this.christmasBtn.updateLayout(EVENT_BTN_WIDTH, this.background.height + this.background.y);
+        }
+    }
+
+    override protected function setChristmasBtnData(param1:ChristmasButtonVO):void {
+        this.christmasBtn.visible = param1.isEnabled;
+        if (this.christmasBtn.visible) {
+            this.christmasBtn.label = param1.label;
+            this.christmasBtn.tooltip = param1.tooltip;
+            this.christmasBtn.setCounter(param1.newToysCount);
+        }
+        else {
+            this.christmasBtn.setCounter(Values.EMPTY_STR);
+        }
+        invalidateSize();
     }
 
     override protected function configUI():void {
@@ -105,6 +131,7 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
         this.background.mouseEnabled = false;
         this.background.mouseChildren = false;
         mouseEnabled = false;
+        this.christmasBtn.addEventListener(ButtonEvent.CLICK, this.onChristmasBtnClickHandler);
         App.utils.helpLayout.registerComponent(this);
     }
 
@@ -123,6 +150,7 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
         }
         super.draw();
         if (_loc1_) {
+            this.christmasBtn.invalidate(InvalidationType.SIZE);
             dispatchEvent(new Event(Event.RESIZE));
         }
     }
@@ -141,6 +169,9 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
         this._dataProvider = null;
         this.filterCounter.dispose();
         this.filterCounter = null;
+        this.christmasBtn.removeEventListener(ButtonEvent.CLICK, this.onChristmasBtnClickHandler);
+        this.christmasBtn.dispose();
+        this.christmasBtn = null;
         this.background = null;
         this.rightFadeEndItem = null;
         this.leftFadeEndItem = null;
@@ -291,6 +322,10 @@ public class TankCarousel extends TankCarouselMeta implements ITankCarousel {
 
     public function get helper():ITankCarouselHelper {
         return this._helper;
+    }
+
+    private function onChristmasBtnClickHandler(param1:ButtonEvent):void {
+        onChristmasBtnClickS();
     }
 
     private function onSelectBuyTankHandler(param1:TankItemEvent):void {

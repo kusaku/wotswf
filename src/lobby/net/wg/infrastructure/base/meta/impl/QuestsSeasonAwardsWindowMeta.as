@@ -27,12 +27,13 @@ public class QuestsSeasonAwardsWindowMeta extends AbstractWindowView {
         this.showVehicleInfo(param1);
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._seasonAwardsVO) {
-            this._seasonAwardsVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:SeasonAwardsVO = this._seasonAwardsVO;
         this._seasonAwardsVO = new SeasonAwardsVO(param1);
         this.setData(this._seasonAwardsVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:SeasonAwardsVO):void {

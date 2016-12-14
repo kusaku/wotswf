@@ -2,12 +2,13 @@ package net.wg.gui.lobby.settings {
 import net.wg.gui.components.advanced.FieldSet;
 import net.wg.gui.components.controls.CheckBox;
 import net.wg.gui.components.controls.DropdownMenu;
+import net.wg.gui.components.controls.IconTextButton;
 import net.wg.gui.components.controls.LabelControl;
 import net.wg.gui.components.controls.Slider;
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.interfaces.IButtonIconLoader;
 import net.wg.gui.lobby.settings.components.RadioButtonBar;
-import net.wg.gui.lobby.settings.components.TabButtonBar;
+import net.wg.gui.lobby.settings.components.SoundDeviceButtonBar;
 import net.wg.infrastructure.base.UIComponentEx;
 
 public class SoundCommonForm extends UIComponentEx {
@@ -74,9 +75,11 @@ public class SoundCommonForm extends UIComponentEx {
 
     public var presetsFieldSet:FieldSet = null;
 
-    public var soundDeviceLabel:LabelControl = null;
+    public var soundDeviceButtonBar:SoundDeviceButtonBar = null;
 
-    public var soundDeviceButtonBar:TabButtonBar = null;
+    public var soundSpeakersDropDown:DropdownMenu = null;
+
+    public var soundSpeakersTestButton:IconTextButton = null;
 
     public var bassBoostCheckbox:CheckBox = null;
 
@@ -108,10 +111,14 @@ public class SoundCommonForm extends UIComponentEx {
         this.bulbVoicesButton.iconOffsetLeft = 2;
         this.bulbVoicesButton.iconOffsetTop = -1;
         this.presetsFieldSet.label = SETTINGS.SOUND_PRESETS_TITLE;
-        this.soundDeviceLabel.text = SETTINGS.SOUNDS_SOUNDDEVICE_LABEL;
         this.bassBoostCheckbox.label = SETTINGS.SOUNDS_BASSBOOST;
         this.nightModeCheckbox.label = SETTINGS.SOUNDS_NIGHTMODE;
         this.soundQualityCheckbox.label = SETTINGS.SOUNDS_SOUNDQUALITY;
+        this.soundSpeakersTestButton.caps = false;
+        this.soundSpeakersTestButton.label = SETTINGS.SOUNDS_ACOUSTICTYPE_TESTBUTTON;
+        this.soundSpeakersTestButton.iconSource = RES_ICONS.MAPS_ICONS_BUTTONS_SOUND;
+        this.soundSpeakersTestButton.iconOffsetLeft = 5;
+        this.soundSpeakersTestButton.iconOffsetTop = 2;
         super.configUI();
     }
 
@@ -180,10 +187,12 @@ public class SoundCommonForm extends UIComponentEx {
         this.bulbVoicesDropDown = null;
         this.presetsFieldSet.dispose();
         this.presetsFieldSet = null;
-        this.soundDeviceLabel.dispose();
-        this.soundDeviceLabel = null;
         this.soundDeviceButtonBar.dispose();
         this.soundDeviceButtonBar = null;
+        this.soundSpeakersTestButton.dispose();
+        this.soundSpeakersTestButton = null;
+        this.soundSpeakersDropDown.dispose();
+        this.soundSpeakersDropDown = null;
         this.bassBoostCheckbox.dispose();
         this.bassBoostCheckbox = null;
         this.nightModeCheckbox.dispose();

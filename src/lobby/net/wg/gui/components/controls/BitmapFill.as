@@ -197,7 +197,7 @@ public class BitmapFill extends UIComponentEx {
         this.disposeBitmapData();
         this._src = param1;
         if (this._src != "") {
-            _loc2_ = App.utils.classFactory.getClass(this._src) as Class;
+            _loc2_ = App.utils.classFactory.getClass(this._src);
             this._bitmapData = BitmapData(new _loc2_());
             this._needDispose = true;
             invalidate();

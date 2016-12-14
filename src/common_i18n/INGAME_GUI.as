@@ -65,6 +65,8 @@ package
       
       public static const PLAYER_ERRORS_CANT_SHOOT_GUN_LOCKED:String = "#ingame_gui:player_errors/cant_shoot/gun_locked";
       
+      public static const PLAYER_ERRORS_CANT_SWITCH_ENGINE_DESTROYED:String = "#ingame_gui:player_errors/cant_switch/engine_destroyed";
+      
       public static const PLAYER_ERRORS_EQUIPMENT_ALREADYACTIVATED:String = "#ingame_gui:player_errors/equipment/alreadyActivated";
       
       public static const PLAYER_ERRORS_EQUIPMENT_MEDKIT_TANKMANISSAFE:String = "#ingame_gui:player_errors/equipment/medkit/tankmanIsSafe";
@@ -955,16 +957,39 @@ package
       
       public static const BATTLEMESSENGER_TOXIC_BLACKLIST_REMOVE_FROM_BLACKLIST_BODY:String = BATTLEMESSENGER_TOXIC_BLACKLIST_REMOVE_FROM_BLACKLIST + "/body";
       
+      public static const SIEGEMODE_HINT_PRESS:String = "#ingame_gui:siegeMode/hint/press";
+      
+      public static const SIEGEMODE_HINT_FORMODE_0:String = "#ingame_gui:siegeMode/hint/forMode/0";
+      
+      public static const SIEGEMODE_HINT_FORMODE_1:String = "#ingame_gui:siegeMode/hint/forMode/1";
+      
+      public static const SIEGEMODE_HINT_FORMODE_2:String = "#ingame_gui:siegeMode/hint/forMode/2";
+      
+      public static const SIEGEMODE_HINT_FORMODE_3:String = "#ingame_gui:siegeMode/hint/forMode/3";
+      
+      public static const SIEGEMODE_HINT_NOBINDING:String = "#ingame_gui:siegeMode/hint/noBinding";
+      
+      public static const EFFICIENCYRIBBONS_ENUM:Array = [EFFICIENCYRIBBONS_ARMOR,EFFICIENCYRIBBONS_CAPTURE,EFFICIENCYRIBBONS_DAMAGE,EFFICIENCYRIBBONS_RAM,EFFICIENCYRIBBONS_BURN,EFFICIENCYRIBBONS_DEFENCE,EFFICIENCYRIBBONS_KILL,EFFICIENCYRIBBONS_SPOTTED,EFFICIENCYRIBBONS_ASSISTTRACK,EFFICIENCYRIBBONS_ASSISTSPOT,EFFICIENCYRIBBONS_CRITS];
+      
       public static const CHAT_EXAMPLE_ENUM:Array = [CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE,CHAT_EXAMPLE_RELOADING_GUN,CHAT_EXAMPLE_RELOADING_CASSETTE,CHAT_EXAMPLE_RELOADING_READY,CHAT_EXAMPLE_TURN_BACK,CHAT_EXAMPLE_RELOADING_READY_CASSETTE,CHAT_EXAMPLE_RELOADING_UNAVAILABLE,CHAT_EXAMPLE_STOP,CHAT_EXAMPLE_HELP_ME,CHAT_EXAMPLE_HELP_ME_EX,CHAT_EXAMPLE_FOLLOW_ME,CHAT_EXAMPLE_ATTACK,CHAT_EXAMPLE_BACK_TO_BASE,CHAT_EXAMPLE_POSITIVE,CHAT_EXAMPLE_NEGATIVE,CHAT_EXAMPLE_ATTENTION_TO_CELL,CHAT_EXAMPLE_ATTACK_ENEMY];
       
       public static const CHAT_SHORTCUTS_ENUM:Array = [CHAT_SHORTCUTS_TURN_BACK,CHAT_SHORTCUTS_SUPPORT_ME_WITH_FIRE,CHAT_SHORTCUTS_RELOADING_GUN,CHAT_SHORTCUTS_RELOADING_CASSETTE,CHAT_SHORTCUTS_RELOADING_READY,CHAT_SHORTCUTS_RELOADING_READY_CASSETTE,CHAT_SHORTCUTS_RELOADING_UNAVAILABLE,CHAT_SHORTCUTS_STOP,CHAT_SHORTCUTS_HELP_ME,CHAT_SHORTCUTS_HELP_ME_EX,CHAT_SHORTCUTS_FOLLOW_ME,CHAT_SHORTCUTS_ATTACK,CHAT_SHORTCUTS_BACK_TO_BASE,CHAT_SHORTCUTS_POSITIVE,CHAT_SHORTCUTS_NEGATIVE,CHAT_SHORTCUTS_ATTENTION_TO_CELL,CHAT_SHORTCUTS_ATTACK_ENEMY];
-      
-      public static const EFFICIENCYRIBBONS_ENUM:Array = [EFFICIENCYRIBBONS_ARMOR,EFFICIENCYRIBBONS_CAPTURE,EFFICIENCYRIBBONS_DAMAGE,EFFICIENCYRIBBONS_RAM,EFFICIENCYRIBBONS_BURN,EFFICIENCYRIBBONS_DEFENCE,EFFICIENCYRIBBONS_KILL,EFFICIENCYRIBBONS_SPOTTED,EFFICIENCYRIBBONS_ASSISTTRACK,EFFICIENCYRIBBONS_ASSISTSPOT,EFFICIENCYRIBBONS_CRITS];
        
       
       public function INGAME_GUI()
       {
          super();
+      }
+      
+      public static function efficiencyribbons(param1:String) : String
+      {
+         var _loc2_:String = "#ingame_gui:efficiencyRibbons/" + param1;
+         if(EFFICIENCYRIBBONS_ENUM.indexOf(_loc2_) == -1)
+         {
+            DebugUtils.LOG_WARNING("[efficiencyribbons]:locale key \"" + _loc2_ + "\" was not found");
+            return null;
+         }
+         return _loc2_;
       }
       
       public static function chat_example(param1:String) : String
@@ -984,17 +1009,6 @@ package
          if(CHAT_SHORTCUTS_ENUM.indexOf(_loc2_) == -1)
          {
             DebugUtils.LOG_WARNING("[chat_shortcuts]:locale key \"" + _loc2_ + "\" was not found");
-            return null;
-         }
-         return _loc2_;
-      }
-      
-      public static function efficiencyribbons(param1:String) : String
-      {
-         var _loc2_:String = "#ingame_gui:efficiencyRibbons/" + param1;
-         if(EFFICIENCYRIBBONS_ENUM.indexOf(_loc2_) == -1)
-         {
-            DebugUtils.LOG_WARNING("[efficiencyribbons]:locale key \"" + _loc2_ + "\" was not found");
             return null;
          }
          return _loc2_;

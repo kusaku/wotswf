@@ -18,5 +18,9 @@ public interface IIngameMenuMeta extends IEventDispatcher {
     function as_setServerStats(param1:String, param2:String):void;
 
     function as_setSettingsBtnCounter(param1:String):void;
+
+    function as_removeSettingsBtnCounter():void;
+
+    function as_setMenuButtonsLabels(param1:String, param2:String, param3:String, param4:String):void;
 }
 }

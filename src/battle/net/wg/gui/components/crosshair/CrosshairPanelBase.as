@@ -41,7 +41,9 @@ public class CrosshairPanelBase extends AimMeta implements IAimMeta {
 
     protected var _reloadingSettings:Array;
 
-    protected var _clipCapacity:Number = 1;
+    protected var _clipCapacity:Number = 0;
+
+    protected var _burst:Number = 0;
 
     protected var clipQuanityBar:ClipQuantityBar = null;
 
@@ -161,21 +163,21 @@ public class CrosshairPanelBase extends AimMeta implements IAimMeta {
     }
 
     public function as_setClipParams(param1:Number, param2:Number):void {
-        var _loc3_:MovieClip = null;
-        if (this._clipCapacity == param1) {
+        if (this._clipCapacity == param1 && this._burst == param2) {
             return;
         }
         this._clipCapacity = param1;
-        if (this._clipCapacity > 1) {
-            _loc3_ = this.cassette;
-            if (_loc3_ && !this.clipQuanityBar) {
-                this.clipQuanityBar = ClipQuantityBar.create(this._clipCapacity, param2);
-                _loc3_.addChild(this.clipQuanityBar);
+        this._burst = param2;
+        if (this.clipQuanityBar != null) {
+            if (this.cassette && this.cassette.contains(this.clipQuanityBar)) {
+                this.cassette.removeChild(this.clipQuanityBar);
             }
-        }
-        else if (this.clipQuanityBar != null) {
-            removeChild(this.clipQuanityBar);
+            this.clipQuanityBar.dispose();
             this.clipQuanityBar = null;
+        }
+        if (this._clipCapacity > 1 && this.cassette) {
+            this.clipQuanityBar = ClipQuantityBar.create(this._clipCapacity, this._burst);
+            this.cassette.addChild(this.clipQuanityBar);
         }
     }
 

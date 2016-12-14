@@ -22,28 +22,28 @@ public class CyberSportIntroMeta extends BaseRallyIntroView {
 
     public var joinClubUnit:Function;
 
-    private var _introVehicleVO:IntroVehicleVO;
+    private var _cSIntroViewStaticTeamVO:CSIntroViewStaticTeamVO;
 
     private var _cSIntroViewTextsVO:CSIntroViewTextsVO;
 
-    private var _cSIntroViewStaticTeamVO:CSIntroViewStaticTeamVO;
+    private var _introVehicleVO:IntroVehicleVO;
 
     public function CyberSportIntroMeta() {
         super();
     }
 
     override protected function onDispose():void {
-        if (this._introVehicleVO) {
-            this._introVehicleVO.dispose();
-            this._introVehicleVO = null;
+        if (this._cSIntroViewStaticTeamVO) {
+            this._cSIntroViewStaticTeamVO.dispose();
+            this._cSIntroViewStaticTeamVO = null;
         }
         if (this._cSIntroViewTextsVO) {
             this._cSIntroViewTextsVO.dispose();
             this._cSIntroViewTextsVO = null;
         }
-        if (this._cSIntroViewStaticTeamVO) {
-            this._cSIntroViewStaticTeamVO.dispose();
-            this._cSIntroViewStaticTeamVO = null;
+        if (this._introVehicleVO) {
+            this._introVehicleVO.dispose();
+            this._introVehicleVO = null;
         }
         super.onDispose();
     }
@@ -83,28 +83,31 @@ public class CyberSportIntroMeta extends BaseRallyIntroView {
         this.joinClubUnit();
     }
 
-    public function as_setSelectedVehicle(param1:Object):void {
-        if (this._introVehicleVO) {
-            this._introVehicleVO.dispose();
-        }
+    public final function as_setSelectedVehicle(param1:Object):void {
+        var _loc2_:IntroVehicleVO = this._introVehicleVO;
         this._introVehicleVO = new IntroVehicleVO(param1);
         this.setSelectedVehicle(this._introVehicleVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setTexts(param1:Object):void {
-        if (this._cSIntroViewTextsVO) {
-            this._cSIntroViewTextsVO.dispose();
-        }
+    public final function as_setTexts(param1:Object):void {
+        var _loc2_:CSIntroViewTextsVO = this._cSIntroViewTextsVO;
         this._cSIntroViewTextsVO = new CSIntroViewTextsVO(param1);
         this.setTexts(this._cSIntroViewTextsVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setStaticTeamData(param1:Object):void {
-        if (this._cSIntroViewStaticTeamVO) {
-            this._cSIntroViewStaticTeamVO.dispose();
-        }
+    public final function as_setStaticTeamData(param1:Object):void {
+        var _loc2_:CSIntroViewStaticTeamVO = this._cSIntroViewStaticTeamVO;
         this._cSIntroViewStaticTeamVO = new CSIntroViewStaticTeamVO(param1);
         this.setStaticTeamData(this._cSIntroViewStaticTeamVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setSelectedVehicle(param1:IntroVehicleVO):void {

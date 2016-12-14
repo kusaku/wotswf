@@ -2,12 +2,12 @@ package net.wg.gui.components.windows {
 import flash.display.Sprite;
 
 import net.wg.gui.components.controls.BitmapFill;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.entity.IDisposable;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class ScreenBg extends UIComponent implements IDisposable {
+public class ScreenBg extends UIComponentEx implements IDisposable {
 
     private static const STATE_INV:String = "stateChange";
 

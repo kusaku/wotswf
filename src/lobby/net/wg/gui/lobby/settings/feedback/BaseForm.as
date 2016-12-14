@@ -12,6 +12,7 @@ import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.IDisplayObject;
 import net.wg.infrastructure.interfaces.IViewStackContent;
 
+import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.IndexEvent;
 
@@ -157,6 +158,12 @@ public class BaseForm extends UIComponentEx implements IViewStackContent {
     protected function onButtonBarIndexChange(param1:RadioButtonBar):void {
         var _loc2_:String = SettingsConfigHelper.instance.getControlId(param1.name, SettingsConfigHelper.TYPE_BUTTON_BAR);
         this.dispatchSettingSubVewEvent(_loc2_, param1.selectedIndex);
+    }
+
+    protected function setElementEnabled(param1:UIComponent, param2:Boolean):void {
+        if (param1.enabled != param2) {
+            param1.enabled = param2;
+        }
     }
 
     public function get formId():String {

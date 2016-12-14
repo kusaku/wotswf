@@ -20,12 +20,13 @@ public class FortClanListWindowMeta extends AbstractWindowView {
         super.onDispose();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._fortClanListWindowVO) {
-            this._fortClanListWindowVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:FortClanListWindowVO = this._fortClanListWindowVO;
         this._fortClanListWindowVO = new FortClanListWindowVO(param1);
         this.setData(this._fortClanListWindowVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:FortClanListWindowVO):void {

@@ -5,10 +5,9 @@ import flash.display.Sprite;
 
 import net.wg.data.constants.generated.CYBER_SPORT_ALIASES;
 import net.wg.gui.rally.vo.SettingRosterVO;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
-
-public class RangeViewComponent extends UIComponent {
+public class RangeViewComponent extends UIComponentEx {
 
     private static const UPDATE_ROSTER:String = "updateRoster";
 

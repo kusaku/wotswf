@@ -1,11 +1,13 @@
 package net.wg.gui.lobby.battlequeue {
 import flash.text.TextField;
 
+import net.wg.infrastructure.base.UIComponentEx;
+
 import scaleform.clik.core.UIComponent;
 import scaleform.clik.data.ListData;
 import scaleform.clik.interfaces.IListItemRenderer;
 
-public class BattleQueueItemRenderer extends UIComponent implements IListItemRenderer {
+public class BattleQueueItemRenderer extends UIComponentEx implements IListItemRenderer {
 
     protected var _index:uint = 0;
 

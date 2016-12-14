@@ -108,11 +108,11 @@ public class ModuleAssets implements IDamagePanelClickableItem {
         this._destroyed.visible = false;
         this._warningAnim.visible = false;
         this._modulesHit.visible = false;
-        this._repairAnim.resetModuleRepairing();
+        this._repairAnim.state = BATTLE_ITEM_STATES.NORMAL;
     }
 
     public function resetModuleRepairing():void {
-        this._repairAnim.resetModuleRepairing();
+        this._repairAnim.state = BATTLE_ITEM_STATES.NORMAL;
     }
 
     public function showDestroyed():void {

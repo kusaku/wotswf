@@ -14,6 +14,8 @@ public class VehicleModulesWindowMeta extends AbstractWindowView {
 
     public var onCompareBtnClick:Function;
 
+    private var _array:Array;
+
     private var _vehicleModulesWindowInitDataVO:VehicleModulesWindowInitDataVO;
 
     public function VehicleModulesWindowMeta() {
@@ -21,6 +23,10 @@ public class VehicleModulesWindowMeta extends AbstractWindowView {
     }
 
     override protected function onDispose():void {
+        if (this._array) {
+            this._array.splice(0, this._array.length);
+            this._array = null;
+        }
         if (this._vehicleModulesWindowInitDataVO) {
             this._vehicleModulesWindowInitDataVO.dispose();
             this._vehicleModulesWindowInitDataVO = null;
@@ -48,16 +54,32 @@ public class VehicleModulesWindowMeta extends AbstractWindowView {
         this.onCompareBtnClick();
     }
 
-    public function as_setInitData(param1:Object):void {
-        if (this._vehicleModulesWindowInitDataVO) {
-            this._vehicleModulesWindowInitDataVO.dispose();
-        }
+    public final function as_setInitData(param1:Object):void {
+        var _loc2_:VehicleModulesWindowInitDataVO = this._vehicleModulesWindowInitDataVO;
         this._vehicleModulesWindowInitDataVO = new VehicleModulesWindowInitDataVO(param1);
         this.setInitData(this._vehicleModulesWindowInitDataVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
+    }
+
+    public final function as_setNodesStates(param1:Array):void {
+        var _loc2_:Array = this._array;
+        this._array = param1;
+        this.setNodesStates(this._array);
+        if (_loc2_) {
+            _loc2_.splice(0, _loc2_.length);
+        }
     }
 
     protected function setInitData(param1:VehicleModulesWindowInitDataVO):void {
         var _loc2_:String = "as_setInitData" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
+    }
+
+    protected function setNodesStates(param1:Array):void {
+        var _loc2_:String = "as_setNodesStates" + Errors.ABSTRACT_INVOKE;
         DebugUtils.LOG_ERROR(_loc2_);
         throw new AbstractException(_loc2_);
     }

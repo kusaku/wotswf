@@ -231,7 +231,7 @@ public class RibbonCtrl implements IDisposable {
     public function updateData(param1:String, param2:String, param3:String, param4:String):void {
         if (this.animationState == RibbonAnimationStates.IS_STATIC_SHOW) {
         }
-        this._texts.setData(param2, param1, param4);
+        this._texts.setData(param2, param1, param4, param3);
         this._icons.setTankIcon(param3);
         this._scheduler.cancelTask(this.onLifetimeCooldown);
         this._scheduler.scheduleTask(this.onLifetimeCooldown, LIFE_TIME);

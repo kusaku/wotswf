@@ -24,14 +24,6 @@ public interface ITweenConstruction extends ITweenHandler, IDisposable {
 
     function addMoveDown(param1:int, param2:String = null):ITweenConstruction;
 
-    function addGlowIn(param1:int, param2:String = null):ITweenConstruction;
-
-    function addGlowOut(param1:int, param2:String = null):ITweenConstruction;
-
-    function addShadowIn(param1:int, param2:String = null):ITweenConstruction;
-
-    function addShadowOut(param1:int, param2:String = null):ITweenConstruction;
-
     function addHalfTurn(param1:int, param2:String = null):ITweenConstruction;
 
     function addTween(param1:ITween, param2:int, param3:String = null):ITweenConstruction;

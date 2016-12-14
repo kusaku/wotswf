@@ -135,32 +135,12 @@ public class FMStatsTableController implements IDisposable {
     }
 
     public function setVehicleStatus(param1:Number, param2:uint):void {
-        var _loc3_:FMStatsItemHolder = this.getItemByVehicleID(param1);
-        if (_loc3_) {
-            _loc3_.setVehicleStatus(param2);
-        }
     }
 
     public function setPlayerStatus(param1:Number, param2:uint):void {
-        var _loc3_:int = this._items.length;
-        var _loc4_:int = 0;
-        while (_loc4_ < _loc3_) {
-            if (this._items[_loc4_].vehicleID == param1) {
-                this._items[_loc4_].setPlayerStatus(param2);
-                if (this._items[_loc4_].isSelected) {
-                    this.setSelectedItem(this._positionControllers[_loc4_].row);
-                }
-                break;
-            }
-            _loc4_++;
-        }
     }
 
     public function setUserTags(param1:Number, param2:Array):void {
-        var _loc3_:FMStatsItemHolder = this.getItemByVehicleID(param1);
-        if (_loc3_) {
-            _loc3_.setUserTags(param2);
-        }
     }
 
     public function updateOrder(param1:Vector.<Number>):void {
@@ -246,12 +226,6 @@ public class FMStatsTableController implements IDisposable {
     }
 
     private function getItemByVehicleID(param1:Number):FMStatsItemHolder {
-        var _loc2_:FMStatsItemHolder = null;
-        for each(_loc2_ in this._items) {
-            if (_loc2_.vehicleID == param1) {
-                return _loc2_;
-            }
-        }
         return null;
     }
 
@@ -267,14 +241,6 @@ public class FMStatsTableController implements IDisposable {
     }
 
     private function getPostionControllerByVehicleID(param1:Number):StatsTableItemPositionController {
-        var _loc2_:int = this._items.length;
-        var _loc3_:int = 0;
-        while (_loc3_ < _loc2_) {
-            if (this._items[_loc3_].containsData && this._items[_loc3_].vehicleID == param1) {
-                return this._positionControllers[_loc3_];
-            }
-            _loc3_++;
-        }
         return null;
     }
 
@@ -361,8 +327,6 @@ public class FMStatsTableController implements IDisposable {
     }
 
     private function addPlayerToTeamController(param1:FMStatsItemHolder):void {
-        var _loc2_:Boolean = !!param1.isInSquad ? Boolean(param1.isSquadPersonal) : Boolean(param1.isCurrentPlayer);
-        this._teamsController.addPlayer(param1.vehicleID, _loc2_, param1.squadIndex);
     }
 }
 }

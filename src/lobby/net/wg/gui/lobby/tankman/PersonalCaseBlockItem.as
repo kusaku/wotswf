@@ -10,12 +10,12 @@ import net.wg.gui.components.advanced.DashLine;
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.components.tooltips.VO.PersonalCaseBlockItemVO;
 import net.wg.gui.events.PersonalCaseEvent;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.gfx.Extensions;
 
-public class PersonalCaseBlockItem extends UIComponent {
+public class PersonalCaseBlockItem extends UIComponentEx {
 
     private static const FULL_DASH_WIDTH:int = 478;
 

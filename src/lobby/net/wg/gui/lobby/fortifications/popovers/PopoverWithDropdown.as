@@ -5,7 +5,6 @@ import flash.geom.Point;
 
 import net.wg.gui.components.controls.events.DropdownMenuEvent;
 import net.wg.infrastructure.base.SmartPopOverView;
-import net.wg.utils.IEventCollector;
 
 public class PopoverWithDropdown extends SmartPopOverView {
 
@@ -38,13 +37,10 @@ public class PopoverWithDropdown extends SmartPopOverView {
     }
 
     protected function onShowDropdownHandler(param1:DropdownMenuEvent):void {
-        var _loc2_:IEventCollector = App.utils.events;
         this.dropdownListRef = param1.dropDownRef;
         this.dropdownListXY = this.dropdownListRef.parent.localToGlobal(new Point(this.dropdownListRef.x, this.dropdownListRef.y));
         this.dropdownListXY = globalToLocal(this.dropdownListXY);
-        _loc2_.disableDisposingForObj(this.dropdownListRef);
         addChild(this.dropdownListRef);
-        _loc2_.enableDisposingForObj(this.dropdownListRef);
         this.dropdownListXY.x = this.dropdownListXY.x | 0;
         this.dropdownListXY.y = this.dropdownListXY.y | 0;
         this.updateDDPosition();

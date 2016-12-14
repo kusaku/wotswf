@@ -226,7 +226,7 @@ public class DamageInfoPanel extends DamageInfoPanelMeta implements IDamageInfoP
         this.hideItem(this.turretRotator, true);
     }
 
-    public function as_show(param1:Array, param2:int):void {
+    override protected function show(param1:Array, param2:int):void {
         var _loc3_:Array = null;
         this.setActiveState();
         this.hideItems();

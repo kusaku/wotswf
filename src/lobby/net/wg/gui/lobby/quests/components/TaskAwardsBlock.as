@@ -32,6 +32,9 @@ public class TaskAwardsBlock extends BaseAwardsBlock {
         this.awardForCompleteTF.htmlText = _loc2_.awardForCompleteText;
         this.awardReceivedTF.htmlText = _loc2_.awardReceivedText;
         this.awardDiscountTF.htmlText = _loc2_.awardBonusStrText;
+        if (!_loc2_.useHtmlInBonusStr) {
+            this.awardDiscountTF.htmlText = this.awardDiscountTF.text;
+        }
         this.ribbonLoader.source = _loc2_.ribbonSource;
     }
 

@@ -17,9 +17,9 @@ public class Slider extends scaleform.clik.controls.Slider {
 
     public var hitMc:MovieClip = null;
 
-    public var patternMc:BitmapFill = null;
+    public var patternMc:net.wg.gui.components.controls.BitmapFill = null;
 
-    public var disablePatternMc:BitmapFill = null;
+    public var disablePatternMc:net.wg.gui.components.controls.BitmapFill = null;
 
     private var _fillPaddingX:Number = 11;
 

@@ -11,16 +11,15 @@ import net.wg.data.VO.TrainingRoomInfoVO;
 import net.wg.data.VO.TrainingRoomRendererVO;
 import net.wg.data.VO.TrainingRoomTeamVO;
 import net.wg.data.VO.UserVO;
-import net.wg.data.constants.Errors;
 import net.wg.data.constants.Linkages;
 import net.wg.gui.components.advanced.TextAreaSimple;
 import net.wg.gui.components.controls.SoundButtonEx;
 import net.wg.gui.components.controls.TextFieldShort;
 import net.wg.gui.components.controls.UserNameField;
 import net.wg.gui.components.icons.BattleTypeIcon;
+import net.wg.gui.components.minimap.MinimapPresentation;
 import net.wg.gui.events.ArenaVoipSettingsEvent;
 import net.wg.gui.interfaces.IButtonIconLoader;
-import net.wg.gui.lobby.components.MinimapLobby;
 import net.wg.infrastructure.base.meta.ITrainingRoomMeta;
 import net.wg.infrastructure.base.meta.impl.TrainingRoomMeta;
 import net.wg.infrastructure.events.DropEvent;
@@ -33,7 +32,6 @@ import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.controls.CoreList;
 import scaleform.clik.controls.ListItemRenderer;
 import scaleform.clik.core.UIComponent;
-import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.events.InputEvent;
 import scaleform.clik.interfaces.IDataProvider;
@@ -70,7 +68,7 @@ public class TrainingRoom extends TrainingRoomMeta implements ITrainingRoomMeta 
 
     public var inviteButton:SoundButtonEx;
 
-    public var minimap:MinimapLobby;
+    public var minimap:MinimapPresentation;
 
     public var owner:UserNameField;
 
@@ -115,6 +113,7 @@ public class TrainingRoom extends TrainingRoomMeta implements ITrainingRoomMeta 
     public function TrainingRoom() {
         this._voiceChatMgr = App.voiceChatMgr;
         super();
+        _deferredDispose = true;
         this._slots = Vector.<InteractiveObject>([this.other, this.team1, this.team2]);
     }
 
@@ -151,16 +150,6 @@ public class TrainingRoom extends TrainingRoomMeta implements ITrainingRoomMeta 
                 break;
             }
         }
-    }
-
-    private static function setupDataProvider(param1:Array):IDataProvider {
-        var _loc3_:Object = null;
-        App.utils.asserter.assertNotNull(param1, "data" + Errors.CANT_NULL);
-        var _loc2_:DataProvider = new DataProvider();
-        for each(_loc3_ in param1) {
-            _loc2_.push(new TrainingRoomRendererVO(_loc3_));
-        }
-        return _loc2_;
     }
 
     override public final function setViewSize(param1:Number, param2:Number):void {
@@ -201,11 +190,16 @@ public class TrainingRoom extends TrainingRoomMeta implements ITrainingRoomMeta 
         this.arenaVOIPLabel.text = this._voiceChatMgr.isVOIPEnabledS() || _loc1_ ? MENU.TRAINING_INFO_VOICECHAT : "";
     }
 
-    override protected function onDispose():void {
+    override protected function onBeforeDispose():void {
         this.removeListeners();
-        this.releaseDataProvider(this.team1.dataProvider);
-        this.releaseDataProvider(this.team2.dataProvider);
-        this.releaseDataProvider(this.other.dataProvider);
+        var _loc1_:IScheduler = App.utils.scheduler;
+        _loc1_.cancelTask(this.finishDisable_swapButton_CoolDownHandler);
+        _loc1_.cancelTask(this.finishDisable_settingsButton_CoolDownHandler);
+        _loc1_.cancelTask(this.finishDisable_observerButton_CoolDownHandler);
+        super.onBeforeDispose();
+    }
+
+    override protected function onDispose():void {
         this.disposeComponents();
         if (this._dragDropListDelegateCtrl) {
             this._dragDropListDelegateCtrl.dispose();
@@ -215,10 +209,6 @@ public class TrainingRoom extends TrainingRoomMeta implements ITrainingRoomMeta 
             this._slots.splice(0, this._slots.length);
             this._slots = null;
         }
-        var _loc1_:IScheduler = App.utils.scheduler;
-        _loc1_.cancelTask(this.finishDisable_swapButton_CoolDownHandler);
-        _loc1_.cancelTask(this.finishDisable_settingsButton_CoolDownHandler);
-        _loc1_.cancelTask(this.finishDisable_observerButton_CoolDownHandler);
         this._voiceChatMgr = null;
         super.onDispose();
     }
@@ -261,53 +251,45 @@ public class TrainingRoom extends TrainingRoomMeta implements ITrainingRoomMeta 
         this.arenaVoipSettings.setUseArenaVoip(param1);
     }
 
-    public function as_setInfo(param1:Object):void {
-        var _loc2_:TrainingRoomInfoVO = new TrainingRoomInfoVO(param1);
-        if (this._isCreator != _loc2_.isCreator) {
-            this._isCreator = _loc2_.isCreator;
-        }
-        this.comment.text = _loc2_.comment;
-        this.timeout.label = _loc2_.roundLenString;
-        this._maxPlayersCount = _loc2_.maxPlayersCount;
+    override protected function setInfo(param1:TrainingRoomInfoVO):void {
+        this._isCreator = param1.isCreator;
+        this.comment.text = param1.comment;
+        this.timeout.label = param1.roundLenString;
+        this._maxPlayersCount = param1.maxPlayersCount;
         this.maxPlayers.label = this._curPlayersCount + "/" + this._maxPlayersCount;
-        this.map.htmlText = _loc2_.arenaName;
-        this.titleField.htmlText = _loc2_.title;
-        this.typeField.htmlText = _loc2_.arenaSubType;
+        this.map.htmlText = param1.arenaName;
+        this.titleField.htmlText = param1.title;
+        this.typeField.htmlText = param1.arenaSubType;
         this.owner.userVO = new UserVO({
             "accID": -1,
             "dbID": -1,
-            "fullName": _loc2_.creatorFullName,
-            "userName": _loc2_.creator,
-            "clanAbbrev": _loc2_.creatorClan,
-            "region": _loc2_.creatorRegion,
-            "igrType": _loc2_.creatorIgrType
+            "fullName": param1.creatorFullName,
+            "userName": param1.creator,
+            "clanAbbrev": param1.creatorClan,
+            "region": param1.creatorRegion,
+            "igrType": param1.creatorIgrType
         });
-        this.minimap.setMapS(_loc2_.arenaTypeID);
+        this.minimap.setMapS(param1.arenaTypeID);
         this.description.position = 0;
-        this.description.htmlText = _loc2_.description;
-        this.arenaVoipSettings.setUseArenaVoip(_loc2_.arenaVoipChannels);
-        this.arenaVoipSettings.setCanChangeArenaVOIP(_loc2_.canChangeArenaVOIP);
+        this.description.htmlText = param1.description;
+        this.arenaVoipSettings.setUseArenaVoip(param1.arenaVoipChannels);
+        this.arenaVoipSettings.setCanChangeArenaVOIP(param1.canChangeArenaVOIP);
         invalidate(InvalidationType.STATE);
-        this.observerButton.visible = _loc2_.isObserverModeEnabled;
-        if (_loc2_.isObserverModeEnabled) {
+        this.observerButton.visible = param1.isObserverModeEnabled;
+        if (param1.isObserverModeEnabled) {
             this.observerButton.addEventListener(ObserverButtonComponent.SELECTED, this.onObserverButtonSelectedHandler, false, 0, true);
         }
-        _loc2_.dispose();
-        _loc2_ = null;
     }
 
     public function as_setObserver(param1:Boolean):void {
         this.observerButton.selected = param1;
     }
 
-    public function as_setOther(param1:Object):void {
-        assertNotNull(param1, "data" + Errors.CANT_NULL);
-        this.releaseDataProvider(this.other.dataProvider);
-        var _loc2_:TrainingRoomTeamVO = new TrainingRoomTeamVO(param1);
-        this.other.dataProvider = setupDataProvider(_loc2_.listData);
-        this._otherLabelText = _loc2_.teamLabel;
+    override protected function setOther(param1:TrainingRoomTeamVO):void {
+        this.other.dataProvider = param1.listData;
+        this._otherLabelText = param1.teamLabel;
         this.countPlayers();
-        invalidate(InvalidationType.DATA);
+        invalidateData();
     }
 
     public function as_setPlayerStateInOther(param1:Number, param2:String, param3:String, param4:String, param5:String, param6:int):void {
@@ -322,34 +304,30 @@ public class TrainingRoom extends TrainingRoomMeta implements ITrainingRoomMeta 
         checkStatus(this.team2, param1, param2, param3, param4, param5, param6);
     }
 
-    public function as_setPlayerTagsInOther(param1:Number, param2:Array):void {
+    override protected function setPlayerTagsInOther(param1:Number, param2:Array):void {
         checkUserTags(this.other, param1, param2);
     }
 
-    public function as_setPlayerTagsInTeam1(param1:Number, param2:Array):void {
+    override protected function setPlayerTagsInTeam1(param1:Number, param2:Array):void {
         checkUserTags(this.team1, param1, param2);
     }
 
-    public function as_setPlayerTagsInTeam2(param1:Number, param2:Array):void {
+    override protected function setPlayerTagsInTeam2(param1:Number, param2:Array):void {
         checkUserTags(this.team2, param1, param2);
     }
 
-    public function as_setTeam1(param1:Object):void {
-        this.releaseDataProvider(this.team1.dataProvider);
-        var _loc2_:TrainingRoomTeamVO = new TrainingRoomTeamVO(param1);
-        this.team1.dataProvider = setupDataProvider(_loc2_.listData);
-        this._team1LabelText = _loc2_.teamLabel;
+    override protected function setTeam1(param1:TrainingRoomTeamVO):void {
+        this.team1.dataProvider = param1.listData;
+        this._team1LabelText = param1.teamLabel;
         this.countPlayers();
-        invalidate(InvalidationType.DATA);
+        invalidateData();
     }
 
-    public function as_setTeam2(param1:Object):void {
-        this.releaseDataProvider(this.team2.dataProvider);
-        var _loc2_:TrainingRoomTeamVO = new TrainingRoomTeamVO(param1);
-        this.team2.dataProvider = setupDataProvider(_loc2_.listData);
-        this._team2LabelText = _loc2_.teamLabel;
+    override protected function setTeam2(param1:TrainingRoomTeamVO):void {
+        this.team2.dataProvider = param1.listData;
+        this._team2LabelText = param1.teamLabel;
         this.countPlayers();
-        invalidate(InvalidationType.DATA);
+        invalidateData();
     }
 
     public function as_startCoolDownObserver(param1:Number):void {
@@ -361,7 +339,7 @@ public class TrainingRoom extends TrainingRoomMeta implements ITrainingRoomMeta 
     }
 
     public function as_startCoolDownSwapButton(param1:Number):void {
-        startDisableCoolDown(this.finishDisable_swapButton_CoolDownHandler, param1, this.swapButton as UIComponent);
+        startDisableCoolDown(this.finishDisable_swapButton_CoolDownHandler, param1, UIComponent(this.swapButton));
     }
 
     public function as_startCoolDownVoiceChat(param1:Number):void {
@@ -384,19 +362,6 @@ public class TrainingRoom extends TrainingRoomMeta implements ITrainingRoomMeta 
 
     public function as_updateTimeout(param1:String):void {
         this.timeout.label = param1;
-    }
-
-    private function releaseDataProvider(param1:IDataProvider):void {
-        var _loc2_:IDisposable = null;
-        if (param1 != null) {
-            if (param1.length > 0) {
-                for each(_loc2_ in param1) {
-                    _loc2_.dispose();
-                }
-                param1.cleanUp();
-            }
-            param1 = null;
-        }
     }
 
     private function finishDisable_settingsButton_CoolDownHandler():void {

@@ -20,12 +20,13 @@ public class ExchangeXpWindowMeta extends BaseExchangeWindow {
         super.onDispose();
     }
 
-    public function as_vehiclesDataChanged(param1:Object):void {
-        if (this._exchangeXPWindowVO) {
-            this._exchangeXPWindowVO.dispose();
-        }
+    public final function as_vehiclesDataChanged(param1:Object):void {
+        var _loc2_:ExchangeXPWindowVO = this._exchangeXPWindowVO;
         this._exchangeXPWindowVO = new ExchangeXPWindowVO(param1);
         this.vehiclesDataChanged(this._exchangeXPWindowVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function vehiclesDataChanged(param1:ExchangeXPWindowVO):void {

@@ -4,12 +4,12 @@ import flash.text.TextField;
 
 import net.wg.data.constants.generated.TOOLTIPS_CONSTANTS;
 import net.wg.gui.components.controls.UILoaderAlt;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.managers.ITooltipMgr;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 
-public class CustomizationItemRenderer extends UIComponent {
+public class CustomizationItemRenderer extends UIComponentEx {
 
     public var loader:UILoaderAlt;
 
@@ -29,7 +29,7 @@ public class CustomizationItemRenderer extends UIComponent {
 
     override protected function draw():void {
         super.draw();
-        if (isInvalid(InvalidationType.DATA)) {
+        if (this.data && isInvalid(InvalidationType.DATA)) {
             this.loader.source = this.data.texture;
             if (this.data.valueStr) {
                 this._valueText = App.textMgr.createTextField();

@@ -7,9 +7,9 @@ public class IconEfficiencyTooltipData {
 
     public var isGarage:Boolean = false;
 
-    public var values:String = null;
+    public var values:Array;
 
-    public var discript:String = null;
+    public var discript:Array;
 
     public var value:String = null;
 
@@ -28,10 +28,12 @@ public class IconEfficiencyTooltipData {
     public var arenaType:int = -1;
 
     public function IconEfficiencyTooltipData() {
+        this.values = [];
+        this.discript = [];
         super();
     }
 
-    public function setBaseValues(param1:String, param2:String, param3:int):void {
+    public function setBaseValues(param1:Array, param2:Array, param3:int):void {
         this.values = param1;
         this.discript = param2;
         this.totalItemsCount = String(param3);

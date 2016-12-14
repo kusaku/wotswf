@@ -1,6 +1,7 @@
 package net.wg.infrastructure.base.meta.impl {
 import net.wg.data.constants.Errors;
 import net.wg.infrastructure.base.AbstractView;
+import net.wg.infrastructure.exceptions.AbstractException;
 
 public class ResearchViewMeta extends AbstractView {
 
@@ -14,8 +15,42 @@ public class ResearchViewMeta extends AbstractView {
 
     public var showSystemMessage:Function;
 
+    private var _array:Array;
+
+    private var _array1:Array;
+
+    private var _array2:Array;
+
+    private var _array3:Array;
+
+    private var _array4:Array;
+
     public function ResearchViewMeta() {
         super();
+    }
+
+    override protected function onDispose():void {
+        if (this._array) {
+            this._array.splice(0, this._array.length);
+            this._array = null;
+        }
+        if (this._array1) {
+            this._array1.splice(0, this._array1.length);
+            this._array1 = null;
+        }
+        if (this._array2) {
+            this._array2.splice(0, this._array2.length);
+            this._array2 = null;
+        }
+        if (this._array3) {
+            this._array3.splice(0, this._array3.length);
+            this._array3 = null;
+        }
+        if (this._array4) {
+            this._array4.splice(0, this._array4.length);
+            this._array4 = null;
+        }
+        super.onDispose();
     }
 
     public function request4UnlockS(param1:Number, param2:Number, param3:Number, param4:Number):void {
@@ -41,6 +76,81 @@ public class ResearchViewMeta extends AbstractView {
     public function showSystemMessageS(param1:String, param2:String):void {
         App.utils.asserter.assertNotNull(this.showSystemMessage, "showSystemMessage" + Errors.CANT_NULL);
         this.showSystemMessage(param1, param2);
+    }
+
+    public final function as_setNodesStates(param1:Number, param2:Array):void {
+        var _loc3_:Array = this._array;
+        this._array = param2;
+        this.setNodesStates(param1, this._array);
+        if (_loc3_) {
+            _loc3_.splice(0, _loc3_.length);
+        }
+    }
+
+    public final function as_setNext2Unlock(param1:Array):void {
+        var _loc2_:Array = this._array1;
+        this._array1 = param1;
+        this.setNext2Unlock(this._array1);
+        if (_loc2_) {
+            _loc2_.splice(0, _loc2_.length);
+        }
+    }
+
+    public final function as_setVehicleTypeXP(param1:Array):void {
+        var _loc2_:Array = this._array2;
+        this._array2 = param1;
+        this.setVehicleTypeXP(this._array2);
+        if (_loc2_) {
+            _loc2_.splice(0, _loc2_.length);
+        }
+    }
+
+    public final function as_setInventoryItems(param1:Array):void {
+        var _loc2_:Array = this._array3;
+        this._array3 = param1;
+        this.setInventoryItems(this._array3);
+        if (_loc2_) {
+            _loc2_.splice(0, _loc2_.length);
+        }
+    }
+
+    public final function as_setNodeVehCompareData(param1:Array):void {
+        var _loc2_:Array = this._array4;
+        this._array4 = param1;
+        this.setNodeVehCompareData(this._array4);
+        if (_loc2_) {
+            _loc2_.splice(0, _loc2_.length);
+        }
+    }
+
+    protected function setNodesStates(param1:Number, param2:Array):void {
+        var _loc3_:String = "as_setNodesStates" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc3_);
+        throw new AbstractException(_loc3_);
+    }
+
+    protected function setNext2Unlock(param1:Array):void {
+        var _loc2_:String = "as_setNext2Unlock" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
+    }
+
+    protected function setVehicleTypeXP(param1:Array):void {
+        var _loc2_:String = "as_setVehicleTypeXP" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
+    }
+
+    protected function setInventoryItems(param1:Array):void {
+        var _loc2_:String = "as_setInventoryItems" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
+    }
+
+    protected function setNodeVehCompareData(param1:Array):void {
+        var _loc2_:String = "as_setNodeVehCompareData" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc2_);
+        throw new AbstractException(_loc2_);
     }
 }
 }

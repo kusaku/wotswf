@@ -4,6 +4,7 @@ import flash.events.MouseEvent;
 
 import net.wg.gui.lobby.messengerBar.carousel.data.ChannelListItemVO;
 import net.wg.gui.lobby.messengerBar.carousel.events.ChannelListEvent;
+import net.wg.infrastructure.base.UIComponentEx;
 
 import scaleform.clik.constants.InvalidationType;
 import scaleform.clik.core.UIComponent;
@@ -12,7 +13,7 @@ import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.interfaces.IListItemRenderer;
 import scaleform.clik.utils.Padding;
 
-public class BaseChannelRenderer extends UIComponent implements IListItemRenderer {
+public class BaseChannelRenderer extends UIComponentEx implements IListItemRenderer {
 
     private static const PROGRESS_INDICATOR_PADDING:uint = 13;
 

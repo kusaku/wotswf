@@ -2,6 +2,8 @@ package net.wg.gui.lobby.profile.pages.summary {
 import net.wg.data.VO.AchievementProfileVO;
 import net.wg.gui.lobby.profile.data.ProfileDossierInfoVO;
 
+import scaleform.clik.data.DataProvider;
+
 public class ProfileSummaryVO extends ProfileDossierInfoVO {
 
     private static const SIGNIFICANT_ACHIEVEMENTS:String = "significantAchievements";
@@ -16,21 +18,32 @@ public class ProfileSummaryVO extends ProfileDossierInfoVO {
 
     public var globalRating:uint;
 
-    public var significantAchievements:Vector.<AchievementProfileVO>;
+    public var significantAchievements:DataProvider;
 
-    public var nearestAchievements:Vector.<AchievementProfileVO>;
+    public var nearestAchievements:DataProvider;
 
     public function ProfileSummaryVO(param1:Object) {
         super(param1);
     }
 
+    private static function getTypedDataProvider(param1:*, param2:Class):DataProvider {
+        var _loc3_:DataProvider = new DataProvider();
+        var _loc4_:int = param1.length;
+        var _loc5_:int = 0;
+        while (_loc5_ < _loc4_) {
+            _loc3_[_loc5_] = new param2(param1[_loc5_]);
+            _loc5_++;
+        }
+        return _loc3_;
+    }
+
     override protected function onDataWrite(param1:String, param2:Object):Boolean {
         if (param1 == SIGNIFICANT_ACHIEVEMENTS) {
-            this.significantAchievements = Vector.<AchievementProfileVO>(App.utils.data.convertVOArrayToVector(param1, param2, AchievementProfileVO));
+            this.significantAchievements = getTypedDataProvider(param2, AchievementProfileVO);
             return false;
         }
         if (param1 == NEAREST_ACHIEVEMENTS) {
-            this.nearestAchievements = Vector.<AchievementProfileVO>(App.utils.data.convertVOArrayToVector(param1, param2, AchievementProfileVO));
+            this.nearestAchievements = getTypedDataProvider(param2, AchievementProfileVO);
             return false;
         }
         return super.onDataWrite(param1, param2);
@@ -43,16 +56,14 @@ public class ProfileSummaryVO extends ProfileDossierInfoVO {
             for each(_loc1_ in this.significantAchievements) {
                 _loc1_.dispose();
             }
-            this.significantAchievements.fixed = false;
-            this.significantAchievements.splice(0, this.significantAchievements.length);
+            this.significantAchievements.cleanUp();
             this.significantAchievements = null;
         }
         if (this.nearestAchievements != null) {
             for each(_loc2_ in this.nearestAchievements) {
                 _loc2_.dispose();
             }
-            this.nearestAchievements.fixed = false;
-            this.nearestAchievements.splice(0, this.nearestAchievements.length);
+            this.nearestAchievements.cleanUp();
             this.nearestAchievements = null;
         }
         super.onDispose();

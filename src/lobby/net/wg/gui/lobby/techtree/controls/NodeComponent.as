@@ -1,10 +1,9 @@
 package net.wg.gui.lobby.techtree.controls {
 import net.wg.gui.lobby.techtree.interfaces.IHasRendererAsOwner;
 import net.wg.gui.lobby.techtree.interfaces.IRenderer;
+import net.wg.infrastructure.base.UIComponentEx;
 
-import scaleform.clik.core.UIComponent;
-
-public class NodeComponent extends UIComponent implements IHasRendererAsOwner {
+public class NodeComponent extends UIComponentEx implements IHasRendererAsOwner {
 
     private var _state:String = "locked";
 

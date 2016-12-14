@@ -34,12 +34,13 @@ public class FortTransportConfirmationWindowMeta extends AbstractWindowView {
         this.onTransporting(param1);
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._transportingVO) {
-            this._transportingVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:TransportingVO = this._transportingVO;
         this._transportingVO = new TransportingVO(param1);
         this.setData(this._transportingVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:TransportingVO):void {

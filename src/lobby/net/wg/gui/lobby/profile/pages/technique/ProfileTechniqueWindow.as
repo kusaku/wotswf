@@ -2,6 +2,7 @@ package net.wg.gui.lobby.profile.pages.technique {
 import fl.transitions.easing.Strong;
 
 import net.wg.gui.components.common.waiting.Waiting;
+import net.wg.gui.lobby.profile.pages.technique.data.ProfileVehicleDossierVO;
 import net.wg.gui.utils.ExcludeTweenManager;
 import net.wg.infrastructure.constants.WindowViewInvalidationType;
 
@@ -79,9 +80,9 @@ public class ProfileTechniqueWindow extends ProfileTechnique {
         super.onDispose();
     }
 
-    override public function as_responseVehicleDossier(param1:Object):void {
+    override protected function responseVehicleDossier(param1:ProfileVehicleDossierVO):void {
         this.showWaiting = param1 == null;
-        super.as_responseVehicleDossier(param1);
+        super.responseVehicleDossier(param1);
     }
 }
 }

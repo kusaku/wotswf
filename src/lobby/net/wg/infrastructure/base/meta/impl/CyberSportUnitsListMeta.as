@@ -3,6 +3,7 @@ import net.wg.data.constants.Errors;
 import net.wg.gui.components.advanced.vo.DummyVO;
 import net.wg.gui.cyberSport.vo.NavigationBlockVO;
 import net.wg.gui.cyberSport.vo.UnitListViewHeaderVO;
+import net.wg.gui.lobby.fortifications.data.CheckBoxIconVO;
 import net.wg.gui.rally.views.list.BaseRallyListView;
 import net.wg.infrastructure.exceptions.AbstractException;
 
@@ -24,20 +25,22 @@ public class CyberSportUnitsListMeta extends BaseRallyListView {
 
     public var searchTeams:Function;
 
-    private var _unitListViewHeaderVO:UnitListViewHeaderVO;
+    private var _checkBoxIconVO:CheckBoxIconVO;
 
     private var _dummyVO:DummyVO;
 
     private var _navigationBlockVO:NavigationBlockVO;
+
+    private var _unitListViewHeaderVO:UnitListViewHeaderVO;
 
     public function CyberSportUnitsListMeta() {
         super();
     }
 
     override protected function onDispose():void {
-        if (this._unitListViewHeaderVO) {
-            this._unitListViewHeaderVO.dispose();
-            this._unitListViewHeaderVO = null;
+        if (this._checkBoxIconVO) {
+            this._checkBoxIconVO.dispose();
+            this._checkBoxIconVO = null;
         }
         if (this._dummyVO) {
             this._dummyVO.dispose();
@@ -46,6 +49,10 @@ public class CyberSportUnitsListMeta extends BaseRallyListView {
         if (this._navigationBlockVO) {
             this._navigationBlockVO.dispose();
             this._navigationBlockVO = null;
+        }
+        if (this._unitListViewHeaderVO) {
+            this._unitListViewHeaderVO.dispose();
+            this._unitListViewHeaderVO = null;
         }
         super.onDispose();
     }
@@ -90,34 +97,52 @@ public class CyberSportUnitsListMeta extends BaseRallyListView {
         this.searchTeams(param1);
     }
 
-    public function as_setDummy(param1:Object):void {
-        if (this._dummyVO) {
-            this._dummyVO.dispose();
-        }
+    public final function as_setDummy(param1:Object):void {
+        var _loc2_:DummyVO = this._dummyVO;
         this._dummyVO = new DummyVO(param1);
         this.setDummy(this._dummyVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_setHeader(param1:Object):void {
-        if (this._unitListViewHeaderVO) {
-            this._unitListViewHeaderVO.dispose();
+    public final function as_setSearchResultText(param1:String, param2:String, param3:Object):void {
+        var _loc4_:CheckBoxIconVO = this._checkBoxIconVO;
+        this._checkBoxIconVO = !!param3 ? new CheckBoxIconVO(param3) : null;
+        this.setSearchResultText(param1, param2, this._checkBoxIconVO);
+        if (_loc4_) {
+            _loc4_.dispose();
         }
+    }
+
+    public final function as_setHeader(param1:Object):void {
+        var _loc2_:UnitListViewHeaderVO = this._unitListViewHeaderVO;
         this._unitListViewHeaderVO = new UnitListViewHeaderVO(param1);
         this.setHeader(this._unitListViewHeaderVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
-    public function as_updateNavigationBlock(param1:Object):void {
-        if (this._navigationBlockVO) {
-            this._navigationBlockVO.dispose();
-        }
+    public final function as_updateNavigationBlock(param1:Object):void {
+        var _loc2_:NavigationBlockVO = this._navigationBlockVO;
         this._navigationBlockVO = new NavigationBlockVO(param1);
         this.updateNavigationBlock(this._navigationBlockVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setDummy(param1:DummyVO):void {
         var _loc2_:String = "as_setDummy" + Errors.ABSTRACT_INVOKE;
         DebugUtils.LOG_ERROR(_loc2_);
         throw new AbstractException(_loc2_);
+    }
+
+    protected function setSearchResultText(param1:String, param2:String, param3:CheckBoxIconVO):void {
+        var _loc4_:String = "as_setSearchResultText" + Errors.ABSTRACT_INVOKE;
+        DebugUtils.LOG_ERROR(_loc4_);
+        throw new AbstractException(_loc4_);
     }
 
     protected function setHeader(param1:UnitListViewHeaderVO):void {

@@ -41,12 +41,13 @@ public class StaticFormationInvitesAndRequestsMeta extends AbstractWindowView {
         this.resolvePlayerRequest(param1, param2);
     }
 
-    public function as_setStaticData(param1:Object):void {
-        if (this._invitesAndRequestsVO) {
-            this._invitesAndRequestsVO.dispose();
-        }
+    public final function as_setStaticData(param1:Object):void {
+        var _loc2_:InvitesAndRequestsVO = this._invitesAndRequestsVO;
         this._invitesAndRequestsVO = new InvitesAndRequestsVO(param1);
         this.setStaticData(this._invitesAndRequestsVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setStaticData(param1:InvitesAndRequestsVO):void {

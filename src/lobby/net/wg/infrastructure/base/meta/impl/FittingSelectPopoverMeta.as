@@ -34,12 +34,13 @@ public class FittingSelectPopoverMeta extends SmartPopOverView {
         this.showModuleInfo(param1);
     }
 
-    public function as_update(param1:Object):void {
-        if (this._fittingSelectPopoverVO) {
-            this._fittingSelectPopoverVO.dispose();
-        }
+    public final function as_update(param1:Object):void {
+        var _loc2_:FittingSelectPopoverVO = this._fittingSelectPopoverVO;
         this._fittingSelectPopoverVO = new FittingSelectPopoverVO(param1);
         this.update(this._fittingSelectPopoverVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function update(param1:FittingSelectPopoverVO):void {

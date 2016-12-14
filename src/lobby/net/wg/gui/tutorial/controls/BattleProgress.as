@@ -3,9 +3,10 @@ import flash.display.DisplayObjectContainer;
 import flash.display.MovieClip;
 import flash.display.Sprite;
 
-import scaleform.clik.core.UIComponent;
+import net.wg.data.constants.Errors;
+import net.wg.infrastructure.base.UIComponentEx;
 
-public class BattleProgress extends UIComponent {
+public class BattleProgress extends UIComponentEx {
 
     private static const PHASE_DONE:String = "done";
 
@@ -25,11 +26,11 @@ public class BattleProgress extends UIComponent {
 
     private var _allPhases:Number = 0;
 
-    private var _phaseStatusMask:Number = NaN;
+    private var _phaseStatusMask:Number;
 
     private var _allTasks:Number = 0;
 
-    private var _tasksStatusMask:Number = NaN;
+    private var _tasksStatusMask:Number;
 
     public var background:MovieClip;
 
@@ -55,10 +56,6 @@ public class BattleProgress extends UIComponent {
         this.phaseItems = [];
         super();
         this._bodyWidth = this.background.width - BODY_WIDTH_CORRECTION;
-    }
-
-    override protected function configUI():void {
-        super.configUI();
     }
 
     override protected function draw():void {
@@ -115,10 +112,12 @@ public class BattleProgress extends UIComponent {
         while (_loc1_ < this._allPhases) {
             _loc2_ = this._phaseWidth * _loc1_ ^ 0;
             _loc3_ = this.createInstance(this.separatorsContainer, this.separatorRenderer) as ProgressSeparator;
+            App.utils.asserter.assertNotNull(_loc3_, "separatorItem" + Errors.CANT_NULL);
             _loc3_.x = _loc2_;
             _loc3_.setup(_loc1_, this._phaseWidth);
             this.separatorItems.push(_loc3_);
             _loc4_ = this.createInstance(this.phasesContainer, this.progressItemRenderer) as ProgressItem;
+            App.utils.asserter.assertNotNull(_loc4_, "phaseItem" + Errors.CANT_NULL);
             _loc4_.x = _loc2_;
             _loc4_.width = this._phaseWidth;
             this.phaseItems.push(_loc4_);
@@ -168,13 +167,15 @@ public class BattleProgress extends UIComponent {
     }
 
     private function rebuildTasks():void {
+        var _loc3_:int = 0;
         var _loc4_:ProgressItem = null;
         this.clearItems(this.tasksContainer, this.taskItems);
         var _loc1_:Number = this._phaseWidth * this._curPhase ^ 0;
         var _loc2_:Number = this._phaseWidth / this._allTasks ^ 0;
-        var _loc3_:int = 0;
+        _loc3_ = 0;
         while (_loc3_ < this._allTasks) {
             _loc4_ = this.createInstance(this.tasksContainer, this.progressItemRenderer) as ProgressItem;
+            App.utils.asserter.assertNotNull(_loc4_, "taskItem" + Errors.CANT_NULL);
             _loc4_.x = _loc1_ + _loc3_ * _loc2_;
             _loc4_.width = _loc3_ == this._allTasks - 1 ? Number((this._phaseWidth % this._allTasks ^ 0) + _loc2_) : Number(_loc2_);
             this.taskItems.push(_loc4_);

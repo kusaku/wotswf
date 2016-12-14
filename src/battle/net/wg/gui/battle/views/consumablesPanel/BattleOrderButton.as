@@ -110,22 +110,18 @@ public class BattleOrderButton extends BattleToolTipButton implements IBattleOrd
         }
     }
 
-    public function setCoolDownTime(param1:Number):void {
+    public function setCoolDownTime(param1:Number, param2:Number, param3:Number, param4:Boolean):void {
+        var _loc5_:Number = NaN;
         this._isActivated = false;
         if (param1 > 0) {
-            if (this._isReloading) {
-                this._coolDownTimer.restartFromCurrentFrame(param1);
-            }
-            else {
-                this.state = BATTLE_ITEM_STATES.COOLDOWN;
-                this._isReloading = true;
-                this._coolDownTimer.start(param1, this, this._consumablesVO.customCoolDownFrame > FIRST_FRAME ? int(this._consumablesVO.customCoolDownFrame) : int(FIRST_FRAME), DEFAULT_TIME_COEF);
-            }
+            _loc5_ = param3 / param2;
+            this.state = BATTLE_ITEM_STATES.COOLDOWN;
+            this._isReloading = param4;
+            this._coolDownTimer.start(param1, this, (END_FRAME - START_FRAME) * _loc5_, DEFAULT_TIME_COEF);
         }
         else {
+            this._isReloading = param4;
             this._coolDownTimer.end();
-            this._isReloading = false;
-            this._consumablesVO.customCoolDownFrame = FIRST_FRAME;
             this._coolDownTimer.moveToFrame(FIRST_FRAME);
         }
     }
@@ -135,7 +131,7 @@ public class BattleOrderButton extends BattleToolTipButton implements IBattleOrd
             this._coolDownTimer.setPositionAsPercent(param1);
         }
         else {
-            this.setCoolDownTime(0);
+            this.setCoolDownTime(0, 0, 0, false);
         }
     }
 
@@ -150,7 +146,6 @@ public class BattleOrderButton extends BattleToolTipButton implements IBattleOrd
     }
 
     public function onCoolDownComplete():void {
-        this._isReloading = false;
     }
 
     public function clearCoolDownTime():void {

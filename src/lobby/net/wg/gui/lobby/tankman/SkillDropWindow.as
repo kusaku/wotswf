@@ -105,10 +105,7 @@ public class SkillDropWindow extends SkillDropMeta implements ISkillDropMeta {
             this._savingModeGroup.dispose();
             this._savingModeGroup = null;
         }
-        if (this.model) {
-            this.model.dispose();
-            this.model = null;
-        }
+        this.model = null;
         super.onDispose();
     }
 
@@ -121,7 +118,7 @@ public class SkillDropWindow extends SkillDropMeta implements ISkillDropMeta {
     override protected function draw():void {
         var _loc1_:Boolean = false;
         super.draw();
-        if (isInvalid(INVALID_DATA) && this.model) {
+        if (this.model && isInvalid(INVALID_DATA)) {
             _loc1_ = this.model.skillsCount <= 1 && this.model.lastSkillLevel < 1;
             this.goldButton.visible = !_loc1_;
             this.creditsButton.visible = !_loc1_;
@@ -148,7 +145,7 @@ public class SkillDropWindow extends SkillDropMeta implements ISkillDropMeta {
             }
             this.recalculateData();
         }
-        if (isInvalid(INVALID_MONEY)) {
+        if (this.model && isInvalid(INVALID_MONEY)) {
             this.updateSavingModes();
         }
     }
@@ -156,13 +153,6 @@ public class SkillDropWindow extends SkillDropMeta implements ISkillDropMeta {
     public function as_setCredits(param1:Number):void {
         this._credits = param1;
         invalidate(INVALID_MONEY);
-    }
-
-    public function as_setData(param1:Object):void {
-        this.model = SkillDropModel.parseFromObject(param1);
-        this._gold = this.model.gold;
-        this._credits = this.model.credits;
-        invalidate(INVALID_DATA);
     }
 
     public function as_setGold(param1:Number):void {
@@ -210,7 +200,7 @@ public class SkillDropWindow extends SkillDropMeta implements ISkillDropMeta {
     }
 
     private function recalculateData():void {
-        var _loc1_:Object = this.getSelectedDropCostInfo();
+        var _loc1_:DropSkillsCost = this.getSelectedDropCostInfo();
         var _loc2_:Array = calcDropSkillsParamsS(this.model.compactDescriptor, _loc1_.xpReuseFraction);
         var _loc3_:Number = _loc2_[0];
         var _loc4_:int = _loc3_ >= MAX_SKILL ? int(_loc2_[1]) : -1;
@@ -221,6 +211,13 @@ public class SkillDropWindow extends SkillDropMeta implements ISkillDropMeta {
         var _loc8_:* = this.model.skillsCount > _loc4_;
         this.afterBlock.setSkills(_loc4_, _loc6_, _loc7_, _loc5_, _loc8_);
         this.afterBlock.setRoleLevel(this.model.roleLevel, _loc3_);
+    }
+
+    override protected function setData(param1:SkillDropModel):void {
+        this.model = param1;
+        this._gold = this.model.gold;
+        this._credits = this.model.credits;
+        invalidate(INVALID_DATA, INVALID_MONEY);
     }
 
     private function onSavingModeGroupChangeHandler(param1:Event):void {

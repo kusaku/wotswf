@@ -54,12 +54,6 @@ public class ModuleRepairAnim extends DamagePanelItemFrameStates {
         super.onDispose();
     }
 
-    override protected function configUI():void {
-        super.configUI();
-        addFrameScript(LAST_FRAME_OF_REPAIRED_ANIM, this.onLastFrameOfAnim);
-        addFrameScript(LAST_FRAME_OF_REPAIRED_FULL_ANIM, this.onLastFrameOfAnim);
-    }
-
     override protected function draw():void {
         super.draw();
         if (isInvalid(InvalidationType.STATE)) {
@@ -67,9 +61,6 @@ public class ModuleRepairAnim extends DamagePanelItemFrameStates {
         }
         if (isInvalid(IS_REPAIRING_INVALID_MASK)) {
             visible = this._isRepairing;
-            if (!this._isRepairing) {
-                stop();
-            }
         }
         if (isInvalid(REPAIRING_PROGRESS_INVALID_MASK)) {
             gotoAndStop(this.currentRepairFrame(this._repairPercents));
@@ -77,10 +68,7 @@ public class ModuleRepairAnim extends DamagePanelItemFrameStates {
     }
 
     public function setRepairSeconds(param1:int, param2:int):void {
-        if (!this._isRepairing) {
-            this._isRepairing = true;
-            invalidate(IS_REPAIRING_INVALID_MASK);
-        }
+        this.setRepairing(true);
         this.updateTimer(param1, param2);
         this._repairPercents = param1;
         invalidate(REPAIRING_PROGRESS_INVALID_MASK);
@@ -97,16 +85,6 @@ public class ModuleRepairAnim extends DamagePanelItemFrameStates {
             this._timer.delay = this._timer.delay * _loc2_;
         }
         this._playbackSpeed = param1;
-    }
-
-    public function resetModuleRepairing():void {
-        this._isRepairing = false;
-        this._timer.stop();
-    }
-
-    private function onLastFrameOfAnim():void {
-        this._isRepairing = false;
-        invalidate(IS_REPAIRING_INVALID_MASK);
     }
 
     private function updateTimer(param1:int, param2:int):void {
@@ -128,8 +106,17 @@ public class ModuleRepairAnim extends DamagePanelItemFrameStates {
         return FIRST_FRAME_REPAIR_ANIM + param1 * REPAIR_ANIM_COUNT_FRAMES / 100 | 0;
     }
 
+    private function setRepairing(param1:Boolean):void {
+        if (this._isRepairing == param1) {
+            return;
+        }
+        this._isRepairing = param1;
+        invalidate(IS_REPAIRING_INVALID_MASK);
+    }
+
     override public function set state(param1:String):void {
         super.state = param1;
+        this.setRepairing(false);
         this._timer.stop();
     }
 
@@ -138,8 +125,8 @@ public class ModuleRepairAnim extends DamagePanelItemFrameStates {
         invalidate(REPAIRING_PROGRESS_INVALID_MASK);
     }
 
-    private function onTimerCompleteHandler(param1:TimerEvent):void {
-        invalidate(IS_REPAIRING_INVALID_MASK);
+    private function onTimerCompleteHandler(param1:TimerEvent = null):void {
+        this.setRepairing(false);
     }
 }
 }

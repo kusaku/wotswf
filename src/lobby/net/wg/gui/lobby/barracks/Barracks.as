@@ -10,6 +10,7 @@ import net.wg.infrastructure.base.meta.IBarracksMeta;
 import net.wg.infrastructure.base.meta.impl.BarracksMeta;
 
 import scaleform.clik.constants.InvalidationType;
+import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.events.InputEvent;
 import scaleform.clik.events.ListEvent;
@@ -88,11 +89,11 @@ public class Barracks extends BarracksMeta implements IBarracksMeta {
     }
 
     public function as_setTankmenFilter(param1:Number, param2:String, param3:String, param4:String, param5:String):void {
-        this.form.as_setTankmenFilter(param1, param2, param3, param4, param5);
+        this.form.setTankmenFilter(param1, param2, param3, param4, param5);
     }
 
-    public function as_updateTanksList(param1:Array):void {
-        this.form.as_updateTanksList(param1);
+    override protected function updateTanksList(param1:DataProvider):void {
+        this.form.updateTanksList(param1);
     }
 
     private function onFormOpenPersonalCaseHandler(param1:CrewEvent):void {

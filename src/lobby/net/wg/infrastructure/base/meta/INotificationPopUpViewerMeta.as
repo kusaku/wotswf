@@ -21,8 +21,6 @@ public interface INotificationPopUpViewerMeta extends IEventDispatcher {
 
     function as_removeAllMessages():void;
 
-    function as_layoutInfo(param1:Object):void;
-
     function as_initInfo(param1:Number, param2:Number):void;
 }
 }

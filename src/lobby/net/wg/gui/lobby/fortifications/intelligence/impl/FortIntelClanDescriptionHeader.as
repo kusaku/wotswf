@@ -12,14 +12,14 @@ import net.wg.gui.components.controls.TextFieldShort;
 import net.wg.gui.components.controls.UILoaderAlt;
 import net.wg.gui.lobby.fortifications.data.ClanDescriptionVO;
 import net.wg.gui.lobby.fortifications.events.FortIntelClanDescriptionEvent;
+import net.wg.infrastructure.base.UIComponentEx;
 import net.wg.infrastructure.interfaces.entity.IFocusContainer;
 
 import scaleform.clik.constants.InvalidationType;
-import scaleform.clik.core.UIComponent;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.events.InputEvent;
 
-public class FortIntelClanDescriptionHeader extends UIComponent implements IFocusContainer {
+public class FortIntelClanDescriptionHeader extends UIComponentEx implements IFocusContainer {
 
     private static const DEFAULT_CONTENT_WIDTH:uint = 408;
 

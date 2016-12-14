@@ -19,13 +19,17 @@ public class SmallTankIcon extends BaseTankIcon {
     }
 
     override protected function updateData(param1:VehicleCarouselVO):void {
+        var _loc2_:Boolean = false;
         super.updateData(param1);
         clanLock.validateNow();
-        var _loc2_:Boolean = StringUtils.isNotEmpty(param1.smallInfoText) && !clanLock.visible;
+        _loc2_ = StringUtils.isNotEmpty(param1.smallInfoText) && !clanLock.visible;
         txtInfo.visible = _loc2_;
         if (_loc2_) {
             txtInfo.htmlText = param1.smallInfoText;
             this._commons.updateTextFieldSize(txtInfo, false, true);
+            if (txtInfo.height > height) {
+                txtInfo.height = height;
+            }
             txtInfo.y = height - txtInfo.height >> 1;
         }
         imgIcon.source = param1.iconSmall;

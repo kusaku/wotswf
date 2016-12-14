@@ -13,7 +13,7 @@ public interface IConsumablesPanelMeta extends IEventDispatcher {
 
     function as_setItemTimeQuantityInSlot(param1:int, param2:int, param3:Number, param4:Number):void;
 
-    function as_setCoolDownTime(param1:int, param2:Number):void;
+    function as_setCoolDownTime(param1:int, param2:Number, param3:Number, param4:Number, param5:Boolean):void;
 
     function as_setCoolDownPosAsPercent(param1:int, param2:Number):void;
 

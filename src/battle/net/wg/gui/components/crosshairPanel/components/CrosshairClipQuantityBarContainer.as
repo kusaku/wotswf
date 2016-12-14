@@ -32,11 +32,12 @@ public class CrosshairClipQuantityBarContainer extends SimpleContainer {
 
     private var _quantityInClip:Number = -1;
 
-    private var _clipState:String = "normal";
+    private var _clipState:String;
 
     private var _isReloaded:Boolean = false;
 
     public function CrosshairClipQuantityBarContainer() {
+        this._clipState = CrosshairClipQuantityBar.STATE_NORMAL;
         super();
     }
 
@@ -55,55 +56,55 @@ public class CrosshairClipQuantityBarContainer extends SimpleContainer {
         var viewClass:Class = null;
         super.draw();
         if (isInvalid(CLIP_CAPACITY_VALIDATION)) {
-            if (this._clipCapacity > 1) {
-                if (!this._currBar) {
-                    viewType = TYPE_LIGHT;
-                    mode = CrosshairClipQuantityBar.MODE_PERCENT;
-                    clipTotalFrames = LIGHT_CLIP_QUANTITY_BAR_TOTAL_FRAMES;
-                    metric = this._clipCapacity;
-                    if (this._burst > 1) {
-                        metric = Math.ceil(this._clipCapacity / this._burst);
-                    }
-                    if (metric < HEAVY_LIMIT) {
-                        viewType = TYPE_HEAVY;
-                        if (this._burst > 1) {
-                            mode = CrosshairClipQuantityBar.MODE_QUEUE;
-                            clipTotalFrames = Math.min(metric + 1, HEAVY_CLIP_QUANTITY_BAR_TOTAL_FRAMES);
-                        }
-                        else {
-                            mode = CrosshairClipQuantityBar.MODE_AMMO;
-                            clipTotalFrames = Math.min(this._clipCapacity + 1, HEAVY_CLIP_QUANTITY_BAR_TOTAL_FRAMES);
-                        }
-                    }
-                    else if (metric < MEDIUM_LIMIT) {
-                        viewType = TYPE_MEDIUM;
-                        clipTotalFrames = MEDIUM_CLIP_QUANTITY_BAR_TOTAL_FRAMES;
-                        if (this._burst > 1) {
-                            mode = CrosshairClipQuantityBar.MODE_QUEUE;
-                            clipTotalFrames = Math.min(metric + 1, MEDIUM_CLIP_QUANTITY_BAR_TOTAL_FRAMES);
-                        }
-                        else {
-                            mode = CrosshairClipQuantityBar.MODE_AMMO;
-                            clipTotalFrames = Math.min(this._clipCapacity + 1, MEDIUM_CLIP_QUANTITY_BAR_TOTAL_FRAMES);
-                        }
-                    }
-                    try {
-                        viewClass = getDefinitionByName(viewType) as Class;
-                        this._currBar = new viewClass();
-                        this._currBar.initialize(mode, this._clipCapacity, this._burst, clipTotalFrames);
-                        addChild(this._currBar);
-                        if (this._quantityInClip != Values.DEFAULT_INT) {
-                            this._currBar.updateInfo(this._quantityInClip, this._clipState, this._isReloaded);
-                        }
-                    }
-                    catch (error:Error) {
-                    }
-                }
-            }
-            else if (this._currBar) {
+            if (this._currBar) {
                 this._currBar.dispose();
                 removeChild(this._currBar);
                 this._currBar = null;
+            }
+            if (this._clipCapacity > 1) {
+                viewType = TYPE_LIGHT;
+                mode = CrosshairClipQuantityBar.MODE_PERCENT;
+                clipTotalFrames = LIGHT_CLIP_QUANTITY_BAR_TOTAL_FRAMES;
+                metric = this._clipCapacity;
+                if (this._burst > 1) {
+                    metric = Math.ceil(this._clipCapacity / this._burst);
+                }
+                if (metric < HEAVY_LIMIT) {
+                    viewType = TYPE_HEAVY;
+                    if (this._burst > 1) {
+                        mode = CrosshairClipQuantityBar.MODE_QUEUE;
+                        clipTotalFrames = Math.min(metric + 1, HEAVY_CLIP_QUANTITY_BAR_TOTAL_FRAMES);
+                    }
+                    else {
+                        mode = CrosshairClipQuantityBar.MODE_AMMO;
+                        clipTotalFrames = Math.min(this._clipCapacity + 1, HEAVY_CLIP_QUANTITY_BAR_TOTAL_FRAMES);
+                    }
+                }
+                else if (metric < MEDIUM_LIMIT) {
+                    viewType = TYPE_MEDIUM;
+                    clipTotalFrames = MEDIUM_CLIP_QUANTITY_BAR_TOTAL_FRAMES;
+                    if (this._burst > 1) {
+                        mode = CrosshairClipQuantityBar.MODE_QUEUE;
+                        clipTotalFrames = Math.min(metric + 1, MEDIUM_CLIP_QUANTITY_BAR_TOTAL_FRAMES);
+                    }
+                    else {
+                        mode = CrosshairClipQuantityBar.MODE_AMMO;
+                        clipTotalFrames = Math.min(this._clipCapacity + 1, MEDIUM_CLIP_QUANTITY_BAR_TOTAL_FRAMES);
+                    }
+                }
+                try {
+                    viewClass = getDefinitionByName(viewType) as Class;
+                    this._currBar = new viewClass();
+                    this._currBar.initialize(mode, this._clipCapacity, this._burst, clipTotalFrames);
+                    addChild(this._currBar);
+                    if (this._quantityInClip != Values.DEFAULT_INT) {
+                        this._currBar.updateInfo(this._quantityInClip, this._clipState, this._isReloaded);
+                    }
+                    return;
+                }
+                catch (error:Error) {
+                    return;
+                }
             }
         }
     }
@@ -118,7 +119,7 @@ public class CrosshairClipQuantityBarContainer extends SimpleContainer {
     }
 
     public function setClipsParam(param1:Number, param2:Number):void {
-        if (this._clipCapacity != param1) {
+        if (this._clipCapacity != param1 || this._burst != param2) {
             this._clipCapacity = param1;
             this._burst = param2;
             invalidate(CLIP_CAPACITY_VALIDATION);

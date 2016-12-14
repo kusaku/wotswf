@@ -33,11 +33,13 @@ import net.wg.infrastructure.interfaces.IViewStackContent;
 import org.idmedia.as3commons.util.StringUtils;
 
 import scaleform.clik.constants.InputValue;
+import scaleform.clik.controls.CoreList;
 import scaleform.clik.data.DataProvider;
 import scaleform.clik.events.ButtonEvent;
 import scaleform.clik.events.FocusHandlerEvent;
 import scaleform.clik.events.InputEvent;
 import scaleform.clik.events.ListEvent;
+import scaleform.clik.interfaces.IDataProvider;
 import scaleform.clik.utils.Padding;
 import scaleform.gfx.MouseEventEx;
 
@@ -79,10 +81,6 @@ public class CompanyRoomView extends CompanyRoomMeta implements ICompanyRoomMeta
 
     public var assignedList:ScrollingListEx;
 
-    public var unassignedDataProvider:DataProvider;
-
-    public var assignedDataProvider:DataProvider;
-
     public var isOpenCheckbox:CheckBox;
 
     public var _commentDefaultTextColor:uint = 4473918;
@@ -119,12 +117,28 @@ public class CompanyRoomView extends CompanyRoomMeta implements ICompanyRoomMeta
 
     private var _viewType:int = -1;
 
-    private var _invalidVehiclesVOs:Vector.<CompanyRoomInvalidVehiclesVO> = null;
-
     public function CompanyRoomView() {
-        this.unassignedDataProvider = new DataProvider();
-        this.assignedDataProvider = new DataProvider();
         super();
+    }
+
+    protected static function checkStatus(param1:CoreList, param2:Object):void {
+        var _loc3_:PlayerPrbInfoVO = null;
+        for each(_loc3_ in param1.dataProvider) {
+            if (_loc3_.dbID == param2.dbID) {
+                _loc3_.update(param2);
+                param1.invalidateData();
+            }
+        }
+    }
+
+    protected static function disposeDataProvider(param1:IDataProvider):void {
+        var _loc2_:PlayerPrbInfoVO = null;
+        if (param1) {
+            for each(_loc2_ in param1) {
+                _loc2_.dispose();
+            }
+            param1.cleanUp();
+        }
     }
 
     override public function as_enableLeaveBtn(param1:Boolean):void {
@@ -149,52 +163,25 @@ public class CompanyRoomView extends CompanyRoomMeta implements ICompanyRoomMeta
     }
 
     override public function as_setPlayerState(param1:int, param2:Boolean, param3:Object):void {
-        var _loc8_:Object = null;
-        var _loc4_:Array = [];
-        var _loc5_:DataProvider = !!param2 ? DataProvider(this.assignedList.dataProvider) : DataProvider(this.unassignedList.dataProvider);
-        var _loc6_:uint = _loc5_.length;
-        var _loc7_:int = 0;
-        while (_loc7_ < _loc6_) {
-            _loc8_ = _loc5_.requestItemAt(_loc7_);
-            if (_loc8_.dbID == param3.dbID) {
-                _loc8_.state = param3.state;
-                _loc8_.vShortName = param3.vShortName;
-                _loc8_.vLevel = param3.vLevel;
-                _loc8_.icon = param3.icon;
-                _loc8_.vType = param3.vType;
-                _loc8_.igrType = param3.igrType;
-            }
-            _loc4_.push(_loc8_);
-            _loc7_++;
-        }
-        if (param2) {
-            this.updateAssignList(_loc4_);
-        }
-        else {
-            this.updateUnassignList(_loc4_);
+        var _loc4_:ScrollingListEx = !!param2 ? this.assignedList : this.unassignedList;
+        checkStatus(_loc4_, param3);
+        if (_loc4_.selectedIndex == -1 && this._isPlayerCreator) {
+            _loc4_.selectedIndex = 0;
         }
     }
 
-    override public function as_setRosterList(param1:int, param2:Boolean, param3:Array):void {
+    override protected function setRosterList(param1:int, param2:Boolean, param3:DataProvider):void {
+        var _loc4_:int = param3.length;
         var _loc5_:int = 0;
-        var _loc6_:Object = null;
-        var _loc7_:int = 0;
-        var _loc4_:Array = [];
-        if (param3.length > 0) {
-            _loc5_ = param3.length;
-            _loc7_ = 0;
-            while (_loc7_ < _loc5_) {
-                _loc6_ = param3[_loc7_] as Object;
-                _loc6_["orderNumber"] = _loc7_ + 1;
-                _loc4_.push(new PlayerPrbInfoVO(_loc6_));
-                _loc7_++;
-            }
+        while (_loc5_ < _loc4_) {
+            param3[_loc5_].orderNumber = _loc5_ + 1;
+            _loc5_++;
         }
-        if (param2) {
-            this.updateAssignList(_loc4_);
-        }
-        else {
-            this.updateUnassignList(_loc4_);
+        var _loc6_:ScrollingListEx = !!param2 ? this.assignedList : this.unassignedList;
+        disposeDataProvider(_loc6_.dataProvider);
+        _loc6_.dataProvider = param3;
+        if (_loc6_.selectedIndex == -1 && this._isPlayerCreator) {
+            _loc6_.selectedIndex = 0;
         }
         this.updateMoveButtons();
     }
@@ -209,7 +196,6 @@ public class CompanyRoomView extends CompanyRoomMeta implements ICompanyRoomMeta
 
     override protected function onDispose():void {
         this.cleanupHeaderVO();
-        this.cleanupInvalidVehiclesVO();
         this.commentText = null;
         this.crewStuffField = null;
         this.queueLabel = null;
@@ -249,16 +235,14 @@ public class CompanyRoomView extends CompanyRoomMeta implements ICompanyRoomMeta
         this.addToAssignBtn = null;
         this.removeFromAssignBtn.dispose();
         this.removeFromAssignBtn = null;
+        disposeDataProvider(this.unassignedList.dataProvider);
+        disposeDataProvider(this.assignedList.dataProvider);
         this.unassignedList.removeEventListener(ListEventEx.ITEM_CLICK, this.showAssignContextMenu);
         this.unassignedList.dispose();
         this.unassignedList = null;
-        this.unassignedDataProvider.cleanUp();
-        this.unassignedDataProvider = null;
         this.assignedList.removeEventListener(ListEventEx.ITEM_CLICK, this.showAssignContextMenu);
         this.assignedList.dispose();
         this.assignedList = null;
-        this.assignedDataProvider.cleanUp();
-        this.assignedDataProvider = null;
         this.listTitle = null;
         if (this.division.hasEventListener(ListEvent.INDEX_CHANGE)) {
             this.division.removeEventListener(ListEvent.INDEX_CHANGE, this.handleDivisionChange);
@@ -297,8 +281,6 @@ public class CompanyRoomView extends CompanyRoomMeta implements ICompanyRoomMeta
         var _loc1_:String = "fullName";
         this.assignedList.labelField = _loc1_;
         this.unassignedList.labelField = _loc1_;
-        this.unassignedList.dataProvider = this.unassignedDataProvider;
-        this.unassignedList.selectedIndex = -1;
         this.unassignedList.addEventListener(ListEventEx.ITEM_CLICK, this.showAssignContextMenu);
         this.assignedList.addEventListener(ListEventEx.ITEM_CLICK, this.showAssignContextMenu);
         this.readyButton.addEventListener(ButtonEvent.CLICK, this.handleReadyClick);
@@ -370,11 +352,11 @@ public class CompanyRoomView extends CompanyRoomMeta implements ICompanyRoomMeta
         this.autoSelectDivision(param1);
     }
 
-    public function as_setDivisionsList(param1:Array, param2:uint):void {
+    override protected function setDivisionsList(param1:DataProvider, param2:uint):void {
         if (!this.division) {
             return;
         }
-        this.division.dataProvider = new DataProvider(param1);
+        this.division.dataProvider = param1;
         this.division.labelField = "label";
         this.division.menuOffset = new Padding(-4, -3, 0, 3);
         this.division.rowCount = param1.length;
@@ -403,14 +385,9 @@ public class CompanyRoomView extends CompanyRoomMeta implements ICompanyRoomMeta
         }
     }
 
-    public function as_setInvalidVehicles(param1:Array):void {
-        var _loc2_:Object = null;
-        this.cleanupInvalidVehiclesVO();
-        this._invalidVehiclesVOs = new Vector.<CompanyRoomInvalidVehiclesVO>(0);
-        for each(_loc2_ in param1) {
-            this._invalidVehiclesVOs.push(new CompanyRoomInvalidVehiclesVO(_loc2_));
-        }
-        this.refreshInvalidVehicles();
+    override protected function setInvalidVehicles(param1:Vector.<CompanyRoomInvalidVehiclesVO>):void {
+        this.updateVehicles(param1, this.assignedList);
+        this.updateVehicles(param1, this.unassignedList);
     }
 
     public function as_setMaxCountLimitLabel(param1:String):void {
@@ -511,23 +488,6 @@ public class CompanyRoomView extends CompanyRoomMeta implements ICompanyRoomMeta
             this.commentInput.textField.textColor = this._commentNormalTextColor;
             this.commentInput.text = param1;
         }
-    }
-
-    private function cleanupInvalidVehiclesVO():void {
-        var _loc1_:CompanyRoomInvalidVehiclesVO = null;
-        if (this._invalidVehiclesVOs) {
-            for each(_loc1_ in this._invalidVehiclesVOs) {
-                _loc1_.dispose();
-                _loc1_ = null;
-            }
-            this._invalidVehiclesVOs.splice(0, this._invalidVehiclesVOs.length);
-            this._invalidVehiclesVOs = null;
-        }
-    }
-
-    private function refreshInvalidVehicles():void {
-        this.updateVehicles(this._invalidVehiclesVOs, this.assignedList);
-        this.updateVehicles(this._invalidVehiclesVOs, this.unassignedList);
     }
 
     private function updateVehicles(param1:Vector.<CompanyRoomInvalidVehiclesVO>, param2:ScrollingListEx):void {
@@ -633,24 +593,6 @@ public class CompanyRoomView extends CompanyRoomMeta implements ICompanyRoomMeta
             this.addToAssignBtn.enabled = this.unassignedList.dataProvider.length > 0 && this._canAssignPlayer;
             this.removeFromAssignBtn.enabled = this.assignedList.dataProvider.length > 0 && this._canUnassignedPlayer;
         }
-    }
-
-    private function updateAssignList(param1:Array):void {
-        this.assignedDataProvider = new DataProvider(param1);
-        this.assignedList.dataProvider = this.assignedDataProvider;
-        if (this.assignedList.selectedIndex == -1 && this._isPlayerCreator) {
-            this.assignedList.selectedIndex = 0;
-        }
-        this.assignedList.validateNow();
-    }
-
-    private function updateUnassignList(param1:Array):void {
-        this.unassignedDataProvider = new DataProvider(param1);
-        this.unassignedList.dataProvider = this.unassignedDataProvider;
-        if (this.unassignedList.selectedIndex == -1 && this._isPlayerCreator) {
-            this.unassignedList.selectedIndex = 0;
-        }
-        this.unassignedList.validateNow();
     }
 
     private function updateOpenedCompany():void {

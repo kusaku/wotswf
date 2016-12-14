@@ -1,5 +1,7 @@
 package net.wg.gui.lobby.vehicleCustomization {
+import flash.display.DisplayObjectContainer;
 import flash.display.InteractiveObject;
+import flash.geom.Point;
 
 import net.wg.gui.events.LobbyEvent;
 import net.wg.gui.lobby.vehicleCustomization.data.BottomPanelVO;
@@ -13,6 +15,7 @@ import net.wg.gui.lobby.vehicleCustomization.data.panels.CustomizationTotalBonus
 import net.wg.gui.lobby.vehicleCustomization.events.CustomizationEvent;
 import net.wg.gui.lobby.vehicleCustomization.events.CustomizationItemEvent;
 import net.wg.gui.lobby.vehicleCustomization.events.CustomizationSlotEvent;
+import net.wg.gui.notification.events.NotificationLayoutEvent;
 import net.wg.infrastructure.base.meta.ICustomizationMainViewMeta;
 import net.wg.infrastructure.base.meta.impl.CustomizationMainViewMeta;
 
@@ -28,7 +31,13 @@ public class CustomizationMainView extends CustomizationMainViewMeta implements 
 
     private static const BONUS_PANEL_GAP:Number = 20;
 
+    private static const SM_PADDING_X:Number = 4;
+
+    private static const SM_PADDING_Y:Number = -21;
+
     private static const INV_FOCUS_CHAIN:String = "InvFocusChain";
+
+    private static const INV_SYSTEM_MESSAGE:String = "InvSystemMessage";
 
     public var customizationHeader:CustomizationHeader = null;
 
@@ -44,9 +53,14 @@ public class CustomizationMainView extends CustomizationMainViewMeta implements 
 
     private var _focusChain:Vector.<InteractiveObject>;
 
+    private var _systemMessages:DisplayObjectContainer;
+
+    private var _smPadding:Number = 0;
+
     public function CustomizationMainView() {
         this._focusChain = new Vector.<InteractiveObject>();
         super();
+        this._systemMessages = App.systemMessages;
     }
 
     override public function updateStage(param1:Number, param2:Number):void {
@@ -73,6 +87,9 @@ public class CustomizationMainView extends CustomizationMainViewMeta implements 
         if (isInvalid(INV_FOCUS_CHAIN)) {
             this.refreshFocusChain();
         }
+        if (isInvalid(INV_SYSTEM_MESSAGE)) {
+            this._systemMessages.dispatchEvent(new NotificationLayoutEvent(NotificationLayoutEvent.UPDATE_LAYOUT, new Point(SM_PADDING_X, this._smPadding + SM_PADDING_Y)));
+        }
     }
 
     override protected function configUI():void {
@@ -88,6 +105,8 @@ public class CustomizationMainView extends CustomizationMainViewMeta implements 
         addEventListener(CustomizationSlotEvent.SELECT_SLOT, this.onSelectSlotHandler);
         addEventListener(CustomizationSlotEvent.REMOVE_SLOT, this.onRemoveSlotHandler);
         addEventListener(CustomizationSlotEvent.REVERT_SLOT, this.onRevertSlotHandler);
+        this._smPadding = this.bottomPanel.background.height;
+        invalidate(INV_SYSTEM_MESSAGE);
     }
 
     override protected function onDispose():void {
@@ -112,6 +131,7 @@ public class CustomizationMainView extends CustomizationMainViewMeta implements 
         this.bottomPanel = null;
         this._focusChain.splice(0, this._focusChain.length);
         this._focusChain = null;
+        this._systemMessages = null;
         super.onDispose();
     }
 
@@ -151,18 +171,20 @@ public class CustomizationMainView extends CustomizationMainViewMeta implements 
         this.bottomPanel.setInitData(param1);
     }
 
+    override protected function setBottomPanelHeader(param1:BottomPanelVO):void {
+        this.bottomPanel.setPanelData(param1);
+    }
+
     public function as_hideBuyingPanel():void {
-        invalidate(INV_FOCUS_CHAIN);
+        invalidate(INV_FOCUS_CHAIN, INV_SYSTEM_MESSAGE);
         this.bottomPanel.hidePrice();
+        this._smPadding = this.bottomPanel.background.height;
     }
 
     public function as_showBuyingPanel():void {
-        invalidate(INV_FOCUS_CHAIN);
+        invalidate(INV_FOCUS_CHAIN, INV_SYSTEM_MESSAGE);
         this.bottomPanel.showPrice();
-    }
-
-    override protected function setBottomPanelHeader(param1:BottomPanelVO):void {
-        this.bottomPanel.setPanelData(param1);
+        this._smPadding = this.bottomPanel.background.height + this.bottomPanel.pricePanel.height;
     }
 
     public function as_showSelectorGroup():void {

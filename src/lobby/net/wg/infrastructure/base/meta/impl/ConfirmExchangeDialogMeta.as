@@ -27,12 +27,13 @@ public class ConfirmExchangeDialogMeta extends AbstractWindowView {
         this.exchange(param1);
     }
 
-    public function as_update(param1:Object):void {
-        if (this._confirmExchangeDialogVO) {
-            this._confirmExchangeDialogVO.dispose();
-        }
+    public final function as_update(param1:Object):void {
+        var _loc2_:ConfirmExchangeDialogVO = this._confirmExchangeDialogVO;
         this._confirmExchangeDialogVO = new ConfirmExchangeDialogVO(param1);
         this.update(this._confirmExchangeDialogVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function update(param1:ConfirmExchangeDialogVO):void {

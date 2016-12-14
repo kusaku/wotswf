@@ -33,8 +33,6 @@ public interface ITweenPropertiesVO extends ISimpleTweenPropertiesVO {
 
     function setRotation(param1:Number):void;
 
-    function setIsOnCodeBased(param1:Boolean):void;
-
     function setTweenIdx(param1:int):void;
 }
 }

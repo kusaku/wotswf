@@ -31,6 +31,8 @@ public class BLOCKS_TOOLTIP_TYPES {
 
     public static const TOOLTIP_IMAGE_LIST_BLOCK_LINKAGE:String = "ImageListBlockUI";
 
+    public static const TOOLTIP_XMAS_EVENT_PROGRESS_BLOCK_LINKAGE:String = "XmasEventProgressBlockUI";
+
     public static const ALIGN_LEFT:String = "left";
 
     public static const ALIGN_RIGHT:String = "right";

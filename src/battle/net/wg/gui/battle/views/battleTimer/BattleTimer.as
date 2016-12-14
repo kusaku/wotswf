@@ -37,6 +37,7 @@ public class BattleTimer extends BattleTimerMeta implements IBattleTimerMeta {
         super.configUI();
         this.mouseChildren = false;
         this.mouseEnabled = false;
+        this.dotsTF.text = COMMON.COMMON_COLON;
     }
 
     override protected function onPopulate():void {

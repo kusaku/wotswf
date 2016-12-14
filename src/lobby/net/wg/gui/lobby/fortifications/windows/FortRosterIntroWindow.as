@@ -2,9 +2,9 @@ package net.wg.gui.lobby.fortifications.windows {
 import flash.display.InteractiveObject;
 import flash.text.TextField;
 
-import net.wg.gui.components.common.SeparatorConstants;
+import net.wg.gui.components.assets.data.SeparatorConstants;
+import net.wg.gui.components.assets.interfaces.ISeparatorAsset;
 import net.wg.gui.components.controls.UILoaderAlt;
-import net.wg.gui.components.interfaces.ISeparatorAsset;
 import net.wg.gui.interfaces.ISoundButtonEx;
 import net.wg.gui.lobby.fortifications.cmp.tankIcon.impl.FortTankIcon;
 import net.wg.gui.lobby.fortifications.data.RosterIntroVO;

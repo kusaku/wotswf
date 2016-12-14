@@ -39,8 +39,6 @@ public interface IUtils extends IUtilsManagerMeta, IDisposable {
 
     function get focusHandler():IFocusHandler;
 
-    function get events():IEventCollector;
-
     function get IME():IIME;
 
     function get voMgr():IVOManager;

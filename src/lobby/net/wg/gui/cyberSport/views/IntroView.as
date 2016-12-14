@@ -282,7 +282,6 @@ public class IntroView extends CyberSportIntroMeta implements ICyberSportIntroMe
         this.selectedVehicleBtn = null;
         this.vehicleBtnTitleTf = null;
         this.warningIcon = null;
-        this._selectedVehicleData.dispose();
         this._selectedVehicleData = null;
         this.teamAdditionalBtn.dispose();
         this.teamAdditionalBtn = null;

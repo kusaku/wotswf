@@ -27,12 +27,13 @@ public class ReferralReferralsIntroWindowMeta extends AbstractWindowView {
         this.onClickApplyBtn();
     }
 
-    public function as_setData(param1:Object):void {
-        if (this._refSysReferralsIntroVO) {
-            this._refSysReferralsIntroVO.dispose();
-        }
+    public final function as_setData(param1:Object):void {
+        var _loc2_:RefSysReferralsIntroVO = this._refSysReferralsIntroVO;
         this._refSysReferralsIntroVO = new RefSysReferralsIntroVO(param1);
         this.setData(this._refSysReferralsIntroVO);
+        if (_loc2_) {
+            _loc2_.dispose();
+        }
     }
 
     protected function setData(param1:RefSysReferralsIntroVO):void {
